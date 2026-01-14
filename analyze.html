@@ -1,10 +1,16 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Jan 13 2026 06:18:52 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Jan 14 2026 07:11:16 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6965c816c706edb1978686d2" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Analyze</title>
-  <meta content="Analyze" property="og:title">
-  <meta content="Analyze" property="twitter:title">
+  <title>Military Calculator for BAH, BAS, Base Pay and Financial Health.</title>
+  <meta content="Get a forecast of your future BAH and an executive summary of your finances. Calculate your current base pay, and BAH to determine financial health. Get home price average of your next duty location." name="description">
+  <meta content="Military Calculator for BAH, BAS, Base Pay and Financial Health." property="og:title">
+  <meta content="Get a forecast of your future BAH and an executive summary of your finances. Calculate your current base pay, and BAH to determine financial health. Get home price average of your next duty location." property="og:description">
+  <meta content="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited.jpg" property="og:image">
+  <meta content="Military Calculator for BAH, BAS, Base Pay and Financial Health." property="twitter:title">
+  <meta content="Get a forecast of your future BAH and an executive summary of your finances. Calculate your current base pay, and BAH to determine financial health. Get home price average of your next duty location." property="twitter:description">
+  <meta property="og:type" content="website">
+  <meta content="summary_large_image" name="twitter:card">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
@@ -15,14 +21,236 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
+  <div class="w-embed w-script"><!--  =========================================================
+  PCSUnited • Frosted Glass Login Lock (Analyze Page) v1.5
+  ✅ Visible by default
+  ✅ Hard-mounts to <body> (prevents clipping)
+  ✅ Locks ONLY pcs-united.webflow.io/analyze
+  ✅ Uses https://theorozcorealty.netlify.app/api/login
+=========================================================  -->
+    <div id="rs-lock-overlay" aria-hidden="false">
+      <div class="rs-lock-centered" role="dialog" aria-labelledby="rs-lock-title" aria-modal="true">
+        <div class="rs-lock-card" id="rs-lock-card">
+          <h1 id="rs-lock-title">Sign In to Continue</h1>
+          <p class="rs-lock-sub">This page is private — please enter your credentials.</p>
+          <div class="rs-field">
+            <input id="rs-email-input" type="email" placeholder="Email Address" autocomplete="email">
+          </div>
+          <div class="rs-field">
+            <input id="rs-pass-input" type="password" placeholder="Password" minlength="8" autocomplete="current-password">
+          </div>
+          <div class="rs-login-row">
+            <button id="rs-login-btn" type="button">Log In</button>
+          </div>
+          <div class="rs-signup-row">
+            <p class="rs-signup-text">Not a Prime Member yet?</p>
+            <a class="rs-signup-btn" href="https://pcs-united.webflow.io/user-profile">Sign Up</a>
+          </div>
+          <p id="rs-lock-msg" class="rs-lock-msg" aria-live="polite"></p>
+        </div>
+      </div>
+    </div>
+    <style>
+  :root{
+    --rs-overlay-bg: rgba(6,10,18,0.55);
+    --rs-accent: #8ef3c5;
+    --rs-ink: #e9ecff;
+    --rs-muted: #a8b0d6;
+    --rs-radius: 14px;
+  }
+  #rs-lock-overlay{
+    position:fixed; inset:0;
+    width:100%; height:100%;
+    z-index:999999;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--rs-overlay-bg);
+    backdrop-filter: blur(12px) saturate(135%);
+    -webkit-backdrop-filter: blur(12px) saturate(135%);
+    font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    /* ✅ Visible by default (no “walk through”) */
+    visibility: visible;
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity .25s ease, visibility .25s ease;
+  }
+  #rs-lock-overlay.rs-hidden{
+    opacity:0 !important;
+    pointer-events:none !important;
+    visibility:hidden !important;
+  }
+  .rs-lock-centered{ width:100%; max-width:520px; padding:20px; }
+  .rs-lock-card{
+    background: rgba(255,255,255,0.035);
+    border-radius: var(--rs-radius);
+    border: 1px solid rgba(255,255,255,0.08);
+    box-shadow: 0 18px 60px rgba(3,6,15,0.72);
+    padding: 28px 24px;
+    color: var(--rs-ink);
+  }
+  .rs-lock-card h1{ margin:0 0 8px; font-size:20px; font-weight:800; }
+  .rs-lock-sub{ margin:0 0 18px; color:var(--rs-muted); font-size:13px; }
+  .rs-field{ margin-bottom:14px; }
+  #rs-email-input, #rs-pass-input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.09);
+    background:rgba(0,0,0,0.18);
+    color:var(--rs-ink);
+    font-size:16px;
+    outline:none;
+  }
+  #rs-email-input::placeholder, #rs-pass-input::placeholder{ color:var(--rs-muted); }
+  #rs-login-btn{
+    width:100%;
+    padding:12px 16px;
+    border-radius:10px;
+    border:none;
+    background:linear-gradient(180deg,var(--rs-accent),rgba(100,230,190,0.85));
+    color:#02110b;
+    font-weight:900;
+    cursor:pointer;
+    font-size:15px;
+  }
+  #rs-login-btn:disabled{ opacity:.7; cursor:not-allowed; }
+  .rs-lock-msg{
+    margin-top:12px;
+    color:var(--rs-muted);
+    font-size:13px;
+    min-height:18px;
+  }
+  .rs-signup-row{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,0.07);
+    text-align:center;
+  }
+  .rs-signup-text{ margin:0 0 8px; font-size:13px; color:var(--rs-muted); }
+  .rs-signup-btn{
+    display:inline-block;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid rgba(142,243,197,0.65);
+    background:rgba(255,255,255,0.02);
+    color:var(--rs-accent);
+    font-size:13px;
+    font-weight:900;
+    text-decoration:none;
+    transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+  .rs-signup-btn:hover{
+    background:rgba(142,243,197,0.10);
+    box-shadow:0 12px 30px rgba(0,0,0,0.75);
+    transform:translateY(-1px);
+  }
+</style>
+    <script>
+(function(){
+  "use strict";
+  // ✅ Lock ONLY this exact page
+  const isPCS = location.hostname === "pcs-united.webflow.io";
+  const isAnalyze = location.pathname === "/analyze";
+  if (!isPCS || !isAnalyze) {
+    const el = document.getElementById("rs-lock-overlay");
+    if (el) el.remove();
+    return;
+  }
+  const API_BASE = "https://theorozcorealty.netlify.app/api";
+  const overlay  = document.getElementById("rs-lock-overlay");
+  const msg      = document.getElementById("rs-lock-msg");
+  const emailInp = document.getElementById("rs-email-input");
+  const passInp  = document.getElementById("rs-pass-input");
+  const loginBtn = document.getElementById("rs-login-btn");
+  const card     = document.getElementById("rs-lock-card");
+  if (!overlay) return;
+  // ✅ Hard-mount to body so Webflow wrappers can't clip it
+  try { document.body.appendChild(overlay); } catch(e){}
+  // ✅ Force visible
+  overlay.classList.remove("rs-hidden");
+  overlay.style.visibility = "visible";
+  overlay.style.opacity = "1";
+  overlay.style.pointerEvents = "auto";
+  overlay.removeAttribute("aria-hidden");
+  console.log("[PCS LOCK] Mounted:", location.hostname + location.pathname);
+  function showMsg(text, isError){
+    msg.textContent = text || "";
+    msg.style.color = isError ? "#ffb3b3" : "var(--rs-muted)";
+  }
+  function unlock(){
+    overlay.classList.add("rs-hidden");
+    overlay.style.visibility = "hidden";
+    overlay.style.opacity = "0";
+    overlay.style.pointerEvents = "none";
+    overlay.setAttribute("aria-hidden","true");
+    console.log("[PCS LOCK] Unlocked");
+  }
+  async function loginWithServer(email, password){
+    let res, data;
+    try{
+      res = await fetch(`${API_BASE}/login`, {
+        method: "POST",
+        headers: {"Content-Type":"application/json"},
+        body: JSON.stringify({ email, password })
+      });
+      data = await res.json().catch(() => ({}));
+    }catch(e){
+      throw new Error("Network error. Check API/CORS or connection.");
+    }
+    if (!res.ok || data.ok === false){
+      throw new Error(data.error || "Incorrect email or password.");
+    }
+    return data;
+  }
+  function rememberLogin(email, serverData){
+    try{
+      localStorage.setItem("realtysass.loginEmail", email);
+      const existing = JSON.parse(localStorage.getItem("realtysass.identity") || "{}") || {};
+      existing.email = email;
+      const profile = (serverData && (serverData.profile || serverData.user || {})) || {};
+      if (profile.full_name && !existing.name) existing.name = profile.full_name;
+      localStorage.setItem("realtysass.identity", JSON.stringify(existing));
+    }catch(e){}
+  }
+  async function onLogin(){
+    const em = (emailInp.value || "").trim().toLowerCase();
+    const pw = (passInp.value || "").trim();
+    if (!em) return showMsg("Please enter your email.", true);
+    if (pw.length < 8) return showMsg("Password must be at least 8 characters.", true);
+    loginBtn.disabled = true;
+    showMsg("Checking credentials...");
+    try{
+      const data = await loginWithServer(em, pw);
+      rememberLogin(em, data);
+      showMsg("");
+      unlock();
+    }catch(err){
+      showMsg(err.message || "Incorrect email or password.", true);
+      if (card && card.animate){
+        card.animate(
+          [{ transform:"translateX(-5px)" }, { transform:"translateX(5px)" }, { transform:"translateX(0)" }],
+          { duration:260 }
+        );
+      }
+      console.warn("[PCS LOCK] Login failed:", err && err.message);
+    }finally{
+      loginBtn.disabled = false;
+    }
+  }
+  loginBtn.addEventListener("click", onLogin);
+  passInp.addEventListener("keydown", (e)=>{ if (e.key === "Enter") onLogin(); });
+  setTimeout(()=> emailInp && emailInp.focus(), 0);
+})();
+</script>
+  </div>
   <div class="code-embed-17 w-embed w-script"><!--  =========================================================
 Fiduciary Snapshot — v3.9.5 (SPLIT EMBEDS)
 EMBED #1 = SHELL ONLY (HTML + CSS)
-✅ UPDATED:
-- REMOVED: Rent vs Buy section + chart
-- ADDED: BLUF strip at the VERY TOP (sticky)
+✅ KEEP SAME AS YOUR WORKING VERSION
+✅ UPDATE (Requested):
+- Add a FULL Rent vs Buy section (canvas id="fid-line")
+- Add footer metric IDs (rvb-gain / rvb-break / rvb-rentCost) so JS can populate like your screenshot
+- Everything else unchanged
 - Keeps hidden #fid-export so existing JS won’t crash
-- Estimated Downpayment defaults to 5% of Housing Cost (still editable)
 =========================================================  -->
     <section id="fid-fullscreen-shell" style="all: initial;">
       <!--  //#1 Chart.js CDN (must load BEFORE EMBED #2 runs)  -->
@@ -134,7 +362,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       --ec-ink:#fff;
       --ec-accent:#8ef3c5;
       --ec-accent2:#6aa7ff;
-      --ec-b1:rgba(255,255,255,.10);
       --ec-blufH:74px;
     }
     #ec-blufHeader{
@@ -222,7 +449,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       display:grid;
       grid-template-columns:repeat(5,minmax(0,1fr));
       gap:18px;
-      margin-top:14px; /* ✅ now below BLUF strip */
+      margin-top:14px;
     }
     @media (max-width:1280px){
       .kpi-strip{ grid-template-columns:repeat(3,minmax(0,1fr)); }
@@ -374,7 +601,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }
     .score-slider:focus{ outline:none; }
     /* ============================================================
-       //#2.2 MID ROW LAYOUT (3 COLUMNS)
+      //#2.2 MID ROW LAYOUT (3 COLUMNS)
     ============================================================ */
     .mid{
       display:grid;
@@ -431,6 +658,9 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       box-shadow:0 24px 48px rgba(0,0,0,.8) inset;
       min-width:0;
     }
+    .chart-holder.rvb{
+      height: clamp(260px, 44vh, 520px);
+    }
     canvas{
       width:100% !important;
       height:100% !important;
@@ -474,53 +704,39 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       padding:12px;
       box-shadow:0 14px 30px rgba(0,0,0,.45) inset;
     }
-    .fs-top{
+    /* ✅ PCSUnited-style simple rows */
+    .fs-simple{ display:flex; flex-direction:column; margin-bottom:10px; }
+    .fs-line{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:10px;
-      margin-bottom:10px;
+      grid-template-columns: 1fr auto;
+      gap:12px;
+      align-items:center;
+      padding:10px 2px;
+      border-bottom:1px solid rgba(255,255,255,.07);
     }
-    .fs-metric{
-      background:rgba(0,0,0,.12);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:12px;
-      padding:10px;
-      min-width:0;
-    }
-    .fs-metric .lbl{
-      font-size:10px;
-      color:rgba(255,255,255,.58);
+    .fs-line:last-child{ border-bottom:none; }
+    .fs-left .lbl{
+      font-size:11px;
+      color:rgba(255,255,255,.62);
       letter-spacing:.12em;
       text-transform:uppercase;
       font-weight:900;
     }
-    .fs-metric .val{
-      margin-top:7px;
-      font-size:18px;
-      font-weight:900;
-      color:#fff;
-      line-height:1.15;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .fs-metric .sub{
+    .fs-left .sub{
       margin-top:4px;
       font-size:11px;
-      color:rgba(255,255,255,.55);
+      color:rgba(255,255,255,.52);
+      line-height:1.25;
     }
-    .fs-bars{
-      display:flex;
-      flex-direction:column;
-      gap:10px;
-      margin-top:10px;
+    .fs-right{
+      font-size:18px;
+      font-weight:950;
+      color:#fff;
+      white-space:nowrap;
+      text-align:right;
     }
-    .fs-row{
-      display:grid;
-      grid-template-columns: 110px 1fr 90px;
-      gap:10px;
-      align-items:center;
-    }
+    .fs-bars{ display:flex; flex-direction:column; gap:10px; margin-top:10px; }
+    .fs-row{ display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; align-items:center; }
     .fs-row .name{
       font-size:11px;
       font-weight:900;
@@ -529,156 +745,80 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       color:rgba(255,255,255,.65);
       white-space:nowrap;
     }
-    .fs-row .amt{
-      font-size:12px;
-      font-weight:900;
-      text-align:right;
-      color:#fff;
-      white-space:nowrap;
-    }
+    .fs-row .amt{ font-size:12px; font-weight:900; text-align:right; color:#fff; white-space:nowrap; }
     .fs-track{
-      height:10px;
-      border-radius:999px;
+      height:10px; border-radius:999px;
       background:rgba(255,255,255,.06);
       border:1px solid rgba(255,255,255,.08);
-      overflow:hidden;
-      position:relative;
+      overflow:hidden; position:relative;
     }
-    .fs-fill{
-      height:100%;
-      width:0%;
-      border-radius:999px;
-      background: linear-gradient(90deg, rgba(255,255,255,.15), rgba(255,255,255,.06));
-      box-shadow:0 0 18px rgba(0,0,0,.35) inset;
-    }
+    .fs-fill{ height:100%; width:0%; border-radius:999px; box-shadow:0 0 18px rgba(0,0,0,.35) inset; }
     .fs-fill.expenses{ background: linear-gradient(90deg, rgba(106,167,255,.95), rgba(106,167,255,.35)); }
     .fs-fill.housing{  background: linear-gradient(90deg, rgba(85,211,153,.95), rgba(85,211,153,.35)); }
     .fs-fill.saving{   background: linear-gradient(90deg, rgba(142,243,197,.95), rgba(142,243,197,.35)); }
     .fs-fill.residual{ background: linear-gradient(90deg, rgba(249,199,79,.95), rgba(249,199,79,.35)); }
     .fs-fill.negative{ background: linear-gradient(90deg, rgba(255,107,107,.95), rgba(255,107,107,.35)); }
-    .fs-foot{
-      margin-top:10px;
-      display:flex;
-      justify-content:space-between;
-      align-items:flex-end;
-      gap:10px;
-      flex-wrap:wrap;
-    }
-    .fs-res{
-      display:flex;
-      flex-direction:column;
-      gap:3px;
-    }
-    .fs-res .lbl{
-      font-size:10px;
-      color:rgba(255,255,255,.58);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      font-weight:900;
-    }
-    .fs-res .val{
-      font-size:20px;
-      font-weight:950;
-      line-height:1.1;
-      color:#fff;
-    }
-    .fs-note{
-      font-size:11px;
-      color:rgba(255,255,255,.58);
-      max-width:260px;
-      line-height:1.35;
-    }
+    .fs-foot{ margin-top:10px; display:flex; justify-content:space-between; align-items:flex-end; gap:10px; flex-wrap:wrap; }
+    .fs-res{ display:flex; flex-direction:column; gap:3px; }
+    .fs-res .lbl{ font-size:10px; color:rgba(255,255,255,.58); letter-spacing:.12em; text-transform:uppercase; font-weight:900; }
+    .fs-res .val{ font-size:20px; font-weight:950; line-height:1.1; color:#fff; }
+    .fs-note{ font-size:11px; color:rgba(255,255,255,.58); max-width:260px; line-height:1.35; }
     /* CITY TARGETS */
-    .city-top{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:12px;
-      margin-bottom:10px;
-    }
-    .city-kicker{
-      display:flex;
-      gap:10px;
-      align-items:flex-start;
-    }
+    .city-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px; }
+    .city-kicker{ display:flex; gap:10px; align-items:flex-start; }
     .city-bed{
-      font-size:34px;
-      font-weight:900;
-      line-height:1;
-      color:var(--accent2);
+      font-size:34px; font-weight:900; line-height:1; color:var(--accent2);
       text-shadow:0 0 18px rgba(142,243,197,.25);
     }
     .city-bed small{
-      display:block;
-      font-size:12px;
-      font-weight:800;
-      color:var(--subink);
-      letter-spacing:.12em;
-      text-transform:uppercase;
-      margin-top:6px;
+      display:block; font-size:12px; font-weight:800; color:var(--subink);
+      letter-spacing:.12em; text-transform:uppercase; margin-top:6px;
     }
-    .city-copy{
-      font-size:12px;
-      color:rgba(255,255,255,.62);
-      line-height:1.35;
-      max-width:240px;
-    }
+    .city-copy{ font-size:12px; color:rgba(255,255,255,.62); line-height:1.35; max-width:240px; }
     .city-hero{
-      width:110px;
-      height:76px;
-      border-radius:14px;
+      width:110px; height:76px; border-radius:14px;
       border:1px solid rgba(255,255,255,.08);
       background:
         radial-gradient(60px 60px at 68% 30%, rgba(142,243,197,.28), transparent 60%),
         radial-gradient(70px 70px at 30% 70%, rgba(106,167,255,.24), transparent 60%),
         linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.10));
-      position:relative;
-      overflow:hidden;
-      box-shadow:0 18px 40px rgba(0,0,0,.55);
-      flex:0 0 auto;
+      position:relative; overflow:hidden; box-shadow:0 18px 40px rgba(0,0,0,.55); flex:0 0 auto;
     }
     .city-hero:after{
-      content:"🏡";
-      position:absolute;
-      right:10px;
-      bottom:8px;
-      font-size:34px;
-      filter:drop-shadow(0 10px 18px rgba(0,0,0,.55));
-      opacity:.92;
+      content:"🏡"; position:absolute; right:10px; bottom:8px; font-size:34px;
+      filter:drop-shadow(0 10px 18px rgba(0,0,0,.55)); opacity:.92;
     }
-    .city-grid{
+    /* ✅ PCSUnited-style simple rows for city */
+    .city-simple{ margin-top:10px; display:flex; flex-direction:column; }
+    .city-line{
       display:grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr auto;
       gap:12px;
-      margin-top:10px;
+      align-items:center;
+      padding:10px 2px;
+      border-bottom:1px solid rgba(255,255,255,.07);
     }
-    .city-tile{
-      background:rgba(0,0,0,.14);
-      border:1px solid rgba(255,255,255,.08);
-      border-radius:14px;
-      padding:12px;
-      min-height:78px;
-      box-shadow:0 14px 30px rgba(0,0,0,.45) inset;
-    }
-    .city-tile .lbl{
+    .city-line:last-child{ border-bottom:none; }
+    .city-left .lbl{
       font-size:11px;
       color:rgba(255,255,255,.58);
       letter-spacing:.12em;
       text-transform:uppercase;
       font-weight:800;
     }
-    .city-tile .val{
-      margin-top:8px;
+    .city-left .sub{
+      margin-top:5px;
+      font-size:11px;
+      color:rgba(255,255,255,.54);
+      line-height:1.3;
+      max-width:260px;
+    }
+    .city-right{
       font-size:18px;
       font-weight:950;
       color:#fff;
-      line-height:1.15;
-    }
-    .city-tile .sub{
-      margin-top:6px;
-      font-size:11px;
-      color:rgba(255,255,255,.58);
-      line-height:1.3;
+      white-space:nowrap;
+      text-align:right;
     }
     .gap-pill{
       display:inline-flex;
@@ -696,6 +836,53 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }
     .gap-pill.good{ color: var(--ok); }
     .gap-pill.bad{  color: var(--bad); }
+    /* ============================================================
+       ✅ RENT vs BUY (Shell-only UI + IDs for JS to fill)
+    ============================================================ */
+    .rvb{
+      margin-top:18px;
+    }
+    .rvb-top{
+      display:flex;
+      justify-content:space-between;
+      align-items:flex-start;
+      gap:12px;
+      flex-wrap:wrap;
+      margin-bottom:10px;
+    }
+    .rvb-title{
+      font-size:14px;
+      color:var(--subink);
+      font-weight:800;
+      letter-spacing:.3px;
+      text-transform:uppercase;
+    }
+    .rvb-sub{
+      font-size:11px;
+      color:rgba(255,255,255,.58);
+      line-height:1.35;
+      max-width:520px;
+    }
+    .rvb-footer{
+      margin-top:10px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+      font-size:12px;
+      color:rgba(255,255,255,.62);
+    }
+    .rvb-metric{
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      white-space:nowrap;
+    }
+    .rvb-metric b{
+      font-weight:950;
+      color:#fff;
+    }
     @media print{
       body, html{ background:#fff !important; }
     }
@@ -711,7 +898,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
               <span id="fid-grade"></span>
               <span id="fid-disp"></span>
               <div id="fid-meter"></div>
-              <!--  ✅ ghost export so existing JS doesn’t throw  -->
               <button id="fid-export" type="button">Export ▾</button>
             </div>
             <!--  ============================================================
@@ -774,7 +960,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
                 <div class="kpi-title">Housing Cost</div>
                 <div class="kpi-val" id="k-mtg">$0</div>
                 <div class="kpi-editor" id="kpi-mtg-editor">
-                  <input class="kpi-input" id="in-housingOverride" type="number" inputmode="numeric" min="0" step="25000" placeholder="Housing cost (adjust by $25,000)">
+                  <input class="kpi-input" id="in-housingOverride" type="number" inputmode="numeric" min="0" step="25000" placeholder="confirm: housing input expects price-like values here">
                 </div>
                 <div class="kpi-hint">Use the arrows / scroll to adjust in $25,000 steps.</div>
               </div>
@@ -820,26 +1006,35 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
                   <span>Income → Housing + Expenses + Savings Target → Residual</span>
                 </h3>
                 <div class="fs-wrap">
-                  <div class="fs-top">
-                    <div class="fs-metric">
-                      <div class="lbl">Total Monthly Income</div>
-                      <div class="val" id="fs-income">$—</div>
-                      <div class="sub" id="fs-income-sub">Total + Add’l</div>
+                  <!--  ✅ SIMPLE WRITTEN ROWS  -->
+                  <div class="fs-simple" aria-label="feasibility-top-rows">
+                    <div class="fs-line">
+                      <div class="fs-left">
+                        <div class="lbl">Total Monthly Income</div>
+                        <div class="sub" id="fs-income-sub">Total + Add’l</div>
+                      </div>
+                      <div class="fs-right" id="fs-income">$—</div>
                     </div>
-                    <div class="fs-metric">
-                      <div class="lbl">All-in Housing</div>
-                      <div class="val" id="fs-housing">$—</div>
-                      <div class="sub" id="fs-housing-sub">Mortgage estimate / override</div>
+                    <div class="fs-line">
+                      <div class="fs-left">
+                        <div class="lbl">All-in Housing</div>
+                        <div class="sub" id="fs-housing-sub">Mortgage estimate / override</div>
+                      </div>
+                      <div class="fs-right" id="fs-housing">$—</div>
                     </div>
-                    <div class="fs-metric">
-                      <div class="lbl">Monthly Expenses</div>
-                      <div class="val" id="fs-expenses">$—</div>
-                      <div class="sub">Total monthly expense</div>
+                    <div class="fs-line">
+                      <div class="fs-left">
+                        <div class="lbl">Monthly Expenses</div>
+                        <div class="sub">Total monthly expense</div>
+                      </div>
+                      <div class="fs-right" id="fs-expenses">$—</div>
                     </div>
-                    <div class="fs-metric">
-                      <div class="lbl">Savings Target</div>
-                      <div class="val" id="fs-saving">$—</div>
-                      <div class="sub" id="fs-saving-sub">% target from income</div>
+                    <div class="fs-line">
+                      <div class="fs-left">
+                        <div class="lbl">Savings Target</div>
+                        <div class="sub" id="fs-saving-sub">% target from income</div>
+                      </div>
+                      <div class="fs-right" id="fs-saving">$—</div>
                     </div>
                   </div>
                   <div class="fs-bars" aria-label="feasibility-bars">
@@ -924,140 +1119,71 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
                   </div>
                   <div class="city-hero" aria-hidden="true"></div>
                 </div>
-                <div class="city-grid">
-                  <div class="city-tile">
-                    <div class="lbl">Target Rent</div>
-                    <div class="val"><span id="ct-rent">$—</span><span style="font-size:12px; font-weight:900; color:rgba(255,255,255,.65)"> / mo</span></div>
-                    <div class="sub" id="ct-rent-sub">Uses BAH (brain.js) when available</div>
+                <!--  ✅ SIMPLE WRITTEN ROWS  -->
+                <div class="city-simple" aria-label="city-simple-rows">
+                  <div class="city-line">
+                    <div class="city-left">
+                      <div class="lbl">Target Rent</div>
+                      <div class="sub" id="ct-rent-sub">Uses BAH (brain.js) when available</div>
+                    </div>
+                    <div class="city-right"><span id="ct-rent">$—</span><span style="font-size:12px; font-weight:900; color:rgba(255,255,255,.65)"> / mo</span></div>
                   </div>
-                  <div class="city-tile">
-                    <div class="lbl">Average Home Price</div>
-                    <div class="val" id="ct-home">$—</div>
-                    <div class="sub" id="ct-home-sub">From city market baseline</div>
+                  <div class="city-line">
+                    <div class="city-left">
+                      <div class="lbl">Average Home Price</div>
+                      <div class="sub" id="ct-home-sub">From city market baseline</div>
+                    </div>
+                    <div class="city-right" id="ct-home">$—</div>
                   </div>
-                  <div class="city-tile">
-                    <div class="lbl">Target Home Price</div>
-                    <div class="val" id="ct-target-home">$—</div>
-                    <div class="sub" id="ct-target-sub">Based on max housing ≤ 33% income</div>
+                  <div class="city-line">
+                    <div class="city-left">
+                      <div class="lbl">Target Home Price</div>
+                      <div class="sub" id="ct-target-sub">Based on max housing ≤ 33% income</div>
+                    </div>
+                    <div class="city-right" id="ct-target-home">$—</div>
                   </div>
-                  <div class="city-tile">
-                    <div class="lbl">Market Gap</div>
-                    <div class="val" id="ct-gap">$—</div>
-                    <div class="gap-pill" id="ct-gap-pill">—</div>
-                    <div class="sub" id="ct-gap-sub">Avg − Target (positive = market above target)</div>
+                  <div class="city-line">
+                    <div class="city-left">
+                      <div class="lbl">Market Gap</div>
+                      <div class="sub" id="ct-gap-sub">Avg − Target (positive = market above target)</div>
+                      <div class="gap-pill" id="ct-gap-pill">—</div>
+                    </div>
+                    <div class="city-right" id="ct-gap">$—</div>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="muted" style="margin-top:10px">
-              Outputs are educational, not advice.
+            <!--  ✅ UPDATED: RENT VS BUY (full section + footer IDs)  -->
+            <div class="card-mini rvb" id="rentbuy-card">
+              <div class="rvb-top">
+                <div>
+                  <div class="rvb-title">RENT VS BUY ANALYSIS</div>
+                  <div class="rvb-sub">
+                    10-year net cost comparison. Buying cost reflects mortgage + taxes/insurance/HOA/PMI assumptions from your live scenario.
+                  </div>
+                </div>
+                <div class="rvb-sub" style="text-align:right;">
+                  Legend and values appear once your scenario loads.
+                </div>
+              </div>
+              <div class="chart-holder rvb">
+                <canvas id="fid-line"></canvas>
+              </div>
+              <div class="rvb-footer" aria-label="rent-vs-buy-footer">
+                <div class="rvb-metric">Long-Term Gain: <b id="rvb-gain">—</b></div>
+                <div class="rvb-metric">Break-even: <b id="rvb-break">—</b></div>
+                <div class="rvb-metric">Cost of Renting: <b id="rvb-rentCost">—</b></div>
+              </div>
+              <div class="muted" style="margin-top:10px">
+                Outputs are educational, not advice.
+              </div>
+            </div>
+            <div class="muted" style="margin-top:12px">
+              Outputs are educational, not financial advice.
             </div>
           </div>
         </div>
       </div>
-      <!--  =========================================================
-    //#4 AUTO DOWNPAYMENT = 5% of HOUSING (unless user overrides)
-    - Works WITHOUT editing your Embed #2
-    - If user clicks Save on downpayment, we mark it as manual
-    - If no manual flag, we keep savingsOverride synced to 5% housing
-  ==========================================================  -->
-      <script>
-  (() => {
-    const LS_KEY = "realtysass.kpi_overrides.v1";
-    const clamp0 = (n) => (Number.isFinite(n) && n > 0 ? n : 0);
-    const readOverrides = () => {
-      try { return JSON.parse(localStorage.getItem(LS_KEY) || "{}") || {}; }
-      catch(e){ return {}; }
-    };
-    const writeOverrides = (obj) => {
-      try { localStorage.setItem(LS_KEY, JSON.stringify(obj || {})); } catch(e){}
-    };
-    const parseMoney = (txt) => {
-      const n = Number(String(txt || "").replace(/[^0-9.-]/g,""));
-      return Number.isFinite(n) ? n : 0;
-    };
-    const safeRepaint = () => {
-      const CORE = window.RS_FID;
-      if (!CORE) return;
-      const fns = [
-        "recalc","recalculate","compute","computeAll","updateAll",
-        "paint","paintAll","render","renderAll","refresh","refreshAll","redraw"
-      ];
-      for (const k of fns){
-        if (typeof CORE[k] === "function") { try { CORE[k](); } catch(e){} }
-      }
-    };
-    const getHousingValue = () => {
-      const CORE = window.RS_FID;
-      const ov = readOverrides();
-      // 1) Prefer live shared state
-      const sHousing = CORE && CORE.state ? (CORE.state.housing ?? CORE.state.housingCost ?? CORE.state.mortgage ?? null) : null;
-      if (Number.isFinite(sHousing) && sHousing > 0) return sHousing;
-      // 2) Then saved override
-      if (Number.isFinite(ov.housingOverride) && ov.housingOverride > 0) return ov.housingOverride;
-      // 3) Then the rendered KPI text
-      const el = document.getElementById("k-mtg");
-      const n = el ? parseMoney(el.textContent) : 0;
-      return n > 0 ? n : 0;
-    };
-    const applyAutoDownpayment = () => {
-      const CORE = window.RS_FID;
-      const ov = readOverrides();
-      // If user manually set downpayment before, do not auto-update.
-      if (ov.dpManual === true) return;
-      const housing = clamp0(getHousingValue());
-      if (!housing) return;
-      const dp = Math.round(housing * 0.05);
-      // Write override + sync live state if present
-      ov.savingsOverride = dp;
-      writeOverrides(ov);
-      if (CORE && CORE.state){
-        if ("savings" in CORE.state) CORE.state.savings = dp;
-        if ("downpayment" in CORE.state) CORE.state.downpayment = dp;
-        if ("estimatedDownpayment" in CORE.state) CORE.state.estimatedDownpayment = dp;
-      }
-      // If the input is visible, prefill it
-      const inp = document.getElementById("in-savingsOverride");
-      if (inp && !ov.dpManual) inp.value = String(dp);
-      // Let the existing dashboard logic repaint
-      safeRepaint();
-    };
-    const armManualLock = () => {
-      const saveBtn = document.getElementById("kpi-save-save");
-      if (!saveBtn) return;
-      saveBtn.addEventListener("click", () => {
-        const ov = readOverrides();
-        ov.dpManual = true;                 // lock the override
-        writeOverrides(ov);
-      }, true);
-    };
-    const boot = () => {
-      armManualLock();
-      // Wait for RS_FID to exist, then apply
-      let tries = 0;
-      const t = setInterval(() => {
-        tries++;
-        const CORE = window.RS_FID;
-        const ready = !!(CORE && (CORE.state || CORE.__coreMounted));
-        if (ready) {
-          applyAutoDownpayment();
-          clearInterval(t);
-        }
-        if (tries > 80) clearInterval(t); // ~8s max
-      }, 100);
-      // Also re-apply after housing save (if user changes Housing Cost and dp not manual)
-      const housingSave = document.getElementById("kpi-mtg-save");
-      if (housingSave){
-        housingSave.addEventListener("click", () => setTimeout(applyAutoDownpayment, 150), true);
-      }
-    };
-    if (document.readyState === "loading") {
-      document.addEventListener("DOMContentLoaded", boot);
-    } else {
-      boot();
-    }
-  })();
-  </script>
     </section>
   </div>
   <div class="w-embed w-script">
@@ -3443,6 +3569,506 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   // Slow loop as a safety net
   setInterval(tick, 450);
   tick();
+})();
+</script>
+  </div>
+  <div class="w-embed w-script">
+    <script>
+(() => {
+  "use strict";
+  // ============================================================
+  // RS_FID • EMBED 2E — RENT vs BUY (Equity + Break-even + Drag Cursor)
+  // - Uses existing Shell IDs:
+  //   canvas#fid-line, #rvb-gain, #rvb-rentCost
+  // - Injects Break-even label into the footer (no Shell edits needed)
+  // ============================================================
+  if (window.RS_RVB_2E && window.RS_RVB_2E.__mounted) return;
+  // ----------------------------
+  // //#1 Helpers
+  // ----------------------------
+  const money0 = (n) => {
+    const x = Number(n);
+    if (!Number.isFinite(x)) return "$—";
+    return x.toLocaleString("en-US", { style:"currency", currency:"USD", maximumFractionDigits:0 });
+  };
+  const numFromText = (txt) => {
+    const n = Number(String(txt || "").replace(/[^0-9.-]/g, ""));
+    return Number.isFinite(n) ? n : 0;
+  };
+  const getEl = (id) => document.getElementById(id);
+  const readJSON = (key) => {
+    try { return JSON.parse(localStorage.getItem(key) || "null"); } catch(e){ return null; }
+  };
+  function pmti(P, r, n){
+    if (!P || !n) return 0;
+    if (r === 0) return P / n;
+    const x = Math.pow(1 + r, n);
+    return P * (r * x) / (x - 1);
+  }
+  function aprFromScore(score){
+    const s = Number(score) || 720;
+    if (s >= 780) return 6.50;
+    if (s >= 740) return 6.90;
+    if (s >= 700) return 7.20;
+    if (s >= 660) return 7.80;
+    return 8.50;
+  }
+  // ----------------------------
+  // //#2 Pull snapshot inputs from RS_FID + localStorage + DOM
+  // ----------------------------
+  function buildSnapshot(){
+    const CORE = window.RS_FID || null;
+    const ov = readJSON("realtysass.kpi_overrides.v1") || {};
+    const mortCache = readJSON("realtysass.mortgage_cache.v1") || {};
+    const derivedMortgage = readJSON("realtysass.derived.housing_monthly.v1") || null;
+    // Price = Housing Cost KPI (this is purchase price, not monthly)
+    let price =
+      (CORE && CORE.state && Number(CORE.state.housingOverride)) ||
+      Number(ov.housingOverride) ||
+      numFromText(getEl("k-mtg")?.textContent) ||
+      350000;
+    // Downpayment amount
+    let dpAmt =
+      (CORE && CORE.state && (Number(CORE.state.savingsOverride) || Number(CORE.state.savings))) ||
+      Number(ov.savingsOverride) ||
+      numFromText(getEl("k-save")?.textContent) ||
+      Math.round(price * 0.05);
+    // Credit score -> APR fallback
+    const score =
+      (CORE && CORE.state && Number(CORE.state.creditScore)) ||
+      Number(ov.creditScore) ||
+      numFromText(getEl("k-score")?.textContent) ||
+      720;
+    // Mortgage cache can be shaped differently depending on your mortgage.js response.
+    // Try multiple likely keys.
+    const mc = mortCache && (mortCache.data || mortCache.payload || mortCache) || {};
+    const apr =
+      Number(mc.apr) ||
+      Number(mc.aprPercent) ||
+      Number(mc.rate) ||
+      aprFromScore(score);
+    const termYears =
+      Number(mc.termYears) ||
+      Number(mc.term) ||
+      30;
+    // Monthly components (preferred from mortgage.js)
+    const pi =
+      Number(mc.piMonthly) ||
+      Number(mc.pi) ||
+      0;
+    const tax =
+      Number(mc.taxMonthly) ||
+      (Number(mc.taxAnnual) ? Number(mc.taxAnnual)/12 : 0) ||
+      0;
+    const ins =
+      Number(mc.insuranceMonthly) ||
+      (Number(mc.insuranceAnnual) ? Number(mc.insuranceAnnual)/12 : 0) ||
+      0;
+    const hoa =
+      Number(mc.hoaMonthly) ||
+      0;
+    const pmi =
+      Number(mc.pmiMonthly) ||
+      Number(mc.pmi) ||
+      0;
+    // All-in monthly mortgage (fallback to derived/local DOM if cache missing)
+    const allIn =
+      Number(mc.allInMonthly) ||
+      Number(mc.monthly) ||
+      Number(derivedMortgage) ||
+      numFromText(getEl("fs-housing")?.textContent) ||
+      0;
+    // If we have no tax/ins/hoa, create a conservative baseline so equity model isn't nonsense.
+    // (Only used when mortgage.js didn't supply details.)
+    let tihoa = (tax + ins + hoa);
+    if (!tihoa && price){
+      const taxMo = (price * 0.0115) / 12;   // ~1.15% property tax
+      const insMo = (price * 0.0040) / 12;   // ~0.40% insurance
+      const hoaMo = 0;                       // unknown
+      tihoa = taxMo + insMo + hoaMo;
+    }
+    // If PI is missing but we have APR/term, compute PI from price/dp.
+    // Loan amount:
+    const loan0 = Math.max(0, price - dpAmt);
+    const r_m = (apr / 100) / 12;
+    const nTot = termYears * 12;
+    let piMo = pi;
+    if (!piMo && loan0 > 0){
+      piMo = pmti(loan0, r_m, nTot);
+    }
+    // Rent monthly: prefer City Target Rent tile (ct-rent) if available
+    let rentMonthly =
+      numFromText(getEl("ct-rent")?.textContent) ||
+      0;
+    // If ct-rent is empty, use a baseline rent heuristic (1% rule-ish)
+    if (!rentMonthly){
+      rentMonthly = Math.max(1200, Math.round((price * 0.0095)));
+    }
+    return {
+      price,
+      dpAmt,
+      apr,
+      termYears,
+      tihoa,    // monthly taxes+insurance+hoa combined
+      pmi,      // monthly
+      piMo,     // monthly PI
+      allIn,    // monthly all-in
+      rentMonthly
+    };
+  }
+  // ----------------------------
+  // //#3 Equity-aware Rent vs Buy Model (10 years)
+  // ----------------------------
+  const MODEL = {
+    CLOSE_PCT: 0.03,  // 3% closing costs
+    SELL_PCT:  0.07,  // 7% selling costs
+    APP_Y:     0.03,  // 3%/yr appreciation
+    RENT_Y:    0.03,  // 3%/yr rent growth
+    INVRET_Y:  0.05,  // 5%/yr alt investment return on cash
+    MAINT_Y:   0.01   // 1%/yr maintenance
+  };
+  function buildSeries10Y(s){
+    const Y = 10;
+    const N = Y * 12;
+    const labels = Array.from({ length: Y + 1 }, (_, i) => i === 0 ? "T" : `${i}Y`);
+    const price = Math.max(150000, Number(s.price) || 350000);
+    const down  = Math.max(0, Number(s.dpAmt) || 0);
+    const loan0 = Math.max(0, price - down);
+    const apr = Number(s.apr) || 7.0;
+    const termYears = Number(s.termYears) || 30;
+    const r_m = (apr / 100) / 12;
+    const nTot = termYears * 12;
+    // Use PI from snapshot if trustworthy, else compute
+    const piMo = Number(s.piMo) || (loan0 > 0 ? pmti(loan0, r_m, nTot) : 0);
+    const tihoa = Number(s.tihoa) || 0;
+    const pmi   = Number(s.pmi) || 0;
+    const maintMo = (price * MODEL.MAINT_Y) / 12;
+    const closing = price * MODEL.CLOSE_PCT;
+    const upfront = down + closing;
+    const rent0 = Math.max(0, Number(s.rentMonthly) || 0);
+    const rent_g_m = Math.pow(1 + MODEL.RENT_Y, 1/12) - 1;
+    const appr_m = Math.pow(1 + MODEL.APP_Y, 1/12) - 1;
+    const inv_m  = Math.pow(1 + MODEL.INVRET_Y, 1/12) - 1;
+    let bal = loan0;
+    let homeVal = price;
+    let cumRent = 0;
+    let cumOwner = upfront;
+    // Alternative investment: renter invests the downpayment (opportunity cost model)
+    let altInvest = down;
+    const buySeries = [upfront];
+    const rentSeries = [0];
+    const equityByYear = [down];
+    const cumRentByYear = [0];
+    let beMonth = null;
+    for (let m = 1; m <= N; m++){
+      // RENT: pay rent, rent grows, invested cash grows
+      const rent_m = rent0 * Math.pow(1 + rent_g_m, m - 1);
+      cumRent += rent_m;
+      altInvest *= (1 + inv_m);
+      // BUY: amortization + all-in owner costs
+      const interest  = bal * r_m;
+      const principal = Math.max(0, piMo - interest);
+      bal = Math.max(0, bal - principal);
+      cumOwner += (piMo + tihoa + pmi + maintMo);
+      // Appreciation
+      homeVal *= (1 + appr_m);
+      const equity = Math.max(0, homeVal - bal);
+      const sellCost = homeVal * MODEL.SELL_PCT;
+      const netIfSold = Math.max(homeVal - sellCost - bal, 0);
+      // Net costs:
+      // - BuyNet = what you paid (cumOwner) minus what you could walk away with if sold now (netIfSold)
+      const buyNet = Math.max(0, cumOwner - netIfSold);
+      // - RentNet = rent paid minus net growth of invested downpayment cash (altInvest - down)
+      const rentNet = Math.max(0, cumRent - (altInvest - down));
+      if (beMonth === null && buyNet <= rentNet) beMonth = m;
+      if (m % 12 === 0){
+        buySeries.push(buyNet);
+        rentSeries.push(rentNet);
+        equityByYear.push(equity);
+        cumRentByYear.push(cumRent);
+      }
+    }
+    const beYears = (beMonth !== null) ? (beMonth / 12) : null;
+    return {
+      labels,
+      buySeries,
+      rentSeries,
+      equityByYear,
+      cumRentByYear,
+      beYears
+    };
+  }
+  // ----------------------------
+  // //#4 Chart + Drag Cursor Plugin
+  // ----------------------------
+  let chart = null;
+  let selectedIndex = 1; // default to 1Y
+  let lastSeries = null;
+  let lastSnap = null;
+  function ensureBreakEvenBadge(){
+    const footer = getEl("rentbuy-card")?.querySelector(".rvb-footer");
+    if (!footer) return;
+    if (!getEl("rvb-be")){
+      const wrap = document.createElement("div");
+      wrap.className = "rvb-metric";
+      wrap.innerHTML = `Break-even: <b id="rvb-be">—</b>`;
+      footer.insertBefore(wrap, footer.children[1] || null);
+    }
+  }
+  const cursorPlugin = {
+    id: "rsRvbCursor",
+    afterDatasetsDraw(c, args, opts){
+      try{
+        const meta = c.getDatasetMeta(0);
+        if (!meta || !meta.data || !meta.data.length) return;
+        const idx = Math.max(0, Math.min(selectedIndex, meta.data.length - 1));
+        const pt = meta.data[idx];
+        if (!pt) return;
+        const { ctx, chartArea } = c;
+        const x = pt.x;
+        ctx.save();
+        ctx.strokeStyle = "rgba(255,255,255,0.35)";
+        ctx.lineWidth = 1;
+        ctx.beginPath();
+        ctx.moveTo(x, chartArea.top);
+        ctx.lineTo(x, chartArea.bottom);
+        ctx.stroke();
+        // Label pill
+        const label = idx === 0 ? "T" : `Year ${idx}`;
+        const padX = 10, padY = 6;
+        ctx.font = "800 11px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial";
+        const w = ctx.measureText(label).width + padX*2;
+        const h = 24;
+        let lx = x - w/2;
+        lx = Math.max(chartArea.left + 6, Math.min(lx, chartArea.right - w - 6));
+        const ly = chartArea.top + 10;
+        // Rounded rect
+        const r = 10;
+        ctx.fillStyle = "rgba(0,0,0,0.55)";
+        ctx.strokeStyle = "rgba(255,255,255,0.18)";
+        ctx.beginPath();
+        ctx.moveTo(lx + r, ly);
+        ctx.arcTo(lx + w, ly, lx + w, ly + h, r);
+        ctx.arcTo(lx + w, ly + h, lx, ly + h, r);
+        ctx.arcTo(lx, ly + h, lx, ly, r);
+        ctx.arcTo(lx, ly, lx + w, ly, r);
+        ctx.closePath();
+        ctx.fill();
+        ctx.stroke();
+        ctx.fillStyle = "rgba(255,255,255,0.92)";
+        ctx.textBaseline = "middle";
+        ctx.fillText(label, lx + padX, ly + h/2);
+        ctx.restore();
+      }catch(e){}
+    }
+  };
+  function initChart(){
+    const canvas = getEl("fid-line");
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    chart = new Chart(ctx, {
+      type: "line",
+      data: {
+        labels: [],
+        datasets: [
+          {
+            label:"Buying — Net Cost",
+            data: [],
+            tension: 0.35,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 0,
+            borderColor: "#6aa7ff"
+          },
+          {
+            label:"Renting — Net Cost",
+            data: [],
+            tension: 0.35,
+            fill: false,
+            borderWidth: 2,
+            pointRadius: 0,
+            borderColor: "#ff5c8a"
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode:"index", intersect:false },
+        plugins: {
+          legend: {
+            display: true,
+            labels: { color:"#fff", boxWidth:12, boxHeight:12 }
+          },
+          tooltip: {
+            callbacks: {
+              label: (item) => {
+                const base = `${item.dataset.label}: ${money0(item.raw)}`;
+                const idx = item.dataIndex;
+                if (lastSeries && item.datasetIndex === 0){
+                  const eq = lastSeries.equityByYear?.[idx] || 0;
+                  return [base, `Equity (est): ${money0(eq)}`];
+                }
+                if (lastSeries && item.datasetIndex === 1){
+                  const cr = lastSeries.cumRentByYear?.[idx] || 0;
+                  return [base, `Cumulative rent paid: ${money0(cr)}`];
+                }
+                return base;
+              }
+            }
+          }
+        },
+        scales: {
+          x: {
+            ticks: { color:"rgba(255,255,255,0.75)", font:{ weight:700 } },
+            grid: { color:"rgba(255,255,255,0.06)" }
+          },
+          y: {
+            ticks: {
+              color:"rgba(255,255,255,0.75)",
+              callback: (v) => {
+                const n = Number(v) || 0;
+                if (n >= 1000000) return (n/1000000).toFixed(1) + "M";
+                if (n >= 1000) return (n/1000).toFixed(0) + "K";
+                return String(n);
+              }
+            },
+            grid: { color:"rgba(255,255,255,0.08)" }
+          }
+        }
+      },
+      plugins: [cursorPlugin]
+    });
+    // Drag handler (mouse/touch/pointer)
+    let dragging = false;
+    const setIdxFromEvent = (ev) => {
+      if (!chart) return;
+      const e = ev.touches ? ev.touches[0] : ev;
+      const rect = canvas.getBoundingClientRect();
+      const x = (e.clientX - rect.left);
+      const xScale = chart.scales.x;
+      if (!xScale) return;
+      // Find closest tick/index by pixel
+      const pixels = chart.getDatasetMeta(0).data.map(p => p.x);
+      let best = 0;
+      let bestD = Infinity;
+      for (let i=0; i<pixels.length; i++){
+        const d = Math.abs(pixels[i] - (xScale.left + x));
+        if (d < bestD){ bestD = d; best = i; }
+      }
+      selectedIndex = best;
+      chart.update("none");
+      paintFooter();
+    };
+    canvas.addEventListener("pointerdown", (ev) => {
+      dragging = true;
+      canvas.setPointerCapture?.(ev.pointerId);
+      setIdxFromEvent(ev);
+    });
+    canvas.addEventListener("pointermove", (ev) => {
+      if (!dragging) return;
+      setIdxFromEvent(ev);
+    });
+    window.addEventListener("pointerup", () => { dragging = false; }, { passive:true });
+    // Touch fallback (older iOS webviews)
+    canvas.addEventListener("touchstart", (ev) => { dragging = true; setIdxFromEvent(ev); }, { passive:true });
+    canvas.addEventListener("touchmove",  (ev) => { if (dragging) setIdxFromEvent(ev); }, { passive:true });
+    window.addEventListener("touchend",   () => { dragging = false; }, { passive:true });
+  }
+  // ----------------------------
+  // //#5 Paint (Chart + Footer + Break-even)
+  // ----------------------------
+  function paintFooter(){
+    const gainEl = getEl("rvb-gain");
+    const rentEl = getEl("rvb-rentCost");
+    const beEl   = getEl("rvb-be");
+    if (!lastSeries) {
+      if (gainEl) gainEl.textContent = "—";
+      if (rentEl) rentEl.textContent = "—";
+      if (beEl)   beEl.textContent   = "—";
+      return;
+    }
+    const idx = Math.max(0, Math.min(selectedIndex, lastSeries.labels.length - 1));
+    const buyNet  = Number(lastSeries.buySeries[idx])  || 0;
+    const rentNet = Number(lastSeries.rentSeries[idx]) || 0;
+    // ✅ Gain definition: positive means BUYING wins (rent net cost - buy net cost)
+    const gain = rentNet - buyNet;
+    if (gainEl) gainEl.textContent = (gain >= 0 ? "" : "−") + money0(Math.abs(gain));
+    if (rentEl) rentEl.textContent = money0(rentNet);
+    if (beEl){
+      if (lastSeries.beYears == null) {
+        beEl.textContent = "—";
+      } else {
+        const y = lastSeries.beYears;
+        const years = Math.floor(y);
+        const months = Math.round((y - years) * 12);
+        const label = (years === 0)
+          ? `${months} mo`
+          : `${years}y ${months}mo`;
+        beEl.textContent = label.replace(" 0mo", "");
+      }
+    }
+  }
+  function paintAll(){
+    if (!chart) initChart();
+    if (!chart) return;
+    ensureBreakEvenBadge();
+    const snap = buildSnapshot();
+    lastSnap = snap;
+    // Build equity-aware series
+    const series = buildSeries10Y(snap);
+    lastSeries = series;
+    // Keep cursor index in range
+    if (selectedIndex > series.labels.length - 1) selectedIndex = series.labels.length - 1;
+    if (selectedIndex < 0) selectedIndex = 0;
+    chart.data.labels = series.labels;
+    chart.data.datasets[0].data = series.buySeries;
+    chart.data.datasets[1].data = series.rentSeries;
+    chart.update();
+    paintFooter();
+  }
+  // ----------------------------
+  // //#6 Hooks: refresh when RS_FID updates
+  // ----------------------------
+  let rafLock = false;
+  const schedulePaint = () => {
+    if (rafLock) return;
+    rafLock = true;
+    requestAnimationFrame(() => {
+      rafLock = false;
+      paintAll();
+    });
+  };
+  // a) Listen for feasibility publish (your core runtime posts this)
+  window.addEventListener("message", (ev) => {
+    try{
+      const d = ev?.data || {};
+      if (d && d.type === "realtysass-feasibility") schedulePaint();
+    }catch(e){}
+  });
+  // b) Soft poll fallback (covers first load + any missed events)
+  let lastKey = "";
+  setInterval(() => {
+    const ov = readJSON("realtysass.kpi_overrides.v1") || {};
+    const mc = readJSON("realtysass.mortgage_cache.v1") || {};
+    const sig = JSON.stringify({
+      h: ov.housingOverride, s: ov.savingsOverride, c: ov.creditScore,
+      m: mc && (mc.key || mc.__key || mc.ts || mc.updatedAt || null)
+    });
+    if (sig !== lastKey){
+      lastKey = sig;
+      schedulePaint();
+    }
+  }, 900);
+  // Boot
+  schedulePaint();
+  // Public handle (optional)
+  window.RS_RVB_2E = {
+    __mounted: true,
+    repaint: schedulePaint,
+    getSnapshot: () => ({ ...(lastSnap || {}) }),
+    getSeries: () => ({ ...(lastSeries || {}) })
+  };
 })();
 </script>
   </div>

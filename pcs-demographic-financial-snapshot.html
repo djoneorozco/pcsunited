@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Jan 14 2026 23:15:35 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Jan 18 2026 11:30:14 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="696731f983d4f50d006664d1" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -16,6 +16,10 @@
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/webflow.css" rel="stylesheet" type="text/css">
   <link href="css/pcs-united.webflow.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">WebFont.load({  google: {    families: ["Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"]  }});</script>
   <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
   <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
   <link href="images/webclip.png" rel="apple-touch-icon">
@@ -23,11 +27,9 @@
 <body>
   <div class="w-embed w-script"><!--  =========================================================
   PCS SNAPSHOT v3.2.2 • House of SaSS (PCS UNITED)
-  ✅ Fix: Base-name cityKeys (Lackland, Fort-Sam-Houston, Davis-Monthan, etc.)
-  ✅ Fix: Robust city JSON field paths (supports your new Lackland.json schema)
-  ✅ Fix: BAH/BasePay = $0 bug (prevents E--4 / O--3)
-  ✅ Update: Chart sizing so all 4 charts fit in one screen (no “half screen” issue)
-  ✅ Keeps your visual structure intact
+  ✅ Theme Update: Match AIOU “House of SaSS” (tokens, cards, buttons, typography)
+  ✅ Keeps your IDs + structure + logic intact
+  ✅ Charts still fit 1 screen (your sizing stays)
 =========================================================  -->
     <div id="pcs-snapshot-shell" style="all: initial;">
       <!--  FONTS + CHART LIBRARIES  -->
@@ -49,6 +51,9 @@
       display: block !important;
       margin: 0 !important;
       padding: 0 !important;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      isolation: isolate;
     }
     #pcs-snapshot-shell{
       padding-top: env(safe-area-inset-top);
@@ -57,43 +62,138 @@
       padding-left: env(safe-area-inset-left);
     }
     /* =========================================================
-       ORIGINAL STYLES (UNCHANGED LOOK) + SIZE TUNING (NEW)
+       //#1 GLOBAL TOKENS / RESET (AIOU THEME)
     ========================================================= */
     #pcs-snapshot-shell,
     #pcs-snapshot-shell * {
       box-sizing: border-box;
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
-    /* NEW: tighter wrap so 2x2 charts fit on one screen */
-    #pcs-snapshot-wrap {
+    :root{
+      --bg:#0b0e1a;
+      --panel:#101426;
+      --panel-2:#0f1324;
+      --ink:#e9ecff;
+      --muted:#a8b0d6;
+      --border:rgba(255,255,255,.10);
+      --accent:#8ef3c5;
+      --accent2:#6aa7ff;
+      --danger:#ff8aa6;
+      /* AIOU chip gradient */
+      --chip-bg-start:#6aa7ff;
+      --chip-bg-end:#4f86ff;
+      /* extra */
+      --shadow: 0 24px 48px rgba(0,0,0,.8);
+      --shadow-inset: 0 16px 32px rgba(0,0,0,.6) inset;
+      --radius: 18px;
+    }
+    h2,h3,h4 { margin: 0; padding: 0; }
+    /* =========================================================
+       //#2 WRAP (AIOU-LIKE SPACING)
+    ========================================================= */
+    #pcs-snapshot-wrap{
       width: 100%;
-      max-width: none;
-      margin: 0;
+      max-width: 1400px;
+      min-width: 1024px;
+      margin: 0 auto;
       min-height: 100vh;
-      padding: 18px clamp(14px, 1.8vw, 26px) 18px;
-      background: #0b0e1a;
-      border-radius: 0;
-      box-shadow: none;
-      color: #e9ecff;
+      padding: 22px 24px 28px;
+      background: var(--bg);
+      color: var(--ink);
     }
-    h2, h3, h4 { margin: 0; padding: 0; }
-    .pcs-panel {
-      background: radial-gradient(circle at top left, #101426, #0f1324);
-      border-radius: 18px;
-      padding: 12px 14px 14px; /* NEW: smaller padding */
-      border: 1px solid rgba(255,255,255,0.08);
-      box-shadow: 0 16px 36px rgba(0,0,0,0.75);
+    @media(max-width:1100px){
+      #pcs-snapshot-wrap{
+        min-width: 0;
+        max-width: 100%;
+        padding: 18px 14px 22px;
+      }
     }
-    .pcs-grid-2 {
+    /* =========================================================
+       //#3 HEADER (AIOU LOOK)
+    ========================================================= */
+    .pcs-header-center{
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,.07) 0%, rgba(0,0,0,0) 60%),
+        linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015) 60%,rgba(0,0,0,0) 100%);
+      background-color: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px 18px 14px;
+      margin-bottom: 14px;
+    }
+    .pcs-header-center h2{
+      font-size: 22px;
+      font-weight: 900;
+      line-height: 1.25;
+      letter-spacing: .2px;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    .pcs-tagline{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 2px;
+      line-height: 1.4;
+    }
+    .pcs-income-main{
+      font-size: 18px;
+      font-weight: 900;
+      color: var(--ink);
+      margin: 10px 0 2px;
+      letter-spacing: .2px;
+    }
+    .pcs-income-breakdown{
+      font-size: 12px;
+      color: var(--muted);
+      margin: 0 0 14px;
+      line-height: 1.4;
+    }
+    /* =========================================================
+       //#4 CARD STYLE (AIOU-CARD EQUIVALENT)
+    ========================================================= */
+    .pcs-panel{
+      background:
+        radial-gradient(circle at 0% 0%, rgba(255,255,255,.07) 0%, rgba(0,0,0,0) 60%),
+        linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015) 60%,rgba(0,0,0,0) 100%);
+      background-color: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 14px 14px 14px;
+      box-shadow: var(--shadow);
+      position: relative;
+      color: var(--ink);
+    }
+    .pcs-panel h4{
+      font-size: 14px;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .2px;
+      margin-bottom: 6px;
+    }
+    .pcs-small{
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+      line-height: 1.4;
+    }
+    .pcs-highlight-teal{ color: var(--accent); font-weight: 800; }
+    .pcs-highlight-blue{ color: var(--accent2); font-weight: 800; }
+    /* =========================================================
+       //#5 GRID (KEPT STRUCTURE, AIOU SPACING)
+    ========================================================= */
+    .pcs-grid-2{
       display: grid;
       grid-template-columns: 1fr 1fr;
-      gap: 14px;           /* NEW: tighter gap */
-      margin-top: 14px;    /* NEW: tighter spacing */
+      gap: 16px;
+      margin-top: 14px;
     }
-    .pcs-small { font-size: 12px; color: #a8b0d6; margin-top: 6px; }
-    .pcs-highlight-teal { color: #8ef3c5; font-weight: 600; }
-    .pcs-highlight-blue { color: #6aa7ff; font-weight: 600; }
-    /* NEW: canvas sizing helper so charts don’t blow up */
+    @media (max-width: 900px) {
+      .pcs-grid-2 { grid-template-columns: 1fr; }
+    }
+    /* =========================================================
+       //#6 CHART SIZING (KEPT)
+    ========================================================= */
     .pcs-canvas{
       width: 100% !important;
       max-height: 170px !important;
@@ -104,79 +204,109 @@
       max-height: 190px !important;
       display: block;
     }
-    .trend-toggle {
+    @media (max-width: 900px) {
+      .pcs-canvas, .pcs-canvas-tall { max-height: 220px !important; }
+    }
+    /* =========================================================
+       //#7 TREND TOGGLES (AIOU BUTTON STYLE)
+    ========================================================= */
+    .trend-toggle{
       display: flex;
       gap: 10px;
       margin-top: 8px;
       margin-bottom: 8px;
+      flex-wrap: wrap;
     }
-    .trend-btn {
-      padding: 6px 12px;
-      border-radius: 6px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: #0f1324;
-      color: #e9ecff;
-      font-size: 12px;
+    .trend-btn{
+      border: 1px solid rgba(255,255,255,.14);
+      background: var(--panel-2);
+      color: var(--ink);
+      padding: 9px 12px;
+      border-radius: 999px;
       cursor: pointer;
+      font-weight: 900;
+      font-size: 12px;
+      line-height: 1.2;
+      letter-spacing: .02em;
+      box-shadow: 0 12px 26px rgba(0,0,0,.65);
     }
-    .trend-btn.active {
-      background: #6aa7ff;
-      color: #0b0e1a;
-      border-color: #6aa7ff;
-      font-weight: 600;
+    .trend-btn.active{
+      background: linear-gradient(180deg,var(--chip-bg-start),var(--chip-bg-end));
+      border: none;
+      color: #06112b;
+      box-shadow: 0 16px 32px rgba(0,0,0,.8);
     }
-    /* NEW: slightly shorter apex area */
-    #pcs-trend-chart-apex {
+    #pcs-trend-chart-apex{
       width: 100%;
       height: 200px;
       margin-top: 6px;
+      border-radius: 12px;
+      overflow: hidden;
     }
-    /* quickfacts */
+    @media (max-width: 900px){
+      #pcs-trend-chart-apex { height: 220px; }
+    }
+    /* =========================================================
+       //#8 QUICKFACTS (AIOU CARD MINI)
+    ========================================================= */
+    h3.pcs-qf-title{
+      margin-top: 16px;
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 900;
+      text-transform: uppercase;
+      letter-spacing: .2px;
+      color: var(--ink);
+    }
     .pcs-quickfacts{
-      display:grid;
+      display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: 12px;
-      margin-top: 10px;
+    }
+    @media (max-width: 900px){
+      .pcs-quickfacts{ grid-template-columns: 1fr; }
     }
     .pcs-fact{
-      background: rgba(12,14,25,0.55);
-      border: 1px solid rgba(255,255,255,0.08);
-      border-radius: 14px;
+      background: rgba(255,255,255,.05);
+      border: 1px solid rgba(255,255,255,.12);
+      border-radius: 12px;
       padding: 12px 14px;
+      box-shadow: var(--shadow);
     }
     .pcs-fact-label{
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: .1em;
-      color:#a8b0d6;
+      color: var(--muted);
       margin-bottom: 6px;
+      font-weight: 800;
     }
     .pcs-fact-value{
       font-size: 14px;
-      font-weight: 700;
-      color:#e9ecff;
+      font-weight: 900;
+      color: var(--ink);
+      line-height: 1.2;
     }
-    @media (max-width: 900px) {
-      .pcs-grid-2 { grid-template-columns: 1fr; }
-      .pcs-quickfacts{ grid-template-columns: 1fr; }
-      #pcs-trend-chart-apex { height: 220px; }
-      .pcs-canvas, .pcs-canvas-tall { max-height: 220px !important; }
+    /* subtle divider style to match AIOU */
+    .pcs-divider{
+      border: 0;
+      border-top: 1px solid rgba(255,255,255,.08);
+      margin: 12px 0;
     }
-    /* small header tune so it doesn’t steal vertical space */
-    .pcs-header-center h2{ font-size: 28px; letter-spacing: -0.02em; }
-    #pcs-income-main{ font-size: 18px; margin-top: 4px; }
-    #pcs-income-breakdown{ font-size: 12px; color:#a8b0d6; margin-top: 2px; }
-    .pcs-tagline{ font-size: 12px; color:#a8b0d6; margin-top: 4px; }
+    /* keep text selection safe */
+    #pcs-snapshot-wrap ::selection{
+      background: rgba(142,243,197,.22);
+    }
   </style>
       <div id="pcs-snapshot-wrap">
         <!--  HEADER  -->
         <div class="pcs-header-center">
-          <h2>Permanent Change of Duty Station (PCS) Snapshot</h2>
+          <h2>Permanent Change of Duty Station PCS Snapshot</h2>
           <div class="pcs-tagline" id="pcs-city-line">Loading city data…</div>
-        </div>
-        <div id="pcs-income-main" class="pcs-income-main">$0 / month</div>
-        <div id="pcs-income-breakdown" class="pcs-income-breakdown">
-          Base Pay: — • BAH: — • BAS: —
+          <div id="pcs-income-main" class="pcs-income-main">$0 / month</div>
+          <div id="pcs-income-breakdown" class="pcs-income-breakdown">
+            Base Pay: — • BAH: — • BAS: —
+          </div>
         </div>
         <!--  =================== TOP GRID ===================  -->
         <div class="pcs-grid-2">
@@ -205,12 +335,12 @@
             <h4>12-Month Housing Trend</h4>
             <div class="pcs-small">Median home price (interactive trend)</div>
             <div class="trend-toggle">
-              <button class="trend-btn active" id="btn-1yr">1 Year</button>
-              <button class="trend-btn" id="btn-3yr">3 Years</button>
+              <button class="trend-btn active" id="btn-1yr" type="button">1 Year</button>
+              <button class="trend-btn" id="btn-3yr" type="button">3 Years</button>
             </div>
             <div id="pcs-trend-chart-apex"></div>
             <div id="pcs-trend-summary" class="pcs-small pcs-highlight-teal"></div>
-            <hr style="border:0;border-top:1px solid rgba(255,255,255,.08);margin:10px 0;">
+            <hr class="pcs-divider">
             <h4>Market Price Breakdown</h4>
             <div class="pcs-small">Median Sale • Avg Sale • Median Listing</div>
             <canvas id="pcs-pricebreak-chart" class="pcs-canvas" height="150"></canvas>
@@ -225,11 +355,11 @@
           </div>
         </div>
         <!--  QUICKFACTS  -->
-        <h3 style="margin-top:16px;margin-bottom:6px;">City QuickFacts</h3>
+        <h3 class="pcs-qf-title">City QuickFacts</h3>
         <div id="pcs-quickfacts" class="pcs-quickfacts"></div>
       </div>
       <!--  =========================================================
-       JAVASCRIPT
+       JAVASCRIPT (UNCHANGED LOGIC)
   =========================================================  -->
       <script>
 (function () {
@@ -467,7 +597,7 @@
         labels:["Low","Avg","High","You"],
         datasets:[{
           data:[low,avg,high,userA],
-          backgroundColor:["#283555","#3e60a5","#527bdd","#8ef3c5"]
+          backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#8ef3c5"]
         }]
       },
       options:{
@@ -508,7 +638,7 @@
         labels:["Low","Avg","High","Your BAH"],
         datasets:[{
           data:[bahLow,bahAvg,bahHigh,bah],
-          backgroundColor:["#283555","#3e60a5","#527bdd","#6aa7ff"]
+          backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#6aa7ff"]
         }]
       },
       options:{
@@ -585,7 +715,7 @@
         labels:["Median Sale","Avg Sale","Median List"],
         datasets:[{
           data:[Number(medSale)||0, Number(avgSale)||0, Number(medList)||0],
-          backgroundColor:["#8ef3c5","#6aa7ff","#527bdd"]
+          backgroundColor:["#8ef3c5","#6aa7ff","#4f86ff"]
         }]
       },
       options:{

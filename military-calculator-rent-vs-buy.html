@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Jan 14 2026 23:15:35 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Jan 18 2026 11:30:14 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6965c816c706edb1978686d2" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -16,239 +16,601 @@
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
   <link href="css/webflow.css" rel="stylesheet" type="text/css">
   <link href="css/pcs-united.webflow.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">WebFont.load({  google: {    families: ["Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"]  }});</script>
   <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
   <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
   <div class="w-embed w-script"><!--  =========================================================
-  PCSUnited • Frosted Glass Login Lock (Analyze Page) v1.5
-  ✅ Visible by default
-  ✅ Hard-mounts to <body> (prevents clipping)
-  ✅ Locks ONLY pcs-united.webflow.io/analyze
-  ✅ Uses https://theorozcorealty.netlify.app/api/login
+  RealtySaSS • Frosted Glass Login Lock (PCS United Aesthetic Patch)
+  - Uses /api/login (Supabase Auth check)
+  - After success:
+      • Unlocks page
+      • Stores login email/profile in localStorage for dashboards
+  ✅ UPDATE (Premium UX):
+      • Auto-unlock if saved login email exists
+      • Persistent “Session / Log Out” pill (always visible after unlock)
+  ✅ UPDATE (Security / Public Device):
+      • “Public / Shared device” toggle = do NOT remember loginEmail
+      • Optional: clears device on tab close when Public mode is ON
 =========================================================  -->
-    <div id="rs-lock-overlay" aria-hidden="false">
-      <div class="rs-lock-centered" role="dialog" aria-labelledby="rs-lock-title" aria-modal="true">
-        <div class="rs-lock-card" id="rs-lock-card">
-          <h1 id="rs-lock-title">Sign In to Continue</h1>
-          <p class="rs-lock-sub">This page is private — please enter your credentials.</p>
-          <div class="rs-field">
-            <input id="rs-email-input" type="email" placeholder="Email Address" autocomplete="email">
+    <div id="rs-lock-root" style="all: initial;">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+      <style>
+    /* =========================================================
+       //#1 SCOPE RESET
+    ========================================================= */
+    #rs-lock-root, #rs-lock-root *{
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    /* =========================================================
+       //#2 TOKENS
+    ========================================================= */
+    #rs-lock-root{
+      --bg:#0b0e1a;
+      --panel:#101426;
+      --panel2:#0f1324;
+      --ink:#e9ecff;
+      --muted:#a8b0d6;
+      --border:rgba(255,255,255,.12);
+      --mint:#8ef3c5;
+      --sapphire:#6aa7ff;
+      --danger:#ff8aa6;
+      --shadow: 0 24px 60px rgba(0,0,0,.75);
+    }
+    /* =========================================================
+       //#3 OVERLAY
+    ========================================================= */
+    #rs-lock-overlay{
+      position: fixed;
+      inset: 0;
+      z-index: 2147483646;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      background:
+        radial-gradient(1200px 700px at 50% 35%, rgba(106,167,255,.14) 0%, rgba(0,0,0,0) 60%),
+        radial-gradient(900px 600px at 30% 20%, rgba(142,243,197,.10) 0%, rgba(0,0,0,0) 58%),
+        radial-gradient(1200px 900px at 50% 70%, rgba(0,0,0,.65) 0%, rgba(0,0,0,.92) 70%),
+        rgba(11,14,26,.72);
+      -webkit-backdrop-filter: blur(14px) saturate(140%);
+      backdrop-filter: blur(14px) saturate(140%);
+      opacity: 0;
+      visibility: hidden;
+      pointer-events: none;
+      transition: opacity .22s ease, visibility .22s ease;
+    }
+    #rs-lock-overlay[aria-hidden="false"]{
+      opacity: 1;
+      visibility: visible;
+      pointer-events: auto;
+    }
+    /* =========================================================
+       //#4 CENTER WRAP
+    ========================================================= */
+    .rs-lock-centered{
+      width: 100%;
+      max-width: 520px;
+    }
+    /* =========================================================
+       //#5 CARD
+    ========================================================= */
+    .rs-lock-card{
+      position: relative;
+      border-radius: 18px;
+      border: 1px solid rgba(255,255,255,.12);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+      background:
+        radial-gradient(900px 600px at 10% 0%, rgba(255,255,255,.10) 0%, rgba(255,255,255,.02) 55%, rgba(0,0,0,0) 75%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+      background-color: rgba(16,20,38,.55);
+      -webkit-backdrop-filter: blur(22px) saturate(160%);
+      backdrop-filter: blur(22px) saturate(160%);
+      padding: 28px 26px 22px;
+    }
+    .rs-lock-card:before{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      border-radius: 20px;
+      padding:2px;
+      background: linear-gradient(135deg, rgba(142,243,197,.35), rgba(106,167,255,.25), rgba(255,255,255,0));
+      -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
+      -webkit-mask-composite: xor;
+      mask-composite: exclude;
+      pointer-events:none;
+      opacity:.55;
+    }
+    /* =========================================================
+       //#6 TYPOGRAPHY
+    ========================================================= */
+    #rs-lock-title{
+      margin: 0 0 6px;
+      color: var(--ink);
+      font-size: 18px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      text-align: center;
+    }
+    .rs-lock-sub{
+      margin: 0 0 18px;
+      color: rgba(168,176,214,.88);
+      font-size: 12.5px;
+      line-height: 1.45;
+      text-align: center;
+    }
+    /* =========================================================
+       //#7 FIELDS
+    ========================================================= */
+    .rs-field{ margin: 10px 0; }
+    #rs-email-input,
+    #rs-pass-input{
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(255,255,255,.06);
+      color: var(--ink);
+      font-size: 14px;
+      outline: none;
+      box-shadow: 0 18px 36px rgba(0,0,0,.55) inset;
+      transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
+    }
+    #rs-email-input::placeholder,
+    #rs-pass-input::placeholder{ color: rgba(233,236,255,.40); }
+    #rs-email-input:focus,
+    #rs-pass-input:focus{
+      border-color: rgba(106,167,255,.55);
+      box-shadow:
+        0 18px 36px rgba(0,0,0,.55) inset,
+        0 0 0 3px rgba(106,167,255,.16);
+      transform: translateY(-1px);
+    }
+    /* =========================================================
+       //#8 BUTTONS
+    ========================================================= */
+    .rs-lock-actions{
+      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    #rs-login-btn{
+      width: 100%;
+      padding: 14px 14px;
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 900;
+      font-size: 14px;
+      letter-spacing: .02em;
+      color: #06112b;
+      background: linear-gradient(180deg, rgba(142,243,197,1), rgba(106,167,255,.95));
+      box-shadow: 0 18px 34px rgba(0,0,0,.65);
+      transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+    }
+    #rs-login-btn:hover{
+      transform: translateY(-1px);
+      filter: brightness(1.02);
+      box-shadow: 0 22px 44px rgba(0,0,0,.72);
+    }
+    #rs-login-btn:active{ transform: translateY(0px); filter: brightness(.98); }
+    #rs-login-btn[disabled]{ opacity: .65; cursor: not-allowed; transform: none; }
+    .rs-lock-foot{
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid rgba(255,255,255,.10);
+      text-align: center;
+      color: rgba(168,176,214,.85);
+      font-size: 12px;
+    }
+    #rs-signup-btn{
+      display: inline-block;
+      margin-top: 10px;
+      padding: 10px 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(142,243,197,.38);
+      color: var(--mint);
+      background: rgba(0,0,0,.10);
+      font-weight: 800;
+      font-size: 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: background .15s ease, transform .15s ease, border-color .15s ease;
+    }
+    #rs-signup-btn:hover{
+      transform: translateY(-1px);
+      background: rgba(142,243,197,.08);
+      border-color: rgba(142,243,197,.55);
+    }
+    /* =========================================================
+       //#9 ERROR TEXT
+    ========================================================= */
+    #rs-lock-error{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--danger);
+      text-align: center;
+      min-height: 16px;
+    }
+    /* =========================================================
+       //#10 PUBLIC DEVICE TOGGLE
+    ========================================================= */
+    .rs-toggle{
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(12,14,25,.35);
+    }
+    .rs-toggle .lbl{
+      color: rgba(233,236,255,.85);
+      font-size: 12px;
+      line-height: 1.35;
+      font-weight: 800;
+      letter-spacing: .02em;
+    }
+    .rs-toggle .sub{
+      display:block;
+      margin-top: 2px;
+      color: rgba(168,176,214,.85);
+      font-weight: 600;
+      font-size: 11px;
+      letter-spacing: 0;
+      text-transform: none;
+    }
+    .rs-switch{ position: relative; width: 46px; height: 26px; flex: 0 0 auto; }
+    .rs-switch input{ opacity: 0; width: 0; height: 0; }
+    .rs-slider{
+      position:absolute; inset:0;
+      border-radius: 999px;
+      background: rgba(255,255,255,.14);
+      border: 1px solid rgba(255,255,255,.14);
+      cursor: pointer;
+      transition: .18s ease;
+      box-shadow: inset 0 10px 20px rgba(0,0,0,.45);
+    }
+    .rs-slider:before{
+      content:"";
+      position:absolute;
+      width: 20px; height: 20px;
+      left: 3px; top: 2px;
+      border-radius: 999px;
+      background: rgba(233,236,255,.9);
+      box-shadow: 0 12px 24px rgba(0,0,0,.55);
+      transition: .18s ease;
+    }
+    .rs-switch input:checked + .rs-slider{
+      background: linear-gradient(180deg, rgba(142,243,197,.9), rgba(106,167,255,.85));
+      border-color: rgba(255,255,255,0);
+    }
+    .rs-switch input:checked + .rs-slider:before{
+      transform: translateX(20px);
+      background: #06112b;
+    }
+    /* =========================================================
+       //#11 SESSION HUD (Persistent Log Out pill)
+    ========================================================= */
+    #rs-session-hud{
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      z-index: 2147483645; /* just under overlay */
+      display: none;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(16,20,38,.50);
+      -webkit-backdrop-filter: blur(18px) saturate(150%);
+      backdrop-filter: blur(18px) saturate(150%);
+      box-shadow: 0 18px 38px rgba(0,0,0,.68);
+      color: var(--ink);
+      max-width: 92vw;
+    }
+    #rs-session-badge{
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      color: rgba(168,176,214,.95);
+      white-space: nowrap;
+    }
+    #rs-session-email{
+      font-size: 12px;
+      font-weight: 800;
+      color: rgba(233,236,255,.95);
+      max-width: 40vw;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    #rs-session-logout{
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(12,14,25,.35);
+      color: rgba(233,236,255,.95);
+      font-weight: 900;
+      font-size: 11px;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      padding: 9px 12px;
+      border-radius: 999px;
+      cursor: pointer;
+      transition: transform .15s ease, filter .15s ease, background .15s ease;
+      white-space: nowrap;
+    }
+    #rs-session-logout:hover{ transform: translateY(-1px); filter: brightness(1.03); background: rgba(12,14,25,.45); }
+    #rs-session-logout:active{ transform: translateY(0); filter: brightness(.99); }
+  </style>
+      <!--  =========================================================
+     //#12 OVERLAY UI
+  =========================================================  -->
+      <div id="rs-lock-overlay" aria-hidden="true">
+        <div class="rs-lock-centered" role="dialog" aria-labelledby="rs-lock-title" aria-modal="true">
+          <div class="rs-lock-card" id="rs-lock-card">
+            <h1 id="rs-lock-title">Sign In to Continue</h1>
+            <p class="rs-lock-sub">This page is private — please enter your credentials.</p>
+            <div class="rs-field">
+              <input id="rs-email-input" type="email" placeholder="Email Address" autocomplete="email">
+            </div>
+            <div class="rs-field">
+              <input id="rs-pass-input" type="password" placeholder="Password" autocomplete="current-password">
+            </div>
+            <div class="rs-toggle" id="rs-public-wrap">
+              <div class="lbl">
+                Public / Shared device
+                <span class="sub">Don’t save login on this device</span>
+              </div>
+              <label class="rs-switch" aria-label="Public device toggle">
+                <input id="rs-public-device" type="checkbox">
+                <span class="rs-slider"></span>
+              </label>
+            </div>
+            <div class="rs-lock-actions">
+              <button id="rs-login-btn" type="button">Log In</button>
+            </div>
+            <div id="rs-lock-error"></div>
+            <div class="rs-lock-foot">
+              Not a Prime Member yet?
+              <br>
+              <a id="rs-signup-btn" href="/create-account" aria-label="Sign up">Sign Up</a>
+            </div>
           </div>
-          <div class="rs-field">
-            <input id="rs-pass-input" type="password" placeholder="Password" minlength="8" autocomplete="current-password">
-          </div>
-          <div class="rs-login-row">
-            <button id="rs-login-btn" type="button">Log In</button>
-          </div>
-          <div class="rs-signup-row">
-            <p class="rs-signup-text">Not a Prime Member yet?</p>
-            <a class="rs-signup-btn" href="https://pcs-united.webflow.io/user-profile">Sign Up</a>
-          </div>
-          <p id="rs-lock-msg" class="rs-lock-msg" aria-live="polite"></p>
         </div>
       </div>
-    </div>
-    <style>
-  :root{
-    --rs-overlay-bg: rgba(6,10,18,0.55);
-    --rs-accent: #8ef3c5;
-    --rs-ink: #e9ecff;
-    --rs-muted: #a8b0d6;
-    --rs-radius: 14px;
-  }
-  #rs-lock-overlay{
-    position:fixed; inset:0;
-    width:100%; height:100%;
-    z-index:999999;
-    display:flex; align-items:center; justify-content:center;
-    background:var(--rs-overlay-bg);
-    backdrop-filter: blur(12px) saturate(135%);
-    -webkit-backdrop-filter: blur(12px) saturate(135%);
-    font-family: Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    /* ✅ Visible by default (no “walk through”) */
-    visibility: visible;
-    opacity: 1;
-    pointer-events: auto;
-    transition: opacity .25s ease, visibility .25s ease;
-  }
-  #rs-lock-overlay.rs-hidden{
-    opacity:0 !important;
-    pointer-events:none !important;
-    visibility:hidden !important;
-  }
-  .rs-lock-centered{ width:100%; max-width:520px; padding:20px; }
-  .rs-lock-card{
-    background: rgba(255,255,255,0.035);
-    border-radius: var(--rs-radius);
-    border: 1px solid rgba(255,255,255,0.08);
-    box-shadow: 0 18px 60px rgba(3,6,15,0.72);
-    padding: 28px 24px;
-    color: var(--rs-ink);
-  }
-  .rs-lock-card h1{ margin:0 0 8px; font-size:20px; font-weight:800; }
-  .rs-lock-sub{ margin:0 0 18px; color:var(--rs-muted); font-size:13px; }
-  .rs-field{ margin-bottom:14px; }
-  #rs-email-input, #rs-pass-input{
-    width:100%;
-    padding:12px 14px;
-    border-radius:10px;
-    border:1px solid rgba(255,255,255,0.09);
-    background:rgba(0,0,0,0.18);
-    color:var(--rs-ink);
-    font-size:16px;
-    outline:none;
-  }
-  #rs-email-input::placeholder, #rs-pass-input::placeholder{ color:var(--rs-muted); }
-  #rs-login-btn{
-    width:100%;
-    padding:12px 16px;
-    border-radius:10px;
-    border:none;
-    background:linear-gradient(180deg,var(--rs-accent),rgba(100,230,190,0.85));
-    color:#02110b;
-    font-weight:900;
-    cursor:pointer;
-    font-size:15px;
-  }
-  #rs-login-btn:disabled{ opacity:.7; cursor:not-allowed; }
-  .rs-lock-msg{
-    margin-top:12px;
-    color:var(--rs-muted);
-    font-size:13px;
-    min-height:18px;
-  }
-  .rs-signup-row{
-    margin-top:18px;
-    padding-top:14px;
-    border-top:1px solid rgba(255,255,255,0.07);
-    text-align:center;
-  }
-  .rs-signup-text{ margin:0 0 8px; font-size:13px; color:var(--rs-muted); }
-  .rs-signup-btn{
-    display:inline-block;
-    padding:8px 16px;
-    border-radius:999px;
-    border:1px solid rgba(142,243,197,0.65);
-    background:rgba(255,255,255,0.02);
-    color:var(--rs-accent);
-    font-size:13px;
-    font-weight:900;
-    text-decoration:none;
-    transition: background .2s ease, box-shadow .2s ease, transform .2s ease;
-  }
-  .rs-signup-btn:hover{
-    background:rgba(142,243,197,0.10);
-    box-shadow:0 12px 30px rgba(0,0,0,0.75);
-    transform:translateY(-1px);
-  }
-</style>
-    <script>
-(function(){
-  "use strict";
-  // ✅ Lock ONLY this exact page
-  const isPCS = location.hostname === "pcs-united.webflow.io";
-  const isAnalyze = location.pathname === "/analyze";
-  if (!isPCS || !isAnalyze) {
-    const el = document.getElementById("rs-lock-overlay");
-    if (el) el.remove();
-    return;
-  }
-  const API_BASE = "https://theorozcorealty.netlify.app/api";
-  const overlay  = document.getElementById("rs-lock-overlay");
-  const msg      = document.getElementById("rs-lock-msg");
-  const emailInp = document.getElementById("rs-email-input");
-  const passInp  = document.getElementById("rs-pass-input");
-  const loginBtn = document.getElementById("rs-login-btn");
-  const card     = document.getElementById("rs-lock-card");
-  if (!overlay) return;
-  // ✅ Hard-mount to body so Webflow wrappers can't clip it
-  try { document.body.appendChild(overlay); } catch(e){}
-  // ✅ Force visible
-  overlay.classList.remove("rs-hidden");
-  overlay.style.visibility = "visible";
-  overlay.style.opacity = "1";
-  overlay.style.pointerEvents = "auto";
-  overlay.removeAttribute("aria-hidden");
-  console.log("[PCS LOCK] Mounted:", location.hostname + location.pathname);
-  function showMsg(text, isError){
-    msg.textContent = text || "";
-    msg.style.color = isError ? "#ffb3b3" : "var(--rs-muted)";
-  }
-  function unlock(){
-    overlay.classList.add("rs-hidden");
-    overlay.style.visibility = "hidden";
-    overlay.style.opacity = "0";
-    overlay.style.pointerEvents = "none";
-    overlay.setAttribute("aria-hidden","true");
-    console.log("[PCS LOCK] Unlocked");
-  }
-  async function loginWithServer(email, password){
-    let res, data;
-    try{
-      res = await fetch(`${API_BASE}/login`, {
-        method: "POST",
-        headers: {"Content-Type":"application/json"},
-        body: JSON.stringify({ email, password })
-      });
-      data = await res.json().catch(() => ({}));
-    }catch(e){
-      throw new Error("Network error. Check API/CORS or connection.");
-    }
-    if (!res.ok || data.ok === false){
-      throw new Error(data.error || "Incorrect email or password.");
-    }
-    return data;
-  }
-  function rememberLogin(email, serverData){
-    try{
-      localStorage.setItem("realtysass.loginEmail", email);
-      const existing = JSON.parse(localStorage.getItem("realtysass.identity") || "{}") || {};
-      existing.email = email;
-      const profile = (serverData && (serverData.profile || serverData.user || {})) || {};
-      if (profile.full_name && !existing.name) existing.name = profile.full_name;
-      localStorage.setItem("realtysass.identity", JSON.stringify(existing));
-    }catch(e){}
-  }
-  async function onLogin(){
-    const em = (emailInp.value || "").trim().toLowerCase();
-    const pw = (passInp.value || "").trim();
-    if (!em) return showMsg("Please enter your email.", true);
-    if (pw.length < 8) return showMsg("Password must be at least 8 characters.", true);
-    loginBtn.disabled = true;
-    showMsg("Checking credentials...");
-    try{
-      const data = await loginWithServer(em, pw);
-      rememberLogin(em, data);
-      showMsg("");
-      unlock();
-    }catch(err){
-      showMsg(err.message || "Incorrect email or password.", true);
-      if (card && card.animate){
-        card.animate(
-          [{ transform:"translateX(-5px)" }, { transform:"translateX(5px)" }, { transform:"translateX(0)" }],
-          { duration:260 }
-        );
+      <!--  =========================================================
+     //#13 SESSION HUD (Always available after unlock)
+  =========================================================  -->
+      <div id="rs-session-hud" aria-live="polite">
+        <span id="rs-session-badge">SESSION</span>
+        <span id="rs-session-email">—</span>
+        <button id="rs-session-logout" type="button">Log Out</button>
+      </div>
+      <script>
+    (function(){
+      "use strict";
+      // ============================================================
+      // //#14 CONFIG
+      // ============================================================
+      const API_BASE = "https://theorozcorealty.netlify.app/api";
+      const LOGIN_ENDPOINT = API_BASE + "/login";
+      const KEY_EMAIL   = "realtysass.loginEmail";          // "remember me" (device)
+      const KEY_SESS    = "realtysass.sessionEmail";        // session email (tab/session)
+      const KEY_PUBLIC  = "realtysass.publicDevice.v1";     // public device flag
+      const overlay  = document.getElementById("rs-lock-overlay");
+      const emailEl  = document.getElementById("rs-email-input");
+      const passEl   = document.getElementById("rs-pass-input");
+      const btnEl    = document.getElementById("rs-login-btn");
+      const errEl    = document.getElementById("rs-lock-error");
+      const pubEl    = document.getElementById("rs-public-device");
+      const hudEl    = document.getElementById("rs-session-hud");
+      const hudMail  = document.getElementById("rs-session-email");
+      const hudOut   = document.getElementById("rs-session-logout");
+      if(!overlay || !emailEl || !passEl || !btnEl) return;
+      function showOverlay(){
+        overlay.setAttribute("aria-hidden","false");
+        try { document.documentElement.style.overflow = "hidden"; } catch(_){}
+        try { document.body.style.overflow = "hidden"; } catch(_){}
       }
-      console.warn("[PCS LOCK] Login failed:", err && err.message);
-    }finally{
-      loginBtn.disabled = false;
-    }
-  }
-  loginBtn.addEventListener("click", onLogin);
-  passInp.addEventListener("keydown", (e)=>{ if (e.key === "Enter") onLogin(); });
-  setTimeout(()=> emailInp && emailInp.focus(), 0);
-})();
-</script>
+      function hideOverlay(){
+        overlay.setAttribute("aria-hidden","true");
+        try { document.documentElement.style.overflow = ""; } catch(_){}
+        try { document.body.style.overflow = ""; } catch(_){}
+      }
+      function setError(msg){
+        if(errEl) errEl.textContent = msg || "";
+      }
+      function getSavedEmail(){
+        try{ return (localStorage.getItem(KEY_EMAIL) || "").trim(); }catch(_){ return ""; }
+      }
+      function setSavedEmail(email){
+        try{ localStorage.setItem(KEY_EMAIL, (email||"").trim()); }catch(_){}
+      }
+      function clearSavedEmail(){
+        try{ localStorage.removeItem(KEY_EMAIL); }catch(_){}
+      }
+      function setSessionEmail(email){
+        try{ sessionStorage.setItem(KEY_SESS, (email||"").trim()); }catch(_){}
+      }
+      function getSessionEmail(){
+        try{ return (sessionStorage.getItem(KEY_SESS) || "").trim(); }catch(_){ return ""; }
+      }
+      function clearSessionEmail(){
+        try{ sessionStorage.removeItem(KEY_SESS); }catch(_){}
+      }
+      function setPublicFlag(on){
+        try{ localStorage.setItem(KEY_PUBLIC, on ? "1" : "0"); }catch(_){}
+      }
+      function getPublicFlag(){
+        try{ return (localStorage.getItem(KEY_PUBLIC) || "0") === "1"; }catch(_){ return false; }
+      }
+      function broadcastUnlocked(email){
+        try{
+          window.dispatchEvent(new CustomEvent("realtysass:unlocked", { detail: { email: email || "" } }));
+        }catch(_){}
+      }
+      function safeRemove(key){ try{ localStorage.removeItem(key); }catch(_){ } }
+      function clearDevice(){
+        // Gate keys
+        safeRemove("realtysass.loginEmail");
+        safeRemove("realtysass.profile.v1");
+        // Core dashboard keys
+        safeRemove("realtysass.bridge");
+        safeRemove("realtysass.kpi_overrides.v1");
+        // Caches/verdicts/models (safe)
+        safeRemove("realtysass.brain_cache.v1");
+        safeRemove("realtysass.mortgage_cache.v1");
+        safeRemove("realtysass.feasibility.v1");
+        safeRemove("realtysass.ec_verdict.v1");
+        safeRemove("realtysass.expense_buckets.v1");
+        safeRemove("realtysass.derived.housing_monthly.v1");
+        // Optional intake keys (safe)
+        safeRemove("realtysass.aiou_house_intake.v1");
+        safeRemove("realtysass.mortgage_intake.v1");
+      }
+      // ============================================================
+      // //#15 SESSION HUD
+      // ============================================================
+      function showHud(email){
+        if(!hudEl) return;
+        if(hudMail) hudMail.textContent = email || "—";
+        hudEl.style.display = "flex";
+      }
+      function hideHud(){
+        if(!hudEl) return;
+        hudEl.style.display = "none";
+        if(hudMail) hudMail.textContent = "—";
+      }
+      function lockNow(){
+        // hard lock: clear session + show overlay
+        clearSessionEmail();
+        hideHud();
+        showOverlay();
+        try{ passEl.value = ""; }catch(_){}
+      }
+      if (hudOut){
+        hudOut.addEventListener("click", ()=>{
+          setError("");
+          clearDevice();
+          clearSavedEmail();
+          setPublicFlag(false);
+          lockNow();
+          try{ emailEl.value = ""; }catch(_){}
+          try{ if(pubEl) pubEl.checked = true; }catch(_){}
+        });
+      }
+      // ============================================================
+      // //#16 PREFILL + PUBLIC TOGGLE DEFAULT
+      // ============================================================
+      const savedEmail = getSavedEmail();
+      if(savedEmail && !emailEl.value) emailEl.value = savedEmail;
+      // Default public toggle ON if no saved email (safer default on first use)
+      const publicDefault = !savedEmail;
+      const rememberedPublic = getPublicFlag();
+      if (pubEl) pubEl.checked = rememberedPublic ? true : publicDefault;
+      // Persist toggle choice
+      if (pubEl){
+        pubEl.addEventListener("change", ()=> setPublicFlag(!!pubEl.checked));
+      }
+      // ============================================================
+      // //#17 AUTO-UNLOCK PATH (saved email)
+      // ============================================================
+      if (savedEmail){
+        hideOverlay();
+        setSessionEmail(savedEmail);
+        showHud(savedEmail);
+        broadcastUnlocked(savedEmail);
+      } else {
+        showOverlay();
+      }
+      // ============================================================
+      // //#18 PUBLIC MODE: clear on tab close (optional hard safety)
+      // ============================================================
+      window.addEventListener("beforeunload", ()=>{
+        try{
+          const isPublic = getPublicFlag();
+          if (isPublic){
+            clearDevice();
+            clearSavedEmail();
+          }
+        }catch(_){}
+      });
+      // ============================================================
+      // //#19 LOGIN FLOW
+      // ============================================================
+      async function doLogin(){
+        setError("");
+        const email = (emailEl.value || "").trim();
+        const password = (passEl.value || "").trim();
+        if(!email || !password){
+          setError("Please enter your email and password.");
+          return;
+        }
+        btnEl.disabled = true;
+        btnEl.textContent = "Logging in…";
+        try{
+          const r = await fetch(LOGIN_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+          });
+          const data = await r.json().catch(()=> ({}));
+          if(!r.ok || !data || data.ok !== true){
+            const msg = (data && (data.error || data.message)) ? (data.error || data.message) : ("Login failed (" + r.status + ")");
+            throw new Error(msg);
+          }
+          // Always set session email (HUD + in-tab use)
+          setSessionEmail(email);
+          // Public/shared device? => do NOT remember email
+          const isPublicDevice = !!(pubEl && pubEl.checked);
+          setPublicFlag(isPublicDevice);
+          if (!isPublicDevice){
+            setSavedEmail(email);
+          } else {
+            clearSavedEmail();
+          }
+          // store profile if returned (non-breaking)
+          if(data.profile){
+            try{ localStorage.setItem("realtysass.profile.v1", JSON.stringify(data.profile)); }catch(_){}
+          }
+          // unlock
+          hideOverlay();
+          showHud(email);
+          broadcastUnlocked(email);
+        }catch(e){
+          setError(e.message || "Login failed.");
+        }finally{
+          btnEl.disabled = false;
+          btnEl.textContent = "Log In";
+        }
+      }
+      btnEl.addEventListener("click", doLogin);
+      passEl.addEventListener("keydown", (e)=>{ if(e.key === "Enter") doLogin(); });
+      emailEl.addEventListener("keydown", (e)=>{ if(e.key === "Enter") doLogin(); });
+    })();
+  </script>
+    </div>
   </div>
   <div class="code-embed-17 w-embed w-script"><!--  =========================================================
 Fiduciary Snapshot — v3.9.5 (SPLIT EMBEDS)
 EMBED #1 = SHELL ONLY (HTML + CSS)
-✅ KEEP SAME AS YOUR WORKING VERSION
+✅ KEEP SAME AS YOUR WORKING VERSION (structure + IDs)
 ✅ UPDATE (Requested):
-- Add a FULL Rent vs Buy section (canvas id="fid-line")
-- Add footer metric IDs (rvb-gain / rvb-break / rvb-rentCost) so JS can populate like your screenshot
+- Visual UX aligned to AIOU / House of SaSS “transparent strip” style:
+  * glassy depth, pill buttons, input glow, refined cards
 - Everything else unchanged
 - Keeps hidden #fid-export so existing JS won’t crash
 =========================================================  -->
@@ -258,19 +620,30 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       <!--  //#2 CORE STYLES  -->
       <style>
     :root{
-      --bg:#0f1220;
-      --panel:#15192b;
-      --card:#181b2e;
-      --ink:#fff;
-      --subink:#bdb5b5;
+      /* House of SaSS tokens */
+      --bg:#0b0e1a;
+      --panel:#101426;
+      --panel2:#0f1324;
+      --card:#101426;
+      --ink:#e9ecff;
+      --subink:#a8b0d6;
       --accent:#6aa7ff;
       --accent2:#8ef3c5;
       --ok:#55d399;
       --warn:#f9c74f;
       --bad:#ff6b6b;
-      --kpiEdge: rgba(255,255,255,.06);
-      --kpiBg: #12162b;
-      --kpiBg2:#0f1326;
+      --edge: rgba(255,255,255,.08);
+      --edge2: rgba(255,255,255,.12);
+      --kpiEdge: rgba(255,255,255,.08);
+      --kpiBg: rgba(12,14,25,0.65);
+      --kpiBg2: rgba(12,14,25,0.65);
+      --shadow: 0 24px 48px rgba(0,0,0,.80);
+      --shadowSoft: 0 16px 32px rgba(0,0,0,.60);
+      --radius: 18px;
+      --radiusSm: 14px;
+      --radiusPill: 999px;
+      --blur: blur(14px);
+      --blurSm: blur(10px);
     }
     /* ============================================================
        //#2.0 SAFE PAGE RESET (does NOT kill scroll)
@@ -328,7 +701,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     #fid-card{
       width:100%;
       min-height:100vh;
-      background: var(--card);
+      background: transparent;
       border:0;
       border-radius:0;
       box-shadow:none;
@@ -359,9 +732,9 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
     }
     #ec-topbar{
-      --ec-ink:#fff;
-      --ec-accent:#8ef3c5;
-      --ec-accent2:#6aa7ff;
+      --ec-ink:var(--ink);
+      --ec-accent:var(--accent2);
+      --ec-accent2:var(--accent);
       --ec-blufH:74px;
     }
     #ec-blufHeader{
@@ -372,15 +745,15 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       display:flex;
       align-items:center;
       gap:14px;
-      padding:12px 16px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.08);
+      padding:12px 14px;
+      border-radius: var(--radius);
+      border:1px solid rgba(255,255,255,.10);
       background:
-        radial-gradient(900px 220px at 70% 50%, rgba(142,243,197,.12), transparent 60%),
-        radial-gradient(900px 220px at 30% 50%, rgba(106,167,255,.14), transparent 60%),
+        radial-gradient(900px 220px at 70% 50%, rgba(142,243,197,.14), transparent 60%),
+        radial-gradient(900px 220px at 30% 50%, rgba(106,167,255,.16), transparent 60%),
         rgba(0,0,0,.22);
-      backdrop-filter: blur(14px);
-      box-shadow:0 16px 32px rgba(0,0,0,.45);
+      backdrop-filter: var(--blur);
+      box-shadow: var(--shadowSoft);
     }
     #ec-blufCapsule{
       flex:1;
@@ -389,10 +762,13 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       align-items:center;
       gap:12px;
       padding:12px 14px;
-      border-radius:14px;
-      border:1px solid rgba(255,255,255,.08);
-      background:rgba(0,0,0,.14);
-      box-shadow:0 10px 22px rgba(0,0,0,.28);
+      border-radius: 16px;
+      border:1px solid rgba(255,255,255,.10);
+      background:
+        radial-gradient(800px 140px at 18% 40%, rgba(106,167,255,.10), transparent 60%),
+        rgba(12,14,25,0.55);
+      backdrop-filter: var(--blurSm);
+      box-shadow:0 12px 26px rgba(0,0,0,.35);
       overflow:hidden;
     }
     #ec-blufTag{
@@ -402,16 +778,16 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       letter-spacing:.14em;
       text-transform:uppercase;
       padding:6px 9px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
+      border-radius: var(--radiusPill);
+      border:1px solid rgba(255,255,255,.12);
       background:rgba(255,255,255,.06);
-      color:rgba(255,255,255,.86);
+      color:rgba(233,236,255,.92);
     }
     #ec-blufText{
       min-width:0;
-      font-size:12.8px;
-      font-weight:850;
-      color:rgba(255,255,255,.90);
+      font-size:13px;
+      font-weight:900;
+      color:rgba(233,236,255,.92);
       white-space:nowrap;
       overflow:hidden;
       text-overflow:ellipsis;
@@ -422,21 +798,24 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       align-items:center;
       gap:10px;
       padding:10px 14px;
-      border-radius:999px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.22);
-      color:rgba(255,255,255,.92);
+      border-radius: var(--radiusPill);
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(120px 40px at 30% 50%, rgba(142,243,197,.18), transparent 60%),
+        rgba(12,14,25,0.55);
+      backdrop-filter: var(--blurSm);
+      color:rgba(233,236,255,.92);
       font-size:11px;
       font-weight:950;
       letter-spacing:.12em;
       text-transform:uppercase;
       text-decoration:none;
       white-space:nowrap;
-      box-shadow:0 10px 22px rgba(0,0,0,.25);
+      box-shadow:0 14px 30px rgba(0,0,0,.55);
       transition:.18s ease;
       user-select:none;
     }
-    #ec-aiBtn:hover{ transform:translateY(-1px); filter:brightness(1.10); }
+    #ec-aiBtn:hover{ transform:translateY(-1px); filter:brightness(1.08); }
     #ec-aiBtn:active{ transform:translateY(0px); filter:brightness(1.00); }
     #ec-aiDot{
       width:9px; height:9px; border-radius:99px;
@@ -462,42 +841,49 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }
     .kpi-card{
       position:relative;
-      background:var(--kpiBg);
-      border:1px solid var(--kpiEdge);
-      border-radius:14px;
+      border-radius: var(--radius);
       padding:14px;
       min-height:86px;
       color:var(--ink);
-      box-shadow:0 16px 32px rgba(0,0,0,.6);
       overflow:hidden;
+      min-width:0;
+      background:
+        radial-gradient(420px 220px at 18% 18%, rgba(142,243,197,.10), transparent 60%),
+        radial-gradient(520px 260px at 85% 20%, rgba(106,167,255,.10), transparent 65%),
+        rgba(12,14,25,0.62);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter: var(--blurSm);
+      box-shadow: var(--shadowSoft);
     }
     .kpi-title{
-      font-size:12px;
-      color:var(--subink);
-      letter-spacing:.2px;
+      font-size:11px;
+      color:rgba(168,176,214,.92);
+      letter-spacing:.12em;
       text-transform:uppercase;
-      font-weight:600;
-      padding-right:88px;
+      font-weight:850;
+      padding-right:96px;
     }
     .kpi-val{
       margin-top:8px;
-      font-weight:700;
+      font-weight:900;
       font-size:20px;
       display:flex;
       align-items:center;
       gap:8px;
-      color:#bdb5b5;
+      color:rgba(233,236,255,.92);
       line-height:1.2;
     }
     .delta{
       font-size:11px;
       margin-left:8px;
-      padding:2px 6px;
-      border-radius:999px;
+      padding:3px 8px;
+      border-radius:var(--radiusPill);
       border:1px solid rgba(255,255,255,.10);
       background:rgba(85,211,153,.10);
       color:var(--ok);
       line-height:1.2;
+      font-weight:900;
+      letter-spacing:.06em;
     }
     .kpi-actions{
       position:absolute;
@@ -509,11 +895,12 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       z-index:5;
     }
     .kpi-ico{
-      width:30px; height:30px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);
-      color:rgba(255,255,255,.85);
+      width:32px; height:32px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(12,14,25,0.55);
+      backdrop-filter: var(--blurSm);
+      color:rgba(233,236,255,.88);
       display:grid;
       place-items:center;
       cursor:pointer;
@@ -521,28 +908,32 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       transition:.15s ease;
       font-size:14px;
       line-height:1;
+      box-shadow:0 12px 24px rgba(0,0,0,.45);
     }
-    .kpi-ico:hover{ transform:translateY(-1px); filter:brightness(1.08); }
+    .kpi-ico:hover{ transform:translateY(-1px); filter:brightness(1.08); border-color: rgba(142,243,197,.35); }
     .kpi-btnMini{
-      height:30px;
-      padding:0 10px;
-      border-radius:10px;
-      border:1px solid rgba(255,255,255,.14);
-      background:rgba(0,0,0,.18);
-      color:rgba(255,255,255,.86);
+      height:32px;
+      padding:0 12px;
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.12);
+      background:rgba(12,14,25,0.55);
+      backdrop-filter: var(--blurSm);
+      color:rgba(233,236,255,.90);
       font-size:11px;
-      font-weight:900;
-      letter-spacing:.08em;
+      font-weight:950;
+      letter-spacing:.10em;
       text-transform:uppercase;
       cursor:pointer;
       user-select:none;
       transition:.15s ease;
+      box-shadow:0 12px 24px rgba(0,0,0,.35);
     }
-    .kpi-btnMini:hover{ transform:translateY(-1px); filter:brightness(1.08); }
+    .kpi-btnMini:hover{ transform:translateY(-1px); filter:brightness(1.08); border-color: rgba(142,243,197,.30); }
     .kpi-btnMini.save{
       border:none;
-      background:linear-gradient(90deg,var(--accent2),var(--accent));
-      color:#07101b;
+      background: radial-gradient(120px 40px at 30% 30%, rgba(142,243,197,1), rgba(106,167,255,1));
+      color:#050712;
+      box-shadow:0 14px 30px rgba(0,0,0,.60);
     }
     .kpi-editor{
       margin-top:10px;
@@ -556,16 +947,22 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       width:100%;
       padding:10px 12px;
       border-radius:12px;
-      border:1px solid rgba(255,255,255,.12);
-      background:var(--kpiBg2);
-      color:#fff;
+      border:1px solid rgba(255,255,255,.10);
+      background: rgba(12,14,25,0.65);
+      backdrop-filter: blur(4px);
+      color:var(--ink);
       outline:none;
       font-size:13px;
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+    }
+    .kpi-input:focus{
+      border-color: rgba(142,243,197,.65);
+      box-shadow: 0 0 0 1px rgba(142,243,197,.35), 0 0 0 6px rgba(142,243,197,.10);
     }
     .kpi-hint{
       margin-top:8px;
       font-size:11px;
-      color:rgba(255,255,255,.60);
+      color:rgba(233,236,255,.60);
       line-height:1.35;
       display:none;
     }
@@ -574,10 +971,12 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       position:relative;
       width:100%;
       height:10px;
-      border-radius:999px;
+      border-radius:var(--radiusPill);
       background:linear-gradient(90deg,#ff6b6b,#f9c74f,#55d399);
       margin-top:8px;
       overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: inset 0 12px 20px rgba(0,0,0,.55);
     }
     .score-marker{
       position:absolute;
@@ -587,7 +986,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       background:#fff;
       border-radius:2px;
       left:0%;
-      box-shadow:0 0 6px rgba(255,255,255,.6);
+      box-shadow:0 0 10px rgba(255,255,255,.75);
       pointer-events:none;
       z-index:3;
     }
@@ -614,15 +1013,19 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       .mid{ grid-template-columns:1fr; }
     }
     .card-mini{
-      background:#12162b;
-      border:1px solid rgba(255,255,255,.06);
-      border-radius:16px;
+      border-radius: var(--radius);
       padding:16px;
       display:flex;
       flex-direction:column;
       color:var(--ink);
-      box-shadow:0 16px 32px rgba(0,0,0,.6);
       min-width:0;
+      background:
+        radial-gradient(900px 420px at 14% 10%, rgba(106,167,255,.10), transparent 60%),
+        radial-gradient(900px 420px at 78% 18%, rgba(142,243,197,.10), transparent 60%),
+        linear-gradient(180deg, rgba(16,20,38,.92), rgba(15,19,36,.72));
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter: var(--blurSm);
+      box-shadow: var(--shadow);
     }
     .card-mini h3{
       margin:0 0 12px;
@@ -630,19 +1033,20 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       justify-content:space-between;
       align-items:flex-start;
       flex-wrap:wrap;
+      gap:10px;
     }
     .card-mini h3 span:first-child{
-      font-size:14px;
-      color:var(--subink);
-      font-weight:700;
-      letter-spacing:.3px;
+      font-size:12px;
+      color:rgba(168,176,214,.95);
+      font-weight:950;
+      letter-spacing:.14em;
       text-transform:uppercase;
     }
     .card-mini h3 span:last-child{
       font-size:11px;
-      font-weight:400;
+      font-weight:600;
       text-transform:none;
-      color:var(--subink);
+      color:rgba(168,176,214,.80);
       line-height:1.4;
       letter-spacing:0;
     }
@@ -652,10 +1056,13 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       width:100%;
       display:block;
       overflow:hidden;
-      border-radius:12px;
-      background:#0f1220;
-      border:1px solid rgba(255,255,255,.05);
-      box-shadow:0 24px 48px rgba(0,0,0,.8) inset;
+      border-radius: 14px;
+      background:
+        radial-gradient(420px 220px at 30% 20%, rgba(142,243,197,.10), transparent 60%),
+        rgba(12,14,25,0.55);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 24px 48px rgba(0,0,0,.80) inset;
       min-width:0;
     }
     .chart-holder.rvb{
@@ -674,35 +1081,51 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       flex-wrap:wrap;
     }
     .select{
-      background:#0f1326;
-      color:#fff;
+      background: rgba(12,14,25,0.65);
+      color:var(--ink);
       border:1px solid rgba(255,255,255,.10);
-      border-radius:10px;
+      border-radius:12px;
       padding:8px 10px;
       font-size:12px;
+      backdrop-filter: blur(4px);
+      box-shadow: inset 0 0 0 1px rgba(0,0,0,.25);
+    }
+    .select:focus{
+      outline:none;
+      border-color: rgba(142,243,197,.55);
+      box-shadow: 0 0 0 1px rgba(142,243,197,.25), 0 0 0 6px rgba(142,243,197,.10);
     }
     .toggle{
       cursor:pointer;
-      padding:6px 10px;
-      border-radius:10px;
+      padding:7px 12px;
+      border-radius: var(--radiusPill);
       border:1px solid rgba(255,255,255,.10);
-      background:#0f1326;
+      background: rgba(12,14,25,0.65);
       font-size:12px;
-      color:#fff;
+      color:var(--ink);
       line-height:1.2;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      backdrop-filter: blur(4px);
+      transition:.15s ease;
     }
+    .toggle:hover{ transform: translateY(-1px); border-color: rgba(142,243,197,.25); }
     .toggle[aria-pressed="true"]{
-      background:#192041;
-      border-color:rgba(255,255,255,.22);
+      border:none;
+      background: radial-gradient(140px 40px at 30% 30%, rgba(142,243,197,1), rgba(106,167,255,1));
+      color:#050712;
+      box-shadow:0 14px 30px rgba(0,0,0,.55);
     }
-    .muted{ color:var(--subink); font-size:12px; line-height:1.4; }
+    .muted{ color:rgba(168,176,214,.82); font-size:12px; line-height:1.4; }
     /* FEASIBILITY SNAPSHOT */
     .fs-wrap{
-      background:rgba(0,0,0,.14);
-      border:1px solid rgba(255,255,255,.08);
+      background: rgba(12,14,25,0.55);
+      border:1px solid rgba(255,255,255,.10);
       border-radius:14px;
       padding:12px;
       box-shadow:0 14px 30px rgba(0,0,0,.45) inset;
+      backdrop-filter: blur(10px);
     }
     /* ✅ PCSUnited-style simple rows */
     .fs-simple{ display:flex; flex-direction:column; margin-bottom:10px; }
@@ -712,26 +1135,26 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       gap:12px;
       align-items:center;
       padding:10px 2px;
-      border-bottom:1px solid rgba(255,255,255,.07);
+      border-bottom:1px solid rgba(255,255,255,.08);
     }
     .fs-line:last-child{ border-bottom:none; }
     .fs-left .lbl{
       font-size:11px;
-      color:rgba(255,255,255,.62);
-      letter-spacing:.12em;
+      color:rgba(168,176,214,.95);
+      letter-spacing:.14em;
       text-transform:uppercase;
-      font-weight:900;
+      font-weight:950;
     }
     .fs-left .sub{
       margin-top:4px;
       font-size:11px;
-      color:rgba(255,255,255,.52);
+      color:rgba(168,176,214,.70);
       line-height:1.25;
     }
     .fs-right{
       font-size:18px;
       font-weight:950;
-      color:#fff;
+      color:var(--ink);
       white-space:nowrap;
       text-align:right;
     }
@@ -739,18 +1162,19 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     .fs-row{ display:grid; grid-template-columns: 110px 1fr 90px; gap:10px; align-items:center; }
     .fs-row .name{
       font-size:11px;
-      font-weight:900;
-      letter-spacing:.08em;
+      font-weight:950;
+      letter-spacing:.10em;
       text-transform:uppercase;
-      color:rgba(255,255,255,.65);
+      color:rgba(168,176,214,.86);
       white-space:nowrap;
     }
-    .fs-row .amt{ font-size:12px; font-weight:900; text-align:right; color:#fff; white-space:nowrap; }
+    .fs-row .amt{ font-size:12px; font-weight:950; text-align:right; color:var(--ink); white-space:nowrap; }
     .fs-track{
       height:10px; border-radius:999px;
       background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
       overflow:hidden; position:relative;
+      box-shadow: inset 0 10px 16px rgba(0,0,0,.55);
     }
     .fs-fill{ height:100%; width:0%; border-radius:999px; box-shadow:0 0 18px rgba(0,0,0,.35) inset; }
     .fs-fill.expenses{ background: linear-gradient(90deg, rgba(106,167,255,.95), rgba(106,167,255,.35)); }
@@ -760,28 +1184,29 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     .fs-fill.negative{ background: linear-gradient(90deg, rgba(255,107,107,.95), rgba(255,107,107,.35)); }
     .fs-foot{ margin-top:10px; display:flex; justify-content:space-between; align-items:flex-end; gap:10px; flex-wrap:wrap; }
     .fs-res{ display:flex; flex-direction:column; gap:3px; }
-    .fs-res .lbl{ font-size:10px; color:rgba(255,255,255,.58); letter-spacing:.12em; text-transform:uppercase; font-weight:900; }
-    .fs-res .val{ font-size:20px; font-weight:950; line-height:1.1; color:#fff; }
-    .fs-note{ font-size:11px; color:rgba(255,255,255,.58); max-width:260px; line-height:1.35; }
+    .fs-res .lbl{ font-size:10px; color:rgba(168,176,214,.82); letter-spacing:.14em; text-transform:uppercase; font-weight:950; }
+    .fs-res .val{ font-size:20px; font-weight:950; line-height:1.1; color:var(--ink); }
+    .fs-note{ font-size:11px; color:rgba(168,176,214,.82); max-width:260px; line-height:1.35; }
     /* CITY TARGETS */
     .city-top{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; margin-bottom:10px; }
     .city-kicker{ display:flex; gap:10px; align-items:flex-start; }
     .city-bed{
-      font-size:34px; font-weight:900; line-height:1; color:var(--accent2);
+      font-size:34px; font-weight:950; line-height:1; color:var(--accent2);
       text-shadow:0 0 18px rgba(142,243,197,.25);
     }
     .city-bed small{
-      display:block; font-size:12px; font-weight:800; color:var(--subink);
-      letter-spacing:.12em; text-transform:uppercase; margin-top:6px;
+      display:block; font-size:12px; font-weight:900; color:rgba(168,176,214,.92);
+      letter-spacing:.14em; text-transform:uppercase; margin-top:6px;
     }
-    .city-copy{ font-size:12px; color:rgba(255,255,255,.62); line-height:1.35; max-width:240px; }
+    .city-copy{ font-size:12px; color:rgba(168,176,214,.82); line-height:1.35; max-width:240px; }
     .city-hero{
       width:110px; height:76px; border-radius:14px;
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid rgba(255,255,255,.10);
       background:
         radial-gradient(60px 60px at 68% 30%, rgba(142,243,197,.28), transparent 60%),
         radial-gradient(70px 70px at 30% 70%, rgba(106,167,255,.24), transparent 60%),
-        linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,.10));
+        rgba(12,14,25,0.55);
+      backdrop-filter: blur(10px);
       position:relative; overflow:hidden; box-shadow:0 18px 40px rgba(0,0,0,.55); flex:0 0 auto;
     }
     .city-hero:after{
@@ -796,27 +1221,27 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       gap:12px;
       align-items:center;
       padding:10px 2px;
-      border-bottom:1px solid rgba(255,255,255,.07);
+      border-bottom:1px solid rgba(255,255,255,.08);
     }
     .city-line:last-child{ border-bottom:none; }
     .city-left .lbl{
       font-size:11px;
-      color:rgba(255,255,255,.58);
-      letter-spacing:.12em;
+      color:rgba(168,176,214,.92);
+      letter-spacing:.14em;
       text-transform:uppercase;
-      font-weight:800;
+      font-weight:950;
     }
     .city-left .sub{
       margin-top:5px;
       font-size:11px;
-      color:rgba(255,255,255,.54);
+      color:rgba(168,176,214,.74);
       line-height:1.3;
       max-width:260px;
     }
     .city-right{
       font-size:18px;
       font-weight:950;
-      color:#fff;
+      color:var(--ink);
       white-space:nowrap;
       text-align:right;
     }
@@ -824,15 +1249,17 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding:4px 8px;
+      padding:5px 9px;
       border-radius:999px;
       border:1px solid rgba(255,255,255,.10);
-      background:rgba(0,0,0,.18);
+      background:rgba(12,14,25,0.55);
+      backdrop-filter: blur(8px);
       font-size:11px;
-      font-weight:900;
-      letter-spacing:.08em;
+      font-weight:950;
+      letter-spacing:.10em;
       text-transform:uppercase;
       margin-top:8px;
+      box-shadow:0 10px 22px rgba(0,0,0,.35);
     }
     .gap-pill.good{ color: var(--ok); }
     .gap-pill.bad{  color: var(--bad); }
@@ -851,15 +1278,15 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       margin-bottom:10px;
     }
     .rvb-title{
-      font-size:14px;
-      color:var(--subink);
-      font-weight:800;
-      letter-spacing:.3px;
+      font-size:12px;
+      color:rgba(168,176,214,.95);
+      font-weight:950;
+      letter-spacing:.14em;
       text-transform:uppercase;
     }
     .rvb-sub{
       font-size:11px;
-      color:rgba(255,255,255,.58);
+      color:rgba(168,176,214,.82);
       line-height:1.35;
       max-width:520px;
     }
@@ -871,7 +1298,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       gap:12px;
       flex-wrap:wrap;
       font-size:12px;
-      color:rgba(255,255,255,.62);
+      color:rgba(168,176,214,.88);
     }
     .rvb-metric{
       display:flex;
@@ -881,7 +1308,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }
     .rvb-metric b{
       font-weight:950;
-      color:#fff;
+      color:var(--ink);
     }
     @media print{
       body, html{ background:#fff !important; }
@@ -1126,7 +1553,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
                       <div class="lbl">Target Rent</div>
                       <div class="sub" id="ct-rent-sub">Uses BAH (brain.js) when available</div>
                     </div>
-                    <div class="city-right"><span id="ct-rent">$—</span><span style="font-size:12px; font-weight:900; color:rgba(255,255,255,.65)"> / mo</span></div>
+                    <div class="city-right"><span id="ct-rent">$—</span><span style="font-size:12px; font-weight:900; color:rgba(168,176,214,.85)"> / mo</span></div>
                   </div>
                   <div class="city-line">
                     <div class="city-left">
@@ -1153,7 +1580,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
                 </div>
               </div>
             </div>
-            <!--  ✅ UPDATED: RENT VS BUY (full section + footer IDs)  -->
+            <!--  ✅ RENT VS BUY (full section + footer IDs)  -->
             <div class="card-mini rvb" id="rentbuy-card">
               <div class="rvb-top">
                 <div>

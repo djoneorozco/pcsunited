@@ -1,16 +1,16 @@
 // netlify/functions/send-code.js
-//
-// PURPOSE:
-// - Accept POST { email, rank, lastName, phone }
-// - Generate 6-digit code
-// - Hash code (never store raw code)
-// - Insert row into Supabase (email_codes table: id, email, code_hash, attempts, expires_at, created_at)
-// - Send code via Resend email (HTML + text)
-// - Return { ok: true }
+// ============================================================
+// PCS United • Send Verification Code
+// - POST { email, rank, lastName, phone }
+// - Generates 6-digit code
+// - Stores sha256 hash in Supabase email_codes
+// - Sends email via Resend
+// - Returns { ok: true, resendId }
+// ============================================================
 
-const crypto = require("crypto");
-const { Resend } = require("resend");
-const { createClient } = require("@supabase/supabase-js");
+import crypto from "crypto";
+import { Resend } from "resend";
+import { createClient } from "@supabase/supabase-js";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -36,49 +36,59 @@ function hashCode(code) {
   return crypto.createHash("sha256").update(code).digest("hex");
 }
 
-exports.handler = async function (event) {
-  // ===== CORS preflight =====
-  if (event.httpMethod === "OPTIONS") return respond(200, {});
-  if (event.httpMethod !== "POST") {
-    return respond(405, { error: "Method not allowed" });
-  }
+function cleanEmail(raw) {
+  // removes invisible whitespace that can break validation
+  return String(raw || "")
+    .replace(/\s+/g, "")
+    .trim()
+    .toLowerCase();
+}
 
-  // ===== Parse body =====
-  let body;
+export const handler = async (event) => {
+  // CORS preflight
+  if (event.httpMethod === "OPTIONS") return respond(200, {});
+  if (event.httpMethod !== "POST") return respond(405, { ok: false, error: "Method not allowed" });
+
+  // Parse body
+  let body = {};
   try {
     body = JSON.parse(event.body || "{}");
-  } catch (err) {
-    return respond(400, { error: "Invalid JSON body" });
+  } catch {
+    return respond(400, { ok: false, error: "Invalid JSON body" });
   }
 
-  const email = (body.email || "").trim().toLowerCase();
-  const rank = body.rank || "";        // used only in email copy
-  const lastName = body.lastName || ""; // used only in email copy
-  const phone = body.phone || "";       // used only in email copy
+  const email = cleanEmail(body.email);
+  const rank = String(body.rank || "");
+  const lastName = String(body.lastName || "");
+  const phone = String(body.phone || "");
 
-  if (!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) {
-    return respond(400, { error: "Valid email required" });
+  if (!email || !/^[^@]+@[^@]+\.[^@]+$/.test(email)) {
+    return respond(400, { ok: false, error: "Valid email required" });
   }
 
-  // ===== Generate + hash code =====
+  // Env checks
+  const SUPABASE_URL = process.env.SUPABASE_URL;
+  const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+  const RESEND_API_KEY = process.env.RESEND_API_KEY;
+
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+    return respond(500, { ok: false, error: "Supabase env not configured" });
+  }
+  if (!RESEND_API_KEY) {
+    return respond(500, { ok: false, error: "RESEND_API_KEY missing" });
+  }
+
+  // Generate + hash
   const code = makeCode();
   const code_hash = hashCode(code);
   const now = new Date().toISOString();
   const expiresAt = new Date("2075-01-01T00:00:00Z").toISOString(); // effectively no expiration
 
-  // ===== Supabase client =====
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    return respond(500, { error: "Supabase env not configured" });
-  }
-
+  // Supabase insert
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
     auth: { persistSession: false },
   });
 
-  // ===== Insert into email_codes (ONLY columns that exist) =====
   const { error: insertErr } = await supabase.from("email_codes").insert([
     {
       email,
@@ -86,145 +96,95 @@ exports.handler = async function (event) {
       attempts: 0,
       created_at: now,
       expires_at: expiresAt,
-      // ⚠️ No rank / last_name / phone / context here,
-      // because those columns do NOT exist in the email_codes table anymore.
     },
   ]);
 
   if (insertErr) {
     console.error("Supabase insert error:", insertErr);
-    return respond(500, { error: "DB insert failed" });
+    return respond(500, { ok: false, error: "DB insert failed" });
   }
 
-  // ===== Resend setup =====
-  const resendKey = process.env.RESEND_API_KEY;
-  if (!resendKey) {
-    console.error("Missing RESEND_API_KEY");
-    return respond(500, { error: "Email service not configured" });
-  }
+  // Resend
+  const resend = new Resend(RESEND_API_KEY);
 
+  // MUST be a verified sender domain inside Resend
   const fromAddress =
     process.env.EMAIL_FROM ||
     process.env.FROM_EMAIL ||
-    "RealtySaSS <noreply@example.com>";
+    "PCS United <noreply@theorozcorealty.com>";
 
-  const resend = new Resend(resendKey);
+  const subject = "PCS United • Your 6-Digit Verification Code";
 
-  const subject = "Your RealtySaSS Verification Code";
+  const helloLine = `Hi ${[rank, lastName].filter(Boolean).join(" ").trim() || "there"},`;
 
-  const textBody = `Hi ${rank ? rank + " " : ""}${lastName || ""},
+  const textBody = `${helloLine}
 
-Your verification code is: ${code}
+Your PCS United verification code is: ${code}
 
-Do not share this code. It is for you only.
+If you didn’t request this, you can ignore this email.
 `;
 
-  const htmlEmailBody = `
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="UTF-8" />
-      <style>
-        body {
-          background-color: #f9fafb;
-          margin: 0;
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-        }
-        .container {
-          max-width: 480px;
-          margin: 40px auto;
-          background: white;
-          border-radius: 8px;
-          padding: 32px;
-          box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-        }
-        .logo {
-          display: block;
-          margin: 0 auto 24px;
-          max-height: 60px;
-        }
-        h1 {
-          font-size: 20px;
-          color: #1a1a1a;
-          text-align: center;
-          margin-bottom: 0.5rem;
-        }
-        p {
-          font-size: 14px;
-          color: #333;
-          text-align: center;
-          margin: 8px 0;
-        }
-        .code-box {
-          margin: 24px auto;
-          background: #f0f4f8;
-          border-radius: 8px;
-          font-size: 28px;
-          font-weight: bold;
-          letter-spacing: 4px;
-          padding: 16px;
-          text-align: center;
-          color: #1a1a1a;
-          width: fit-content;
-          box-shadow: 0 3px 6px rgba(0,0,0,0.08);
-        }
-        .footer {
-          font-size: 12px;
-          color: #777;
-          text-align: center;
-          margin-top: 24px;
-        }
-        .signature {
-          margin-top: 24px;
-          text-align: left;
-          font-size: 13px;
-          color: #333;
-        }
-        .signature img {
-          max-height: 60px;
-          margin-top: 12px;
-          border-radius: 8px;
-        }
-      </style>
-    </head>
-    <body>
-      <div class="container">
-        <img src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/690045801fe6ec061af6b131_1394a00d76ce9dd861ade690dfb1a058_TOR-p-2600.png" alt="OrozcoRealty Logo" class="logo" />
-        <h1>Welcome to The Orozco Realty</h1>
-        <p><strong>Hi ${rank} ${lastName},</strong></p>
-        <p>Your unique verification code for <strong>OrozcoRealty</strong> is:</p>
-        <div class="code-box">${code}</div>
-        <p>Please safeguard this code and do not share it with anyone.</p>
-        <div class="signature">
-          Sincerely Yours,<br />
-          <strong>Elena</strong><br />
-          <em>"A.I. Concierge"</em><br />
-          <img src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/68db342a77ed69fc1044ebee_5aaaff2bff71a700da3fa14548ad049f_Landing%20Footer%20Background.png" alt="Elena Signature Image" />
-        </div>
-        <div class="footer">
-          SaSS™ — Naughty Realty, Serious Returns<br />
-          © 2025 The Orozco Realty. All rights reserved.
-        </div>
+  const htmlEmailBody = `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>PCS United Verification</title>
+</head>
+<body style="margin:0;background:#0b0e1a;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;">
+  <div style="max-width:560px;margin:32px auto;padding:22px;">
+    <div style="background:linear-gradient(180deg,#101426,#0f1324);border:1px solid rgba(255,255,255,0.10);border-radius:16px;box-shadow:0 24px 48px rgba(0,0,0,.55);padding:22px;color:#e9ecff;">
+      <div style="font-weight:900;letter-spacing:.08em;text-transform:uppercase;font-size:12px;color:#a8b0d6;">
+        PCS UNITED • ACCOUNT VERIFICATION
       </div>
-    </body>
-    </html>
-  `;
+
+      <h1 style="margin:10px 0 6px;font-size:20px;line-height:1.25;">
+        Your 6-Digit Verification Code
+      </h1>
+
+      <p style="margin:0 0 14px;color:#a8b0d6;font-size:14px;line-height:1.6;">
+        ${helloLine}<br/>
+        Use this code to verify your email and continue.
+      </p>
+
+      <div style="margin:18px 0 16px;padding:14px 16px;border-radius:14px;
+                  background:rgba(12,14,25,0.65);border:1px solid rgba(255,255,255,0.10);
+                  text-align:center;font-size:28px;font-weight:900;letter-spacing:8px;color:#8ef3c5;">
+        ${code}
+      </div>
+
+      <p style="margin:0;color:#a8b0d6;font-size:12px;line-height:1.6;">
+        Don’t share this code with anyone. If you didn’t request it, you can ignore this email.
+      </p>
+
+      <div style="margin-top:16px;padding-top:14px;border-top:1px solid rgba(255,255,255,0.08);
+                  color:#a8b0d6;font-size:12px;line-height:1.6;">
+        <strong style="color:#e9ecff;">PCS United</strong><br/>
+        Support: reply to this email
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
 
   try {
-    await resend.emails.send({
+    const result = await resend.emails.send({
       from: fromAddress,
       to: [email],
       subject,
       text: textBody,
       html: htmlEmailBody,
     });
+
+    console.log("Resend send result:", result);
+
+    return respond(200, {
+      ok: true,
+      message: "Code created, stored, and sent.",
+      resendId: result?.id || null,
+    });
   } catch (mailErr) {
     console.error("Resend error:", mailErr);
-    return respond(500, { error: "Email send failed" });
+    return respond(500, { ok: false, error: "Email send failed", details: String(mailErr?.message || mailErr) });
   }
-
-  return respond(200, {
-    ok: true,
-    message: "Code created, stored, and emailed.",
-  });
 };

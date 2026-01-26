@@ -3,20 +3,19 @@
 // PCS United • Save AIOU House Intake (v1.0.0)
 // PURPOSE:
 // - Accept POST payload from the PCS United AIOU House Intake embed
-// - Upsert into Supabase public.user_aiou_inputs
+// - Insert or update into Supabase public.user_aiou_inputs
+//   (matches your existing table columns)
 //
 // BODY (POST JSON):
 // {
-//   profile_id: "optional-uuid",
-//   email: "optional@x.com",
-//   home_year: "optional string (we accept yearBand here)",
+//   email: "user@x.com",                 // recommended
+//   profile_id: "uuid-optional",
+//   home_year: "2019–2024" | "≤ 2018" | "0–1 years" | etc,
 //   bedrooms: number,
 //   bathrooms: number,
 //   sqft: number,
 //   property_type: string,
-//   amenities: string,          // free text (comma-separated ok)
-//   source: "pcsunited.aiou.house_intake.v1",
-//   payload: {...}              // optional raw blob (not stored unless you add a jsonb column)
+//   amenities: string                    // store as text (comma separated)
 // }
 //
 // ENV REQUIRED:
@@ -46,19 +45,9 @@ function nOrNull(v) {
   return Number.isFinite(n) ? n : null;
 }
 
-function cleanText(v, maxLen) {
+function sOrNull(v) {
   const s = String(v ?? "").trim();
-  if (!s) return null;
-  if (maxLen && s.length > maxLen) return s.slice(0, maxLen);
-  return s;
-}
-
-function cleanEmail(v) {
-  const s = String(v ?? "").trim().toLowerCase();
-  if (!s) return null;
-  // lightweight email sanity check (don’t over-reject)
-  if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(s)) return null;
-  return s;
+  return s ? s : null;
 }
 
 exports.handler = async function (event) {
@@ -74,47 +63,26 @@ exports.handler = async function (event) {
   let body = {};
   try {
     body = JSON.parse(event.body || "{}");
-  } catch (e) {
+  } catch (_) {
     return respond(400, { ok: false, error: "Invalid JSON body" });
   }
 
-  const profile_id = cleanText(body.profile_id, 64); // UUID string typically
-  const email = cleanEmail(body.email);
+  const email = sOrNull(body.email)?.toLowerCase() || null;
+  const profile_id = sOrNull(body.profile_id) || null;
 
-  // We need *something* to associate the row with a user
-  if (!profile_id && !email) {
-    return respond(400, {
-      ok: false,
-      error: "profile_id or a valid email is required",
-    });
-  }
-
-  // ============================================================
-  // //#2 NORMALIZE FIELDS (match your table columns)
-  // ============================================================
-  // Your table has home_year but you removed Year Built in the UI.
-  // We’ll store the derived “year band” string here (ex: "2024–2025" or "≤ 2016" or "2–7 years").
-  const home_year = cleanText(body.home_year || body.yearBand || body.condition_year_band, 64);
-
+  const home_year = sOrNull(body.home_year) || null;
   const bedrooms = nOrNull(body.bedrooms);
   const bathrooms = nOrNull(body.bathrooms);
   const sqft = nOrNull(body.sqft);
+  const property_type = sOrNull(body.property_type) || null;
+  const amenities = sOrNull(body.amenities) || null;
 
-  const property_type = cleanText(body.property_type || body.propertyType, 64);
-
-  // Save amenities as a text field (comma-separated is fine)
-  // If the embed sends amenities[] we’ll join it.
-  let amenities = null;
-  if (Array.isArray(body.amenities)) {
-    amenities = body.amenities.map(x => String(x || "").trim()).filter(Boolean).slice(0, 60).join(", ");
-  } else {
-    amenities = cleanText(body.amenities || body.amenitiesText, 400);
-  }
-
-  const source = cleanText(body.source, 80) || "pcsunited.aiou.house_intake.v1";
+  // We allow saving without email (nullable), but email is strongly preferred.
+  // If you want to require email, uncomment below:
+  // if (!email) return respond(400, { ok:false, error:"email is required" });
 
   // ============================================================
-  // //#3 SUPABASE CLIENT
+  // //#2 SUPABASE CLIENT
   // ============================================================
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
@@ -128,42 +96,67 @@ exports.handler = async function (event) {
   });
 
   // ============================================================
-  // //#4 UPSERT (profile_id preferred; else email)
+  // //#3 INSERT OR UPDATE (NO UNIQUE CONSTRAINT REQUIRED)
   // ============================================================
+  const nowIso = new Date().toISOString();
+
   const row = {
-    profile_id: profile_id || null,
-    email: email || null,
-    home_year: home_year || null,
+    profile_id,
+    email,
+    home_year,
     bedrooms,
     bathrooms,
     sqft,
-    property_type: property_type || null,
-    amenities: amenities || null,
-    updated_at: new Date().toISOString(),
-    // NOTE: If you later add a jsonb column like "payload", we can store body.payload safely.
-    // payload: (body.payload && typeof body.payload === "object") ? body.payload : null,
-    source, // NOTE: if your table doesn't have "source", remove this line.
+    property_type,
+    amenities,
+    updated_at: nowIso,
   };
 
-  // ⚠️ If your table does NOT have a "source" column, Supabase will throw.
-  // If you’re not sure, delete `source` from row above.
+  try {
+    // If we have an email, try to update the existing row first
+    if (email) {
+      const { data: existing, error: selErr } = await supabase
+        .from("user_aiou_inputs")
+        .select("id")
+        .eq("email", email)
+        .order("updated_at", { ascending: false })
+        .limit(1);
 
-  const conflictCol = profile_id ? "profile_id" : "email";
+      if (selErr) {
+        console.error("PCS United aiou-intake select error:", selErr);
+        // Fall through to insert attempt
+      } else if (existing && existing.length) {
+        const id = existing[0].id;
+        const { error: updErr } = await supabase
+          .from("user_aiou_inputs")
+          .update(row)
+          .eq("id", id);
 
-  const { error } = await supabase
-    .from("user_aiou_inputs")
-    .upsert([row], { onConflict: conflictCol });
+        if (updErr) {
+          console.error("PCS United aiou-intake update error:", updErr);
+          return respond(500, { ok: false, error: updErr.message || "DB update failed" });
+        }
 
-  if (error) {
-    console.error("PCS United aiou-intake error:", error);
-    return respond(500, { ok: false, error: error.message || "DB upsert failed" });
+        return respond(200, { ok: true, message: "AIOU intake updated.", id });
+      }
+    }
+
+    // Otherwise insert a new row
+    const { data: insData, error: insErr } = await supabase
+      .from("user_aiou_inputs")
+      .insert([row])
+      .select("id")
+      .limit(1);
+
+    if (insErr) {
+      console.error("PCS United aiou-intake insert error:", insErr);
+      return respond(500, { ok: false, error: insErr.message || "DB insert failed" });
+    }
+
+    const id = insData && insData[0] ? insData[0].id : null;
+    return respond(200, { ok: true, message: "AIOU intake saved.", id });
+  } catch (e) {
+    console.error("PCS United aiou-intake fatal:", e);
+    return respond(500, { ok: false, error: "Server error" });
   }
-
-  return respond(200, {
-    ok: true,
-    message: "AIOU intake saved.",
-    upserted_on: conflictCol,
-    email: email || null,
-    profile_id: profile_id || null,
-  });
 };

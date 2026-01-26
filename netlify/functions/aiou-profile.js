@@ -1,9 +1,10 @@
 // netlify/functions/aiou-profile.js
 // ============================================================
-// PCS United • AIOU Profile Hydrator (v1.0.0)
+// PCS United • AIOU Profile Hydrator (v1.0.1)
 // PURPOSE:
 // - Given { email }, fetch profile context from Supabase
-// - Optionally fetch latest user_aiou_inputs row (if present)
+// - Fetch latest user_aiou_inputs row (if present)
+// - ✅ FIX: Fetch latest financial_intakes row (if present) to hydrate Budget Max
 // - Return normalized fields for AIOU "Profile & Goals"
 //
 // BODY (POST JSON):
@@ -17,7 +18,7 @@
 //     bedroomsWanted, budgetMax,
 //     preferredSetting, safetyPriority
 //   },
-//   raw: { profile, aiou_input }
+//   raw: { profile, aiou_input, financial_intake }
 // }
 //
 // ENV REQUIRED:
@@ -58,6 +59,45 @@ function splitName(full) {
   const parts = f.split(/\s+/).filter(Boolean);
   if (parts.length === 1) return { firstName: parts[0], lastName: "" };
   return { firstName: parts[0], lastName: parts.slice(1).join(" ") };
+}
+
+// ============================================================
+// ✅ Helper: fetch latest row by email with defensive ordering
+// - Tries order columns in sequence (created_at -> updated_at), then falls back
+// ============================================================
+async function fetchLatestByEmail(supabase, table, email, orderCols = ["created_at", "updated_at"]) {
+  for (const col of orderCols) {
+    try {
+      const { data, error } = await supabase
+        .from(table)
+        .select("*")
+        .eq("email", email)
+        .order(col, { ascending: false })
+        .limit(1);
+
+      if (!error && data && data[0]) return data[0];
+      if (error) {
+        // If column doesn't exist, try next; otherwise break to fallback
+        const msg = String(error.message || "").toLowerCase();
+        if (msg.includes("does not exist") || msg.includes("column") || msg.includes("schema cache")) continue;
+      }
+    } catch (_) {
+      // try next
+    }
+  }
+
+  // fallback: no ordering (still returns some row if present)
+  try {
+    const { data, error } = await supabase
+      .from(table)
+      .select("*")
+      .eq("email", email)
+      .limit(1);
+
+    if (!error && data && data[0]) return data[0];
+  } catch (_) {}
+
+  return null;
 }
 
 exports.handler = async (event) => {
@@ -116,14 +156,18 @@ exports.handler = async (event) => {
     // ============================================================
     let aiou_input = null;
     try {
-      const { data: aiouRows, error: aiouErr } = await supabase
-        .from("user_aiou_inputs")
-        .select("*")
-        .eq("email", email)
-        .order("updated_at", { ascending: false })
-        .limit(1);
+      aiou_input = await fetchLatestByEmail(supabase, "user_aiou_inputs", email, ["updated_at", "created_at"]);
+    } catch (_) {
+      // optional table; ignore if missing
+    }
 
-      if (!aiouErr && aiouRows && aiouRows[0]) aiou_input = aiouRows[0];
+    // ============================================================
+    // //#4.5 ✅ FIX: FETCH LATEST FINANCIAL INTAKE (OPTIONAL)
+    // - Used to hydrate Budget (max $) from financial_intakes.price
+    // ============================================================
+    let financial_intake = null;
+    try {
+      financial_intake = await fetchLatestByEmail(supabase, "financial_intakes", email, ["updated_at", "created_at"]);
     } catch (_) {
       // optional table; ignore if missing
     }
@@ -150,21 +194,30 @@ exports.handler = async (event) => {
       n(profile?.bedrooms) ??
       null;
 
-    // Budget max:
-    // prefer common home price fields you already use elsewhere.
+    // ✅ Budget max:
+    // prefer latest financial_intakes.price (authoritative for "Budget (max $)")
+    // then fall back to any stored AIOU/profile fields.
     const budgetMax =
+      n(financial_intake?.price) ??
+      n(financial_intake?.budget_max) ??
+      n(aiou_input?.budget_max) ??
       n(profile?.projected_home_price) ??
       n(profile?.price) ??
       n(profile?.home_price) ??
       null;
 
-    // Preferred setting + safety (if you later store them in profile)
+    // Preferred setting + safety:
+    // prefer aiou_input if you add those columns there later, else profile, else defaults
     const preferredSetting =
+      s(aiou_input?.preferred_setting) ||
+      s(aiou_input?.setting) ||
       s(profile?.preferred_setting) ||
       s(profile?.setting) ||
       "city";
 
     const safetyPriority =
+      n(aiou_input?.safety_priority) ??
+      n(aiou_input?.safety) ??
       n(profile?.safety_priority) ??
       n(profile?.safety) ??
       5;
@@ -181,7 +234,8 @@ exports.handler = async (event) => {
       },
       raw: {
         profile,
-        aiou_input
+        aiou_input,
+        financial_intake
       }
     });
   } catch (e) {

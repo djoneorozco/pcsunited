@@ -2,11 +2,15 @@
   publish = "."
   functions = "netlify/functions"
 
+[functions]
+  included_files = ["netlify/functions/data/**","netlify/functions/cities/**"]
+
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
+# CORS for direct and pretty routes
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]

@@ -1,17 +1,17 @@
 // netlify/functions/brain.js
 // ============================================================
-// PCSUnited • CENTRAL BRAIN (v2.0.0) — Pay + City (bases.json index) + Mortgage Breakdown
+// PCSUnited • CENTRAL BRAIN (v2.1.0)
+// Pay Tables: netlify/functions/data/militaryPayTables.json
+// City Data: prefers netlify/functions/cities/bases.json
+//           falls back to netlify/functions/cities/*.json (per-base)
+// Mortgage: delegates to mortgage.js (single source of truth)
 //
-// ✅ PCSUnited PATHS (as provided):
-// - Pay Tables: netlify/functions/data/militaryPayTables.json
-// - Cities Index: netlify/functions/cities/bases.json
-//
-// ✅ DESIGN GOALS:
-// - Deterministic Pay (Base Pay + BAS + BAH) from pay tables
-// - City payload loaded from bases.json (NOT per-base json files)
-// - Mortgage math delegated to mortgage.js (single source of truth)
-// - Robust CORS preflight support
-// - Safe response: returns public profile by default (no sensitive fields)
+// ✅ Backward-compatible output shape:
+// - { ok, schemaVersion, profile, pay, city, mortgage, missing, estimatedMonthlyMortgage }
+// ✅ Safe-by-default:
+// - profile returned is a "public profile" subset unless debug=true
+// ✅ Robust bundle behavior:
+// - Uses runtime import(), file-system reads, and supports Netlify packaging
 // ============================================================
 
 const SCHEMA_VERSION = "1.2";
@@ -26,7 +26,9 @@ let __mortgageHandler = null;
 
 let __ROOT = null;
 let __PAY_TABLES_PATH = null;
+let __CITIES_DIR = null;
 let __BASES_INDEX_PATH = null;
+let __INDEX_BY_BASE_PATH = null;
 
 async function ensureDeps() {
   if (__fs && __path && __createClient && __mortgageHandler && __ROOT) return;
@@ -46,10 +48,11 @@ async function ensureDeps() {
   }
 
   __ROOT = process.cwd(); // /var/task
-
-  // PCSUnited fixed paths
   __PAY_TABLES_PATH = __path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json");
-  __BASES_INDEX_PATH = __path.join(__ROOT, "netlify", "functions", "cities", "bases.json");
+
+  __CITIES_DIR = __path.join(__ROOT, "netlify", "functions", "cities");
+  __BASES_INDEX_PATH = __path.join(__CITIES_DIR, "bases.json");
+  __INDEX_BY_BASE_PATH = __path.join(__CITIES_DIR, "index.byBase.json");
 }
 
 // -----------------------------
@@ -257,15 +260,19 @@ function applyOverridesToProfile(profile, overrides) {
 // //#3 File loading (Netlify-safe)
 // -----------------------------
 let __PAY_TABLES_CACHE__ = null;
-let __BASES_INDEX_CACHE__ = null;
+let __BASES_CACHE__ = null;
+let __INDEX_BY_BASE_CACHE__ = null;
+let __CITY_FILE_INDEX__ = null;
+const __CITY_CACHE__ = new Map();
 
 function loadPayTables() {
   if (__PAY_TABLES_CACHE__) return __PAY_TABLES_CACHE__;
+
   if (!__PAY_TABLES_PATH) throw new Error("Pay tables path not initialized.");
   if (!__fs.existsSync(__PAY_TABLES_PATH)) {
     throw new Error(
       `militaryPayTables.json not found at: ${__PAY_TABLES_PATH}\n` +
-      `Fix: ensure netlify.toml includes [functions].included_files = ["netlify/functions/data/**","netlify/functions/cities/**"]`
+      `Fix: add netlify.toml [functions].included_files = ["netlify/functions/data/**","netlify/functions/cities/**"]`
     );
   }
   const raw = __fs.readFileSync(__PAY_TABLES_PATH, "utf8");
@@ -273,66 +280,43 @@ function loadPayTables() {
   return __PAY_TABLES_CACHE__;
 }
 
-function loadBasesIndex() {
-  if (__BASES_INDEX_CACHE__) return __BASES_INDEX_CACHE__;
-  if (!__BASES_INDEX_PATH) throw new Error("bases.json path not initialized.");
-  if (!__fs.existsSync(__BASES_INDEX_PATH)) {
-    throw new Error(
-      `bases.json not found at: ${__BASES_INDEX_PATH}\n` +
-      `Fix: ensure netlify.toml includes [functions].included_files = ["netlify/functions/data/**","netlify/functions/cities/**"]`
-    );
+function loadJsonIfExists(absPath) {
+  try {
+    if (!__fs.existsSync(absPath)) return null;
+    const raw = __fs.readFileSync(absPath, "utf8");
+    return JSON.parse(raw);
+  } catch (e) {
+    return null;
   }
-  const raw = __fs.readFileSync(__BASES_INDEX_PATH, "utf8");
-  __BASES_INDEX_CACHE__ = JSON.parse(raw);
-  return __BASES_INDEX_CACHE__;
+}
+
+function listCityFiles() {
+  if (__CITY_FILE_INDEX__) return __CITY_FILE_INDEX__;
+  try {
+    const files = __fs.readdirSync(__CITIES_DIR)
+      .filter((f) => /\.json$/i.test(f))
+      .map((f) => f.replace(/\.json$/i, ""));
+    __CITY_FILE_INDEX__ = new Set(files);
+    return __CITY_FILE_INDEX__;
+  } catch (e) {
+    __CITY_FILE_INDEX__ = new Set();
+    return __CITY_FILE_INDEX__;
+  }
+}
+
+function cityFileExists(fileKey) {
+  const k = String(fileKey || "").trim();
+  if (!k) return false;
+  const idx = listCityFiles();
+  return idx.has(k);
 }
 
 // -----------------------------
-// //#3.5 City resolution (base -> cityKey) + bases.json loader
+// //#3.2 City normalization (so UI always finds avg + target)
 // -----------------------------
-function deriveCityKeyFromBase(profile, payTables) {
-  const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
-  const norm = normalizeBaseName(baseRaw);
-  if (!norm) return { cityKey: null, source: "none", base: String(baseRaw || "").trim() };
-
-  // Prefer authoritative payTables mapping if present
-  const tbl =
-    payTables?.CITY_BY_BASE ||
-    payTables?.CITY?.by_base ||
-    payTables?.CITY?.byBase ||
-    payTables?.city_by_base ||
-    null;
-
-  if (tbl && typeof tbl === "object") {
-    const mapped = tbl[norm] || tbl[String(baseRaw || "").trim()] || null;
-    if (mapped) return { cityKey: safeKey(mapped), source: "payTables.CITY_BY_BASE", base: String(baseRaw || "").trim() };
-  }
-
-  // Small internal fallback map (expand later if needed)
-  const MAP = {
-    NELLIS: "LasVegas",
-    NELLISAFB: "LasVegas",
-    DAVISMONTHAN: "Tucson",
-    DAVISMONTHANAFB: "Tucson",
-    FORTSAMHOUSTON: "SanAntonio",
-    FORTSAM: "SanAntonio",
-    LACKLAND: "SanAntonio",
-    RANDOLPH: "SanAntonio",
-    LUKE: "Phoenix",
-    LUKEAFB: "Phoenix",
-    DYESS: "Abilene",
-    KIRTLAND: "Albuquerque",
-    LAUGHLIN: "DelRio",
-  };
-
-  const hit = MAP[norm] || null;
-  return { cityKey: hit ? safeKey(hit) : null, source: hit ? "internalBaseCityMap" : "none", base: String(baseRaw || "").trim() };
-}
-
-function cityBaselineFromCityPayload(data) {
-  // Normalize market + targets to be schema-friendly
-  const marketRaw = data?.market || data?.housing?.market || data?.realEstate?.market || {};
-  const targetsRaw = data?.targets || data?.housing?.targets || data?.realEstate?.targets || {};
+function normalizeCityPayload(data, meta) {
+  const marketRaw = data.market || data?.housing?.market || data?.realEstate?.market || {};
+  const targets = data.targets || data?.housing?.targets || data?.realEstate?.targets || {};
 
   const zillowAvg = toNum(marketRaw?.zillow_average_home_value);
   const medianSale = toNum(marketRaw?.median_sale_price_current);
@@ -340,18 +324,11 @@ function cityBaselineFromCityPayload(data) {
   const ownerOccMedian = toNum(data?.housing?.median_value_owner_occupied);
 
   const avgHome =
+    toNum(data?.avg_home_value ?? data?.average_home_value ?? data?.avgHome ?? data?.city_avg_home) ??
     zillowAvg ??
     medianSale ??
     medianList ??
     ownerOccMedian ??
-    toNum(data?.avg_home_value ?? data?.average_home_value ?? data?.avgHome ?? data?.city_avg_home) ??
-    null;
-
-  const avgHomeSource =
-    (zillowAvg != null && "housing.market.zillow_average_home_value") ||
-    (medianSale != null && "housing.market.median_sale_price_current") ||
-    (medianList != null && "housing.market.median_listing_price_realtor") ||
-    (ownerOccMedian != null && "housing.median_value_owner_occupied") ||
     null;
 
   const bedrooms =
@@ -378,7 +355,7 @@ function cityBaselineFromCityPayload(data) {
   );
 
   const targetRent =
-    toNum(data?.target_rent ?? data?.targetRent ?? targetsRaw?.target_rent ?? targetsRaw?.targetRent) ??
+    toNum(data?.target_rent ?? data?.targetRent ?? targets?.target_rent ?? targets?.targetRent) ??
     derivedTargetRent ??
     null;
 
@@ -390,119 +367,213 @@ function cityBaselineFromCityPayload(data) {
       average_home_value: avgHome,
       avgHome: avgHome,
       city_avg_home: avgHome,
-      avg_home_value_source: avgHomeSource,
     },
-    targets: targetsRaw,
-    bedrooms: bedrooms,
+    targets,
+    bedrooms,
+
+    // common aliases
+    avg_home_value: avgHome,
+    average_home_value: avgHome,
+    avgHome: avgHome,
+    city_avg_home: avgHome,
+
     target_rent: targetRent,
     targetRent: targetRent,
 
-    // Also provide commonly-used aliases (helps front-end)
-    avg_home_value: toNum(data?.avg_home_value ?? data?.average_home_value ?? data?.avgHome ?? data?.city_avg_home) ?? avgHome ?? null,
-    average_home_value: toNum(data?.average_home_value) ?? (toNum(data?.avg_home_value) ?? avgHome ?? null),
-    avgHome: toNum(data?.avgHome) ?? (toNum(data?.avg_home_value) ?? avgHome ?? null),
-    city_avg_home: toNum(data?.city_avg_home) ?? (toNum(data?.avg_home_value) ?? avgHome ?? null),
+    // meta for debugging
+    source: meta?.source || null,
+    cityFileUsed: meta?.cityFileUsed || null,
+    basesIndexPick: meta?.basesIndexPick || null,
   };
 }
 
-function tryPickCityFromBasesIndex({ basesIndex, baseRaw, baseNorm, cityKey }) {
-  // This function is intentionally defensive: bases.json may use different shapes.
+// -----------------------------
+// //#3.3 City resolution (base -> cityKey) + loaders
+// -----------------------------
+function deriveCityKeyFromBase(profile, payTables) {
+  const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
+  const norm = normalizeBaseName(baseRaw);
+  if (!norm) return { cityKey: null, source: "none", base: String(baseRaw || "").trim() };
 
-  const cityKeyClean = safeKey(cityKey || "");
-  const baseRawStr = String(baseRaw || "").trim();
-  const baseNormStr = String(baseNorm || "");
+  const tbl =
+    payTables?.CITY_BY_BASE ||
+    payTables?.CITY?.by_base ||
+    payTables?.CITY?.byBase ||
+    payTables?.city_by_base ||
+    null;
 
-  const candidates = [];
-
-  // Candidate keys to try in maps
-  if (baseRawStr) candidates.push(baseRawStr);
-  if (baseNormStr) candidates.push(baseNormStr);
-  if (cityKeyClean) candidates.push(cityKeyClean);
-
-  // Candidate containers
-  const containers = [];
-
-  if (basesIndex && typeof basesIndex === "object") {
-    containers.push(basesIndex);
-
-    // Common shapes
-    if (basesIndex.bases && typeof basesIndex.bases === "object") containers.push(basesIndex.bases);
-    if (basesIndex.by_base && typeof basesIndex.by_base === "object") containers.push(basesIndex.by_base);
-    if (basesIndex.byBase && typeof basesIndex.byBase === "object") containers.push(basesIndex.byBase);
-    if (basesIndex.BASES && typeof basesIndex.BASES === "object") containers.push(basesIndex.BASES);
-
-    if (basesIndex.cities && typeof basesIndex.cities === "object") containers.push(basesIndex.cities);
-    if (basesIndex.by_city && typeof basesIndex.by_city === "object") containers.push(basesIndex.by_city);
-    if (basesIndex.byCity && typeof basesIndex.byCity === "object") containers.push(basesIndex.byCity);
+  if (tbl && typeof tbl === "object") {
+    const mapped = tbl[norm] || tbl[String(baseRaw || "").trim()] || null;
+    if (mapped) return { cityKey: safeKey(mapped), source: "payTables.CITY_BY_BASE", base: String(baseRaw || "").trim() };
   }
 
-  // 1) Direct lookup by candidate keys
+  const MAP = {
+    NELLIS: "LasVegas",
+    NELLISAFB: "LasVegas",
+    DAVISMONTHAN: "Tucson",
+    DAVISMONTHANAFB: "Tucson",
+    FORTSAMHOUSTON: "SanAntonio",
+    FORTSAM: "SanAntonio",
+    LACKLAND: "SanAntonio",
+    RANDOLPH: "SanAntonio",
+    LUKE: "Phoenix",
+    LUKEAFB: "Phoenix",
+    DYESS: "Abilene",
+    KIRTLAND: "Albuquerque",
+    LAUGHLIN: "DelRio",
+  };
+
+  const hit = MAP[norm] || null;
+  return { cityKey: hit ? safeKey(hit) : null, source: hit ? "internalBaseCityMap" : "none", base: String(baseRaw || "").trim() };
+}
+
+function loadCityFromBasesJson({ profile, resolvedCityKey }) {
+  if (__BASES_CACHE__ == null) __BASES_CACHE__ = loadJsonIfExists(__BASES_INDEX_PATH);
+  const bases = __BASES_CACHE__;
+  if (!bases) return null;
+
+  const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
+  const baseNorm = normalizeBaseName(baseRaw);
+  const cityKeyClean = safeKey(resolvedCityKey || "");
+
+  const containers = [];
+  if (bases && typeof bases === "object") containers.push(bases);
+  if (bases?.bases && typeof bases.bases === "object") containers.push(bases.bases);
+  if (bases?.by_base && typeof bases.by_base === "object") containers.push(bases.by_base);
+  if (bases?.byBase && typeof bases.byBase === "object") containers.push(bases.byBase);
+  if (bases?.cities && typeof bases.cities === "object") containers.push(bases.cities);
+  if (bases?.byCity && typeof bases.byCity === "object") containers.push(bases.byCity);
+
+  const candidates = [];
+  if (baseRaw) candidates.push(String(baseRaw).trim());
+  if (baseNorm) candidates.push(baseNorm);
+  if (cityKeyClean) candidates.push(cityKeyClean);
+
   for (const c of containers) {
     for (const k of candidates) {
       if (!k) continue;
-      if (c[k] && typeof c[k] === "object") return { ok: true, pickedFrom: "direct", keyUsed: k, record: c[k] };
+      if (c[k] && typeof c[k] === "object") {
+        return normalizeCityPayload(c[k], {
+          source: "cities/bases.json",
+          basesIndexPick: { keyUsed: k },
+          cityFileUsed: "bases.json",
+        });
+      }
     }
   }
 
-  // 2) If a container is keyed by normalized base names, attempt normalized scan
+  // also try normalized key match across container entries
   for (const c of containers) {
     for (const [k, v] of Object.entries(c)) {
       if (!v || typeof v !== "object") continue;
-      if (normalizeBaseName(k) === baseNormStr) return { ok: true, pickedFrom: "normalizedKeyMatch", keyUsed: k, record: v };
+      if (normalizeBaseName(k) === baseNorm) {
+        return normalizeCityPayload(v, {
+          source: "cities/bases.json",
+          basesIndexPick: { keyUsed: k, via: "normalizedKeyMatch" },
+          cityFileUsed: "bases.json",
+        });
+      }
     }
   }
 
-  // 3) If basesIndex has an array of bases/cities
-  const arraysToTry = [];
-  if (Array.isArray(basesIndex?.bases)) arraysToTry.push(basesIndex.bases);
-  if (Array.isArray(basesIndex?.items)) arraysToTry.push(basesIndex.items);
-  if (Array.isArray(basesIndex)) arraysToTry.push(basesIndex);
-
-  for (const arr of arraysToTry) {
-    for (const item of arr) {
-      if (!item || typeof item !== "object") continue;
-      const itemBase = pickFirst(item, ["base", "base_name", "baseName", "installation", "name"]);
-      const itemCityKey = pickFirst(item, ["cityKey", "city_key", "city", "canonical_city_key"]);
-      const nb = normalizeBaseName(itemBase);
-      const ck = safeKey(itemCityKey);
-
-      if (baseNormStr && nb === baseNormStr) return { ok: true, pickedFrom: "arrayBaseMatch", keyUsed: String(itemBase || ""), record: item };
-      if (cityKeyClean && ck === cityKeyClean) return { ok: true, pickedFrom: "arrayCityKeyMatch", keyUsed: String(itemCityKey || ""), record: item };
-    }
-  }
-
-  return { ok: false, pickedFrom: "none", keyUsed: null, record: null };
+  return null;
 }
 
-function loadCityFromBasesIndex({ profile, resolvedCityKey }) {
-  const basesIndex = loadBasesIndex();
+function loadCityFromIndexByBase({ profile }) {
+  if (__INDEX_BY_BASE_CACHE__ == null) __INDEX_BY_BASE_CACHE__ = loadJsonIfExists(__INDEX_BY_BASE_PATH);
+  const idx = __INDEX_BY_BASE_CACHE__;
+  if (!idx || typeof idx !== "object") return null;
 
   const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
   const baseNorm = normalizeBaseName(baseRaw);
 
-  const pick = tryPickCityFromBasesIndex({
-    basesIndex,
-    baseRaw,
-    baseNorm,
-    cityKey: resolvedCityKey,
-  });
+  // common shapes: { "Nellis": {...} } OR { by_base: {...} }
+  const containers = [];
+  containers.push(idx);
+  if (idx?.by_base && typeof idx.by_base === "object") containers.push(idx.by_base);
+  if (idx?.byBase && typeof idx.byBase === "object") containers.push(idx.byBase);
 
-  if (!pick.ok || !pick.record) {
-    const knownTopKeys = basesIndex && typeof basesIndex === "object" ? Object.keys(basesIndex).slice(0, 25) : [];
-    throw new Error(
-      `City not found in bases.json index. base="${String(baseRaw || "").trim()}" cityKey="${String(resolvedCityKey || "").trim()}". ` +
-      `Try verifying bases.json structure. topKeys=[${knownTopKeys.join(", ")}]`
-    );
+  for (const c of containers) {
+    // direct
+    if (baseRaw && c[String(baseRaw).trim()]) return normalizeCityPayload(c[String(baseRaw).trim()], { source: "cities/index.byBase.json", cityFileUsed: "index.byBase.json" });
+    // normalized key match
+    for (const [k, v] of Object.entries(c)) {
+      if (!v || typeof v !== "object") continue;
+      if (normalizeBaseName(k) === baseNorm) return normalizeCityPayload(v, { source: "cities/index.byBase.json", cityFileUsed: "index.byBase.json" });
+    }
   }
 
-  const normalized = cityBaselineFromCityPayload(pick.record);
+  return null;
+}
 
-  return {
-    ...normalized,
-    source: "bases.json",
-    canonical_city_key: safeKey(resolvedCityKey || pick.keyUsed || ""),
-    basesIndexPick: { pickedFrom: pick.pickedFrom, keyUsed: pick.keyUsed },
+function baseToCityFileKey(baseRaw) {
+  const norm = normalizeBaseName(baseRaw);
+  if (!norm) return null;
+
+  // Matches what your repo is showing: Davis-Monthan.json, Fort-Sam-Houston.json, etc.
+  const MAP = {
+    NELLIS: "Nellis",
+    NELLISAFB: "Nellis",
+
+    DAVISMONTHAN: "Davis-Monthan",
+    DAVISMONTHANAFB: "Davis-Monthan",
+
+    FORTSAMHOUSTON: "Fort-Sam-Houston",
+    FORTSAM: "Fort-Sam-Houston",
+
+    LACKLAND: "Lackland",
+    RANDOLPH: "Randolph",
+
+    LUKE: "Luke",
+    LUKEAFB: "Luke",
+
+    DYESS: "Dyess",
+    KIRTLAND: "Kirtland",
+    LAUGHLIN: "Laughlin",
   };
+
+  return MAP[norm] || null;
+}
+
+function loadCityFromPerBaseFiles({ profile }) {
+  const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
+  const fileKey = baseToCityFileKey(baseRaw);
+
+  if (!fileKey) return null;
+
+  if (__CITY_CACHE__.has(fileKey)) return __CITY_CACHE__.get(fileKey);
+
+  if (!cityFileExists(fileKey)) return null;
+
+  const filePath = __path.join(__CITIES_DIR, `${fileKey}.json`);
+  const data = loadJsonIfExists(filePath);
+  if (!data) return null;
+
+  const out = normalizeCityPayload(data, { source: "cities/<base>.json", cityFileUsed: `${fileKey}.json` });
+  __CITY_CACHE__.set(fileKey, out);
+  return out;
+}
+
+function loadCity({ profile, resolvedCityKey }) {
+  // 1) Prefer bases.json index if it exists and matches
+  const fromBases = loadCityFromBasesJson({ profile, resolvedCityKey });
+  if (fromBases) return fromBases;
+
+  // 2) Next prefer index.byBase.json if present
+  const fromIndex = loadCityFromIndexByBase({ profile });
+  if (fromIndex) return fromIndex;
+
+  // 3) Finally try direct per-base city file
+  const fromFiles = loadCityFromPerBaseFiles({ profile });
+  if (fromFiles) return fromFiles;
+
+  // fail with visibility
+  const available = Array.from(listCityFiles()).sort();
+  throw new Error(
+    `City data not found. base="${String(pickFirst(profile, ["base","pcs_base","duty_station","station"]) || "").trim()}" ` +
+    `resolvedCityKey="${String(resolvedCityKey || "").trim()}". ` +
+    `citiesDirFiles=[${available.join(", ")}].`
+  );
 }
 
 // -----------------------------
@@ -689,7 +760,6 @@ function computePay(profile, payTables) {
     };
   }
 
-  // Active duty: derive zip from base if missing
   if (!zip && baseName) {
     const baseToZipRaw = payTables?.BAH?.base_to_zip || payTables?.BAH?.baseToZip || payTables?.BASE_ZIP || {};
     const baseToZipNorm = new Map();
@@ -735,14 +805,7 @@ function pickMortgagePrice({ body, profile, city, bedrooms }) {
   const profPrice = toNum(profile?.price ?? profile?.home_price ?? profile?.projected_home_price ?? profile?.projectedHomePrice);
 
   const bedsKey = String(bedrooms ?? 4);
-  const bedsRoot =
-    city?.bedrooms ||
-    city?.raw?.bedrooms ||
-    city?.by_bedroom ||
-    city?.raw?.by_bedroom ||
-    city?.byBedroom ||
-    city?.raw?.byBedroom ||
-    null;
+  const bedsRoot = city?.bedrooms || city?.raw?.bedrooms || city?.by_bedroom || city?.byBedroom || null;
 
   let bedPrice = null;
   if (bedsRoot && typeof bedsRoot === "object") {
@@ -854,42 +917,18 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
     toNum(city?.tax_rate ?? city?.property_tax_rate ?? city?.raw?.property_tax_rate) ??
     1.2;
 
-  sources.taxRate =
-    body?.taxRate != null ? "body.taxRate"
-    : profile?.taxRate != null ? "profile.taxRate"
-    : city?.tax_rate != null ? "city.tax_rate"
-    : (city?.property_tax_rate != null || city?.raw?.property_tax_rate != null) ? "city.property_tax_rate"
-    : "default:1.20";
-
   const insRatePct =
     toNum(body?.insRate ?? profile?.insRate) ??
     toNum(city?.insurance_rate ?? city?.raw?.insurance_rate) ??
     0.5;
 
-  sources.insRate =
-    body?.insRate != null ? "body.insRate"
-    : profile?.insRate != null ? "profile.insRate"
-    : (city?.insurance_rate != null || city?.raw?.insurance_rate != null) ? "city.insurance_rate"
-    : "default:0.50";
-
   const hoa =
     toNum(body?.hoa ?? profile?.hoa ?? profile?.hoa_monthly ?? city?.hoa_monthly ?? city?.raw?.hoa_monthly) ?? 0;
-
-  sources.hoa =
-    body?.hoa != null ? "body.hoa"
-    : (profile?.hoa != null || profile?.hoa_monthly != null) ? "profile.hoa_monthly"
-    : (city?.hoa_monthly != null || city?.raw?.hoa_monthly != null) ? "city.hoa_monthly"
-    : "default:0";
 
   const loanTypeRaw = String(body?.loanType ?? profile?.loanType ?? profile?.loan_type ?? "").trim();
   const loanType = loanTypeRaw ? loanTypeRaw : "conventional";
 
   const pmiRatePct = toNum(body?.pmiRate ?? profile?.pmiRate) ?? defaultPmiRate({ loanType, dpPct });
-
-  sources.pmiRate =
-    body?.pmiRate != null ? "body.pmiRate"
-    : profile?.pmiRate != null ? "profile.pmiRate"
-    : "defaultPmiRate(loanType,dpPct)";
 
   const mortgagePayload = {
     price: price,
@@ -995,8 +1034,6 @@ async function fetchProfileByEmail(email) {
 }
 
 function buildPublicProfile(profileEffective) {
-  // Keep this response safe for the browser.
-  // Add fields as needed, but avoid leaking sensitive data by default.
   return {
     email: String(profileEffective?.email || "").trim().toLowerCase(),
     mode: profileEffective?.mode ?? null,
@@ -1028,7 +1065,9 @@ export async function handler(event) {
         note: "POST JSON: { email, cityKey?, bedrooms?, price?, dpPct?, termYears?, creditScore?, apr?, taxRate?, insRate?, hoa?, pmiRate?, loanType?, overrides?, debug? }",
         paths: {
           payTables: "netlify/functions/data/militaryPayTables.json",
-          citiesIndex: "netlify/functions/cities/bases.json",
+          citiesDir: "netlify/functions/cities/",
+          basesIndex: "netlify/functions/cities/bases.json (optional)",
+          indexByBase: "netlify/functions/cities/index.byBase.json (optional)",
         },
       });
     }
@@ -1052,27 +1091,16 @@ export async function handler(event) {
 
     const { profileEffective, overridesApplied } = applyOverridesToProfile(profile, body.overrides);
 
-    // Resolve cityKey: body.cityKey wins; else derive from base
+    // Resolve cityKey: body.cityKey wins; else derive from base; else SanAntonio as last resort
     let resolvedCityKey = cityKeyClean || null;
     let cityResolve = { cityKey: null, source: "none", base: "" };
 
     if (!resolvedCityKey) {
       cityResolve = deriveCityKeyFromBase(profileEffective, payTables);
-      resolvedCityKey = cityResolve.cityKey || "SanAntonio"; // last resort
+      resolvedCityKey = cityResolve.cityKey || "SanAntonio";
     }
 
-    // Load city from bases.json
-    let city = null;
-    let cityLoadError = null;
-
-    try {
-      city = loadCityFromBasesIndex({ profile: profileEffective, resolvedCityKey });
-    } catch (err) {
-      cityLoadError = String(err?.message || err);
-      // Hard fallback attempt
-      resolvedCityKey = "SanAntonio";
-      city = loadCityFromBasesIndex({ profile: profileEffective, resolvedCityKey });
-    }
+    const city = loadCity({ profile: profileEffective, resolvedCityKey });
 
     const computed = computePay(profileEffective, payTables);
     const mortgageCore = await computeMortgageEstimate({ body, profile: profileEffective, city, bedrooms });
@@ -1097,46 +1125,30 @@ export async function handler(event) {
       source: "brain",
     };
 
-    const publicProfile = buildPublicProfile(profileEffective);
-
-    const needsProfile = {
-      ok: (computed?.missing || []).length === 0,
-      missing: computed?.missing || [],
-      message:
-        (computed?.missing || []).length === 0
-          ? "Profile complete."
-          : "Update your profile (rank/YOS/base/family/zip) to compute deterministic pay + city baselines.",
-    };
-
     return respond(event, 200, {
       ok: true,
       schemaVersion: SCHEMA_VERSION,
       input: { email, cityKey: resolvedCityKey, bedrooms },
 
-      // Contract-required fields
-      profile: publicProfile,
+      profile: debugOn ? profileEffective : buildPublicProfile(profileEffective),
       pay: computed.pay,
       city: city,
       missing: computed.missing,
 
-      // Optional extras
       mortgage,
       estimatedMonthlyMortgage: mortgage.totalMonthly,
-      needsProfile,
 
-      // Debug only when requested
       debug: debugOn
         ? {
-            payTablesPathUsed: __PAY_TABLES_PATH || null,
-            basesIndexPathUsed: __BASES_INDEX_PATH || null,
+            payTablesPathUsed: __PAY_TABLES_PATH,
+            citiesDir: __CITIES_DIR,
+            basesIndexExists: __fs.existsSync(__BASES_INDEX_PATH),
+            indexByBaseExists: __fs.existsSync(__INDEX_BY_BASE_PATH),
             cityKeyRaw: cityKeyRaw || null,
             cityKeyResolved: resolvedCityKey,
             cityKeySource: cityKeyClean ? "body.cityKey" : (cityResolve.cityKey ? cityResolve.source : "default"),
             baseUsedForCity: cityResolve.base || null,
-            cityLoadError: cityLoadError || null,
             overridesApplied: overridesApplied || [],
-            basesIndexPick: city?.basesIndexPick || null,
-            profileEffective: profileEffective, // ⚠️ includes private fields; only sent if debug=true
           }
         : undefined,
     });

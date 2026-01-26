@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Jan 18 2026 11:30:14 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Jan 26 2026 07:19:35 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6965838af59da527c04bcc2e" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -192,7 +192,8 @@ margin: 0rem !important;
               <nav role="navigation" class="nav-menu w-nav-menu">
                 <a href="index.html" aria-current="page" class="nav-link w-nav-link w--current">Home</a>
                 <a href="airforce-financial-calculator.html" class="nav-link w-nav-link">A.I Dashboard</a>
-                <a href="va-loan-education.html" class="nav-link w-nav-link">VA University</a>
+                <a href="va-loan-education.html" class="nav-link w-nav-link">PCS Academy</a>
+                <a href="air-force-base-demographics-bah-realty.html" class="nav-link w-nav-link">Base Information</a>
                 <div data-delay="200" data-hover="false" class="nav-dropdown w-dropdown">
                   <div class="nav-dropdown-toggle w-dropdown-toggle">
                     <div class="dot"></div>
@@ -337,256 +338,9 @@ margin: 0rem !important;
               </div>
               <div class="home1_hero_info">
                 <div class="text-block-4">PCS United is a Military Support Platform build to provide BAH forecasting, Military Pay and Financial Analysis, Base Relocation Support, and VA Education. <br>Our Goal is to Simplify your Financial Factors and provide Clear and Un-Biased Guidance.  <br>PCS United is Veteran Owned and Operated.</div>
-                <div class="w-embed w-script"><!--  ============================================================
-  OROZCOREALTY • INTRO VIDEO + ASK-ELENA (Option A)
-  ✅ UI UPDATE (Requested):
-  - Replaced the “Process Overview” chip with a simple WHITE button:
-    "Watch Intro Video" (matches PCSUnited style)
-  - Kept the same behavior + video + Ask-Elena handoff logic
-===============================================================  -->
-                  <!--  ============================================================
-  //#1 INTRO VIDEO PLAYER (UNCHANGED FUNCTIONALLY)
-===============================================================  -->
-                  <div id="about-video-wrap" style="
-  position:fixed; bottom:5.5rem; right:1rem; z-index:2147480000;
-  width:360px; height:480px; max-width:90vw; border-radius:12px; overflow:hidden;
-  background:rgba(0,0,0,.85); border:1px solid rgba(255,255,255,.12);
-  box-shadow:0 24px 80px rgba(0,0,0,.6);
-  opacity:0; transform:translateY(20px) scale(.98); pointer-events:none;
-  transition:opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1);
-">
-                    <div style="display:flex; align-items:center; justify-content:space-between; padding:.5rem .75rem;">
-                      <div style="color:#a8b0d6; font:600 .8rem/1 Inter,system-ui,sans-serif;">Your Journey Begins — Now</div>
-                      <button id="about-video-close" aria-label="Close video" style="
-      appearance:none; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06);
-      color:#fff; font:.8rem/1 Inter,system-ui,sans-serif; padding:.25rem .5rem; border-radius:.5rem; cursor:pointer;
-    ">✕</button>
-                    </div>
-                    <video id="about-video" playsinline="" controls="" preload="auto" style="display:block; width:100%; height:calc(100% - 2rem); object-fit:cover; background:#000;">
-                      <source src="https://s3.amazonaws.com/webflow-prod-assets/68cecb820ec3dbdca3ef9099/690b4811fe4aacf24701e89b_TOR_3.mp4">
-                    </video>
-                  </div>
-                  <!--  ============================================================
-  //#2 INTRO TRIGGER (UPDATED LOOK → simple white button)
-===============================================================  -->
-                  <button id="intro-video-btn" type="button" style="
-  position:fixed; bottom:1rem; right:1rem; z-index:2147480000;
-  display:flex; align-items:center; justify-content:center; gap:.55rem;
-  padding:.9rem 1.15rem; min-width:190px;
-  background:#ffffff; color:#111111;
-  border:1px solid rgba(0,0,0,.14);
-  border-radius:10px;
-  font:600 14px/1 Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  box-shadow:0 18px 48px rgba(0,0,0,.28);
-  cursor:pointer;
-  opacity:0; transform:translateY(20px) scale(.98); pointer-events:none;
-  transition:opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
-">
-                    <!--  play icon  -->
-                    <span aria-hidden="true" style="display:inline-flex; align-items:center; justify-content:center;">
-                      <svg width="16" height="16" viewbox="0 0 24 24" fill="none">
-                        <path d="M8.5 6.8v10.4c0 .7.8 1.1 1.4.7l8.3-5.2c.6-.4.6-1.2 0-1.6L9.9 6.1c-.6-.4-1.4 0-1.4.7z" fill="currentColor"></path>
-                      </svg>
-                    </span>
-                    <span>Watch Intro Video</span>
-                  </button>
-                  <script>
-(function () {
-  const btn = document.getElementById('intro-video-btn');
-  const wrap = document.getElementById('about-video-wrap');
-  const video = document.getElementById('about-video');
-  const closeBtn = document.getElementById('about-video-close');
-  if (!btn || !wrap || !video || !closeBtn) return;
-  let revealed = false;
-  // Reveal the button after a little scroll (same behavior as before)
-  function revealBtn() {
-    if (!revealed && window.scrollY > 150) {
-      revealed = true;
-      btn.style.opacity = '1';
-      btn.style.transform = 'translateY(0)';
-      btn.style.pointerEvents = 'auto';
-    }
-  }
-  revealBtn();
-  window.addEventListener('scroll', revealBtn, { passive: true });
-  function showPlayer() {
-    wrap.style.opacity = '1';
-    wrap.style.pointerEvents = 'auto';
-    wrap.style.transform = 'translateY(0)';
-  }
-  function hidePlayer() {
-    wrap.style.opacity = '0';
-    wrap.style.pointerEvents = 'none';
-    wrap.style.transform = 'translateY(20px)';
-  }
-  // Click button:
-  // - If player hidden: show + play
-  // - If playing: pause
-  // - If paused: play
-  btn.addEventListener('click', () => {
-    if (wrap.style.pointerEvents !== 'auto') showPlayer();
-    if (!video.paused) {
-      video.pause();
-    } else {
-      video.play().catch(() => {});
-    }
-  });
-  closeBtn.addEventListener('click', hidePlayer);
-  // When video ends: hide everything + reveal Ask-Elena launcher (same handoff)
-  video.addEventListener('ended', () => {
-    hidePlayer();
-    btn.style.opacity = '0';
-    btn.style.pointerEvents = 'none';
-    setTimeout(() => {
-      btn.remove();
-      wrap.remove();
-      const launcher = document.getElementById('ask-elena-launcher');
-      if (launcher) {
-        launcher.style.opacity = '1';
-        launcher.style.pointerEvents = 'auto';
-        launcher.style.transform = 'translateY(0)';
-      }
-    }, 600);
-  });
-})();
-</script>
-                  <!--  ============================================================
-  //#3 ASK-ELENA LAUNCHER BUTTON (UNCHANGED)
-===============================================================  -->
-                  <div id="ask-elena-launcher" style="
-  position:fixed; bottom:1rem; right:1rem; z-index:2147480000;
-  padding:1rem 1.2rem; border-radius:1rem; cursor:pointer;
-  background:rgba(14,18,30,0.7); backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.12);
-  color:#fff; font-family:Inter,sans-serif; display:flex;
-  align-items:center; gap:.75rem;
-  opacity:0; pointer-events:none;
-  transform:translateY(20px); transition:.4s ease;
-">
-                    <img src="https://cdn.prod.website-files.com/68ab0c767e65bfdde9ef9099/68b6f1c7c6e9aa25891ff487_ElenaSultry%20E4EDF8CF.png" style="width:42px;height:42px;border-radius:50%;object-fit:cover;">
-                    <div style="display:flex;flex-direction:column;line-height:1.2;">
-                      <div style="font-size:.8rem;font-weight:600;">Ask Elena</div>
-                      <div style="font-size:.7rem;color:#a8b0d6;">Your A.I. Concierge</div>
-                    </div>
-                  </div>
-                  <!--  ============================================================
-  //#4 ASK-ELENA COMMAND CENTER (UNCHANGED)
-===============================================================  -->
-                  <div id="ask-elena-shell" data-endpoint="https://theorozcorealty.netlify.app/.netlify/functions/ask-elena" style="
-  position:fixed; bottom:1rem; right:1rem; z-index:2147480000;
-  width:420px; height:620px; max-width:95vw;
-  background:linear-gradient(180deg,#101426,#0f1324);
-  border-radius:16px; box-shadow:0 24px 48px rgba(0,0,0,.8);
-  border:1px solid rgba(255,255,255,.08);
-  display:none; overflow:hidden;
-">
-                    <style>
-  #ask-elena-shell, #ask-elena-shell * {
-    box-sizing:border-box;
-    font-family:Inter,sans-serif;
-  }
-  /* SCROLL FIX — entire interior scrolls as needed */
-  #ae-wrapper-scroll {
-    width:100%;
-    height:100%;
-    display:flex;
-    flex-direction:column;
-    overflow-y:auto; /* <-- entire widget scrolls */
-  }
-  #ae-header {
-    padding:16px;
-    background:#0f1324;
-    display:flex;align-items:center;justify-content:space-between;
-    border-bottom:1px solid rgba(255,255,255,.08);
-  }
-  #ae-header img { width:40px;height:40px;border-radius:50%; }
-  #ae-chat {
-    flex:1; padding:18px; display:flex; flex-direction:column;
-    gap:12px; overflow-y:auto; /* <-- chat scrolls naturally */
-  }
-  .ae-msg {
-    max-width:80%; padding:12px; border-radius:14px;
-    white-space:pre-wrap; color:#fff; backdrop-filter:blur(6px);
-  }
-  .ae-user { background:rgba(142,243,197,.08);border:1px solid rgba(142,243,197,.3);align-self:flex-end; }
-  .ae-bot { background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12); }
-  .ae-footer {
-    padding:14px; display:flex; gap:10px;
-    border-top:1px solid rgba(255,255,255,.08);
-    background:rgba(0,0,0,.25);
-  }
-  #ae-input {
-    flex:1;padding:12px;background:rgba(255,255,255,.06);
-    border:1px solid rgba(255,255,255,.12); color:#fff;
-    border-radius:10px;
-  }
-  #ae-send {
-    padding:12px 18px; border-radius:10px;
-    background:linear-gradient(90deg,#8ef3c5,#6aa7ff);
-    border:none; font-weight:700; cursor:pointer;
-  }
-</style>
-                    <div id="ae-wrapper-scroll">
-                      <!--  HEADER with CLOSE BUTTON  -->
-                      <div id="ae-header">
-                        <div style="display:flex;align-items:center;gap:12px;">
-                          <img src="https://cdn.prod.website-files.com/68ab0c767e65bfdde9ef9099/68b6f1c7c6e9aa25891ff487_ElenaSultry%20E4EDF8CF.png">
-                          <div>
-                            <div style="font-weight:700;font-size:15px;">Elena</div>
-                            <div style="font-size:12px;color:#a8b0d6;">Your Concierge</div>
-                          </div>
-                        </div>
-                        <!--  CLOSE BUTTON  -->
-                        <button id="ae-close" style="
-      background:none;border:1px solid rgba(255,255,255,.2);
-      color:white;font-size:14px;border-radius:6px;
-      padding:4px 8px;cursor:pointer;
-    ">✕</button>
-                      </div>
-                      <!--  CHAT  -->
-                      <div id="ae-chat"></div>
-                      <!--  FOOTER  -->
-                      <div class="ae-footer">
-                        <input id="ae-input" type="text" placeholder="Ask Elena anything…">
-                        <button id="ae-send">Send</button>
-                      </div>
-                    </div>
-                    <!--  JS — CHAT + CLOSE BUTTON  -->
-                    <script>
-(function(){
-  const launcher = document.getElementById("ask-elena-launcher");
-  const panel = document.getElementById("ask-elena-shell");
-  const closeBtn = document.getElementById("ae-close");
-  launcher.onclick = () => { panel.style.display="block"; };
-  closeBtn.onclick = () => { panel.style.display="none"; };
-  const ENDPOINT = panel.getAttribute("data-endpoint");
-  const chat = document.getElementById("ae-chat");
-  const input = document.getElementById("ae-input");
-  const send = document.getElementById("ae-send");
-  function scroll(){ chat.scrollTop = chat.scrollHeight; }
-  function msg(role,text){
-    const el=document.createElement("div");
-    el.className="ae-msg "+(role==="user"?"ae-user":"ae-bot");
-    el.textContent=text;
-    chat.appendChild(el);
-    scroll();
-  }
-  async function ask(q){
-    msg("user",q);
-    input.value="";
-    const res=await fetch(ENDPOINT,{
-      method:"POST",
-      headers:{"Content-Type":"application/json"},
-      body:JSON.stringify({message:q})
-    });
-    const data=await res.json();
-    msg("assistant",data.reply||"I'm here with you.");
-  }
-  send.onclick = ()=>{ if(input.value.trim()) ask(input.value); };
-  input.onkeydown = e=>{ if(e.key==="Enter") send.click(); };
-  msg("assistant", "Hello, I'm Elena,\n\nThe A.I Concierge at Orozco Realty.\nHow may I help you today?");
-})();
-</script>
+                <div class="home3_hero_watch-copy-copy">
+                  <div class="stories_watch"><img src="images/play.svg" loading="lazy" alt="" class="icon-height-small">
+                    <div>Watch Video</div>
                   </div>
                 </div>
               </div>
@@ -609,8 +363,7 @@ margin: 0rem !important;
               </div>
             </div>
             <div data-w-id="63eeaef3-1351-a533-53c5-fd7ad7dea80b" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="home1_benefit_grid">
-              <div class="home1_benefit_card"><img loading="lazy" src="images/home-benefit1_1home-benefit1.avif" alt="" class="icon-height-xlarge icon-shadow">
-                <div class="spacer-small-2"></div>
+              <div class="home1_benefit_card"><img src="images/56E44F0C-D47C-43E1-A862-FCC6CBAC3178.png" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" srcset="images/56E44F0C-D47C-43E1-A862-FCC6CBAC3178-p-500.png 500w, images/56E44F0C-D47C-43E1-A862-FCC6CBAC3178.png 800w" alt="" class="image-82">
                 <div class="heading-style-h5-3">Base Insights</div>
                 <div class="text-size-small-3">With years of experience across education and consulting, our team brings tested strategies and real-world knowledge to every program.<br>‍</div>
               </div>
@@ -619,8 +372,8 @@ margin: 0rem !important;
                 <div class="heading-style-h5-3">VA Loan Workshops</div>
                 <div class="text-size-small-3">No two journeys are alike. That’s why Pathwise programs are designed to adapt—whether you’re a student seeking academic support.<br>‍</div>
               </div>
-              <div class="home1_benefit_card"><img loading="lazy" src="images/home-benefit3_1home-benefit3.avif" alt="" class="icon-height-xlarge icon-shadow">
-                <div class="spacer-small-2"></div>
+              <div class="home1_benefit_card">
+                <div class="spacer-small-2"></div><img src="images/74363163-66D7-483C-BBA8-205042C73D1F.png" loading="lazy" width="99" sizes="99px" alt="" srcset="images/f931e39e1a94e4c1427c1f2572380d61_74363163-66D7-483C-BBA8-205042C73D1F-p-500.png 500w, images/74363163-66D7-483C-BBA8-205042C73D1F.png 800w" class="image-81">
                 <div class="heading-style-h5-3">Home-Purchase</div>
                 <div class="text-size-small-3">Your success is our priority. We build every relationship on trust, transparency, and care, ensuring that every student, parent, or client feels supported</div>
               </div>
@@ -1081,17 +834,7 @@ margin: 0rem !important;
                 <div class="home1_about_content-2">
                   <h2 class="heading-style-h1-2"><br>Instant PCS verdict + housing range + next steps (no account required)</h2>
                   <div class="home2_links_grid-2">
-                    <a href="#" class="home2_links_card-2 w-inline-block"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d0fc03a867952e96776284_home%20links%20icon1.png" alt="" class="icon-height-large-2 icon-shadow">
-                      <div class="home2_links_content-2">
-                        <h2 class="heading-style-h4-2">How Much Mortgage can I Afford?</h2>
-                        <div class="text-block">Tailored pathways for learners and clients</div>
-                      </div>
-                      <div class="button-arrow">
-                        <div class="text-size-medium text-weight-medium">Explore</div>
-                        <div class="button-8 is-icon is-secondary"><img loading="lazy" src="https://cdn.prod.website-files.com/69641801fba570f104bd1ee2/69641802fba570f104bd2299_Right%20-%206.svg" alt="" class="icon-height-small-5"></div>
-                      </div>
-                    </a>
-                    <a href="/category/workshops" class="home2_links_card-2 w-inline-block"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d0fc035815bd7586c8fd44_home%20links%20icon2.png" alt="" class="icon-height-large-2 icon-shadow">
+                    <a href="/category/workshops" class="home2_links_card-2 w-inline-block"><img src="images/8805D95F-35D2-4830-9327-A4CC7B763BE2.png" loading="lazy" width="103" sizes="103px" alt="" srcset="images/8805D95F-35D2-4830-9327-A4CC7B763BE2-p-500.png 500w, images/8805D95F-35D2-4830-9327-A4CC7B763BE2.png 800w">
                       <div class="home2_links_content-2">
                         <h2 class="heading-style-h4-2">Should I  &quot;Buy - Rent - Base Housing&quot;</h2>
                         <div class="text-block-2">Interactive learning experiences</div>
@@ -1101,13 +844,23 @@ margin: 0rem !important;
                         <div class="button-8 is-icon is-secondary"><img loading="lazy" src="https://cdn.prod.website-files.com/69641801fba570f104bd1ee2/69641802fba570f104bd2299_Right%20-%206.svg" alt="" class="icon-height-small-5"></div>
                       </div>
                     </a>
-                    <a href="#" class="home2_links_card-2 w-inline-block"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d0fc23d3dcef9b8b5bdb11_home%20links%20icon3.png" alt="" class="icon-height-large-2 icon-shadow">
+                    <a href="#" class="home2_links_card-2 w-inline-block"><img src="images/E5854A2A-BA7C-478E-BD1E-8867A0D7DA66.png" loading="lazy" width="103" sizes="103px" alt="" srcset="images/E5854A2A-BA7C-478E-BD1E-8867A0D7DA66-p-500.png 500w, images/E5854A2A-BA7C-478E-BD1E-8867A0D7DA66.png 800w">
                       <div class="home2_links_content-2">
                         <h2 class="heading-style-h4-2">Analyze Your Home &quot;Wants &amp; Needs&quot;</h2>
                         <div class="text-block-3">Personalized guidance from experts</div>
                       </div>
                       <div class="button-arrow">
                         <div class="text-size-medium text-weight-medium">Explore</div>
+                        <div class="button-8 is-icon is-secondary"><img loading="lazy" src="https://cdn.prod.website-files.com/69641801fba570f104bd1ee2/69641802fba570f104bd2299_Right%20-%206.svg" alt="" class="icon-height-small-5"></div>
+                      </div>
+                    </a>
+                    <a href="/category/workshops" class="home2_links_card-2 w-inline-block"><img src="images/9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" width="103" sizes="103px" alt="" srcset="images/9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063-p-500.png 500w, images/9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png 800w">
+                      <div class="home2_links_content-2">
+                        <h2 class="heading-style-h4-2">Should I  &quot;Buy - Rent - Base Housing&quot;</h2>
+                        <div class="text-block-2">Interactive learning experiences</div>
+                      </div>
+                      <div class="button-arrow">
+                        <div class="text-size-medium text-weight-medium">Browse</div>
                         <div class="button-8 is-icon is-secondary"><img loading="lazy" src="https://cdn.prod.website-files.com/69641801fba570f104bd1ee2/69641802fba570f104bd2299_Right%20-%206.svg" alt="" class="icon-height-small-5"></div>
                       </div>
                     </a>
@@ -1131,16 +884,16 @@ margin: 0rem !important;
           <div data-w-id="c4294515-7c82-373f-88c0-2cd092b18956" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee">
             <div class="highlight_marquee-group">
               <div class="highlight_marquee-texts">
-                <div class="highlight_marquee-box"><img src="images/icon-line1_1icon-line1.avif" loading="lazy" alt="" class="icon-height-large">
+                <div class="highlight_marquee-box"><img src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" class="icon-height-large">
                   <div class="heading-style-h4 text-color-alternate">Veteran Owned</div>
                 </div>
-                <div class="highlight_marquee-box"><img src="images/home-benefit3_1home-benefit3.avif" loading="lazy" alt="" class="icon-height-large">
+                <div class="highlight_marquee-box"><img src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" class="icon-height-large">
                   <div class="heading-style-h4 text-color-alternate">A.I Intelligence</div>
                 </div>
-                <div class="highlight_marquee-box"><img src="images/icon-line3_1icon-line3.avif" loading="lazy" alt="" class="icon-height-large">
+                <div class="highlight_marquee-box"><img src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" width="100" height="100" alt="" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large">
                   <div class="heading-style-h4 text-color-alternate">VA University</div>
                 </div>
-                <div class="highlight_marquee-box"><img src="images/icon-line4_1icon-line4.avif" loading="lazy" alt="" class="icon-height-large">
+                <div class="highlight_marquee-box"><img src="images/9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" width="100" height="100" alt="" srcset="images/9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063-p-500.png 500w, images/9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png 800w" sizes="100px" class="icon-height-large">
                   <div class="heading-style-h4 text-color-alternate">Financial Forecasting</div>
                 </div>
               </div>
@@ -1239,7 +992,7 @@ margin: 0rem !important;
                 </div>
                 <div class="spacer-small"></div>
                 <div class="home1_hero_reviews is-v2">
-                  <div class="hero_reviews-authors"><img sizes="(max-width: 1418px) 100vw, 1418px" srcset="images/people1_1people1.avif 500w, images/people1_1people1.avif 1418w" alt="Schools Coaching Webflow template " src="images/people1_1people1.avif" loading="lazy" class="hero_avatar is-first is-v2"><img sizes="(max-width: 1419px) 100vw, 1419px" srcset="images/people6_1people6.avif 500w, images/people6_1people6.avif 800w, images/people6_1people6.avif 1419w" alt="Schools Coaching Webflow template " src="images/people6_1people6.avif" loading="lazy" class="hero_avatar is-v2"><img sizes="(max-width: 1419px) 100vw, 1419px" srcset="images/people3_1people3.avif 500w, images/people3_1people3.avif 1419w" alt="Schools Coaching Webflow template " src="images/people3_1people3.avif" loading="lazy" class="hero_avatar is-v2"><img sizes="(max-width: 1418px) 100vw, 1418px" srcset="images/people5_1people5.avif 500w, images/people5_1people5.avif 800w, images/people5_1people5.avif 1418w" alt="Schools Coaching Webflow template " src="images/people5_1people5.avif" loading="lazy" class="hero_avatar is-v2"></div>
+                  <div class="hero_reviews-authors"><img sizes="100vw" srcset="images/people1_1people1.avif 500w, images/people1_1people1.avif 1418w" alt="Schools Coaching Webflow template " src="images/people1_1people1.avif" loading="lazy" class="hero_avatar is-first is-v2"><img sizes="100vw" srcset="images/people6_1people6.avif 500w, images/people6_1people6.avif 800w, images/people6_1people6.avif 1419w" alt="Schools Coaching Webflow template " src="images/people6_1people6.avif" loading="lazy" class="hero_avatar is-v2"><img sizes="100vw" srcset="images/people3_1people3.avif 500w, images/people3_1people3.avif 1419w" alt="Schools Coaching Webflow template " src="images/people3_1people3.avif" loading="lazy" class="hero_avatar is-v2"><img sizes="100vw" srcset="images/people5_1people5.avif 500w, images/people5_1people5.avif 800w, images/people5_1people5.avif 1418w" alt="Schools Coaching Webflow template " src="images/people5_1people5.avif" loading="lazy" class="hero_avatar is-v2"></div>
                   <div class="text-size-tiny text-weight-medium">Join Over 600+ Students</div>
                 </div>
               </div>
@@ -1294,7 +1047,7 @@ margin: 0rem !important;
             <div class="footer_buy">
               <div class="heading-style-h4 text-align-center"><em>A Create an Account,</em> and receive enhanced Financial Analytics &amp; A.I Driven Support.  Get the most of your next move with PCS United.</div>
               <a href="https://webflow.com/templates/html/pathwise-website-template" target="_blank" class="button w-button">Create Account</a>
-            </div><img src="images/footer-image_1footer-image.avif" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="images/footer-image_1footer-image.avif 500w, images/footer-image_1footer-image.avif 1368w" alt="Schools Coaching Webflow template " class="footer_image">
+            </div><img src="images/PCSUnited.jpg" loading="lazy" width="531" sizes="(max-width: 767px) 100vw, 531px" alt="" srcset="images/ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-500.jpg 500w, images/ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800.jpg 800w, images/PCSUnited.jpg 1050w" class="footer_image">
           </div>
           <div class="spacer-large">
             <div class="footer-flex-wrapper-2">
@@ -1307,7 +1060,7 @@ margin: 0rem !important;
                 <div class="footer-social-links-wrapper invert">
                   <a href="https://www.instagram.com/" target="_blank" class="footer-social-link w-inline-block"><img loading="lazy" src="images/instagram-black_1instagram-black.webp" alt="Instagram Icon Image Black" class="footer-social-link-image-2"></a>
                   <a href="https://facebook.com/" target="_blank" class="footer-social-link w-inline-block"><img loading="lazy" src="images/facebook-black_1facebook-black.webp" alt="facebook icon black" class="footer-social-link-image-2"></a>
-                  <a href="https://www.twitter.com/" target="_blank" class="footer-social-link w-inline-block"><img sizes="100vw" srcset="images/twitter-p-500.png 500w, images/twitter.png 512w" alt="" src="images/twitter.png" loading="lazy" class="footer-social-link-image-2"></a>
+                  <a href="https://www.twitter.com/" target="_blank" class="footer-social-link w-inline-block"><img sizes="(max-width: 512px) 100vw, 512px" srcset="images/twitter-p-500.png 500w, images/twitter.png 512w" alt="" src="images/twitter.png" loading="lazy" class="footer-social-link-image-2"></a>
                   <a href="https://www.youtube.com/" target="_blank" class="footer-social-link w-inline-block"><img loading="lazy" src="images/youtube-black_1youtube-black.webp" alt="YouTube White Icon Image Black" class="footer-social-link-image-2"></a>
                 </div>
               </div>

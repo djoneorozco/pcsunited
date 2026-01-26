@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Jan 18 2026 11:30:14 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Jan 26 2026 07:19:35 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6968a3dd39333b922d770468" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -360,17 +360,17 @@
     </div>
   </div>
   <section>
-    <div class="code-embed-12 w-embed w-script"><!--  //#0 A.I.O.U • Timed Buyer Psychology Test (Full-Screen Wide Layout v3 - auto report + Financial Dashboard Prefill)
+    <div class="code-embed-12 w-embed"><!--  //#0 A.I.O.U • Timed Buyer Psychology Test (Full-Screen Wide Layout v3 - auto report + Financial Dashboard Prefill)
      ✅ UPDATED: waits for login BEFORE mounting overlay (no more bypass)
      ✅ UPDATED: AIOU portal z-index lowered so Login overlay always wins
-     ✅ UPDATE: now calls aiou-score.js (server-side scoring) + passes AIOU House Intake into aiou-report
-     ✅ CONNECTION FIX (Requested):
-        - Prefill "Profile & Goals" using AIOU House Intake:
-          * Bedrooms wanted ← aiou_house_intake.bedrooms (or bridge.house.bedrooms)
-          * Visual slider seed ← aiou_house_intake.styleVsPriceSlider (or bridge._aiouStyleVsPriceSlider)
+     ✅ UPDATED (PCSUnited):
+        - Uses PCSUnited endpoints for aiou-report + aiou-score
+        - Hydrate "Profile & Goals" from Supabase via /api/aiou-profile
+     ✅ Still prefills from Financial Dashboard if present
+     ✅ Still prefills from AIOU House Intake if present
      ✅ Nothing else changed (layout, UX, timing, UI all preserved)
  -->
-      <div id="aiou-shell" data-endpoint="https://theorozcorealty.netlify.app/.netlify/functions/aiou-report" data-score-endpoint="https://theorozcorealty.netlify.app/.netlify/functions/aiou-score" style="all: initial;">
+      <div id="aiou-shell" data-endpoint="https://pcsunited.com/.netlify/functions/aiou-report" data-score-endpoint="https://pcsunited.com/.netlify/functions/aiou-score" style="all: initial;">
         <!--  Google Font  -->
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
         <style>
@@ -810,737 +810,822 @@
       display: none !important;
     }
   </style>
-        <script>
-    (function(){
-      "use strict";
-      /* =========================================================
-         //#0.5 LOGIN GATE (NEW)
-         - AIOU will not mount until user is logged in
-         - Accepts either:
-           (1) localStorage "realtysass.loginEmail"
-           (2) window.RS_AUTH.ok === true
-           (3) event "realtysass:unlocked"
-      ========================================================= */
-      const LOGIN_KEY = "realtysass.loginEmail";
-      function hasLogin(){
-        try{
-          const ls = (localStorage.getItem(LOGIN_KEY) || "").trim();
-          if (ls) return true;
-        }catch(_){}
-        try{
-          if (window.RS_AUTH && window.RS_AUTH.ok === true) return true;
-        }catch(_){}
-        return false;
+      </div>
+    </div>
+    <div class="code-embed-12 w-embed w-script">
+      <script>
+(function(){
+  "use strict";
+  // ============================================================
+  // WAIT UNTIL #aiou-shell EXISTS (Webflow embed ordering safety)
+  // ============================================================
+  function whenShellReady(cb){
+    const el = document.getElementById("aiou-shell");
+    if (el) return cb(el);
+    let tries = 0;
+    const t = setInterval(()=>{
+      const e = document.getElementById("aiou-shell");
+      tries++;
+      if (e || tries > 150){
+        clearInterval(t);
+        if (e) cb(e);
       }
-      function waitForLoginThenMount(mountFn){
-        if (hasLogin()) return mountFn();
-        const onUnlock = () => {
-          if (hasLogin()){
-            cleanup();
-            mountFn();
-          }
-        };
-        const poll = setInterval(() => {
-          if (hasLogin()){
-            cleanup();
-            mountFn();
-          }
-        }, 200);
-        function cleanup(){
-          clearInterval(poll);
-          try{ window.removeEventListener("realtysass:unlocked", onUnlock); }catch(_){}
+    }, 50);
+  }
+  whenShellReady(function(){
+    /* =========================================================
+       //#0.5 LOGIN GATE
+    ========================================================= */
+    const LOGIN_KEY = "realtysass.loginEmail";
+    function hasLogin(){
+      try{
+        const ls = (localStorage.getItem(LOGIN_KEY) || "").trim();
+        if (ls) return true;
+      }catch(_){}
+      try{
+        if (window.RS_AUTH && window.RS_AUTH.ok === true) return true;
+      }catch(_){}
+      return false;
+    }
+    function waitForLoginThenMount(mountFn){
+      if (hasLogin()) return mountFn();
+      const onUnlock = () => {
+        if (hasLogin()){
+          cleanup();
+          mountFn();
         }
-        try{ window.addEventListener("realtysass:unlocked", onUnlock); }catch(_){}
+      };
+      const poll = setInterval(() => {
+        if (hasLogin()){
+          cleanup();
+          mountFn();
+        }
+      }, 200);
+      function cleanup(){
+        clearInterval(poll);
+        try{ window.removeEventListener("realtysass:unlocked", onUnlock); }catch(_){}
       }
-      // ============================================================
-      // //#8 MOUNT AIOU (ONLY AFTER LOGIN)
-      // ============================================================
-      waitForLoginThenMount(function mountAIOU(){
-        if (window.__AIOU_MOUNTED__) return;
-        window.__AIOU_MOUNTED__ = true;
-        /* =========================================================
-           //#8 CREATE OVERLAY PORTAL
-           ========================================================= */
-        const portal = document.createElement('div');
-        portal.id = 'aiou-portal';
-        document.body.appendChild(portal);
-        /* =========================================================
-           //#9 DOM STRUCTURE (2-col row, then full-width rows)
-           ========================================================= */
-        portal.innerHTML = `
-          <div class="aiou-wrap">
-            <!-- //#9.1 INTRO / TIMER CARD -->
-            <div class="aiou-card" id="introCard">
-              <div class="overallTimer">
-                <span class="hint">About <span id="overallHint">~3 min</span></span>
-                <span class="badge" id="overallClock">3:00</span>
-              </div>
-              <div class="aiou-title-block">
-                <h1>A.I.O.U • TIMED<br>BUYER<br>PSYCHOLOGY TEST</h1>
-                <p class="aiou-desc">
-                  Each question is timed (<b>10 seconds</b>). Choose from
-                  <b>-5</b> to <b>+5</b>.
-                  Some items repeat in different words to check consistency.
-                </p>
-              </div>
-              <div class="aiou-bar">
-                <button class="aiou-btn primary" id="startQuiz">Start Timed Quiz</button>
-                <button class="aiou-btn" id="closePortal">Close</button>
-              </div>
+      try{ window.addEventListener("realtysass:unlocked", onUnlock); }catch(_){}
+    }
+    // ============================================================
+    // //#8 MOUNT AIOU (ONLY AFTER LOGIN)
+    // ============================================================
+    waitForLoginThenMount(function mountAIOU(){
+      if (window.__AIOU_MOUNTED__) return;
+      window.__AIOU_MOUNTED__ = true;
+      /* =========================================================
+         //#8.1 API BASE (PCSUnited + Webflow-safe)
+      ========================================================= */
+      const API_BASE = (function(){
+        const h = String(location.hostname || "").toLowerCase();
+        if (h.includes("webflow.io")) return "https://pcsunited.com/api";
+        return "/api";
+      })();
+      /* =========================================================
+         //#8 CREATE OVERLAY PORTAL
+      ========================================================= */
+      const portal = document.createElement('div');
+      portal.id = 'aiou-portal';
+      document.body.appendChild(portal);
+      /* =========================================================
+         //#9 DOM STRUCTURE
+      ========================================================= */
+      portal.innerHTML = `
+        <div class="aiou-wrap">
+          <div class="aiou-card" id="introCard">
+            <div class="overallTimer">
+              <span class="hint">About <span id="overallHint">~3 min</span></span>
+              <span class="badge" id="overallClock">3:00</span>
             </div>
-            <!-- //#9.2 PROFILE CARD -->
-            <div class="aiou-card" id="profileCard">
-              <h2>Profile & Goals</h2>
-              <p class="blurb">
-                We use this context to generate your personalized Buyer Memo at the end.
-                (Auto-filled from your Financial Dashboard when possible.)
+            <div class="aiou-title-block">
+              <h1>A.I.O.U • TIMED<br>BUYER<br>PSYCHOLOGY TEST</h1>
+              <p class="aiou-desc">
+                Each question is timed (<b>10 seconds</b>). Choose from
+                <b>-5</b> to <b>+5</b>.
+                Some items repeat in different words to check consistency.
               </p>
-              <div class="aiou-grid">
-                <div>
-                  <label class="aiou-label">First Name</label>
-                  <input id="firstName" class="aiou-input" type="text" placeholder="e.g., Alex">
-                </div>
-                <div>
-                  <label class="aiou-label">Last Name</label>
-                  <input id="lastName" class="aiou-input" type="text" placeholder="e.g., Rivera">
-                </div>
-                <div>
-                  <label class="aiou-label">Bedrooms wanted</label>
-                  <input id="bedrooms" class="aiou-input" type="number" min="0" step="1" placeholder="e.g., 4">
-                </div>
-                <div>
-                  <label class="aiou-label">Budget (max $)</label>
-                  <input id="budget" class="aiou-input" type="number" min="0" step="1000" placeholder="e.g., 450000">
-                </div>
-                <div>
-                  <label class="aiou-label">Preferred setting</label>
-                  <select id="setting" class="aiou-select">
-                    <option value="city">City</option>
-                    <option value="suburb">Suburb</option>
-                    <option value="rural">Rural</option>
-                  </select>
-                </div>
-                <div>
-                  <label class="aiou-label">Safety priority (1–5)</label>
-                  <select id="safety" class="aiou-select">
-                    <option>1</option><option>2</option><option>3</option>
-                    <option>4</option><option selected>5</option>
-                  </select>
-                </div>
-              </div>
             </div>
-            <!-- //#9.3 QUIZ CARD -->
-            <div class="aiou-card fullrow hidden" id="quizCard" style="position:relative;">
-              <div class="qtopbar"><i id="qTopTimer"></i></div>
-              <div id="qTitle">Question</div>
-              <div id="qText" class="aiou-desc" style="margin-bottom:12px;"></div>
-              <!-- visual question -->
-              <div id="visualArea" class="hidden">
-                <div class="dualpref">
-                  <figure>
-                    <img id="vImgA"
-                      src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/68f9a10aab47946a36f5c135_04d878cc02583fb9bfda33ddbd28d91a_MinorFixesHome.jpg"
-                      alt="May Require Fixes (Option A)">
-                    <figcaption>May Require Fixes</figcaption>
-                  </figure>
-                  <figure>
-                    <img id="vImgB"
-                      src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/68f9a113c4924ecebad2319a_a0cc3184b96f525ed5a278c3bac62891_BrandNewHome.jpg"
-                      alt="Brand New Home (Option B)">
-                    <figcaption>Brand New Home</figcaption>
-                  </figure>
-                  <div class="sliderRow">
-                    <span class="end">Needs Fixes</span>
-                    <div class="rangeWrap">
-                      <input id="vSlider" type="range" min="-5" max="5" value="0" step="1"
-                        aria-label="Preference between Needs Fixes and Brand New">
-                    </div>
-                    <span class="end">Brand New</span>
-                  </div>
-                </div>
-                <div class="aiou-desc" id="vLabel" style="text-align:center;margin-top:8px;">Neutral</div>
-              </div>
-              <!-- standard scale -->
-              <div class="scale" id="scaleBlock"></div>
-              <div class="quiz-controls">
-                <button class="aiou-btn" id="skip">Skip</button>
-                <button class="aiou-btn warn" id="reset">Reset</button>
-              </div>
-              <div class="quiz-hint">
-                No answer = neutral (0) after 10 seconds. “Skip” moves on immediately.
-              </div>
+            <div class="aiou-bar">
+              <button class="aiou-btn primary" id="startQuiz">Start Timed Quiz</button>
+              <button class="aiou-btn" id="closePortal">Close</button>
             </div>
-            <!-- //#9.4 RESULTS CARD -->
-            <div class="aiou-card fullrow hidden" id="resultsCard">
-              <h2>Results</h2>
-              <p class="blurb">
-                Your buyer psychology profile and personalized memo.
-              </p>
-              <div class="kpi-row">
-                <div class="kpi-chip">
-                  <h3>OPENNESS</h3>
-                  <div id="kO">—</div>
-                </div>
-                <div class="kpi-chip">
-                  <h3>CONSCIENTIOUSNESS</h3>
-                  <div id="kC">—</div>
-                </div>
-                <div class="kpi-chip">
-                  <h3>EXTRAVERSION</h3>
-                  <div id="kE">—</div>
-                </div>
-                <div class="kpi-chip">
-                  <h3>AGREEABLENESS</h3>
-                  <div id="kA">—</div>
-                </div>
-                <div class="kpi-chip">
-                  <h3>RISK AVERSION</h3>
-                  <div id="kN">—</div>
-                </div>
+          </div>
+          <div class="aiou-card" id="profileCard">
+            <h2>Profile & Goals</h2>
+            <p class="blurb">
+              We use this context to generate your personalized Buyer Memo at the end.
+              (Auto-filled from your Financial Dashboard when possible.)
+            </p>
+            <div class="aiou-grid">
+              <div>
+                <label class="aiou-label">First Name</label>
+                <input id="firstName" class="aiou-input" type="text" placeholder="e.g., Alex">
               </div>
-              <div id="consistency" class="consistency-block"></div>
-              <div id="archetype" class="arch-block" style="font-weight:900;"></div>
-              <div id="mbti" class="mbti-block"></div>
-              <div id="jsonReportBox">(Generating your personalized memo…)</div>
-              <div class="results-actions">
-                <button class="aiou-btn primary" id="btnReport">Generate Report (OpenAI)</button>
+              <div>
+                <label class="aiou-label">Last Name</label>
+                <input id="lastName" class="aiou-input" type="text" placeholder="e.g., Rivera">
+              </div>
+              <div>
+                <label class="aiou-label">Bedrooms wanted</label>
+                <input id="bedrooms" class="aiou-input" type="number" min="0" step="1" placeholder="e.g., 4">
+              </div>
+              <div>
+                <label class="aiou-label">Budget (max $)</label>
+                <input id="budget" class="aiou-input" type="number" min="0" step="1000" placeholder="e.g., 450000">
+              </div>
+              <div>
+                <label class="aiou-label">Preferred setting</label>
+                <select id="setting" class="aiou-select">
+                  <option value="city">City</option>
+                  <option value="suburb">Suburb</option>
+                  <option value="rural">Rural</option>
+                </select>
+              </div>
+              <div>
+                <label class="aiou-label">Safety priority (1–5)</label>
+                <select id="safety" class="aiou-select">
+                  <option>1</option><option>2</option><option>3</option>
+                  <option>4</option><option selected>5</option>
+                </select>
               </div>
             </div>
           </div>
-        `;
-        /* =========================================================
-           //#9.5  PREFILL FROM FINANCIAL DASHBOARD
-           ========================================================= */
-        function prefillFromFinancial(){
-          const rsRoot = document.querySelector('#rs-shell');
-          function readField(sel){
-            if(!rsRoot) return '';
-            const el = rsRoot.querySelector(sel);
-            if(!el) return '';
-            if('value' in el && el.value !== undefined && el.value !== null && String(el.value).trim() !== ''){
-              return String(el.value).trim();
-            }
-            if('textContent' in el && el.textContent){
-              return String(el.textContent).trim();
-            }
-            return '';
+          <div class="aiou-card fullrow hidden" id="quizCard" style="position:relative;">
+            <div class="qtopbar"><i id="qTopTimer"></i></div>
+            <div id="qTitle">Question</div>
+            <div id="qText" class="aiou-desc" style="margin-bottom:12px;"></div>
+            <div id="visualArea" class="hidden">
+              <div class="dualpref">
+                <figure>
+                  <img id="vImgA"
+                    src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/68f9a10aab47946a36f5c135_04d878cc02583fb9bfda33ddbd28d91a_MinorFixesHome.jpg"
+                    alt="May Require Fixes (Option A)">
+                  <figcaption>May Require Fixes</figcaption>
+                </figure>
+                <figure>
+                  <img id="vImgB"
+                    src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/68f9a113c4924ecebad2319a_a0cc3184b96f525ed5a278c3bac62891_BrandNewHome.jpg"
+                    alt="Brand New Home (Option B)">
+                  <figcaption>Brand New Home</figcaption>
+                </figure>
+                <div class="sliderRow">
+                  <span class="end">Needs Fixes</span>
+                  <div class="rangeWrap">
+                    <input id="vSlider" type="range" min="-5" max="5" value="0" step="1"
+                      aria-label="Preference between Needs Fixes and Brand New">
+                  </div>
+                  <span class="end">Brand New</span>
+                </div>
+              </div>
+              <div class="aiou-desc" id="vLabel" style="text-align:center;margin-top:8px;">Neutral</div>
+            </div>
+            <div class="scale" id="scaleBlock"></div>
+            <div class="quiz-controls">
+              <button class="aiou-btn" id="skip">Skip</button>
+              <button class="aiou-btn warn" id="reset">Reset</button>
+            </div>
+            <div class="quiz-hint">
+              No answer = neutral (0) after 10 seconds. “Skip” moves on immediately.
+            </div>
+          </div>
+          <div class="aiou-card fullrow hidden" id="resultsCard">
+            <h2>Results</h2>
+            <p class="blurb">
+              Your buyer psychology profile and personalized memo.
+            </p>
+            <div class="kpi-row">
+              <div class="kpi-chip"><h3>OPENNESS</h3><div id="kO">—</div></div>
+              <div class="kpi-chip"><h3>CONSCIENTIOUSNESS</h3><div id="kC">—</div></div>
+              <div class="kpi-chip"><h3>EXTRAVERSION</h3><div id="kE">—</div></div>
+              <div class="kpi-chip"><h3>AGREEABLENESS</h3><div id="kA">—</div></div>
+              <div class="kpi-chip"><h3>RISK AVERSION</h3><div id="kN">—</div></div>
+            </div>
+            <div id="consistency" class="consistency-block"></div>
+            <div id="archetype" class="arch-block" style="font-weight:900;"></div>
+            <div id="mbti" class="mbti-block"></div>
+            <div id="jsonReportBox">(Generating your personalized memo…)</div>
+            <div class="results-actions">
+              <button class="aiou-btn primary" id="btnReport">Generate Report (OpenAI)</button>
+            </div>
+          </div>
+        </div>
+      `;
+      /* =========================================================
+         //#9.5 PREFILL FROM FINANCIAL DASHBOARD (unchanged)
+      ========================================================= */
+      function prefillFromFinancial(){
+        const rsRoot = document.querySelector('#rs-shell');
+        function readField(sel){
+          if(!rsRoot) return '';
+          const el = rsRoot.querySelector(sel);
+          if(!el) return '';
+          if('value' in el && el.value !== undefined && el.value !== null && String(el.value).trim() !== ''){
+            return String(el.value).trim();
           }
-          const first = readField('.pf-fname');
-          const last  = readField('.pf-lname');
-          const price = readField('#h-price'); // treat as "budget max"
-          const aiouFirst = portal.querySelector('#firstName');
-          const aiouLast  = portal.querySelector('#lastName');
-          const aiouBudget= portal.querySelector('#budget');
-          if (aiouFirst && first && !aiouFirst.value) { aiouFirst.value = first; }
-          if (aiouLast  && last  && !aiouLast.value ) { aiouLast.value  = last;  }
-          if (aiouBudget&& price && !aiouBudget.value){
-            aiouBudget.value = price;
+          if('textContent' in el && el.textContent){
+            return String(el.textContent).trim();
+          }
+          return '';
+        }
+        const first = readField('.pf-fname');
+        const last  = readField('.pf-lname');
+        const price = readField('#h-price');
+        const aiouFirst = portal.querySelector('#firstName');
+        const aiouLast  = portal.querySelector('#lastName');
+        const aiouBudget= portal.querySelector('#budget');
+        if (aiouFirst && first && !aiouFirst.value) { aiouFirst.value = first; }
+        if (aiouLast  && last  && !aiouLast.value ) { aiouLast.value  = last;  }
+        if (aiouBudget&& price && !aiouBudget.value){ aiouBudget.value = price; }
+      }
+      /* =========================================================
+         //#9.6 PREFILL FROM AIOU HOUSE INTAKE (unchanged)
+      ========================================================= */
+      const AIOU_HOUSE_KEY = "realtysass.aiou_house_intake.v1";
+      const BRIDGE_KEY     = "realtysass.bridge";
+      function readJSON(key, fallback){
+        try { return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
+        catch(_) { return fallback; }
+      }
+      function prefillFromAIOUHouse(){
+        const aiouHouse = readJSON(AIOU_HOUSE_KEY, {}) || {};
+        const bridge = readJSON(BRIDGE_KEY, {}) || {};
+        const bridgeHouse = (bridge && bridge.house) ? bridge.house : {};
+        const bedsFromIntake =
+          (aiouHouse.bedrooms ?? bridgeHouse.bedrooms ?? null);
+        const sliderFromIntake =
+          (aiouHouse.styleVsPriceSlider ?? bridge._aiouStyleVsPriceSlider ?? null);
+        const elBeds = portal.querySelector('#bedrooms');
+        if (elBeds && (elBeds.value == null || String(elBeds.value).trim() === '')){
+          if (bedsFromIntake != null && Number(bedsFromIntake) > 0){
+            elBeds.value = String(Math.round(Number(bedsFromIntake)));
           }
         }
-        /* =========================================================
-           //#9.6 PREFILL FROM AIOU HOUSE INTAKE (CONNECTION FIX)
-           ========================================================= */
-        const AIOU_HOUSE_KEY = "realtysass.aiou_house_intake.v1";
-        const BRIDGE_KEY     = "realtysass.bridge";
-        function readJSON(key, fallback){
-          try { return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
-          catch(_) { return fallback; }
+        if (sliderFromIntake != null && Number.isFinite(Number(sliderFromIntake))){
+          window.__STYLE_V_PRICE = Math.max(-5, Math.min(5, Number(sliderFromIntake)));
         }
-        function prefillFromAIOUHouse(){
-          const aiouHouse = readJSON(AIOU_HOUSE_KEY, {}) || {};
+      }
+      /* =========================================================
+         //#9.7 PCSUnited: HYDRATE FROM SUPABASE via /api/aiou-profile
+      ========================================================= */
+      function getLoginEmail(){
+        try{ return String(localStorage.getItem("realtysass.loginEmail") || "").trim().toLowerCase(); }
+        catch(_){ return ""; }
+      }
+      function setIfEmpty(inputEl, val){
+        if (!inputEl) return;
+        const cur = ("value" in inputEl) ? String(inputEl.value || "").trim() : "";
+        const next = String(val ?? "").trim();
+        if (!cur && next) inputEl.value = next;
+      }
+      function setNumberIfEmpty(inputEl, val){
+        if (!inputEl) return;
+        const cur = String(inputEl.value || "").trim();
+        if (cur !== "") return;
+        const n = Number(val);
+        if (Number.isFinite(n) && n > 0) inputEl.value = String(Math.round(n));
+      }
+      function setSelectIfDefault(selectEl, val, defaultVal){
+        if (!selectEl) return;
+        const cur = String(selectEl.value || "").trim();
+        const next = String(val ?? "").trim().toLowerCase();
+        if (cur && cur !== defaultVal) return;
+        if (!next) return;
+        const opts = Array.from(selectEl.options || []).map(o => String(o.value || "").toLowerCase());
+        if (opts.includes(next)) selectEl.value = next;
+      }
+      async function hydrateProfileFromSupabase(){
+        const email = getLoginEmail();
+        if (!email) return;
+        function splitName(full){
+          const s = String(full || "").trim();
+          if (!s) return { first:"", last:"" };
+          const parts = s.split(/\s+/).filter(Boolean);
+          return { first: parts[0] || "", last: parts.slice(1).join(" ") || "" };
+        }
+        const fn = portal.querySelector("#firstName");
+        const ln = portal.querySelector("#lastName");
+        const bd = portal.querySelector("#bedrooms");
+        const bg = portal.querySelector("#budget");
+        const st = portal.querySelector("#setting");
+        const sf = portal.querySelector("#safety");
+        // 1) identity cache
+        try{
+          const ident = JSON.parse(localStorage.getItem("realtysass.identity") || "null");
+          if (ident && typeof ident === "object"){
+            const nm = splitName(ident.fullName || ident.full_name || ident.name || "");
+            setIfEmpty(fn, ident.first_name || ident.firstName || nm.first);
+            setIfEmpty(ln, ident.last_name  || ident.lastName  || nm.last);
+          }
+        }catch(_){}
+        // 2) cached profile
+        try{
+          const cached = JSON.parse(localStorage.getItem("realtysass.profile.v1") || "null");
+          if (cached && typeof cached === "object") {
+            const nm = splitName(cached.full_name || cached.fullName || "");
+            setIfEmpty(fn, cached.first_name || cached.firstName || nm.first);
+            setIfEmpty(ln, cached.last_name  || cached.lastName  || nm.last);
+          }
+        }catch(_){}
+        // 3) bridge / overrides backup for bedrooms + budget
+        try{
           const bridge = readJSON(BRIDGE_KEY, {}) || {};
-          const bridgeHouse = (bridge && bridge.house) ? bridge.house : {};
-          const bedsFromIntake =
-            (aiouHouse.bedrooms ?? bridgeHouse.bedrooms ?? null);
-          const sliderFromIntake =
-            (aiouHouse.styleVsPriceSlider ?? bridge._aiouStyleVsPriceSlider ?? null);
-          const elBeds = portal.querySelector('#bedrooms');
-          if (elBeds && (elBeds.value == null || String(elBeds.value).trim() === '')){
-            if (bedsFromIntake != null && Number(bedsFromIntake) > 0){
-              elBeds.value = String(Math.round(Number(bedsFromIntake)));
-            }
-          }
-          if (sliderFromIntake != null && Number.isFinite(Number(sliderFromIntake))){
-            window.__STYLE_V_PRICE = Math.max(-5, Math.min(5, Number(sliderFromIntake)));
-          }
-        }
-        prefillFromFinancial();
-        prefillFromAIOUHouse();
-        /* =========================================================
-           //#10 SHORTCUTS
-           ========================================================= */
-        const $  = (sel)=>portal.querySelector(sel);
-        const $$ = (sel)=>Array.from(portal.querySelectorAll(sel));
-        /* =========================================================
-           //#11 QUESTIONS
-           ========================================================= */
-        const Q = [
-          { id:'V1', type:'visual', dim:'O',
-            text:'Choose between Brand New Home vs May Require Fixes.', rev:false },
-          { id:'O1',  dim:'O', text:'I prefer a home that looks new or freshly renovated rather than plain but practical.', rev:false, ctrlPair:'O1b' },
-          { id:'O1b', dim:'O', text:'I’m fine with a simple, ordinary-looking home if it works.',                         rev:true,  ctrlPair:'O1'  },
-          { id:'O2',  dim:'O', text:'Special features (big windows, open kitchen, modern finishes) are worth paying more.', rev:false },
-          { id:'O3',  dim:'O', text:'I want a home that feels different from most homes I’ve seen.',                      rev:false },
-          { id:'C1',  dim:'C', text:'If a place is just above my budget, I would still try to get it.', rev:true,  ctrlPair:'C1b' },
-          { id:'C1b', dim:'C', text:'I will not go over my budget, even if I love the home.',          rev:false, ctrlPair:'C1'  },
-          { id:'C2',  dim:'C', text:'Lower monthly costs matter more to me than extra style.',          rev:false },
-          { id:'E1',  dim:'E', text:'I often picture hosting dinners, parties, or family gatherings at home.', rev:false, ctrlPair:'E1b' },
-          { id:'E1b', dim:'E', text:'I rarely imagine hosting people at my home.',                             rev:true,  ctrlPair:'E1'  },
-          { id:'E2',  dim:'E', text:'I would trade an extra bedroom for a bigger living room or outdoor area.', rev:false },
-          { id:'A1',  dim:'A', text:'I can be flexible on details if the main things are met.', rev:false, ctrlPair:'A1b' },
-          { id:'A1b', dim:'A', text:'Once I set my must-haves, I won’t bend on them.',          rev:true,  ctrlPair:'A1'  },
-          { id:'N1',  dim:'N', text:'Buying a home that needs repairs would stress me out.',         rev:false, ctrlPair:'N1b' },
-          { id:'N1b', dim:'N', text:'A home that needs repairs doesn’t worry me much.',              rev:true,  ctrlPair:'N1'  },
-          { id:'N2',  dim:'N', text:'I’d rather choose a 5–10 year-old home that’s already proven than brand-new.', rev:false },
-          { id:'N3',  dim:'N', text:'I prefer a quieter, safer area even if it’s farther from restaurants and events.', rev:false },
-          { id:'X1',  dim:'O', text:'If I must choose, I’ll pick style and layout over getting the lowest possible price.', rev:false }
-        ];
-        /* =========================================================
-           //#12 STATE
-           ========================================================= */
-        let answers = {};
-        let idx = 0;
-        let timer = null;
-        let tLeft = 10;
-        let overallTimer = null;
-        let overallLeftMs = Q.length * 10000;
-        if (window.__STYLE_V_PRICE == null) window.__STYLE_V_PRICE = 0;
-        /* =========================================================
-           //#12.5 STORAGE HELPERS
-           ========================================================= */
-        function extractHouseContext(){
-          const aiouHouse = readJSON(AIOU_HOUSE_KEY, {}) || {};
-          const bridge = readJSON(BRIDGE_KEY, {}) || {};
-          const bridgeHouse = (bridge && bridge.house) ? bridge.house : {};
-          const house = {
-            bedrooms: aiouHouse.bedrooms ?? bridgeHouse.bedrooms ?? null,
-            bathrooms: aiouHouse.bathrooms ?? bridgeHouse.bathrooms ?? null,
-            sqft: aiouHouse.sqft ?? bridgeHouse.sqft ?? null,
-            propertyType: aiouHouse.propertyType ?? bridgeHouse.propertyType ?? "",
-            yearBuilt: aiouHouse.yearBuilt ?? bridgeHouse.yearBuilt ?? null,
-            amenities: Array.isArray(aiouHouse.amenities) ? aiouHouse.amenities : (Array.isArray(bridgeHouse.amenities) ? bridgeHouse.amenities : []),
-            amenitiesText: aiouHouse.amenitiesText ?? "",
-            conditionPreference: aiouHouse.conditionPreference ?? bridgeHouse.conditionPreference ?? null,
-            yearBand: aiouHouse.yearBand ?? bridgeHouse.yearBand ?? null,
-            styleVsPriceSlider: (aiouHouse.styleVsPriceSlider ?? bridgeHouse.styleVsPriceSlider ?? null),
-            mode: aiouHouse.mode ?? bridge._aiouHouseMode ?? null,
-            saved_at: aiouHouse.saved_at ?? null,
-            _src: aiouHouse._intakeSource ?? "aiou.house.intake"
-          };
-          return house;
-        }
-        /* =========================================================
-           //#13 HELPERS / UI
-           ========================================================= */
-        function mmss(ms){
-          const s = Math.max(0, Math.ceil(ms/1000));
-          const m = Math.floor(s/60);
-          const r = s % 60;
-          return m+":"+String(r).padStart(2,'0');
-        }
-        function buildScalePills(){
-          const block = $('#scaleBlock');
-          block.innerHTML='';
-          for (let v=-5; v<=5; v++){
-            const pill=document.createElement('div');
-            pill.className='pill';
-            pill.textContent=String(v);
-            pill.dataset.val=v;
-            pill.addEventListener('click', ()=>selectValue(v));
-            block.appendChild(pill);
-          }
-        }
-        function startQuizFlow(){
-          answers = {};
-          idx=0;
-          Q.forEach(q=>answers[q.id]=undefined);
-          overallLeftMs = Q.length * 10000;
-          $('#overallClock').textContent = mmss(overallLeftMs);
-          if (overallTimer) clearInterval(overallTimer);
-          overallTimer = setInterval(()=>{
-            overallLeftMs -= 200;
-            if (overallLeftMs <= 0){
-              overallLeftMs = 0;
-              clearInterval(overallTimer);
-            }
-            $('#overallClock').textContent = mmss(overallLeftMs);
-          },200);
-          $('#quizCard').classList.remove('hidden');
-          $('#resultsCard').classList.add('hidden');
-          renderQuestion();
-        }
-        function renderQuestion(){
-          const q = Q[idx];
-          $('#qTitle').textContent = `Question ${idx+1} / ${Q.length}`;
-          $('#qText').textContent  =
-            (q.type==='visual'
-              ? 'Where are you between these two options right now?'
-              : q.text);
-          const visual = $('#visualArea');
-          const scale  = $('#scaleBlock');
-          if(q.type==='visual'){
-            visual.classList.remove('hidden');
-            scale.classList.add('hidden');
-            initVisualSlider();
-          } else {
-            visual.classList.add('hidden');
-            scale.classList.remove('hidden');
-            buildScalePills();
-            $$('.pill').forEach(p=>p.dataset.sel='0');
-            const prev = answers[q.id];
-            if(prev!==undefined && prev!==null){
-              const el = $$('.pill').find(x=>Number(x.dataset.val)===prev);
-              if(el) el.dataset.sel='1';
-            }
-          }
-          startPerQuestionTimer();
-        }
-        function startPerQuestionTimer(){
-          clearInterval(timer);
-          tLeft = 10;
-          const bar = $('#qTopTimer');
-          if (bar) bar.style.transform='scaleX(1)';
-          timer = setInterval(()=>{
-            tLeft -= 0.05;
-            const frac = Math.max(0, tLeft/10);
-            if (bar) bar.style.transform=`scaleX(${frac})`;
-            if (tLeft<=0){
-              clearInterval(timer);
-              recordAnswer(null);
-            }
-          },50);
-        }
-        function selectValue(v){
-          clearInterval(timer);
-          recordAnswer(v);
-        }
-        function recordAnswer(v){
-          const q = Q[idx];
-          if(q.type==='visual'){
-            const s = $('#vSlider');
-            const raw = (v===null ? 0 : Number(s.value||0));
-            answers[q.id] = raw;
-            window.__STYLE_V_PRICE = raw;
-          } else {
-            answers[q.id] = (v===null ? 0 : Number(v));
-          }
-          idx++;
-          if(idx < Q.length){
-            renderQuestion();
-          } else {
-            finishQuiz();
-          }
-        }
-        /* =========================================================
-           //#14 VISUAL SLIDER SETUP
-           ========================================================= */
-        function initVisualSlider(){
-          const s   = $('#vSlider');
-          const lbl = $('#vLabel');
-          const imgA= $('#vImgA');
-          const imgB= $('#vImgB');
-          function explain(v){
-            if (v <= -3) return "Prefers Needs Fixes strongly (Option A)";
-            if (v === -2 || v === -1) return "Leans Needs Fixes (Option A)";
-            if (v === 0) return "Neutral";
-            if (v === 1 || v === 2) return "Leans Brand New (Option B)";
-            return "Prefers Brand New strongly (Option B)";
-          }
-          function update(){
-            const val = Number(s.value||0);
-            window.__STYLE_V_PRICE = val;
-            if(lbl){
-              lbl.textContent = explain(val);
-              s.setAttribute('aria-valuetext', lbl.textContent);
-            }
-          }
-          if (s){
-            if (window.__STYLE_V_PRICE==null) window.__STYLE_V_PRICE=0;
-            s.value = String(window.__STYLE_V_PRICE||0);
-            s.removeEventListener('input', s.__onInput || (()=>{}));
-            s.__onInput = ()=>update();
-            s.addEventListener('input', s.__onInput);
-            update();
-          }
-          if(imgA){
-            imgA.addEventListener('click', ()=>{
-              s.value = Math.max(-5,(Number(s.value)||0)-1);
-              s.dispatchEvent(new Event('input'));
-            });
-          }
-          if(imgB){
-            imgB.addEventListener('click', ()=>{
-              s.value = Math.min(5,(Number(s.value)||0)+1);
-              s.dispatchEvent(new Event('input'));
-            });
-          }
-        }
-        /* =========================================================
-           //#15 LOCAL SCORING (fallback)
-           ========================================================= */
-        function scoreAllLocal(){
-          const dims={O:[],C:[],E:[],A:[],N:[]};
-          const qMap=Object.fromEntries(Q.map(q=>[q.id,q]));
-          Q.forEach(q=>{
-            if(q.type==='visual') return;
-            let v=answers[q.id];
-            if(v===undefined || v===null) v=0;
-            if(q.rev) v=-v;
-            const mapped=((v+5)*0.4)+1;
-            if(dims[q.dim]) dims[q.dim].push(mapped);
-          });
-          const avg=a=>a.reduce((x,y)=>x+y,0)/a.length || 3;
-          const S={
-            O:+avg(dims.O).toFixed(2),
-            C:+avg(dims.C).toFixed(2),
-            E:+avg(dims.E).toFixed(2),
-            A:+avg(dims.A).toFixed(2),
-            N:+avg(dims.N).toFixed(2)
-          };
-          const v = Number(window.__STYLE_V_PRICE || 0);
-          S.O = +(Math.max(1, Math.min(5, S.O + (v/12.5)))).toFixed(2);
-          const flags=[];
-          const handled=new Set();
-          Q.forEach(q=>{
-            if(q.ctrlPair && !handled.has(q.id)){
-              const a=answers[q.id];
-              const b=answers[q.ctrlPair];
-              if(a!=null && b!=null){
-                const aAdj=q.rev? -a:a;
-                const bAdj=(qMap[q.ctrlPair].rev? -b:b);
-                if(Math.abs(aAdj-bAdj)>=6){
-                  flags.push(`${q.id}/${q.ctrlPair}`);
-                }
+          const kpiOv  = readJSON("realtysass.kpi_overrides.v1", {}) || {};
+          setNumberIfEmpty(bd, bridge?.house?.bedrooms ?? bridge?.bedrooms ?? null);
+          if (bg && String(bg.value || "").trim() === "") {
+            const candidates = [
+              kpiOv.housingOverride,
+              bridge.projected_home_price,
+              bridge.price,
+              bridge.housing,
+              bridge.housingRaw,
+              bridge?.kpis?.housing,
+              bridge?.kpis?.price
+            ];
+            for (const c of candidates){
+              const n = Number(c);
+              if (Number.isFinite(n) && n > 5000){
+                bg.value = String(Math.round(n));
+                break;
               }
-              handled.add(q.id);
-              handled.add(q.ctrlPair);
             }
+          }
+        }catch(_){}
+        // 4) authoritative: /api/aiou-profile
+        try{
+          const r = await fetch(`${API_BASE}/aiou-profile`, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email })
           });
-          return {scores:S, inconsistencies:flags};
+          const j = await r.json().catch(()=> ({}));
+          if (!r.ok) throw new Error("HTTP " + r.status);
+          if (!j || j.ok !== true) throw new Error(j?.error || "aiou-profile returned ok:false");
+          const d = (j.data && typeof j.data === "object") ? j.data : {};
+          setIfEmpty(fn, d.firstName || "");
+          setIfEmpty(ln, d.lastName || "");
+          setNumberIfEmpty(bd, d.bedroomsWanted);
+          if (bg && String(bg.value || "").trim() === "") {
+            const b = Number(d.budgetMax);
+            if (Number.isFinite(b) && b > 5000) bg.value = String(Math.round(b));
+          }
+          setSelectIfDefault(st, d.preferredSetting, "city");
+          if (sf) {
+            const cur = String(sf.value || "5");
+            const next = Number(d.safetyPriority);
+            if (cur === "5" && Number.isFinite(next) && next >= 1 && next <= 5) {
+              sf.value = String(Math.round(next));
+            }
+          }
+        } catch (e) {
+          console.warn("AIOU Supabase hydrate failed:", e && e.message ? e.message : e);
         }
-        const MBTI_BUYER_GUIDE = {
-          ISTJ:"Stable, detail-first. Prefers proven neighborhoods, low-variance costs, and strong inspection records.",
-          ISFJ:"Practical caretaker. Values safety, schools, and quiet streets; favors move-in-ready over projects.",
-          INFJ:"Purpose-driven. Wants harmony and meaningful space; calm areas and quality renovations matter.",
-          INTJ:"Planner/optimizer. Seeks value efficiency and long-term upside; ignores fluffy upgrades.",
-          ISTP:"Hands-on problem-solver. Open to light projects if priced right; needs clear scope/timeline.",
-          ISFP:"Aesthetic + comfort. Drawn to warm finishes, natural light, and cozy outdoor spots.",
-          INFP:"Idealistic. Wants character and story; needs guardrails so budget doesn’t drift.",
-          INTP:"Analytical. Structure/systems/future flexibility > staging glam.",
-          ESTP:"Action-oriented. Loves lively areas and entertainment spaces; avoid payment creep.",
-          ESFP:"Experience-first. Open layouts and social hubs; size payment first, then pick the fun.",
-          ENFP:"Vision + people. Creative layouts, natural light; watch impulsive upgrades.",
-          ENTP:"Options hunter. Wants flexibility/ADU potential; negotiate hard.",
-          ESTJ:"Structured operator. Predictability, commute efficiency, and low-maintenance wins.",
-          ESFJ:"Community anchor. Schools/parks close; turnkey > fixer to keep harmony.",
-          ENFJ:"Connector. Hosting flow matters; choose move-in-ready to keep momentum.",
-          ENTJ:"Decisive strategist. Location + resale math; newish or quality reno to avoid downtime."
+      }
+      // Run prefills in best order
+      prefillFromFinancial();
+      prefillFromAIOUHouse();
+      hydrateProfileFromSupabase();
+      const $  = (sel)=>portal.querySelector(sel);
+      const $$ = (sel)=>Array.from(portal.querySelectorAll(sel));
+      const Q = [
+        { id:'V1', type:'visual', dim:'O',
+          text:'Choose between Brand New Home vs May Require Fixes.', rev:false },
+        { id:'O1',  dim:'O', text:'I prefer a home that looks new or freshly renovated rather than plain but practical.', rev:false, ctrlPair:'O1b' },
+        { id:'O1b', dim:'O', text:'I’m fine with a simple, ordinary-looking home if it works.',                         rev:true,  ctrlPair:'O1'  },
+        { id:'O2',  dim:'O', text:'Special features (big windows, open kitchen, modern finishes) are worth paying more.', rev:false },
+        { id:'O3',  dim:'O', text:'I want a home that feels different from most homes I’ve seen.',                      rev:false },
+        { id:'C1',  dim:'C', text:'If a place is just above my budget, I would still try to get it.', rev:true,  ctrlPair:'C1b' },
+        { id:'C1b', dim:'C', text:'I will not go over my budget, even if I love the home.',          rev:false, ctrlPair:'C1'  },
+        { id:'C2',  dim:'C', text:'Lower monthly costs matter more to me than extra style.',          rev:false },
+        { id:'E1',  dim:'E', text:'I often picture hosting dinners, parties, or family gatherings at home.', rev:false, ctrlPair:'E1b' },
+        { id:'E1b', dim:'E', text:'I rarely imagine hosting people at my home.',                             rev:true,  ctrlPair:'E1'  },
+        { id:'E2',  dim:'E', text:'I would trade an extra bedroom for a bigger living room or outdoor area.', rev:false },
+        { id:'A1',  dim:'A', text:'I can be flexible on details if the main things are met.', rev:false, ctrlPair:'A1b' },
+        { id:'A1b', dim:'A', text:'Once I set my must-haves, I won’t bend on them.',          rev:true,  ctrlPair:'A1'  },
+        { id:'N1',  dim:'N', text:'Buying a home that needs repairs would stress me out.',         rev:false, ctrlPair:'N1b' },
+        { id:'N1b', dim:'N', text:'A home that needs repairs doesn’t worry me much.',              rev:true,  ctrlPair:'N1'  },
+        { id:'N2',  dim:'N', text:'I’d rather choose a 5–10 year-old home that’s already proven than brand-new.', rev:false },
+        { id:'N3',  dim:'N', text:'I prefer a quieter, safer area even if it’s farther from restaurants and events.', rev:false },
+        { id:'X1',  dim:'O', text:'If I must choose, I’ll pick style and layout over getting the lowest possible price.', rev:false }
+      ];
+      let answers = {};
+      let idx = 0;
+      let timer = null;
+      let tLeft = 10;
+      let overallTimer = null;
+      let overallLeftMs = Q.length * 10000;
+      if (window.__STYLE_V_PRICE == null) window.__STYLE_V_PRICE = 0;
+      function extractHouseContext(){
+        const aiouHouse = readJSON(AIOU_HOUSE_KEY, {}) || {};
+        const bridge = readJSON(BRIDGE_KEY, {}) || {};
+        const bridgeHouse = (bridge && bridge.house) ? bridge.house : {};
+        const house = {
+          bedrooms: aiouHouse.bedrooms ?? bridgeHouse.bedrooms ?? null,
+          bathrooms: aiouHouse.bathrooms ?? bridgeHouse.bathrooms ?? null,
+          sqft: aiouHouse.sqft ?? bridgeHouse.sqft ?? null,
+          propertyType: aiouHouse.propertyType ?? bridgeHouse.propertyType ?? "",
+          yearBuilt: aiouHouse.yearBuilt ?? bridgeHouse.yearBuilt ?? null,
+          amenities: Array.isArray(aiouHouse.amenities) ? aiouHouse.amenities : (Array.isArray(bridgeHouse.amenities) ? bridgeHouse.amenities : []),
+          amenitiesText: aiouHouse.amenitiesText ?? "",
+          conditionPreference: aiouHouse.conditionPreference ?? bridgeHouse.conditionPreference ?? null,
+          yearBand: aiouHouse.yearBand ?? bridgeHouse.yearBand ?? null,
+          styleVsPriceSlider: (aiouHouse.styleVsPriceSlider ?? bridgeHouse.styleVsPriceSlider ?? null),
+          mode: aiouHouse.mode ?? bridge._aiouHouseMode ?? null,
+          saved_at: aiouHouse.saved_at ?? null,
+          _src: aiouHouse._intakeSource ?? "aiou.house.intake"
         };
-        function mbtiLabel(type){
-          const map={
-            ISTJ:"Inspector", ISFJ:"Protector", INFJ:"Sage", INTJ:"Architect",
-            ISTP:"Crafter",   ISFP:"Artist",    INFP:"Idealist", INTP:"Analyst",
-            ESTP:"Promoter",  ESFP:"Performer", ENFP:"Champion", ENTP:"Debater",
-            ESTJ:"Executive", ESFJ:"Consul",    ENFJ:"Protagonist", ENTJ:"Commander"
-          };
-          return map[type] || "Persona";
+        return house;
+      }
+      function mmss(ms){
+        const s = Math.max(0, Math.ceil(ms/1000));
+        const m = Math.floor(s/60);
+        const r = s % 60;
+        return m+":"+String(r).padStart(2,'0');
+      }
+      function buildScalePills(){
+        const block = $('#scaleBlock');
+        block.innerHTML='';
+        for (let v=-5; v<=5; v++){
+          const pill=document.createElement('div');
+          pill.className='pill';
+          pill.textContent=String(v);
+          pill.dataset.val=v;
+          pill.addEventListener('click', ()=>selectValue(v));
+          block.appendChild(pill);
         }
-        function letterEI(E){ return E>=3.75 ? 'E' : (E<=3.25 ? 'I' : (E>=3.5?'E':'I')); }
-        function letterSN(O){ return O>=3.75 ? 'N' : (O<=3.25 ? 'S' : (O>=3.5?'N':'S')); }
-        function letterTF(A){ return A>=3.75 ? 'F' : (A<=3.25 ? 'T' : (A>=3.5?'F':'T')); }
-        function letterJP(C){ return C>=3.75 ? 'J' : (C<=3.25 ? 'P' : (C>=3.5?'J':'P')); }
-        function scoresToMBTILocal(S){
-          const ei=letterEI(S.E),
-                sn=letterSN(S.O),
-                tf=letterTF(S.A),
-                jp=letterJP(S.C);
-          const type=`${ei}${sn}${tf}${jp}`;
-          const dist=(v,hi=true)=> hi? Math.max(0,v-3.5)/1.5 : Math.max(0,3.5-v)/1.5;
-          const parts=[
-            ei==='E'?dist(S.E,true):dist(S.E,false),
-            sn==='N'?dist(S.O,true):dist(S.O,false),
-            tf==='F'?dist(S.A,true):dist(S.A,false),
-            jp==='J'?dist(S.C,true):dist(S.C,false)
-          ];
-          const confidence=Math.max(0.35,
-            +(parts.reduce((a,b)=>a+b,0)/4).toFixed(2)
-          );
-          return { type, confidence };
-        }
-        /* =========================================================
-           //#16 SERVER SCORING
-           ========================================================= */
-        async function scoreViaServer(payload){
-          const SCORE_ENDPOINT = (
-            document.querySelector('#aiou-shell')?.dataset?.scoreEndpoint
-            || 'https://theorozcorealty.netlify.app/.netlify/functions/aiou-score'
-          ).trim();
-          const r = await fetch(SCORE_ENDPOINT, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(payload)
-          });
-          if (!r.ok) throw new Error('Score server returned ' + r.status);
-          const data = await r.json();
-          if (!data || data.ok !== true) throw new Error((data && data.error) ? data.error : 'Score response not ok');
-          return data;
-        }
-        /* =========================================================
-           //#17 FINISH QUIZ -> SHOW RESULTS -> AUTO REPORT
-           ========================================================= */
-        function finishQuiz(){
-          $('#quizCard').classList.add('hidden');
-          if (overallTimer) clearInterval(overallTimer);
-          $('#resultsCard').classList.remove('hidden');
-          $('#kO').textContent = '—';
-          $('#kC').textContent = '—';
-          $('#kE').textContent = '—';
-          $('#kA').textContent = '—';
-          $('#kN').textContent = '—';
-          $('#consistency').innerHTML = '';
-          $('#archetype').textContent = '';
-          $('#mbti').innerHTML = '';
-          $('#jsonReportBox').innerHTML = '(Generating your personalized memo…)';
-          const profile = {
-            firstName: $('#firstName').value.trim(),
-            lastName:  $('#lastName').value.trim(),
-            bedrooms:  Number($('#bedrooms').value||0),
-            budgetMax: Number($('#budget').value||0),
-            setting:   $('#setting').value,
-            safetyPriority: Number($('#safety').value||3)
-          };
-          const house = extractHouseContext();
-          const styleVsPriceSlider = Number(window.__STYLE_V_PRICE ?? 0);
-          const scorePayload = {
-            answers: Object.assign({}, answers),
-            styleVsPriceSlider: styleVsPriceSlider,
-            conditionPreference: house.conditionPreference ?? null
-          };
-          (async ()=>{
-            let scores, inconsistencies, archetype, mbti, mbtiBlurb;
-            try{
-              const scored = await scoreViaServer(scorePayload);
-              scores = scored.scores || null;
-              inconsistencies = scored.inconsistencies || [];
-              archetype = scored.archetype || 'Balanced Explorer';
-              mbti = scored.mbti || null;
-              mbtiBlurb = (mbti && mbti.blurb) ? mbti.blurb : '';
-            }catch(_err){
-              const local = scoreAllLocal();
-              scores = local.scores;
-              inconsistencies = local.inconsistencies;
-              archetype=(function(s){
-                const hi=v=>v>=4.0, lo=v=>v<=2.5;
-                if(hi(s.O)&&hi(s.E)) return 'Visionary Host';
-                if(hi(s.C)&&!hi(s.O)&&!hi(s.E)) return 'Steady Planner';
-                if(hi(s.N)&&lo(s.E)) return 'Risk-Guarded Nest-Builder';
-                if(hi(s.A)&&hi(s.C)) return 'Family-First Optimizer';
-                if(hi(s.O)&&s.N<3.3) return 'Design-Forward Adventurer';
-                return 'Balanced Explorer';
-              })(scores);
-              const mbLocal = scoresToMBTILocal(scores);
-              const blurbLocal = MBTI_BUYER_GUIDE[mbLocal.type]
-                || "Personality informs your tradeoffs; we’ll size budget first, then match how you live.";
-              mbti = {
-                type: mbLocal.type,
-                confidence: mbLocal.confidence,
-                label: mbtiLabel(mbLocal.type),
-                blurb: blurbLocal
-              };
-              mbtiBlurb = blurbLocal;
-            }
-            $('#kO').textContent = Number(scores.O).toFixed(2);
-            $('#kC').textContent = Number(scores.C).toFixed(2);
-            $('#kE').textContent = Number(scores.E).toFixed(2);
-            $('#kA').textContent = Number(scores.A).toFixed(2);
-            $('#kN').textContent = Number(scores.N).toFixed(2);
-            $('#archetype').textContent = `Archetype: ${archetype}`;
-            const mbType = (mbti && mbti.type) ? mbti.type : 'INTJ';
-            const mbConf = (mbti && typeof mbti.confidence === 'number') ? mbti.confidence : 0.5;
-            const mbLbl  = (mbti && mbti.label) ? mbti.label : mbtiLabel(mbType);
-            const blurb  = mbtiBlurb || (MBTI_BUYER_GUIDE[mbType] || "Personality informs your tradeoffs; we’ll size budget first, then match how you live.");
-            $('#mbti').innerHTML =
-              `MBTI: <b>${mbType}</b> — ${mbLbl} ` +
-              `<span style="opacity:.7">(${(mbConf*100).toFixed(0)}% match)</span><br>` +
-              `<span style="color:var(--muted);font-weight:400;">${blurb}</span>`;
-            $('#consistency').innerHTML = (inconsistencies && inconsistencies.length)
-              ? `<span class="flag">⚠ Consistency flags:</span> ${inconsistencies.join(', ')}`
-              : `<span class="ok">✓ Responses appear consistent across rephrased items.</span>`;
-            const brief = {
-              version:'aiou.v3.timed',
-              ts:new Date().toISOString(),
-              profile,
-              house,
-              scores,
-              archetype,
-              mbti,
-              psych:{
-                totalItems: Q.length,
-                inconsistencies,
-                answers: Object.assign({}, answers)
-              },
-              visual:{
-                styleVsPriceSlider: styleVsPriceSlider
-              }
-            };
-            sendToLLM(brief);
-          })();
-        }
-        /* =========================================================
-           //#18 CALL NETLIFY FUNCTION
-           ========================================================= */
-        async function sendToLLM(brief){
-          const ENDPOINT = (
-            document.querySelector('#aiou-shell')?.dataset?.endpoint
-            || 'https://theorozcorealty.netlify.app/.netlify/functions/aiou-report'
-          ).trim();
-          const box = $('#jsonReportBox');
-          box.innerHTML = '(Generating your personalized memo…)';
-          try{
-            const r = await fetch(ENDPOINT,{
-              method:'POST',
-              headers:{'Content-Type':'application/json'},
-              body:JSON.stringify(brief)
-            });
-            if(!r.ok) throw new Error('Server returned '+r.status);
-            const data = await r.json();
-            const html =
-              data.memoHtml
-              || (data.memo
-                  ? `<p>${String(data.memo).replace(/</g,'&lt;')}</p>`
-                  : '<p>No memo returned.</p>');
-            box.innerHTML = html;
-            if (data.hydratedProfile){
-              if (!$('#firstName').value && data.hydratedProfile.firstName){
-                $('#firstName').value = data.hydratedProfile.firstName;
-              }
-              if (!$('#lastName').value && data.hydratedProfile.lastName){
-                $('#lastName').value = data.hydratedProfile.lastName;
-              }
-            }
-          }catch(e){
-            box.innerHTML = `<span class="flag">Error: ${e.message}</span>`;
+      }
+      function startQuizFlow(){
+        answers = {};
+        idx=0;
+        Q.forEach(q=>answers[q.id]=undefined);
+        overallLeftMs = Q.length * 10000;
+        $('#overallClock').textContent = mmss(overallLeftMs);
+        if (overallTimer) clearInterval(overallTimer);
+        overallTimer = setInterval(()=>{
+          overallLeftMs -= 200;
+          if (overallLeftMs <= 0){
+            overallLeftMs = 0;
+            clearInterval(overallTimer);
+          }
+          $('#overallClock').textContent = mmss(overallLeftMs);
+        },200);
+        $('#quizCard').classList.remove('hidden');
+        $('#resultsCard').classList.add('hidden');
+        renderQuestion();
+      }
+      function renderQuestion(){
+        const q = Q[idx];
+        $('#qTitle').textContent = `Question ${idx+1} / ${Q.length}`;
+        $('#qText').textContent  =
+          (q.type==='visual'
+            ? 'Where are you between these two options right now?'
+            : q.text);
+        const visual = $('#visualArea');
+        const scale  = $('#scaleBlock');
+        if(q.type==='visual'){
+          visual.classList.remove('hidden');
+          scale.classList.add('hidden');
+          initVisualSlider();
+        } else {
+          visual.classList.add('hidden');
+          scale.classList.remove('hidden');
+          buildScalePills();
+          $$('.pill').forEach(p=>p.dataset.sel='0');
+          const prev = answers[q.id];
+          if(prev!==undefined && prev!==null){
+            const el = $$('.pill').find(x=>Number(x.dataset.val)===prev);
+            if(el) el.dataset.sel='1';
           }
         }
-        /* =========================================================
-           //#19 BUTTON HANDLERS
-           ========================================================= */
-        $('#startQuiz').addEventListener('click', startQuizFlow);
-        $('#skip').addEventListener('click', ()=>{ recordAnswer(null); });
-        $('#reset').addEventListener('click', ()=>{
-          if (overallTimer) clearInterval(overallTimer);
-          startQuizFlow();
+        startPerQuestionTimer();
+      }
+      function startPerQuestionTimer(){
+        clearInterval(timer);
+        tLeft = 10;
+        const bar = $('#qTopTimer');
+        if (bar) bar.style.transform='scaleX(1)';
+        timer = setInterval(()=>{
+          tLeft -= 0.05;
+          const frac = Math.max(0, tLeft/10);
+          if (bar) bar.style.transform=`scaleX(${frac})`;
+          if (tLeft<=0){
+            clearInterval(timer);
+            recordAnswer(null);
+          }
+        },50);
+      }
+      function selectValue(v){
+        clearInterval(timer);
+        recordAnswer(v);
+      }
+      function recordAnswer(v){
+        const q = Q[idx];
+        if(q.type==='visual'){
+          const s = $('#vSlider');
+          const raw = (v===null ? 0 : Number(s.value||0));
+          answers[q.id] = raw;
+          window.__STYLE_V_PRICE = raw;
+        } else {
+          answers[q.id] = (v===null ? 0 : Number(v));
+        }
+        idx++;
+        if(idx < Q.length){
+          renderQuestion();
+        } else {
+          finishQuiz();
+        }
+      }
+      function initVisualSlider(){
+        const s   = $('#vSlider');
+        const lbl = $('#vLabel');
+        const imgA= $('#vImgA');
+        const imgB= $('#vImgB');
+        function explain(v){
+          if (v <= -3) return "Prefers Needs Fixes strongly (Option A)";
+          if (v === -2 || v === -1) return "Leans Needs Fixes (Option A)";
+          if (v === 0) return "Neutral";
+          if (v === 1 || v === 2) return "Leans Brand New (Option B)";
+          return "Prefers Brand New strongly (Option B)";
+        }
+        function update(){
+          const val = Number(s.value||0);
+          window.__STYLE_V_PRICE = val;
+          if(lbl){
+            lbl.textContent = explain(val);
+            s.setAttribute('aria-valuetext', lbl.textContent);
+          }
+        }
+        if (s){
+          if (window.__STYLE_V_PRICE==null) window.__STYLE_V_PRICE=0;
+          s.value = String(window.__STYLE_V_PRICE||0);
+          s.removeEventListener('input', s.__onInput || (()=>{}));
+          s.__onInput = ()=>update();
+          s.addEventListener('input', s.__onInput);
+          update();
+        }
+        if(imgA){
+          imgA.addEventListener('click', ()=>{
+            s.value = Math.max(-5,(Number(s.value)||0)-1);
+            s.dispatchEvent(new Event('input'));
+          });
+        }
+        if(imgB){
+          imgB.addEventListener('click', ()=>{
+            s.value = Math.min(5,(Number(s.value)||0)+1);
+            s.dispatchEvent(new Event('input'));
+          });
+        }
+      }
+      function scoreAllLocal(){
+        const dims={O:[],C:[],E:[],A:[],N:[]};
+        const qMap=Object.fromEntries(Q.map(q=>[q.id,q]));
+        Q.forEach(q=>{
+          if(q.type==='visual') return;
+          let v=answers[q.id];
+          if(v===undefined || v===null) v=0;
+          if(q.rev) v=-v;
+          const mapped=((v+5)*0.4)+1;
+          if(dims[q.dim]) dims[q.dim].push(mapped);
         });
-        $('#closePortal').addEventListener('click', ()=>{
-          if (overallTimer) clearInterval(overallTimer);
-          portal.remove();
+        const avg=a=>a.reduce((x,y)=>x+y,0)/a.length || 3;
+        const S={
+          O:+avg(dims.O).toFixed(2),
+          C:+avg(dims.C).toFixed(2),
+          E:+avg(dims.E).toFixed(2),
+          A:+avg(dims.A).toFixed(2),
+          N:+avg(dims.N).toFixed(2)
+        };
+        const v = Number(window.__STYLE_V_PRICE || 0);
+        S.O = +(Math.max(1, Math.min(5, S.O + (v/12.5)))).toFixed(2);
+        const flags=[];
+        const handled=new Set();
+        Q.forEach(q=>{
+          if(q.ctrlPair && !handled.has(q.id)){
+            const a=answers[q.id];
+            const b=answers[q.ctrlPair];
+            if(a!=null && b!=null){
+              const aAdj=q.rev? -a:a;
+              const bAdj=(qMap[q.ctrlPair].rev? -b:b);
+              if(Math.abs(aAdj-bAdj)>=6){
+                flags.push(`${q.id}/${q.ctrlPair}`);
+              }
+            }
+            handled.add(q.id);
+            handled.add(q.ctrlPair);
+          }
         });
+        return {scores:S, inconsistencies:flags};
+      }
+      const MBTI_BUYER_GUIDE = {
+        ISTJ:"Stable, detail-first. Prefers proven neighborhoods, low-variance costs, and strong inspection records.",
+        ISFJ:"Practical caretaker. Values safety, schools, and quiet streets; favors move-in-ready over projects.",
+        INFJ:"Purpose-driven. Wants harmony and meaningful space; calm areas and quality renovations matter.",
+        INTJ:"Planner/optimizer. Seeks value efficiency and long-term upside; ignores fluffy upgrades.",
+        ISTP:"Hands-on problem-solver. Open to light projects if priced right; needs clear scope/timeline.",
+        ISFP:"Aesthetic + comfort. Drawn to warm finishes, natural light, and cozy outdoor spots.",
+        INFP:"Idealistic. Wants character and story; needs guardrails so budget doesn’t drift.",
+        INTP:"Analytical. Structure/systems/future flexibility > staging glam.",
+        ESTP:"Action-oriented. Loves lively areas and entertainment spaces; avoid payment creep.",
+        ESFP:"Experience-first. Open layouts and social hubs; size payment first, then pick the fun.",
+        ENFP:"Vision + people. Creative layouts, natural light; watch impulsive upgrades.",
+        ENTP:"Options hunter. Wants flexibility/ADU potential; negotiate hard.",
+        ESTJ:"Structured operator. Predictability, commute efficiency, and low-maintenance wins.",
+        ESFJ:"Community anchor. Schools/parks close; turnkey > fixer to keep harmony.",
+        ENFJ:"Connector. Hosting flow matters; choose move-in-ready to keep momentum.",
+        ENTJ:"Decisive strategist. Location + resale math; newish or quality reno to avoid downtime."
+      };
+      function mbtiLabel(type){
+        const map={
+          ISTJ:"Inspector", ISFJ:"Protector", INFJ:"Sage", INTJ:"Architect",
+          ISTP:"Crafter",   ISFP:"Artist",    INFP:"Idealist", INTP:"Analyst",
+          ESTP:"Promoter",  ESFP:"Performer", ENFP:"Champion", ENTP:"Debater",
+          ESTJ:"Executive", ESFJ:"Consul",    ENFJ:"Protagonist", ENTJ:"Commander"
+        };
+        return map[type] || "Persona";
+      }
+      function letterEI(E){ return E>=3.75 ? 'E' : (E<=3.25 ? 'I' : (E>=3.5?'E':'I')); }
+      function letterSN(O){ return O>=3.75 ? 'N' : (O<=3.25 ? 'S' : (O>=3.5?'N':'S')); }
+      function letterTF(A){ return A>=3.75 ? 'F' : (A<=3.25 ? 'T' : (A>=3.5?'F':'T')); }
+      function letterJP(C){ return C>=3.75 ? 'J' : (C<=3.25 ? 'P' : (C>=3.5?'J':'P')); }
+      function scoresToMBTILocal(S){
+        const ei=letterEI(S.E),
+              sn=letterSN(S.O),
+              tf=letterTF(S.A),
+              jp=letterJP(S.C);
+        const type=`${ei}${sn}${tf}${jp}`;
+        const dist=(v,hi=true)=> hi? Math.max(0,v-3.5)/1.5 : Math.max(0,3.5-v)/1.5;
+        const parts=[
+          ei==='E'?dist(S.E,true):dist(S.E,false),
+          sn==='N'?dist(S.O,true):dist(S.O,false),
+          tf==='F'?dist(S.A,true):dist(S.A,false),
+          jp==='J'?dist(S.C,true):dist(S.C,false)
+        ];
+        const confidence=Math.max(0.35,
+          +(parts.reduce((a,b)=>a+b,0)/4).toFixed(2)
+        );
+        return { type, confidence };
+      }
+      async function scoreViaServer(payload){
+        const SCORE_ENDPOINT = (
+          document.querySelector('#aiou-shell')?.dataset?.scoreEndpoint
+          || 'https://pcsunited.com/.netlify/functions/aiou-score'
+        ).trim();
+        const r = await fetch(SCORE_ENDPOINT, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!r.ok) throw new Error('Score server returned ' + r.status);
+        const data = await r.json();
+        if (!data || data.ok !== true) throw new Error((data && data.error) ? data.error : 'Score response not ok');
+        return data;
+      }
+      function finishQuiz(){
         $('#quizCard').classList.add('hidden');
-        $('#resultsCard').classList.add('hidden');
+        if (overallTimer) clearInterval(overallTimer);
+        $('#resultsCard').classList.remove('hidden');
+        $('#kO').textContent = '—';
+        $('#kC').textContent = '—';
+        $('#kE').textContent = '—';
+        $('#kA').textContent = '—';
+        $('#kN').textContent = '—';
+        $('#consistency').innerHTML = '';
+        $('#archetype').textContent = '';
+        $('#mbti').innerHTML = '';
+        $('#jsonReportBox').innerHTML = '(Generating your personalized memo…)';
+        const profile = {
+          firstName: $('#firstName').value.trim(),
+          lastName:  $('#lastName').value.trim(),
+          bedrooms:  Number($('#bedrooms').value||0),
+          budgetMax: Number($('#budget').value||0),
+          setting:   $('#setting').value,
+          safetyPriority: Number($('#safety').value||3)
+        };
+        const house = extractHouseContext();
+        const styleVsPriceSlider = Number(window.__STYLE_V_PRICE ?? 0);
+        const scorePayload = {
+          answers: Object.assign({}, answers),
+          styleVsPriceSlider: styleVsPriceSlider,
+          conditionPreference: house.conditionPreference ?? null
+        };
+        (async ()=>{
+          let scores, inconsistencies, archetype, mbti, mbtiBlurb;
+          try{
+            const scored = await scoreViaServer(scorePayload);
+            scores = scored.scores || null;
+            inconsistencies = scored.inconsistencies || [];
+            archetype = scored.archetype || 'Balanced Explorer';
+            mbti = scored.mbti || null;
+            mbtiBlurb = (mbti && mbti.blurb) ? mbti.blurb : '';
+          }catch(_err){
+            const local = scoreAllLocal();
+            scores = local.scores;
+            inconsistencies = local.inconsistencies;
+            archetype=(function(s){
+              const hi=v=>v>=4.0, lo=v=>v<=2.5;
+              if(hi(s.O)&&hi(s.E)) return 'Visionary Host';
+              if(hi(s.C)&&!hi(s.O)&&!hi(s.E)) return 'Steady Planner';
+              if(hi(s.N)&&lo(s.E)) return 'Risk-Guarded Nest-Builder';
+              if(hi(s.A)&&hi(s.C)) return 'Family-First Optimizer';
+              if(hi(s.O)&&s.N<3.3) return 'Design-Forward Adventurer';
+              return 'Balanced Explorer';
+            })(scores);
+            const mbLocal = scoresToMBTILocal(scores);
+            const blurbLocal = MBTI_BUYER_GUIDE[mbLocal.type]
+              || "Personality informs your tradeoffs; we’ll size budget first, then match how you live.";
+            mbti = {
+              type: mbLocal.type,
+              confidence: mbLocal.confidence,
+              label: mbtiLabel(mbLocal.type),
+              blurb: blurbLocal
+            };
+            mbtiBlurb = blurbLocal;
+          }
+          $('#kO').textContent = Number(scores.O).toFixed(2);
+          $('#kC').textContent = Number(scores.C).toFixed(2);
+          $('#kE').textContent = Number(scores.E).toFixed(2);
+          $('#kA').textContent = Number(scores.A).toFixed(2);
+          $('#kN').textContent = Number(scores.N).toFixed(2);
+          $('#archetype').textContent = `Archetype: ${archetype}`;
+          const mbType = (mbti && mbti.type) ? mbti.type : 'INTJ';
+          const mbConf = (mbti && typeof mbti.confidence === 'number') ? mbti.confidence : 0.5;
+          const mbLbl  = (mbti && mbti.label) ? mbti.label : mbtiLabel(mbType);
+          const blurb  = mbtiBlurb || (MBTI_BUYER_GUIDE[mbType] || "Personality informs your tradeoffs; we’ll size budget first, then match how you live.");
+          $('#mbti').innerHTML =
+            `MBTI: <b>${mbType}</b> — ${mbLbl} ` +
+            `<span style="opacity:.7">(${(mbConf*100).toFixed(0)}% match)</span><br>` +
+            `<span style="color:var(--muted);font-weight:400;">${blurb}</span>`;
+          $('#consistency').innerHTML = (inconsistencies && inconsistencies.length)
+            ? `<span class="flag">⚠ Consistency flags:</span> ${inconsistencies.join(', ')}`
+            : `<span class="ok">✓ Responses appear consistent across rephrased items.</span>`;
+          const brief = {
+            version:'aiou.v3.timed',
+            ts:new Date().toISOString(),
+            profile,
+            house,
+            scores,
+            archetype,
+            mbti,
+            psych:{
+              totalItems: Q.length,
+              inconsistencies,
+              answers: Object.assign({}, answers)
+            },
+            visual:{
+              styleVsPriceSlider: styleVsPriceSlider
+            }
+          };
+          sendToLLM(brief);
+        })();
+      }
+      async function sendToLLM(brief){
+        const ENDPOINT = (
+          document.querySelector('#aiou-shell')?.dataset?.endpoint
+          || 'https://pcsunited.com/.netlify/functions/aiou-report'
+        ).trim();
+        const box = $('#jsonReportBox');
+        box.innerHTML = '(Generating your personalized memo…)';
+        try{
+          const r = await fetch(ENDPOINT,{
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body:JSON.stringify(brief)
+          });
+          if(!r.ok) throw new Error('Server returned '+r.status);
+          const data = await r.json();
+          const html =
+            data.memoHtml
+            || (data.memo
+                ? `<p>${String(data.memo).replace(/</g,'&lt;')}</p>`
+                : '<p>No memo returned.</p>');
+          box.innerHTML = html;
+          if (data.hydratedProfile){
+            if (!$('#firstName').value && data.hydratedProfile.firstName){
+              $('#firstName').value = data.hydratedProfile.firstName;
+            }
+            if (!$('#lastName').value && data.hydratedProfile.lastName){
+              $('#lastName').value = data.hydratedProfile.lastName;
+            }
+          }
+        }catch(e){
+          box.innerHTML = `<span class="flag">Error: ${e.message}</span>`;
+        }
+      }
+      $('#startQuiz').addEventListener('click', startQuizFlow);
+      $('#skip').addEventListener('click', ()=>{ recordAnswer(null); });
+      $('#reset').addEventListener('click', ()=>{
+        if (overallTimer) clearInterval(overallTimer);
+        startQuizFlow();
       });
-    })();
-  </script>
-      </div>
+      $('#closePortal').addEventListener('click', ()=>{
+        if (overallTimer) clearInterval(overallTimer);
+        portal.remove();
+      });
+      $('#quizCard').classList.add('hidden');
+      $('#resultsCard').classList.add('hidden');
+    });
+  });
+})();
+</script>
     </div>
   </section>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69658389f59da527c04bcbd4" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Jan 18 2026 11:30:14 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Jan 26 2026 07:19:35 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6965838af59da527c04bcc31" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -191,7 +191,8 @@ margin: 0rem !important;
               <nav role="navigation" class="nav-menu w-nav-menu">
                 <a href="index.html" class="nav-link w-nav-link">Home</a>
                 <a href="airforce-financial-calculator.html" aria-current="page" class="nav-link w-nav-link w--current">A.I Dashboard</a>
-                <a href="va-loan-education.html" class="nav-link w-nav-link">VA University</a>
+                <a href="va-loan-education.html" class="nav-link w-nav-link">PCS Academy</a>
+                <a href="air-force-base-demographics-bah-realty.html" class="nav-link w-nav-link">Base Information</a>
                 <div data-delay="200" data-hover="false" class="nav-dropdown w-dropdown">
                   <div class="nav-dropdown-toggle w-dropdown-toggle">
                     <div class="dot"></div>
@@ -335,7 +336,7 @@ margin: 0rem !important;
                 <div class="spacer-small"></div>
                 <div class="button-group">
                   <div class="code-embed-20 w-embed w-script"><!--  //#0 HOUSE OF SASS • PCS UNITED • FINANCIAL INTAKE (SINGLE EMBED)
-     INPUT ONLY → saves to correct KPI keys → redirects to Rent vs Buy Dashboard
+     INPUT ONLY → saves to correct KPI keys → saves to Supabase → redirects
  -->
                     <div id="sass-mortgage-strip" style="all: initial;">
                       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -473,19 +474,25 @@ margin: 0rem !important;
                             <div class="sass-help">300–850 (used for APR tier).</div>
                           </div>
                         </div>
-                        <button id="sass-analyze-btn">Continue</button>
+                        <button id="sass-analyze-btn" type="button">Continue</button>
                         <div id="sass-err"></div>
                       </div>
                       <script>
     (function(){
       "use strict";
       // =========================================================
-      // //#1 CONFIG (PCS UNITED)
+      // //#1 CONFIG (PCS UNITED • NO GHOSTS)
       // =========================================================
+      const API_BASE = "https://pcsunited.netlify.app/api";
       const DASHBOARD_URL = "https://pcs-united.webflow.io/military-calculator-rent-vs-buy";
-      const OV_KEY = "realtysass.kpi_overrides.v1";
-      const BRIDGE_KEY = "realtysass.bridge";
-      const INTENT_KEY = "realtysass.mortgage_intake.v1";
+      // PCS United localStorage keys (clean namespace)
+      const OV_KEY        = "pcsunited.kpi_overrides.v1";
+      const BRIDGE_KEY    = "pcsunited.bridge.v1";
+      const INTENT_KEY    = "pcsunited.financial_intake.v1";
+      const INTAKE_ID_KEY = "pcsunited.intake_id.v1";
+      // Identity / session keys
+      const LOGIN_EMAIL_KEY = "pcsunited.loginEmail";
+      const IDENTITY_KEY    = "pcsunited.identity.v1";
       const root = document.getElementById("sass-mortgage-strip");
       if (!root) return;
       const buttons = root.querySelectorAll(".intent-btn");
@@ -520,6 +527,40 @@ margin: 0rem !important;
         errEl.style.display = "block";
         errEl.textContent = msg;
       }
+      function makeIntakeId(){
+        const rand = Math.random().toString(16).slice(2);
+        return "pcsint_" + Date.now().toString(36) + "_" + rand;
+      }
+      function getOrCreateIntakeId(){
+        const existing = String(localStorage.getItem(INTAKE_ID_KEY) || "").trim();
+        if (existing) return existing;
+        const id = makeIntakeId();
+        localStorage.setItem(INTAKE_ID_KEY, id);
+        return id;
+      }
+      function validEmail(s){
+        return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(s||"").trim());
+      }
+      function getEmailIfKnown(){
+        // 1) If your PCS United login overlay saves a login email, use it
+        const loginEmail = String(localStorage.getItem(LOGIN_EMAIL_KEY) || "").trim();
+        if (loginEmail && validEmail(loginEmail)) return loginEmail.toLowerCase();
+        // 2) Else try identity from PCS United signup flow
+        const identity = readJSON(IDENTITY_KEY, {}) || {};
+        const e = String(identity.email || "").trim();
+        if (e && validEmail(e)) return e.toLowerCase();
+        return "";
+      }
+      async function postJSON(url, body){
+        const r = await fetch(url, {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify(body || {})
+        });
+        const j = await r.json().catch(()=>({}));
+        if (!r.ok || j.ok === false) throw new Error(j.error || ("HTTP " + r.status));
+        return j;
+      }
       // intent button toggles
       buttons.forEach(btn => {
         btn.addEventListener("click", () => {
@@ -527,7 +568,7 @@ margin: 0rem !important;
           btn.classList.add("active");
         });
       });
-      // Prefill if user already has overrides
+      // Prefill if user already has overrides (PCS United namespace)
       (function prefill(){
         const ov = readJSON(OV_KEY, {}) || {};
         const prevExpenses = ov.expensesOverride ?? ov.expenses ?? "";
@@ -539,7 +580,7 @@ margin: 0rem !important;
         if (elDown && prevDown !== "") elDown.value = String(prevDown);
         if (elScore && prevScore !== "") elScore.value = String(prevScore);
       })();
-      continueBtn.addEventListener("click", ()=>{
+      continueBtn.addEventListener("click", async ()=>{
         setError("");
         const mode = getActiveMode();
         const expenses = Math.max(0, n0(elExpenses && elExpenses.value));
@@ -553,18 +594,17 @@ margin: 0rem !important;
           return;
         }
         // =========================================================
-        // //#2 SAVE (Dashboard reads these keys)
+        // //#2 SAVE LOCAL (PCS UNITED KEYS)
         // =========================================================
         const ov = readJSON(OV_KEY, {}) || {};
-        ov.expensesOverride = expenses;   // ✅ KPI #2
-        ov.housingOverride  = price;      // ✅ KPI #3 (price)
-        ov.savingsOverride  = down;       // ✅ KPI #4 (downpayment)
-        ov.creditScore      = score;      // ✅ KPI #5
-        ov.dpManual         = true;       // ✅ prevent auto-downpayment overwriting intake
+        ov.expensesOverride = expenses;   // KPI #2
+        ov.housingOverride  = price;      // KPI #3 (price)
+        ov.savingsOverride  = down;       // KPI #4 (downpayment)
+        ov.creditScore      = score;      // KPI #5
+        ov.dpManual         = true;
         ov._intakeTs        = Date.now();
         ov._intakeSource    = "pcsunited.financial.intake.v1";
         writeJSON(OV_KEY, ov);
-        // Optional bridge merge (without nuking existing data)
         const bridge = readJSON(BRIDGE_KEY, {}) || {};
         bridge.expenses = expenses;
         bridge.housing = price;
@@ -574,17 +614,53 @@ margin: 0rem !important;
         bridge._intakeTs = Date.now();
         bridge._intakeSource = "pcsunited.financial.intake.v1";
         writeJSON(BRIDGE_KEY, bridge);
-        // Keep a clean record of what user entered
         writeJSON(INTENT_KEY, {
           mode,
           expenses,
           price,
           downpayment: down,
           creditScore: score,
-          saved_at: new Date().toISOString()
+          saved_at: new Date().toISOString(),
+          source: "pcsunited.financial.intake.v1"
         });
         // =========================================================
-        // //#3 REDIRECT
+        // //#3 SAVE TO SUPABASE (PCS UNITED FUNCTION)
+        // =========================================================
+        const intake_id = getOrCreateIntakeId();
+        const email = getEmailIfKnown();
+        continueBtn.disabled = true;
+        continueBtn.textContent = "Saving…";
+        try{
+          await postJSON(API_BASE + "/save-intake", {
+            intake_id,
+            email: email || null,
+            mode,
+            expenses,
+            price,
+            downpayment: down,
+            credit_score: score,
+            source: "pcsunited.financial.intake.v1",
+            payload: {
+              intake_id,
+              email: email || null,
+              mode,
+              expenses,
+              price,
+              downpayment: down,
+              credit_score: score,
+              overrides: ov,
+              bridge
+            }
+          });
+        } catch(e){
+          console.error("PCS United save-intake failed:", e);
+          continueBtn.disabled = false;
+          continueBtn.textContent = "Continue";
+          setError("We saved your inputs locally, but the secure cloud save failed. Please try again.");
+          return;
+        }
+        // =========================================================
+        // //#4 REDIRECT
         // =========================================================
         if (DASHBOARD_URL) location.href = DASHBOARD_URL;
       });
@@ -728,14 +804,11 @@ margin: 0rem !important;
                 <a href="#" class="home1_links_card w-inline-block"><img src="images/Tab-Change-image-2.webp" loading="lazy" width="294" sizes="(max-width: 479px) 100vw, 294px" alt="" srcset="images/Tab-Change-image-2-p-500.webp 500w, images/Tab-Change-image-2-p-800.webp 800w, images/Tab-Change-image-2.webp 846w" class="image-9"></a>
               </div>
             </div>
-            <div class="code-embed-19 w-embed w-script"><!--  //#0 HOUSE OF SASS • AIOU HOUSE INTAKE (UPDATED)
-     INPUT ONLY → saves to localStorage (AIOU keys) → redirects to your next page
-     ✅ Updates ONLY:
-        1) Replace Ready Now / Within 6 Months / Unsure with:
-           - New Home • Light Touch-Ups • $25K+ Upgrades
-           - Auto-derives typical year band (dynamic, based on current year)
-        2) Remove Year Built field entirely
-        3) Reduce to 5 inputs in ONE row on desktop (Beds, Baths, Sqft, Type, Amenities)
+            <div class="code-embed-19 w-embed w-script"><!--  //#0 HOUSE OF SASS • PCS UNITED • AIOU HOUSE INTAKE (v1.1.0)
+     INPUT ONLY → saves localStorage (PCS United keys) → saves to Supabase → redirects
+     - Condition buttons: New Home • Light Touch-Ups • $25K+ Upgrades
+     - Auto-derives typical year band (dynamic)
+     - 5 inputs in one row on desktop
  -->
               <div id="aiou-house-strip" style="all: initial;">
                 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -750,12 +823,11 @@ margin: 0rem !important;
       margin: 0 auto;
       padding: 16px 0;
     }
-    /* ===== INTENT BUTTONS (repurposed as CONDITION PREFERENCE) ===== */
     #aiou-intent-row {
       display: flex;
       justify-content: center;
       gap: 14px;
-      margin-bottom: 14px; /* slightly tighter now */
+      margin-bottom: 14px;
       flex-wrap: wrap;
     }
     .aiou-intent-btn {
@@ -776,7 +848,6 @@ margin: 0rem !important;
       color: #050712;
       border-color: transparent;
     }
-    /* small helper line under the condition toggle */
     #aiou-condition-hint {
       text-align: center;
       margin: 0 auto 22px;
@@ -789,10 +860,9 @@ margin: 0rem !important;
       color: #e9ecff;
       font-weight: 800;
     }
-    /* ===== INPUT GRID ===== */
     #aiou-input-row {
       display: grid;
-      grid-template-columns: repeat(5, 1fr); /* ✅ 5 boxes in one line */
+      grid-template-columns: repeat(5, 1fr);
       gap: 16px;
       align-items: start;
     }
@@ -847,7 +917,7 @@ margin: 0rem !important;
       transition: .15s ease;
     }
     #aiou-continue-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
-    /* small inline error text */
+    #aiou-continue-btn:disabled { opacity:.7; cursor:not-allowed; transform:none; }
     #aiou-err {
       margin: 10px auto 0;
       max-width: 720px;
@@ -858,7 +928,6 @@ margin: 0rem !important;
     }
   </style>
                 <div id="aiou-shell">
-                  <!--  CONDITION PREFERENCE (REPLACES READY/SOON/UNSURE)  -->
                   <div id="aiou-intent-row" aria-label="Home condition preference">
                     <button class="aiou-intent-btn active" data-mode="new">New Home</button>
                     <button class="aiou-intent-btn" data-mode="light">Light Touch-Ups</button>
@@ -867,27 +936,22 @@ margin: 0rem !important;
                   <div id="aiou-condition-hint">
                     Typical build year range: <b id="aiou-year-band">—</b>
                   </div>
-                  <!--  INPUT GRID (NOW 5 FIELDS)  -->
                   <div id="aiou-input-row">
-                    <!--  BEDROOMS  -->
                     <div>
                       <label class="aiou-field-label">Bedrooms</label>
                       <input class="aiou-input" id="aiou-beds" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 4">
                       <div class="aiou-help">Number of bedrooms.</div>
                     </div>
-                    <!--  BATHROOMS  -->
                     <div>
                       <label class="aiou-field-label">Bathrooms</label>
                       <input class="aiou-input" id="aiou-baths" type="number" inputmode="decimal" min="0" step="0.5" placeholder="e.g., 2.5">
                       <div class="aiou-help">Half-baths allowed (0.5).</div>
                     </div>
-                    <!--  SQUARE FEET  -->
                     <div>
                       <label class="aiou-field-label">Square Feet</label>
                       <input class="aiou-input" id="aiou-sqft" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 2150">
                       <div class="aiou-help">Approximate interior living area.</div>
                     </div>
-                    <!--  PROPERTY TYPE  -->
                     <div>
                       <label class="aiou-field-label">Property Type</label>
                       <select class="aiou-input" id="aiou-type">
@@ -901,27 +965,34 @@ margin: 0rem !important;
                       </select>
                       <div class="aiou-help">Helps tune comps + expectations.</div>
                     </div>
-                    <!--  AMENITIES  -->
                     <div>
                       <label class="aiou-field-label">Amenities</label>
                       <input class="aiou-input" id="aiou-amenities" type="text" placeholder="e.g., pool, garage, solar, HOA">
                       <div class="aiou-help">Comma-separated is perfect.</div>
                     </div>
                   </div>
-                  <button id="aiou-continue-btn">Continue</button>
+                  <button id="aiou-continue-btn" type="button">Continue</button>
                   <div id="aiou-err"></div>
                 </div>
                 <script>
     (function(){
       "use strict";
       // =========================================================
-      // //#1 CONFIG
+      // //#1 CONFIG (PCS UNITED ONLY — NO GHOSTS)
       // =========================================================
-      // ✅ CONNECT FIX: Redirect to your Quiz page (AIOU lives here)
-      const NEXT_URL  = "https://pcs-united.webflow.io/pcs-home-quiz";
-      // Dedicated AIOU keys (so we don’t collide with your KPI overrides)
-      const AIOU_HOUSE_KEY   = "realtysass.aiou_house_intake.v1";
-      const BRIDGE_KEY       = "realtysass.bridge"; // optional merge (safe)
+      const API_BASE = (function(){
+        const h = String(location.hostname || "").toLowerCase();
+        if (h.includes("webflow.io")) return "https://pcsunited.netlify.app/api";
+        return "/api";
+      })();
+      const NEXT_URL = (function(){
+        const h = String(location.hostname || "").toLowerCase();
+        if (h.includes("webflow.io")) return "/pcs-home-quiz";
+        return "/pcs-home-quiz";
+      })();
+      const AIOU_HOUSE_KEY = "pcsunited.aiou_house_intake.v1";
+      const BRIDGE_KEY     = "pcsunited.bridge.v1";
+      const ERR_KEY        = "pcsunited.aiou_last_error.v1"; // optional debug trail
       const root = document.getElementById("aiou-house-strip");
       if (!root) return;
       const buttons = root.querySelectorAll(".aiou-intent-btn");
@@ -944,15 +1015,6 @@ margin: 0rem !important;
       function writeJSON(key, val){
         try{ localStorage.setItem(key, JSON.stringify(val)); }catch(_){}
       }
-      // NOTE: We keep the same button mechanics, but now "mode" means conditionPreference
-      function getActiveMode(){
-        const a = root.querySelector(".aiou-intent-btn.active");
-        return a ? String(a.dataset.mode || "light") : "light";
-      }
-      function setActiveMode(mode){
-        const m = String(mode || "light");
-        buttons.forEach(b => b.classList.toggle("active", String(b.dataset.mode||"") === m));
-      }
       function setError(msg){
         if (!errEl) return;
         if (!msg){
@@ -963,49 +1025,33 @@ margin: 0rem !important;
         errEl.style.display = "block";
         errEl.textContent = msg;
       }
+      function getActiveMode(){
+        const a = root.querySelector(".aiou-intent-btn.active");
+        return a ? String(a.dataset.mode || "light") : "light";
+      }
+      function setActiveMode(mode){
+        const m = String(mode || "light");
+        buttons.forEach(b => b.classList.toggle("active", String(b.dataset.mode||"") === m));
+      }
       // =========================================================
-      // //#1.1 CONDITION → YEAR BAND + AIOU ANCHOR (styleVsPriceSlider)
+      // //#1.1 CONDITION → YEAR BAND
       // =========================================================
       function conditionMeta(mode){
         const now = new Date().getFullYear();
-        // Year bands are derived (dynamic; never stale)
         if (mode === "new"){
-          return {
-            conditionPreference: "new",
-            yearBand: "0–1 years",
-            impliedYearMin: now - 1,
-            impliedYearMax: now,
-            styleVsPriceSlider: 4
-          };
+          return { conditionPreference:"new", yearBand:`${now-1}–${now}`, impliedYearMin: now-1, impliedYearMax: now, styleVsPriceSlider: 4 };
         }
         if (mode === "light"){
-          return {
-            conditionPreference: "light",
-            yearBand: "2–7 years",
-            impliedYearMin: now - 7,
-            impliedYearMax: now - 2,
-            styleVsPriceSlider: 1
-          };
+          return { conditionPreference:"light", yearBand:`${now-7}–${now-2}`, impliedYearMin: now-7, impliedYearMax: now-2, styleVsPriceSlider: 1 };
         }
         // value_add
-        return {
-          conditionPreference: "value_add",
-          yearBand: "8+ years",
-          impliedYearMin: null,
-          impliedYearMax: now - 8,
-          styleVsPriceSlider: -3
-        };
+        return { conditionPreference:"value_add", yearBand:`≤ ${now-8}`, impliedYearMin: null, impliedYearMax: now-8, styleVsPriceSlider: -3 };
       }
       function paintYearBand(){
         if (!elYearBand) return;
         const meta = conditionMeta(getActiveMode());
-        if (meta.conditionPreference === "value_add"){
-          elYearBand.textContent = `≤ ${meta.impliedYearMax}`;
-        } else {
-          elYearBand.textContent = `${meta.impliedYearMin}–${meta.impliedYearMax}`;
-        }
+        elYearBand.textContent = meta.yearBand;
       }
-      // button toggles (kept for your UX)
       buttons.forEach(btn => {
         btn.addEventListener("click", () => {
           buttons.forEach(b => b.classList.remove("active"));
@@ -1014,11 +1060,36 @@ margin: 0rem !important;
         });
       });
       // =========================================================
-      // //#2 PREFILL (nice continuity if user returns)
+      // //#1.2 IDENTITY HELPERS (PCS UNITED)
+      // =========================================================
+      function isEmail(s){
+        return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(s||"").trim());
+      }
+      function getEmailIfKnown(){
+        // 1) If a login overlay stores it
+        const loginEmail = String(localStorage.getItem("pcsunited.loginEmail") || "").trim();
+        if (isEmail(loginEmail)) return loginEmail.toLowerCase();
+        // 2) Else try signup identity
+        const id = readJSON("pcsunited.identity.v1", {}) || {};
+        const e = String(id.email || "").trim();
+        if (isEmail(e)) return e.toLowerCase();
+        return "";
+      }
+      async function postJSON(url, body){
+        const r = await fetch(url, {
+          method: "POST",
+          headers: {"Content-Type":"application/json"},
+          body: JSON.stringify(body || {})
+        });
+        const j = await r.json().catch(()=>({}));
+        if (!r.ok || j.ok === false) throw new Error(j.error || ("HTTP " + r.status));
+        return j;
+      }
+      // =========================================================
+      // //#2 PREFILL
       // =========================================================
       (function prefill(){
         const prev = readJSON(AIOU_HOUSE_KEY, {}) || {};
-        // Back-compat: if older "mode" exists, accept it; prefer conditionPreference
         const prevMode = String(prev.conditionPreference || prev.mode || "light");
         setActiveMode(prevMode);
         if (elBeds && prev.bedrooms != null) elBeds.value = String(prev.bedrooms);
@@ -1029,70 +1100,75 @@ margin: 0rem !important;
         paintYearBand();
       })();
       // =========================================================
-      // //#3 SAVE + REDIRECT
+      // //#3 SAVE LOCAL + SUPABASE + REDIRECT
       // =========================================================
-      continueBtn.addEventListener("click", ()=>{
+      continueBtn.addEventListener("click", async ()=>{
         setError("");
-        const mode = getActiveMode();                 // "new" | "light" | "value_add"
+        writeJSON(ERR_KEY, null);
+        const mode = getActiveMode();
         const meta = conditionMeta(mode);
         const bedrooms  = Math.max(0, Math.round(n0(elBeds && elBeds.value)));
-        const bathrooms = Math.max(0, Math.round(n0(elBaths && elBaths.value) * 2) / 2); // keep .5 steps
+        const bathrooms = Math.max(0, Math.round(n0(elBaths && elBaths.value) * 2) / 2);
         const sqft      = Math.max(0, Math.round(n0(elSqft && elSqft.value)));
         const propertyType = String((elType && elType.value) || "").trim();
         const amenitiesText = String((elAmenities && elAmenities.value) || "").trim();
-        // Soft guardrails (don’t be harsh)
-        if (bedrooms > 20){
-          setError("Bedrooms looks too high — please double-check.");
-          return;
-        }
-        if (bathrooms > 20){
-          setError("Bathrooms looks too high — please double-check.");
-          return;
-        }
-        if (sqft > 0 && sqft < 200){
-          setError("Square feet looks low — please double-check.");
-          return;
-        }
-        // Normalize amenities into an array (keeps original text too)
-        const amenities = amenitiesText
+        if (bedrooms > 20){ setError("Bedrooms looks too high — please double-check."); return; }
+        if (bathrooms > 20){ setError("Bathrooms looks too high — please double-check."); return; }
+        if (sqft > 0 && sqft < 200){ setError("Square feet looks low — please double-check."); return; }
+        const amenitiesArr = amenitiesText
           ? amenitiesText.split(",").map(s => s.trim()).filter(Boolean).slice(0, 40)
           : [];
-        // Save AIOU house intake (clean, dedicated)
+        // Local save (PCS United keys)
         writeJSON(AIOU_HOUSE_KEY, {
-          conditionPreference: meta.conditionPreference,      // "new" | "light" | "value_add"
-          yearBand: meta.yearBand,                            // "0–1 years" | "2–7 years" | "8+ years"
-          impliedYearMin: meta.impliedYearMin,                // number | null
-          impliedYearMax: meta.impliedYearMax,                // number
-          styleVsPriceSlider: meta.styleVsPriceSlider,        // +4 | +1 | -3 (feeds AIOU baseline)
+          conditionPreference: meta.conditionPreference,
+          yearBand: meta.yearBand,
+          impliedYearMin: meta.impliedYearMin,
+          impliedYearMax: meta.impliedYearMax,
+          styleVsPriceSlider: meta.styleVsPriceSlider,
           bedrooms,
           bathrooms,
           sqft,
           propertyType,
           amenitiesText,
-          amenities,
+          amenities: amenitiesArr,
           saved_at: new Date().toISOString(),
           _intakeTs: Date.now(),
-          _intakeSource: "aiou.house.intake.v1"
+          _intakeSource: "pcsunited.aiou.house.intake.v1"
         });
-        // Optional compatibility: merge into bridge without nuking anything
-        // (So any downstream tools can read bridge.house.* if you want later.)
+        // Optional bridge (PCS United key)
         const bridge = readJSON(BRIDGE_KEY, {}) || {};
         bridge.house = Object.assign({}, bridge.house || {}, {
-          bedrooms,
-          bathrooms,
-          sqft,
-          propertyType,
-          amenities,
-          // condition preference signals (derived)
+          bedrooms, bathrooms, sqft, propertyType,
+          amenities: amenitiesArr,
           conditionPreference: meta.conditionPreference,
           yearBand: meta.yearBand,
           impliedYearMin: meta.impliedYearMin,
           impliedYearMax: meta.impliedYearMax
         });
-        // AIOU anchor (so quiz/scoring can read it later if desired)
         bridge._aiouStyleVsPriceSlider = meta.styleVsPriceSlider;
         bridge._aiouHouseTs = Date.now();
         writeJSON(BRIDGE_KEY, bridge);
+        // Cloud save
+        const email = getEmailIfKnown();
+        continueBtn.disabled = true;
+        try{
+          await postJSON(`${API_BASE}/aiou-intake`, {
+            email: email || null,
+            // map to your table columns
+            home_year: meta.yearBand,
+            bedrooms,
+            bathrooms,
+            sqft,
+            property_type: propertyType || null,
+            amenities: amenitiesText || null
+          });
+        } catch(e){
+          console.error("AIOU save failed:", e);
+          writeJSON(ERR_KEY, { message: String(e && e.message || "cloud save failed"), ts: Date.now() });
+          continueBtn.disabled = false;
+          setError("Saved locally, but cloud save failed. Please try again.");
+          return;
+        }
         // Redirect
         if (NEXT_URL) location.href = NEXT_URL;
       });
@@ -1166,6 +1242,38 @@ margin: 0rem !important;
                     </div>
                   </div>
                 </div>
+                <div class="home3_about_list-grid">
+                  <div class="home3_about_list-item"><img loading="lazy" src="images/home-about-icon1.svg" alt="" class="icon-height-small">
+                    <div>
+                      <div class="text-size-small text-weight-medium">Real Estate Experience</div>
+                      <div class="text-size-small text-style-muted60">Simple layouts that make information easy to find</div>
+                    </div>
+                  </div>
+                  <div class="home3_about_list-item"><img loading="lazy" src="images/home-about-icon2.svg" alt="" class="icon-height-small">
+                    <div>
+                      <div class="text-size-small text-weight-medium">Fiduciary Support</div>
+                      <div class="text-size-small text-style-muted60">We believe in Integrity</div>
+                    </div>
+                  </div>
+                </div>
+                <div data-w-id="29224cbc-7e5b-fa6d-266a-7a08a2813969" style="opacity:0" class="buttons-row-5">
+                  <a href="#" data-w-id="29224cbc-7e5b-fa6d-266a-7a08a281396a" class="primary-glow-wrapper-22 full w-inline-block">
+                    <div data-w-id="29224cbc-7e5b-fa6d-266a-7a08a281396b" class="button-overflow-hidden mobile-full-width">
+                      <div class="box-shadow-block-16">
+                        <div class="pedding-stroke-12">
+                          <div class="inside-button-31">
+                            <div class="button-text-32">Connect with Realtor today</div>
+                            <div style="-webkit-transform:translate3d(-100%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(-100%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(-100%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(-100%, 0, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="hover-line-43"></div>
+                          </div>
+                        </div>
+                        <div style="opacity:0.6" class="glow-wrapper stroke">
+                          <div class="glow-item left"></div>
+                          <div class="glow-item"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </a>
+                </div>
               </div>
               <div class="home3_about_media"><img src="images/pattern2_1pattern2.avif" loading="lazy" width="384" id="w-node-c6d7973f-eeef-c70f-fbc8-2f04069ccf67-c04bcc31" alt="" srcset="images/pattern2_1pattern2.avif 500w, images/pattern2_1pattern2.avif 800w, images/pattern2_1pattern2.avif 1080w, images/pattern2_1pattern2.avif 2464w" sizes="(max-width: 479px) 100vw, 384px" class="home3_about_image"><img src="images/lifestyle3_1lifestyle3.avif" loading="lazy" width="273" id="w-node-_71b85fc1-ad5c-0b84-d555-5524fdbf471a-c04bcc31" alt="Schools Coaching Webflow template " srcset="images/lifestyle3_1lifestyle3.avif 500w, images/lifestyle3_1lifestyle3.avif 1489w" sizes="(max-width: 479px) 100vw, 273px" class="home3_about_image">
                 <div id="w-node-c6d7973f-eeef-c70f-fbc8-2f04069ccf60-c04bcc31" class="home3_about_metric"><img src="images/PCSUnited.jpg" loading="lazy" sizes="(max-width: 1050px) 100vw, 1050px" srcset="images/ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-500.jpg 500w, images/ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800.jpg 800w, images/PCSUnited.jpg 1050w" alt="" class="home3_about_metric-image">
@@ -1179,101 +1287,21 @@ margin: 0rem !important;
           </div>
         </div>
       </section>
-      <section class="section_home1_faq background-color-secondary">
-        <div class="padding-global another">
-          <div class="container-default">
-            <div class="faq_grid">
-              <div data-w-id="30290acf-d6d6-e849-11d7-33e63aca85a3" class="faq_left">
-                <div class="max-width-small">
-                  <div class="text-style-badge">FAQ</div>
-                  <div class="spacer-small"></div>
-                  <h2>Everything You Need to Know—Upfront</h2>
-                  <div class="spacer-xxsmall"></div>
-                  <div>We help schools, students, professionals, and organizations grow with structured programs and expert coaching—here’s what most people ask before getting started with us</div>
-                  <div class="spacer-small"></div>
-                </div>
-              </div>
-              <div data-w-id="30290acf-d6d6-e849-11d7-33e63aca85b5" class="faq_box">
-                <div data-w-id="25c4837b-3530-41a4-d13b-6cd7954f94bc" class="faq_accordion">
-                  <div class="faq_question">
-                    <div class="faq_question_header">
-                      <div>What types of programs does Pathwise offer?</div>
-                    </div>
-                    <div class="faq_icon"><img loading="lazy" src="images/Plus-5.svg" alt="" class="icon-height-small"></div>
-                  </div>
-                  <div class="faq_answer">
-                    <div class="faq_answer-wrapper">
-                      <div class="max-width-large">
-                        <p class="text-size-small text-style-muted60">Pathwise includes academic workshops, professional seminars, and personalized coaching programs—flexible enough to support both students and professionals.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div data-w-id="25c4837b-3530-41a4-d13b-6cd7954f94bc" class="faq_accordion">
-                  <div class="faq_question">
-                    <div class="faq_question_header">
-                      <div>Can I enroll in programs online?</div>
-                    </div>
-                    <div class="faq_icon"><img loading="lazy" src="images/Plus-5.svg" alt="" class="icon-height-small"></div>
-                  </div>
-                  <div class="faq_answer">
-                    <div class="faq_answer-wrapper">
-                      <div class="max-width-large">
-                        <p class="text-size-small text-style-muted60">Yes, many of our programs and coaching sessions are available virtually, giving you the option to learn or connect from anywhere.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div data-w-id="25c4837b-3530-41a4-d13b-6cd7954f94bc" class="faq_accordion">
-                  <div class="faq_question">
-                    <div class="faq_question_header">
-                      <div>How do I know which program is right for me?</div>
-                    </div>
-                    <div class="faq_icon"><img loading="lazy" src="images/Plus-5.svg" alt="" class="icon-height-small"></div>
-                  </div>
-                  <div class="faq_answer">
-                    <div class="faq_answer-wrapper">
-                      <div class="max-width-large">
-                        <p class="text-size-small text-style-muted60">Each program includes detailed descriptions and levels (beginner, intermediate, advanced). You can also reach out to our team for personalized recommendations.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                <div data-w-id="25c4837b-3530-41a4-d13b-6cd7954f94bc" class="faq_accordion">
-                  <div class="faq_question">
-                    <div class="faq_question_header">
-                      <div>What is the typical duration of a program?</div>
-                    </div>
-                    <div class="faq_icon"><img loading="lazy" src="images/Plus-5.svg" alt="" class="icon-height-small"></div>
-                  </div>
-                  <div class="faq_answer">
-                    <div class="faq_answer-wrapper">
-                      <div class="max-width-large">
-                        <p class="text-size-small text-style-muted60">Programs range from single-day workshops to multi-week courses or long-term coaching engagements—depending on your goals.</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
       <section class="section_home3_banner">
         <div class="padding-global another">
           <div class="container-default">
             <div data-w-id="4556cbaf-c422-595d-a3f4-9fbc303e88ba" class="home3_banner_grid">
-              <div class="home3_banner_image-box"><img src="images/lifestyle2_1lifestyle2.avif" loading="lazy" sizes="100vw" srcset="images/lifestyle2_1lifestyle2.avif 500w, images/lifestyle2_1lifestyle2.avif 800w, images/lifestyle2_1lifestyle2.avif 2127w" alt="Schools Coaching Webflow template " class="home3_banner_image"></div>
-              <div id="w-node-_4556cbaf-c422-595d-a3f4-9fbc303e88bb-303e88b7" class="home3_banner_content">
-                <div class="text-style-badge is-white">Get Started</div>
+              <div class="home3_banner_image-box"><img src="images/lifestyle2_1lifestyle2.avif" loading="lazy" sizes="(max-width: 2127px) 100vw, 2127px" srcset="images/lifestyle2_1lifestyle2.avif 500w, images/lifestyle2_1lifestyle2.avif 800w, images/lifestyle2_1lifestyle2.avif 2127w" alt="Schools Coaching Webflow template " class="home3_banner_image"></div>
+              <div id="w-node-_4556cbaf-c422-595d-a3f4-9fbc303e88bb-303e88b7" class="home3_banner_content-copy">
+                <div class="text-style-badge is-white">Request Your</div>
                 <div class="spacer-small"></div>
-                <h2>Ready to Start Your Path?</h2>
+                <h2 class="heading-50">Executive Financial Summary</h2>
                 <div class="spacer-xsmall"></div>
-                <div class="text-style-muted80">Whether you’re shaping future leaders or guiding professionals, Pathwise helps you share your programs with impact</div>
+                <div class="text-style-muted80">Obtain a Detailed and Un-Biased Financial Summary to analyze your current Financial Health, and understand the circumstance surrounding it. Our A.I Driven Executive are provided Insight into your Home Ownership ability. </div>
                 <div class="spacer-small"></div>
                 <div class="button-group">
-                  <a href="programs-v3.html" class="button w-button">Explore Programs</a>
-                  <a href="veteran-activeduty-account.html" class="button is-secondary w-button">Contact Us</a>
+                  <a href="programs-v3.html" class="button w-button">Request Executive Summary</a>
+                  <a href="veteran-activeduty-account.html" class="button is-secondary w-button">Invite Realtor</a>
                 </div>
                 <div class="spacer-small"></div>
                 <div class="home1_hero_reviews is-v2">
@@ -1293,7 +1321,7 @@ margin: 0rem !important;
             <div class="footer_buy">
               <div class="heading-style-h4 text-align-center"><em>A Create an Account,</em> and receive enhanced Financial Analytics &amp; A.I Driven Support.  Get the most of your next move with PCS United.</div>
               <a href="https://webflow.com/templates/html/pathwise-website-template" target="_blank" class="button w-button">Create Account</a>
-            </div><img src="images/footer-image_1footer-image.avif" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="images/footer-image_1footer-image.avif 500w, images/footer-image_1footer-image.avif 1368w" alt="Schools Coaching Webflow template " class="footer_image">
+            </div><img src="images/PCSUnited.jpg" loading="lazy" width="531" sizes="(max-width: 767px) 100vw, 531px" alt="" srcset="images/ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-500.jpg 500w, images/ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800.jpg 800w, images/PCSUnited.jpg 1050w" class="footer_image">
           </div>
           <div class="spacer-large">
             <div class="footer-flex-wrapper-2">
@@ -1306,7 +1334,7 @@ margin: 0rem !important;
                 <div class="footer-social-links-wrapper invert">
                   <a href="https://www.instagram.com/" target="_blank" class="footer-social-link w-inline-block"><img loading="lazy" src="images/instagram-black_1instagram-black.webp" alt="Instagram Icon Image Black" class="footer-social-link-image-2"></a>
                   <a href="https://facebook.com/" target="_blank" class="footer-social-link w-inline-block"><img loading="lazy" src="images/facebook-black_1facebook-black.webp" alt="facebook icon black" class="footer-social-link-image-2"></a>
-                  <a href="https://www.twitter.com/" target="_blank" class="footer-social-link w-inline-block"><img sizes="100vw" srcset="images/twitter-p-500.png 500w, images/twitter.png 512w" alt="" src="images/twitter.png" loading="lazy" class="footer-social-link-image-2"></a>
+                  <a href="https://www.twitter.com/" target="_blank" class="footer-social-link w-inline-block"><img sizes="(max-width: 512px) 100vw, 512px" srcset="images/twitter-p-500.png 500w, images/twitter.png 512w" alt="" src="images/twitter.png" loading="lazy" class="footer-social-link-image-2"></a>
                   <a href="https://www.youtube.com/" target="_blank" class="footer-social-link w-inline-block"><img loading="lazy" src="images/youtube-black_1youtube-black.webp" alt="YouTube White Icon Image Black" class="footer-social-link-image-2"></a>
                 </div>
               </div>

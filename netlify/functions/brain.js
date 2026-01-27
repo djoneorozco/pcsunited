@@ -1,26 +1,35 @@
 // netlify/functions/brain.js
 // ============================================================
-// PCSUnited • CENTRAL BRAIN (v1.0.1) — PAY + CITY (NO MORTGAGE IMPORTS)
+// PCSUnited • CENTRAL BRAIN (v1.0.2) — PAY + CITY (NO MORTGAGE)
+// CommonJS-safe export to match package.json "type":"commonjs"
 //
-// ✅ FIX GOAL:
-// - Kill the "module is not defined in ES module scope" crash.
-// - Return deterministic Active Duty pay: BasePay + BAS + BAH
-// - Load city JSON by PCS base using: netlify/functions/cities/bases.json
-// - Uses pay tables at: netlify/functions/data/militaryPayTables.json
-//
-// ✅ IMPORTANT:
-// - This file intentionally does NOT import mortgage.js at all.
-//   (Mortgage can be added back once we confirm /api/brain is stable.)
+// ✅ FIXES:
+// - Eliminates "module is not defined in ES module scope" by using exports.handler.
+// - Deterministic Active Duty pay: BasePay + BAS + BAH
+// - City JSON loads by PCS base using: netlify/functions/cities/bases.json
+// - Pay tables load from: netlify/functions/data/militaryPayTables.json
+// - Bundling ensured via netlify.toml [functions].included_files
 //
 // ✅ DEPLOY_TAG:
-// - Helps you confirm the live endpoint is running THIS exact file.
+// - Confirms you are hitting the correct deployed file.
+//
+// Notes:
+// - This function expects your Supabase "profiles" row to contain at least:
+//   • rank or rank_paygrade
+//   • yos (years of service)
+//   • pcs_base (or base)
+//   • family (or family_size / familySize) for with/without dependents
+// - BAH requires zip. We attempt:
+//   1) profile.zip
+//   2) bases.json zip
+//   3) city.json zip
 // ============================================================
 
 const SCHEMA_VERSION = "1.2";
-const DEPLOY_TAG = "PCS_BRAIN_v1.0.1_NO_MORTGAGE_2026-01-27";
+const DEPLOY_TAG = "PCS_BRAIN_v1.0.2_CJS_SAFE_2026-01-27";
 
 // -----------------------------
-// //#0 Runtime deps (ESM-safe)
+// //#0 Runtime deps (CJS-safe via dynamic import)
 // -----------------------------
 let __fs = null;
 let __path = null;
@@ -145,12 +154,15 @@ let __CITY_FILE_INDEX__ = null;
 function loadJsonFromFirstExisting(paths, labelForError) {
   let found = null;
   for (const p of paths || []) {
-    if (__fs.existsSync(p)) { found = p; break; }
+    if (__fs.existsSync(p)) {
+      found = p;
+      break;
+    }
   }
   if (!found) {
     throw new Error(
       `${labelForError} not found. Tried:\n- ${(paths || []).join("\n- ")}\n` +
-      `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
+        `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
     );
   }
   const raw = __fs.readFileSync(found, "utf8");
@@ -182,9 +194,16 @@ function loadBasesIndex() {
 function listCityFiles() {
   if (__CITY_FILE_INDEX__) return __CITY_FILE_INDEX__;
   try {
-    const files = __fs.readdirSync(__CITIES_DIR)
+    const files = __fs
+      .readdirSync(__CITIES_DIR)
       .filter((f) => /\.json$/i.test(f))
-      .map((f) => f.replace(/\.json$/i, ""));
+      .map((f) => f.replace(/\.json$/i, ""))
+      // avoid treating indexes as city files
+      .filter((name) => {
+        const n = String(name || "").toLowerCase();
+        return n !== "bases" && n !== "index.bybase" && n !== "indexbybase";
+      });
+
     __CITY_FILE_INDEX__ = new Set(files);
     return __CITY_FILE_INDEX__;
   } catch (e) {
@@ -199,6 +218,10 @@ function cityFileExists(fileKey) {
   return listCityFiles().has(k);
 }
 
+// bases.json can be:
+// - array of records [{base, cityKey, file, zip}, ...]
+// - object map { "NELLISAFB": {fileKey:"Nellis", zip:"89191", cityKey:"LasVegas"} }
+// - nested {bases:{...}}
 function resolveFromBasesIndex(baseRaw) {
   const idx = loadBasesIndex();
   if (!idx || typeof idx !== "object") return null;
@@ -206,8 +229,7 @@ function resolveFromBasesIndex(baseRaw) {
   const norm = normalizeBaseName(baseRaw);
   if (!norm) return null;
 
-  let map = idx;
-
+  // Array shape
   if (Array.isArray(idx)) {
     const hit = idx.find((r) => normalizeBaseName(r?.base || r?.name || r?.installation) === norm);
     if (!hit) return null;
@@ -219,6 +241,8 @@ function resolveFromBasesIndex(baseRaw) {
     };
   }
 
+  // Object map shape
+  let map = idx;
   if (idx.bases && typeof idx.bases === "object") map = idx.bases;
 
   const hit = map[norm] || map[String(baseRaw || "").trim()] || null;
@@ -235,6 +259,7 @@ function resolveFromBasesIndex(baseRaw) {
 function loadCityByFileKey(fileKey, canonicalCityKey) {
   const fk = safeKey(fileKey);
   if (!fk) throw new Error("Missing city fileKey.");
+
   if (__CITY_CACHE__.has(fk)) {
     const cached = __CITY_CACHE__.get(fk);
     return {
@@ -245,9 +270,7 @@ function loadCityByFileKey(fileKey, canonicalCityKey) {
   }
 
   const filePath = __path.join(__CITIES_DIR, `${fk}.json`);
-  if (!__fs.existsSync(filePath)) {
-    throw new Error(`City JSON not found at ${filePath}`);
-  }
+  if (!__fs.existsSync(filePath)) throw new Error(`City JSON not found at ${filePath}`);
 
   const raw = __fs.readFileSync(filePath, "utf8");
   const data = JSON.parse(raw);
@@ -264,7 +287,7 @@ function loadCityByFileKey(fileKey, canonicalCityKey) {
 }
 
 function deriveCityAndFile(profile) {
-  const baseRaw = pickFirst(profile, ["pcs_base","pcsBase","base","duty_station","station","dutyStation"]);
+  const baseRaw = pickFirst(profile, ["pcs_base", "pcsBase", "base", "duty_station", "station", "dutyStation"]);
   const baseName = String(baseRaw || "").trim();
 
   const fromBases = resolveFromBasesIndex(baseName);
@@ -279,6 +302,7 @@ function deriveCityAndFile(profile) {
     };
   }
 
+  // Known good fallback if your repo has this file
   if (cityFileExists("Fort-Sam-Houston")) {
     return {
       ok: true,
@@ -290,6 +314,7 @@ function deriveCityAndFile(profile) {
     };
   }
 
+  // Final fallback: first city file we can find
   const any = Array.from(listCityFiles())[0] || null;
   if (any) {
     return { ok: true, base: baseName, cityKey: safeKey(any), fileKey: safeKey(any), zip: null, source: "fallback:firstCityFile" };
@@ -305,9 +330,8 @@ function computeBasePay(rank, yos, payTables, missing) {
   let basePay = 0;
   if (rank && yos !== null) {
     const baseTable = payTables?.BASEPAY?.[rank];
-    if (!baseTable) {
-      missing.push("basepay_table_for_rank");
-    } else {
+    if (!baseTable) missing.push("basepay_table_for_rank");
+    else {
       const picked = pickNearestYos(baseTable, yos);
       if (picked == null) missing.push("basepay_value");
       else basePay = Number(picked) || 0;
@@ -323,8 +347,14 @@ function computeBAS(rank, payTables) {
 }
 
 function computeBAH(rank, familyBool, zip, payTables, missing) {
-  if (!zip) { missing.push("bah_zip_missing"); return 0; }
-  if (!rank) { missing.push("bah_rank_missing"); return 0; }
+  if (!zip) {
+    missing.push("bah_zip_missing");
+    return 0;
+  }
+  if (!rank) {
+    missing.push("bah_rank_missing");
+    return 0;
+  }
 
   const bahZip =
     payTables?.BAH_TX?.[zip] ||
@@ -333,13 +363,22 @@ function computeBAH(rank, familyBool, zip, payTables, missing) {
     payTables?.BAH?.[zip] ||
     null;
 
-  if (!bahZip) { missing.push("bah_zip_not_found"); return 0; }
+  if (!bahZip) {
+    missing.push("bah_zip_not_found");
+    return 0;
+  }
 
   const bucket = familyBool ? bahZip.with : bahZip.without;
-  if (!bucket) { missing.push("bah_bucket_missing"); return 0; }
+  if (!bucket) {
+    missing.push("bah_bucket_missing");
+    return 0;
+  }
 
   const val = bucket?.[rank];
-  if (val == null) { missing.push("bah_rank_not_found"); return 0; }
+  if (val == null) {
+    missing.push("bah_rank_not_found");
+    return 0;
+  }
 
   return Number(val) || 0;
 }
@@ -347,8 +386,8 @@ function computeBAH(rank, familyBool, zip, payTables, missing) {
 function detectPayModel(profile) {
   const modeRaw = lower(profile?.mode);
   if (modeRaw) {
-    if (["vet","veteran","retired","retiree","sep","separated","civ","civilian"].includes(modeRaw)) return "veteran";
-    if (["ad","active","active_duty","activeduty"].includes(modeRaw)) return "active";
+    if (["vet", "veteran", "retired", "retiree", "sep", "separated", "civ", "civilian"].includes(modeRaw)) return "veteran";
+    if (["ad", "active", "active_duty", "activeduty"].includes(modeRaw)) return "active";
   }
   return "active";
 }
@@ -360,17 +399,19 @@ function computePay(profile, payTables, cityPick, city) {
   const rank = normalizeRank(profile?.rank_paygrade || profile?.rank || "");
   const yos = toInt(profile?.yos ?? profile?.years_of_service ?? profile?.yearsOfService);
 
-  const famRaw = profile?.family ?? profile?.dependents ?? profile?.has_dependents;
+  const famRaw = profile?.family ?? profile?.dependents ?? profile?.has_dependents ?? profile?.family_size ?? profile?.familySize;
+  const famInt = toInt(famRaw);
   const familyBool =
     String(famRaw).toLowerCase() === "true" ||
     famRaw === true ||
-    (toInt(famRaw) || 0) >= 2;
+    (Number.isFinite(famInt) ? famInt >= 2 : false);
 
   if (!rank) missing.push("rank_paygrade");
   if (yos === null) missing.push("yos");
 
   const basePay = computeBasePay(rank, yos, payTables, missing);
 
+  // PCSUnited brain currently focused on Active Duty deterministic pay
   if (payModel === "veteran") {
     return {
       ok: basePay > 0,
@@ -388,7 +429,7 @@ function computePay(profile, payTables, cityPick, city) {
         familyUsed: familyBool,
         rankUsed: rank || null,
         yosUsed: yos,
-      }
+      },
     };
   }
 
@@ -445,9 +486,9 @@ async function fetchProfileByEmail(email) {
 }
 
 // -----------------------------
-// //#6 Netlify handler
+// //#6 Netlify handler (CommonJS export)
 // -----------------------------
-export async function handler(event) {
+exports.handler = async function handler(event) {
   try {
     await ensureDeps();
 
@@ -460,19 +501,36 @@ export async function handler(event) {
         ok: true,
         schemaVersion: SCHEMA_VERSION,
         deployTag: DEPLOY_TAG,
+        runtime: {
+          typeofModule: typeof module,
+          typeofExports: typeof exports,
+          node: process.version,
+        },
         note: "POST JSON: { email, bedrooms? }",
       });
     }
 
     if (event.httpMethod !== "POST") {
-      return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Method not allowed." });
+      return respond(event, 405, {
+        ok: false,
+        schemaVersion: SCHEMA_VERSION,
+        deployTag: DEPLOY_TAG,
+        error: "Method not allowed.",
+      });
     }
 
     const body = JSON.parse(event.body || "{}");
     const email = String(body.email || "").trim().toLowerCase();
     const bedrooms = toInt(body.bedrooms) ?? 4;
 
-    if (!email) return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Missing email." });
+    if (!email) {
+      return respond(event, 400, {
+        ok: false,
+        schemaVersion: SCHEMA_VERSION,
+        deployTag: DEPLOY_TAG,
+        error: "Missing email.",
+      });
+    }
 
     const payTables = loadPayTables();
     const profile = await fetchProfileByEmail(email);
@@ -525,4 +583,4 @@ export async function handler(event) {
       error: String(e?.message || e),
     });
   }
-}
+};

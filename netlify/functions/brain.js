@@ -1,32 +1,30 @@
 // netlify/functions/brain.js
 // ============================================================
-// PCSUnited • CENTRAL BRAIN (v1.0.0) — Pay + City + (Optional) Mortgage
+// PCSUnited • CENTRAL BRAIN (v1.0.1) — PAY + CITY (NO MORTGAGE IMPORTS)
 //
-// ✅ PRIMARY GOAL:
-// - ALWAYS return deterministic PAY (Base Pay + BAS + BAH) + City baselines
-// - Never allow mortgage.js (or any other module) to crash the endpoint
+// ✅ FIX GOAL:
+// - Kill the "module is not defined in ES module scope" crash.
+// - Return deterministic Active Duty pay: BasePay + BAS + BAH
+// - Load city JSON by PCS base using: netlify/functions/cities/bases.json
+// - Uses pay tables at: netlify/functions/data/militaryPayTables.json
 //
-// ✅ DATA PATHS (PCSUnited):
-// - Pay Tables: netlify/functions/data/militaryPayTables.json
-// - Bases Index: netlify/functions/cities/bases.json
-// - City JSONs:  netlify/functions/cities/*.json   (e.g., Davis-Monthan.json)
+// ✅ IMPORTANT:
+// - This file intentionally does NOT import mortgage.js at all.
+//   (Mortgage can be added back once we confirm /api/brain is stable.)
 //
-// ✅ CORS:
-// - OPTIONS returns 204 with headers (preflight success)
+// ✅ DEPLOY_TAG:
+// - Helps you confirm the live endpoint is running THIS exact file.
 // ============================================================
 
 const SCHEMA_VERSION = "1.2";
+const DEPLOY_TAG = "PCS_BRAIN_v1.0.1_NO_MORTGAGE_2026-01-27";
 
 // -----------------------------
-// //#0 Runtime deps (ESM-safe dynamic imports)
+// //#0 Runtime deps (ESM-safe)
 // -----------------------------
 let __fs = null;
 let __path = null;
 let __createClient = null;
-
-// mortgage.js is OPTIONAL — if it fails, we keep going
-let __mortgageHandler = null;
-let __mortgageImportError = null;
 
 let __ROOT = null;
 let __PAY_TABLES_PATHS = null;
@@ -55,22 +53,6 @@ async function ensureDeps() {
     __path.join(__ROOT, "netlify", "functions", "cities", "index.byBase.json"),
     __path.join(__ROOT, "netlify", "functions", "cities", "indexByBase.json"),
   ];
-
-  // Try to import mortgage.js, but DO NOT crash if it fails (ESM/CJS mismatch, etc.)
-  try {
-    const mortMod = await import("./mortgage.js");
-    const h = mortMod?.handler;
-    if (typeof h === "function") {
-      __mortgageHandler = h;
-      __mortgageImportError = null;
-    } else {
-      __mortgageHandler = null;
-      __mortgageImportError = "mortgage.js found but does not export `handler`.";
-    }
-  } catch (e) {
-    __mortgageHandler = null;
-    __mortgageImportError = String(e?.message || e);
-  }
 }
 
 // -----------------------------
@@ -98,7 +80,7 @@ function respond(event, statusCode, obj) {
 }
 
 // -----------------------------
-// //#2 Small helpers
+// //#2 Helpers
 // -----------------------------
 function safeKey(s) {
   return String(s || "").trim().replace(/[^a-zA-Z0-9_-]/g, "");
@@ -157,7 +139,7 @@ let __PAY_TABLES_PATH_USED__ = null;
 let __BASES_INDEX_CACHE__ = null;
 let __BASES_INDEX_PATH_USED__ = null;
 
-const __CITY_CACHE__ = new Map(); // key = fileKey (filename without .json)
+const __CITY_CACHE__ = new Map(); // fileKey => city json
 let __CITY_FILE_INDEX__ = null;
 
 function loadJsonFromFirstExisting(paths, labelForError) {
@@ -224,10 +206,6 @@ function resolveFromBasesIndex(baseRaw) {
   const norm = normalizeBaseName(baseRaw);
   if (!norm) return null;
 
-  // Support multiple shapes:
-  // A) { "NELLIS": { cityKey:"LasVegas", file:"Nellis", zip:"89191" }, ... }
-  // B) { "bases": { ... } }
-  // C) [ { base:"Nellis", cityKey:"LasVegas", file:"Nellis", zip:"..." }, ... ]
   let map = idx;
 
   if (Array.isArray(idx)) {
@@ -243,12 +221,7 @@ function resolveFromBasesIndex(baseRaw) {
 
   if (idx.bases && typeof idx.bases === "object") map = idx.bases;
 
-  // Try direct normalized key
-  const hit =
-    map[norm] ||
-    map[String(baseRaw || "").trim()] ||
-    null;
-
+  const hit = map[norm] || map[String(baseRaw || "").trim()] || null;
   if (!hit) return null;
 
   return {
@@ -290,11 +263,10 @@ function loadCityByFileKey(fileKey, canonicalCityKey) {
   return out;
 }
 
-function deriveCityAndFile(profile, payTables) {
+function deriveCityAndFile(profile) {
   const baseRaw = pickFirst(profile, ["pcs_base","pcsBase","base","duty_station","station","dutyStation"]);
   const baseName = String(baseRaw || "").trim();
 
-  // 1) Prefer bases.json
   const fromBases = resolveFromBasesIndex(baseName);
   if (fromBases?.fileKey && cityFileExists(fromBases.fileKey)) {
     return {
@@ -307,34 +279,27 @@ function deriveCityAndFile(profile, payTables) {
     };
   }
 
-  // 2) Fallback: try cityKey itself (if your cityKey matches a filename)
-  const cityKeyCanon = safeKey(fromBases?.cityKey || "");
-  if (cityKeyCanon && cityFileExists(cityKeyCanon)) {
-    return { ok: true, base: baseName, cityKey: cityKeyCanon, fileKey: cityKeyCanon, zip: fromBases?.zip || null, source: "bases.json->cityKeyAsFile" };
-  }
-
-  // 3) Last resort: payTables mapping if present
-  const norm = normalizeBaseName(baseName);
-  const tbl = payTables?.CITY_BY_BASE || payTables?.CITY?.by_base || payTables?.city_by_base || null;
-  if (tbl && typeof tbl === "object") {
-    const mapped = tbl[norm] || tbl[baseName] || null;
-    const ck = safeKey(mapped);
-    if (ck && cityFileExists(ck)) return { ok: true, base: baseName, cityKey: ck, fileKey: ck, zip: null, source: "payTables.CITY_BY_BASE" };
-  }
-
-  // 4) Hard fallback: Fort-Sam-Houston if present, else first file in directory
   if (cityFileExists("Fort-Sam-Houston")) {
-    return { ok: true, base: baseName, cityKey: "SanAntonio", fileKey: "Fort-Sam-Houston", zip: null, source: "fallback:Fort-Sam-Houston" };
+    return {
+      ok: true,
+      base: baseName,
+      cityKey: "SanAntonio",
+      fileKey: "Fort-Sam-Houston",
+      zip: null,
+      source: "fallback:Fort-Sam-Houston",
+    };
   }
 
   const any = Array.from(listCityFiles())[0] || null;
-  if (any) return { ok: true, base: baseName, cityKey: safeKey(any), fileKey: safeKey(any), zip: null, source: "fallback:firstCityFile" };
+  if (any) {
+    return { ok: true, base: baseName, cityKey: safeKey(any), fileKey: safeKey(any), zip: null, source: "fallback:firstCityFile" };
+  }
 
   return { ok: false, base: baseName, cityKey: null, fileKey: null, zip: null, source: "none" };
 }
 
 // -----------------------------
-// //#4 Deterministic pay math (Active Duty focused)
+// //#4 Deterministic pay math
 // -----------------------------
 function computeBasePay(rank, yos, payTables, missing) {
   let basePay = 0;
@@ -358,18 +323,9 @@ function computeBAS(rank, payTables) {
 }
 
 function computeBAH(rank, familyBool, zip, payTables, missing) {
-  let bah = 0;
+  if (!zip) { missing.push("bah_zip_missing"); return 0; }
+  if (!rank) { missing.push("bah_rank_missing"); return 0; }
 
-  if (!zip) {
-    missing.push("bah_zip_missing");
-    return 0;
-  }
-  if (!rank) {
-    missing.push("bah_rank_missing");
-    return 0;
-  }
-
-  // Prefer BAH_TX shape (your known PCSUnited dataset)
   const bahZip =
     payTables?.BAH_TX?.[zip] ||
     payTables?.BAH?.by_zip?.[zip] ||
@@ -377,28 +333,15 @@ function computeBAH(rank, familyBool, zip, payTables, missing) {
     payTables?.BAH?.[zip] ||
     null;
 
-  if (!bahZip) {
-    missing.push("bah_zip_not_found");
-    return 0;
-  }
+  if (!bahZip) { missing.push("bah_zip_not_found"); return 0; }
 
-  // Support both shapes:
-  // A) { with: {E-6: 2400}, without:{E-6: 1800} }
-  // B) { with:{rank:}, without:{rank:} } (same)
   const bucket = familyBool ? bahZip.with : bahZip.without;
-  if (!bucket) {
-    missing.push("bah_bucket_missing");
-    return 0;
-  }
+  if (!bucket) { missing.push("bah_bucket_missing"); return 0; }
 
   const val = bucket?.[rank];
-  if (val == null) {
-    missing.push("bah_rank_not_found");
-    return 0;
-  }
+  if (val == null) { missing.push("bah_rank_not_found"); return 0; }
 
-  bah = Number(val) || 0;
-  return bah;
+  return Number(val) || 0;
 }
 
 function detectPayModel(profile) {
@@ -407,18 +350,10 @@ function detectPayModel(profile) {
     if (["vet","veteran","retired","retiree","sep","separated","civ","civilian"].includes(modeRaw)) return "veteran";
     if (["ad","active","active_duty","activeduty"].includes(modeRaw)) return "active";
   }
-
-  const modelRaw = lower(pickFirst(profile, ["pay_model","payModel","status","member_status","memberStatus","service_status","serviceStatus"]));
-  const veteranWords = ["veteran","retired","retiree","separated","civilian"];
-  const activeWords = ["active","activeduty","ad","active duty"];
-
-  if (veteranWords.some((w) => modelRaw.includes(w))) return "veteran";
-  if (activeWords.some((w) => modelRaw.includes(w))) return "active";
-
   return "active";
 }
 
-function computePay(profile, payTables, city, baseZipHint) {
+function computePay(profile, payTables, cityPick, city) {
   const missing = [];
   const payModel = detectPayModel(profile);
 
@@ -436,9 +371,7 @@ function computePay(profile, payTables, city, baseZipHint) {
 
   const basePay = computeBasePay(rank, yos, payTables, missing);
 
-  // PCSUnited focus: Active Duty pay is deterministic (Base + BAS + BAH).
   if (payModel === "veteran") {
-    // Keep structure, but no deterministic BAH/BAS assumed for vet mode here
     return {
       ok: basePay > 0,
       missing: ["veteran_mode_not_enabled_in_pcs_brain"].concat(missing),
@@ -459,31 +392,15 @@ function computePay(profile, payTables, city, baseZipHint) {
     };
   }
 
-  // ZIP resolution priority:
+  // ZIP resolution:
   // 1) profile.zip
-  // 2) bases.json provided zip
-  // 3) city.zip inside city JSON
-  // 4) payTables.BAH.base_to_zip lookup by base (if exists)
-  let zip =
+  // 2) bases.json zip
+  // 3) city.zip
+  const zip =
     String(profile?.zip || profile?.postal_code || "").trim() ||
-    String(baseZipHint || "").trim() ||
+    String(cityPick?.zip || "").trim() ||
     String(city?.zip || city?.postal_code || "").trim() ||
     "";
-
-  if (!zip) {
-    const baseRaw = pickFirst(profile, ["pcs_base","pcsBase","base","duty_station","station","dutyStation"]);
-    const baseName = String(baseRaw || "").trim();
-    const baseToZipRaw = payTables?.BAH?.base_to_zip || payTables?.BAH?.baseToZip || payTables?.BASE_ZIP || {};
-    const baseToZipNorm = new Map();
-    for (const [k, v] of Object.entries(baseToZipRaw || {})) {
-      const nk = normalizeBaseName(k);
-      if (nk) baseToZipNorm.set(nk, String(v || "").trim());
-    }
-    const derived = baseToZipNorm.get(normalizeBaseName(baseName));
-    if (derived) zip = derived;
-  }
-
-  if (!zip) missing.push("bah_zip_missing");
 
   const bas = computeBAS(rank, payTables);
   const bah = computeBAH(rank, familyBool, zip || null, payTables, missing);
@@ -528,49 +445,12 @@ async function fetchProfileByEmail(email) {
 }
 
 // -----------------------------
-// //#6 Optional mortgage (never blocks pay)
-// -----------------------------
-async function computeMortgageOptional(body) {
-  if (typeof __mortgageHandler !== "function") {
-    return {
-      ok: false,
-      error: __mortgageImportError || "mortgage.js unavailable",
-      breakdown: { pi: 0, tax: 0, insurance: 0, hoa: 0, pmi: 0, allIn: 0 },
-      meta: { warnings: ["mortgage_disabled_to_prevent_brain_crash"] },
-    };
-  }
-
-  try {
-    const evt = { httpMethod: "POST", headers: {}, body: JSON.stringify(body || {}) };
-    const res = await __mortgageHandler(evt);
-    const parsed = res?.body ? JSON.parse(res.body) : null;
-    if (res?.statusCode !== 200 || !parsed || parsed.ok !== true) {
-      return {
-        ok: false,
-        error: parsed?.error || `mortgage.js failed (status=${res?.statusCode ?? "unknown"})`,
-        breakdown: parsed?.breakdown || { pi: 0, tax: 0, insurance: 0, hoa: 0, pmi: 0, allIn: 0 },
-        meta: parsed?.meta || null,
-      };
-    }
-    return parsed;
-  } catch (e) {
-    return {
-      ok: false,
-      error: String(e?.message || e),
-      breakdown: { pi: 0, tax: 0, insurance: 0, hoa: 0, pmi: 0, allIn: 0 },
-      meta: { warnings: ["mortgage_handler_exception"] },
-    };
-  }
-}
-
-// -----------------------------
-// //#7 Netlify handler
+// //#6 Netlify handler
 // -----------------------------
 export async function handler(event) {
   try {
     await ensureDeps();
 
-    // Preflight success (this fixes the “preflight doesn’t have HTTP ok status” problem)
     if (event.httpMethod === "OPTIONS") {
       return { statusCode: 204, headers: buildCorsHeaders(event), body: "" };
     }
@@ -579,27 +459,25 @@ export async function handler(event) {
       return respond(event, 200, {
         ok: true,
         schemaVersion: SCHEMA_VERSION,
-        note: "POST JSON: { email, bedrooms?, cityKey? (optional), overrides? (optional) }",
-        mortgageAvailable: typeof __mortgageHandler === "function",
-        mortgageImportError: __mortgageImportError || null,
+        deployTag: DEPLOY_TAG,
+        note: "POST JSON: { email, bedrooms? }",
       });
     }
 
     if (event.httpMethod !== "POST") {
-      return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Method not allowed." });
+      return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Method not allowed." });
     }
 
     const body = JSON.parse(event.body || "{}");
     const email = String(body.email || "").trim().toLowerCase();
     const bedrooms = toInt(body.bedrooms) ?? 4;
 
-    if (!email) return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Missing email." });
+    if (!email) return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Missing email." });
 
     const payTables = loadPayTables();
     const profile = await fetchProfileByEmail(email);
 
-    // Resolve city via PCS base (bases.json) and load that city file
-    const cityPick = deriveCityAndFile(profile, payTables);
+    const cityPick = deriveCityAndFile(profile);
 
     let city = null;
     let cityError = null;
@@ -608,49 +486,24 @@ export async function handler(event) {
       if (cityPick.ok && cityPick.fileKey) {
         city = loadCityByFileKey(cityPick.fileKey, cityPick.cityKey || null);
       } else {
-        // fallback to Fort-Sam-Houston if present
-        city = loadCityByFileKey("Fort-Sam-Houston", "SanAntonio");
+        city = cityFileExists("Fort-Sam-Houston") ? loadCityByFileKey("Fort-Sam-Houston", "SanAntonio") : null;
       }
     } catch (e) {
       cityError = String(e?.message || e);
       city = null;
     }
 
-    // ✅ Compute PAY no matter what
-    const computed = computePay(profile, payTables, city, cityPick?.zip || null);
-
-    // Optional mortgage (never blocks pay)
-    const mortgageEngine = await computeMortgageOptional(body);
-
-    const mortgage = {
-      ok: mortgageEngine?.ok === true,
-      breakdown: mortgageEngine?.breakdown || null,
-      aprUsed: Number(mortgageEngine?.apr || 0) || 0,
-      termYears: Number(mortgageEngine?.termYears || 0) || 0,
-      loanAmount: Number(mortgageEngine?.loanAmount || 0) || 0,
-
-      principalInterestMonthly: Number(mortgageEngine?.breakdown?.pi || 0) || 0,
-      taxMonthly: Number(mortgageEngine?.breakdown?.tax || 0) || 0,
-      insuranceMonthly: Number(mortgageEngine?.breakdown?.insurance || 0) || 0,
-      hoaMonthly: Number(mortgageEngine?.breakdown?.hoa || 0) || 0,
-      pmiMonthly: Number(mortgageEngine?.breakdown?.pmi || 0) || 0,
-      totalMonthly: Number(mortgageEngine?.breakdown?.allIn || 0) || 0,
-
-      source: mortgageEngine?.ok ? "mortgage.js" : "disabled",
-      error: mortgageEngine?.ok ? null : (mortgageEngine?.error || null),
-      meta: mortgageEngine?.meta || null,
-    };
+    const computed = computePay(profile, payTables, cityPick, city);
 
     return respond(event, 200, {
       ok: true,
       schemaVersion: SCHEMA_VERSION,
+      deployTag: DEPLOY_TAG,
       input: { email, bedrooms },
 
       debug: {
         payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
         basesIndexPathUsed: __BASES_INDEX_PATH_USED__ || null,
-        mortgageAvailable: typeof __mortgageHandler === "function",
-        mortgageImportError: __mortgageImportError || null,
         cityPick,
         cityLoadError: cityError || null,
         cityFileUsed: city?.cityFileUsed || null,
@@ -661,10 +514,15 @@ export async function handler(event) {
       city,
       missing: computed.missing || [],
 
-      mortgage,
-      estimatedMonthlyMortgage: mortgage.totalMonthly,
+      mortgage: null,
+      estimatedMonthlyMortgage: 0,
     });
   } catch (e) {
-    return respond(event, 500, { ok: false, schemaVersion: SCHEMA_VERSION, error: String(e?.message || e) });
+    return respond(event, 500, {
+      ok: false,
+      schemaVersion: SCHEMA_VERSION,
+      deployTag: DEPLOY_TAG,
+      error: String(e?.message || e),
+    });
   }
 }

@@ -1,71 +1,76 @@
-// netlify/functions/brain.js
-// ============================================================
-// PCSUnited • CENTRAL BRAIN (v1.0.3) — PAY + CITY (NO MORTGAGE)
-// ✅ ESM-safe export to match package.json: "type":"module"
-//
-// ✅ FIXES:
-// - Eliminates "module is not defined in ES module scope" by using: export const handler
-// - Deterministic Active Duty pay: BasePay + BAS + BAH
-// - City JSON loads by PCS base using: netlify/functions/cities/bases.json (or index.byBase.json)
-// - Pay tables load from: netlify/functions/data/militaryPayTables.json
-// - Bundling ensured via netlify.toml [functions].included_files
-//
-// ✅ DEPLOY_TAG:
-// - Confirms you are hitting the correct deployed file.
-// ============================================================
+/* ============================================================
+  PCSUnited • CENTRAL BRAIN (v1.0.4) — PAY + CITY (NO MORTGAGE)
+  ✅ ESM SAFE (package.json: "type":"module")
+  ✅ Netlify-safe paths via import.meta.url + fallbacks
+  ✅ CORS + OPTIONS
+  ✅ Deterministic Active Duty pay: BasePay + BAS + BAH
+  ✅ City JSON loads from netlify/functions/cities/*
+  ✅ Pay tables load from netlify/functions/data/militaryPayTables.json
 
+  POST JSON:
+    { "email": "you@email.com", "bedrooms": 4 }
+
+============================================================ */
+
+import { existsSync, readFileSync, readdirSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
+import { createClient } from "@supabase/supabase-js";
+
+// ============================================================
+// //#0 Version tags
+// ============================================================
 const SCHEMA_VERSION = "1.2";
-const DEPLOY_TAG = "PCS_BRAIN_v1.0.3_ESM_SAFE_2026-01-27";
+const DEPLOY_TAG = "PCS_BRAIN_v1.0.4_ESM_2026-01-27";
 
-// -----------------------------
-// //#0 Runtime deps (ESM-safe via dynamic import)
-// -----------------------------
-let __fs = null;
-let __path = null;
-let __createClient = null;
+// ============================================================
+// //#1 Paths (ESM-safe)
+// ============================================================
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-let __ROOT = null;
-let __PAY_TABLES_PATHS = null;
-let __CITIES_DIR = null;
-let __BASES_INDEX_PATHS = null;
+// In Netlify, the bundled function typically lives in:
+//   /var/task/netlify/functions/brain.js
+// So these relative paths usually work:
+const ROOT = process.cwd(); // /var/task
+const FUNCTIONS_DIR = __dirname;
 
-async function ensureDeps() {
-  if (__fs && __path && __createClient) return;
+// Prefer relative-to-function paths first, then fallback to cwd-based paths.
+const PAY_TABLE_CANDIDATES = [
+  path.join(FUNCTIONS_DIR, "data", "militaryPayTables.json"),
+  path.join(ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
+  path.join(ROOT, "netlify", "functions", "militaryPayTables.json"),
+];
 
-  const fsMod = await import("node:fs");
-  const pathMod = await import("node:path");
-  __fs = fsMod.default || fsMod;
-  __path = pathMod.default || pathMod;
+const CITIES_DIR_CANDIDATES = [
+  path.join(FUNCTIONS_DIR, "cities"),
+  path.join(ROOT, "netlify", "functions", "cities"),
+];
 
-  const sbMod = await import("@supabase/supabase-js");
-  __createClient = sbMod.createClient;
+const BASES_INDEX_CANDIDATES = [
+  // If you later add bases.json, we’ll pick it up automatically
+  "bases.json",
+  "index.byBase.json",
+  "indexByBase.json",
+];
 
-  __ROOT = process.cwd(); // /var/task on Netlify
-  __PAY_TABLES_PATHS = [
-    __path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
-    __path.join(__ROOT, "netlify", "functions", "militaryPayTables.json"),
-  ];
-  __CITIES_DIR = __path.join(__ROOT, "netlify", "functions", "cities");
-  __BASES_INDEX_PATHS = [
-    __path.join(__ROOT, "netlify", "functions", "cities", "bases.json"),
-    __path.join(__ROOT, "netlify", "functions", "cities", "index.byBase.json"),
-    __path.join(__ROOT, "netlify", "functions", "cities", "indexByBase.json"),
-  ];
+// Resolve cities dir
+function resolveCitiesDir() {
+  for (const p of CITIES_DIR_CANDIDATES) {
+    if (existsSync(p)) return p;
+  }
+  // fallback anyway (keeps error messages consistent)
+  return CITIES_DIR_CANDIDATES[0];
 }
+const CITIES_DIR = resolveCitiesDir();
 
-// -----------------------------
-// //#1 CORS
-// -----------------------------
-function buildCorsHeaders(event) {
-  const origin = event?.headers?.origin || event?.headers?.Origin || "*";
-  const reqHeaders =
-    event?.headers?.["access-control-request-headers"] ||
-    event?.headers?.["Access-Control-Request-Headers"] ||
-    "Content-Type, Authorization";
-
+// ============================================================
+// //#2 CORS helpers
+// ============================================================
+function corsHeaders() {
   return {
-    "Access-Control-Allow-Origin": origin === "null" ? "*" : origin,
-    "Access-Control-Allow-Headers": reqHeaders,
+    "Access-Control-Allow-Origin": "*",
+    "Access-Control-Allow-Headers": "*",
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
     Vary: "Origin",
@@ -73,13 +78,17 @@ function buildCorsHeaders(event) {
   };
 }
 
-function respond(event, statusCode, obj) {
-  return { statusCode, headers: buildCorsHeaders(event), body: JSON.stringify(obj) };
+function respond(statusCode, obj) {
+  return {
+    statusCode,
+    headers: corsHeaders(),
+    body: JSON.stringify(obj),
+  };
 }
 
-// -----------------------------
-// //#2 Helpers
-// -----------------------------
+// ============================================================
+// //#3 Small helpers
+// ============================================================
 function safeKey(s) {
   return String(s || "").trim().replace(/[^a-zA-Z0-9_-]/g, "");
 }
@@ -124,22 +133,22 @@ function pickNearestYos(tableForRank, yos) {
   return tableForRank[String(chosen)] ?? null;
 }
 
-// -----------------------------
-// //#3 File loading (Netlify-safe)
-// -----------------------------
-let __PAY_TABLES_CACHE__ = null;
-let __PAY_TABLES_PATH_USED__ = null;
+// ============================================================
+// //#4 JSON loading (bundled files)
+// ============================================================
+let PAY_TABLES_CACHE = null;
+let PAY_TABLES_PATH_USED = null;
 
-let __BASES_INDEX_CACHE__ = null;
-let __BASES_INDEX_PATH_USED__ = null;
+let BASES_INDEX_CACHE = null;
+let BASES_INDEX_PATH_USED = null;
 
-const __CITY_CACHE__ = new Map(); // fileKey => city json
-let __CITY_FILE_INDEX__ = null;
+const CITY_CACHE = new Map(); // fileKey -> json
+let CITY_FILE_INDEX = null;
 
 function loadJsonFromFirstExisting(paths, labelForError) {
   let found = null;
   for (const p of paths || []) {
-    if (__fs.existsSync(p)) {
+    if (existsSync(p)) {
       found = p;
       break;
     }
@@ -147,40 +156,45 @@ function loadJsonFromFirstExisting(paths, labelForError) {
   if (!found) {
     throw new Error(
       `${labelForError} not found. Tried:\n- ${(paths || []).join("\n- ")}\n` +
-        `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
+        `Fix: ensure it's bundled via netlify.toml [functions].included_files`
     );
   }
-  const raw = __fs.readFileSync(found, "utf8");
+  const raw = readFileSync(found, "utf8");
   return { pathUsed: found, data: JSON.parse(raw) };
 }
 
 function loadPayTables() {
-  if (__PAY_TABLES_CACHE__) return __PAY_TABLES_CACHE__;
-  const { pathUsed, data } = loadJsonFromFirstExisting(__PAY_TABLES_PATHS, "militaryPayTables.json");
-  __PAY_TABLES_CACHE__ = data;
-  __PAY_TABLES_PATH_USED__ = pathUsed;
-  return __PAY_TABLES_CACHE__;
+  if (PAY_TABLES_CACHE) return PAY_TABLES_CACHE;
+  const { pathUsed, data } = loadJsonFromFirstExisting(PAY_TABLE_CANDIDATES, "militaryPayTables.json");
+  PAY_TABLES_CACHE = data;
+  PAY_TABLES_PATH_USED = pathUsed;
+  return PAY_TABLES_CACHE;
 }
 
 function loadBasesIndex() {
-  if (__BASES_INDEX_CACHE__) return __BASES_INDEX_CACHE__;
-  try {
-    const { pathUsed, data } = loadJsonFromFirstExisting(__BASES_INDEX_PATHS, "bases.json/index.byBase.json");
-    __BASES_INDEX_CACHE__ = data;
-    __BASES_INDEX_PATH_USED__ = pathUsed;
-    return __BASES_INDEX_CACHE__;
-  } catch (e) {
-    __BASES_INDEX_CACHE__ = null;
-    __BASES_INDEX_PATH_USED__ = null;
-    return null;
+  if (BASES_INDEX_CACHE) return BASES_INDEX_CACHE;
+
+  // Try each candidate filename inside the resolved cities dir
+  const candidates = BASES_INDEX_CANDIDATES.map((f) => path.join(CITIES_DIR, f));
+  for (const p of candidates) {
+    if (existsSync(p)) {
+      const raw = readFileSync(p, "utf8");
+      BASES_INDEX_CACHE = JSON.parse(raw);
+      BASES_INDEX_PATH_USED = p;
+      return BASES_INDEX_CACHE;
+    }
   }
+
+  BASES_INDEX_CACHE = null;
+  BASES_INDEX_PATH_USED = null;
+  return null;
 }
 
 function listCityFiles() {
-  if (__CITY_FILE_INDEX__) return __CITY_FILE_INDEX__;
+  if (CITY_FILE_INDEX) return CITY_FILE_INDEX;
+
   try {
-    const files = __fs
-      .readdirSync(__CITIES_DIR)
+    const files = readdirSync(CITIES_DIR)
       .filter((f) => /\.json$/i.test(f))
       .map((f) => f.replace(/\.json$/i, ""))
       .filter((name) => {
@@ -188,11 +202,11 @@ function listCityFiles() {
         return n !== "bases" && n !== "index.bybase" && n !== "indexbybase";
       });
 
-    __CITY_FILE_INDEX__ = new Set(files);
-    return __CITY_FILE_INDEX__;
-  } catch (e) {
-    __CITY_FILE_INDEX__ = new Set();
-    return __CITY_FILE_INDEX__;
+    CITY_FILE_INDEX = new Set(files);
+    return CITY_FILE_INDEX;
+  } catch {
+    CITY_FILE_INDEX = new Set();
+    return CITY_FILE_INDEX;
   }
 }
 
@@ -202,9 +216,7 @@ function cityFileExists(fileKey) {
   return listCityFiles().has(k);
 }
 
-// bases index can be array or object map.
-// - array: [{base, cityKey, file, zip}, ...]
-// - object: { "NELLISAFB": {fileKey:"Nellis", zip:"89191", cityKey:"LasVegas"} }
+// bases index can be array or object map — same logic as your CJS version
 function resolveFromBasesIndex(baseRaw) {
   const idx = loadBasesIndex();
   if (!idx || typeof idx !== "object") return null;
@@ -212,6 +224,7 @@ function resolveFromBasesIndex(baseRaw) {
   const norm = normalizeBaseName(baseRaw);
   if (!norm) return null;
 
+  // Array shape
   if (Array.isArray(idx)) {
     const hit = idx.find((r) => normalizeBaseName(r?.base || r?.name || r?.installation) === norm);
     if (!hit) return null;
@@ -223,6 +236,7 @@ function resolveFromBasesIndex(baseRaw) {
     };
   }
 
+  // Object map shape
   let map = idx;
   if (idx.bases && typeof idx.bases === "object") map = idx.bases;
 
@@ -231,7 +245,7 @@ function resolveFromBasesIndex(baseRaw) {
 
   return {
     cityKey: safeKey(hit.cityKey || hit.city_key || hit.city || ""),
-    fileKey: safeKey(hit.file || hit.fileKey || hit.cityFile || hit.city_file || hit.file_key || ""),
+    fileKey: safeKey(hit.file || hit.fileKey || hit.cityFile || hit.city_file || ""),
     zip: String(hit.zip || hit.postal_code || "").trim() || null,
     source: "basesIndex[object]",
   };
@@ -241,8 +255,8 @@ function loadCityByFileKey(fileKey, canonicalCityKey) {
   const fk = safeKey(fileKey);
   if (!fk) throw new Error("Missing city fileKey.");
 
-  if (__CITY_CACHE__.has(fk)) {
-    const cached = __CITY_CACHE__.get(fk);
+  if (CITY_CACHE.has(fk)) {
+    const cached = CITY_CACHE.get(fk);
     return {
       ...cached,
       canonical_city_key: safeKey(canonicalCityKey || cached?.canonical_city_key || ""),
@@ -250,10 +264,10 @@ function loadCityByFileKey(fileKey, canonicalCityKey) {
     };
   }
 
-  const filePath = __path.join(__CITIES_DIR, `${fk}.json`);
-  if (!__fs.existsSync(filePath)) throw new Error(`City JSON not found at ${filePath}`);
+  const filePath = path.join(CITIES_DIR, `${fk}.json`);
+  if (!existsSync(filePath)) throw new Error(`City JSON not found at ${filePath}`);
 
-  const raw = __fs.readFileSync(filePath, "utf8");
+  const raw = readFileSync(filePath, "utf8");
   const data = JSON.parse(raw);
 
   const out = {
@@ -263,7 +277,7 @@ function loadCityByFileKey(fileKey, canonicalCityKey) {
     cityFileUsed: fk,
   };
 
-  __CITY_CACHE__.set(fk, out);
+  CITY_CACHE.set(fk, out);
   return out;
 }
 
@@ -283,6 +297,7 @@ function deriveCityAndFile(profile) {
     };
   }
 
+  // Known-good fallback if present
   if (cityFileExists("Fort-Sam-Houston")) {
     return {
       ok: true,
@@ -294,6 +309,7 @@ function deriveCityAndFile(profile) {
     };
   }
 
+  // Final fallback: first city file
   const any = Array.from(listCityFiles())[0] || null;
   if (any) {
     return {
@@ -309,9 +325,9 @@ function deriveCityAndFile(profile) {
   return { ok: false, base: baseName, cityKey: null, fileKey: null, zip: null, source: "none" };
 }
 
-// -----------------------------
-// //#4 Deterministic pay math
-// -----------------------------
+// ============================================================
+// //#5 Deterministic pay math
+// ============================================================
 function computeBasePay(rank, yos, payTables, missing) {
   let basePay = 0;
   if (rank && yos !== null) {
@@ -418,11 +434,23 @@ function computePay(profile, payTables, cityPick, city) {
     };
   }
 
-  const zip =
-    String(profile?.zip || profile?.postal_code || "").trim() ||
-    String(cityPick?.zip || "").trim() ||
-    String(city?.zip || city?.postal_code || "").trim() ||
-    "";
+  // ZIP resolution:
+  // 1) profile.zip
+  // 2) bases index zip
+  // 3) city.zip
+  // 4) payTables.BAH.base_to_zip by profile/base label (if present)
+  const zipFromProfile = String(profile?.zip || profile?.postal_code || "").trim();
+  const zipFromPick = String(cityPick?.zip || "").trim();
+  const zipFromCity = String(city?.zip || city?.postal_code || "").trim();
+
+  let zip = zipFromProfile || zipFromPick || zipFromCity || "";
+
+  if (!zip) {
+    const baseRaw = pickFirst(profile, ["pcs_base", "pcsBase", "base", "duty_station", "station", "dutyStation"]);
+    const baseLabel = String(baseRaw || "").trim();
+    const baseToZip = payTables?.BAH?.base_to_zip || {};
+    if (baseLabel && baseToZip[baseLabel]) zip = String(baseToZip[baseLabel]).trim();
+  }
 
   const bas = computeBAS(rank, payTables);
   const bah = computeBAH(rank, familyBool, zip || null, payTables, missing);
@@ -448,14 +476,14 @@ function computePay(profile, payTables, cityPick, city) {
   };
 }
 
-// -----------------------------
-// //#5 Supabase profile lookup
-// -----------------------------
+// ============================================================
+// //#6 Supabase profile lookup
+// ============================================================
 function getSupabase() {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_KEY env vars.");
-  return __createClient(url, key, { auth: { persistSession: false } });
+  return createClient(url, key, { auth: { persistSession: false } });
 }
 
 async function fetchProfileByEmail(email) {
@@ -466,37 +494,32 @@ async function fetchProfileByEmail(email) {
   return data;
 }
 
-// -----------------------------
-// //#6 Netlify handler (ESM export)
-// -----------------------------
+// ============================================================
+// //#7 Netlify handler (ESM)
+// ============================================================
 export const handler = async (event) => {
   try {
-    await ensureDeps();
-
     if (event.httpMethod === "OPTIONS") {
-      return { statusCode: 204, headers: buildCorsHeaders(event), body: "" };
+      return { statusCode: 204, headers: corsHeaders(), body: "" };
     }
 
     if (event.httpMethod === "GET") {
-      return respond(event, 200, {
+      return respond(200, {
         ok: true,
         schemaVersion: SCHEMA_VERSION,
         deployTag: DEPLOY_TAG,
         runtime: {
           node: process.version,
-          esm: true,
+          cwd: process.cwd(),
+          functionsDir: FUNCTIONS_DIR,
+          citiesDir: CITIES_DIR,
         },
         note: "POST JSON: { email, bedrooms? }",
       });
     }
 
     if (event.httpMethod !== "POST") {
-      return respond(event, 405, {
-        ok: false,
-        schemaVersion: SCHEMA_VERSION,
-        deployTag: DEPLOY_TAG,
-        error: "Method not allowed.",
-      });
+      return respond(405, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Method not allowed." });
     }
 
     const body = JSON.parse(event.body || "{}");
@@ -504,12 +527,7 @@ export const handler = async (event) => {
     const bedrooms = toInt(body.bedrooms) ?? 4;
 
     if (!email) {
-      return respond(event, 400, {
-        ok: false,
-        schemaVersion: SCHEMA_VERSION,
-        deployTag: DEPLOY_TAG,
-        error: "Missing email.",
-      });
+      return respond(400, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Missing email." });
     }
 
     const payTables = loadPayTables();
@@ -533,15 +551,15 @@ export const handler = async (event) => {
 
     const computed = computePay(profile, payTables, cityPick, city);
 
-    return respond(event, 200, {
+    return respond(200, {
       ok: true,
       schemaVersion: SCHEMA_VERSION,
       deployTag: DEPLOY_TAG,
       input: { email, bedrooms },
 
       debug: {
-        payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
-        basesIndexPathUsed: __BASES_INDEX_PATH_USED__ || null,
+        payTablesPathUsed: PAY_TABLES_PATH_USED || null,
+        basesIndexPathUsed: BASES_INDEX_PATH_USED || null,
         cityPick,
         cityLoadError: cityError || null,
         cityFileUsed: city?.cityFileUsed || null,
@@ -556,7 +574,7 @@ export const handler = async (event) => {
       estimatedMonthlyMortgage: 0,
     });
   } catch (e) {
-    return respond(event, 500, {
+    return respond(500, {
       ok: false,
       schemaVersion: SCHEMA_VERSION,
       deployTag: DEPLOY_TAG,

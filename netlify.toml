@@ -3,17 +3,14 @@
   functions = "netlify/functions"
 
 [functions]
-  included_files = [
-    "netlify/functions/data/**",
-    "netlify/functions/cities/**"
-  ]
+  included_files = ["netlify/functions/data/**", "netlify/functions/cities/**"]
 
 [[redirects]]
   from = "/api/*"
   to = "/.netlify/functions/:splat"
   status = 200
 
-# CORS for direct function path
+# CORS for direct function calls
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]
@@ -23,7 +20,7 @@
     Access-Control-Max-Age = "86400"
     Vary = "Origin"
 
-# CORS for /api redirect path
+# CORS for /api proxy routes
 [[headers]]
   for = "/api/*"
   [headers.values]

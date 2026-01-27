@@ -1,227 +1,203 @@
 // netlify/functions/commit-intake.js
 // ============================================================
-// PCS United • Commit Pending Intake to Supabase (v1.0.0)
+// PCSUnited • Commit Pending Intake (v1.0)
 // PURPOSE:
-// - Called ONLY after password login success
-// - Takes localStorage pending payload (FAI + optional AIOU)
-// - Updates:
-//    1) public.profiles (CURRENT STATE)  ✅
-//    2) public.financial_intakes (HISTORY) optional
-//    3) public.user_aiou_inputs (AIOU) optional
+// - Called ONLY after successful email/password login.
+// - Updates ONE row in public.profiles (current state)
+// - Inserts ONE row into public.financial_intakes (history)
+// - Optionally upserts public.user_aiou_inputs (if pending.aiou exists)
 //
-// BODY (POST JSON):
-// { email: "user@x.com", pending: {...} }
+// INPUT (POST JSON):
+// { email: "user@email.com", pending: {...} }
 //
-// ENV REQUIRED:
-//   SUPABASE_URL
-//   SUPABASE_SERVICE_KEY
+// RETURNS:
+// { ok:true, profile?:{...} }
 // ============================================================
 
 import { createClient } from "@supabase/supabase-js";
 
-const CORS_HEADERS = {
+const cors = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Content-Type": "application/json",
-  "Access-Control-Max-Age": "86400",
-  "Vary": "Origin",
+  "Access-Control-Max-Age": "86400"
 };
 
-function respond(statusCode, payload) {
-  return { statusCode, headers: CORS_HEADERS, body: JSON.stringify(payload || {}) };
-}
-
-function s(v) {
-  const out = String(v ?? "").trim();
-  return out ? out : null;
-}
-function n(v) {
-  const out = Number(v);
-  return Number.isFinite(out) ? out : null;
-}
-function lowerEmail(v) {
-  const out = s(v);
-  return out ? out.toLowerCase() : null;
-}
-
-export const handler = async (event) => {
-  if (event.httpMethod === "OPTIONS") return respond(200, { ok: true });
-  if (event.httpMethod !== "POST") return respond(405, { ok: false, error: "Method not allowed" });
-
-  let body = {};
-  try {
-    body = JSON.parse(event.body || "{}");
-  } catch {
-    return respond(400, { ok: false, error: "Invalid JSON body" });
-  }
-
-  const email = lowerEmail(body.email);
-  const pending = body.pending && typeof body.pending === "object" ? body.pending : null;
-
-  if (!email) return respond(400, { ok: false, error: "email is required" });
-  if (!pending) return respond(400, { ok: false, error: "pending payload is required" });
-
-  const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    return respond(500, { ok: false, error: "Supabase env not configured" });
-  }
-
-  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
-    auth: { persistSession: false, autoRefreshToken: false },
-  });
-
-  // ------------------------------------------------------------
-  // 1) Normalize pending payload (FAI + AIOU)
-  // ------------------------------------------------------------
-  const mode = s(pending.mode); // ready | soon | unsure
-  const monthly_expenses = n(pending.monthly_expenses);
-  const projected_home_price = n(pending.projected_home_price);
-  const downpayment = n(pending.downpayment);
-  const credit_score = n(pending.credit_score);
-
-  // AIOU may be nested in pending.aiou or pending.aiou.data depending on your wrapper
-  const aiouRaw =
-    (pending.aiou && typeof pending.aiou === "object" ? pending.aiou : null) ||
-    null;
-
-  // Support either direct fields or wrapped formats
-  const aiou = aiouRaw?.data && typeof aiouRaw.data === "object" ? aiouRaw.data : aiouRaw;
-
-  const bedrooms = n(aiou?.bedrooms);
-  const bathrooms = n(aiou?.bathrooms);
-  const sqft = n(aiou?.sqft);
-  const property_type = s(aiou?.property_type);
-  const amenities = s(aiou?.amenities);
-
-  // Your profiles table screenshot shows home_condition (NOT home_year)
-  const home_condition =
-    s(aiou?.home_condition) ||
-    s(aiou?.conditionPreference) ||
-    null;
-
-  const home_year =
-    s(aiou?.home_year) ||
-    s(aiou?.yearBand) ||
-    null;
-
-  const nowIso = new Date().toISOString();
-
-  // ------------------------------------------------------------
-  // 2) Update PROFILES (THIS is the missing piece)
-  //    We patch only the fields you have in the table editor.
-  // ------------------------------------------------------------
-  const profilePatch = {
-    email,
-    time_to_buy: mode,                 // matches your screenshot field
-    monthly_expenses,                  // if exists (safe if column exists)
-    projected_home_price,              // if exists (safe if column exists)
-    downpayment,
-    credit_score,
-    bedrooms,
-    bathrooms,
-    sqft,
-    property_type,
-    amenities,
-    home_condition,
-    // home_year: only include if you actually have this column
-    // Comment OUT if your profiles table does not have home_year.
-    home_year,
-    updated_at: nowIso,
+function j(body, status = 200) {
+  return {
+    statusCode: status,
+    headers: { "Content-Type": "application/json", ...cors },
+    body: JSON.stringify(body)
   };
+}
 
-  // IMPORTANT: If your profiles table does NOT have monthly_expenses/projected_home_price/home_year,
-  // Supabase will error. If you’re not sure, remove those three fields.
-  // (Your screenshot confirms: downpayment, credit_score, time_to_buy, bedrooms, bathrooms, sqft,
-  //  property_type, amenities, home_condition exist.)
+function n(v) {
+  const x = Number(v);
+  return Number.isFinite(x) ? x : null;
+}
+function i(v) {
+  const x = Math.round(Number(v));
+  return Number.isFinite(x) ? x : null;
+}
+
+export async function handler(event) {
+  if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers: cors, body: "" };
+  if (event.httpMethod !== "POST") return j({ ok: false, error: "Method not allowed" }, 405);
 
   try {
-    // Patch existing profile row
-    // If a profile row might not exist yet, switch to upsert and ensure email is unique.
-    const { error: profErr } = await supabase
-      .from("profiles")
-      .update(profilePatch)
-      .eq("email", email);
+    const SUPABASE_URL = process.env.SUPABASE_URL;
+    const SERVICE_KEY =
+      process.env.SUPABASE_SERVICE_ROLE_KEY ||
+      process.env.SUPABASE_SERVICE_KEY ||
+      process.env.SUPABASE_KEY;
 
-    if (profErr) {
-      console.error("commit-intake profiles.update error:", profErr);
-      return respond(500, { ok: false, error: profErr.message || "profiles update failed" });
+    if (!SUPABASE_URL || !SERVICE_KEY) {
+      return j({ ok: false, error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars." }, 500);
     }
 
-    // ------------------------------------------------------------
-    // 3) Optional: Write FINANCIAL INTAKES history (if you want)
-    // ------------------------------------------------------------
-    // If your financial_intakes table schema differs, adjust here.
-    const intakeRow = {
+    const supabase = createClient(SUPABASE_URL, SERVICE_KEY, {
+      auth: { persistSession: false },
+      global: { headers: { "X-Client-Info": "pcsunited-commit-intake" } }
+    });
+
+    const body = JSON.parse(event.body || "{}");
+    const email = String(body.email || "").trim().toLowerCase();
+    const pending = body.pending && typeof body.pending === "object" ? body.pending : null;
+
+    if (!email) return j({ ok: false, error: "Missing email" }, 400);
+    if (!pending) return j({ ok: false, error: "Missing pending payload" }, 400);
+
+    // ============================================================
+    // //#1 Normalize FAI fields
+    // ============================================================
+    const time_to_buy = String(pending.mode || "").trim() || null;
+
+    const monthly_expenses = n(pending.monthly_expenses);
+    const projected_home_price = n(pending.projected_home_price);
+    const downpayment = n(pending.downpayment);
+    const credit_score = i(pending.credit_score);
+
+    const home_condition = pending.aiou && pending.aiou.home_condition ? String(pending.aiou.home_condition) : null;
+    const bedrooms = pending.aiou && pending.aiou.bedrooms != null ? i(pending.aiou.bedrooms) : null;
+    const bathrooms = pending.aiou && pending.aiou.bathrooms != null ? n(pending.aiou.bathrooms) : null;
+    const sqft = pending.aiou && pending.aiou.sqft != null ? i(pending.aiou.sqft) : null;
+    const property_type = pending.aiou && pending.aiou.property_type ? String(pending.aiou.property_type) : null;
+    const amenities = pending.aiou && pending.aiou.amenities ? String(pending.aiou.amenities) : null;
+
+    // ============================================================
+    // //#2 Upsert Profiles (by email) WITHOUT requiring unique index
+    // ============================================================
+    const { data: existingProfile, error: selErr } = await supabase
+      .from("profiles")
+      .select("id,email")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (selErr) return j({ ok: false, error: "profiles select failed: " + selErr.message }, 500);
+
+    const profilePatch = {
       email,
-      mode,
+      time_to_buy,
+      monthly_expenses,
+      projected_home_price,
+      downpayment,
+      credit_score,
+      bedrooms,
+      bathrooms,
+      sqft,
+      property_type,
+      amenities,
+      home_condition
+    };
+
+    let profileRow = null;
+
+    if (existingProfile && existingProfile.id) {
+      const { data: upd, error: updErr } = await supabase
+        .from("profiles")
+        .update(profilePatch)
+        .eq("id", existingProfile.id)
+        .select("*")
+        .maybeSingle();
+
+      if (updErr) return j({ ok: false, error: "profiles update failed: " + updErr.message }, 500);
+      profileRow = upd || null;
+    } else {
+      const { data: ins, error: insErr } = await supabase
+        .from("profiles")
+        .insert(profilePatch)
+        .select("*")
+        .maybeSingle();
+
+      if (insErr) return j({ ok: false, error: "profiles insert failed: " + insErr.message }, 500);
+      profileRow = ins || null;
+    }
+
+    // ============================================================
+    // //#3 Insert History Row into financial_intakes
+    // ============================================================
+    const attemptId = String(pending.attempt_id || "").trim() || null;
+
+    const historyRow = {
+      email,
+      mode: time_to_buy,
       expenses: monthly_expenses,
       price: projected_home_price,
       downpayment,
       credit_score,
-      source: s(pending.source) || "pcsunited.commit-intake",
-      intake_id: s(pending.attempt_id) || null,
+      source: String(pending.source || "pcsunited.financial.intake.v1"),
+      intake_id: attemptId
     };
 
-    const { error: finErr } = await supabase
+    const { error: histErr } = await supabase
       .from("financial_intakes")
-      .insert([intakeRow]);
+      .insert(historyRow);
 
-    if (finErr) {
-      // Don’t fail the whole commit if history insert fails
-      console.warn("commit-intake financial_intakes insert warning:", finErr);
+    // If a unique constraint exists later, you can change this to upsert.
+    if (histErr) {
+      // Don’t fail profile update if history insert is blocked by schema/rls/etc.
+      // Return warning-like behavior.
+      return j({
+        ok: true,
+        profile: profileRow,
+        warning: "financial_intakes insert failed: " + histErr.message
+      });
     }
 
-    // ------------------------------------------------------------
-    // 4) Optional: Mirror AIOU into user_aiou_inputs (if present)
-    // ------------------------------------------------------------
-    if (aiou && typeof aiou === "object") {
-      const aiouRow = {
+    // ============================================================
+    // //#4 Optional: Upsert user_aiou_inputs by email (best-effort)
+    // ============================================================
+    if (pending.aiou && typeof pending.aiou === "object") {
+      const aiouPayload = {
         email,
-        home_year,
+        home_year: pending.aiou.home_year ? String(pending.aiou.home_year) : null,
         bedrooms,
         bathrooms,
         sqft,
         property_type,
         amenities,
-        updated_at: nowIso,
+        updated_at: new Date().toISOString()
       };
 
-      // Update latest row by email else insert (no unique constraint required)
-      const { data: existing, error: selErr } = await supabase
+      // Upsert strategy without relying on unique constraints:
+      const { data: aiouExisting, error: aiouSelErr } = await supabase
         .from("user_aiou_inputs")
-        .select("id")
+        .select("id,email")
         .eq("email", email)
-        .order("updated_at", { ascending: false })
-        .limit(1);
+        .maybeSingle();
 
-      if (!selErr && existing && existing.length) {
-        const { error: updErr } = await supabase
-          .from("user_aiou_inputs")
-          .update(aiouRow)
-          .eq("id", existing[0].id);
-
-        if (updErr) console.warn("commit-intake user_aiou_inputs update warning:", updErr);
-      } else {
-        const { error: insErr } = await supabase
-          .from("user_aiou_inputs")
-          .insert([aiouRow]);
-
-        if (insErr) console.warn("commit-intake user_aiou_inputs insert warning:", insErr);
+      if (!aiouSelErr) {
+        if (aiouExisting && aiouExisting.id) {
+          await supabase.from("user_aiou_inputs").update(aiouPayload).eq("id", aiouExisting.id);
+        } else {
+          await supabase.from("user_aiou_inputs").insert(aiouPayload);
+        }
       }
     }
 
-    // Return the patched profile fields so UI can cache them if needed
-    return respond(200, {
-      ok: true,
-      message: "Committed intake to profiles.",
-      email,
-      profile: profilePatch,
-    });
+    return j({ ok: true, profile: profileRow });
 
   } catch (e) {
-    console.error("commit-intake fatal:", e);
-    return respond(500, { ok: false, error: "Server error" });
+    return j({ ok: false, error: e.message || "Unknown error" }, 500);
   }
-};
+}

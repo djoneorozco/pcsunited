@@ -1,32 +1,36 @@
 // netlify/functions/brain.mjs
 // ============================================================
-// PCSUnited • CENTRAL BRAIN (v1.0.5) — PAY + CITY (NO MORTGAGE)
-// ✅ ESM-FORCED via .mjs so it works even when package.json is commonjs
-// ✅ Always returns CORS headers (even on errors)
-// ✅ Strong POST validation so missing/invalid JSON returns 400 (not 500)
+// PCS UNITED • CENTRAL BRAIN (ESM) — Diagnostic-safe
+// - ESM-first (no module.exports, no require)
+// - Dynamic imports for Netlify safety
+// - GET returns diagnostics (env/files/module graph) to end guessing
 // ============================================================
 
 const SCHEMA_VERSION = "1.2";
-const DEPLOY_TAG = "PCS_BRAIN_v1.0.5_ESM_MJS_STABLE_2026-01-27";
+const DEPLOY_TAG = "PCS_BRAIN_ESM_DIAG_v1.0_2026-01-27";
 
-let __fs, __path, __createClient;
+// -----------------------------
+// //#0 Runtime deps (ESM safe)
+// -----------------------------
+let __fs = null;
+let __path = null;
+let __createClient = null;
+let __mortgageHandler = null;
 
 let __ROOT = null;
 let __PAY_TABLES_PATHS = null;
 let __CITIES_DIR = null;
-let __BASES_INDEX_PATHS = null;
 
 let __PAY_TABLES_CACHE__ = null;
 let __PAY_TABLES_PATH_USED__ = null;
 
-let __BASES_INDEX_CACHE__ = null;
-let __BASES_INDEX_PATH_USED__ = null;
-
 const __CITY_CACHE__ = new Map();
 let __CITY_FILE_INDEX__ = null;
 
+let __MORTGAGE_MODULE_USED__ = null;
+
 async function ensureDeps() {
-  if (__fs && __path && __createClient) return;
+  if (__fs && __path && __createClient && __mortgageHandler) return;
 
   const fsMod = await import("node:fs");
   const pathMod = await import("node:path");
@@ -36,24 +40,34 @@ async function ensureDeps() {
   const sbMod = await import("@supabase/supabase-js");
   __createClient = sbMod.createClient;
 
-  __ROOT = process.cwd(); // /var/task on Netlify
+  // Try mortgage.mjs first, then mortgage.js (so ESM projects can move cleanly)
+  let mortMod = null;
+  try {
+    mortMod = await import("./mortgage.mjs");
+    __MORTGAGE_MODULE_USED__ = "mortgage.mjs";
+  } catch (_) {
+    mortMod = await import("./mortgage.js");
+    __MORTGAGE_MODULE_USED__ = "mortgage.js";
+  }
 
+  __mortgageHandler = mortMod?.handler;
+
+  if (typeof __mortgageHandler !== "function") {
+    throw new Error(
+      `mortgage handler not found. Ensure netlify/functions/${__MORTGAGE_MODULE_USED__} exports: export async function handler(event) { ... }`
+    );
+  }
+
+  __ROOT = process.cwd(); // /var/task
   __PAY_TABLES_PATHS = [
+    __path.join(__ROOT, "netlify", "functions", "militaryPayTables.json"),
     __path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
-    __path.join(__ROOT, "netlify", "functions", "militaryPayTables.json")
   ];
-
   __CITIES_DIR = __path.join(__ROOT, "netlify", "functions", "cities");
-
-  __BASES_INDEX_PATHS = [
-    __path.join(__ROOT, "netlify", "functions", "cities", "bases.json"),
-    __path.join(__ROOT, "netlify", "functions", "cities", "index.byBase.json"),
-    __path.join(__ROOT, "netlify", "functions", "cities", "indexByBase.json")
-  ];
 }
 
 // -----------------------------
-// CORS (always returned)
+// //#1 CORS (robust)
 // -----------------------------
 function buildCorsHeaders(event) {
   const origin = event?.headers?.origin || event?.headers?.Origin || "*";
@@ -67,27 +81,27 @@ function buildCorsHeaders(event) {
     "Access-Control-Allow-Headers": reqHeaders,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
-    "Vary": "Origin",
-    "Content-Type": "application/json"
+    Vary: "Origin",
+    "Content-Type": "application/json",
   };
 }
 
 function respond(event, statusCode, obj) {
-  return {
-    statusCode,
-    headers: buildCorsHeaders(event),
-    body: JSON.stringify(obj)
-  };
+  return { statusCode, headers: buildCorsHeaders(event), body: JSON.stringify(obj) };
 }
 
 // -----------------------------
-// Helpers
+// //#2 Helpers
 // -----------------------------
 function safeKey(s) {
   return String(s || "").trim().replace(/[^a-zA-Z0-9_-]/g, "");
 }
 function toInt(x) {
   const n = Number.parseInt(String(x ?? "").trim(), 10);
+  return Number.isFinite(n) ? n : null;
+}
+function toNum(x) {
+  const n = Number(String(x ?? "").trim());
   return Number.isFinite(n) ? n : null;
 }
 function lower(x) {
@@ -100,7 +114,10 @@ function normalizeRank(rank) {
   return r;
 }
 function normalizeBaseName(s) {
-  return String(s || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
+  return String(s || "")
+    .trim()
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "");
 }
 function pickFirst(obj, keys) {
   for (const k of keys) {
@@ -118,65 +135,49 @@ function pickNearestYos(tableForRank, yos) {
   if (!keys.length) return null;
 
   let chosen = keys[0];
-  for (const k of keys) if (k <= yos) chosen = k;
-
+  for (const k of keys) {
+    if (k <= yos) chosen = k;
+  }
   return tableForRank[String(chosen)] ?? null;
 }
 
 // -----------------------------
-// File loading
+// //#3 File loading
 // -----------------------------
-function loadJsonFromFirstExisting(paths, labelForError) {
-  let found = null;
-  for (const p of paths || []) {
-    if (__fs.existsSync(p)) { found = p; break; }
-  }
-  if (!found) {
-    throw new Error(
-      `${labelForError} not found. Tried:\n- ${(paths || []).join("\n- ")}\n` +
-      `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
-    );
-  }
-  const raw = __fs.readFileSync(found, "utf8");
-  return { pathUsed: found, data: JSON.parse(raw) };
-}
-
 function loadPayTables() {
   if (__PAY_TABLES_CACHE__) return __PAY_TABLES_CACHE__;
-  const { pathUsed, data } = loadJsonFromFirstExisting(__PAY_TABLES_PATHS, "militaryPayTables.json");
-  __PAY_TABLES_CACHE__ = data;
-  __PAY_TABLES_PATH_USED__ = pathUsed;
-  return __PAY_TABLES_CACHE__;
-}
 
-function loadBasesIndex() {
-  if (__BASES_INDEX_CACHE__) return __BASES_INDEX_CACHE__;
-  try {
-    const { pathUsed, data } = loadJsonFromFirstExisting(__BASES_INDEX_PATHS, "bases.json");
-    __BASES_INDEX_CACHE__ = data;
-    __BASES_INDEX_PATH_USED__ = pathUsed;
-    return __BASES_INDEX_CACHE__;
-  } catch {
-    __BASES_INDEX_CACHE__ = null;
-    __BASES_INDEX_PATH_USED__ = null;
-    return null;
+  let found = null;
+  for (const p of __PAY_TABLES_PATHS || []) {
+    if (__fs.existsSync(p)) {
+      found = p;
+      break;
+    }
   }
+
+  if (!found) {
+    throw new Error(
+      `militaryPayTables.json not found. Tried:\n- ${( __PAY_TABLES_PATHS || []).join("\n- ")}\n` +
+      `Fix: ensure file exists in repo AND netlify.toml [functions].included_files includes netlify/functions/data/**`
+    );
+  }
+
+  const raw = __fs.readFileSync(found, "utf8");
+  __PAY_TABLES_CACHE__ = JSON.parse(raw);
+  __PAY_TABLES_PATH_USED__ = found;
+  return __PAY_TABLES_CACHE__;
 }
 
 function listCityFiles() {
   if (__CITY_FILE_INDEX__) return __CITY_FILE_INDEX__;
   try {
-    const files = __fs.readdirSync(__CITIES_DIR)
+    const files = __fs
+      .readdirSync(__CITIES_DIR)
       .filter((f) => /\.json$/i.test(f))
-      .map((f) => f.replace(/\.json$/i, ""))
-      .filter((name) => {
-        const n = String(name || "").toLowerCase();
-        return n !== "bases" && n !== "index.bybase" && n !== "indexbybase";
-      });
-
+      .map((f) => f.replace(/\.json$/i, ""));
     __CITY_FILE_INDEX__ = new Set(files);
     return __CITY_FILE_INDEX__;
-  } catch {
+  } catch (_) {
     __CITY_FILE_INDEX__ = new Set();
     return __CITY_FILE_INDEX__;
   }
@@ -184,249 +185,46 @@ function listCityFiles() {
 
 function cityFileExists(fileKey) {
   const k = safeKey(fileKey);
-  return !!k && listCityFiles().has(k);
+  if (!k) return false;
+  const idx = listCityFiles();
+  return idx.has(k);
 }
 
-function resolveFromBasesIndex(baseRaw) {
-  const idx = loadBasesIndex();
-  if (!idx || typeof idx !== "object") return null;
+function loadCity(cityKeyCanonical) {
+  const canonical = safeKey(cityKeyCanonical || "SanAntonio");
+  const idx = listCityFiles();
 
-  const norm = normalizeBaseName(baseRaw);
-  if (!norm) return null;
-
-  // Array shape
-  if (Array.isArray(idx)) {
-    const hit = idx.find((r) => normalizeBaseName(r?.base || r?.name || r?.installation) === norm);
-    if (!hit) return null;
-    return {
-      cityKey: safeKey(hit.cityKey || hit.city_key || hit.city || ""),
-      fileKey: safeKey(hit.file || hit.fileKey || hit.cityFile || hit.city_file || ""),
-      zip: String(hit.zip || hit.postal_code || "").trim() || null,
-      source: "bases.json[array]"
-    };
+  // PCSUnited: simplest version — expects canonical filename exists
+  // (If you want the base->fileKey compatibility patch like OrozcoRealty, we can add it next.)
+  if (!cityFileExists(canonical)) {
+    throw new Error(
+      `City JSON not found for "${canonical}". Available: ${Array.from(idx).sort().join(", ")}`
+    );
   }
 
-  // Object shape
-  let map = idx;
-  if (idx.bases && typeof idx.bases === "object") map = idx.bases;
+  if (__CITY_CACHE__.has(canonical)) return __CITY_CACHE__.get(canonical);
 
-  const hit = map[norm] || map[String(baseRaw || "").trim()] || null;
-  if (!hit) return null;
-
-  return {
-    cityKey: safeKey(hit.cityKey || hit.city_key || hit.city || ""),
-    fileKey: safeKey(hit.file || hit.fileKey || hit.cityFile || hit.city_file || ""),
-    zip: String(hit.zip || hit.postal_code || "").trim() || null,
-    source: "bases.json[object]"
-  };
-}
-
-function loadCityByFileKey(fileKey, canonicalCityKey) {
-  const fk = safeKey(fileKey);
-  if (!fk) throw new Error("Missing city fileKey.");
-
-  if (__CITY_CACHE__.has(fk)) {
-    const cached = __CITY_CACHE__.get(fk);
-    return {
-      ...cached,
-      canonical_city_key: safeKey(canonicalCityKey || cached?.canonical_city_key || ""),
-      cityFileUsed: fk
-    };
-  }
-
-  const filePath = __path.join(__CITIES_DIR, `${fk}.json`);
-  if (!__fs.existsSync(filePath)) throw new Error(`City JSON not found at ${filePath}`);
-
+  const filePath = __path.join(__CITIES_DIR, `${canonical}.json`);
   const raw = __fs.readFileSync(filePath, "utf8");
   const data = JSON.parse(raw);
 
-  const out = {
-    ...data,
-    raw: data,
-    canonical_city_key: safeKey(canonicalCityKey || ""),
-    cityFileUsed: fk
-  };
-
-  __CITY_CACHE__.set(fk, out);
+  const out = { key: canonical, ...data };
+  __CITY_CACHE__.set(canonical, out);
   return out;
 }
 
-function deriveCityAndFile(profile) {
-  const baseRaw = pickFirst(profile, ["pcs_base","pcsBase","base","duty_station","station","dutyStation"]);
-  const baseName = String(baseRaw || "").trim();
-
-  const fromBases = resolveFromBasesIndex(baseName);
-  if (fromBases?.fileKey && cityFileExists(fromBases.fileKey)) {
-    return {
-      ok: true,
-      base: baseName,
-      cityKey: fromBases.cityKey || null,
-      fileKey: fromBases.fileKey,
-      zip: fromBases.zip || null,
-      source: fromBases.source
-    };
-  }
-
-  if (cityFileExists("Fort-Sam-Houston")) {
-    return {
-      ok: true,
-      base: baseName,
-      cityKey: "SanAntonio",
-      fileKey: "Fort-Sam-Houston",
-      zip: null,
-      source: "fallback:Fort-Sam-Houston"
-    };
-  }
-
-  const any = Array.from(listCityFiles())[0] || null;
-  if (any) {
-    return {
-      ok: true,
-      base: baseName,
-      cityKey: safeKey(any),
-      fileKey: safeKey(any),
-      zip: null,
-      source: "fallback:firstCityFile"
-    };
-  }
-
-  return { ok: false, base: baseName, cityKey: null, fileKey: null, zip: null, source: "none" };
-}
-
 // -----------------------------
-// Deterministic pay math
-// -----------------------------
-function computeBasePay(rank, yos, payTables, missing) {
-  let basePay = 0;
-  if (rank && yos !== null) {
-    const baseTable = payTables?.BASEPAY?.[rank];
-    if (!baseTable) missing.push("basepay_table_for_rank");
-    else {
-      const picked = pickNearestYos(baseTable, yos);
-      if (picked == null) missing.push("basepay_value");
-      else basePay = Number(picked) || 0;
-    }
-  }
-  return basePay;
-}
-
-function computeBAS(rank, payTables) {
-  const isOfficer = /^O-/.test(rank);
-  const basObj = payTables?.BAS || {};
-  return Number(isOfficer ? basObj.officer : basObj.enlisted) || 0;
-}
-
-function computeBAH(rank, familyBool, zip, payTables, missing) {
-  if (!zip) { missing.push("bah_zip_missing"); return 0; }
-  if (!rank) { missing.push("bah_rank_missing"); return 0; }
-
-  const bahZip =
-    payTables?.BAH_TX?.[zip] ||
-    payTables?.BAH?.by_zip?.[zip] ||
-    payTables?.BAH?.byZip?.[zip] ||
-    payTables?.BAH?.[zip] ||
-    null;
-
-  if (!bahZip) { missing.push("bah_zip_not_found"); return 0; }
-
-  const bucket = familyBool ? bahZip.with : bahZip.without;
-  if (!bucket) { missing.push("bah_bucket_missing"); return 0; }
-
-  const val = bucket?.[rank];
-  if (val == null) { missing.push("bah_rank_not_found"); return 0; }
-
-  return Number(val) || 0;
-}
-
-function detectPayModel(profile) {
-  const modeRaw = lower(profile?.mode);
-  if (modeRaw) {
-    if (["vet","veteran","retired","retiree","sep","separated","civ","civilian"].includes(modeRaw)) return "veteran";
-    if (["ad","active","active_duty","activeduty"].includes(modeRaw)) return "active";
-  }
-  return "active";
-}
-
-function computePay(profile, payTables, cityPick, city) {
-  const missing = [];
-  const payModel = detectPayModel(profile);
-
-  const rank = normalizeRank(profile?.rank_paygrade || profile?.rank || "");
-  const yos = toInt(profile?.yos ?? profile?.years_of_service ?? profile?.yearsOfService);
-
-  const famRaw = profile?.family ?? profile?.dependents ?? profile?.has_dependents ?? profile?.family_size ?? profile?.familySize;
-  const famInt = toInt(famRaw);
-  const familyBool =
-    String(famRaw).toLowerCase() === "true" ||
-    famRaw === true ||
-    (Number.isFinite(famInt) ? famInt >= 2 : false);
-
-  if (!rank) missing.push("rank_paygrade");
-  if (yos === null) missing.push("yos");
-
-  const basePay = computeBasePay(rank, yos, payTables, missing);
-
-  if (payModel === "veteran") {
-    return {
-      ok: basePay > 0,
-      missing: ["veteran_mode_not_enabled_in_pcs_brain"].concat(missing),
-      pay: {
-        ok: basePay > 0,
-        payModel,
-        payAccuracy: "partial",
-        basePay,
-        bas: 0,
-        bah: 0,
-        totalPay: basePay,
-        total: basePay,
-        zipUsed: null,
-        familyUsed: familyBool,
-        rankUsed: rank || null,
-        yosUsed: yos
-      }
-    };
-  }
-
-  const zip =
-    String(profile?.zip || profile?.postal_code || "").trim() ||
-    String(cityPick?.zip || "").trim() ||
-    String(city?.zip || city?.postal_code || "").trim() ||
-    "";
-
-  const bas = computeBAS(rank, payTables);
-  const bah = computeBAH(rank, familyBool, zip || null, payTables, missing);
-  const totalPay = basePay + bas + bah;
-
-  return {
-    ok: totalPay > 0,
-    missing,
-    pay: {
-      ok: totalPay > 0,
-      payModel,
-      payAccuracy: "deterministic",
-      basePay,
-      bas,
-      bah,
-      totalPay,
-      total: totalPay,
-      zipUsed: zip || null,
-      familyUsed: familyBool,
-      rankUsed: rank || null,
-      yosUsed: yos
-    }
-  };
-}
-
-// -----------------------------
-// Supabase profile lookup
+// //#4 Supabase
 // -----------------------------
 function getSupabase() {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY;
 
   if (!url || !key) {
-    // make this a clean, obvious error (this is a TOP 3 cause of your 500s)
-    throw new Error("Missing env vars: SUPABASE_URL and/or SUPABASE_SERVICE_KEY on Netlify.");
+    // IMPORTANT: This is the #1 reason PCS will POST-500 while Orozco works.
+    throw new Error(
+      `Missing Supabase env vars. Need SUPABASE_URL and SUPABASE_SERVICE_KEY on THIS Netlify site.`
+    );
   }
 
   return __createClient(url, key, { auth: { persistSession: false } });
@@ -441,7 +239,97 @@ async function fetchProfileByEmail(email) {
 }
 
 // -----------------------------
-// Handler (ESM)
+// //#5 Pay math (minimal)
+// -----------------------------
+function computePay(profile, payTables) {
+  const missing = [];
+
+  const rank = normalizeRank(profile?.rank_paygrade || profile?.rank || "");
+  const yos = toInt(profile?.yos ?? profile?.years_of_service ?? profile?.yearsOfService);
+
+  if (!rank) missing.push("rank_paygrade");
+  if (yos === null) missing.push("yos");
+
+  let basePay = 0;
+  const baseTable = payTables?.BASEPAY?.[rank];
+  if (!baseTable) missing.push("basepay_table_for_rank");
+  else {
+    const picked = pickNearestYos(baseTable, yos ?? 0);
+    if (picked == null) missing.push("basepay_value");
+    else basePay = Number(picked) || 0;
+  }
+
+  return {
+    missing,
+    pay: {
+      ok: basePay > 0,
+      rankUsed: rank || null,
+      yosUsed: yos,
+      basePay,
+      total: basePay,
+    },
+  };
+}
+
+// -----------------------------
+// //#6 Mortgage passthrough
+// -----------------------------
+async function callMortgageEngine(payload) {
+  const evt = { httpMethod: "POST", headers: {}, body: JSON.stringify(payload || {}) };
+  const res = await __mortgageHandler(evt);
+  let out = null;
+  try {
+    out = res?.body ? JSON.parse(res.body) : null;
+  } catch (_) {
+    out = null;
+  }
+  return { res, out };
+}
+
+// -----------------------------
+// //#7 Diagnostics (GET)
+// -----------------------------
+function diagnostics() {
+  const env = {
+    SUPABASE_URL: !!process.env.SUPABASE_URL,
+    SUPABASE_SERVICE_KEY: !!process.env.SUPABASE_SERVICE_KEY,
+    NODE_VERSION: process.version,
+    CWD: process.cwd(),
+  };
+
+  const files = {
+    payTablesTried: __PAY_TABLES_PATHS || [],
+    payTablesFound: null,
+    citiesDir: __CITIES_DIR || null,
+    citiesDirExists: __CITIES_DIR ? __fs.existsSync(__CITIES_DIR) : false,
+    cityJsonCount: null,
+  };
+
+  for (const p of __PAY_TABLES_PATHS || []) {
+    if (__fs.existsSync(p)) {
+      files.payTablesFound = p;
+      break;
+    }
+  }
+
+  if (files.citiesDirExists) {
+    try {
+      files.cityJsonCount = __fs.readdirSync(__CITIES_DIR).filter((f) => /\.json$/i.test(f)).length;
+    } catch (_) {
+      files.cityJsonCount = 0;
+    }
+  }
+
+  const modules = {
+    mortgageModuleUsed: __MORTGAGE_MODULE_USED__ || null,
+    hasMortgageHandler: typeof __mortgageHandler === "function",
+  };
+
+  return { env, files, modules };
+}
+
+// -----------------------------
+// //#8 Handler
 // -----------------------------
 export async function handler(event) {
   try {
@@ -456,71 +344,52 @@ export async function handler(event) {
         ok: true,
         schemaVersion: SCHEMA_VERSION,
         deployTag: DEPLOY_TAG,
-        runtime: { node: process.version, cwd: process.cwd() },
-        note: "POST JSON: { email, bedrooms? }"
+        note: "POST JSON: { email, cityKey?, bedrooms? }",
+        diagnostics: diagnostics(),
       });
     }
 
     if (event.httpMethod !== "POST") {
-      return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Method not allowed." });
+      return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Method not allowed." });
     }
 
-    // Robust JSON parsing (prevents random 500s from bad bodies)
-    let body = {};
-    try {
-      body = JSON.parse(event.body || "{}");
-    } catch {
-      return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Invalid JSON body." });
-    }
-
+    const body = JSON.parse(event.body || "{}");
     const email = String(body.email || "").trim().toLowerCase();
+    const cityKey = safeKey(body.cityKey || "SanAntonio");
     const bedrooms = toInt(body.bedrooms) ?? 4;
 
-    if (!email) {
-      return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Missing email in POST body." });
-    }
+    if (!email) return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Missing email." });
 
     const payTables = loadPayTables();
     const profile = await fetchProfileByEmail(email);
+    const computed = computePay(profile, payTables);
+    const city = loadCity(cityKey);
 
-    const cityPick = deriveCityAndFile(profile);
-
-    let city = null;
-    let cityError = null;
-    try {
-      if (cityPick.ok && cityPick.fileKey) city = loadCityByFileKey(cityPick.fileKey, cityPick.cityKey || null);
-    } catch (e) {
-      cityError = String(e?.message || e);
-      city = null;
-    }
-
-    const computed = computePay(profile, payTables, cityPick, city);
+    // Mortgage call just to validate module graph (optional)
+    const mort = await callMortgageEngine({ price: 400000, down: 5, termYears: 30 });
 
     return respond(event, 200, {
       ok: true,
       schemaVersion: SCHEMA_VERSION,
       deployTag: DEPLOY_TAG,
-      input: { email, bedrooms },
+      input: { email, cityKey, bedrooms },
       debug: {
         payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
-        basesIndexPathUsed: __BASES_INDEX_PATH_USED__ || null,
-        cityPick,
-        cityLoadError: cityError || null,
-        cityFileUsed: city?.cityFileUsed || null
+        mortgageModuleUsed: __MORTGAGE_MODULE_USED__ || null,
+        mortgageOk: mort?.out?.ok === true,
       },
       profile,
       pay: computed.pay,
+      missing: computed.missing,
       city,
-      missing: computed.missing || [],
-      mortgage: null,
-      estimatedMonthlyMortgage: 0
     });
   } catch (e) {
+    // NOTE: This ensures even failures return CORS headers (prevents “fake CORS” errors).
     return respond(event, 500, {
       ok: false,
       schemaVersion: SCHEMA_VERSION,
       deployTag: DEPLOY_TAG,
-      error: String(e?.message || e)
+      error: String(e?.message || e),
     });
   }
 }

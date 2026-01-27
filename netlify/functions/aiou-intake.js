@@ -1,35 +1,21 @@
 // netlify/functions/aiou-intake.js
 // ============================================================
-// PCS United • Save AIOU House Intake (v1.0.0)
-// PURPOSE:
-// - Accept POST payload from the PCS United AIOU House Intake embed
-// - Insert or update into Supabase public.user_aiou_inputs
-//   (matches your existing table columns)
-//
-// BODY (POST JSON):
-// {
-//   email: "user@x.com",                 // recommended
-//   profile_id: "uuid-optional",
-//   home_year: "2019–2024" | "≤ 2018" | "0–1 years" | etc,
-//   bedrooms: number,
-//   bathrooms: number,
-//   sqft: number,
-//   property_type: string,
-//   amenities: string                    // store as text (comma separated)
-// }
-//
-// ENV REQUIRED:
-//   SUPABASE_URL
-//   SUPABASE_SERVICE_KEY
+// PCS United • Save AIOU House Intake (v1.0.1)
+// FIXES (v1.0.1):
+// - ✅ ESM-safe (your repo uses "type":"module")
+// - ✅ Env fallback: SUPABASE_SERVICE_ROLE_KEY OR SUPABASE_SERVICE_KEY
+// - Keeps original insert/update behavior exactly
 // ============================================================
 
-const { createClient } = require("@supabase/supabase-js");
+import { createClient } from "@supabase/supabase-js";
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "*",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
   "Content-Type": "application/json",
+  "Access-Control-Max-Age": "86400",
+  "Vary": "Origin",
 };
 
 function respond(statusCode, payload) {
@@ -50,7 +36,7 @@ function sOrNull(v) {
   return s ? s : null;
 }
 
-exports.handler = async function (event) {
+export const handler = async (event) => {
   // ============================================================
   // //#0 CORS + METHOD
   // ============================================================
@@ -77,18 +63,29 @@ exports.handler = async function (event) {
   const property_type = sOrNull(body.property_type) || null;
   const amenities = sOrNull(body.amenities) || null;
 
-  // We allow saving without email (nullable), but email is strongly preferred.
-  // If you want to require email, uncomment below:
+  // If you want to REQUIRE email, uncomment:
   // if (!email) return respond(400, { ok:false, error:"email is required" });
 
   // ============================================================
   // //#2 SUPABASE CLIENT
   // ============================================================
   const SUPABASE_URL = process.env.SUPABASE_URL;
-  const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+
+  // Support either env name (you may have one or the other in Netlify)
+  const SUPABASE_SERVICE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY ||
+    "";
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    return respond(500, { ok: false, error: "Supabase env not configured" });
+    return respond(500, {
+      ok: false,
+      error: "Supabase env not configured",
+      missing: {
+        SUPABASE_URL: !SUPABASE_URL,
+        SUPABASE_SERVICE_ROLE_KEY_or_SUPABASE_SERVICE_KEY: !SUPABASE_SERVICE_KEY,
+      },
+    });
   }
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
@@ -127,6 +124,7 @@ exports.handler = async function (event) {
         // Fall through to insert attempt
       } else if (existing && existing.length) {
         const id = existing[0].id;
+
         const { error: updErr } = await supabase
           .from("user_aiou_inputs")
           .update(row)

@@ -1,35 +1,24 @@
 // netlify/functions/brain.js
 // ============================================================
-// PCSUnited • CENTRAL BRAIN (v1.0.2) — PAY + CITY (NO MORTGAGE)
-// CommonJS-safe export to match package.json "type":"commonjs"
+// PCSUnited • CENTRAL BRAIN (v1.0.3) — PAY + CITY (NO MORTGAGE)
+// ✅ ESM-safe export to match package.json: "type":"module"
 //
 // ✅ FIXES:
-// - Eliminates "module is not defined in ES module scope" by using exports.handler.
+// - Eliminates "module is not defined in ES module scope" by using: export const handler
 // - Deterministic Active Duty pay: BasePay + BAS + BAH
-// - City JSON loads by PCS base using: netlify/functions/cities/bases.json
+// - City JSON loads by PCS base using: netlify/functions/cities/bases.json (or index.byBase.json)
 // - Pay tables load from: netlify/functions/data/militaryPayTables.json
 // - Bundling ensured via netlify.toml [functions].included_files
 //
 // ✅ DEPLOY_TAG:
 // - Confirms you are hitting the correct deployed file.
-//
-// Notes:
-// - This function expects your Supabase "profiles" row to contain at least:
-//   • rank or rank_paygrade
-//   • yos (years of service)
-//   • pcs_base (or base)
-//   • family (or family_size / familySize) for with/without dependents
-// - BAH requires zip. We attempt:
-//   1) profile.zip
-//   2) bases.json zip
-//   3) city.json zip
 // ============================================================
 
 const SCHEMA_VERSION = "1.2";
-const DEPLOY_TAG = "PCS_BRAIN_v1.0.2_CJS_SAFE_2026-01-27";
+const DEPLOY_TAG = "PCS_BRAIN_v1.0.3_ESM_SAFE_2026-01-27";
 
 // -----------------------------
-// //#0 Runtime deps (CJS-safe via dynamic import)
+// //#0 Runtime deps (ESM-safe via dynamic import)
 // -----------------------------
 let __fs = null;
 let __path = null;
@@ -96,10 +85,6 @@ function safeKey(s) {
 }
 function toInt(x) {
   const n = Number.parseInt(String(x ?? "").trim(), 10);
-  return Number.isFinite(n) ? n : null;
-}
-function toNum(x) {
-  const n = Number(String(x ?? "").trim());
   return Number.isFinite(n) ? n : null;
 }
 function lower(x) {
@@ -180,7 +165,7 @@ function loadPayTables() {
 function loadBasesIndex() {
   if (__BASES_INDEX_CACHE__) return __BASES_INDEX_CACHE__;
   try {
-    const { pathUsed, data } = loadJsonFromFirstExisting(__BASES_INDEX_PATHS, "bases.json");
+    const { pathUsed, data } = loadJsonFromFirstExisting(__BASES_INDEX_PATHS, "bases.json/index.byBase.json");
     __BASES_INDEX_CACHE__ = data;
     __BASES_INDEX_PATH_USED__ = pathUsed;
     return __BASES_INDEX_CACHE__;
@@ -198,7 +183,6 @@ function listCityFiles() {
       .readdirSync(__CITIES_DIR)
       .filter((f) => /\.json$/i.test(f))
       .map((f) => f.replace(/\.json$/i, ""))
-      // avoid treating indexes as city files
       .filter((name) => {
         const n = String(name || "").toLowerCase();
         return n !== "bases" && n !== "index.bybase" && n !== "indexbybase";
@@ -218,10 +202,9 @@ function cityFileExists(fileKey) {
   return listCityFiles().has(k);
 }
 
-// bases.json can be:
-// - array of records [{base, cityKey, file, zip}, ...]
-// - object map { "NELLISAFB": {fileKey:"Nellis", zip:"89191", cityKey:"LasVegas"} }
-// - nested {bases:{...}}
+// bases index can be array or object map.
+// - array: [{base, cityKey, file, zip}, ...]
+// - object: { "NELLISAFB": {fileKey:"Nellis", zip:"89191", cityKey:"LasVegas"} }
 function resolveFromBasesIndex(baseRaw) {
   const idx = loadBasesIndex();
   if (!idx || typeof idx !== "object") return null;
@@ -229,7 +212,6 @@ function resolveFromBasesIndex(baseRaw) {
   const norm = normalizeBaseName(baseRaw);
   if (!norm) return null;
 
-  // Array shape
   if (Array.isArray(idx)) {
     const hit = idx.find((r) => normalizeBaseName(r?.base || r?.name || r?.installation) === norm);
     if (!hit) return null;
@@ -237,11 +219,10 @@ function resolveFromBasesIndex(baseRaw) {
       cityKey: safeKey(hit.cityKey || hit.city_key || hit.city || ""),
       fileKey: safeKey(hit.file || hit.fileKey || hit.cityFile || hit.city_file || ""),
       zip: String(hit.zip || hit.postal_code || "").trim() || null,
-      source: "bases.json[array]",
+      source: "basesIndex[array]",
     };
   }
 
-  // Object map shape
   let map = idx;
   if (idx.bases && typeof idx.bases === "object") map = idx.bases;
 
@@ -250,9 +231,9 @@ function resolveFromBasesIndex(baseRaw) {
 
   return {
     cityKey: safeKey(hit.cityKey || hit.city_key || hit.city || ""),
-    fileKey: safeKey(hit.file || hit.fileKey || hit.cityFile || hit.city_file || ""),
+    fileKey: safeKey(hit.file || hit.fileKey || hit.cityFile || hit.city_file || hit.file_key || ""),
     zip: String(hit.zip || hit.postal_code || "").trim() || null,
-    source: "bases.json[object]",
+    source: "basesIndex[object]",
   };
 }
 
@@ -302,7 +283,6 @@ function deriveCityAndFile(profile) {
     };
   }
 
-  // Known good fallback if your repo has this file
   if (cityFileExists("Fort-Sam-Houston")) {
     return {
       ok: true,
@@ -314,10 +294,16 @@ function deriveCityAndFile(profile) {
     };
   }
 
-  // Final fallback: first city file we can find
   const any = Array.from(listCityFiles())[0] || null;
   if (any) {
-    return { ok: true, base: baseName, cityKey: safeKey(any), fileKey: safeKey(any), zip: null, source: "fallback:firstCityFile" };
+    return {
+      ok: true,
+      base: baseName,
+      cityKey: safeKey(any),
+      fileKey: safeKey(any),
+      zip: null,
+      source: "fallback:firstCityFile",
+    };
   }
 
   return { ok: false, base: baseName, cityKey: null, fileKey: null, zip: null, source: "none" };
@@ -411,7 +397,6 @@ function computePay(profile, payTables, cityPick, city) {
 
   const basePay = computeBasePay(rank, yos, payTables, missing);
 
-  // PCSUnited brain currently focused on Active Duty deterministic pay
   if (payModel === "veteran") {
     return {
       ok: basePay > 0,
@@ -433,10 +418,6 @@ function computePay(profile, payTables, cityPick, city) {
     };
   }
 
-  // ZIP resolution:
-  // 1) profile.zip
-  // 2) bases.json zip
-  // 3) city.zip
   const zip =
     String(profile?.zip || profile?.postal_code || "").trim() ||
     String(cityPick?.zip || "").trim() ||
@@ -486,9 +467,9 @@ async function fetchProfileByEmail(email) {
 }
 
 // -----------------------------
-// //#6 Netlify handler (CommonJS export)
+// //#6 Netlify handler (ESM export)
 // -----------------------------
-exports.handler = async function handler(event) {
+export const handler = async (event) => {
   try {
     await ensureDeps();
 
@@ -502,9 +483,8 @@ exports.handler = async function handler(event) {
         schemaVersion: SCHEMA_VERSION,
         deployTag: DEPLOY_TAG,
         runtime: {
-          typeofModule: typeof module,
-          typeofExports: typeof exports,
           node: process.version,
+          esm: true,
         },
         note: "POST JSON: { email, bedrooms? }",
       });

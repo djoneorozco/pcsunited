@@ -1,27 +1,59 @@
 // netlify/functions/brain.mjs
 // ============================================================
-// PCSUnited • CENTRAL BRAIN (v1.0.4) — PAY + CITY (NO MORTGAGE)
-// ESM-FORCED: .mjs extension + netlify.toml node_bundler=esbuild
-//
-// ✅ FIX GOAL:
-// - Eliminate "module is not defined" permanently (no CJS globals used).
-// - Deterministic Active Duty pay: BasePay + BAS + BAH
-// - Load city JSON by PCS base using: netlify/functions/cities/index.byBase.json (or bases.json)
-// - Uses pay tables at: netlify/functions/data/militaryPayTables.json
-//
-// ✅ DEPLOY_TAG:
-// - Confirms live endpoint is running THIS exact file.
+// PCSUnited • CENTRAL BRAIN (v1.0.5) — PAY + CITY (NO MORTGAGE)
+// ✅ ESM-FORCED via .mjs so it works even when package.json is commonjs
+// ✅ Always returns CORS headers (even on errors)
+// ✅ Strong POST validation so missing/invalid JSON returns 400 (not 500)
 // ============================================================
 
-import fs from "node:fs";
-import path from "node:path";
-import { createClient } from "@supabase/supabase-js";
-
 const SCHEMA_VERSION = "1.2";
-const DEPLOY_TAG = "PCS_BRAIN_v1.0.4_ESM_FORCED_MJS_2026-01-27";
+const DEPLOY_TAG = "PCS_BRAIN_v1.0.5_ESM_MJS_STABLE_2026-01-27";
+
+let __fs, __path, __createClient;
+
+let __ROOT = null;
+let __PAY_TABLES_PATHS = null;
+let __CITIES_DIR = null;
+let __BASES_INDEX_PATHS = null;
+
+let __PAY_TABLES_CACHE__ = null;
+let __PAY_TABLES_PATH_USED__ = null;
+
+let __BASES_INDEX_CACHE__ = null;
+let __BASES_INDEX_PATH_USED__ = null;
+
+const __CITY_CACHE__ = new Map();
+let __CITY_FILE_INDEX__ = null;
+
+async function ensureDeps() {
+  if (__fs && __path && __createClient) return;
+
+  const fsMod = await import("node:fs");
+  const pathMod = await import("node:path");
+  __fs = fsMod.default || fsMod;
+  __path = pathMod.default || pathMod;
+
+  const sbMod = await import("@supabase/supabase-js");
+  __createClient = sbMod.createClient;
+
+  __ROOT = process.cwd(); // /var/task on Netlify
+
+  __PAY_TABLES_PATHS = [
+    __path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
+    __path.join(__ROOT, "netlify", "functions", "militaryPayTables.json")
+  ];
+
+  __CITIES_DIR = __path.join(__ROOT, "netlify", "functions", "cities");
+
+  __BASES_INDEX_PATHS = [
+    __path.join(__ROOT, "netlify", "functions", "cities", "bases.json"),
+    __path.join(__ROOT, "netlify", "functions", "cities", "index.byBase.json"),
+    __path.join(__ROOT, "netlify", "functions", "cities", "indexByBase.json")
+  ];
+}
 
 // -----------------------------
-// //#1 CORS
+// CORS (always returned)
 // -----------------------------
 function buildCorsHeaders(event) {
   const origin = event?.headers?.origin || event?.headers?.Origin || "*";
@@ -35,17 +67,21 @@ function buildCorsHeaders(event) {
     "Access-Control-Allow-Headers": reqHeaders,
     "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
-    Vary: "Origin",
-    "Content-Type": "application/json",
+    "Vary": "Origin",
+    "Content-Type": "application/json"
   };
 }
 
 function respond(event, statusCode, obj) {
-  return { statusCode, headers: buildCorsHeaders(event), body: JSON.stringify(obj) };
+  return {
+    statusCode,
+    headers: buildCorsHeaders(event),
+    body: JSON.stringify(obj)
+  };
 }
 
 // -----------------------------
-// //#2 Helpers
+// Helpers
 // -----------------------------
 function safeKey(s) {
   return String(s || "").trim().replace(/[^a-zA-Z0-9_-]/g, "");
@@ -64,10 +100,7 @@ function normalizeRank(rank) {
   return r;
 }
 function normalizeBaseName(s) {
-  return String(s || "")
-    .trim()
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "");
+  return String(s || "").trim().toUpperCase().replace(/[^A-Z0-9]/g, "");
 }
 function pickFirst(obj, keys) {
   for (const k of keys) {
@@ -85,43 +118,18 @@ function pickNearestYos(tableForRank, yos) {
   if (!keys.length) return null;
 
   let chosen = keys[0];
-  for (const k of keys) {
-    if (k <= yos) chosen = k;
-  }
+  for (const k of keys) if (k <= yos) chosen = k;
+
   return tableForRank[String(chosen)] ?? null;
 }
 
 // -----------------------------
-// //#3 Paths + JSON loading (Netlify-safe)
+// File loading
 // -----------------------------
-const ROOT = process.cwd(); // /var/task on Netlify
-
-const PAY_TABLES_PATHS = [
-  path.join(ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
-  path.join(ROOT, "netlify", "functions", "militaryPayTables.json"),
-];
-
-const CITIES_DIR = path.join(ROOT, "netlify", "functions", "cities");
-
-const BASES_INDEX_PATHS = [
-  path.join(ROOT, "netlify", "functions", "cities", "bases.json"),
-  path.join(ROOT, "netlify", "functions", "cities", "index.byBase.json"),
-  path.join(ROOT, "netlify", "functions", "cities", "indexByBase.json"),
-];
-
-let PAY_TABLES_CACHE = null;
-let PAY_TABLES_PATH_USED = null;
-
-let BASES_INDEX_CACHE = null;
-let BASES_INDEX_PATH_USED = null;
-
-const CITY_CACHE = new Map();
-let CITY_FILE_INDEX = null;
-
 function loadJsonFromFirstExisting(paths, labelForError) {
   let found = null;
   for (const p of paths || []) {
-    if (fs.existsSync(p)) { found = p; break; }
+    if (__fs.existsSync(p)) { found = p; break; }
   }
   if (!found) {
     throw new Error(
@@ -129,60 +137,56 @@ function loadJsonFromFirstExisting(paths, labelForError) {
       `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
     );
   }
-  const raw = fs.readFileSync(found, "utf8");
+  const raw = __fs.readFileSync(found, "utf8");
   return { pathUsed: found, data: JSON.parse(raw) };
 }
 
 function loadPayTables() {
-  if (PAY_TABLES_CACHE) return PAY_TABLES_CACHE;
-  const { pathUsed, data } = loadJsonFromFirstExisting(PAY_TABLES_PATHS, "militaryPayTables.json");
-  PAY_TABLES_CACHE = data;
-  PAY_TABLES_PATH_USED = pathUsed;
-  return PAY_TABLES_CACHE;
+  if (__PAY_TABLES_CACHE__) return __PAY_TABLES_CACHE__;
+  const { pathUsed, data } = loadJsonFromFirstExisting(__PAY_TABLES_PATHS, "militaryPayTables.json");
+  __PAY_TABLES_CACHE__ = data;
+  __PAY_TABLES_PATH_USED__ = pathUsed;
+  return __PAY_TABLES_CACHE__;
 }
 
 function loadBasesIndex() {
-  if (BASES_INDEX_CACHE) return BASES_INDEX_CACHE;
+  if (__BASES_INDEX_CACHE__) return __BASES_INDEX_CACHE__;
   try {
-    const { pathUsed, data } = loadJsonFromFirstExisting(BASES_INDEX_PATHS, "bases/index.byBase.json");
-    BASES_INDEX_CACHE = data;
-    BASES_INDEX_PATH_USED = pathUsed;
-    return BASES_INDEX_CACHE;
+    const { pathUsed, data } = loadJsonFromFirstExisting(__BASES_INDEX_PATHS, "bases.json");
+    __BASES_INDEX_CACHE__ = data;
+    __BASES_INDEX_PATH_USED__ = pathUsed;
+    return __BASES_INDEX_CACHE__;
   } catch {
-    BASES_INDEX_CACHE = null;
-    BASES_INDEX_PATH_USED = null;
+    __BASES_INDEX_CACHE__ = null;
+    __BASES_INDEX_PATH_USED__ = null;
     return null;
   }
 }
 
 function listCityFiles() {
-  if (CITY_FILE_INDEX) return CITY_FILE_INDEX;
+  if (__CITY_FILE_INDEX__) return __CITY_FILE_INDEX__;
   try {
-    const files = fs.readdirSync(CITIES_DIR)
+    const files = __fs.readdirSync(__CITIES_DIR)
       .filter((f) => /\.json$/i.test(f))
       .map((f) => f.replace(/\.json$/i, ""))
       .filter((name) => {
         const n = String(name || "").toLowerCase();
         return n !== "bases" && n !== "index.bybase" && n !== "indexbybase";
       });
-    CITY_FILE_INDEX = new Set(files);
-    return CITY_FILE_INDEX;
+
+    __CITY_FILE_INDEX__ = new Set(files);
+    return __CITY_FILE_INDEX__;
   } catch {
-    CITY_FILE_INDEX = new Set();
-    return CITY_FILE_INDEX;
+    __CITY_FILE_INDEX__ = new Set();
+    return __CITY_FILE_INDEX__;
   }
 }
 
 function cityFileExists(fileKey) {
   const k = safeKey(fileKey);
-  if (!k) return false;
-  return listCityFiles().has(k);
+  return !!k && listCityFiles().has(k);
 }
 
-// bases.json OR index.byBase.json can be:
-// - array of records [{base, cityKey, file, zip}, ...]
-// - object map { "NELLISAFB": {fileKey:"Nellis", zip:"89191", cityKey:"LasVegas"} }
-// - nested {bases:{...}}
 function resolveFromBasesIndex(baseRaw) {
   const idx = loadBasesIndex();
   if (!idx || typeof idx !== "object") return null;
@@ -190,6 +194,7 @@ function resolveFromBasesIndex(baseRaw) {
   const norm = normalizeBaseName(baseRaw);
   if (!norm) return null;
 
+  // Array shape
   if (Array.isArray(idx)) {
     const hit = idx.find((r) => normalizeBaseName(r?.base || r?.name || r?.installation) === norm);
     if (!hit) return null;
@@ -197,10 +202,11 @@ function resolveFromBasesIndex(baseRaw) {
       cityKey: safeKey(hit.cityKey || hit.city_key || hit.city || ""),
       fileKey: safeKey(hit.file || hit.fileKey || hit.cityFile || hit.city_file || ""),
       zip: String(hit.zip || hit.postal_code || "").trim() || null,
-      source: "basesIndex[array]",
+      source: "bases.json[array]"
     };
   }
 
+  // Object shape
   let map = idx;
   if (idx.bases && typeof idx.bases === "object") map = idx.bases;
 
@@ -211,7 +217,7 @@ function resolveFromBasesIndex(baseRaw) {
     cityKey: safeKey(hit.cityKey || hit.city_key || hit.city || ""),
     fileKey: safeKey(hit.file || hit.fileKey || hit.cityFile || hit.city_file || ""),
     zip: String(hit.zip || hit.postal_code || "").trim() || null,
-    source: "basesIndex[object]",
+    source: "bases.json[object]"
   };
 }
 
@@ -219,34 +225,34 @@ function loadCityByFileKey(fileKey, canonicalCityKey) {
   const fk = safeKey(fileKey);
   if (!fk) throw new Error("Missing city fileKey.");
 
-  if (CITY_CACHE.has(fk)) {
-    const cached = CITY_CACHE.get(fk);
+  if (__CITY_CACHE__.has(fk)) {
+    const cached = __CITY_CACHE__.get(fk);
     return {
       ...cached,
       canonical_city_key: safeKey(canonicalCityKey || cached?.canonical_city_key || ""),
-      cityFileUsed: fk,
+      cityFileUsed: fk
     };
   }
 
-  const filePath = path.join(CITIES_DIR, `${fk}.json`);
-  if (!fs.existsSync(filePath)) throw new Error(`City JSON not found at ${filePath}`);
+  const filePath = __path.join(__CITIES_DIR, `${fk}.json`);
+  if (!__fs.existsSync(filePath)) throw new Error(`City JSON not found at ${filePath}`);
 
-  const raw = fs.readFileSync(filePath, "utf8");
+  const raw = __fs.readFileSync(filePath, "utf8");
   const data = JSON.parse(raw);
 
   const out = {
     ...data,
     raw: data,
     canonical_city_key: safeKey(canonicalCityKey || ""),
-    cityFileUsed: fk,
+    cityFileUsed: fk
   };
 
-  CITY_CACHE.set(fk, out);
+  __CITY_CACHE__.set(fk, out);
   return out;
 }
 
 function deriveCityAndFile(profile) {
-  const baseRaw = pickFirst(profile, ["pcs_base", "pcsBase", "base", "duty_station", "station", "dutyStation"]);
+  const baseRaw = pickFirst(profile, ["pcs_base","pcsBase","base","duty_station","station","dutyStation"]);
   const baseName = String(baseRaw || "").trim();
 
   const fromBases = resolveFromBasesIndex(baseName);
@@ -257,7 +263,7 @@ function deriveCityAndFile(profile) {
       cityKey: fromBases.cityKey || null,
       fileKey: fromBases.fileKey,
       zip: fromBases.zip || null,
-      source: fromBases.source,
+      source: fromBases.source
     };
   }
 
@@ -268,20 +274,27 @@ function deriveCityAndFile(profile) {
       cityKey: "SanAntonio",
       fileKey: "Fort-Sam-Houston",
       zip: null,
-      source: "fallback:Fort-Sam-Houston",
+      source: "fallback:Fort-Sam-Houston"
     };
   }
 
   const any = Array.from(listCityFiles())[0] || null;
   if (any) {
-    return { ok: true, base: baseName, cityKey: safeKey(any), fileKey: safeKey(any), zip: null, source: "fallback:firstCityFile" };
+    return {
+      ok: true,
+      base: baseName,
+      cityKey: safeKey(any),
+      fileKey: safeKey(any),
+      zip: null,
+      source: "fallback:firstCityFile"
+    };
   }
 
   return { ok: false, base: baseName, cityKey: null, fileKey: null, zip: null, source: "none" };
 }
 
 // -----------------------------
-// //#4 Deterministic pay math
+// Deterministic pay math
 // -----------------------------
 function computeBasePay(rank, yos, payTables, missing) {
   let basePay = 0;
@@ -369,8 +382,8 @@ function computePay(profile, payTables, cityPick, city) {
         zipUsed: null,
         familyUsed: familyBool,
         rankUsed: rank || null,
-        yosUsed: yos,
-      },
+        yosUsed: yos
+      }
     };
   }
 
@@ -399,19 +412,24 @@ function computePay(profile, payTables, cityPick, city) {
       zipUsed: zip || null,
       familyUsed: familyBool,
       rankUsed: rank || null,
-      yosUsed: yos,
-    },
+      yosUsed: yos
+    }
   };
 }
 
 // -----------------------------
-// //#5 Supabase profile lookup
+// Supabase profile lookup
 // -----------------------------
 function getSupabase() {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY;
-  if (!url || !key) throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_KEY env vars.");
-  return createClient(url, key, { auth: { persistSession: false } });
+
+  if (!url || !key) {
+    // make this a clean, obvious error (this is a TOP 3 cause of your 500s)
+    throw new Error("Missing env vars: SUPABASE_URL and/or SUPABASE_SERVICE_KEY on Netlify.");
+  }
+
+  return __createClient(url, key, { auth: { persistSession: false } });
 }
 
 async function fetchProfileByEmail(email) {
@@ -423,10 +441,12 @@ async function fetchProfileByEmail(email) {
 }
 
 // -----------------------------
-// //#6 Netlify handler (ESM export)
+// Handler (ESM)
 // -----------------------------
 export async function handler(event) {
   try {
+    await ensureDeps();
+
     if (event.httpMethod === "OPTIONS") {
       return { statusCode: 204, headers: buildCorsHeaders(event), body: "" };
     }
@@ -436,11 +456,8 @@ export async function handler(event) {
         ok: true,
         schemaVersion: SCHEMA_VERSION,
         deployTag: DEPLOY_TAG,
-        runtime: {
-          node: process.version,
-          cwd: process.cwd(),
-        },
-        note: "POST JSON: { email, bedrooms? }",
+        runtime: { node: process.version, cwd: process.cwd() },
+        note: "POST JSON: { email, bedrooms? }"
       });
     }
 
@@ -448,11 +465,20 @@ export async function handler(event) {
       return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Method not allowed." });
     }
 
-    const body = JSON.parse(event.body || "{}");
+    // Robust JSON parsing (prevents random 500s from bad bodies)
+    let body = {};
+    try {
+      body = JSON.parse(event.body || "{}");
+    } catch {
+      return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Invalid JSON body." });
+    }
+
     const email = String(body.email || "").trim().toLowerCase();
     const bedrooms = toInt(body.bedrooms) ?? 4;
 
-    if (!email) return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Missing email." });
+    if (!email) {
+      return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, deployTag: DEPLOY_TAG, error: "Missing email in POST body." });
+    }
 
     const payTables = loadPayTables();
     const profile = await fetchProfileByEmail(email);
@@ -461,13 +487,8 @@ export async function handler(event) {
 
     let city = null;
     let cityError = null;
-
     try {
-      if (cityPick.ok && cityPick.fileKey) {
-        city = loadCityByFileKey(cityPick.fileKey, cityPick.cityKey || null);
-      } else {
-        city = cityFileExists("Fort-Sam-Houston") ? loadCityByFileKey("Fort-Sam-Houston", "SanAntonio") : null;
-      }
+      if (cityPick.ok && cityPick.fileKey) city = loadCityByFileKey(cityPick.fileKey, cityPick.cityKey || null);
     } catch (e) {
       cityError = String(e?.message || e);
       city = null;
@@ -480,29 +501,26 @@ export async function handler(event) {
       schemaVersion: SCHEMA_VERSION,
       deployTag: DEPLOY_TAG,
       input: { email, bedrooms },
-
       debug: {
-        payTablesPathUsed: PAY_TABLES_PATH_USED || null,
-        basesIndexPathUsed: BASES_INDEX_PATH_USED || null,
+        payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
+        basesIndexPathUsed: __BASES_INDEX_PATH_USED__ || null,
         cityPick,
         cityLoadError: cityError || null,
-        cityFileUsed: city?.cityFileUsed || null,
+        cityFileUsed: city?.cityFileUsed || null
       },
-
       profile,
       pay: computed.pay,
       city,
       missing: computed.missing || [],
-
       mortgage: null,
-      estimatedMonthlyMortgage: 0,
+      estimatedMonthlyMortgage: 0
     });
   } catch (e) {
     return respond(event, 500, {
       ok: false,
       schemaVersion: SCHEMA_VERSION,
       deployTag: DEPLOY_TAG,
-      error: String(e?.message || e),
+      error: String(e?.message || e)
     });
   }
 }

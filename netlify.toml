@@ -1,14 +1,8 @@
-# netlify.toml — PCSUnited (Full)
-# ✅ Includes local JSON in the serverless bundle
-# ✅ /api/* routes to Netlify Functions
-# ✅ CORS headers cover BOTH /.netlify/functions/* and /api/* (GET/POST/OPTIONS)
-
 [build]
   publish = "."
   functions = "netlify/functions"
 
 [functions]
-  # IMPORTANT: bundle these local JSON assets so brain.js can read them at runtime
   included_files = [
     "netlify/functions/data/**",
     "netlify/functions/cities/**"
@@ -19,7 +13,7 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
-# --- CORS for direct function routes ---
+# CORS for direct function path
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]
@@ -29,7 +23,7 @@
     Access-Control-Max-Age = "86400"
     Vary = "Origin"
 
-# --- CORS for pretty /api routes ---
+# CORS for /api redirect path
 [[headers]]
   for = "/api/*"
   [headers.values]

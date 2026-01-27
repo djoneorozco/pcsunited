@@ -1,9 +1,14 @@
-// A.I.O.U → Executive Buyer Memo (5 paragraphs) — CORS-hardened (v1.1)
-// UPDATE (v1.1):
+// A.I.O.U → Executive Buyer Memo (5 paragraphs) — CORS-hardened (v1.2)
+// UPDATE (v1.2):
+// - ✅ Writes to Supabase public.profiles (upsert by email)
 // - Accepts optional house/conditionPreference signals and tailors the playbook paragraph.
 // - Backwards compatible: if not provided, defaults to your original guidance.
 
+import { createClient } from "@supabase/supabase-js";
+
 const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
 /* ---------------- CORS helpers ---------------- */
 const corsHeaders = {
@@ -15,7 +20,7 @@ const corsHeaders = {
   "Vary": "Origin",
 };
 const ok = (bodyObj) => ({ statusCode: 200, headers: corsHeaders, body: JSON.stringify(bodyObj) });
-const bad = (code, message) => ({ statusCode: code, headers: corsHeaders, body: JSON.stringify({ error: message }) });
+const bad = (code, message) => ({ statusCode: code, headers: corsHeaders, body: JSON.stringify({ ok: false, error: message }) });
 
 /* ---------------- tiny utils ---------------- */
 const lastNameOf = (full) => String(full || "").trim().split(/\s+/).slice(-1)[0] || "Client";
@@ -23,6 +28,24 @@ const toCurrency = (n, d = 0) => (Number(n) || 0).toLocaleString("en-US", {
   style: "currency", currency: "USD", minimumFractionDigits: d, maximumFractionDigits: d
 });
 const housingLane = (incomeMonthly) => ({ laneMin: incomeMonthly * 0.28, laneMax: incomeMonthly * 0.33 });
+
+const safeStr = (v) => String(v ?? "").trim();
+const isEmail = (s) => /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(s || "").trim());
+
+function pickEmail(brief) {
+  // Preferred: brief.email (your quiz should send this)
+  const a = safeStr(brief?.email).toLowerCase();
+  if (isEmail(a)) return a;
+
+  // Fallbacks (non-breaking)
+  const b = safeStr(brief?.profile?.email).toLowerCase();
+  if (isEmail(b)) return b;
+
+  const c = safeStr(brief?.identity?.email).toLowerCase();
+  if (isEmail(c)) return c;
+
+  return "";
+}
 
 // ensure exactly 5 <p> blocks without dependencies
 function enforceFiveParagraphsFromText(text, fallbackBlocks) {
@@ -67,6 +90,41 @@ function conditionGuidance(conditionPreference, yearBand) {
   };
 }
 
+/* ---------------- Supabase: upsert into public.profiles ---------------- */
+async function upsertProfile({ email, firstName, lastName }) {
+  if (!email) return { skipped: true, reason: "No email provided" };
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
+    return { skipped: true, reason: "Supabase env vars not configured (SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY)" };
+    // NOTE: not throwing so memo still returns even if Supabase isn't set up yet
+  }
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY);
+
+  const first = safeStr(firstName);
+  const last = safeStr(lastName);
+  const payload = { email };
+
+  // avoid overwriting existing names with blanks
+  if (first) payload.first_name = first;
+  if (last) payload.last_name = last;
+
+  const full = [first, last].filter(Boolean).join(" ").trim();
+  if (full) payload.full_name = full;
+
+  if (Object.keys(payload).length <= 1) {
+    return { skipped: true, reason: "No profile fields to update (names empty)" };
+  }
+
+  const { error } = await supabase
+    .from("profiles")
+    .upsert(payload, { onConflict: "email" });
+
+  if (error) {
+    return { ok: false, error: error.message };
+  }
+  return { ok: true };
+}
+
 /* ---------------- entry (ESM-safe for PCSUnited) ---------------- */
 export const handler = async (event) => {
   if (event.httpMethod === "OPTIONS") return { statusCode: 200, headers: corsHeaders, body: "" };
@@ -104,6 +162,9 @@ export const handler = async (event) => {
   const assumedIncomeMonthly = Math.max(3500, Math.min(12000, budgetMax / 60));
   const lane = housingLane(assumedIncomeMonthly);
 
+  // ✅ Email for profile write
+  const email = pickEmail(brief);
+
   // Local fallback memo (5 blocks) — UPDATED P4 to reflect condition if provided
   const localBlocks = [
     `<strong>${last}</strong>, this memo turns your A.I.O.U profile into a plan. Archetype: <strong>${archetype || "Balanced Explorer"}</strong>. We’ll match homes to how you live and avoid regret buys.`,
@@ -130,6 +191,7 @@ Style: crisp, friendly, no jargon, whole dollars only.
   const userPrompt = `
 INPUT:
 ${JSON.stringify({
+  email: email || null,
   profile: { first, last, bedrooms, budgetMax, setting, safetyPriority },
   house: {
     conditionPreference: conditionPreference || null,
@@ -168,6 +230,22 @@ Write the five paragraphs now.`;
     return data?.choices?.[0]?.message?.content?.trim() || "";
   }
 
+  // ✅ Attempt profile write early (doesn't block memo)
+  let profileWrite = { skipped: true, reason: "Not attempted" };
+  try {
+    if (isEmail(email)) {
+      profileWrite = await upsertProfile({
+        email,
+        firstName: profile.firstName,
+        lastName: profile.lastName
+      });
+    } else {
+      profileWrite = { skipped: true, reason: "Missing/invalid email in brief payload" };
+    }
+  } catch (e) {
+    profileWrite = { ok: false, error: String(e.message || e) };
+  }
+
   try {
     const memoText = await callOpenAI();
     const memoHtml = enforceFiveParagraphsFromText(memoText, localBlocks);
@@ -175,7 +253,9 @@ Write the five paragraphs now.`;
       ok: true,
       memo: memoText,
       memoHtml,
+      profileWrite,
       meta: {
+        email: isEmail(email) ? email : null,
         archetype,
         scores,
         condition: {
@@ -195,7 +275,9 @@ Write the five paragraphs now.`;
       error: String(e.message || e),
       memo: localBlocks.join("\n\n"),
       memoHtml,
+      profileWrite,
       meta: {
+        email: isEmail(email) ? email : null,
         fallback: true,
         archetype,
         scores,

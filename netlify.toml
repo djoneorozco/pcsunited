@@ -3,7 +3,10 @@
   functions = "netlify/functions"
 
 [functions]
-  # ✅ REQUIRED: bundle local JSON data into serverless function deploy
+  # Ensures Netlify bundles serverless functions reliably
+  node_bundler = "esbuild"
+
+  # CRITICAL: include local JSON files in the deployed function bundle
   included_files = [
     "netlify/functions/data/**",
     "netlify/functions/cities/**"
@@ -14,7 +17,7 @@
   to = "/.netlify/functions/:splat"
   status = 200
 
-# CORS for direct function routes
+# CORS headers for function routes
 [[headers]]
   for = "/.netlify/functions/*"
   [headers.values]
@@ -24,7 +27,7 @@
     Access-Control-Max-Age = "86400"
     Vary = "Origin"
 
-# CORS for /api/* rewrite routes
+# CORS headers for the /api/* redirect facade
 [[headers]]
   for = "/api/*"
   [headers.values]

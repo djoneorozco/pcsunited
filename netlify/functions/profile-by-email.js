@@ -4,72 +4,84 @@
 // - POST { email }
 // - Returns: { ok:true, profile:{...all columns...} }
 // - CORS + OPTIONS support (required for Webflow -> Netlify)
+//
+// ✅ Robust ENV support:
+//   SUPABASE_URL
+//   SUPABASE_SERVICE_ROLE_KEY  (preferred)
+//   SUPABASE_SERVICE_KEY       (fallback; used by some of your other functions)
 // ============================================================
 
-import { createClient } from "@supabase/supabase-js";
+const { createClient } = require("@supabase/supabase-js");
 
-function corsHeaders(origin = "*") {
+const CORS_HEADERS = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Max-Age": "86400",
+  "Vary": "Origin",
+  "Content-Type": "application/json"
+};
+
+function respond(statusCode, payload) {
   return {
-    "Access-Control-Allow-Origin": origin,
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Methods": "POST, OPTIONS",
-    "Access-Control-Max-Age": "86400",
-    "Vary": "Origin"
+    statusCode,
+    headers: CORS_HEADERS,
+    body: JSON.stringify(payload || {})
   };
 }
 
-export const handler = async (event) => {
-  const origin = event.headers?.origin || "*";
-
-  // ✅ Preflight
+exports.handler = async function (event) {
+  // --- 0) CORS preflight ---
   if (event.httpMethod === "OPTIONS") {
-    return {
-      statusCode: 204,
-      headers: corsHeaders(origin),
-      body: ""
-    };
+    return respond(200, {});
   }
 
+  // --- 1) Enforce POST ---
   if (event.httpMethod !== "POST") {
-    return {
-      statusCode: 405,
-      headers: { ...corsHeaders(origin), "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: false, error: "Method not allowed" })
-    };
+    return respond(405, { ok: false, error: "Method not allowed" });
   }
 
+  // --- 2) Parse body ---
+  let body = {};
   try {
-    const SUPABASE_URL = process.env.SUPABASE_URL;
-    const SUPABASE_SERVICE_ROLE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    body = JSON.parse(event.body || "{}");
+  } catch (_) {
+    return respond(400, { ok: false, error: "Invalid JSON body" });
+  }
 
-    if (!SUPABASE_URL || !SUPABASE_SERVICE_ROLE_KEY) {
-      return {
-        statusCode: 500,
-        headers: { ...corsHeaders(origin), "Content-Type": "application/json" },
-        body: JSON.stringify({
-          ok: false,
-          error: "Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars"
-        })
-      };
-    }
+  const email = String(body.email || "").trim().toLowerCase();
+  if (!email) {
+    return respond(400, { ok: false, error: "Email is required" });
+  }
 
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, {
-      auth: { persistSession: false }
+  // --- 3) Env (robust) ---
+  const SUPABASE_URL =
+    process.env.SUPABASE_URL ||
+    process.env.SUPABASE_PROJECT_URL ||
+    "";
+
+  const SUPABASE_SERVICE_KEY =
+    process.env.SUPABASE_SERVICE_ROLE_KEY || // preferred name
+    process.env.SUPABASE_SERVICE_KEY ||      // fallback name (your login.js uses this)
+    "";
+
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+    return respond(500, {
+      ok: false,
+      error: "Missing Supabase env vars (need SUPABASE_URL and a service key).",
+      missing: {
+        SUPABASE_URL: !SUPABASE_URL,
+        SUPABASE_SERVICE_ROLE_KEY_or_SERVICE_KEY: !SUPABASE_SERVICE_KEY
+      }
+    });
+  }
+
+  // --- 4) Query profiles ---
+  try {
+    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
+      auth: { persistSession: false, autoRefreshToken: false }
     });
 
-    let body = {};
-    try { body = JSON.parse(event.body || "{}"); } catch (_) {}
-
-    const email = String(body.email || "").trim().toLowerCase();
-    if (!email) {
-      return {
-        statusCode: 400,
-        headers: { ...corsHeaders(origin), "Content-Type": "application/json" },
-        body: JSON.stringify({ ok: false, error: "Email is required" })
-      };
-    }
-
-    // Pull ALL columns from profiles
     const { data, error } = await supabase
       .from("profiles")
       .select("*")
@@ -77,24 +89,11 @@ export const handler = async (event) => {
       .maybeSingle();
 
     if (error) {
-      return {
-        statusCode: 500,
-        headers: { ...corsHeaders(origin), "Content-Type": "application/json" },
-        body: JSON.stringify({ ok: false, error: error.message })
-      };
+      return respond(500, { ok: false, error: error.message });
     }
 
-    return {
-      statusCode: 200,
-      headers: { ...corsHeaders(origin), "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: true, email, profile: data || null })
-    };
-
+    return respond(200, { ok: true, email, profile: data || null });
   } catch (e) {
-    return {
-      statusCode: 500,
-      headers: { ...corsHeaders(origin), "Content-Type": "application/json" },
-      body: JSON.stringify({ ok: false, error: e?.message || "Server error" })
-    };
+    return respond(500, { ok: false, error: e?.message || "Server error" });
   }
 };

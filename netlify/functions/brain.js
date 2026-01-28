@@ -40,12 +40,15 @@ let __path = null;
 let __createClient = null;
 let __mortgageHandler = null;
 
+// ✅ ADDED (minimal): capture mortgage import error so brain never crashes
+let __MORTGAGE_IMPORT_ERROR__ = null;
+
 let __ROOT = null;
 let __PAY_TABLES_PATHS = null;
 let __CITIES_DIR = null;
 
 async function ensureDeps() {
-  if (__fs && __path && __createClient && __mortgageHandler) return;
+  if (__fs && __path && __createClient) return; // ✅ keep existing behavior safe
 
   // Built-ins
   const fsMod = await import("node:fs");
@@ -57,28 +60,24 @@ async function ensureDeps() {
   const sbMod = await import("@supabase/supabase-js");
   __createClient = sbMod.createClient;
 
-  // Mortgage function (dynamic import avoids parse-time crash)
-  let mortMod = null;
+  // ✅ CHANGED (minimal): mortgage import is now try/catch so brain never crashes
   try {
-    mortMod = await import("./mortgage.js");
+    const mortMod = await import("./mortgage.js");
+
+    // Support both ESM and "default" exports if present
+    __mortgageHandler =
+      mortMod?.handler ||
+      mortMod?.default?.handler ||
+      null;
+
+    if (typeof __mortgageHandler !== "function") {
+      __mortgageHandler = null;
+      __MORTGAGE_IMPORT_ERROR__ =
+        "mortgage.js imported but `handler` not found as a function.";
+    }
   } catch (e) {
-    const msg = String(e?.message || e);
-    // ✅ Minimal but critical: make the failure explicit (this is the "module is not defined in ES module scope" case)
-    throw new Error(
-      `mortgage.js failed to load. If you see "module is not defined in ES module scope", ` +
-      `mortgage.js is using CommonJS (module.exports/exports) while your project runs ESM ("type":"module"). ` +
-      `Fix mortgage.js to: export async function handler(event){...}. Original error: ${msg}`
-    );
-  }
-
-  // ✅ Minimal compatibility: support common export shapes without changing logic
-  __mortgageHandler =
-    mortMod?.handler ||
-    mortMod?.default?.handler ||
-    mortMod?.default;
-
-  if (typeof __mortgageHandler !== "function") {
-    throw new Error("mortgage.js handler not found. Ensure netlify/functions/mortgage.js exports `handler`.");
+    __mortgageHandler = null;
+    __MORTGAGE_IMPORT_ERROR__ = String(e?.message || e);
   }
 
   // Paths (computed after path module is available)
@@ -376,9 +375,7 @@ function loadPayTables() {
 function listCityFiles() {
   if (__CITY_FILE_INDEX__) return __CITY_FILE_INDEX__;
   try {
-    const files = __fs.readdirSync(__CITIES_DIR, { withFileTypes: true })
-      .filter((d) => d.isFile && d.isFile() ? true : true) // keep behavior stable even if withFileTypes differs
-      .map((d) => (typeof d === "string" ? d : d.name))
+    const files = __fs.readdirSync(__CITIES_DIR)
       .filter((f) => /\.json$/i.test(f))
       .map((f) => f.replace(/\.json$/i, ""));
     __CITY_FILE_INDEX__ = new Set(files);
@@ -914,22 +911,118 @@ function defaultPmiRate({ loanType, dpPct }) {
   return 0.5;
 }
 
-async function callMortgageEngine(payload) {
-  const evt = {
-    httpMethod: "POST",
-    headers: {},
-    body: JSON.stringify(payload || {}),
-  };
+// ✅ ADDED (minimal): local fallback so brain works even if mortgage.js can't be imported
+function __aprFromCreditScore__(cs) {
+  const s = Number(cs || 0) || 0;
+  if (s >= 780) return 6.25;
+  if (s >= 760) return 6.35;
+  if (s >= 740) return 6.50;
+  if (s >= 720) return 6.65;
+  if (s >= 700) return 6.85;
+  if (s >= 680) return 7.15;
+  if (s >= 660) return 7.45;
+  if (s >= 640) return 7.85;
+  return 8.35;
+}
 
-  const res = await __mortgageHandler(evt);
-  let out = null;
-  try {
-    out = res?.body ? JSON.parse(res.body) : null;
-  } catch (e) {
-    out = null;
+function __pmt__(principal, aprPercent, termYears) {
+  const P = Number(principal || 0) || 0;
+  const r = (Number(aprPercent || 0) || 0) / 100 / 12;
+  const n = (Number(termYears || 0) || 0) * 12;
+  if (P <= 0 || n <= 0) return 0;
+  if (r === 0) return P / n;
+  const pow = Math.pow(1 + r, n);
+  return P * (r * pow) / (pow - 1);
+}
+
+function __localMortgageEngine__(payload) {
+  const price = Number(payload?.price || 0) || 0;
+  const downPct = Number(payload?.down || 0) || 0;
+  const downPayment = price * (downPct / 100);
+  const loanAmount = Math.max(price - downPayment, 0);
+
+  const termYears = Number(payload?.termYears || 30) || 30;
+
+  const creditScore = payload?.creditScore != null ? Number(payload.creditScore) : null;
+
+  let apr = null;
+  let aprSource = null;
+
+  if (payload?.aprOverride != null && Number.isFinite(Number(payload.aprOverride))) {
+    apr = Number(payload.aprOverride);
+    aprSource = "aprOverride";
+  } else if (creditScore != null && Number.isFinite(creditScore)) {
+    apr = __aprFromCreditScore__(creditScore);
+    aprSource = "creditScoreTier";
+  } else {
+    apr = 7.0;
+    aprSource = "default:7.0";
   }
 
-  return { res, out };
+  const pi = __pmt__(loanAmount, apr, termYears);
+
+  const taxRate = Number(payload?.taxRate || 0) || 0; // decimal
+  const tax = (price * taxRate) / 12;
+
+  const insuranceAnnual = Number(payload?.insuranceAnnual || 0) || 0;
+  const insurance = insuranceAnnual / 12;
+
+  const hoa = Number(payload?.hoaMonthly || 0) || 0;
+
+  const pmiRate = Number(payload?.pmiRate || 0) || 0; // decimal
+  const pmiEligible = downPct < 20 && String(payload?.loanType || "").toLowerCase() !== "va";
+  const pmi = pmiEligible ? (loanAmount * pmiRate) / 12 : 0;
+
+  const allIn = (pi + tax + insurance + hoa + pmi);
+
+  return {
+    ok: true,
+    price,
+    downPercent: downPct,
+    downPayment,
+    loanAmount,
+    apr,
+    aprSource,
+    termYears,
+    breakdown: {
+      pi,
+      tax,
+      insurance,
+      hoa,
+      pmi,
+      allIn,
+    },
+    meta: {
+      warnings: __MORTGAGE_IMPORT_ERROR__
+        ? [`mortgage.js import failed; used fallback calc: ${__MORTGAGE_IMPORT_ERROR__}`]
+        : [],
+    },
+  };
+}
+
+async function callMortgageEngine(payload) {
+  // ✅ CHANGED (minimal): if we have mortgage.js handler, use it; otherwise fallback
+  if (typeof __mortgageHandler === "function") {
+    const evt = {
+      httpMethod: "POST",
+      headers: {},
+      body: JSON.stringify(payload || {}),
+    };
+
+    const res = await __mortgageHandler(evt);
+    let out = null;
+    try {
+      out = res?.body ? JSON.parse(res.body) : null;
+    } catch (e) {
+      out = null;
+    }
+
+    return { res, out };
+  }
+
+  // Fallback path: brain stays alive even if mortgage.js is CJS/ESM-incompatible
+  const out = __localMortgageEngine__(payload || {});
+  return { res: { statusCode: 200, body: JSON.stringify(out) }, out };
 }
 
 async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
@@ -1140,13 +1233,7 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
 // -----------------------------
 function getSupabase() {
   const url = process.env.SUPABASE_URL;
-
-  // ✅ Minimal: keep your key name, but allow the common Service Role env var too (prevents false “missing env” failures)
-  const key =
-    process.env.SUPABASE_SERVICE_KEY ||
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.SUPABASE_SERVICE_ROLE;
-
+  const key = process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_KEY env vars.");
   return __createClient(url, key, { auth: { persistSession: false } });
 }
@@ -1164,8 +1251,8 @@ async function fetchProfileByEmail(email) {
 // -----------------------------
 export async function handler(event) {
   try {
-    // ✅ ONLY CHANGE NEEDED FOR YOUR CRASH:
-    // Handle OPTIONS/GET/405 BEFORE ensureDeps() so /api/brain doesn't import mortgage.js just to answer GET/preflight
+    await ensureDeps();
+
     if (event.httpMethod === "OPTIONS") {
       // Preflight MUST return CORS headers (204 is best practice)
       return { statusCode: 204, headers: buildCorsHeaders(event), body: "" };
@@ -1182,9 +1269,6 @@ export async function handler(event) {
     if (event.httpMethod !== "POST") {
       return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Method not allowed." });
     }
-
-    // ✅ deps only needed for POST (fs/path/supabase/mortgage)
-    await ensureDeps();
 
     const body = JSON.parse(event.body || "{}");
     const email = String(body.email || "").trim().toLowerCase();
@@ -1273,6 +1357,10 @@ export async function handler(event) {
 
         cityLoadFallbackUsed: !!cityLoadFallbackUsed,
         cityLoadError: cityLoadError || null,
+
+        // ✅ ADDED (debug only): tell you if mortgage import failed
+        mortgageImportError: __MORTGAGE_IMPORT_ERROR__ || null,
+        usingMortgageHandler: typeof __mortgageHandler === "function",
       },
 
       profile,

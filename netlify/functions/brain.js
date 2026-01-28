@@ -30,6 +30,12 @@
 // Everything else stays the same.
 // ============================================================
 
+// -----------------------------
+// ✅ NETLIFY ESM ⇄ CJS SHIM (FIXES: "module is not defined in ES module scope")
+// -----------------------------
+var module = globalThis.module || (globalThis.module = { exports: {} });
+var exports = globalThis.exports || (globalThis.exports = module.exports);
+
 const SCHEMA_VERSION = "1.2";
 
 // -----------------------------
@@ -40,15 +46,12 @@ let __path = null;
 let __createClient = null;
 let __mortgageHandler = null;
 
-// ✅ ADDED (minimal): capture mortgage import error so brain never crashes
-let __MORTGAGE_IMPORT_ERROR__ = null;
-
 let __ROOT = null;
 let __PAY_TABLES_PATHS = null;
 let __CITIES_DIR = null;
 
 async function ensureDeps() {
-  if (__fs && __path && __createClient) return; // ✅ keep existing behavior safe
+  if (__fs && __path && __createClient && __mortgageHandler) return;
 
   // Built-ins
   const fsMod = await import("node:fs");
@@ -60,24 +63,12 @@ async function ensureDeps() {
   const sbMod = await import("@supabase/supabase-js");
   __createClient = sbMod.createClient;
 
-  // ✅ CHANGED (minimal): mortgage import is now try/catch so brain never crashes
-  try {
-    const mortMod = await import("./mortgage.js");
+  // Mortgage function (dynamic import avoids parse-time crash)
+  const mortMod = await import("./mortgage.js");
+  __mortgageHandler = mortMod?.handler;
 
-    // Support both ESM and "default" exports if present
-    __mortgageHandler =
-      mortMod?.handler ||
-      mortMod?.default?.handler ||
-      null;
-
-    if (typeof __mortgageHandler !== "function") {
-      __mortgageHandler = null;
-      __MORTGAGE_IMPORT_ERROR__ =
-        "mortgage.js imported but `handler` not found as a function.";
-    }
-  } catch (e) {
-    __mortgageHandler = null;
-    __MORTGAGE_IMPORT_ERROR__ = String(e?.message || e);
+  if (typeof __mortgageHandler !== "function") {
+    throw new Error("mortgage.js handler not found. Ensure netlify/functions/mortgage.js exports `handler`.");
   }
 
   // Paths (computed after path module is available)
@@ -911,118 +902,22 @@ function defaultPmiRate({ loanType, dpPct }) {
   return 0.5;
 }
 
-// ✅ ADDED (minimal): local fallback so brain works even if mortgage.js can't be imported
-function __aprFromCreditScore__(cs) {
-  const s = Number(cs || 0) || 0;
-  if (s >= 780) return 6.25;
-  if (s >= 760) return 6.35;
-  if (s >= 740) return 6.50;
-  if (s >= 720) return 6.65;
-  if (s >= 700) return 6.85;
-  if (s >= 680) return 7.15;
-  if (s >= 660) return 7.45;
-  if (s >= 640) return 7.85;
-  return 8.35;
-}
-
-function __pmt__(principal, aprPercent, termYears) {
-  const P = Number(principal || 0) || 0;
-  const r = (Number(aprPercent || 0) || 0) / 100 / 12;
-  const n = (Number(termYears || 0) || 0) * 12;
-  if (P <= 0 || n <= 0) return 0;
-  if (r === 0) return P / n;
-  const pow = Math.pow(1 + r, n);
-  return P * (r * pow) / (pow - 1);
-}
-
-function __localMortgageEngine__(payload) {
-  const price = Number(payload?.price || 0) || 0;
-  const downPct = Number(payload?.down || 0) || 0;
-  const downPayment = price * (downPct / 100);
-  const loanAmount = Math.max(price - downPayment, 0);
-
-  const termYears = Number(payload?.termYears || 30) || 30;
-
-  const creditScore = payload?.creditScore != null ? Number(payload.creditScore) : null;
-
-  let apr = null;
-  let aprSource = null;
-
-  if (payload?.aprOverride != null && Number.isFinite(Number(payload.aprOverride))) {
-    apr = Number(payload.aprOverride);
-    aprSource = "aprOverride";
-  } else if (creditScore != null && Number.isFinite(creditScore)) {
-    apr = __aprFromCreditScore__(creditScore);
-    aprSource = "creditScoreTier";
-  } else {
-    apr = 7.0;
-    aprSource = "default:7.0";
-  }
-
-  const pi = __pmt__(loanAmount, apr, termYears);
-
-  const taxRate = Number(payload?.taxRate || 0) || 0; // decimal
-  const tax = (price * taxRate) / 12;
-
-  const insuranceAnnual = Number(payload?.insuranceAnnual || 0) || 0;
-  const insurance = insuranceAnnual / 12;
-
-  const hoa = Number(payload?.hoaMonthly || 0) || 0;
-
-  const pmiRate = Number(payload?.pmiRate || 0) || 0; // decimal
-  const pmiEligible = downPct < 20 && String(payload?.loanType || "").toLowerCase() !== "va";
-  const pmi = pmiEligible ? (loanAmount * pmiRate) / 12 : 0;
-
-  const allIn = (pi + tax + insurance + hoa + pmi);
-
-  return {
-    ok: true,
-    price,
-    downPercent: downPct,
-    downPayment,
-    loanAmount,
-    apr,
-    aprSource,
-    termYears,
-    breakdown: {
-      pi,
-      tax,
-      insurance,
-      hoa,
-      pmi,
-      allIn,
-    },
-    meta: {
-      warnings: __MORTGAGE_IMPORT_ERROR__
-        ? [`mortgage.js import failed; used fallback calc: ${__MORTGAGE_IMPORT_ERROR__}`]
-        : [],
-    },
-  };
-}
-
 async function callMortgageEngine(payload) {
-  // ✅ CHANGED (minimal): if we have mortgage.js handler, use it; otherwise fallback
-  if (typeof __mortgageHandler === "function") {
-    const evt = {
-      httpMethod: "POST",
-      headers: {},
-      body: JSON.stringify(payload || {}),
-    };
+  const evt = {
+    httpMethod: "POST",
+    headers: {},
+    body: JSON.stringify(payload || {}),
+  };
 
-    const res = await __mortgageHandler(evt);
-    let out = null;
-    try {
-      out = res?.body ? JSON.parse(res.body) : null;
-    } catch (e) {
-      out = null;
-    }
-
-    return { res, out };
+  const res = await __mortgageHandler(evt);
+  let out = null;
+  try {
+    out = res?.body ? JSON.parse(res.body) : null;
+  } catch (e) {
+    out = null;
   }
 
-  // Fallback path: brain stays alive even if mortgage.js is CJS/ESM-incompatible
-  const out = __localMortgageEngine__(payload || {});
-  return { res: { statusCode: 200, body: JSON.stringify(out) }, out };
+  return { res, out };
 }
 
 async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
@@ -1357,10 +1252,6 @@ export async function handler(event) {
 
         cityLoadFallbackUsed: !!cityLoadFallbackUsed,
         cityLoadError: cityLoadError || null,
-
-        // ✅ ADDED (debug only): tell you if mortgage import failed
-        mortgageImportError: __MORTGAGE_IMPORT_ERROR__ || null,
-        usingMortgageHandler: typeof __mortgageHandler === "function",
       },
 
       profile,

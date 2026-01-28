@@ -1,6 +1,6 @@
 // netlify/functions/mortgage.js
 // ============================================================
-// PCSUnited • Mortgage Engine (Standalone) v1.0.0
+// OrozcoRealty.ai • Mortgage Engine (Standalone) v1.0.0
 // PURPOSE:
 // - Deterministic mortgage breakdown for dashboards (Webflow-safe)
 // - Central source of truth for: APR, P&I, Tax, Insurance, HOA, PMI, All-in
@@ -42,6 +42,12 @@
 //   meta: { aprSource, pmiApplied, warnings: [...] }
 // }
 // ============================================================
+
+// -----------------------------
+// ✅ NETLIFY ESM ⇄ CJS SHIM (FIXES: "module is not defined in ES module scope")
+// -----------------------------
+var module = globalThis.module || (globalThis.module = { exports: {} });
+var exports = globalThis.exports || (globalThis.exports = module.exports);
 
 // ============================================================
 // //#1 — CORS + helpers

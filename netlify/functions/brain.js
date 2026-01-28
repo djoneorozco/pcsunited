@@ -58,8 +58,24 @@ async function ensureDeps() {
   __createClient = sbMod.createClient;
 
   // Mortgage function (dynamic import avoids parse-time crash)
-  const mortMod = await import("./mortgage.js");
-  __mortgageHandler = mortMod?.handler;
+  let mortMod = null;
+  try {
+    mortMod = await import("./mortgage.js");
+  } catch (e) {
+    const msg = String(e?.message || e);
+    // ✅ Minimal but critical: make the failure explicit (this is the "module is not defined in ES module scope" case)
+    throw new Error(
+      `mortgage.js failed to load. If you see "module is not defined in ES module scope", ` +
+      `mortgage.js is using CommonJS (module.exports/exports) while your project runs ESM ("type":"module"). ` +
+      `Fix mortgage.js to: export async function handler(event){...}. Original error: ${msg}`
+    );
+  }
+
+  // ✅ Minimal compatibility: support common export shapes without changing logic
+  __mortgageHandler =
+    mortMod?.handler ||
+    mortMod?.default?.handler ||
+    mortMod?.default;
 
   if (typeof __mortgageHandler !== "function") {
     throw new Error("mortgage.js handler not found. Ensure netlify/functions/mortgage.js exports `handler`.");
@@ -360,7 +376,9 @@ function loadPayTables() {
 function listCityFiles() {
   if (__CITY_FILE_INDEX__) return __CITY_FILE_INDEX__;
   try {
-    const files = __fs.readdirSync(__CITIES_DIR)
+    const files = __fs.readdirSync(__CITIES_DIR, { withFileTypes: true })
+      .filter((d) => d.isFile && d.isFile() ? true : true) // keep behavior stable even if withFileTypes differs
+      .map((d) => (typeof d === "string" ? d : d.name))
       .filter((f) => /\.json$/i.test(f))
       .map((f) => f.replace(/\.json$/i, ""));
     __CITY_FILE_INDEX__ = new Set(files);
@@ -1122,7 +1140,13 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
 // -----------------------------
 function getSupabase() {
   const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_KEY;
+
+  // ✅ Minimal: keep your key name, but allow the common Service Role env var too (prevents false “missing env” failures)
+  const key =
+    process.env.SUPABASE_SERVICE_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_ROLE;
+
   if (!url || !key) throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_KEY env vars.");
   return __createClient(url, key, { auth: { persistSession: false } });
 }
@@ -1140,8 +1164,8 @@ async function fetchProfileByEmail(email) {
 // -----------------------------
 export async function handler(event) {
   try {
-    await ensureDeps();
-
+    // ✅ ONLY CHANGE NEEDED FOR YOUR CRASH:
+    // Handle OPTIONS/GET/405 BEFORE ensureDeps() so /api/brain doesn't import mortgage.js just to answer GET/preflight
     if (event.httpMethod === "OPTIONS") {
       // Preflight MUST return CORS headers (204 is best practice)
       return { statusCode: 204, headers: buildCorsHeaders(event), body: "" };
@@ -1158,6 +1182,9 @@ export async function handler(event) {
     if (event.httpMethod !== "POST") {
       return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Method not allowed." });
     }
+
+    // ✅ deps only needed for POST (fs/path/supabase/mortgage)
+    await ensureDeps();
 
     const body = JSON.parse(event.body || "{}");
     const email = String(body.email || "").trim().toLowerCase();

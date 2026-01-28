@@ -1144,7 +1144,7 @@ async function fetchProfileByEmail(email) {
 // -----------------------------
 // //#6 Netlify handler
 // -----------------------------
-export async function handler(event) {
+exports.handler = async function handler(event) {
   try {
     await ensureDeps();
 

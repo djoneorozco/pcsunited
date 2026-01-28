@@ -1,20 +1,16 @@
 // netlify/functions/brain.js
 // ============================================================
-// CENTRAL BRAIN (v1.9.3) — Pay + City + FULL Mortgage Breakdown (BACKWARD-COMPAT)
+// CENTRAL BRAIN (v1.9.3-cjs) — Pay + City + FULL Mortgage Breakdown (BACKWARD-COMPAT)
 //
 // ✅ CITY FIX (Base-named JSON compatibility):
 // Your /netlify/functions/cities folder uses BASE-NAMED files:
 //   Nellis.json, Davis-Monthan.json, Fort-Sam-Houston.json, Randolph.json, etc.
-// But brain resolves canonical city keys like: LasVegas, Tucson, SanAntonio.
-// This patch keeps canonical cityKey for output/debug, BUT loads the correct FILE key.
-//
-// Example:
-//   base = "Nellis" -> canonical cityKey = "LasVegas"
-//   loads file = "Nellis.json" (since LasVegas.json doesn't exist)
+// But callers often use canonical city keys like: LasVegas, Tucson, SanAntonio.
+// This keeps canonical cityKey for output/debug, BUT loads the correct FILE key.
 //
 // ✅ MORTGAGE CHANGE (Option 1):
 // - Mortgage MATH is REMOVED from brain.js
-// - brain.js now calls mortgage.js (single source of truth) and maps the result
+// - brain.js calls mortgage.js (single source of truth) and maps the result
 // - Output shape remains backward-compatible (mortgage.breakdown + legacy aliases)
 //
 // ✅ FIX (Credit Score not affecting APR):
@@ -22,63 +18,34 @@
 // - Only pass aprOverride when user explicitly provides body.apr OR when creditScore is missing.
 // - This allows mortgage.js creditScore tiers to drive APR as intended.
 //
-// ✅ NEW (REQUIRED FOR NETLIFY CRASH FIX):
-// - Removed ALL top-level `import ...` statements.
-// - Uses runtime `import()` so this file cannot crash with:
-//   "Cannot use import statement outside a module"
+// ✅ NETLIFY STABILITY:
+// - CommonJS only (no top-level ESM import/export, no shim, no dynamic import)
+// - Works with the rest of your functions that already use require()
 //
-// Everything else stays the same.
+// ENDPOINT:
+//   POST /api/brain   (via netlify.toml redirect)
 // ============================================================
 
-// -----------------------------
-// ✅ NETLIFY ESM ⇄ CJS SHIM (FIXES: "module is not defined in ES module scope")
-// -----------------------------
-var module = globalThis.module || (globalThis.module = { exports: {} });
-var exports = globalThis.exports || (globalThis.exports = module.exports);
+"use strict";
+
+const fs = require("node:fs");
+const path = require("node:path");
+const { createClient } = require("@supabase/supabase-js");
+
+// Local mortgage engine handler (must be CommonJS: exports.handler = ...)
+const { handler: mortgageHandler } = require("./mortgage.js");
 
 const SCHEMA_VERSION = "1.2";
 
 // -----------------------------
-// //#0 Runtime deps (CJS/ESM safe)
+// //#0 Paths (Netlify-safe)
 // -----------------------------
-let __fs = null;
-let __path = null;
-let __createClient = null;
-let __mortgageHandler = null;
-
-let __ROOT = null;
-let __PAY_TABLES_PATHS = null;
-let __CITIES_DIR = null;
-
-async function ensureDeps() {
-  if (__fs && __path && __createClient && __mortgageHandler) return;
-
-  // Built-ins
-  const fsMod = await import("node:fs");
-  const pathMod = await import("node:path");
-  __fs = fsMod.default || fsMod;
-  __path = pathMod.default || pathMod;
-
-  // Supabase (dynamic import avoids parse-time crash)
-  const sbMod = await import("@supabase/supabase-js");
-  __createClient = sbMod.createClient;
-
-  // Mortgage function (dynamic import avoids parse-time crash)
-  const mortMod = await import("./mortgage.js");
-  __mortgageHandler = mortMod?.handler;
-
-  if (typeof __mortgageHandler !== "function") {
-    throw new Error("mortgage.js handler not found. Ensure netlify/functions/mortgage.js exports `handler`.");
-  }
-
-  // Paths (computed after path module is available)
-  __ROOT = process.cwd(); // /var/task
-  __PAY_TABLES_PATHS = [
-    __path.join(__ROOT, "netlify", "functions", "militaryPayTables.json"),
-    __path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
-  ];
-  __CITIES_DIR = __path.join(__ROOT, "netlify", "functions", "cities");
-}
+const __ROOT = process.cwd(); // /var/task
+const __PAY_TABLES_PATHS = [
+  path.join(__ROOT, "netlify", "functions", "militaryPayTables.json"),
+  path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
+];
+const __CITIES_DIR = path.join(__ROOT, "netlify", "functions", "cities");
 
 // -----------------------------
 // //#1 CORS (robust)
@@ -163,9 +130,8 @@ function pickFirst(obj, keys) {
 }
 
 // -----------------------------
-// //#2.5 Missing functions (RESTORED + UPDATED)
+// //#2.5 Restored helper functions (model + overrides)
 // -----------------------------
-
 function detectPayModel(profile) {
   const modeRaw = lower(profile?.mode);
 
@@ -215,9 +181,7 @@ function detectPayModel(profile) {
 
 function deriveDependentsFromFamilySize(profile) {
   const familySize =
-    toInt(
-      pickFirst(profile, ["familySize", "family_size", "family", "dependents_count", "dependentsCount"])
-    ) ?? 1;
+    toInt(pickFirst(profile, ["familySize", "family_size", "family", "dependents_count", "dependentsCount"])) ?? 1;
 
   const hasSpouse = familySize >= 2;
   const kidsUnder18 = Math.max(familySize - 2, 0);
@@ -302,7 +266,12 @@ function deriveCityKeyFromBase(profile, payTables) {
 
   if (tbl && typeof tbl === "object") {
     const mapped = tbl[norm] || tbl[String(baseRaw || "").trim()] || null;
-    if (mapped) return { cityKey: safeKey(mapped), source: "payTables.CITY_BY_BASE", base: String(baseRaw || "").trim() };
+    if (mapped)
+      return {
+        cityKey: safeKey(mapped),
+        source: "payTables.CITY_BY_BASE",
+        base: String(baseRaw || "").trim(),
+      };
   }
 
   const MAP = {
@@ -327,7 +296,11 @@ function deriveCityKeyFromBase(profile, payTables) {
   };
 
   const hit = MAP[norm] || null;
-  return { cityKey: hit ? safeKey(hit) : null, source: hit ? "internalBaseCityMap" : "none", base: String(baseRaw || "").trim() };
+  return {
+    cityKey: hit ? safeKey(hit) : null,
+    source: hit ? "internalBaseCityMap" : "none",
+    base: String(baseRaw || "").trim(),
+  };
 }
 
 // -----------------------------
@@ -344,7 +317,7 @@ function loadPayTables() {
 
   let found = null;
   for (const p of __PAY_TABLES_PATHS || []) {
-    if (__fs.existsSync(p)) {
+    if (fs.existsSync(p)) {
       found = p;
       break;
     }
@@ -353,11 +326,11 @@ function loadPayTables() {
   if (!found) {
     throw new Error(
       `militaryPayTables.json not found. Tried:\n- ${( __PAY_TABLES_PATHS || []).join("\n- ")}\n` +
-        `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
+      `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
     );
   }
 
-  const raw = __fs.readFileSync(found, "utf8");
+  const raw = fs.readFileSync(found, "utf8");
   __PAY_TABLES_CACHE__ = JSON.parse(raw);
   __PAY_TABLES_PATH_USED__ = found;
   return __PAY_TABLES_CACHE__;
@@ -366,7 +339,8 @@ function loadPayTables() {
 function listCityFiles() {
   if (__CITY_FILE_INDEX__) return __CITY_FILE_INDEX__;
   try {
-    const files = __fs.readdirSync(__CITIES_DIR)
+    const files = fs
+      .readdirSync(__CITIES_DIR)
       .filter((f) => /\.json$/i.test(f))
       .map((f) => f.replace(/\.json$/i, ""));
     __CITY_FILE_INDEX__ = new Set(files);
@@ -465,7 +439,14 @@ function resolveCityFileKey({ cityKeyCanonical, profile }) {
       return {
         ok: true,
         fileKey: c,
-        via: c === canonical ? "direct" : (c === baseFile ? "baseToFileKey" : (c === canonicalFallback ? "canonicalToFileFallback" : "lastResort")),
+        via:
+          c === canonical
+            ? "direct"
+            : c === baseFile
+              ? "baseToFileKey"
+              : c === canonicalFallback
+                ? "canonicalToFileFallback"
+                : "lastResort",
         candidates: uniq,
         baseUsed: String(baseRaw || "").trim(),
       };
@@ -486,10 +467,10 @@ function loadCity(cityKeyCanonical, profileForFilePick) {
 
   const res = resolveCityFileKey({ cityKeyCanonical: canonical, profile: profileForFilePick || {} });
   const idx = listCityFiles();
+
   if (!res.ok || !res.fileKey) {
     throw new Error(
-      `City JSON not found. requested="${canonical}" canonical="${canonical}" ` +
-      `availableFiles=${Array.from(idx).sort().join(", ")}`
+      `City JSON not found. requested="${canonical}" canonical="${canonical}" availableFiles=${Array.from(idx).sort().join(", ")}`
     );
   }
 
@@ -508,12 +489,12 @@ function loadCity(cityKeyCanonical, profileForFilePick) {
     };
   }
 
-  const filePath = __path.join(__CITIES_DIR, `${fileKey}.json`);
-  if (!__fs.existsSync(filePath)) {
+  const filePath = path.join(__CITIES_DIR, `${fileKey}.json`);
+  if (!fs.existsSync(filePath)) {
     throw new Error(`City JSON not found at ${filePath}`);
   }
 
-  const raw = __fs.readFileSync(filePath, "utf8");
+  const raw = fs.readFileSync(filePath, "utf8");
   const data = JSON.parse(raw);
 
   const marketRaw = data.market || data?.housing?.market || data?.realEstate?.market || {};
@@ -763,7 +744,8 @@ function computePay(profile, payTables) {
   const yos = toInt(profile?.yos ?? profile?.years_of_service ?? profile?.yearsOfService);
 
   const famRaw = profile?.family ?? profile?.dependents ?? profile?.has_dependents;
-  const familyBool = String(famRaw).toLowerCase() === "true" || famRaw === true || (toInt(famRaw) || 0) >= 2;
+  const familyBool =
+    String(famRaw).toLowerCase() === "true" || famRaw === true || (toInt(famRaw) || 0) >= 2;
 
   const explicitZip = String(profile?.zip || profile?.postal_code || "").trim();
   const baseName = String(profile?.base || profile?.duty_station || profile?.station || "").trim();
@@ -847,7 +829,7 @@ function computePay(profile, payTables) {
 }
 
 // -----------------------------
-// //#4.5 Mortgage (NO MATH) — select inputs + call mortgage.js + map output
+// //#4.5 Mortgage (NO MATH) — call mortgage.js + map output
 // -----------------------------
 function pickMortgagePrice({ body, profile, city, bedrooms }) {
   const bodyPrice = toNum(body?.price ?? body?.homePrice ?? body?.purchase_price ?? body?.purchasePrice);
@@ -894,22 +876,27 @@ function pickMortgagePrice({ body, profile, city, bedrooms }) {
   return { price, source };
 }
 
-function defaultPmiRate({ loanType, dpPct }) {
+function defaultPmiRatePct({ loanType, dpPct }) {
   const lt = String(loanType || "").trim().toLowerCase();
   if (lt === "va") return 0;
-  if (lt === "fha") return 0.55;
+  if (lt === "fha") return 0.55; // percent
   if (dpPct >= 20) return 0;
-  return 0.5;
+  return 0.5; // percent
 }
 
 async function callMortgageEngine(payload) {
+  if (typeof mortgageHandler !== "function") {
+    return { res: { statusCode: 500, body: JSON.stringify({ ok: false, error: "mortgage.js handler missing" }) }, out: null };
+  }
+
   const evt = {
     httpMethod: "POST",
     headers: {},
     body: JSON.stringify(payload || {}),
   };
 
-  const res = await __mortgageHandler(evt);
+  const res = await mortgageHandler(evt);
+
   let out = null;
   try {
     out = res?.body ? JSON.parse(res.body) : null;
@@ -965,6 +952,9 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
 
   const creditScore = toInt(body?.creditScore ?? profile?.creditScore ?? profile?.credit_score) ?? null;
 
+  // Only allow aprOverride when:
+  // - caller explicitly sets body.apr OR
+  // - creditScore is missing (then we may use profile/city fallback)
   const bodyApr = toNum(body?.apr);
   const profileApr = toNum(profile?.apr);
 
@@ -1033,17 +1023,19 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
   const loanTypeRaw = String(body?.loanType ?? profile?.loanType ?? profile?.loan_type ?? "").trim();
   const loanType = loanTypeRaw ? loanTypeRaw : "conventional";
 
-  const pmiRatePct = toNum(body?.pmiRate ?? profile?.pmiRate) ?? defaultPmiRate({ loanType, dpPct });
+  const pmiRatePct =
+    toNum(body?.pmiRate ?? profile?.pmiRate) ??
+    defaultPmiRatePct({ loanType, dpPct });
 
   sources.pmiRate =
-    body?.pmiRate != null ? "body.pmiRate" : profile?.pmiRate != null ? "profile.pmiRate" : "defaultPmiRate(loanType,dpPct)";
+    body?.pmiRate != null ? "body.pmiRate" : profile?.pmiRate != null ? "profile.pmiRate" : "defaultPmiRatePct(loanType,dpPct)";
 
   const mortgagePayload = {
     price: price,
-    down: dpPct,
+    down: dpPct, // percent (mortgage.js supports percent)
     creditScore: creditScore ?? undefined,
     termYears: termYears,
-    taxRate: Number.isFinite(taxRatePct) ? (taxRatePct / 100) : undefined,
+    taxRate: Number.isFinite(taxRatePct) ? (taxRatePct / 100) : undefined, // fraction
     insuranceAnnual: Number.isFinite(insRatePct) ? (price * (insRatePct / 100)) : undefined,
     hoaMonthly: Number.isFinite(hoa) ? hoa : 0,
     loanType: String(loanType || "conventional").toLowerCase(),
@@ -1051,7 +1043,7 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
       (bodyApr != null || creditScore == null)
         ? (Number.isFinite(aprOverrideCandidate) ? aprOverrideCandidate : undefined)
         : undefined,
-    pmiRate: Number.isFinite(pmiRatePct) ? (pmiRatePct / 100) : undefined,
+    pmiRate: Number.isFinite(pmiRatePct) ? (pmiRatePct / 100) : undefined, // fraction
   };
 
   let engine = null;
@@ -1060,6 +1052,7 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
   try {
     const { res, out } = await callMortgageEngine(mortgagePayload);
     engine = out;
+
     if (!res || res.statusCode !== 200 || !out || out.ok !== true) {
       engineErr = out?.error || `mortgage.js failed (status=${res?.statusCode ?? "unknown"})`;
     }
@@ -1130,7 +1123,7 @@ function getSupabase() {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_KEY;
   if (!url || !key) throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_KEY env vars.");
-  return __createClient(url, key, { auth: { persistSession: false } });
+  return createClient(url, key, { auth: { persistSession: false } });
 }
 
 async function fetchProfileByEmail(email) {
@@ -1146,10 +1139,7 @@ async function fetchProfileByEmail(email) {
 // -----------------------------
 exports.handler = async function handler(event) {
   try {
-    await ensureDeps();
-
     if (event.httpMethod === "OPTIONS") {
-      // Preflight MUST return CORS headers (204 is best practice)
       return { statusCode: 204, headers: buildCorsHeaders(event), body: "" };
     }
 
@@ -1165,15 +1155,19 @@ exports.handler = async function handler(event) {
       return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Method not allowed." });
     }
 
-    const body = JSON.parse(event.body || "{}");
+    let body = {};
+    try {
+      body = JSON.parse(event.body || "{}");
+    } catch (e) {
+      return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Invalid JSON body." });
+    }
+
     const email = String(body.email || "").trim().toLowerCase();
+    if (!email) return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Missing email." });
 
     const cityKeyRaw = body.cityKey == null ? "" : String(body.cityKey);
     const cityKeyClean = safeKey(cityKeyRaw);
-
     const bedrooms = toInt(body.bedrooms) ?? 4;
-
-    if (!email) return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Missing email." });
 
     const payTables = loadPayTables();
     const profile = await fetchProfileByEmail(email);
@@ -1213,12 +1207,14 @@ exports.handler = async function handler(event) {
 
     const mortgageCore = await computeMortgageEstimate({ body, profile: profileEffective, city, bedrooms });
 
+    // Backward-compatible mortgage output
     const mortgage = {
       ok: !!mortgageCore.ok,
       breakdown: mortgageCore.breakdown,
       assumptions: mortgageCore.assumptions,
       sources: mortgageCore.sources,
 
+      // legacy aliases used across older dashboards
       totalMonthly: Number(mortgageCore?.breakdown?.totalMonthly || 0) || 0,
       principalInterestMonthly: Number(mortgageCore?.breakdown?.principalInterest || 0) || 0,
       taxMonthly: Number(mortgageCore?.breakdown?.propertyTax || 0) || 0,
@@ -1230,7 +1226,8 @@ exports.handler = async function handler(event) {
       termYears: Number(mortgageCore?.assumptions?.termYears || 0) || 0,
       loanAmount: Number(mortgageCore?.assumptions?.loan || 0) || 0,
 
-      source: "brain",
+      source: "brain->mortgage.js",
+      meta: mortgageCore?.meta || null,
     };
 
     return respond(event, 200, {
@@ -1242,7 +1239,12 @@ exports.handler = async function handler(event) {
         payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
         cityKeyRaw: cityKeyRaw || null,
         cityKeyResolved: resolvedCityKey,
-        cityKeySource: callerDidNotChooseCity && cityResolve.cityKey ? cityResolve.source : cityKeyClean ? "body.cityKey" : "default",
+        cityKeySource:
+          callerDidNotChooseCity && cityResolve.cityKey
+            ? cityResolve.source
+            : cityKeyClean
+              ? "body.cityKey"
+              : "default",
         baseUsedForCity: callerDidNotChooseCity && cityResolve.cityKey ? cityResolve.base || null : null,
 
         cityFileRequested: city?.cityFileRequested || null,
@@ -1268,4 +1270,4 @@ exports.handler = async function handler(event) {
   } catch (e) {
     return respond(event, 500, { ok: false, schemaVersion: SCHEMA_VERSION, error: String(e?.message || e) });
   }
-}
+};

@@ -43,12 +43,6 @@
 // }
 // ============================================================
 
-// -----------------------------
-// ✅ NETLIFY ESM ⇄ CJS SHIM (FIXES: "module is not defined in ES module scope")
-// -----------------------------
-var module = globalThis.module || (globalThis.module = { exports: {} });
-var exports = globalThis.exports || (globalThis.exports = module.exports);
-
 // ============================================================
 // //#1 — CORS + helpers
 // ============================================================
@@ -193,7 +187,7 @@ function computePMI({
 // ============================================================
 // //#4 — Netlify handler
 // ============================================================
-export async function handler(event) {
+exports.handler = async function handler(event) {
   try{
     if (event.httpMethod === "OPTIONS"){
       return { statusCode: 204, headers: corsHeaders, body: "" };
@@ -318,4 +312,4 @@ export async function handler(event) {
   } catch (e){
     return j(500, { ok:false, error:"Server error", detail: String(e?.message || e) });
   }
-}
+};

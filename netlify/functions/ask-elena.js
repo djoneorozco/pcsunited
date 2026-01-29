@@ -1,5 +1,5 @@
 // netlify/functions/ask-elena.js
-// v2.4.2 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability + OpenAI Web Search fallback)
+// v2.4.1 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability)
 //
 // GOAL:
 // - Elena can answer questions about the user's profile + pay (Base Pay + BAS, and BAH if ZIP/base is available)
@@ -16,7 +16,7 @@
 //
 // CLIENT SHOULD CALL (recommended):
 //   POST https://pcsunited.netlify.app/api/ask-elena
-//   body: { message, email, zip?, context?: { profile?: {...}, identity?: {...} } }
+//   body: { message, email, zip?, context?: { profile?: {...} } }
 
 const { createClient } = require("@supabase/supabase-js");
 const fs = require("fs");
@@ -32,7 +32,8 @@ const ALLOW_ORIGINS = [
   "https://www.pcsunited.com",
   "https://pcsunited.netlify.app",
 
-  // Webflow staging (update if different)
+  // If you still use Webflow staging for PCSUnited, keep these:
+  // (replace with your real Webflow domains if different)
   "https://pcsunited.webflow.io",
   "https://www.pcsunited.webflow.io",
 
@@ -100,12 +101,7 @@ function lastNameOf(fullName, lastNameField) {
 }
 
 function getEmailFromPayload(payload) {
-  // Priority order:
-  // 1) payload.email
-  // 2) payload.context.email
-  // 3) payload.context.profile.email
-  // 4) payload.context.identity.email   (HUD sends identity here)
-  // 5) payload.identity.email           (legacy)
+  // Priority order: payload.email -> payload.context.email -> payload.context.profile.email -> payload.identity.email
   const direct = normalizeEmail(payload?.email);
   if (direct) return direct;
 
@@ -114,9 +110,6 @@ function getEmailFromPayload(payload) {
 
   const ctxProfEmail = normalizeEmail(payload?.context?.profile?.email);
   if (ctxProfEmail) return ctxProfEmail;
-
-  const ctxIdentEmail = normalizeEmail(payload?.context?.identity?.email);
-  if (ctxIdentEmail) return ctxIdentEmail;
 
   const identEmail = normalizeEmail(payload?.identity?.email);
   if (identEmail) return identEmail;
@@ -225,7 +218,6 @@ function principalFromPaymentPI(payment, aprPercent, termYears) {
 ============================================================ */
 let __PAY_TABLES_CACHE__ = null;
 let __PAY_TABLES_LOC_USED__ = null; // "data" | "legacy" | null
-let __PAY_TABLES_PATH_USED__ = null;
 
 function loadPayTables() {
   if (__PAY_TABLES_CACHE__ !== null) return __PAY_TABLES_CACHE__;
@@ -248,18 +240,15 @@ function loadPayTables() {
     if (!fp) {
       __PAY_TABLES_CACHE__ = null;
       __PAY_TABLES_LOC_USED__ = null;
-      __PAY_TABLES_PATH_USED__ = null;
       return null;
     }
 
     const raw = fs.readFileSync(fp, "utf8");
     __PAY_TABLES_CACHE__ = JSON.parse(raw);
-    __PAY_TABLES_PATH_USED__ = fp;
     return __PAY_TABLES_CACHE__;
   } catch (_) {
     __PAY_TABLES_CACHE__ = null;
     __PAY_TABLES_LOC_USED__ = null;
-    __PAY_TABLES_PATH_USED__ = null;
     return null;
   }
 }
@@ -391,55 +380,6 @@ function detectIntent(text) {
 }
 
 /* ============================================================
-   //#5B — OpenAI Web Search helper (Responses API)
-   - Lets Elena answer “Google-type” questions without guessing.
-============================================================ */
-async function openaiWithWebSearch({ apiKey, system, userPayload }) {
-  const resp = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${apiKey}`,
-    },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      temperature: 0.25,
-      max_output_tokens: 650,
-      tools: [{ type: "web_search" }],
-      input: [
-        { role: "system", content: system },
-        { role: "user", content: JSON.stringify(userPayload) },
-      ],
-    }),
-  });
-
-  const data = await resp.json();
-
-  const text = (data?.output_text || "").trim();
-
-  // Optional source extraction (best-effort; depends on tool annotations)
-  const sources = [];
-  try {
-    for (const item of data?.output || []) {
-      for (const c of item?.content || []) {
-        for (const a of c?.annotations || []) {
-          const url = a?.url || a?.source_url || a?.source || null;
-          if (url) sources.push(String(url));
-        }
-      }
-    }
-  } catch (_) {}
-
-  return {
-    ok: resp.ok,
-    status: resp.status,
-    text,
-    sources: Array.from(new Set(sources)).slice(0, 6),
-    raw: data,
-  };
-}
-
-/* ============================================================
    //#6 — Main handler
 ============================================================ */
 module.exports.handler = async (event) => {
@@ -540,7 +480,6 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
         },
       });
     }
@@ -561,7 +500,6 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
       },
     });
   }
@@ -580,7 +518,6 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
         },
       });
     }
@@ -604,7 +541,6 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
         },
       });
     }
@@ -645,7 +581,6 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
       },
     });
   }
@@ -664,7 +599,6 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
         },
       });
     }
@@ -688,7 +622,6 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
         },
       });
     }
@@ -697,7 +630,7 @@ module.exports.handler = async (event) => {
     const allInCap = totalPay * 0.30; // safe all-in housing cap
     const piTarget = allInCap / 1.28; // buffer for taxes/ins/HOA
 
-    // Explicit quick assumptions
+    // Explicit quick assumptions (same as your original)
     const aprAssumed = 7.0;
     const termAssumed = 30;
 
@@ -747,13 +680,12 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
       },
     });
   }
 
   // ============================================================
-  // //#6.4 — OpenAI fallback WITH Web Search (profile-aware, optional)
+  // //#6.4 — OpenAI fallback (profile-aware, optional)
   // ============================================================
   const key = process.env.OPENAI_API_KEY;
   if (!key) {
@@ -769,12 +701,11 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
       },
     });
   }
 
-  // Provide pay preview to avoid hallucinated numbers
+  // Provide pay preview to the LLM so it DOESN’T ask for ZIP if base already gives one.
   let payPreview = null;
   if (profileContext && pg && profileContext.yos !== null && profileContext.yos !== undefined) {
     const p = computePayBasics({
@@ -789,52 +720,56 @@ module.exports.handler = async (event) => {
 
   const system = [
     "You are Elena, a warm, high-trust A.I. Concierge for PCSUnited / RealtySaSS.",
-    "BLUF-first. Keep answers tight. No fluff.",
-    "NEVER invent platform numbers. If payPreview/profile are provided, use those exact values only.",
-    "Use web search for current facts (dates, definitions, public info).",
-    "If a question needs user-specific math beyond provided inputs, ask for the missing inputs explicitly.",
-    "If resolvedZip is provided (user ZIP or derived from base), DO NOT ask for ZIP.",
+    "BLUF-first. Keep answers under 8 sentences. No fluff.",
+    "If a question needs math, ask for the missing inputs explicitly.",
+    "If profile is available, use it (rank/yos/base/family/VA).",
+    "IMPORTANT: If resolvedZip is provided (either user ZIP or derived from base), DO NOT ask for ZIP.",
+    "If payPreview is provided, you can reference Base Pay + BAS + BAH + Total directly.",
   ].join(" ");
 
   try {
-    const result = await openaiWithWebSearch({
-      apiKey: key,
-      system,
-      userPayload: {
-        message: userText,
-        profile: profileContext || null,
-        resolvedZip: resolvedZip || null,
-        payPreview: payPreview
-          ? {
-              basePay: payPreview.basePay,
-              bas: payPreview.bas,
-              bah: payPreview.bah,
-              total: payPreview.total,
-              bahNote: payPreview.bahNote || "",
-            }
-          : null,
-        nowISO: new Date().toISOString(),
-        note: "Use web_search for up-to-date facts. Do not fabricate platform numbers.",
-      },
+    const resp = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        temperature: 0.35,
+        max_tokens: 450,
+        messages: [
+          { role: "system", content: system },
+          {
+            role: "user",
+            content: JSON.stringify({
+              message: userText,
+              profile: profileContext,
+              resolvedZip: resolvedZip || null,
+              payPreview: payPreview
+                ? {
+                    basePay: payPreview.basePay,
+                    bas: payPreview.bas,
+                    bah: payPreview.bah,
+                    total: payPreview.total,
+                    bahNote: payPreview.bahNote,
+                  }
+                : null,
+              note: "Use resolvedZip/payPreview if present. Only ask for missing inputs once.",
+            }),
+          },
+        ],
+      }),
     });
 
-    const replyBase = (result.text || "").trim() || "I’m here — what are we solving today?";
-
-    // Optional: attach sources when available (keeps SME vibe + auditability)
-    const reply =
-      result.sources && result.sources.length
-        ? `${replyBase}\n\nSources:\n- ${result.sources.join("\n- ")}`
-        : replyBase;
+    const data = await resp.json();
+    const reply = (data?.choices?.[0]?.message?.content || "").trim() || "I’m here — what are we solving today?";
 
     return respond(200, headers, {
-      intent: "openai_web_search_fallback",
+      intent: "openai_fallback",
       reply,
       profile: profileContext || undefined,
       debug: {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
         resolvedZip: resolvedZip || null,
       },
     });
@@ -846,7 +781,6 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
       },
     });
   }

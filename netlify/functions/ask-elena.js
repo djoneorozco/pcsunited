@@ -1,10 +1,12 @@
 // netlify/functions/ask-elena.js
-// v2.4.2 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability + base/city context)
+// v2.4.1 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability)
 //
-// GOAL (unchanged + added):
+// GOAL:
 // - Elena can answer questions about the user's profile + pay (Base Pay + BAS, and BAH if ZIP/base is available)
 // - Adds deterministic “How much house can I afford?” quick answer
-// - ✅ NEW: Base/City context from netlify/functions/cities/index.byBase.json (+ per-base file load)
+// - Uses deterministic pay tables from:
+//     ✅ netlify/functions/data/militaryPayTables.json (recommended for PCSUnited)
+//     ↩︎ netlify/functions/militaryPayTables.json (legacy fallback)
 //
 // REQUIRED ENV:
 //   SUPABASE_URL
@@ -14,7 +16,7 @@
 //
 // CLIENT SHOULD CALL (recommended):
 //   POST https://pcsunited.netlify.app/api/ask-elena
-//   body: { message, email, zip?, context?: { profile?: {...}, base?: "..."} }
+//   body: { message, email, zip?, context?: { profile?: {...} } }
 
 const { createClient } = require("@supabase/supabase-js");
 const fs = require("fs");
@@ -22,12 +24,16 @@ const path = require("path");
 
 /* ============================================================
    //#1 — CORS (PCSUnited)
+   - Remove OrozcoRealty domains to prevent cross-site “ghost” behavior.
+   - Add PCSUnited origins you actually serve from.
 ============================================================ */
 const ALLOW_ORIGINS = [
   "https://pcsunited.com",
   "https://www.pcsunited.com",
   "https://pcsunited.netlify.app",
 
+  // If you still use Webflow staging for PCSUnited, keep these:
+  // (replace with your real Webflow domains if different)
   "https://pcsunited.webflow.io",
   "https://www.pcsunited.webflow.io",
 
@@ -95,6 +101,7 @@ function lastNameOf(fullName, lastNameField) {
 }
 
 function getEmailFromPayload(payload) {
+  // Priority order: payload.email -> payload.context.email -> payload.context.profile.email -> payload.identity.email
   const direct = normalizeEmail(payload?.email);
   if (direct) return direct;
 
@@ -121,7 +128,7 @@ function normalizePaygrade(x) {
   if (!raw) return "";
   if (/^[EOW]-\d{1,2}$/.test(raw)) return raw;
   if (/^[EOW]\d{1,2}$/.test(raw)) return raw[0] + "-" + raw.slice(1);
-  return raw;
+  return raw; // fallback
 }
 
 function rankShort(paygradeOrRank) {
@@ -201,11 +208,13 @@ function principalFromPaymentPI(payment, aprPercent, termYears) {
   if (r === 0) return M * n;
 
   const pow = Math.pow(1 + r, n);
+  // P = M * (( (1+r)^n - 1 ) / ( r*(1+r)^n ))
   return M * ((pow - 1) / (r * pow));
 }
 
 /* ============================================================
    //#4 — Deterministic pay tables (militaryPayTables.json)
+   PCSUnited preferred location is /netlify/functions/data/
 ============================================================ */
 let __PAY_TABLES_CACHE__ = null;
 let __PAY_TABLES_LOC_USED__ = null; // "data" | "legacy" | null
@@ -213,7 +222,9 @@ let __PAY_TABLES_LOC_USED__ = null; // "data" | "legacy" | null
 function loadPayTables() {
   if (__PAY_TABLES_CACHE__ !== null) return __PAY_TABLES_CACHE__;
 
+  // ✅ PCSUnited preferred
   const pData = path.join(process.cwd(), "netlify", "functions", "data", "militaryPayTables.json");
+  // ↩︎ legacy fallback
   const pLegacy = path.join(process.cwd(), "netlify", "functions", "militaryPayTables.json");
 
   try {
@@ -267,126 +278,7 @@ function pickYosValue(tableForRank, yos) {
   return Number(tableForRank[String(best)]) || 0;
 }
 
-/* ============================================================
-   //#4B — Base/City mapping (cities/index.byBase.json)
-   - Primary: netlify/functions/cities/index.byBase.json
-   - Optional fallback: netlify/functions/cities/base.json (if you add it later)
-   - Optional per-base file load: netlify/functions/cities/<file>.json
-============================================================ */
-let __BASE_INDEX_CACHE__ = null;
-let __BASE_INDEX_LOC_USED__ = null; // "index.byBase" | "base.json" | null
-
-function loadBaseIndex() {
-  if (__BASE_INDEX_CACHE__ !== null) return __BASE_INDEX_CACHE__;
-
-  const pIndex = path.join(process.cwd(), "netlify", "functions", "cities", "index.byBase.json");
-  const pBase = path.join(process.cwd(), "netlify", "functions", "cities", "base.json"); // optional
-
-  try {
-    let fp = null;
-    if (fs.existsSync(pIndex)) {
-      fp = pIndex;
-      __BASE_INDEX_LOC_USED__ = "index.byBase";
-    } else if (fs.existsSync(pBase)) {
-      fp = pBase;
-      __BASE_INDEX_LOC_USED__ = "base.json";
-    }
-
-    if (!fp) {
-      __BASE_INDEX_CACHE__ = null;
-      __BASE_INDEX_LOC_USED__ = null;
-      return null;
-    }
-
-    const raw = fs.readFileSync(fp, "utf8");
-    __BASE_INDEX_CACHE__ = JSON.parse(raw);
-    return __BASE_INDEX_CACHE__;
-  } catch (_) {
-    __BASE_INDEX_CACHE__ = null;
-    __BASE_INDEX_LOC_USED__ = null;
-    return null;
-  }
-}
-
-function resolveBaseMeta(inputBaseName) {
-  const idx = loadBaseIndex();
-  if (!idx) return null;
-
-  const bases = idx?.bases || {};
-  const aliases = idx?.aliases || {};
-
-  const raw = safeStr(inputBaseName);
-  if (!raw) return null;
-
-  // 1) exact base key
-  if (bases[raw]) return { canonical: raw, ...bases[raw] };
-
-  // 2) alias -> canonical
-  const aliased = aliases[raw];
-  if (aliased && bases[aliased]) return { canonical: aliased, ...bases[aliased] };
-
-  // 3) normalized match across bases + aliases
-  const want = normalizeBaseName(raw);
-  if (!want) return null;
-
-  // normalize base keys
-  for (const k of Object.keys(bases)) {
-    if (normalizeBaseName(k) === want) return { canonical: k, ...bases[k] };
-  }
-
-  // normalize aliases
-  for (const [a, canon] of Object.entries(aliases)) {
-    if (normalizeBaseName(a) === want && bases[canon]) return { canonical: canon, ...bases[canon] };
-  }
-
-  return null;
-}
-
-function findBaseMentionInText(text) {
-  const idx = loadBaseIndex();
-  if (!idx) return "";
-
-  const t = String(text || "").toLowerCase();
-  if (!t) return "";
-
-  const bases = Object.keys(idx.bases || {});
-  const aliases = Object.keys(idx.aliases || {});
-
-  // try longer strings first to reduce accidental matches
-  const candidates = [...bases, ...aliases].sort((a, b) => b.length - a.length);
-
-  for (const c of candidates) {
-    if (!c) continue;
-    if (t.includes(String(c).toLowerCase())) return c;
-  }
-
-  return "";
-}
-
-function loadPerBaseFile(meta) {
-  if (!meta || !meta.file) return null;
-  const fname = String(meta.file).endsWith(".json") ? String(meta.file) : `${meta.file}.json`;
-  const fp = path.join(process.cwd(), "netlify", "functions", "cities", fname);
-
-  try {
-    if (!fs.existsSync(fp)) return null;
-    const raw = fs.readFileSync(fp, "utf8");
-    return JSON.parse(raw);
-  } catch (_) {
-    return null;
-  }
-}
-
-/* ============================================================
-   //#4C — ZIP derivation (prefer base index; fallback pay tables)
-============================================================ */
 function deriveZipFromBase(tables, baseName) {
-  // 1) prefer city index mapping if present
-  const meta = resolveBaseMeta(baseName);
-  const z1 = safeStr(meta?.zip);
-  if (z1) return z1;
-
-  // 2) fallback: pay table base_to_zip mapping
   const baseToZip = tables?.BAH?.base_to_zip || tables?.BAH?.baseToZip || {};
   if (!baseName) return "";
 
@@ -484,17 +376,6 @@ function detectIntent(text) {
     (t.includes("budget") && (t.includes("house") || t.includes("home") || t.includes("mortgage")))
   ) return { type: "affordability_question" };
 
-  // ✅ NEW: base/city info intent
-  if (
-    t.includes("base info") ||
-    t.includes("tell me about") ||
-    t.includes("pcs to") ||
-    t.includes("i'm going to") ||
-    t.includes("im going to") ||
-    t.includes("city targets") ||
-    (t.includes("city") && (t.includes("target") || t.includes("rent") || t.includes("home price") || t.includes("market")))
-  ) return { type: "base_city_question" };
-
   return null;
 }
 
@@ -547,7 +428,7 @@ module.exports.handler = async (event) => {
         usedSupabase = true;
       }
     } catch (_) {
-      // swallow
+      // swallow — we can still respond using contextProfile
     }
   }
 
@@ -557,7 +438,7 @@ module.exports.handler = async (event) => {
   const ln = lastNameOf(fullName, profile?.last_name);
   const pg = normalizePaygrade(profile?.rank_paygrade || profile?.rank);
   const yos = profile?.yos ?? null;
-  const baseFromProfile = safeStr(profile?.base);
+  const base = safeStr(profile?.base);
   const family = profile?.family ?? null;
   const va = profile?.va_disability ?? null;
 
@@ -571,7 +452,7 @@ module.exports.handler = async (event) => {
         rank_paygrade: safeStr(profile.rank_paygrade) || null,
         rank: safeStr(profile.rank) || null,
         yos: yos === null || yos === undefined ? null : Number(yos),
-        base: baseFromProfile || null,
+        base: base || null,
         family: family === null || family === undefined ? null : family,
         va_disability: va === null || va === undefined ? null : va,
         mode: safeStr(profile.mode) || null,
@@ -580,35 +461,9 @@ module.exports.handler = async (event) => {
 
   const intent = detectIntent(userText);
 
-  // ============================================================
-  // //#6.0 — Base/City context resolve (from profile + context + text)
-  // ============================================================
-  const baseHint =
-    safeStr(payload?.base) ||
-    safeStr(payload?.context?.base) ||
-    safeStr(payload?.context?.profile?.base) ||
-    baseFromProfile ||
-    "";
-
-  const baseFromText = findBaseMentionInText(userText);
-  const baseCandidate = baseHint || baseFromText || "";
-
-  const baseMeta = baseCandidate ? resolveBaseMeta(baseCandidate) : null;
-  const perBaseData = baseMeta ? loadPerBaseFile(baseMeta) : null;
-
-  const baseContext = baseMeta
-    ? {
-        base: baseMeta.canonical || null,
-        cityKey: safeStr(baseMeta.cityKey) || null,
-        zip: safeStr(baseMeta.zip) || null,
-        file: safeStr(baseMeta.file) || null,
-        data: perBaseData || null, // raw JSON if present
-      }
-    : null;
-
-  // Resolve ZIP early (deterministic + OpenAI fallback)
+  // Resolve ZIP early (used for deterministic + OpenAI fallback)
   const tables = loadPayTables();
-  const derivedZip = !zip && baseCandidate && tables ? deriveZipFromBase(tables, baseCandidate) : "";
+  const derivedZip = !zip && base && tables ? deriveZipFromBase(tables, base) : "";
   const resolvedZip = zip || derivedZip || "";
 
   // ============================================================
@@ -625,7 +480,6 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
         },
       });
     }
@@ -640,14 +494,12 @@ module.exports.handler = async (event) => {
 
     return respond(200, headers, {
       intent: "profile_question",
-      reply: `Locked in. I see you as ${r} ${ln || ""} — ${y} YOS, Base ${baseFromProfile || "—"}, Family ${fam}, VA ${vaTxt}.`.trim(),
+      reply: `Locked in. I see you as ${r} ${ln || ""} — ${y} YOS, Base ${base || "—"}, Family ${fam}, VA ${vaTxt}.`.trim(),
       profile: profileContext,
-      baseContext,
       debug: {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
       },
     });
   }
@@ -666,7 +518,6 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
         },
       });
     }
@@ -676,7 +527,7 @@ module.exports.handler = async (event) => {
       yos: profileContext.yos,
       zip: resolvedZip,
       family: !!profileContext.family,
-      base: profileContext.base || baseCandidate,
+      base: profileContext.base,
     });
 
     const r = rankShort(pg) || pg || "—";
@@ -686,12 +537,10 @@ module.exports.handler = async (event) => {
         intent: "pay_question",
         reply: `I can see your profile (${r}, ${String(profileContext.yos ?? "—")} YOS), but pay math can’t run yet: ${pay.reason}`,
         profile: profileContext,
-        baseContext,
         debug: {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
         },
       });
     }
@@ -713,7 +562,6 @@ module.exports.handler = async (event) => {
       intent: "pay_question",
       reply: lines.join("\n"),
       profile: profileContext,
-      baseContext,
       pay: {
         basePay: pay.basePay,
         bas: pay.bas,
@@ -725,7 +573,7 @@ module.exports.handler = async (event) => {
           paygrade: pg || null,
           yos: profileContext.yos ?? null,
           zip: resolvedZip || null,
-          base: (profileContext.base || baseCandidate) || null,
+          base: profileContext.base || null,
           family: !!profileContext.family,
         },
       },
@@ -733,7 +581,6 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
       },
     });
   }
@@ -752,7 +599,6 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
         },
       });
     }
@@ -764,7 +610,7 @@ module.exports.handler = async (event) => {
       yos: profileContext.yos,
       zip: resolvedZip,
       family: !!profileContext.family,
-      base: profileContext.base || baseCandidate,
+      base: profileContext.base,
     });
 
     if (!pay.ok) {
@@ -772,25 +618,25 @@ module.exports.handler = async (event) => {
         intent: "affordability_question",
         reply: `I can see your profile (${r}, ${String(profileContext.yos ?? "—")} YOS), but pay math can’t run yet: ${pay.reason}`,
         profile: profileContext,
-        baseContext,
         debug: {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
         },
       });
     }
 
     const totalPay = Number(pay.total) || 0;
-    const allInCap = totalPay * 0.30;
-    const piTarget = allInCap / 1.28;
+    const allInCap = totalPay * 0.30; // safe all-in housing cap
+    const piTarget = allInCap / 1.28; // buffer for taxes/ins/HOA
 
+    // Explicit quick assumptions (same as your original)
     const aprAssumed = 7.0;
     const termAssumed = 30;
 
     const maxPrincipal = principalFromPaymentPI(piTarget, aprAssumed, termAssumed);
-    const price0 = maxPrincipal;
+
+    const price0 = maxPrincipal; // 0% down estimate
     const price5 = maxPrincipal / (1 - 0.05);
 
     const lines = [];
@@ -814,7 +660,6 @@ module.exports.handler = async (event) => {
       intent: "affordability_question",
       reply: lines.join("\n"),
       profile: profileContext,
-      baseContext,
       pay: {
         basePay: pay.basePay,
         bas: pay.bas,
@@ -835,64 +680,6 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
-      },
-    });
-  }
-
-  // ============================================================
-  // //#6.3B — Base/City question (deterministic)
-  // ============================================================
-  if (intent?.type === "base_city_question") {
-    if (!baseContext || !baseContext.base) {
-      return respond(200, headers, {
-        intent: "base_city_question",
-        reply:
-          "Tell me the base name you’re heading to (example: Nellis AFB / JBSA-Lackland). If your profile has a base saved, I can use that too.",
-        profile: profileContext || null,
-        baseContext: null,
-        debug: {
-          usedSupabase,
-          hasContextProfile: !!contextProfile,
-          baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
-        },
-      });
-    }
-
-    const lines = [];
-    lines.push(`Base locked: ${baseContext.base}.`);
-    if (baseContext.cityKey) lines.push(`City key: ${baseContext.cityKey}.`);
-    if (baseContext.zip) lines.push(`ZIP anchor: ${baseContext.zip}.`);
-
-    if (baseContext.data && typeof baseContext.data === "object") {
-      // We don’t assume schema — just highlight common-looking values if present.
-      const d = baseContext.data;
-      const maybe = (obj, keys) => {
-        for (const k of keys) {
-          const v = obj?.[k];
-          if (v !== undefined && v !== null && String(v).trim() !== "") return v;
-        }
-        return null;
-      };
-
-      const targetRent = maybe(d, ["targetRent", "rentTarget", "target_rent", "targets_rent"]);
-      const avgHome = maybe(d, ["avgHomePrice", "averageHomePrice", "homePriceAvg", "avg_home_price", "targets_home"]);
-      if (targetRent) lines.push(`Target rent (from base file): ${String(targetRent)}`);
-      if (avgHome) lines.push(`Average home price (from base file): ${String(avgHome)}`);
-    }
-
-    lines.push("");
-    lines.push("Ask me what you want: rent target, price bands, neighborhoods, commute rails, or VA-loan strategy for that market.");
-
-    return respond(200, headers, {
-      intent: "base_city_question",
-      reply: lines.join("\n"),
-      profile: profileContext || null,
-      baseContext,
-      debug: {
-        usedSupabase,
-        hasContextProfile: !!contextProfile,
-        baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
       },
     });
   }
@@ -903,19 +690,17 @@ module.exports.handler = async (event) => {
   const key = process.env.OPENAI_API_KEY;
   if (!key) {
     const hint = profileContext
-      ? `I can see your profile (${rankShort(pg) || pg || "—"}, ${String(profileContext.yos ?? "—")} YOS, ${baseFromProfile || "—"}).`
+      ? `I can see your profile (${rankShort(pg) || pg || "—"}, ${String(profileContext.yos ?? "—")} YOS, ${base || "—"}).`
       : "I can’t see your profile yet (sync it in the shell or include email).";
 
     return respond(200, headers, {
       intent: "fallback_no_openai",
       reply: `Elena (dev echo): “${userText}” — ${hint} Add OPENAI_API_KEY for natural-language answers.`,
       profile: profileContext,
-      baseContext,
       debug: {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
       },
     });
   }
@@ -928,7 +713,7 @@ module.exports.handler = async (event) => {
       yos: profileContext.yos,
       zip: resolvedZip,
       family: !!profileContext.family,
-      base: profileContext.base || baseCandidate,
+      base: profileContext.base,
     });
     if (p?.ok) payPreview = p;
   }
@@ -940,7 +725,6 @@ module.exports.handler = async (event) => {
     "If profile is available, use it (rank/yos/base/family/VA).",
     "IMPORTANT: If resolvedZip is provided (either user ZIP or derived from base), DO NOT ask for ZIP.",
     "If payPreview is provided, you can reference Base Pay + BAS + BAH + Total directly.",
-    "If baseContext is provided (base/cityKey/zip), you can answer base/city questions using it.",
   ].join(" ");
 
   try {
@@ -948,13 +732,9 @@ module.exports.handler = async (event) => {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
       body: JSON.stringify({
-        // ✅ upgrade model
-        model: "gpt-5-nano",
+        model: "gpt-4o-mini",
         temperature: 0.35,
-
-        // ✅ fix: some models require max_completion_tokens (max_tokens deprecated)
-        max_completion_tokens: 450,
-
+        max_tokens: 450,
         messages: [
           { role: "system", content: system },
           {
@@ -963,7 +743,6 @@ module.exports.handler = async (event) => {
               message: userText,
               profile: profileContext,
               resolvedZip: resolvedZip || null,
-              baseContext: baseContext || null,
               payPreview: payPreview
                 ? {
                     basePay: payPreview.basePay,
@@ -973,7 +752,7 @@ module.exports.handler = async (event) => {
                     bahNote: payPreview.bahNote,
                   }
                 : null,
-              note: "Use resolvedZip/baseContext/payPreview if present. Only ask for missing inputs once.",
+              note: "Use resolvedZip/payPreview if present. Only ask for missing inputs once.",
             }),
           },
         ],
@@ -987,12 +766,10 @@ module.exports.handler = async (event) => {
       intent: "openai_fallback",
       reply,
       profile: profileContext || undefined,
-      baseContext: baseContext || undefined,
       debug: {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
         resolvedZip: resolvedZip || null,
       },
     });
@@ -1004,7 +781,6 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        baseIndexLocation: __BASE_INDEX_LOC_USED__ || null,
       },
     });
   }

@@ -1,200 +1,135 @@
 // netlify/functions/elena/skills/profile.js
 // ============================================================
-// PCSUnited • Elena Skill: PROFILE — v1.0.0
+// Skill: profile
 // PURPOSE:
-// - Deterministically answer profile questions (rank, YOS, base, family, mode)
-// - Uses Supabase by email (service role) so Elena can "know who the user is"
+// - Answer "my rank / my YOS / my base / my profile" using Supabase profiles table
 // ============================================================
 
-import { createClient } from "@supabase/supabase-js";
+"use strict";
 
-export const SKILL_NAME = "profile";
-
-function safeStr(x){
+function safeStr(x) {
   const s = String(x ?? "").trim();
   return s || "";
 }
-function lower(x){ return safeStr(x).toLowerCase(); }
-
-function normEmail(email){
-  const e = lower(email);
-  return e.includes("@") ? e : "";
+function lower(x) {
+  return safeStr(x).toLowerCase();
 }
 
-function wantsProfile(text){
+function wantsRank(text) {
   const t = lower(text);
-
-  // Rank / paygrade / “what is my rank”
-  if (t.includes("my rank") || t.includes("rank?") || t.includes("rank ") || t.includes("paygrade") || t.includes("pay grade")) return true;
-
-  // YOS
-  if (t.includes("yos") || t.includes("years of service") || t.includes("time in service")) return true;
-
-  // Base / location
-  if (t.includes("my base") || t.includes("base?") || t.includes("installation") || t.includes("stationed") || t.includes("gaining base")) return true;
-
-  // “my profile”
-  if (t.includes("my profile") || t.includes("my pcsunited profile") || t.includes("who am i") || t.includes("do you know me")) return true;
-
-  return false;
+  return (
+    t.includes("my rank") ||
+    t.includes("what is my rank") ||
+    (t.includes("rank") && t.includes("my")) ||
+    t.includes("rank_paygrade") ||
+    t.includes("paygrade")
+  );
 }
 
-function getSupabase(){
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
-  if (!url || !key) {
-    throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY env vars.");
-  }
-  return createClient(url, key, { auth: { persistSession: false } });
-}
-
-async function fetchProfileByEmail(email){
-  const supabase = getSupabase();
-
-  // Keep this list tight + canonical. Add fields when you need them.
-  const { data, error } = await supabase
-    .from("profiles")
-    .select("email, first_name, last_name, full_name, mode, rank, rank_paygrade, yos, family, base, va_disability")
-    .eq("email", email)
-    .maybeSingle();
-
-  if (error) throw new Error(error.message || "Supabase profile query failed.");
-  return data || null;
-}
-
-function fallbackFromHint(ctx){
-  // If Supabase fails, we can still answer from the client “profile hint”
-  const p = ctx?.profile && typeof ctx.profile === "object" ? ctx.profile : null;
-  if (!p) return null;
-
-  const out = {
-    email: normEmail(p.email),
-    full_name: safeStr(p.full_name),
-    first_name: safeStr(p.first_name),
-    last_name: safeStr(p.last_name),
-    mode: safeStr(p.mode),
-    rank_paygrade: safeStr(p.rank_paygrade || p.rank),
-    yos: (p.yos != null && Number.isFinite(Number(p.yos))) ? Number(p.yos) : null,
-    base: safeStr(p.base),
-    family: (p.family != null ? p.family : null),
-  };
-
-  // only return if it’s actually useful
-  if (out.rank_paygrade || out.yos != null || out.base || out.full_name || out.first_name) return out;
-  return null;
-}
-
-function buildProfileReply(text, profile){
+function wantsProfile(text) {
   const t = lower(text);
-
-  const name =
-    safeStr(profile.first_name) ||
-    safeStr(profile.full_name).split(" ")[0] ||
-    "";
-
-  const rank = safeStr(profile.rank_paygrade || profile.rank);
-  const yos = (profile.yos != null && Number.isFinite(Number(profile.yos))) ? Number(profile.yos) : null;
-  const base = safeStr(profile.base);
-  const mode = safeStr(profile.mode);
-
-  // Specific Q: rank
-  if (t.includes("rank") || t.includes("paygrade") || t.includes("pay grade")) {
-    if (rank) return `Yep${name ? `, ${name}` : ""}. Your PCSUnited profile shows your rank/paygrade as **${rank}**.`;
-    return `I’m not seeing a rank saved in your PCSUnited profile yet. If you tell me your rank (ex: E-6), I can save it and use it for pay + BAH instantly.`;
-  }
-
-  // Specific Q: YOS
-  if (t.includes("yos") || t.includes("years of service") || t.includes("time in service")) {
-    if (yos != null) return `You’re sitting at **${yos}** years of service (YOS) on your PCSUnited profile.`;
-    return `I don’t see your YOS saved yet. Tell me your years of service and I’ll lock it in for pay + retirement estimates.`;
-  }
-
-  // Specific Q: base
-  if (t.includes("base") || t.includes("installation") || t.includes("stationed") || t.includes("gaining")) {
-    if (base) return `Your PCSUnited profile has your base as **${base}**.`;
-    return `I don’t see a base saved in your profile yet. Tell me your base (or ZIP for BAH) and I’ll use that as your default.`;
-  }
-
-  // General profile
-  const bits = [];
-  if (rank) bits.push(`Rank: **${rank}**`);
-  if (yos != null) bits.push(`YOS: **${yos}**`);
-  if (base) bits.push(`Base: **${base}**`);
-  if (mode) bits.push(`Mode: **${mode}**`);
-
-  if (bits.length) {
-    return `Got you${name ? `, ${name}` : ""}. Here’s what I’m reading from your PCSUnited profile:\n${bits.map(b => `• ${b}`).join("\n")}`;
-  }
-
-  return `I can read your PCSUnited profile, but it looks like your key fields (rank/YOS/base) aren’t saved yet. Want to tell me your rank + YOS + base so I can store them and answer instantly going forward?`;
+  return (
+    wantsRank(t) ||
+    t.includes("my profile") ||
+    t.includes("who am i") ||
+    t.includes("what do you know about me") ||
+    t.includes("my yos") ||
+    t.includes("years of service") ||
+    t.includes("my base") ||
+    t.includes("my family") ||
+    t.includes("dependents")
+  );
 }
 
-export async function canHandle({ message }) {
-  return wantsProfile(message);
-}
+module.exports = {
+  id: "profile",
+  priority: 100, // run early
 
-export async function handle({ message, email, context }) {
-  const em = normEmail(email);
+  match: (text, ctx) => {
+    if (!text) return false;
+    return wantsProfile(text);
+  },
 
-  // If no email, we cannot fetch Supabase profile.
-  if (!em) {
-    return {
-      reply:
-        "I can pull your PCSUnited profile, but I don’t have your login email in this chat session. " +
-        "Log in first (or refresh once logged in) and ask again: “what is my rank?”",
-      ui: { speed: 18, startDelay: 120 },
-    };
-  }
-
-  try {
-    const prof = await fetchProfileByEmail(em);
-
-    if (prof) {
+  handle: async (text, ctx, helpers = {}) => {
+    const email = safeStr(ctx?.email).toLowerCase();
+    if (!email || !email.includes("@")) {
       return {
-        reply: buildProfileReply(message, prof),
-        data: { profile: prof },
-        ui: { speed: 18, startDelay: 120 },
-      };
-    }
-
-    // No row found
-    const hint = fallbackFromHint(context);
-    if (hint) {
-      return {
+        intent: "profile_missing_email",
         reply:
-          "I didn’t find a Supabase profile row for your email yet, but I *can* see a local profile hint on this device. " +
-          buildProfileReply(message, hint),
-        data: { profile_hint: hint },
-        ui: { speed: 18, startDelay: 120 },
+          "I can pull your PCSUnited profile, but I don’t have your email identity in this request. Log in first, then try again.",
       };
     }
 
-    return {
-      reply:
-        "I didn’t find your PCSUnited profile in Supabase yet. If you just created the account, it may not be saved — " +
-        "or the email differs. Tell me your rank (ex: E-6) + YOS and I’ll align it.",
-      ui: { speed: 18, startDelay: 120 },
-    };
-
-  } catch (err) {
-    // Fallback to hint if Supabase is misconfigured
-    const hint = fallbackFromHint(context);
-    if (hint) {
+    const supabase = helpers?.supabase;
+    if (!supabase) {
       return {
+        intent: "profile_supabase_not_configured",
         reply:
-          "I hit a cloud lookup snag, but I *can* still answer from your local session data. " +
-          buildProfileReply(message, hint),
-        data: { error: String(err?.message || err), profile_hint: hint },
-        ui: { speed: 18, startDelay: 120 },
+          "I can see your login identity, but Supabase isn’t available in this function environment yet. Make sure SUPABASE_URL and SUPABASE_SERVICE_KEY are set in Netlify.",
       };
     }
 
+    const { data, error } = await supabase
+      .from("profiles")
+      .select("email, full_name, first_name, last_name, mode, rank, rank_paygrade, yos, base, family, va_disability")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (error) {
+      return {
+        intent: "profile_supabase_error",
+        reply: "I tried to load your profile, but Supabase returned an error. Try again in a moment.",
+        data: { error: String(error?.message || error) },
+      };
+    }
+
+    if (!data) {
+      return {
+        intent: "profile_not_found",
+        reply:
+          "I found your login identity, but I don’t see a profile row for that email in Supabase yet. If you just signed up, try logging out and back in once.",
+      };
+    }
+
+    const rank = safeStr(data.rank_paygrade || data.rank || "");
+    const yos = (data.yos != null && Number.isFinite(Number(data.yos))) ? Number(data.yos) : null;
+    const base = safeStr(data.base || "");
+    const mode = safeStr(data.mode || "");
+
+    // If user asked rank specifically, keep it tight and confident
+    if (wantsRank(text)) {
+      if (rank) {
+        const bits = [];
+        if (yos != null) bits.push(`YOS ${yos}`);
+        if (base) bits.push(base);
+        const tail = bits.length ? ` (${bits.join(" • ")})` : "";
+        return {
+          intent: "profile_rank",
+          reply: `Your rank is **${rank}**${tail}.`,
+          data: { rank, yos, base, mode },
+        };
+      }
+      return {
+        intent: "profile_rank_missing",
+        reply:
+          "I pulled your profile, but rank / paygrade is blank right now. Update it on your Profile Page and I’ll use it instantly.",
+        data: { yos, base, mode },
+      };
+    }
+
+    // Otherwise, summary
+    const name = safeStr(data.first_name || data.full_name || "there");
+    const lines = [];
+    lines.push(`Here’s what I have for you, ${name}:`);
+    lines.push(`• Rank: ${rank || "—"}`);
+    lines.push(`• YOS: ${yos != null ? yos : "—"}`);
+    lines.push(`• Base: ${base || "—"}`);
+    lines.push(`• Mode: ${mode || "—"}`);
+
     return {
-      reply:
-        "Sorry Sir, Seems like I misplaced a file somewhere. This usually means Supabase env vars aren’t set on Netlify " +
-        "(SUPABASE_URL / SUPABASE_SERVICE_ROLE_KEY), or the profiles table query failed.",
-      data: { error: String(err?.message || err) },
-      ui: { speed: 18, startDelay: 120 },
+      intent: "profile_summary",
+      reply: lines.join("\n"),
+      data: { rank, yos, base, mode },
     };
-  }
-}
+  },
+};

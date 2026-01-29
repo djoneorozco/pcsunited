@@ -1,22 +1,22 @@
 // netlify/functions/ask-elena.js
-// v2.4.1 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability)
+// v2.4.3 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability + OpenAI Web Search fallback)
 //
 // GOAL:
-// - Elena can answer questions about the user's profile + pay (Base Pay + BAS, and BAH if ZIP/base is available)
-// - Adds deterministic “How much house can I afford?” quick answer
-// - Uses deterministic pay tables from:
-//     ✅ netlify/functions/data/militaryPayTables.json (recommended for PCSUnited)
-//     ↩︎ netlify/functions/militaryPayTables.json (legacy fallback)
+// - Deterministic answers for: profile, pay, affordability
+// - OpenAI fallback for natural language questions
+// - Optional Web Search tool for “Google-type” facts + dates
 //
 // REQUIRED ENV:
 //   SUPABASE_URL
 //   SUPABASE_SERVICE_KEY
 // OPTIONAL ENV:
-//   OPENAI_API_KEY   (only for non-deterministic questions)
+//   OPENAI_API_KEY
+//   OPENAI_MODEL        (default: gpt-5-nano)
+//   OPENAI_WEB_SEARCH   ("1" to allow web search tool, default ON when OPENAI_API_KEY exists)
 //
 // CLIENT SHOULD CALL (recommended):
 //   POST https://pcsunited.netlify.app/api/ask-elena
-//   body: { message, email, zip?, context?: { profile?: {...} } }
+//   body: { message, email, zip?, context?: { profile?: {...}, identity?: {...} } }
 
 const { createClient } = require("@supabase/supabase-js");
 const fs = require("fs");
@@ -24,19 +24,13 @@ const path = require("path");
 
 /* ============================================================
    //#1 — CORS (PCSUnited)
-   - Remove OrozcoRealty domains to prevent cross-site “ghost” behavior.
-   - Add PCSUnited origins you actually serve from.
 ============================================================ */
 const ALLOW_ORIGINS = [
   "https://pcsunited.com",
   "https://www.pcsunited.com",
   "https://pcsunited.netlify.app",
-
-  // If you still use Webflow staging for PCSUnited, keep these:
-  // (replace with your real Webflow domains if different)
   "https://pcsunited.webflow.io",
   "https://www.pcsunited.webflow.io",
-
   "http://localhost:8888",
 ];
 
@@ -101,7 +95,12 @@ function lastNameOf(fullName, lastNameField) {
 }
 
 function getEmailFromPayload(payload) {
-  // Priority order: payload.email -> payload.context.email -> payload.context.profile.email -> payload.identity.email
+  // Priority order:
+  // 1) payload.email
+  // 2) payload.context.email
+  // 3) payload.context.profile.email
+  // 4) payload.context.identity.email   (HUD sends identity here)
+  // 5) payload.identity.email           (legacy)
   const direct = normalizeEmail(payload?.email);
   if (direct) return direct;
 
@@ -110,6 +109,9 @@ function getEmailFromPayload(payload) {
 
   const ctxProfEmail = normalizeEmail(payload?.context?.profile?.email);
   if (ctxProfEmail) return ctxProfEmail;
+
+  const ctxIdentEmail = normalizeEmail(payload?.context?.identity?.email);
+  if (ctxIdentEmail) return ctxIdentEmail;
 
   const identEmail = normalizeEmail(payload?.identity?.email);
   if (identEmail) return identEmail;
@@ -128,7 +130,7 @@ function normalizePaygrade(x) {
   if (!raw) return "";
   if (/^[EOW]-\d{1,2}$/.test(raw)) return raw;
   if (/^[EOW]\d{1,2}$/.test(raw)) return raw[0] + "-" + raw.slice(1);
-  return raw; // fallback
+  return raw;
 }
 
 function rankShort(paygradeOrRank) {
@@ -188,7 +190,6 @@ function monthlyPaymentPI(principal, aprPercent, termYears) {
   const n = Math.max(1, Math.round(years * 12));
 
   if (P <= 0) return 0;
-
   const r = apr > 0 ? (apr / 100) / 12 : 0;
   if (r === 0) return P / n;
 
@@ -203,28 +204,24 @@ function principalFromPaymentPI(payment, aprPercent, termYears) {
   const n = Math.max(1, Math.round(years * 12));
 
   if (M <= 0) return 0;
-
   const r = apr > 0 ? (apr / 100) / 12 : 0;
   if (r === 0) return M * n;
 
   const pow = Math.pow(1 + r, n);
-  // P = M * (( (1+r)^n - 1 ) / ( r*(1+r)^n ))
   return M * ((pow - 1) / (r * pow));
 }
 
 /* ============================================================
    //#4 — Deterministic pay tables (militaryPayTables.json)
-   PCSUnited preferred location is /netlify/functions/data/
 ============================================================ */
 let __PAY_TABLES_CACHE__ = null;
 let __PAY_TABLES_LOC_USED__ = null; // "data" | "legacy" | null
+let __PAY_TABLES_PATH_USED__ = null;
 
 function loadPayTables() {
   if (__PAY_TABLES_CACHE__ !== null) return __PAY_TABLES_CACHE__;
 
-  // ✅ PCSUnited preferred
   const pData = path.join(process.cwd(), "netlify", "functions", "data", "militaryPayTables.json");
-  // ↩︎ legacy fallback
   const pLegacy = path.join(process.cwd(), "netlify", "functions", "militaryPayTables.json");
 
   try {
@@ -240,20 +237,22 @@ function loadPayTables() {
     if (!fp) {
       __PAY_TABLES_CACHE__ = null;
       __PAY_TABLES_LOC_USED__ = null;
+      __PAY_TABLES_PATH_USED__ = null;
       return null;
     }
 
     const raw = fs.readFileSync(fp, "utf8");
     __PAY_TABLES_CACHE__ = JSON.parse(raw);
+    __PAY_TABLES_PATH_USED__ = fp;
     return __PAY_TABLES_CACHE__;
   } catch (_) {
     __PAY_TABLES_CACHE__ = null;
     __PAY_TABLES_LOC_USED__ = null;
+    __PAY_TABLES_PATH_USED__ = null;
     return null;
   }
 }
 
-// choose nearest YOS key <= requested YOS if exact missing
 function pickYosValue(tableForRank, yos) {
   if (!tableForRank || typeof tableForRank !== "object") return 0;
 
@@ -380,7 +379,103 @@ function detectIntent(text) {
 }
 
 /* ============================================================
-   //#6 — Main handler
+   //#5B — Time helpers (avoid “date wrong”)
+============================================================ */
+function tokyoNowISO() {
+  // Deterministic “today” for your user base in Japan
+  try {
+    const fmt = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Asia/Tokyo",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    });
+    const parts = fmt.formatToParts(new Date());
+    const y = parts.find(p => p.type === "year")?.value || "";
+    const m = parts.find(p => p.type === "month")?.value || "";
+    const d = parts.find(p => p.type === "day")?.value || "";
+    // en-CA gives YYYY-MM-DD formatting
+    return `${y}-${m}-${d}`;
+  } catch (_) {
+    return new Date().toISOString().slice(0, 10);
+  }
+}
+
+/* ============================================================
+   //#6 — OpenAI (Responses API + optional Web Search tool)
+============================================================ */
+async function callOpenAI({ apiKey, model, allowWeb, system, userPayload }) {
+  const tools = [];
+  if (allowWeb) {
+    // OpenAI Web Search tool
+    tools.push({ type: "web_search" });
+  }
+
+  const body = {
+    model,
+    input: [
+      { role: "system", content: [{ type: "text", text: system }] },
+      { role: "user", content: [{ type: "text", text: JSON.stringify(userPayload) }] },
+    ],
+    max_output_tokens: 550,
+  };
+
+  if (tools.length) body.tools = tools;
+
+  const r = await fetch("https://api.openai.com/v1/responses", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${apiKey}`,
+    },
+    body: JSON.stringify(body),
+  });
+
+  const j = await r.json();
+  if (!r.ok) {
+    const msg = j?.error?.message || `OpenAI HTTP ${r.status}`;
+    const e = new Error(msg);
+    e.__status = r.status;
+    e.__raw = j;
+    throw e;
+  }
+
+  // Primary text
+  const text = (j.output_text || "").trim();
+
+  // Try to extract web sources (best effort)
+  // Different responses may include them in tool outputs; we keep it conservative.
+  let sources = [];
+  try {
+    const out = Array.isArray(j.output) ? j.output : [];
+    for (const item of out) {
+      if (item?.type === "tool_output" && item?.tool_name === "web_search") {
+        const s = item?.content?.sources || item?.sources || [];
+        if (Array.isArray(s)) sources = sources.concat(s);
+      }
+      // Some variants attach sources elsewhere; we just collect what we can safely see.
+      if (Array.isArray(item?.sources)) sources = sources.concat(item.sources);
+    }
+  } catch (_) {}
+
+  // De-dupe + sanitize
+  const seen = new Set();
+  const cleanSources = [];
+  for (const s of sources) {
+    const title = safeStr(s?.title || s?.name || "");
+    const url = safeStr(s?.url || s?.link || "");
+    const key = `${title}::${url}`;
+    if (!url || seen.has(key)) continue;
+    seen.add(key);
+    cleanSources.push({ title: title || url, url });
+    if (cleanSources.length >= 4) break;
+  }
+
+  return { text, sources: cleanSources };
+}
+
+/* ============================================================
+   //#7 — Main handler
 ============================================================ */
 module.exports.handler = async (event) => {
   const origin = event.headers?.origin || "";
@@ -427,9 +522,7 @@ module.exports.handler = async (event) => {
         profile = data;
         usedSupabase = true;
       }
-    } catch (_) {
-      // swallow — we can still respond using contextProfile
-    }
+    } catch (_) {}
   }
 
   if (!profile && contextProfile) profile = contextProfile;
@@ -461,13 +554,12 @@ module.exports.handler = async (event) => {
 
   const intent = detectIntent(userText);
 
-  // Resolve ZIP early (used for deterministic + OpenAI fallback)
   const tables = loadPayTables();
   const derivedZip = !zip && base && tables ? deriveZipFromBase(tables, base) : "";
   const resolvedZip = zip || derivedZip || "";
 
   // ============================================================
-  // //#6.1 — Profile question (deterministic)
+  // //#7.1 — Profile question (deterministic)
   // ============================================================
   if (intent?.type === "profile_question") {
     if (!profileContext || !profileContext.email) {
@@ -494,7 +586,7 @@ module.exports.handler = async (event) => {
 
     return respond(200, headers, {
       intent: "profile_question",
-      reply: `Locked in. I see you as ${r} ${ln || ""} — ${y} YOS, Base ${base || "—"}, Family ${fam}, VA ${vaTxt}.`.trim(),
+      reply: `Profile synced. ${r} ${ln || ""} — ${y} YOS, Base ${base || "—"}, Family ${fam}, VA ${vaTxt}.`.trim(),
       profile: profileContext,
       debug: {
         usedSupabase,
@@ -505,7 +597,7 @@ module.exports.handler = async (event) => {
   }
 
   // ============================================================
-  // //#6.2 — Pay question (deterministic)
+  // //#7.2 — Pay question (deterministic)
   // ============================================================
   if (intent?.type === "pay_question") {
     if (!profileContext || !profileContext.email) {
@@ -549,13 +641,8 @@ module.exports.handler = async (event) => {
     lines.push(`Monthly pay snapshot for ${r} ${ln || ""}:`.trim());
     lines.push(`• Base Pay: ${money(pay.basePay)}`);
     lines.push(`• BAS: ${money(pay.bas)}`);
-
-    if (pay.bah > 0) {
-      lines.push(`• BAH: ${money(pay.bah)}${pay.resolvedZip ? ` (ZIP ${pay.resolvedZip})` : ""}`);
-    } else {
-      lines.push(`• BAH: — (${pay.bahNote || "ZIP required"})`);
-    }
-
+    if (pay.bah > 0) lines.push(`• BAH: ${money(pay.bah)}${pay.resolvedZip ? ` (ZIP ${pay.resolvedZip})` : ""}`);
+    else lines.push(`• BAH: — (${pay.bahNote || "ZIP required"})`);
     lines.push(`= Estimated Total: ${money(pay.total)} / month`);
 
     return respond(200, headers, {
@@ -586,7 +673,7 @@ module.exports.handler = async (event) => {
   }
 
   // ============================================================
-  // //#6.3 — Affordability question (deterministic quick answer)
+  // //#7.3 — Affordability question (deterministic)
   // ============================================================
   if (intent?.type === "affordability_question") {
     if (!profileContext || !profileContext.email) {
@@ -604,7 +691,6 @@ module.exports.handler = async (event) => {
     }
 
     const r = rankShort(pg) || pg || "—";
-
     const pay = computePayBasics({
       paygrade: pg,
       yos: profileContext.yos,
@@ -627,34 +713,31 @@ module.exports.handler = async (event) => {
     }
 
     const totalPay = Number(pay.total) || 0;
-    const allInCap = totalPay * 0.30; // safe all-in housing cap
-    const piTarget = allInCap / 1.28; // buffer for taxes/ins/HOA
+    const allInCap = totalPay * 0.30;
+    const piTarget = allInCap / 1.28;
 
-    // Explicit quick assumptions (same as your original)
     const aprAssumed = 7.0;
     const termAssumed = 30;
-
     const maxPrincipal = principalFromPaymentPI(piTarget, aprAssumed, termAssumed);
-
-    const price0 = maxPrincipal; // 0% down estimate
+    const price0 = maxPrincipal;
     const price5 = maxPrincipal / (1 - 0.05);
 
     const lines = [];
-    lines.push(`BLUF: Your “safe” all-in housing cap is about ${money(allInCap)}/mo.`);
-    lines.push(`That’s a P&I target of ~${money(piTarget)}/mo (using your 1.28 buffer).`);
+    lines.push(`BLUF: “Safe” all-in housing cap ≈ ${money(allInCap)}/mo.`);
+    lines.push(`P&I target ≈ ${money(piTarget)}/mo (1.28 buffer).`);
     lines.push("");
-    lines.push(`Pay snapshot for ${r} ${ln || ""}:`.trim());
+    lines.push(`Pay used (${r} ${ln || ""}):`.trim());
     lines.push(`• Base Pay: ${money(pay.basePay)}`);
     lines.push(`• BAS: ${money(pay.bas)}`);
     if (pay.bah > 0) lines.push(`• BAH: ${money(pay.bah)}${pay.resolvedZip ? ` (ZIP ${pay.resolvedZip})` : ""}`);
     else lines.push(`• BAH: — (${pay.bahNote || "needs base/ZIP"})`);
-    lines.push(`= Total Pay Used: ${money(totalPay)}/mo`);
+    lines.push(`= Total: ${money(totalPay)}/mo`);
     lines.push("");
-    lines.push(`Quick max price estimate (assumes ${aprAssumed}% APR, ${termAssumed}yr fixed):`);
-    lines.push(`• ~${money(price0)} home price @ 0% down (VA-style rough cap)`);
-    lines.push(`• ~${money(price5)} home price @ 5% down`);
+    lines.push(`Quick max price (assumes ${aprAssumed}% APR, ${termAssumed}yr):`);
+    lines.push(`• ~${money(price0)} @ 0% down`);
+    lines.push(`• ~${money(price5)} @ 5% down`);
     lines.push("");
-    lines.push(`If you tell me your credit score + planned down payment, I’ll tighten this to your real APR band.`);
+    lines.push(`Tell me your credit score + down payment and I’ll tighten the APR band.`);
 
     return respond(200, headers, {
       intent: "affordability_question",
@@ -685,7 +768,7 @@ module.exports.handler = async (event) => {
   }
 
   // ============================================================
-  // //#6.4 — OpenAI fallback (profile-aware, optional)
+  // //#7.4 — OpenAI fallback (optional web search)
   // ============================================================
   const key = process.env.OPENAI_API_KEY;
   if (!key) {
@@ -695,7 +778,7 @@ module.exports.handler = async (event) => {
 
     return respond(200, headers, {
       intent: "fallback_no_openai",
-      reply: `Elena (dev echo): “${userText}” — ${hint} Add OPENAI_API_KEY for natural-language answers.`,
+      reply: `I can do deterministic pay/profile/affordability right now. For broader questions, add OPENAI_API_KEY. ${hint}`.trim(),
       profile: profileContext,
       debug: {
         usedSupabase,
@@ -705,7 +788,7 @@ module.exports.handler = async (event) => {
     });
   }
 
-  // Provide pay preview to the LLM so it DOESN’T ask for ZIP if base already gives one.
+  // Provide pay preview to the LLM (so it doesn’t re-ask for ZIP if base derived it)
   let payPreview = null;
   if (profileContext && pg && profileContext.yos !== null && profileContext.yos !== undefined) {
     const p = computePayBasics({
@@ -718,49 +801,57 @@ module.exports.handler = async (event) => {
     if (p?.ok) payPreview = p;
   }
 
+  const model = safeStr(process.env.OPENAI_MODEL) || "gpt-5-nano";
+  const allowWeb = (safeStr(process.env.OPENAI_WEB_SEARCH) || "1") === "1";
+  const todayTokyo = tokyoNowISO();
+
   const system = [
-    "You are Elena, a warm, high-trust A.I. Concierge for PCSUnited / RealtySaSS.",
-    "BLUF-first. Keep answers under 8 sentences. No fluff.",
-    "If a question needs math, ask for the missing inputs explicitly.",
-    "If profile is available, use it (rank/yos/base/family/VA).",
-    "IMPORTANT: If resolvedZip is provided (either user ZIP or derived from base), DO NOT ask for ZIP.",
-    "If payPreview is provided, you can reference Base Pay + BAS + BAH + Total directly.",
+    "You are Elena, a warm, high-trust A.I. Concierge for PCSUnited.",
+    "BLUF-first. Be precise. No fluff.",
+    "IMPORTANT: Do NOT add closers like “How can I help?” or “Anything else?”",
+    "Only ask ONE follow-up question if a critical input is missing.",
+    "If resolvedZip is provided, do NOT ask for ZIP.",
+    "If payPreview is provided, you may reference it directly.",
+    `Today (Asia/Tokyo) is: ${todayTokyo}. Use this for date-sensitive answers.`,
+    allowWeb ? "You MAY use web_search tool for current facts/dates; cite sources briefly at the end." : "Do NOT browse the web.",
   ].join(" ");
 
+  const userPayload = {
+    message: userText,
+    profile: profileContext,
+    resolvedZip: resolvedZip || null,
+    payPreview: payPreview
+      ? {
+          basePay: payPreview.basePay,
+          bas: payPreview.bas,
+          bah: payPreview.bah,
+          total: payPreview.total,
+          bahNote: payPreview.bahNote,
+        }
+      : null,
+  };
+
   try {
-    const resp = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
-      headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
-      body: JSON.stringify({
-        model: "gpt-4o-mini",
-        temperature: 0.35,
-        max_tokens: 450,
-        messages: [
-          { role: "system", content: system },
-          {
-            role: "user",
-            content: JSON.stringify({
-              message: userText,
-              profile: profileContext,
-              resolvedZip: resolvedZip || null,
-              payPreview: payPreview
-                ? {
-                    basePay: payPreview.basePay,
-                    bas: payPreview.bas,
-                    bah: payPreview.bah,
-                    total: payPreview.total,
-                    bahNote: payPreview.bahNote,
-                  }
-                : null,
-              note: "Use resolvedZip/payPreview if present. Only ask for missing inputs once.",
-            }),
-          },
-        ],
-      }),
+    const out = await callOpenAI({
+      apiKey: key,
+      model,
+      allowWeb,
+      system,
+      userPayload,
     });
 
-    const data = await resp.json();
-    const reply = (data?.choices?.[0]?.message?.content || "").trim() || "I’m here — what are we solving today?";
+    let reply = (out.text || "").trim();
+
+    // If model returned nothing, give a clean deterministic fallback (no “how can I help”)
+    if (!reply) {
+      reply = "I’m here. Ask me about pay, BAH, affordability, or a specific PCS question.";
+    }
+
+    // Append sources if present (HUD can display plain text links)
+    if (out.sources && out.sources.length) {
+      const srcLines = out.sources.map((s) => `- ${s.title}: ${s.url}`);
+      reply += `\n\nSources:\n${srcLines.join("\n")}`;
+    }
 
     return respond(200, headers, {
       intent: "openai_fallback",
@@ -770,17 +861,23 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+        payTablesPath: __PAY_TABLES_PATH_USED__ || null,
         resolvedZip: resolvedZip || null,
+        openai_model: model,
+        openai_web_search: allowWeb,
+        todayTokyo,
       },
     });
   } catch (err) {
     return respond(500, headers, {
-      error: "Server exception",
-      detail: String(err),
+      error: "OpenAI call failed",
+      detail: String(err?.message || err),
       debug: {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+        payTablesPath: __PAY_TABLES_PATH_USED__ || null,
+        openai_model: model,
       },
     });
   }

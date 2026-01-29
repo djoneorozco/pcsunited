@@ -253,6 +253,63 @@ function loadPayTables() {
   }
 }
 
+/* ============================================================
+   //#4B — Bases index (bases.json) for base→ZIP fallback
+   Location: netlify/functions/cities/bases.json
+============================================================ */
+let __BASES_CACHE__ = null;
+
+function loadBasesIndex() {
+  if (__BASES_CACHE__ !== null) return __BASES_CACHE__;
+
+  const pBases = path.join(process.cwd(), "netlify", "functions", "cities", "bases.json");
+
+  try {
+    if (!fs.existsSync(pBases)) {
+      __BASES_CACHE__ = null;
+      return null;
+    }
+    const raw = fs.readFileSync(pBases, "utf8");
+    __BASES_CACHE__ = JSON.parse(raw);
+    return __BASES_CACHE__;
+  } catch (_) {
+    __BASES_CACHE__ = null;
+    return null;
+  }
+}
+
+function extractZipFromBaseRecord(rec) {
+  if (!rec) return "";
+
+  // If someone stores mapping as a raw string: { "FORTSAMHOUSTON": "78234" }
+  if (typeof rec === "string" || typeof rec === "number") {
+    const s = safeStr(rec);
+    return /^\d{5}$/.test(s) ? s : "";
+  }
+
+  if (typeof rec !== "object") return "";
+
+  // Common field names we’ve seen across base datasets
+  const candidates = [
+    rec.zip,
+    rec.zipcode,
+    rec.zipCode,
+    rec.bah_zip,
+    rec.bahZip,
+    rec.postal_code,
+    rec.postalCode,
+    rec.default_zip,
+    rec.defaultZip,
+  ];
+
+  for (const c of candidates) {
+    const s = safeStr(c);
+    if (/^\d{5}$/.test(s)) return s;
+  }
+
+  return "";
+}
+
 // choose nearest YOS key <= requested YOS if exact missing
 function pickYosValue(tableForRank, yos) {
   if (!tableForRank || typeof tableForRank !== "object") return 0;
@@ -285,13 +342,57 @@ function deriveZipFromBase(tables, baseName) {
   const want = normalizeBaseName(baseName);
   if (!want) return "";
 
+  // 1) Prefer pay-tables mapping (existing behavior)
   const map = new Map();
   for (const [k, v] of Object.entries(baseToZip || {})) {
     const nk = normalizeBaseName(k);
     if (nk) map.set(nk, safeStr(v));
   }
+  const hit = map.get(want) || "";
+  if (hit) return hit;
 
-  return map.get(want) || "";
+  // 2) Fallback to cities/bases.json (requested)
+  const bases = loadBasesIndex();
+  if (!bases) return "";
+
+  // Allow either:
+  // - { "FORTSAMHOUSTON": {zip:"78234", ...}, ... }
+  // - { "Fort Sam Houston": {...}, ... } (we normalize keys)
+  // - { bases: [...] } (array records) — we’ll try to match by name-ish fields if present
+  if (typeof bases === "object" && !Array.isArray(bases)) {
+    const idx = new Map();
+    for (const [k, v] of Object.entries(bases)) {
+      const nk = normalizeBaseName(k);
+      if (!nk) continue;
+      const z = extractZipFromBaseRecord(v);
+      if (z) idx.set(nk, z);
+    }
+    const z = idx.get(want) || "";
+    if (z) return z;
+  }
+
+  // Array-style structures (very tolerant, no schema assumptions)
+  const arr = Array.isArray(bases)
+    ? bases
+    : Array.isArray(bases?.bases)
+      ? bases.bases
+      : Array.isArray(bases?.items)
+        ? bases.items
+        : null;
+
+  if (arr && arr.length) {
+    for (const rec of arr) {
+      if (!rec || typeof rec !== "object") continue;
+      const nameKeys = [rec.base, rec.base_name, rec.baseName, rec.name, rec.title];
+      const nm = normalizeBaseName(nameKeys.map(safeStr).find(Boolean) || "");
+      if (nm && nm === want) {
+        const z = extractZipFromBaseRecord(rec);
+        if (z) return z;
+      }
+    }
+  }
+
+  return "";
 }
 
 function lookupBah(tables, zip, paygrade, familyBool) {

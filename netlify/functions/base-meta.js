@@ -1,27 +1,23 @@
 // netlify/functions/base-meta.js
 // ============================================================
-// PCSUnited • Base Meta Lookup — v1.0.0
+// PCSUnited • Base Meta Lookup — v1.0.1 (Crash-proof ESM)
 // PURPOSE:
 // - Browser-safe endpoint to fetch base metadata stored in:
 //   netlify/functions/cities/bases.json
-// - Returns base info: file, zip, cityKey, image_url, plus extra fields:
+// - Returns base info + extra fields:
 //   market_type_summary, population, avg_home_morgage_monthly, etc.
 //
-// ROUTE (via /api/* redirect):
-// - GET  /api/base-meta?base=...        (recommended for quick tests)
+// ROUTES:
+// - GET  /api/base-meta?base=...
 // - POST /api/base-meta   { base: "..." }
 //
-// REQUIRES netlify.toml included_files:
-// [functions]
-// included_files = ["netlify/functions/data/**","netlify/functions/cities/**"]
+// NOTE:
+// - Requires netlify.toml included_files:
+//   [functions]
+//   included_files = ["netlify/functions/data/**","netlify/functions/cities/**"]
 // ============================================================
 
 import fs from "fs/promises";
-import path from "path";
-import { fileURLToPath } from "url";
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -31,7 +27,11 @@ const CORS_HEADERS = {
 };
 
 function respond(statusCode, payload) {
-  return { statusCode, headers: CORS_HEADERS, body: JSON.stringify(payload) };
+  return {
+    statusCode,
+    headers: CORS_HEADERS,
+    body: JSON.stringify(payload),
+  };
 }
 
 function safeJsonParse(s) {
@@ -47,15 +47,19 @@ function normalizeKey(s) {
 }
 
 async function readBasesJson() {
-  const filePath = path.join(__dirname, "cities", "bases.json");
-  const raw = await fs.readFile(filePath, "utf8");
+  // ✅ No __filename / __dirname (avoids Netlify bundler redeclare crash)
+  const fileUrl = new URL("./cities/bases.json", import.meta.url);
+  const raw = await fs.readFile(fileUrl, "utf8");
   const data = JSON.parse(raw);
 
   // Supports either:
-  // { bases: { "Nellis AFB": {...} } }
+  // { "version":"1.0", "bases": { "Nellis AFB": {...} } }
   // or
   // { "Nellis AFB": {...} }
-  const bases = data?.bases && typeof data.bases === "object" ? data.bases : data;
+  const bases =
+    data?.bases && typeof data.bases === "object"
+      ? data.bases
+      : data;
 
   return { version: data?.version || "unknown", bases };
 }
@@ -64,26 +68,21 @@ function findBaseEntry(basesObj, baseName) {
   if (!basesObj || typeof basesObj !== "object") return null;
   if (!baseName) return null;
 
-  // 1) exact key match
+  // 1) exact key
   if (basesObj[baseName]) return { key: baseName, ...basesObj[baseName] };
 
-  // 2) normalized match (handles small spacing/punctuation differences)
+  // 2) normalized key match
   const target = normalizeKey(baseName);
-  let bestKey = null;
-
   for (const k of Object.keys(basesObj)) {
-    if (normalizeKey(k) === target) {
-      bestKey = k;
-      break;
-    }
+    if (normalizeKey(k) === target) return { key: k, ...basesObj[k] };
   }
 
-  if (!bestKey) return null;
-  return { key: bestKey, ...basesObj[bestKey] };
+  return null;
 }
 
 export async function handler(event) {
   try {
+    // ✅ Always succeed preflight (prevents CORS blockage)
     if (event.httpMethod === "OPTIONS") {
       return { statusCode: 204, headers: CORS_HEADERS, body: "" };
     }
@@ -100,12 +99,11 @@ export async function handler(event) {
     }
 
     base = String(base || "").trim();
-
     if (!base) {
       return respond(400, {
         ok: false,
         error: "Missing required parameter: base",
-        hint: 'Send ?base=... (GET) or { "base": "..." } (POST).',
+        hint: 'Use GET ?base=... or POST { "base": "..." }',
       });
     }
 
@@ -121,7 +119,7 @@ export async function handler(event) {
       });
     }
 
-    // Return *only* safe metadata (no secrets)
+    // ✅ Return safe metadata + pass-through fields
     return respond(200, {
       ok: true,
       version,
@@ -131,16 +129,13 @@ export async function handler(event) {
         file: entry.file || null,
         zip: entry.zip || null,
 
-        // Optional: allow you to store direct webflow CDN links per base
         image_url: entry.image_url || entry.imageUrl || entry.image || null,
 
-        // Your new fields
         market_type_summary: entry.market_type_summary || null,
         population: entry.population ?? null,
         avg_home_morgage_monthly: entry.avg_home_morgage_monthly ?? null,
 
-        // Pass-through any extras you add later
-        ...entry,
+        ...entry, // allow future add-ons without code changes
       },
     });
   } catch (err) {

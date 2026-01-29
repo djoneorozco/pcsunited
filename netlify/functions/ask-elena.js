@@ -1,9 +1,10 @@
 // netlify/functions/ask-elena.js
-// v2.4.1 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability)
+// v2.4.2 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability + city/base data)
 //
 // GOAL:
 // - Elena can answer questions about the user's profile + pay (Base Pay + BAS, and BAH if ZIP/base is available)
 // - Adds deterministic “How much house can I afford?” quick answer
+// - ✅ NEW (minimal): Can pull base/city market data from netlify/functions/cities/*.json via index.byBase.json
 // - Uses deterministic pay tables from:
 //     ✅ netlify/functions/data/militaryPayTables.json (recommended for PCSUnited)
 //     ↩︎ netlify/functions/militaryPayTables.json (legacy fallback)
@@ -178,6 +179,12 @@ function normalizeBaseName(s) {
     .replace(/[^A-Z0-9]/g, "");
 }
 
+function toPct(n, digits = 2) {
+  const x = Number(n);
+  if (!Number.isFinite(x)) return "—";
+  return `${(x * 100).toFixed(digits)}%`;
+}
+
 /* ============================================================
    //#3B — Mortgage helpers (deterministic)
 ============================================================ */
@@ -253,63 +260,6 @@ function loadPayTables() {
   }
 }
 
-/* ============================================================
-   //#4B — Bases index (bases.json) for base→ZIP fallback
-   Location: netlify/functions/cities/bases.json
-============================================================ */
-let __BASES_CACHE__ = null;
-
-function loadBasesIndex() {
-  if (__BASES_CACHE__ !== null) return __BASES_CACHE__;
-
-  const pBases = path.join(process.cwd(), "netlify", "functions", "cities", "bases.json");
-
-  try {
-    if (!fs.existsSync(pBases)) {
-      __BASES_CACHE__ = null;
-      return null;
-    }
-    const raw = fs.readFileSync(pBases, "utf8");
-    __BASES_CACHE__ = JSON.parse(raw);
-    return __BASES_CACHE__;
-  } catch (_) {
-    __BASES_CACHE__ = null;
-    return null;
-  }
-}
-
-function extractZipFromBaseRecord(rec) {
-  if (!rec) return "";
-
-  // If someone stores mapping as a raw string: { "FORTSAMHOUSTON": "78234" }
-  if (typeof rec === "string" || typeof rec === "number") {
-    const s = safeStr(rec);
-    return /^\d{5}$/.test(s) ? s : "";
-  }
-
-  if (typeof rec !== "object") return "";
-
-  // Common field names we’ve seen across base datasets
-  const candidates = [
-    rec.zip,
-    rec.zipcode,
-    rec.zipCode,
-    rec.bah_zip,
-    rec.bahZip,
-    rec.postal_code,
-    rec.postalCode,
-    rec.default_zip,
-    rec.defaultZip,
-  ];
-
-  for (const c of candidates) {
-    const s = safeStr(c);
-    if (/^\d{5}$/.test(s)) return s;
-  }
-
-  return "";
-}
-
 // choose nearest YOS key <= requested YOS if exact missing
 function pickYosValue(tableForRank, yos) {
   if (!tableForRank || typeof tableForRank !== "object") return 0;
@@ -342,57 +292,13 @@ function deriveZipFromBase(tables, baseName) {
   const want = normalizeBaseName(baseName);
   if (!want) return "";
 
-  // 1) Prefer pay-tables mapping (existing behavior)
   const map = new Map();
   for (const [k, v] of Object.entries(baseToZip || {})) {
     const nk = normalizeBaseName(k);
     if (nk) map.set(nk, safeStr(v));
   }
-  const hit = map.get(want) || "";
-  if (hit) return hit;
 
-  // 2) Fallback to cities/bases.json (requested)
-  const bases = loadBasesIndex();
-  if (!bases) return "";
-
-  // Allow either:
-  // - { "FORTSAMHOUSTON": {zip:"78234", ...}, ... }
-  // - { "Fort Sam Houston": {...}, ... } (we normalize keys)
-  // - { bases: [...] } (array records) — we’ll try to match by name-ish fields if present
-  if (typeof bases === "object" && !Array.isArray(bases)) {
-    const idx = new Map();
-    for (const [k, v] of Object.entries(bases)) {
-      const nk = normalizeBaseName(k);
-      if (!nk) continue;
-      const z = extractZipFromBaseRecord(v);
-      if (z) idx.set(nk, z);
-    }
-    const z = idx.get(want) || "";
-    if (z) return z;
-  }
-
-  // Array-style structures (very tolerant, no schema assumptions)
-  const arr = Array.isArray(bases)
-    ? bases
-    : Array.isArray(bases?.bases)
-      ? bases.bases
-      : Array.isArray(bases?.items)
-        ? bases.items
-        : null;
-
-  if (arr && arr.length) {
-    for (const rec of arr) {
-      if (!rec || typeof rec !== "object") continue;
-      const nameKeys = [rec.base, rec.base_name, rec.baseName, rec.name, rec.title];
-      const nm = normalizeBaseName(nameKeys.map(safeStr).find(Boolean) || "");
-      if (nm && nm === want) {
-        const z = extractZipFromBaseRecord(rec);
-        if (z) return z;
-      }
-    }
-  }
-
-  return "";
+  return map.get(want) || "";
 }
 
 function lookupBah(tables, zip, paygrade, familyBool) {
@@ -451,6 +357,118 @@ function computePayBasics({ paygrade, yos, zip, family, base }) {
 }
 
 /* ============================================================
+   //#4B — Base → City JSON (cities/*.json) via index.byBase.json
+   ✅ Minimal add: lets Elena read netlify/functions/cities/<file>.json
+============================================================ */
+let __BASE_INDEX_CACHE__ = null; // index.byBase.json content
+let __CITIES_DIR_LIST__ = null;  // cached file list for fallback lookup
+
+function loadBaseIndex() {
+  if (__BASE_INDEX_CACHE__ !== null) return __BASE_INDEX_CACHE__;
+  const fp = path.join(process.cwd(), "netlify", "functions", "cities", "index.byBase.json");
+  try {
+    if (!fs.existsSync(fp)) {
+      __BASE_INDEX_CACHE__ = null;
+      return null;
+    }
+    const raw = fs.readFileSync(fp, "utf8");
+    __BASE_INDEX_CACHE__ = JSON.parse(raw);
+    return __BASE_INDEX_CACHE__;
+  } catch (_) {
+    __BASE_INDEX_CACHE__ = null;
+    return null;
+  }
+}
+
+function listCityJsonFiles() {
+  if (__CITIES_DIR_LIST__ !== null) return __CITIES_DIR_LIST__;
+  const dir = path.join(process.cwd(), "netlify", "functions", "cities");
+  try {
+    if (!fs.existsSync(dir)) {
+      __CITIES_DIR_LIST__ = [];
+      return __CITIES_DIR_LIST__;
+    }
+    const all = fs.readdirSync(dir);
+    __CITIES_DIR_LIST__ = all
+      .filter((f) => f.toLowerCase().endsWith(".json"))
+      .filter((f) => f !== "index.byBase.json");
+    return __CITIES_DIR_LIST__;
+  } catch (_) {
+    __CITIES_DIR_LIST__ = [];
+    return __CITIES_DIR_LIST__;
+  }
+}
+
+function resolveBaseCityMeta(baseName) {
+  const base = safeStr(baseName);
+  if (!base) return null;
+
+  const want = normalizeBaseName(base);
+  if (!want) return null;
+
+  // 1) Preferred: index.byBase.json (authoritative mapping)
+  const idx = loadBaseIndex();
+  const basesObj = idx?.bases && typeof idx.bases === "object" ? idx.bases : null;
+
+  if (basesObj) {
+    for (const [k, v] of Object.entries(basesObj)) {
+      const nk = normalizeBaseName(k);
+      if (nk && nk === want) {
+        const file = safeStr(v?.file);
+        const cityKey = safeStr(v?.cityKey);
+        const zip = safeStr(v?.zip);
+        if (file) {
+          return { fileStem: file, cityKey: cityKey || null, zip: zip || null, source: "index.byBase" };
+        }
+      }
+    }
+  }
+
+  // 2) Fallback: find a matching json file name in /cities
+  const files = listCityJsonFiles();
+  const hit = files.find((f) => normalizeBaseName(f.replace(/\.json$/i, "")) === want);
+  if (hit) return { fileStem: hit.replace(/\.json$/i, ""), cityKey: null, zip: null, source: "cities.scan" };
+
+  // 3) Fallback: soft contains match (last resort)
+  const soft = files.find((f) => normalizeBaseName(f).includes(want) || want.includes(normalizeBaseName(f)));
+  if (soft) return { fileStem: soft.replace(/\.json$/i, ""), cityKey: null, zip: null, source: "cities.scan_soft" };
+
+  return null;
+}
+
+function loadCityDataByBase(baseName) {
+  const meta = resolveBaseCityMeta(baseName);
+  if (!meta?.fileStem) return { ok: false, reason: "Base not mapped to a city JSON file.", meta: meta || null, data: null };
+
+  const fp = path.join(process.cwd(), "netlify", "functions", "cities", `${meta.fileStem}.json`);
+  try {
+    if (!fs.existsSync(fp)) {
+      return { ok: false, reason: "City JSON file not found on server.", meta, data: null };
+    }
+    const raw = fs.readFileSync(fp, "utf8");
+    const json = JSON.parse(raw);
+    return { ok: true, reason: "", meta, data: json };
+  } catch (e) {
+    return { ok: false, reason: `City JSON read/parse failed: ${String(e)}`, meta, data: null };
+  }
+}
+
+function pickBedroomTarget(byBedroomObj, family) {
+  // Minimal heuristic: if family is numeric, pick a sensible bedroom bucket.
+  const f = Number(family);
+  if (!byBedroomObj || typeof byBedroomObj !== "object") return null;
+  const keys = Object.keys(byBedroomObj).filter((k) => /^\d+$/.test(k)).sort((a, b) => Number(a) - Number(b));
+  if (!keys.length) return null;
+
+  if (!Number.isFinite(f) || f <= 0) return keys.includes("3") ? "3" : keys[0];
+  // Very light rule-of-thumb
+  if (f >= 6) return keys.includes("5") ? "5" : keys[keys.length - 1];
+  if (f >= 4) return keys.includes("4") ? "4" : keys[keys.length - 1];
+  if (f >= 3) return keys.includes("3") ? "3" : keys[Math.min(1, keys.length - 1)];
+  return keys.includes("2") ? "2" : keys[0];
+}
+
+/* ============================================================
    //#5 — Intent detection (simple + reliable)
 ============================================================ */
 function detectIntent(text) {
@@ -476,6 +494,16 @@ function detectIntent(text) {
     (t.includes("spend") && (t.includes("house") || t.includes("home"))) ||
     (t.includes("budget") && (t.includes("house") || t.includes("home") || t.includes("mortgage")))
   ) return { type: "affordability_question" };
+
+  // ✅ NEW (minimal): base/city details (pulls from cities/*.json)
+  if (
+    t.includes("next duty base") ||
+    t.includes("next base") ||
+    t.includes("my next base") ||
+    (t.includes("my base") && (t.includes("details") || t.includes("specifics") || t.includes("info") || t.includes("data"))) ||
+    ((t.includes("tell me") || t.includes("give me") || t.includes("provide")) && t.includes("base") && (t.includes("details") || t.includes("specifics") || t.includes("data") || t.includes("info"))) ||
+    (t.includes("nellis") && (t.includes("details") || t.includes("specifics") || t.includes("data")))
+  ) return { type: "base_details_question" };
 
   return null;
 }
@@ -565,7 +593,15 @@ module.exports.handler = async (event) => {
   // Resolve ZIP early (used for deterministic + OpenAI fallback)
   const tables = loadPayTables();
   const derivedZip = !zip && base && tables ? deriveZipFromBase(tables, base) : "";
-  const resolvedZip = zip || derivedZip || "";
+
+  // ✅ NEW (minimal): base index zip fallback (only used if user zip + pay-table base->zip both missing)
+  const cityLookup = base ? resolveBaseCityMeta(base) : null;
+  const indexZip = !zip && !derivedZip ? safeStr(cityLookup?.zip) : "";
+
+  const resolvedZip = zip || derivedZip || indexZip || "";
+
+  // ✅ NEW (minimal): load city data once if we have a base
+  const cityPack = base ? loadCityDataByBase(base) : { ok: false, reason: "No base on profile.", meta: null, data: null };
 
   // ============================================================
   // //#6.1 — Profile question (deterministic)
@@ -786,6 +822,144 @@ module.exports.handler = async (event) => {
   }
 
   // ============================================================
+  // //#6.3B — Base/City details question (deterministic from cities/*.json)
+  // ============================================================
+  if (intent?.type === "base_details_question") {
+    if (!profileContext || !profileContext.email) {
+      return respond(200, headers, {
+        intent: "base_details_question",
+        reply:
+          "I can pull your base market snapshot instantly once your profile is synced (email).",
+        profile: null,
+        debug: {
+          usedSupabase,
+          hasContextProfile: !!contextProfile,
+          payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+          cityData: { ok: false, reason: "No profile.", file: null, source: null },
+        },
+      });
+    }
+
+    if (!base) {
+      return respond(200, headers, {
+        intent: "base_details_question",
+        reply:
+          "I can do that — I just need your base on file. Update your PCSUnited profile with your duty base and ask again.",
+        profile: profileContext,
+        debug: {
+          usedSupabase,
+          hasContextProfile: !!contextProfile,
+          payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+          cityData: { ok: false, reason: "No base on profile.", file: null, source: null },
+        },
+      });
+    }
+
+    if (!cityPack?.ok || !cityPack?.data) {
+      return respond(200, headers, {
+        intent: "base_details_question",
+        reply: `I can see your base is ${base}, but I can’t load its city file yet: ${cityPack?.reason || "unknown error"}`,
+        profile: profileContext,
+        debug: {
+          usedSupabase,
+          hasContextProfile: !!contextProfile,
+          payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+          cityData: { ok: false, reason: cityPack?.reason || "failed", file: cityPack?.meta?.fileStem || null, source: cityPack?.meta?.source || null },
+        },
+      });
+    }
+
+    const d = cityPack.data || {};
+    const place = safeStr(d.place || d.city || "");
+    const st = safeStr(d.state || "");
+    const zipCity = safeStr(d.zip || "") || safeStr(indexZip || "");
+    const label = safeStr(d.market_label || "");
+    const avgHome =
+      Number(d.avg_home_value) ||
+      Number(d.average_home_value) ||
+      Number(d.avgHome) ||
+      Number(d.city_avg_home) ||
+      0;
+
+    const taxRate = d.property_tax_rate;
+    const insRate = d.insurance_rate;
+    const hoa = Number(d.hoa_monthly) || 0;
+
+    const by = d.by_bedroom && typeof d.by_bedroom === "object" ? d.by_bedroom : null;
+    const pick = pickBedroomTarget(by, profileContext.family);
+
+    const lines = [];
+    lines.push(`Your next duty base: ${base}${place ? ` — ${place}${st ? `, ${st}` : ""}` : ""}${zipCity ? ` (ZIP ${zipCity})` : ""}.`);
+    if (label) lines.push(`Market label: ${label}.`);
+    if (avgHome > 0) lines.push(`City avg home value: ${money(avgHome)}.`);
+    if (taxRate != null || insRate != null || hoa > 0) {
+      lines.push(`Cost assumptions: Tax ${taxRate != null ? toPct(taxRate) : "—"} • Insurance ${insRate != null ? toPct(insRate) : "—"} • HOA ${hoa > 0 ? money(hoa) + "/mo" : "—"}.`);
+    }
+
+    if (by) {
+      const showKeys = Object.keys(by).filter((k) => /^\d+$/.test(k)).sort((a, b) => Number(a) - Number(b));
+      lines.push("");
+      lines.push(`Housing targets (by bedroom):`);
+
+      for (const k of showKeys) {
+        const row = by[k] || {};
+        const rentAvg = Number(row?.rent_monthly?.avg) || 0;
+        const rentLo = Number(row?.rent_monthly?.low) || 0;
+        const rentHi = Number(row?.rent_monthly?.high) || 0;
+
+        const priceAvg = Number(row?.home_price?.avg) || 0;
+        const priceLo = Number(row?.home_price?.low) || 0;
+        const priceHi = Number(row?.home_price?.high) || 0;
+
+        const utilAvg = Number(row?.utilities?.total?.avg) || 0;
+
+        const tag = pick && String(pick) === String(k) ? " ⭐" : "";
+        const rentTxt = rentAvg ? `${money(rentAvg)}/mo` : (rentLo && rentHi ? `${money(rentLo)}–${money(rentHi)}/mo` : "—");
+        const priceTxt = priceAvg ? `${money(priceAvg)}` : (priceLo && priceHi ? `${money(priceLo)}–${money(priceHi)}` : "—");
+        const utilTxt = utilAvg ? `${money(utilAvg)}/mo` : "—";
+
+        lines.push(`• ${k}BR:${tag} Rent ~${rentTxt} • Buy ~${priceTxt} • Utilities ~${utilTxt}`);
+      }
+
+      if (pick) {
+        lines.push("");
+        lines.push(`BLUF: Based on Family ${String(profileContext.family ?? "—")}, your “best-fit” starting point is the ${pick}BR line (⭐).`);
+      }
+    } else {
+      lines.push("");
+      lines.push(`I loaded your base city file, but it doesn’t include by-bedroom targets yet.`);
+    }
+
+    return respond(200, headers, {
+      intent: "base_details_question",
+      reply: lines.join("\n"),
+      profile: profileContext,
+      city: {
+        base,
+        mappedFile: cityPack?.meta?.fileStem || null,
+        mapSource: cityPack?.meta?.source || null,
+        cityKey: cityPack?.meta?.cityKey || null,
+        zip_from_index: cityPack?.meta?.zip || null,
+        place: place || null,
+        state: st || null,
+        zip: zipCity || null,
+        market_label: label || null,
+        avg_home_value: avgHome || null,
+        property_tax_rate: taxRate != null ? Number(taxRate) : null,
+        insurance_rate: insRate != null ? Number(insRate) : null,
+        hoa_monthly: hoa || null,
+        by_bedroom: by || null,
+      },
+      debug: {
+        usedSupabase,
+        hasContextProfile: !!contextProfile,
+        payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+        cityData: { ok: true, file: cityPack?.meta?.fileStem || null, source: cityPack?.meta?.source || null },
+      },
+    });
+  }
+
+  // ============================================================
   // //#6.4 — OpenAI fallback (profile-aware, optional)
   // ============================================================
   const key = process.env.OPENAI_API_KEY;
@@ -802,6 +976,7 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+        cityDataLoaded: !!(cityPack && cityPack.ok),
       },
     });
   }
@@ -819,6 +994,9 @@ module.exports.handler = async (event) => {
     if (p?.ok) payPreview = p;
   }
 
+  // ✅ NEW (minimal): if city data exists, pass it to the LLM so it can answer “base specifics” without guessing.
+  const baseMarketData = cityPack && cityPack.ok ? cityPack.data : null;
+
   const system = [
     "You are Elena, a warm, high-trust A.I. Concierge for PCSUnited / RealtySaSS.",
     "BLUF-first. Keep answers under 8 sentences. No fluff.",
@@ -826,6 +1004,7 @@ module.exports.handler = async (event) => {
     "If profile is available, use it (rank/yos/base/family/VA).",
     "IMPORTANT: If resolvedZip is provided (either user ZIP or derived from base), DO NOT ask for ZIP.",
     "If payPreview is provided, you can reference Base Pay + BAS + BAH + Total directly.",
+    "If baseMarketData is provided, use it as the source-of-truth for city/base specifics (rent ranges, home prices, utilities). Do not invent numbers.",
   ].join(" ");
 
   try {
@@ -853,7 +1032,8 @@ module.exports.handler = async (event) => {
                     bahNote: payPreview.bahNote,
                   }
                 : null,
-              note: "Use resolvedZip/payPreview if present. Only ask for missing inputs once.",
+              baseMarketData: baseMarketData || null,
+              note: "Use resolvedZip/payPreview/baseMarketData if present. Only ask for missing inputs once.",
             }),
           },
         ],
@@ -872,6 +1052,9 @@ module.exports.handler = async (event) => {
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
         resolvedZip: resolvedZip || null,
+        cityDataLoaded: !!(cityPack && cityPack.ok),
+        cityFileUsed: cityPack?.meta?.fileStem || null,
+        cityMapSource: cityPack?.meta?.source || null,
       },
     });
   } catch (err) {
@@ -882,6 +1065,7 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+        cityDataLoaded: !!(cityPack && cityPack.ok),
       },
     });
   }

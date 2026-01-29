@@ -732,7 +732,8 @@ module.exports.handler = async (event) => {
       method: "POST",
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
       body: JSON.stringify({
-        model: "gpt-4o-mini",
+        // ✅ ONLY CHANGE: model upgraded to gpt-5-nano
+        model: "gpt-5-nano",
         temperature: 0.35,
         max_tokens: 450,
         messages: [

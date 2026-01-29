@@ -8,6 +8,12 @@
 //     ✅ netlify/functions/data/militaryPayTables.json (recommended for PCSUnited)
 //     ↩︎ netlify/functions/militaryPayTables.json (legacy fallback)
 //
+// ✅ UPDATE (MINIMAL, REQUESTED):
+// - Also reads base/city JSON files from: netlify/functions/cities/*.json
+// - Uses: netlify/functions/cities/index.byBase.json to map Base Name → { cityKey, file, zip }
+// - Adds a deterministic “city/base data” responder for utilities / mortgage assumptions / demographics / market label & summary
+// - Does NOT change any existing pay/profile/affordability logic paths beyond better ZIP resolution.
+//
 // REQUIRED ENV:
 //   SUPABASE_URL
 //   SUPABASE_SERVICE_KEY
@@ -176,109 +182,6 @@ function normalizeBaseName(s) {
     .trim()
     .toUpperCase()
     .replace(/[^A-Z0-9]/g, "");
-}
-
-/* ============================================================
-   //#3C — City JSON loader (cities/*.json via index.byBase.json)
-   ✅ Minimal addition: read the local JSON file and pass into LLM context
-============================================================ */
-let __BASE_INDEX_CACHE__ = null;
-let __CITY_CACHE__ = new Map(); // file -> parsed json
-let __CITY_DEBUG__ = { indexLoaded: false, indexPathUsed: null, fileUsed: null, fileFound: false };
-
-function loadBaseIndex() {
-  if (__BASE_INDEX_CACHE__ !== null) return __BASE_INDEX_CACHE__;
-
-  const pIndex = path.join(process.cwd(), "netlify", "functions", "cities", "index.byBase.json");
-
-  try {
-    if (!fs.existsSync(pIndex)) {
-      __BASE_INDEX_CACHE__ = null;
-      __CITY_DEBUG__.indexLoaded = false;
-      __CITY_DEBUG__.indexPathUsed = null;
-      return null;
-    }
-    const raw = fs.readFileSync(pIndex, "utf8");
-    __BASE_INDEX_CACHE__ = JSON.parse(raw);
-    __CITY_DEBUG__.indexLoaded = true;
-    __CITY_DEBUG__.indexPathUsed = "cities/index.byBase.json";
-    return __BASE_INDEX_CACHE__;
-  } catch (_) {
-    __BASE_INDEX_CACHE__ = null;
-    __CITY_DEBUG__.indexLoaded = false;
-    __CITY_DEBUG__.indexPathUsed = null;
-    return null;
-  }
-}
-
-function resolveCityFileFromBase(baseName) {
-  const b = safeStr(baseName);
-  if (!b) return "";
-
-  const idx = loadBaseIndex();
-  const bases = idx?.bases && typeof idx.bases === "object" ? idx.bases : null;
-  if (!bases) return "";
-
-  // normalize keys for robust matching
-  const want = normalizeBaseName(b);
-  if (!want) return "";
-
-  for (const [k, v] of Object.entries(bases)) {
-    const nk = normalizeBaseName(k);
-    if (nk && nk === want) {
-      const file = safeStr(v?.file);
-      return file || "";
-    }
-  }
-
-  // fallback: some profiles store "Lackland" while index key is "JBSA-Lackland"
-  // attempt a contains match (still deterministic)
-  for (const [k, v] of Object.entries(bases)) {
-    const nk = normalizeBaseName(k);
-    if (nk && (nk.includes(want) || want.includes(nk))) {
-      const file = safeStr(v?.file);
-      return file || "";
-    }
-  }
-
-  return "";
-}
-
-function loadCityJsonByFile(fileName) {
-  const f = safeStr(fileName);
-  if (!f) return null;
-
-  if (__CITY_CACHE__.has(f)) return __CITY_CACHE__.get(f) || null;
-
-  const pCity = path.join(process.cwd(), "netlify", "functions", "cities", `${f}.json`);
-
-  try {
-    if (!fs.existsSync(pCity)) {
-      __CITY_CACHE__.set(f, null);
-      return null;
-    }
-    const raw = fs.readFileSync(pCity, "utf8");
-    const parsed = JSON.parse(raw);
-    __CITY_CACHE__.set(f, parsed);
-    return parsed;
-  } catch (_) {
-    __CITY_CACHE__.set(f, null);
-    return null;
-  }
-}
-
-function getCityDetailsForBase(baseName) {
-  __CITY_DEBUG__.fileUsed = null;
-  __CITY_DEBUG__.fileFound = false;
-
-  const file = resolveCityFileFromBase(baseName);
-  if (!file) return null;
-
-  const city = loadCityJsonByFile(file);
-  __CITY_DEBUG__.fileUsed = `${file}.json`;
-  __CITY_DEBUG__.fileFound = !!city;
-
-  return city || null;
 }
 
 /* ============================================================
@@ -453,6 +356,262 @@ function computePayBasics({ paygrade, yos, zip, family, base }) {
 }
 
 /* ============================================================
+   //#4B — Base → City files (netlify/functions/cities)
+   Uses index.byBase.json:
+   {
+     "version":"1.0",
+     "bases": {
+       "JBSA-Lackland": { "cityKey":"SanAntonio", "file":"Lackland", "zip":"78236" },
+       ...
+     }
+   }
+============================================================ */
+let __CITY_INDEX_CACHE__ = null;
+let __CITY_INDEX_LOADED__ = false;
+let __CITY_INDEX_FP__ = null;
+
+let __CITY_FILE_CACHE__ = new Map(); // key: file (e.g., "Lackland") -> json
+let __CITY_FILE_LAST__ = null;       // last loaded file name (for debug)
+let __CITY_FILE_FP_LAST__ = null;    // last loaded full path (for debug)
+
+function loadBaseIndex() {
+  if (__CITY_INDEX_LOADED__) return __CITY_INDEX_CACHE__;
+
+  const fp = path.join(process.cwd(), "netlify", "functions", "cities", "index.byBase.json");
+  __CITY_INDEX_FP__ = fp;
+
+  try {
+    if (!fs.existsSync(fp)) {
+      __CITY_INDEX_CACHE__ = null;
+      __CITY_INDEX_LOADED__ = true;
+      return null;
+    }
+    const raw = fs.readFileSync(fp, "utf8");
+    __CITY_INDEX_CACHE__ = JSON.parse(raw);
+    __CITY_INDEX_LOADED__ = true;
+    return __CITY_INDEX_CACHE__;
+  } catch (_) {
+    __CITY_INDEX_CACHE__ = null;
+    __CITY_INDEX_LOADED__ = true;
+    return null;
+  }
+}
+
+function resolveBaseEntry(baseName, indexJson) {
+  const b = safeStr(baseName);
+  if (!b || !indexJson || typeof indexJson !== "object") return null;
+
+  const bases = indexJson.bases && typeof indexJson.bases === "object" ? indexJson.bases : null;
+  if (!bases) return null;
+
+  // 1) Exact key match first (your index keys are already human-readable)
+  if (bases[b]) return bases[b];
+
+  // 2) Normalize compare
+  const want = normalizeBaseName(b);
+  if (!want) return null;
+
+  const normMap = new Map();
+  for (const [k, v] of Object.entries(bases)) {
+    const nk = normalizeBaseName(k);
+    if (nk) normMap.set(nk, v);
+  }
+
+  return normMap.get(want) || null;
+}
+
+function loadCityJsonByFile(fileName) {
+  const f = safeStr(fileName);
+  if (!f) return null;
+
+  if (__CITY_FILE_CACHE__.has(f)) return __CITY_FILE_CACHE__.get(f);
+
+  const fp = path.join(process.cwd(), "netlify", "functions", "cities", `${f}.json`);
+  __CITY_FILE_LAST__ = f;
+  __CITY_FILE_FP_LAST__ = fp;
+
+  try {
+    if (!fs.existsSync(fp)) {
+      __CITY_FILE_CACHE__.set(f, null);
+      return null;
+    }
+    const raw = fs.readFileSync(fp, "utf8");
+    const json = JSON.parse(raw);
+    __CITY_FILE_CACHE__.set(f, json);
+    return json;
+  } catch (_) {
+    __CITY_FILE_CACHE__.set(f, null);
+    return null;
+  }
+}
+
+function parseBedroomCount(text) {
+  const t = String(text || "");
+  const m = t.match(/(\d+)\s*[- ]?\s*bed(room)?/i);
+  const n = m ? Number(m[1]) : NaN;
+  if (!Number.isFinite(n)) return null;
+  if (n < 0) return null;
+  return String(n);
+}
+
+function pickCityLite(cityJson) {
+  if (!cityJson || typeof cityJson !== "object") return null;
+
+  // Keep payload modest; enough for LLM + deterministic city answers
+  const market = cityJson?.housing?.market || cityJson?.housing?.market || {};
+  const lite = {
+    city: safeStr(cityJson.city) || null,
+    place: safeStr(cityJson.place) || null,
+    state: safeStr(cityJson.state) || null,
+    zip: safeStr(cityJson.zip) || null,
+    year: cityJson.year ?? null,
+    last_updated_data_from_sources: safeStr(cityJson.last_updated_data_from_sources) || null,
+    market_label: safeStr(cityJson.market_label) || null,
+    avg_home_value: Number(cityJson.avg_home_value ?? cityJson.average_home_value ?? cityJson.avgHome ?? cityJson.city_avg_home ?? 0) || 0,
+    mortgage_assumptions: cityJson.mortgage_assumptions || null,
+    property_tax_rate: cityJson.property_tax_rate ?? null,
+    insurance_rate: cityJson.insurance_rate ?? null,
+    hoa_monthly: cityJson.hoa_monthly ?? null,
+    income: cityJson.income || null,
+    population: cityJson.population || null,
+    veterans: cityJson.veterans || null,
+    by_bedroom: cityJson.by_bedroom || null,
+    market: {
+      market_type_summary: safeStr(market.market_type_summary) || null,
+      average_days_on_market: market.average_days_on_market ?? null,
+      active_listings_total: market.active_listings_total ?? null,
+      median_listing_price_realtor: market.median_listing_price_realtor ?? null,
+      median_sale_price_current: market.median_sale_price_current ?? null,
+      median_listing_price_per_sqft: market.median_listing_price_per_sqft ?? null,
+      zillow_one_year_change_percent: market.zillow_one_year_change_percent ?? null,
+    },
+  };
+
+  return lite;
+}
+
+function answerCityQuestion(userText, baseName, baseEntry, cityLite) {
+  const t = String(userText || "").toLowerCase();
+  if (!cityLite) {
+    const b = safeStr(baseName) || (safeStr(baseEntry?.file) ? safeStr(baseEntry.file) : "your base");
+    return {
+      ok: false,
+      reply:
+        `I’m not seeing a loaded city file for ${b} yet. That usually means the base→file mapping didn’t resolve, or the JSON file isn’t included in the function bundle.`,
+    };
+  }
+
+  const cityName = cityLite.place || cityLite.city || "this city";
+  const marketLabel = cityLite.market_label || "—";
+
+  // Market label / ZIP / basic profile
+  if (t.includes("market label") || t.includes("market_label") || t.includes("marketlabel") || t.includes("marketlabel")) {
+    return {
+      ok: true,
+      reply: `For ${safeStr(baseName) || "this base"}, I have ZIP ${safeStr(baseEntry?.zip || cityLite.zip || "—")} and market label “${marketLabel}”.`,
+    };
+  }
+
+  if (t.includes("zip")) {
+    return {
+      ok: true,
+      reply: `ZIP on file for ${safeStr(baseName) || "this base"} is ${safeStr(baseEntry?.zip || cityLite.zip || "—")}.`,
+    };
+  }
+
+  // Mortgage assumptions
+  if (
+    t.includes("mortgage assumptions") ||
+    (t.includes("assumptions") && (t.includes("apr") || t.includes("term") || t.includes("down")))
+  ) {
+    const ma = cityLite.mortgage_assumptions || {};
+    const apr = ma.apr_percent ?? null;
+    const term = ma.term_years ?? null;
+    const down = ma.down_payment_percent ?? null;
+    const includes = safeStr(ma.includes) || null;
+
+    if (apr == null && term == null && down == null) {
+      return { ok: false, reply: `I’m not seeing mortgage_assumptions in the city file for ${cityName}.` };
+    }
+
+    return {
+      ok: true,
+      reply: `City mortgage assumptions for ${cityName}: APR ${apr ?? "—"}%, term ${term ?? "—"} years, down payment ${down ?? "—"}%${includes ? `, includes: ${includes}` : ""}.`,
+    };
+  }
+
+  // Income / poverty
+  if (t.includes("median household income") || t.includes("poverty")) {
+    const inc = cityLite.income || {};
+    const med = inc.median_household_income ?? null;
+    const pov = inc.poverty_rate_percent ?? null;
+
+    if (med == null && pov == null) {
+      return { ok: false, reply: `I’m not seeing income/poverty fields in the city file for ${cityName}.` };
+    }
+
+    return {
+      ok: true,
+      reply: `City profile for ${cityName}: median household income ${med ? money(med) : "—"}; poverty rate ${pov != null ? `${pov}%` : "—"}.`,
+    };
+  }
+
+  // Utilities by bedroom
+  if (t.includes("utilities") || t.includes("utility")) {
+    const bed = parseBedroomCount(userText);
+    const by = cityLite.by_bedroom || {};
+    const node = bed && by ? by[bed] : null;
+    const util = node?.utilities || null;
+
+    if (!bed) {
+      return {
+        ok: true,
+        reply: `Tell me the bedroom count (e.g., “3-bedroom utilities”), and I’ll pull the exact low/high/avg from the city file for ${cityName}.`,
+      };
+    }
+
+    if (!util || typeof util !== "object") {
+      return { ok: false, reply: `I’m not seeing utilities for ${bed}-bedroom in the city file for ${cityName}.` };
+    }
+
+    const eg = util.electric_gas || {};
+    const ws = util.water_sewer || {};
+    const tot = util.total || {};
+    const asOf = safeStr(util.as_of) || "—";
+
+    return {
+      ok: true,
+      reply: [
+        `${cityName} • ${bed}-bed utilities (as of ${asOf}):`,
+        `• Electric/Gas: ${money(eg.low)}–${money(eg.high)} (avg ${money(eg.avg)})`,
+        `• Water/Sewer: ${money(ws.low)}–${money(ws.high)} (avg ${money(ws.avg)})`,
+        `• Total: ${money(tot.low)}–${money(tot.high)} (avg ${money(tot.avg)})`,
+      ].join("\n"),
+    };
+  }
+
+  // Market type summary
+  if (t.includes("market_type_summary") || (t.includes("market") && t.includes("summary"))) {
+    const s = safeStr(cityLite.market?.market_type_summary);
+    if (!s) return { ok: false, reply: `I’m not seeing market_type_summary in the city file for ${cityName}.` };
+    return { ok: true, reply: `Market type summary for ${cityName}: ${s}` };
+  }
+
+  // Avg home value
+  if (t.includes("avg home value") || t.includes("average home value") || t.includes("avg_home_value")) {
+    const v = Number(cityLite.avg_home_value) || 0;
+    if (!v) return { ok: false, reply: `I’m not seeing avg_home_value in the city file for ${cityName}.` };
+    return { ok: true, reply: `Average home value in ${cityName}: ${money(v)}.` };
+  }
+
+  // Generic city profile poke
+  return {
+    ok: true,
+    reply: `I have the city file loaded for ${cityName} (market “${marketLabel}”). Ask me utilities by bedroom, mortgage assumptions, income/poverty, market summary, or avg home value.`,
+  };
+}
+
+/* ============================================================
    //#5 — Intent detection (simple + reliable)
 ============================================================ */
 function detectIntent(text) {
@@ -478,6 +637,25 @@ function detectIntent(text) {
     (t.includes("spend") && (t.includes("house") || t.includes("home"))) ||
     (t.includes("budget") && (t.includes("house") || t.includes("home") || t.includes("mortgage")))
   ) return { type: "affordability_question" };
+
+  // ✅ City/base JSON questions (minimal add so Elena uses cities/*.json)
+  if (
+    t.includes("utilities") ||
+    t.includes("utility") ||
+    t.includes("market label") ||
+    t.includes("market_label") ||
+    t.includes("market_type_summary") ||
+    (t.includes("market") && t.includes("summary")) ||
+    t.includes("mortgage assumptions") ||
+    (t.includes("assumptions") && (t.includes("apr") || t.includes("term") || t.includes("down"))) ||
+    t.includes("median household income") ||
+    t.includes("poverty") ||
+    t.includes("avg home value") ||
+    t.includes("average home value") ||
+    t.includes("avg_home_value") ||
+    (t.includes("what zip") && t.includes("base")) ||
+    (t.includes("zip") && t.includes("market"))
+  ) return { type: "city_question" };
 
   return null;
 }
@@ -564,13 +742,19 @@ module.exports.handler = async (event) => {
 
   const intent = detectIntent(userText);
 
+  // ============================================================
+  // //#6.0 — Load base→city mapping + city JSON (if possible)
+  // ============================================================
+  const baseIndex = loadBaseIndex();
+  const baseEntry = resolveBaseEntry(base, baseIndex);
+  const cityJson = baseEntry?.file ? loadCityJsonByFile(baseEntry.file) : null;
+  const cityLite = pickCityLite(cityJson);
+
   // Resolve ZIP early (used for deterministic + OpenAI fallback)
   const tables = loadPayTables();
-  const derivedZip = !zip && base && tables ? deriveZipFromBase(tables, base) : "";
-  const resolvedZip = zip || derivedZip || "";
-
-  // ✅ NEW (minimal): load city details from local cities JSON if base is available
-  const cityDetails = base ? getCityDetailsForBase(base) : null;
+  const derivedZipFromPayTables = !zip && base && tables ? deriveZipFromBase(tables, base) : "";
+  const derivedZipFromBaseIndex = safeStr(baseEntry?.zip || "");
+  const resolvedZip = zip || derivedZipFromPayTables || derivedZipFromBaseIndex || "";
 
   // ============================================================
   // //#6.1 — Profile question (deterministic)
@@ -586,10 +770,10 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-          cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-          cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-          cityFileFound: __CITY_DEBUG__.fileFound || false,
+          baseIndexPath: __CITY_INDEX_FP__ || null,
+          baseEntry: baseEntry || null,
+          cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+          cityLoaded: !!cityLite,
         },
       });
     }
@@ -606,14 +790,17 @@ module.exports.handler = async (event) => {
       intent: "profile_question",
       reply: `Locked in. I see you as ${r} ${ln || ""} — ${y} YOS, Base ${base || "—"}, Family ${fam}, VA ${vaTxt}.`.trim(),
       profile: profileContext,
+      city: cityLite || undefined,
       debug: {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-        cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-        cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-        cityFileFound: __CITY_DEBUG__.fileFound || false,
+        resolvedZip: resolvedZip || null,
+        baseIndexPath: __CITY_INDEX_FP__ || null,
+        baseEntry: baseEntry || null,
+        cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+        cityLoaded: !!cityLite,
+        cityFilePath: __CITY_FILE_FP_LAST__ || null,
       },
     });
   }
@@ -632,10 +819,10 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-          cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-          cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-          cityFileFound: __CITY_DEBUG__.fileFound || false,
+          baseIndexPath: __CITY_INDEX_FP__ || null,
+          baseEntry: baseEntry || null,
+          cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+          cityLoaded: !!cityLite,
         },
       });
     }
@@ -655,14 +842,16 @@ module.exports.handler = async (event) => {
         intent: "pay_question",
         reply: `I can see your profile (${r}, ${String(profileContext.yos ?? "—")} YOS), but pay math can’t run yet: ${pay.reason}`,
         profile: profileContext,
+        city: cityLite || undefined,
         debug: {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-          cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-          cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-          cityFileFound: __CITY_DEBUG__.fileFound || false,
+          resolvedZip: resolvedZip || null,
+          baseIndexPath: __CITY_INDEX_FP__ || null,
+          baseEntry: baseEntry || null,
+          cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+          cityLoaded: !!cityLite,
         },
       });
     }
@@ -684,6 +873,7 @@ module.exports.handler = async (event) => {
       intent: "pay_question",
       reply: lines.join("\n"),
       profile: profileContext,
+      city: cityLite || undefined,
       pay: {
         basePay: pay.basePay,
         bas: pay.bas,
@@ -703,10 +893,36 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-        cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-        cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-        cityFileFound: __CITY_DEBUG__.fileFound || false,
+        resolvedZip: resolvedZip || null,
+        baseIndexPath: __CITY_INDEX_FP__ || null,
+        baseEntry: baseEntry || null,
+        cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+        cityLoaded: !!cityLite,
+      },
+    });
+  }
+
+  // ============================================================
+  // //#6.2B — City/Base question (deterministic from cities/*.json)
+  // ============================================================
+  if (intent?.type === "city_question") {
+    const ans = answerCityQuestion(userText, base, baseEntry, cityLite);
+
+    return respond(200, headers, {
+      intent: "city_question",
+      reply: ans.reply,
+      profile: profileContext || null,
+      city: cityLite || null,
+      debug: {
+        usedSupabase,
+        hasContextProfile: !!contextProfile,
+        payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+        resolvedZip: resolvedZip || null,
+        baseIndexPath: __CITY_INDEX_FP__ || null,
+        baseEntry: baseEntry || null,
+        cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+        cityLoaded: !!cityLite,
+        cityFilePath: __CITY_FILE_FP_LAST__ || null,
       },
     });
   }
@@ -725,10 +941,10 @@ module.exports.handler = async (event) => {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-          cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-          cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-          cityFileFound: __CITY_DEBUG__.fileFound || false,
+          baseIndexPath: __CITY_INDEX_FP__ || null,
+          baseEntry: baseEntry || null,
+          cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+          cityLoaded: !!cityLite,
         },
       });
     }
@@ -748,14 +964,16 @@ module.exports.handler = async (event) => {
         intent: "affordability_question",
         reply: `I can see your profile (${r}, ${String(profileContext.yos ?? "—")} YOS), but pay math can’t run yet: ${pay.reason}`,
         profile: profileContext,
+        city: cityLite || undefined,
         debug: {
           usedSupabase,
           hasContextProfile: !!contextProfile,
           payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-          cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-          cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-          cityFileFound: __CITY_DEBUG__.fileFound || false,
+          resolvedZip: resolvedZip || null,
+          baseIndexPath: __CITY_INDEX_FP__ || null,
+          baseEntry: baseEntry || null,
+          cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+          cityLoaded: !!cityLite,
         },
       });
     }
@@ -794,6 +1012,7 @@ module.exports.handler = async (event) => {
       intent: "affordability_question",
       reply: lines.join("\n"),
       profile: profileContext,
+      city: cityLite || undefined,
       pay: {
         basePay: pay.basePay,
         bas: pay.bas,
@@ -814,17 +1033,17 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-        cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-        cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-        cityFileFound: __CITY_DEBUG__.fileFound || false,
+        resolvedZip: resolvedZip || null,
+        baseIndexPath: __CITY_INDEX_FP__ || null,
+        baseEntry: baseEntry || null,
+        cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+        cityLoaded: !!cityLite,
       },
     });
   }
 
   // ============================================================
   // //#6.4 — OpenAI fallback (profile-aware, optional)
-  //   ✅ City details are now included so Elena can quote exact numbers
   // ============================================================
   const key = process.env.OPENAI_API_KEY;
   if (!key) {
@@ -836,14 +1055,16 @@ module.exports.handler = async (event) => {
       intent: "fallback_no_openai",
       reply: `Elena (dev echo): “${userText}” — ${hint} Add OPENAI_API_KEY for natural-language answers.`,
       profile: profileContext,
+      city: cityLite || undefined,
       debug: {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-        cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-        cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-        cityFileFound: __CITY_DEBUG__.fileFound || false,
+        resolvedZip: resolvedZip || null,
+        baseIndexPath: __CITY_INDEX_FP__ || null,
+        baseEntry: baseEntry || null,
+        cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+        cityLoaded: !!cityLite,
       },
     });
   }
@@ -864,11 +1085,11 @@ module.exports.handler = async (event) => {
   const system = [
     "You are Elena, a warm, high-trust A.I. Concierge for PCSUnited / RealtySaSS.",
     "BLUF-first. Keep answers under 8 sentences. No fluff.",
+    "If a question needs math, ask for the missing inputs explicitly.",
     "If profile is available, use it (rank/yos/base/family/VA).",
     "IMPORTANT: If resolvedZip is provided (either user ZIP or derived from base), DO NOT ask for ZIP.",
     "If payPreview is provided, you can reference Base Pay + BAS + BAH + Total directly.",
-    "IMPORTANT: If cityDetails is provided, you MUST use those exact fields/numbers. Do NOT invent ranges.",
-    "If a field is missing from cityDetails, say it is not available in the city file.",
+    "If city data is provided, use it as source-of-truth for utilities, mortgage assumptions, demographics, and market summary.",
   ].join(" ");
 
   try {
@@ -877,7 +1098,7 @@ module.exports.handler = async (event) => {
       headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
       body: JSON.stringify({
         model: "gpt-4o-mini",
-        temperature: 0.2,
+        temperature: 0.35,
         max_tokens: 450,
         messages: [
           { role: "system", content: system },
@@ -886,7 +1107,9 @@ module.exports.handler = async (event) => {
             content: JSON.stringify({
               message: userText,
               profile: profileContext,
-              resolvedZip: resolvedZip || null, // BAH ZIP (may differ from city file zip)
+              resolvedZip: resolvedZip || null,
+              baseEntry: baseEntry || null,
+              city: cityLite || null,
               payPreview: payPreview
                 ? {
                     basePay: payPreview.basePay,
@@ -896,9 +1119,7 @@ module.exports.handler = async (event) => {
                     bahNote: payPreview.bahNote,
                   }
                 : null,
-              cityDetails: cityDetails || null,
-              note:
-                "Use resolvedZip/payPreview if present. If cityDetails exists, quote exact numbers (market_label, mortgage_assumptions, property_tax_rate, insurance_rate, hoa_monthly, by_bedroom utilities/rent/price). Never guess.",
+              note: "Use city/base data if present. Use resolvedZip/payPreview if present. Only ask for missing inputs once.",
             }),
           },
         ],
@@ -912,15 +1133,17 @@ module.exports.handler = async (event) => {
       intent: "openai_fallback",
       reply,
       profile: profileContext || undefined,
+      city: cityLite || undefined,
       debug: {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
         resolvedZip: resolvedZip || null,
-        cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-        cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-        cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-        cityFileFound: __CITY_DEBUG__.fileFound || false,
+        baseIndexPath: __CITY_INDEX_FP__ || null,
+        baseEntry: baseEntry || null,
+        cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+        cityLoaded: !!cityLite,
+        cityFilePath: __CITY_FILE_FP_LAST__ || null,
       },
     });
   } catch (err) {
@@ -931,10 +1154,11 @@ module.exports.handler = async (event) => {
         usedSupabase,
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        cityIndexLoaded: __CITY_DEBUG__.indexLoaded || false,
-        cityIndexPath: __CITY_DEBUG__.indexPathUsed || null,
-        cityFileUsed: __CITY_DEBUG__.fileUsed || null,
-        cityFileFound: __CITY_DEBUG__.fileFound || false,
+        baseIndexPath: __CITY_INDEX_FP__ || null,
+        baseEntry: baseEntry || null,
+        cityFile: baseEntry?.file ? `${baseEntry.file}.json` : null,
+        cityLoaded: !!cityLite,
+        cityFilePath: __CITY_FILE_FP_LAST__ || null,
       },
     });
   }

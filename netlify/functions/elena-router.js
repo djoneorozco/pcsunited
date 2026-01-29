@@ -1,20 +1,19 @@
 // netlify/functions/elena-router.js
 // ============================================================
-// PCSUnited • Elena Router (Public Function Endpoint) — v1.1.0
+// PCSUnited • Elena Function Entry (CommonJS) — v1.0.1
 // PURPOSE:
-// - Single stable endpoint for Webflow HUD: /.netlify/functions/elena-router
-// - Handles CORS + OPTIONS
-// - Parses message/email/context
-// - Routes to internal modular router: netlify/functions/elena/router.js
+// - Single stable Netlify Function endpoint for Webflow
+// - Handles CORS + OPTIONS correctly
+// - Accepts JSON body (and text/plain fallback)
+// - Delegates routing to: netlify/functions/elena/router.js
 // ============================================================
 
 "use strict";
 
-const { createClient } = require("@supabase/supabase-js");
-const ElenaRouter = require("./elena/router.js");
+const { route } = require("./elena/router.js");
 
 /* ============================================================
-  //#1 CORS
+   //#1 — CORS
 ============================================================ */
 const ALLOW_ORIGINS = [
   "https://pcs-united.webflow.io",
@@ -29,18 +28,23 @@ const ALLOW_ORIGINS = [
 function corsHeaders(origin) {
   const o = String(origin || "").trim();
   const allow = ALLOW_ORIGINS.includes(o) ? o : "*";
+
   return {
     "Access-Control-Allow-Origin": allow,
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Max-Age": "86400",
-    Vary: "Origin",
+    "Vary": "Origin",
     "Content-Type": "application/json; charset=utf-8",
   };
 }
 
 function respond(statusCode, headers, payload) {
-  return { statusCode, headers, body: JSON.stringify(payload ?? {}) };
+  return {
+    statusCode,
+    headers,
+    body: JSON.stringify(payload ?? {}),
+  };
 }
 
 function safeStr(x) {
@@ -48,24 +52,15 @@ function safeStr(x) {
   return s || "";
 }
 
-/* ============================================================
-  //#2 Supabase helper (Service Role)
-============================================================ */
-function getSupabaseAdmin() {
-  const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_KEY;
-  if (!url || !key) return null;
-
-  return createClient(url, key, {
-    auth: { persistSession: false },
-  });
+function safeJSONParse(raw) {
+  try { return JSON.parse(raw || "{}"); } catch (_) { return null; }
 }
 
 /* ============================================================
-  //#3 Main handler
+   //#2 — Handler
 ============================================================ */
 exports.handler = async (event) => {
-  const origin = event.headers?.origin || event.headers?.Origin || "";
+  const origin = event.headers?.origin || "";
   const headers = corsHeaders(origin);
 
   // Preflight
@@ -74,50 +69,40 @@ exports.handler = async (event) => {
   }
 
   if (event.httpMethod !== "POST") {
-    return respond(405, headers, { ok: false, error: "Method Not Allowed" });
+    return respond(405, headers, { ok:false, error: "Method Not Allowed" });
   }
 
-  let payload = {};
-  try {
-    payload = JSON.parse(event.body || "{}");
-  } catch (_) {
-    return respond(400, headers, { ok: false, error: "Invalid JSON body" });
+  // Parse body (supports application/json AND text/plain JSON string)
+  const bodyObj = safeJSONParse(event.body);
+  if (!bodyObj) {
+    return respond(400, headers, { ok:false, error: "Invalid JSON body" });
   }
 
-  const message = safeStr(payload.message);
-  if (!message) return respond(400, headers, { ok: false, error: "Missing message" });
+  const message = safeStr(bodyObj.message);
+  if (!message) return respond(400, headers, { ok:false, error: "Missing message" });
 
-  // email priority: payload.email -> context.identity.email -> context.profile.email
+  // Identity-first email (same logic as your HUD)
   const email =
-    safeStr(payload.email) ||
-    safeStr(payload?.context?.identity?.email) ||
-    safeStr(payload?.context?.profile?.email) ||
-    safeStr(payload?.context?.email) ||
+    safeStr(bodyObj?.email) ||
+    safeStr(bodyObj?.context?.identity?.email) ||
+    safeStr(bodyObj?.context?.email) ||
+    safeStr(bodyObj?.identity?.email) ||
     "";
 
-  const context = (payload?.context && typeof payload.context === "object") ? payload.context : {};
-
-  // Build helpers that skills can use (supabase, etc)
-  const supabase = getSupabaseAdmin();
-
-  const helpers = {
-    supabase,
-    env: {
-      hasSupabase: !!supabase,
-    },
-  };
+  const context = (bodyObj?.context && typeof bodyObj.context === "object") ? bodyObj.context : {};
+  context.email = context.email || email || undefined;
 
   try {
-    const out = await ElenaRouter.route(message, { email, ...context }, helpers);
+    // Delegate to CommonJS router
+    const out = await route(message, context, {});
 
-    // Router returns { reply, intent, data?, debug? }
+    // Standardize response shape for the HUD
     return respond(200, headers, {
       ok: true,
-      reply: out.reply || "I’m here — what do you want to solve?",
-      intent: out.intent || "unknown",
-      data: out.data || undefined,
-      // uncomment if you want debugging in prod:
-      // debug: out.debug || undefined,
+      reply: safeStr(out?.reply) || "I’m here — what should we tackle?",
+      intent: safeStr(out?.intent) || "ok",
+      data: out?.data || undefined,
+      debug: out?.debug || undefined,
     });
   } catch (err) {
     return respond(500, headers, {

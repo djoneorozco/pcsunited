@@ -1,5 +1,5 @@
 // netlify/functions/ask-elena.js
-// v2.4.2 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability + OpenAI Web Search fallback)
+// v2.4.1 — PCSUnited Elena (Profile-aware + deterministic pay basics + affordability)
 //
 // GOAL:
 // - Elena can answer questions about the user's profile + pay (Base Pay + BAS, and BAH if ZIP/base is available)
@@ -16,7 +16,7 @@
 //
 // CLIENT SHOULD CALL (recommended):
 //   POST https://pcsunited.netlify.app/api/ask-elena
-//   body: { message, email, zip?, context?: { profile?: {...}, identity?: {...} } }
+//   body: { message, email, zip?, context?: { profile?: {...} } }
 
 const { createClient } = require("@supabase/supabase-js");
 const fs = require("fs");
@@ -100,16 +100,8 @@ function lastNameOf(fullName, lastNameField) {
   return parts.length ? parts[parts.length - 1] : "";
 }
 
-function safeJSON(str) {
-  try {
-    return JSON.parse(str);
-  } catch (_) {
-    return null;
-  }
-}
-
 function getEmailFromPayload(payload) {
-  // Priority order: payload.email -> payload.context.email -> payload.context.profile.email -> payload.context.identity.email -> payload.identity.email
+  // Priority order: payload.email -> payload.context.email -> payload.context.profile.email -> payload.identity.email
   const direct = normalizeEmail(payload?.email);
   if (direct) return direct;
 
@@ -118,9 +110,6 @@ function getEmailFromPayload(payload) {
 
   const ctxProfEmail = normalizeEmail(payload?.context?.profile?.email);
   if (ctxProfEmail) return ctxProfEmail;
-
-  const ctxIdentEmail = normalizeEmail(payload?.context?.identity?.email);
-  if (ctxIdentEmail) return ctxIdentEmail;
 
   const identEmail = normalizeEmail(payload?.identity?.email);
   if (identEmail) return identEmail;
@@ -219,6 +208,7 @@ function principalFromPaymentPI(payment, aprPercent, termYears) {
   if (r === 0) return M * n;
 
   const pow = Math.pow(1 + r, n);
+  // P = M * (( (1+r)^n - 1 ) / ( r*(1+r)^n ))
   return M * ((pow - 1) / (r * pow));
 }
 
@@ -232,7 +222,9 @@ let __PAY_TABLES_LOC_USED__ = null; // "data" | "legacy" | null
 function loadPayTables() {
   if (__PAY_TABLES_CACHE__ !== null) return __PAY_TABLES_CACHE__;
 
+  // ✅ PCSUnited preferred
   const pData = path.join(process.cwd(), "netlify", "functions", "data", "militaryPayTables.json");
+  // ↩︎ legacy fallback
   const pLegacy = path.join(process.cwd(), "netlify", "functions", "militaryPayTables.json");
 
   try {
@@ -261,6 +253,7 @@ function loadPayTables() {
   }
 }
 
+// choose nearest YOS key <= requested YOS if exact missing
 function pickYosValue(tableForRank, yos) {
   if (!tableForRank || typeof tableForRank !== "object") return 0;
 
@@ -384,206 +377,6 @@ function detectIntent(text) {
   ) return { type: "affordability_question" };
 
   return null;
-}
-
-/* ============================================================
-   //#5B — Should we use Web Search?
-   We only trigger web_search when the user clearly wants up-to-date facts.
-============================================================ */
-function needsWebSearch(text) {
-  const t = String(text || "").toLowerCase();
-
-  // “freshness” cues
-  if (t.includes("today") || t.includes("yesterday") || t.includes("tomorrow")) return true;
-  if (t.includes("latest") || t.includes("most recent") || t.includes("current")) return true;
-  if (t.includes("right now") || t.includes("as of") || t.includes("this week") || t.includes("this month")) return true;
-
-  // “lookup” cues
-  if (t.startsWith("who is ") || t.startsWith("what is ") || t.startsWith("when is ")) return true;
-  if (t.includes("price of") || t.includes("stock") || t.includes("weather") || t.includes("score")) return true;
-  if (t.includes("news") || t.includes("headline")) return true;
-
-  // Dates/time zones often cause the exact issue you saw
-  if (t.includes("date") || t.includes("time zone") || t.includes("time in")) return true;
-
-  return false;
-}
-
-/* ============================================================
-   //#5C — OpenAI calls
-   - Web Search via Responses API tools: [{type:"web_search"}]
-   - Normal chat fallback via Chat Completions (cheaper)
-============================================================ */
-function tokyoDateString() {
-  try {
-    return new Date().toLocaleString("en-US", {
-      timeZone: "Asia/Tokyo",
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "2-digit",
-    });
-  } catch (_) {
-    return new Date().toISOString().slice(0, 10);
-  }
-}
-
-async function callOpenAIWebSearch({ apiKey, userText, profileContext, resolvedZip, payPreview }) {
-  // Responses API Web Search
-  const system = [
-    "You are Elena, a warm, high-trust A.I. Concierge for PCSUnited / RealtySaSS.",
-    "BLUF-first. Keep answers under 8 sentences. No fluff.",
-    "Use web search for up-to-date facts and cite sources inline when relevant.",
-    `User timezone: Asia/Tokyo. Today in Tokyo is: ${tokyoDateString()}.`,
-    "If a question needs math, ask for missing inputs explicitly.",
-    "If profile is available, use it (rank/yos/base/family/VA).",
-    "IMPORTANT: If resolvedZip is provided (either user ZIP or derived from base), DO NOT ask for ZIP.",
-    "If payPreview is provided, you can reference Base Pay + BAS + BAH + Total directly.",
-  ].join(" ");
-
-  const input = [
-    "SYSTEM:",
-    system,
-    "",
-    "USER_PAYLOAD_JSON:",
-    JSON.stringify(
-      {
-        message: userText,
-        profile: profileContext || null,
-        resolvedZip: resolvedZip || null,
-        payPreview: payPreview
-          ? {
-              basePay: payPreview.basePay,
-              bas: payPreview.bas,
-              bah: payPreview.bah,
-              total: payPreview.total,
-              bahNote: payPreview.bahNote,
-            }
-          : null,
-        instruction:
-          "Answer the user. If you used web info, include short inline citations. If you reference a date, be precise and match Tokyo date context.",
-      },
-      null,
-      0
-    ),
-  ].join("\n");
-
-  const r = await fetch("https://api.openai.com/v1/responses", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: "gpt-5",
-      reasoning: { effort: "low" },
-      tools: [{ type: "web_search" }],
-      tool_choice: "auto",
-      include: ["web_search_call.action.sources"],
-      input,
-      max_output_tokens: 550,
-    }),
-  });
-
-  const data = await r.json();
-
-  if (!r.ok) {
-    const msg = data?.error?.message || `HTTP ${r.status}`;
-    const e = new Error(msg);
-    e.__raw = data;
-    throw e;
-  }
-
-  const reply = (data?.output_text || "").trim() || "";
-  const sources =
-    (() => {
-      try {
-        const out = Array.isArray(data?.output) ? data.output : [];
-        const src = [];
-        for (const item of out) {
-          if (item && item.type === "web_search_call") {
-            const s = item?.action?.sources;
-            if (Array.isArray(s)) {
-              for (const it of s) {
-                if (it && it.url) src.push({ url: String(it.url), title: String(it.title || it.url) });
-              }
-            }
-          }
-        }
-        // de-dupe
-        const seen = new Set();
-        const deduped = [];
-        for (const x of src) {
-          const k = x.url;
-          if (!k || seen.has(k)) continue;
-          seen.add(k);
-          deduped.push(x);
-        }
-        return deduped.slice(0, 5);
-      } catch (_) {
-        return [];
-      }
-    })();
-
-  // If the model already cited inline, we won’t spam sources.
-  // But if it returned no inline citations, a small Sources footer helps trust.
-  let finalReply = reply;
-  if (sources.length && !/\[\d+\]/.test(reply)) {
-    finalReply += "\n\nSources:\n" + sources.map((s, i) => `${i + 1}. ${s.title} — ${s.url}`).join("\n");
-  }
-
-  return { reply: finalReply, raw: data };
-}
-
-async function callOpenAIChat({ apiKey, userText, profileContext, resolvedZip, payPreview }) {
-  const system = [
-    "You are Elena, a warm, high-trust A.I. Concierge for PCSUnited / RealtySaSS.",
-    "BLUF-first. Keep answers under 8 sentences. No fluff.",
-    `User timezone: Asia/Tokyo. Today in Tokyo is: ${tokyoDateString()}.`,
-    "If a question needs math, ask for the missing inputs explicitly.",
-    "If profile is available, use it (rank/yos/base/family/VA).",
-    "IMPORTANT: If resolvedZip is provided (either user ZIP or derived from base), DO NOT ask for ZIP.",
-    "If payPreview is provided, you can reference Base Pay + BAS + BAH + Total directly.",
-  ].join(" ");
-
-  const resp = await fetch("https://api.openai.com/v1/chat/completions", {
-    method: "POST",
-    headers: { "Content-Type": "application/json", Authorization: `Bearer ${apiKey}` },
-    body: JSON.stringify({
-      model: "gpt-4o-mini",
-      temperature: 0.35,
-      max_tokens: 450,
-      messages: [
-        { role: "system", content: system },
-        {
-          role: "user",
-          content: JSON.stringify({
-            message: userText,
-            profile: profileContext,
-            resolvedZip: resolvedZip || null,
-            payPreview: payPreview
-              ? {
-                  basePay: payPreview.basePay,
-                  bas: payPreview.bas,
-                  bah: payPreview.bah,
-                  total: payPreview.total,
-                  bahNote: payPreview.bahNote,
-                }
-              : null,
-            note: "Use resolvedZip/payPreview if present. Only ask for missing inputs once.",
-          }),
-        },
-      ],
-    }),
-  });
-
-  const data = await resp.json();
-  if (!resp.ok) {
-    const msg = data?.error?.message || `HTTP ${resp.status}`;
-    const e = new Error(msg);
-    e.__raw = data;
-    throw e;
-  }
-
-  const reply = (data?.choices?.[0]?.message?.content || "").trim() || "";
-  return { reply, raw: data };
 }
 
 /* ============================================================
@@ -837,6 +630,7 @@ module.exports.handler = async (event) => {
     const allInCap = totalPay * 0.30; // safe all-in housing cap
     const piTarget = allInCap / 1.28; // buffer for taxes/ins/HOA
 
+    // Explicit quick assumptions (same as your original)
     const aprAssumed = 7.0;
     const termAssumed = 30;
 
@@ -891,9 +685,7 @@ module.exports.handler = async (event) => {
   }
 
   // ============================================================
-  // //#6.4 — OpenAI fallback
-  // - If user clearly wants up-to-date info → Web Search (Responses API)
-  // - Otherwise → normal Chat Completions (cheaper)
+  // //#6.4 — OpenAI fallback (profile-aware, optional)
   // ============================================================
   const key = process.env.OPENAI_API_KEY;
   if (!key) {
@@ -926,41 +718,49 @@ module.exports.handler = async (event) => {
     if (p?.ok) payPreview = p;
   }
 
+  const system = [
+    "You are Elena, a warm, high-trust A.I. Concierge for PCSUnited / RealtySaSS.",
+    "BLUF-first. Keep answers under 8 sentences. No fluff.",
+    "If a question needs math, ask for the missing inputs explicitly.",
+    "If profile is available, use it (rank/yos/base/family/VA).",
+    "IMPORTANT: If resolvedZip is provided (either user ZIP or derived from base), DO NOT ask for ZIP.",
+    "If payPreview is provided, you can reference Base Pay + BAS + BAH + Total directly.",
+  ].join(" ");
+
   try {
-    // Use web search when the question is clearly about “current” facts
-    if (needsWebSearch(userText)) {
-      const ws = await callOpenAIWebSearch({
-        apiKey: key,
-        userText,
-        profileContext,
-        resolvedZip,
-        payPreview,
-      });
-
-      return respond(200, headers, {
-        intent: "openai_web_search",
-        reply: ws.reply || "I’m here — what are we solving today?",
-        profile: profileContext || undefined,
-        debug: {
-          usedSupabase,
-          hasContextProfile: !!contextProfile,
-          payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          resolvedZip: resolvedZip || null,
-          web_search_used: true,
-        },
-      });
-    }
-
-    // Otherwise use cheaper standard model
-    const chat = await callOpenAIChat({
-      apiKey: key,
-      userText,
-      profileContext,
-      resolvedZip,
-      payPreview,
+    const resp = await fetch("https://api.openai.com/v1/chat/completions", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${key}` },
+      body: JSON.stringify({
+        model: "gpt-4o-mini",
+        temperature: 0.35,
+        max_tokens: 450,
+        messages: [
+          { role: "system", content: system },
+          {
+            role: "user",
+            content: JSON.stringify({
+              message: userText,
+              profile: profileContext,
+              resolvedZip: resolvedZip || null,
+              payPreview: payPreview
+                ? {
+                    basePay: payPreview.basePay,
+                    bas: payPreview.bas,
+                    bah: payPreview.bah,
+                    total: payPreview.total,
+                    bahNote: payPreview.bahNote,
+                  }
+                : null,
+              note: "Use resolvedZip/payPreview if present. Only ask for missing inputs once.",
+            }),
+          },
+        ],
+      }),
     });
 
-    const reply = chat.reply || "I’m here — what are we solving today?";
+    const data = await resp.json();
+    const reply = (data?.choices?.[0]?.message?.content || "").trim() || "I’m here — what are we solving today?";
 
     return respond(200, headers, {
       intent: "openai_fallback",
@@ -971,44 +771,17 @@ module.exports.handler = async (event) => {
         hasContextProfile: !!contextProfile,
         payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
         resolvedZip: resolvedZip || null,
-        web_search_used: false,
       },
     });
   } catch (err) {
-    // If web search fails for any reason, try normal chat once before giving up
-    try {
-      const chat = await callOpenAIChat({
-        apiKey: key,
-        userText,
-        profileContext,
-        resolvedZip,
-        payPreview,
-      });
-
-      const reply = chat.reply || "I’m here — what are we solving today?";
-      return respond(200, headers, {
-        intent: "openai_fallback_after_ws_error",
-        reply,
-        profile: profileContext || undefined,
-        debug: {
-          usedSupabase,
-          hasContextProfile: !!contextProfile,
-          payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-          resolvedZip: resolvedZip || null,
-          web_search_used: false,
-          web_search_error: String(err && err.message ? err.message : err),
-        },
-      });
-    } catch (err2) {
-      return respond(500, headers, {
-        error: "Server exception",
-        detail: String(err2 && err2.message ? err2.message : err2),
-        debug: {
-          usedSupabase,
-          hasContextProfile: !!contextProfile,
-          payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
-        },
-      });
-    }
+    return respond(500, headers, {
+      error: "Server exception",
+      detail: String(err),
+      debug: {
+        usedSupabase,
+        hasContextProfile: !!contextProfile,
+        payTablesLocation: __PAY_TABLES_LOC_USED__ || null,
+      },
+    });
   }
 };

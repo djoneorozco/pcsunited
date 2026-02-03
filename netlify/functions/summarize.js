@@ -1,5 +1,5 @@
 // netlify/functions/summarize.js
-// v1.3.2 — PCSUnited port (CORS fix): adds pcs-united.webflow.io (hyphen) + www
+// v1.3.2 — PCSUnited: CORS fix for pcs-united.webflow.io + safe wildcard fallback
 // Purpose → Concrete Health/Grade Targets → Biggest Issues → Improvement Playbook → Closing
 //
 // INPUT (POST JSON):
@@ -9,11 +9,9 @@
 // { memoHtml, memo, grade, kpis }
 
 const ALLOW_ORIGINS = [
-  // ✅ PCS United Webflow (published + designer preview variants)
+  // Webflow (staging / published) — BOTH variants
   "https://pcs-united.webflow.io",
   "https://www.pcs-united.webflow.io",
-
-  // (Optional) If you ever used the no-hyphen staging name:
   "https://pcsunited.webflow.io",
   "https://www.pcsunited.webflow.io",
 
@@ -31,14 +29,16 @@ const ALLOW_ORIGINS = [
 ];
 
 function corsHeaders(origin) {
-  const allow = ALLOW_ORIGINS.includes(origin) ? origin : (ALLOW_ORIGINS[0] || "*");
+  // If not explicitly allowed, use "*" (safe because we do NOT use credentials)
+  const allow = (origin && ALLOW_ORIGINS.includes(origin)) ? origin : "*";
+
   return {
     "Access-Control-Allow-Origin": allow,
     "Access-Control-Allow-Headers": "Content-Type, Authorization",
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Credentials": "false",
     "Access-Control-Max-Age": "86400",
-    Vary: "Origin",
+    "Vary": "Origin",
     "Content-Type": "application/json"
   };
 }
@@ -127,7 +127,6 @@ function paygradeToRank(paygradeRaw, branchRaw) {
 }
 
 function computeKPIs(s) {
-  // PCSUnited-friendly aliases
   const income = +s.income || +s.totalIncome || 0;
   const expenses = +s.expenses || +s.monthly_expenses || 0;
   const savings = +s.savings || +s.downpayment || 0;
@@ -141,7 +140,6 @@ function computeKPIs(s) {
   const coverage = expenses > 0 ? income / expenses : income > 0 ? Infinity : 0;
   const runwayMonths = expenses > 0 ? savings / expenses : 0;
 
-  // Stress: +200bps APR & +5% expenses using price/dp when available
   const stressApr = (Number(s.apr) || scoreAPR(Number(s.creditScore || s.credit_score || 720))) + 2.0;
 
   const price = Number(s.price || s.projected_home_price) || 0;
@@ -213,7 +211,6 @@ function lastNameOf(name) {
   return parts.length ? parts[parts.length - 1] : s;
 }
 
-/** EXACTLY five <p> paragraphs */
 function toFiveParagraphHTML(text) {
   if (!text) return "<p></p><p></p><p></p><p></p><p></p>";
   let t = text
@@ -234,7 +231,6 @@ function toFiveParagraphHTML(text) {
   return parts.map((p) => `<p>${p}</p>`).join("");
 }
 
-/** Server-side synthesis if model under-delivers */
 function synthesizeFromFacts(f, k) {
   const greet =
     (f.client.rankPretty ? f.client.rankPretty.split(" (")[0] : "Service Member") +
@@ -284,7 +280,6 @@ module.exports.handler = async (event) => {
     const key = process.env.OPENAI_API_KEY;
     if (!key) return { statusCode: 500, headers, body: JSON.stringify({ error: "OPENAI_API_KEY not configured" }) };
 
-    /* -------- Identity (PCSUnited-compatible) -------- */
     const branch = snapshot?.military?.branch || snapshot?.profile?.branch || snapshot?.branch || "";
 
     const paygrade =
@@ -310,11 +305,9 @@ module.exports.handler = async (event) => {
     const clientEmail =
       (snapshot?.profile?.email || snapshot?.userEmail || snapshot?.email || "").toString();
 
-    /* -------- KPIs & grade -------- */
     const k = computeKPIs(snapshot);
     const letter = gradeLetter(k);
 
-    /* -------- Facts -------- */
     const facts = {
       client: {
         name: clientName,
@@ -351,7 +344,6 @@ module.exports.handler = async (event) => {
       }
     };
 
-    /* -------- Style (server-enforced) -------- */
     const defaultStyleGuide = {
       persona: {
         name: "Elena — Executive Concierge",
@@ -370,7 +362,7 @@ module.exports.handler = async (event) => {
         "P2 — Concrete dollar targets: housing lane (28–33%) AS DOLLAR RANGE, minimum DI, autopay reserve amount, DTI guardrails.",
         "P3 — Biggest issues with specificity (credit tier $ impact, runway, discretionary %).",
         "P4 — Improvement Playbook with actionable steps + plain links (annualcreditreport.com, cfpb.gov), seller-credits/points tactics.",
-        "P5 — Closing & next steps with PCS United."
+        "P5 — Closing + next steps with PCS United."
       ],
       formatting: {
         paragraphs: 5,
@@ -395,7 +387,6 @@ module.exports.handler = async (event) => {
       signoff: defaultStyleGuide.signoff
     };
 
-    /* -------- Prompts -------- */
     const system = [
       "You are ELENA — a CEO-grade fiduciary strategist with a polished, boardroom voice.",
       "Write EXACTLY FIVE paragraphs of HTML-ready prose (no headings, no lists). Never return fewer than five paragraphs.",
@@ -414,7 +405,6 @@ module.exports.handler = async (event) => {
       buckets
     });
 
-    /* -------- OpenAI call -------- */
     const resp = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -440,7 +430,6 @@ module.exports.handler = async (event) => {
     const data = await resp.json();
     let raw = (data?.choices?.[0]?.message?.content || "").trim();
 
-    // Enforce 5 paragraphs; synthesize if short
     let memoHtml = toFiveParagraphHTML(raw);
     const count = (memoHtml.match(/<p>/g) || []).length;
     if (count < 5) memoHtml = toFiveParagraphHTML(synthesizeFromFacts(facts, k));

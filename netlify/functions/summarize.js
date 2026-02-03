@@ -1,5 +1,5 @@
 // netlify/functions/summarize.js
-// v1.3.1 — PCSUnited port (ghost fixes): CORS + brand strings + profile-field compatibility
+// v1.3.2 — PCSUnited port (CORS fix): adds pcs-united.webflow.io (hyphen) + www
 // Purpose → Concrete Health/Grade Targets → Biggest Issues → Improvement Playbook → Closing
 //
 // INPUT (POST JSON):
@@ -9,7 +9,11 @@
 // { memoHtml, memo, grade, kpis }
 
 const ALLOW_ORIGINS = [
-  // Webflow (staging / published)
+  // ✅ PCS United Webflow (published + designer preview variants)
+  "https://pcs-united.webflow.io",
+  "https://www.pcs-united.webflow.io",
+
+  // (Optional) If you ever used the no-hyphen staging name:
   "https://pcsunited.webflow.io",
   "https://www.pcsunited.webflow.io",
 

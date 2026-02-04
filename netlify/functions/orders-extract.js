@@ -1,176 +1,128 @@
 // netlify/functions/orders-extract.js
-// ============================================================
-// PCSUnited • Orders Extract (Option A: upload -> extract -> return JSON -> discard)
-// v0.2 — FIX: CORS preflight (OPTIONS) + multipart parsing + safe no-storage flow
-//
-// Accepts: multipart/form-data with file field name "file"
-// Optional: redact=true/false
-//
-// Returns JSON:
-// { ok, meta:{...}, extracted:{...}, rawTextPreview, warnings:[...] }
-//
-// NOTE: This baseline intentionally does NOT store the file anywhere.
-// ============================================================
+// PCS Orders Translator — Option A (no file storage)
+// v1.0.0 — POST text -> structured JSON (with redaction)
 
-import Busboy from "busboy";
-
-// ---- CORS (allow your known origins; keep * if you’re okay with public access)
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "*",
+  "Access-Control-Allow-Headers": "Content-Type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Max-Age": "86400",
   "Content-Type": "application/json",
 };
 
-function json(statusCode, payload) {
-  return {
-    statusCode,
-    headers: CORS_HEADERS,
-    body: JSON.stringify(payload),
-  };
+function respond(statusCode, payload) {
+  return { statusCode, headers: CORS_HEADERS, body: JSON.stringify(payload) };
 }
 
-function parseMultipart(event) {
-  return new Promise((resolve, reject) => {
-    const contentType =
-      event.headers["content-type"] || event.headers["Content-Type"];
-    if (!contentType || !contentType.includes("multipart/form-data")) {
-      return reject(
-        new Error("Expected multipart/form-data. Send file using FormData().")
-      );
-    }
+function redactPII(raw) {
+  if (!raw) return "";
 
-    const bb = Busboy({ headers: { "content-type": contentType } });
+  let t = raw;
 
-    const fields = {};
-    let fileBuffer = null;
-    let fileInfo = null;
+  // SSN patterns (very rough; safe enough for redaction)
+  t = t.replace(/\b\d{3}-\d{2}-\d{4}\b/g, "[REDACTED_SSN]");
+  t = t.replace(/\b\d{3}\s?\d{2}\s?\d{4}\b/g, "[REDACTED_SSN]");
 
-    bb.on("field", (name, val) => {
-      fields[name] = val;
-    });
+  // DoD ID / long numeric identifiers (8–12 digits)
+  t = t.replace(/\b\d{8,12}\b/g, "[REDACTED_ID]");
 
-    bb.on("file", (name, file, info) => {
-      const { filename, mimeType } = info;
-      const chunks = [];
-      file.on("data", (d) => chunks.push(d));
-      file.on("end", () => {
-        fileBuffer = Buffer.concat(chunks);
-        fileInfo = { fieldname: name, filename, mimeType, size: fileBuffer.length };
-      });
-    });
+  // Emails
+  t = t.replace(/\b[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}\b/gi, "[REDACTED_EMAIL]");
 
-    bb.on("error", reject);
-    bb.on("finish", () => resolve({ fields, fileBuffer, fileInfo }));
-
-    // Netlify provides body as base64 for binary/multipart often.
-    const body = event.isBase64Encoded
-      ? Buffer.from(event.body || "", "base64")
-      : Buffer.from(event.body || "", "utf8");
-
-    bb.end(body);
-  });
+  return t;
 }
 
-export async function handler(event) {
-  try {
-    // ✅ Fix 405 preflight
-    if (event.httpMethod === "OPTIONS") {
-      return { statusCode: 204, headers: CORS_HEADERS, body: "" };
-    }
+function pickFirstDate(text) {
+  // Looks for patterns like "31 JAN 2025"
+  const m = text.match(/\b(\d{1,2})\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\s+(\d{4})\b/i);
+  if (!m) return null;
+  const d = String(m[1]).padStart(2, "0");
+  const mon = m[2].toUpperCase();
+  const y = m[3];
+  return `${d} ${mon} ${y}`;
+}
 
-    if (event.httpMethod !== "POST") {
-      return json(405, {
-        ok: false,
-        error: "Method Not Allowed",
-        expected: "POST",
-        got: event.httpMethod,
-      });
-    }
-
-    const { fields, fileBuffer, fileInfo } = await parseMultipart(event);
-
-    if (!fileBuffer || !fileInfo) {
-      return json(400, {
-        ok: false,
-        error: "No file received.",
-        hint: 'Send multipart/form-data with field name "file".',
-      });
-    }
-
-    // Basic file type guard
-    const isPdf =
-      fileInfo.mimeType === "application/pdf" ||
-      (fileInfo.filename || "").toLowerCase().endsWith(".pdf");
-    const isImage =
-      (fileInfo.mimeType || "").startsWith("image/") ||
-      /\.(png|jpg|jpeg|webp)$/i.test(fileInfo.filename || "");
-
-    if (!isPdf && !isImage) {
-      return json(400, {
-        ok: false,
-        error: "Unsupported file type.",
-        allowed: ["application/pdf", "image/*"],
-        received: fileInfo.mimeType,
-        filename: fileInfo.filename,
-      });
-    }
-
-    const redact = String(fields.redact ?? "true") === "true";
-
-    // ============================================================
-    // TODO: REAL EXTRACTION
-    // - For PDF: extract text (pdf-parse or similar)
-    // - For Image: OCR (Tesseract or external service)
-    //
-    // Baseline now returns a placeholder to prove end-to-end wiring.
-    // ============================================================
-
-    const warnings = [];
-    if (fileInfo.size > 10 * 1024 * 1024) {
-      warnings.push("Large file: extraction may take longer.");
-    }
-
-    // Placeholder "extracted" payload structure that 2A can paint into your shell IDs
-    const extracted = {
-      assignment: {
-        location: "Kadena AB, Japan",
-        rnltd: null,
-        unit: null,
-        dependents: "Authorized (example)",
-        travelMode: isPdf ? "See orders" : "See image",
-      },
-      nextSteps: [
-        "Schedule TMO counseling / DPS setup",
-        "Contact Finance (DLA / travel pay / GTCC questions)",
-        "Confirm passports / medical clearance (OCONUS)",
-      ],
-      importantNotes: [
-        "Verify RNLTD and earliest depart date with MPF",
-        "Keep receipts for baggage fees if applicable",
-        "Japan housing is smaller—plan shipment carefully",
-      ],
-    };
-
-    return json(200, {
-      ok: true,
-      meta: {
-        filename: fileInfo.filename,
-        mimeType: fileInfo.mimeType,
-        bytes: fileInfo.size,
-        redact,
-        stored: false, // ✅ Option A guarantee
-      },
-      extracted,
-      rawTextPreview: null, // fill later once PDF parsing is added
-      warnings,
-    });
-  } catch (err) {
-    return json(500, {
-      ok: false,
-      error: "orders-extract failed",
-      message: err?.message || String(err),
+function extractLocations(text) {
+  // Very simple “LOSING” / “GAINING” style inference based on your sample:
+  // finds "... KIRTLAND NM 87117..." then "... KADENA JP 96368..."
+  const candidates = [];
+  const re = /\b([A-Z][A-Z0-9'\- ]{2,30})\s+(NM|TX|CA|FL|VA|WA|CO|AZ|NV|NC|SC|GA|AL|LA|OK|UT|ID|OR|IL|MD|PA|OH|MI|IN|MO|TN|KY|MS|AR|KS|NE|IA|MN|WI|ND|SD|NY|NJ|CT|MA|RI|VT|NH|ME|HI|AK|JP|DE|GB|IT|KR|BE|NL|ES)\s+(\d{5})/g;
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    candidates.push({
+      place: m[1].trim().replace(/\s{2,}/g, " "),
+      region: m[2],
+      zip: m[3],
     });
   }
+
+  // heuristic: first is losing, second is gaining
+  const losing = candidates[0] || null;
+  const gaining = candidates[1] || null;
+
+  return { losing, gaining };
 }
+
+exports.handler = async (event) => {
+  if (event.httpMethod === "OPTIONS") {
+    return { statusCode: 200, headers: CORS_HEADERS, body: "" };
+  }
+  if (event.httpMethod !== "POST") {
+    return respond(405, { ok: false, error: "Method Not Allowed" });
+  }
+
+  try {
+    const body = JSON.parse(event.body || "{}");
+    const filename = body.filename || "orders.pdf";
+    const redact = body.redact !== false; // default true
+    const rawText = String(body.text || "");
+
+    if (!rawText || rawText.length < 50) {
+      return respond(400, { ok: false, error: "Missing or too-short text" });
+    }
+
+    const text = redact ? redactPII(rawText) : rawText;
+
+    const rnltd = pickFirstDate(text); // heuristic
+    const { losing, gaining } = extractLocations(text);
+
+    const assignment = {
+      from: losing ? `${losing.place}, ${losing.region} ${losing.zip}` : "Unknown",
+      to: gaining ? `${gaining.place}, ${gaining.region} ${gaining.zip}` : "Unknown",
+      reportNoLater: rnltd || "Unknown",
+    };
+
+    // Minimal “Brief” payload (2A/2B/2C/2D can paint these)
+    const payload = {
+      ok: true,
+      meta: {
+        filename,
+        redactApplied: redact,
+        source: "orders-extract.v1.0.0",
+      },
+      brief: {
+        assignment,
+        keyDetails: {
+          reportNoLater: assignment.reportNoLater,
+          losing: assignment.from,
+          gaining: assignment.to,
+          dependents: /CHILD|SPOUSE|DEPENDENT/i.test(text) ? "Likely Authorized (detected dependents)" : "Unknown",
+        },
+        nextSteps: [
+          "Schedule MPF out-processing + final out appointment",
+          "Start TMO counseling / DPS flow",
+          "Confirm Finance items (DLA/TLE/TLA as applicable)",
+        ],
+        importantNotes: [
+          "OCONUS moves often require extra steps (medical, passports, etc.)",
+          "Keep a redacted copy for housing/utilities (never share SSN)",
+          "Always verify critical dates with MPF/TMO/Finance",
+        ],
+      },
+    };
+
+    return respond(200, payload);
+
+  } catch (e) {
+    return respond(500, { ok: false, error: "Server error", detail: String(e?.message || e) });
+  }
+};

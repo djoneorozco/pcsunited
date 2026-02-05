@@ -1,7 +1,7 @@
 // netlify/functions/elena-agent.js
 // ============================================================
 // PCSUnited • Agentic Elena — elena-agent (Orchestrator)
-// v1.0.0 (2026-02-06)
+// v1.1.0 (2026-02-06)
 //
 // ✅ Purpose:
 // - Deterministic orchestration layer for Ask Elena
@@ -9,11 +9,17 @@
 // - Computes verdict (GREEN/CAUTION/NO-GO) deterministically
 // - Returns a single "truth packet" (inputs_used + receipts + next_action)
 //
+// ✅ v1.1.0 Improvements:
+// - NEVER "dead-ends" when mortgage inputs are missing
+// - Adds deterministic QUICK affordability rails (max price @ 0% and 5% down)
+// - Adds profile_used (first/last/full name) to prevent wrong greeting
+// - Adds missing_inputs + stronger next_action guidance
+//
 // ✅ Design Principles:
 // - NO LLM required here
 // - NO "AI math" (only deterministic rules)
 // - Safe fallbacks + explicit "sources"
-// -Toggle-friendly: HUD can render directly or forward payload into ask-elena for narration
+// - Toggle-friendly: HUD can render directly or forward payload into ask-elena for narration
 //
 // INPUT (POST JSON):
 // {
@@ -38,8 +44,10 @@
 //   scenario_id: "elena_...",
 //   ts: 1700000000,
 //   email: "...",
+//   profile_used?: {...},
 //   inputs_used: {...},
-//   mortgage: {...},
+//   quick?: {...},
+//   mortgage?: {...},
 //   verdict: {...},
 //   next_action: {...},
 //   debug?: {...}
@@ -131,9 +139,6 @@ function makeScenarioId(email, ts) {
 function pickApiBase(event) {
   const env = process.env.PCSU_API_BASE || process.env.API_BASE;
   if (env) return env.replace(/\/$/, "");
-
-  // If called from Webflow, we still want PCSUnited Netlify as the API origin.
-  // This matches your existing pattern for *.webflow.io embeds.
   return "https://pcsunited.netlify.app";
 }
 
@@ -164,6 +169,79 @@ function pickFirst(...vals) {
     if (v !== undefined && v !== null && v !== "" && !(typeof v === "number" && !Number.isFinite(v))) return v;
   }
   return null;
+}
+
+// ------------------------------
+// //#2B FINANCE MATH (DETERMINISTIC)
+// ------------------------------
+function aprTierFromScore(score) {
+  // Simple deterministic tier table (tune later, but stable).
+  // If score missing, default to 7.0% (as your UI copy currently does).
+  const s = Number.isFinite(score) ? score : null;
+  if (!s) return 0.07;
+  if (s >= 780) return 0.0625;
+  if (s >= 740) return 0.0675;
+  if (s >= 700) return 0.0725;
+  if (s >= 660) return 0.0800;
+  return 0.0900;
+}
+
+function pmtMonthly(principal, apr, termYears) {
+  if (!Number.isFinite(principal) || principal <= 0) return null;
+  const y = Number.isFinite(termYears) ? termYears : 30;
+  const n = Math.round(y * 12);
+  const r = (Number.isFinite(apr) ? apr : 0.07) / 12;
+  if (n <= 0) return null;
+
+  if (r <= 0) return principal / n;
+
+  const pow = Math.pow(1 + r, n);
+  const p = principal * (r * pow) / (pow - 1);
+  return Number.isFinite(p) ? p : null;
+}
+
+// Invert PMT to estimate max principal given target PI
+function principalFromPmt(targetPI, apr, termYears) {
+  if (!Number.isFinite(targetPI) || targetPI <= 0) return null;
+  const y = Number.isFinite(termYears) ? termYears : 30;
+  const n = Math.round(y * 12);
+  const r = (Number.isFinite(apr) ? apr : 0.07) / 12;
+  if (n <= 0) return null;
+
+  if (r <= 0) return targetPI * n;
+
+  const pow = Math.pow(1 + r, n);
+  const principal = targetPI * (pow - 1) / (r * pow);
+  return Number.isFinite(principal) ? principal : null;
+}
+
+function buildQuickAffordability({ income, housingCapPct = 0.30, buffer = 1.28, apr, termYears = 30 }) {
+  const inc = Number.isFinite(income) ? income : null;
+  if (!inc) return null;
+
+  const housingCap = inc * housingCapPct;         // all-in cap
+  const piTarget = housingCap / buffer;           // your canonical "1.28 buffer" style PI target
+
+  const principal0 = principalFromPmt(piTarget, apr, termYears);     // 0% down
+  const price0 = principal0 ? principal0 : null;
+
+  // For 5% down, principal = 0.95 * price => price = principal / 0.95
+  const price5 = principal0 ? (principal0 / 0.95) : null;
+
+  return {
+    housing_cap_monthly: Math.round(housingCap),
+    pi_target_monthly: Math.round(piTarget),
+    assumptions: {
+      housing_cap_pct: housingCapPct,
+      buffer,
+      apr_assumed: Number.isFinite(apr) ? apr : null,
+      term_years: termYears
+    },
+    quick_max_price: {
+      price_0_down: price0 ? Math.round(price0) : null,
+      price_5_down: price5 ? Math.round(price5) : null
+    }
+  };
 }
 
 // ------------------------------
@@ -242,6 +320,19 @@ function buildScenario(body) {
   };
 }
 
+function listMissingInputs({ income, expenses, creditScore, downpayment, price, housingAllIn }) {
+  const missing = [];
+  if (!Number.isFinite(income)) missing.push("income");
+  if (!Number.isFinite(expenses)) missing.push("expenses");
+  // Mortgage is "full truth" only if we can compute it; otherwise quick mode still works.
+  if (!Number.isFinite(housingAllIn)) {
+    if (!Number.isFinite(price)) missing.push("price");
+    if (!Number.isFinite(downpayment)) missing.push("downpayment");
+    if (!Number.isFinite(creditScore)) missing.push("creditScore");
+  }
+  return missing;
+}
+
 // ------------------------------
 // //#4 VERDICT ENGINE (DETERMINISTIC)
 // ------------------------------
@@ -250,21 +341,33 @@ function computeVerdict({ income, expenses, housingAllIn }) {
   const exp = Number.isFinite(expenses) ? expenses : 0;
   const hou = Number.isFinite(housingAllIn) ? housingAllIn : null;
 
-  if (!inc || !hou) {
+  // If we have income but not a mortgage estimate, we can still publish the cap.
+  if (!inc) {
     return {
       status: "INSUFFICIENT",
       grade: "N/A",
       housingCap: null,
-      ratios: { housingRatio: null, expenseRatio: inc ? exp / inc : null },
+      ratios: { housingRatio: null, expenseRatio: null },
       residual: null,
-      notes: ["Missing income or mortgage estimate; cannot compute a defensible verdict."],
+      notes: ["Missing income; cannot compute affordability rails."],
+    };
+  }
+
+  const housingCap = inc * 0.30;
+
+  if (!hou) {
+    return {
+      status: "INSUFFICIENT",
+      grade: "N/A",
+      housingCap: Math.round(housingCap),
+      ratios: { housingRatio: null, expenseRatio: exp / inc },
+      residual: null,
+      notes: ["Missing mortgage estimate; using affordability cap + quick estimates only."],
     };
   }
 
   // Housing affordability cap (your canonical 30% rule)
-  const housingCap = inc * 0.30;
   const housingRatio = hou / inc;
-
   const residual = inc - exp - hou;
 
   // Cushion thresholds (tunable)
@@ -286,7 +389,6 @@ function computeVerdict({ income, expenses, housingAllIn }) {
   }
 
   // Grade (simple, readable, deterministic)
-  // You can refine later, but this is stable and transparent.
   let grade = "B";
   if (status === "NO-GO") grade = "D";
   else if (status === "CAUTION") grade = "C+";
@@ -307,18 +409,25 @@ function computeVerdict({ income, expenses, housingAllIn }) {
   };
 }
 
-function pickNextAction({ verdict, income, expenses, price, downpayment, housingAllIn }) {
+function pickNextAction({ verdict, missing_inputs, price, housingAllIn }) {
   if (!verdict || verdict.status === "INSUFFICIENT") {
+    // If we can do quick rails, ask for the mortgage inputs to "tighten"
+    if (missing_inputs && missing_inputs.length) {
+      return {
+        type: "collect_missing_inputs",
+        target: { missing: missing_inputs },
+        why: "I can give quick rails now, and a full mortgage-verified verdict once those inputs are provided.",
+      };
+    }
     return {
       type: "collect_missing_inputs",
       target: null,
-      why: "Need complete inputs (income + mortgage estimate) to produce a defensible recommendation.",
+      why: "Need more inputs to produce a defensible recommendation.",
     };
   }
 
-  // If NO-GO, lead with the lever that most directly fixes it.
+  // If NO-GO, lead with price lever.
   if (verdict.status === "NO-GO") {
-    // 1) If price exists and we have current all-in, compute a target price to fit cap.
     if (Number.isFinite(price) && price > 0 && Number.isFinite(housingAllIn) && housingAllIn > 0 && Number.isFinite(verdict.housingCap)) {
       const cap = verdict.housingCap;
       const ratio = cap / housingAllIn;
@@ -335,20 +444,6 @@ function pickNextAction({ verdict, income, expenses, price, downpayment, housing
       };
     }
 
-    // 2) Otherwise reduce expenses to create cushion.
-    if (Number.isFinite(income) && Number.isFinite(expenses) && Number.isFinite(housingAllIn)) {
-      const required = Math.max(0, housingAllIn + expenses - (income - income * 0.05));
-      const targetCut = roundTo(required, 50);
-      return {
-        type: "reduce_expenses",
-        target: {
-          current_expenses: Math.round(expenses),
-          suggested_cut: Math.round(targetCut),
-        },
-        why: "Creates at least a small 5% buffer after housing + expenses.",
-      };
-    }
-
     return {
       type: "adjust_scenario",
       target: null,
@@ -356,33 +451,15 @@ function pickNextAction({ verdict, income, expenses, price, downpayment, housing
     };
   }
 
-  // If CAUTION: try to build buffer.
+  // If CAUTION: build buffer.
   if (verdict.status === "CAUTION") {
-    if (Number.isFinite(income) && Number.isFinite(expenses) && Number.isFinite(housingAllIn)) {
-      const targetResidual = income * 0.10; // aim 10% buffer
-      const needed = Math.max(0, targetResidual - (income - expenses - housingAllIn));
-      const targetCut = roundTo(needed, 50);
-
-      if (targetCut > 0) {
-        return {
-          type: "increase_buffer",
-          target: {
-            target_residual: Math.round(targetResidual),
-            suggested_monthly_improvement: Math.round(targetCut),
-          },
-          why: "Moves you toward a healthier buffer so small surprises don’t flip the verdict.",
-        };
-      }
-    }
-
     return {
-      type: "raise_downpayment_or_lower_price",
+      type: "increase_buffer",
       target: null,
       why: "Small adjustments can move you from CAUTION to GREEN.",
     };
   }
 
-  // GREEN: next action is usually execution readiness.
   return {
     type: "lock_in_plan",
     target: null,
@@ -442,6 +519,21 @@ exports.handler = async (event) => {
   const mode = pickFirst(sc.mode, profile?.mode, "active") || "active";
   const va_disability = num(pickFirst(sc.va_disability, profile?.va_disability));
 
+  // profile_used helps Ask-Elena greet correctly (prevents “Jennifer”)
+  const profile_used = {
+    email,
+    first_name: pickFirst(profile?.first_name, profile?.firstName) || null,
+    last_name: pickFirst(profile?.last_name, profile?.lastName) || null,
+    full_name: pickFirst(profile?.full_name, profile?.fullName) || null,
+    rank: profile?.rank || rank || null,
+    rank_paygrade: profile?.rank_paygrade || null,
+    yos: Number.isFinite(yos) ? yos : null,
+    base: base || null,
+    family: !!family,
+    mode: mode || null,
+    va_disability: Number.isFinite(va_disability) ? va_disability : null
+  };
+
   // ------------------------------------------------------------
   // //#5B Brain (income + city baselines)
   // ------------------------------------------------------------
@@ -476,7 +568,6 @@ exports.handler = async (event) => {
     num(pickFirst(sc.baseline?.income, sc.legacy?.income, sc.baseline?.monthlyIncome, sc.legacy?.monthlyIncome)) ?? null;
 
   const income = brainPayTotal ?? incomeFromScenario;
-
   const incomeSource = brainPayTotal ? "api/brain" : (incomeFromScenario ? "scenario" : "missing");
 
   // ------------------------------------------------------------
@@ -502,12 +593,12 @@ exports.handler = async (event) => {
     taxAnnual: Number.isFinite(taxAnnual) ? taxAnnual : undefined,
     insuranceAnnual: Number.isFinite(insuranceAnnual) ? insuranceAnnual : undefined,
     hoaMonthly: Number.isFinite(hoaMonthly) ? hoaMonthly : undefined,
-    // aprOverride optional if you later add it
   };
 
   let mortgage = null;
   let mortgageSource = "missing";
 
+  // Only call mortgage API when we have the full required inputs
   if (!Number.isFinite(price) || !Number.isFinite(down) || !Number.isFinite(creditScore)) {
     mortgageSource = "insufficient_inputs_for_mortgage";
   } else {
@@ -520,7 +611,6 @@ exports.handler = async (event) => {
     }
   }
 
-  // Attempt to extract all-in mortgage from known shapes
   const housingAllIn =
     num(
       pickFirst(
@@ -543,6 +633,18 @@ exports.handler = async (event) => {
   };
 
   // ------------------------------------------------------------
+  // //#5C-2 Quick rails (always available if income exists)
+  // ------------------------------------------------------------
+  const aprAssumed = aprTierFromScore(creditScore);
+  const quick = buildQuickAffordability({
+    income,
+    housingCapPct: 0.30,
+    buffer: 1.28,
+    apr: aprAssumed,
+    termYears: sc.termYears
+  });
+
+  // ------------------------------------------------------------
   // //#5D Verdict + Next Action
   // ------------------------------------------------------------
   const verdict = computeVerdict({
@@ -551,13 +653,20 @@ exports.handler = async (event) => {
     housingAllIn,
   });
 
-  const next_action = pickNextAction({
-    verdict,
+  const missing_inputs = listMissingInputs({
     income,
     expenses: sc.expenses,
-    price,
+    creditScore,
     downpayment: down,
-    housingAllIn,
+    price,
+    housingAllIn
+  });
+
+  const next_action = pickNextAction({
+    verdict,
+    missing_inputs,
+    price,
+    housingAllIn
   });
 
   // ------------------------------------------------------------
@@ -583,6 +692,7 @@ exports.handler = async (event) => {
       downpayment: Number.isFinite(down) ? "scenario/overrides" : "missing",
       creditScore: Number.isFinite(creditScore) ? "scenario/overrides" : "missing",
       mortgage: mortgageSource,
+      quick: quick ? "deterministic_quick_rails" : "missing_income"
     },
   };
 
@@ -591,8 +701,11 @@ exports.handler = async (event) => {
     scenario_id,
     ts,
     email,
+    profile_used,
     intent: sc.question ? "user_question" : "affordability_check",
+    missing_inputs,
     inputs_used,
+    quick: quick || null,
     mortgage: {
       all_in_monthly: Number.isFinite(housingAllIn) ? Math.round(housingAllIn) : null,
       breakdown,
@@ -601,7 +714,6 @@ exports.handler = async (event) => {
     },
     verdict,
     next_action,
-    // If you want to forward this into /api/ask-elena, include a compact context:
     context: {
       profile: profile ? {
         rank: profile?.rank || null,
@@ -610,6 +722,9 @@ exports.handler = async (event) => {
         family: profile?.family ?? null,
         mode: profile?.mode || null,
         va_disability: profile?.va_disability ?? null,
+        first_name: pickFirst(profile?.first_name, profile?.firstName) || null,
+        last_name: pickFirst(profile?.last_name, profile?.lastName) || null,
+        full_name: pickFirst(profile?.full_name, profile?.fullName) || null,
       } : null,
       brain_ok: !!brainRes.ok,
       mortgage_ok: !!mortgage,
@@ -628,6 +743,7 @@ exports.handler = async (event) => {
       mortgagePayloadSent: mortgagePayload,
       brainPayloadSent: brainPayload,
       profileFetched: !!profile,
+      aprAssumed,
     };
   }
 

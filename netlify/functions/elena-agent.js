@@ -253,6 +253,60 @@ function normalizeEmail(emailRaw) {
   return e;
 }
 
+// ------------------------------
+// //#3A FAD SNAPSHOT INGEST (NEW)
+// - Reads published 2A snapshot if HUD forwards it
+// - Primary expected location: body.context.fad
+// - Safe fallbacks included for migration
+// ------------------------------
+function readFadSnapshot(body) {
+  const ctx = body?.context && typeof body.context === "object" ? body.context : {};
+
+  // Most canonical: body.context.fad (you can standardize to this)
+  const fad =
+    (ctx?.fad && typeof ctx.fad === "object" ? ctx.fad : null) ||
+    (body?.fad && typeof body.fad === "object" ? body.fad : null) ||
+    (body?.fad_snapshot && typeof body.fad_snapshot === "object" ? body.fad_snapshot : null) ||
+    (body?.snapshot && typeof body.snapshot === "object" ? body.snapshot : null) ||
+    null;
+
+  if (!fad) return {};
+
+  // Normalize a compact subset (we keep original object too)
+  return {
+    __raw: fad,
+
+    // Canonical numbers (various possible key names)
+    price: num(pickFirst(fad.price, fad.homePrice, fad.projected_home_price, fad.housingPrice, fad.housing_cost, fad.housingRaw)),
+    expenses: num(pickFirst(fad.expenses, fad.monthlyExpenses, fad.monthly_expenses, fad.expenses_total)),
+    downpayment: num(pickFirst(fad.downpayment, fad.dpAmt, fad.down, fad.currentSavings, fad.savings, fad.savingsOverride)),
+    creditScore: num(pickFirst(fad.creditScore, fad.credit_score, fad.score, fad.scoreValue)),
+    termYears: num(pickFirst(fad.termYears, fad.term_years, fad.term)),
+    loanType: String(pickFirst(fad.loanType, fad.loan_type, fad.mortgageType) || "").toLowerCase() || null,
+
+    // Identity hints (if present)
+    rank: pickFirst(fad.rank, fad.rank_paygrade),
+    yos: num(pickFirst(fad.yos, fad.yearsOfService)),
+    base: pickFirst(fad.base, fad.baseZip, fad.base_name),
+    family: pickFirst(fad.family, fad.dependents, fad.withDependents),
+
+    mode: String(pickFirst(fad.mode, fad.userMode) || "").toLowerCase() || null,
+    va_disability: num(pickFirst(fad.va_disability, fad.va, fad.disability, fad.vaDisability)),
+
+    cityKey: pickFirst(fad.cityKey, fad.city_key, fad.city),
+    bedrooms: num(pickFirst(fad.bedrooms, fad.beds)),
+
+    // Optional income passthrough (brain still wins — we only use if brain missing)
+    income: num(pickFirst(fad.income, fad.monthlyIncome, fad.monthly_income, fad.totalIncome)),
+
+    // Optional tax/ins/hoa passthrough (used only when brain lacks)
+    taxRate: num(pickFirst(fad.taxRate, fad.tax_rate)),
+    taxAnnual: num(pickFirst(fad.taxAnnual, fad.tax_annual)),
+    insuranceAnnual: num(pickFirst(fad.insuranceAnnual, fad.insurance_annual)),
+    hoaMonthly: num(pickFirst(fad.hoaMonthly, fad.hoa_monthly)),
+  };
+}
+
 function buildScenario(body) {
   const scenario = body?.scenario && typeof body.scenario === "object" ? body.scenario : {};
   const overrides = body?.overrides && typeof body.overrides === "object" ? body.overrides : {};
@@ -260,47 +314,92 @@ function buildScenario(body) {
   // Accept a few legacy-ish keys if they come in (helps during migration)
   const legacy = body?.bridge && typeof body.bridge === "object" ? body.bridge : {};
 
+  // NEW: Pull in published 2A snapshot (FAD)
+  const fad = readFadSnapshot(body);
+
   // Canonical numeric inputs
+  // Priority order (unchanged principle):
+  // overrides > FAD snapshot (live dashboard) > scenario baseline > legacy bridge
   const price =
-    num(pickFirst(overrides.price, scenario.price, scenario.housingPrice, legacy.price, legacy.housingPrice, legacy.housingOverride)) ??
-    null;
+    num(pickFirst(
+      overrides.price,
+      fad.price,
+      scenario.price,
+      scenario.housingPrice,
+      legacy.price,
+      legacy.housingPrice,
+      legacy.housingOverride
+    )) ?? null;
 
   const expenses =
-    num(pickFirst(overrides.expenses, scenario.expenses, scenario.monthlyExpenses, legacy.expenses, legacy.expensesOverride)) ??
-    null;
+    num(pickFirst(
+      overrides.expenses,
+      fad.expenses,
+      scenario.expenses,
+      scenario.monthlyExpenses,
+      legacy.expenses,
+      legacy.expensesOverride
+    )) ?? null;
 
   const downpayment =
-    num(pickFirst(overrides.downpayment, scenario.downpayment, scenario.dpAmt, legacy.dpAmt, legacy.downpayment, legacy.savingsOverride)) ??
-    null;
+    num(pickFirst(
+      overrides.downpayment,
+      fad.downpayment,
+      scenario.downpayment,
+      scenario.dpAmt,
+      legacy.dpAmt,
+      legacy.downpayment,
+      legacy.savingsOverride
+    )) ?? null;
 
-  const creditScoreRaw = num(pickFirst(overrides.creditScore, scenario.creditScore, legacy.creditScore, legacy.credit_score));
+  const creditScoreRaw = num(pickFirst(
+    overrides.creditScore,
+    fad.creditScore,
+    scenario.creditScore,
+    legacy.creditScore,
+    legacy.credit_score
+  ));
   const creditScore = creditScoreRaw ? clamp(Math.round(creditScoreRaw), 300, 850) : null;
 
-  const termYearsRaw = num(pickFirst(overrides.termYears, scenario.termYears, legacy.termYears));
+  const termYearsRaw = num(pickFirst(
+    overrides.termYears,
+    fad.termYears,
+    scenario.termYears,
+    legacy.termYears
+  ));
   const termYears = termYearsRaw ? clamp(Math.round(termYearsRaw), 10, 40) : 30;
 
-  const loanType = String(pickFirst(overrides.loanType, scenario.loanType, legacy.loanType, "va") || "va").toLowerCase();
+  const loanType = String(pickFirst(
+    overrides.loanType,
+    fad.loanType,
+    scenario.loanType,
+    legacy.loanType,
+    "va"
+  ) || "va").toLowerCase();
 
-  const cityKey = pickFirst(overrides.cityKey, scenario.cityKey, legacy.cityKey) || null;
-  const bedroomsRaw = num(pickFirst(overrides.bedrooms, scenario.bedrooms, legacy.bedrooms));
+  const cityKey = pickFirst(overrides.cityKey, fad.cityKey, scenario.cityKey, legacy.cityKey) || null;
+  const bedroomsRaw = num(pickFirst(overrides.bedrooms, fad.bedrooms, scenario.bedrooms, legacy.bedrooms));
   const bedrooms = bedroomsRaw ? clamp(Math.round(bedroomsRaw), 0, 12) : null;
 
   // Identity-ish / profile-ish fields (for brain)
-  const rank = pickFirst(scenario.rank, legacy.rank) || null;
-  const yosRaw = num(pickFirst(scenario.yos, legacy.yos));
+  const rank = pickFirst(fad.rank, scenario.rank, legacy.rank) || null;
+  const yosRaw = num(pickFirst(fad.yos, scenario.yos, legacy.yos));
   const yos = yosRaw ? clamp(Math.round(yosRaw), 0, 40) : null;
-  const base = pickFirst(scenario.base, legacy.base) || null;
-  const family = pickFirst(scenario.family, legacy.family);
+  const base = pickFirst(fad.base, scenario.base, legacy.base) || null;
+
+  const family = pickFirst(fad.family, scenario.family, legacy.family);
   const familyBool = family === true || family === "true" || family === 1 || family === "1";
 
-  const mode = String(pickFirst(scenario.mode, legacy.mode, "active") || "active").toLowerCase();
-  const va_disability = num(pickFirst(scenario.va_disability, legacy.va_disability, scenario.va, legacy.va));
+  const mode = String(pickFirst(fad.mode, scenario.mode, legacy.mode, "active") || "active").toLowerCase();
+  const va_disability = num(pickFirst(fad.va_disability, scenario.va_disability, legacy.va_disability, scenario.va, legacy.va));
 
   return {
     question: String(body?.question || "").trim() || null,
     overrides,
     baseline: scenario,
     legacy,
+    fad, // NEW: keep for downstream use (income fallback + receipts/debug if needed)
+
     // canonical inputs
     price,
     expenses,
@@ -310,6 +409,7 @@ function buildScenario(body) {
     loanType,
     cityKey,
     bedrooms,
+
     // profile hints
     rank,
     yos,
@@ -564,8 +664,17 @@ exports.handler = async (event) => {
       )
     ) ?? null;
 
+  // NEW: include sc.fad.income as an additional baseline fallback (brain still wins)
   const incomeFromScenario =
-    num(pickFirst(sc.baseline?.income, sc.legacy?.income, sc.baseline?.monthlyIncome, sc.legacy?.monthlyIncome)) ?? null;
+    num(
+      pickFirst(
+        sc.baseline?.income,
+        sc.legacy?.income,
+        sc.baseline?.monthlyIncome,
+        sc.legacy?.monthlyIncome,
+        sc.fad?.income
+      )
+    ) ?? null;
 
   const income = brainPayTotal ?? incomeFromScenario;
   const incomeSource = brainPayTotal ? "api/brain" : (incomeFromScenario ? "scenario" : "missing");
@@ -578,10 +687,11 @@ exports.handler = async (event) => {
   const creditScore = sc.creditScore;
 
   // Mortgage defaults from brain if available
-  const taxRate = num(pickFirst(sc.baseline?.taxRate, brain?.city?.taxRate, brain?.rates?.taxRate));
-  const taxAnnual = num(pickFirst(sc.baseline?.taxAnnual, brain?.city?.taxAnnual, brain?.rates?.taxAnnual));
-  const insuranceAnnual = num(pickFirst(sc.baseline?.insuranceAnnual, brain?.city?.insuranceAnnual, brain?.rates?.insuranceAnnual));
-  const hoaMonthly = num(pickFirst(sc.baseline?.hoaMonthly, brain?.city?.hoaMonthly, brain?.rates?.hoaMonthly));
+  // NEW: allow FAD snapshot to provide these too (brain still preferred)
+  const taxRate = num(pickFirst(sc.baseline?.taxRate, brain?.city?.taxRate, brain?.rates?.taxRate, sc.fad?.taxRate));
+  const taxAnnual = num(pickFirst(sc.baseline?.taxAnnual, brain?.city?.taxAnnual, brain?.rates?.taxAnnual, sc.fad?.taxAnnual));
+  const insuranceAnnual = num(pickFirst(sc.baseline?.insuranceAnnual, brain?.city?.insuranceAnnual, brain?.rates?.insuranceAnnual, sc.fad?.insuranceAnnual));
+  const hoaMonthly = num(pickFirst(sc.baseline?.hoaMonthly, brain?.city?.hoaMonthly, brain?.rates?.hoaMonthly, sc.fad?.hoaMonthly));
 
   const mortgagePayload = {
     price: Number.isFinite(price) ? price : undefined,
@@ -728,6 +838,9 @@ exports.handler = async (event) => {
       } : null,
       brain_ok: !!brainRes.ok,
       mortgage_ok: !!mortgage,
+
+      // NEW: include whether a FAD snapshot was provided (helps debugging HUD wiring)
+      fad_ok: !!(sc.fad && Object.keys(sc.fad).length),
     },
   };
 
@@ -744,6 +857,9 @@ exports.handler = async (event) => {
       brainPayloadSent: brainPayload,
       profileFetched: !!profile,
       aprAssumed,
+
+      // NEW: show minimal fad keys without bloating response
+      fadKeys: sc.fad && sc.fad.__raw ? Object.keys(sc.fad.__raw).slice(0, 50) : [],
     };
   }
 

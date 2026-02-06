@@ -1,7 +1,7 @@
 // netlify/functions/elena-agent.js
 // ============================================================
 // PCSUnited • Agentic Elena — elena-agent (Orchestrator)
-// v1.1.0 (2026-02-06)
+// v1.1.1 (2026-02-06)
 //
 // ✅ Purpose:
 // - Deterministic orchestration layer for Ask Elena
@@ -9,11 +9,11 @@
 // - Computes verdict (GREEN/CAUTION/NO-GO) deterministically
 // - Returns a single "truth packet" (inputs_used + receipts + next_action)
 //
-// ✅ v1.1.0 Improvements:
-// - NEVER "dead-ends" when mortgage inputs are missing
-// - Adds deterministic QUICK affordability rails (max price @ 0% and 5% down)
-// - Adds profile_used (first/last/full name) to prevent wrong greeting
-// - Adds missing_inputs + stronger next_action guidance
+// ✅ v1.1.1 Improvements (PATCH):
+// - Parses hypothetical credit score from the user's QUESTION
+//   (e.g., “...if my credit score went up to 720”)
+//   -> treated as a scenario override ONLY when phrasing suggests a what-if
+// - Treats api/mortgage all-in values <= 0 as MISSING (prevents "$0/month" truth packets)
 //
 // ✅ Design Principles:
 // - NO LLM required here
@@ -172,6 +172,42 @@ function pickFirst(...vals) {
 }
 
 // ------------------------------
+// //#2A QUESTION PARSERS (DETERMINISTIC)
+// ------------------------------
+function parseHypotheticalCreditScoreFromQuestion(question) {
+  // Only treat as an override if phrasing implies a WHAT-IF / CHANGE request.
+  // Examples that should match:
+  // - "what would my mortgage be if my credit score went up to 720"
+  // - "if my fico was 740"
+  // - "raise my credit score to 760"
+  const t = String(question || "").toLowerCase().trim();
+  if (!t) return null;
+
+  const looksHypothetical =
+    /\bif\b|\bwent\s*up\b|\braise\b|\bbump\b|\bincrease\b|\bimprove\b|\bup\s*to\b|\bto\s*\d{3}\b/.test(t);
+
+  if (!looksHypothetical) return null;
+
+  // Prefer explicit "credit score/FICO ... 720"
+  let m =
+    t.match(/(?:credit\s*score|fico)\D{0,12}(\d{3})\b/) ||
+    t.match(/\bto\D{0,4}(\d{3})\b/);
+
+  if (!m) return null;
+
+  const s = Number(m[1]);
+  if (!Number.isFinite(s)) return null;
+  if (s < 300 || s > 850) return null;
+
+  return Math.round(s);
+}
+
+function hasPositiveMoney(n) {
+  const x = Number(n);
+  return Number.isFinite(x) && x > 0;
+}
+
+// ------------------------------
 // //#2B FINANCE MATH (DETERMINISTIC)
 // ------------------------------
 function aprTierFromScore(score) {
@@ -317,6 +353,8 @@ function buildScenario(body) {
   // NEW: Pull in published 2A snapshot (FAD)
   const fad = readFadSnapshot(body);
 
+  const question = String(body?.question || "").trim() || null;
+
   // Canonical numeric inputs
   // Priority order (unchanged principle):
   // overrides > FAD snapshot (live dashboard) > scenario baseline > legacy bridge
@@ -352,6 +390,9 @@ function buildScenario(body) {
       legacy.savingsOverride
     )) ?? null;
 
+  // ---- credit score (v1.1.1: allow hypothetical override from question)
+  let creditScoreSource = "missing";
+
   const creditScoreRaw = num(pickFirst(
     overrides.creditScore,
     fad.creditScore,
@@ -359,7 +400,22 @@ function buildScenario(body) {
     legacy.creditScore,
     legacy.credit_score
   ));
-  const creditScore = creditScoreRaw ? clamp(Math.round(creditScoreRaw), 300, 850) : null;
+
+  let creditScore = creditScoreRaw ? clamp(Math.round(creditScoreRaw), 300, 850) : null;
+
+  if (creditScore !== null) {
+    if (overrides.creditScore !== undefined && overrides.creditScore !== null) creditScoreSource = "overrides";
+    else if (fad.creditScore !== undefined && fad.creditScore !== null) creditScoreSource = "fad";
+    else if (scenario.creditScore !== undefined && scenario.creditScore !== null) creditScoreSource = "scenario";
+    else if (legacy.creditScore !== undefined && legacy.creditScore !== null) creditScoreSource = "legacy";
+    else creditScoreSource = "scenario/overrides";
+  } else {
+    const fromQ = parseHypotheticalCreditScoreFromQuestion(question);
+    if (fromQ !== null) {
+      creditScore = fromQ;
+      creditScoreSource = "question_hypothetical";
+    }
+  }
 
   const termYearsRaw = num(pickFirst(
     overrides.termYears,
@@ -394,7 +450,7 @@ function buildScenario(body) {
   const va_disability = num(pickFirst(fad.va_disability, scenario.va_disability, legacy.va_disability, scenario.va, legacy.va));
 
   return {
-    question: String(body?.question || "").trim() || null,
+    question,
     overrides,
     baseline: scenario,
     legacy,
@@ -405,6 +461,7 @@ function buildScenario(body) {
     expenses,
     downpayment,
     creditScore,
+    creditScoreSource, // NEW (v1.1.1)
     termYears,
     loanType,
     cityKey,
@@ -425,7 +482,7 @@ function listMissingInputs({ income, expenses, creditScore, downpayment, price, 
   if (!Number.isFinite(income)) missing.push("income");
   if (!Number.isFinite(expenses)) missing.push("expenses");
   // Mortgage is "full truth" only if we can compute it; otherwise quick mode still works.
-  if (!Number.isFinite(housingAllIn)) {
+  if (!Number.isFinite(housingAllIn) || housingAllIn <= 0) {
     if (!Number.isFinite(price)) missing.push("price");
     if (!Number.isFinite(downpayment)) missing.push("downpayment");
     if (!Number.isFinite(creditScore)) missing.push("creditScore");
@@ -439,7 +496,9 @@ function listMissingInputs({ income, expenses, creditScore, downpayment, price, 
 function computeVerdict({ income, expenses, housingAllIn }) {
   const inc = Number.isFinite(income) ? income : null;
   const exp = Number.isFinite(expenses) ? expenses : 0;
-  const hou = Number.isFinite(housingAllIn) ? housingAllIn : null;
+
+  // Treat <=0 as "missing" (v1.1.1)
+  const hou = (Number.isFinite(housingAllIn) && housingAllIn > 0) ? housingAllIn : null;
 
   // If we have income but not a mortgage estimate, we can still publish the cap.
   if (!inc) {
@@ -721,7 +780,8 @@ exports.handler = async (event) => {
     }
   }
 
-  const housingAllIn =
+  // v1.1.1: treat 0/<=0 as missing
+  const rawAllIn =
     num(
       pickFirst(
         mortgage?.allInMonthly,
@@ -732,6 +792,12 @@ exports.handler = async (event) => {
         mortgage?.totalMonthly
       )
     ) ?? null;
+
+  const housingAllIn = hasPositiveMoney(rawAllIn) ? rawAllIn : null;
+
+  if (mortgageSource === "api/mortgage" && !housingAllIn) {
+    mortgageSource = "api/mortgage:missing_or_zero";
+  }
 
   const breakdown = {
     principal: num(pickFirst(mortgage?.breakdown?.principal, mortgage?.principal)) ?? null,
@@ -800,7 +866,7 @@ exports.handler = async (event) => {
       expenses: sc.expenses !== null ? "scenario/overrides" : "missing",
       price: Number.isFinite(price) ? "scenario/overrides" : "missing",
       downpayment: Number.isFinite(down) ? "scenario/overrides" : "missing",
-      creditScore: Number.isFinite(creditScore) ? "scenario/overrides" : "missing",
+      creditScore: Number.isFinite(creditScore) ? sc.creditScoreSource : "missing",
       mortgage: mortgageSource,
       quick: quick ? "deterministic_quick_rails" : "missing_income"
     },
@@ -837,7 +903,7 @@ exports.handler = async (event) => {
         full_name: pickFirst(profile?.full_name, profile?.fullName) || null,
       } : null,
       brain_ok: !!brainRes.ok,
-      mortgage_ok: !!mortgage,
+      mortgage_ok: !!(mortgage && housingAllIn),
 
       // NEW: include whether a FAD snapshot was provided (helps debugging HUD wiring)
       fad_ok: !!(sc.fad && Object.keys(sc.fad).length),

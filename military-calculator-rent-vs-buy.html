@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Jan 26 2026 07:19:35 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Feb 11 2026 06:11:19 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6965c816c706edb1978686d2" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -26,54 +26,25 @@
 </head>
 <body>
   <div class="w-embed w-script"><!--  =========================================================
-  RealtySaSS • Frosted Glass Login Lock (PCS United Aesthetic Patch)
-  - Uses /api/login (Supabase Auth check)
-  - After success:
-      • Unlocks page
-      • Stores login email/profile in localStorage for dashboards
-  ✅ UPDATE (Premium UX):
-      • Auto-unlock if saved login email exists
-      • Persistent “Session / Log Out” pill (always visible after unlock)
-  ✅ UPDATE (Security / Public Device):
-      • “Public / Shared device” toggle = do NOT remember loginEmail
-      • Optional: clears device on tab close when Public mode is ON
+  PCSUnited • Login Lock (Overlay Removed)
+  ✅ FIX: Clicking "Log In" no longer triggers logout
+  ✅ Logout detector now only matches real clickable elements
+  ✅ Hidden logout button no longer contains "Log Out" text
+  ✅ Exposes: window.PCSU_LOGOUT()
+  ✅ Listens: pcsunited:logout event
 =========================================================  -->
     <div id="rs-lock-root" style="all: initial;">
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
       <style>
-    /* =========================================================
-       //#1 SCOPE RESET
-    ========================================================= */
-    #rs-lock-root, #rs-lock-root *{
-      box-sizing: border-box;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    /* =========================================================
-       //#2 TOKENS
-    ========================================================= */
+    #rs-lock-root, #rs-lock-root *{ box-sizing: border-box; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
     #rs-lock-root{
-      --bg:#0b0e1a;
-      --panel:#101426;
-      --panel2:#0f1324;
-      --ink:#e9ecff;
-      --muted:#a8b0d6;
-      --border:rgba(255,255,255,.12);
-      --mint:#8ef3c5;
-      --sapphire:#6aa7ff;
-      --danger:#ff8aa6;
+      --ink:#e9ecff; --muted:#a8b0d6; --danger:#ff8aa6;
+      --mint:#8ef3c5; --sapphire:#6aa7ff;
       --shadow: 0 24px 60px rgba(0,0,0,.75);
     }
-    /* =========================================================
-       //#3 OVERLAY
-    ========================================================= */
     #rs-lock-overlay{
-      position: fixed;
-      inset: 0;
-      z-index: 2147483646;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 28px;
+      position: fixed; inset: 0; z-index: 2147483646;
+      display: flex; align-items: center; justify-content: center; padding: 28px;
       background:
         radial-gradient(1200px 700px at 50% 35%, rgba(106,167,255,.14) 0%, rgba(0,0,0,0) 60%),
         radial-gradient(900px 600px at 30% 20%, rgba(142,243,197,.10) 0%, rgba(0,0,0,0) 58%),
@@ -81,26 +52,11 @@
         rgba(11,14,26,.72);
       -webkit-backdrop-filter: blur(14px) saturate(140%);
       backdrop-filter: blur(14px) saturate(140%);
-      opacity: 0;
-      visibility: hidden;
-      pointer-events: none;
+      opacity: 0; visibility: hidden; pointer-events: none;
       transition: opacity .22s ease, visibility .22s ease;
     }
-    #rs-lock-overlay[aria-hidden="false"]{
-      opacity: 1;
-      visibility: visible;
-      pointer-events: auto;
-    }
-    /* =========================================================
-       //#4 CENTER WRAP
-    ========================================================= */
-    .rs-lock-centered{
-      width: 100%;
-      max-width: 520px;
-    }
-    /* =========================================================
-       //#5 CARD
-    ========================================================= */
+    #rs-lock-overlay[aria-hidden="false"]{ opacity: 1; visibility: visible; pointer-events: auto; }
+    .rs-lock-centered{ width: 100%; max-width: 520px; }
     .rs-lock-card{
       position: relative;
       border-radius: 18px;
@@ -116,248 +72,72 @@
       padding: 28px 26px 22px;
     }
     .rs-lock-card:before{
-      content:"";
-      position:absolute;
-      inset:-2px;
-      border-radius: 20px;
-      padding:2px;
+      content:""; position:absolute; inset:-2px; border-radius: 20px; padding:2px;
       background: linear-gradient(135deg, rgba(142,243,197,.35), rgba(106,167,255,.25), rgba(255,255,255,0));
       -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0);
-      -webkit-mask-composite: xor;
-      mask-composite: exclude;
-      pointer-events:none;
-      opacity:.55;
+      -webkit-mask-composite: xor; mask-composite: exclude;
+      pointer-events:none; opacity:.55;
     }
-    /* =========================================================
-       //#6 TYPOGRAPHY
-    ========================================================= */
     #rs-lock-title{
-      margin: 0 0 6px;
-      color: var(--ink);
-      font-size: 18px;
-      font-weight: 900;
-      letter-spacing: .16em;
-      text-transform: uppercase;
-      text-align: center;
+      margin: 0 0 6px; color: var(--ink);
+      font-size: 18px; font-weight: 900; letter-spacing: .16em;
+      text-transform: uppercase; text-align: center;
     }
     .rs-lock-sub{
-      margin: 0 0 18px;
-      color: rgba(168,176,214,.88);
-      font-size: 12.5px;
-      line-height: 1.45;
-      text-align: center;
+      margin: 0 0 18px; color: rgba(168,176,214,.88);
+      font-size: 12.5px; line-height: 1.45; text-align: center;
     }
-    /* =========================================================
-       //#7 FIELDS
-    ========================================================= */
     .rs-field{ margin: 10px 0; }
-    #rs-email-input,
-    #rs-pass-input{
-      width: 100%;
-      padding: 14px 14px;
-      border-radius: 12px;
+    #rs-email-input, #rs-pass-input{
+      width: 100%; padding: 14px 14px; border-radius: 12px;
       border: 1px solid rgba(255,255,255,.14);
       background: rgba(255,255,255,.06);
-      color: var(--ink);
-      font-size: 14px;
-      outline: none;
+      color: var(--ink); font-size: 14px; outline: none;
       box-shadow: 0 18px 36px rgba(0,0,0,.55) inset;
       transition: border-color .18s ease, box-shadow .18s ease, transform .18s ease;
     }
-    #rs-email-input::placeholder,
-    #rs-pass-input::placeholder{ color: rgba(233,236,255,.40); }
-    #rs-email-input:focus,
-    #rs-pass-input:focus{
+    #rs-email-input::placeholder, #rs-pass-input::placeholder{ color: rgba(233,236,255,.40); }
+    #rs-email-input:focus, #rs-pass-input:focus{
       border-color: rgba(106,167,255,.55);
-      box-shadow:
-        0 18px 36px rgba(0,0,0,.55) inset,
-        0 0 0 3px rgba(106,167,255,.16);
+      box-shadow: 0 18px 36px rgba(0,0,0,.55) inset, 0 0 0 3px rgba(106,167,255,.16);
       transform: translateY(-1px);
     }
-    /* =========================================================
-       //#8 BUTTONS
-    ========================================================= */
-    .rs-lock-actions{
-      margin-top: 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+    .rs-lock-actions{ margin-top: 14px; display: flex; flex-direction: column; gap: 10px; }
     #rs-login-btn{
-      width: 100%;
-      padding: 14px 14px;
-      border-radius: 12px;
-      border: none;
-      cursor: pointer;
-      font-weight: 900;
-      font-size: 14px;
-      letter-spacing: .02em;
+      width: 100%; padding: 14px 14px; border-radius: 12px; border: none; cursor: pointer;
+      font-weight: 900; font-size: 14px; letter-spacing: .02em;
       color: #06112b;
       background: linear-gradient(180deg, rgba(142,243,197,1), rgba(106,167,255,.95));
       box-shadow: 0 18px 34px rgba(0,0,0,.65);
       transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
     }
-    #rs-login-btn:hover{
-      transform: translateY(-1px);
-      filter: brightness(1.02);
-      box-shadow: 0 22px 44px rgba(0,0,0,.72);
-    }
+    #rs-login-btn:hover{ transform: translateY(-1px); filter: brightness(1.02); box-shadow: 0 22px 44px rgba(0,0,0,.72); }
     #rs-login-btn:active{ transform: translateY(0px); filter: brightness(.98); }
     #rs-login-btn[disabled]{ opacity: .65; cursor: not-allowed; transform: none; }
-    .rs-lock-foot{
-      margin-top: 12px;
-      padding-top: 12px;
-      border-top: 1px solid rgba(255,255,255,.10);
-      text-align: center;
-      color: rgba(168,176,214,.85);
-      font-size: 12px;
-    }
-    #rs-signup-btn{
-      display: inline-block;
-      margin-top: 10px;
-      padding: 10px 16px;
-      border-radius: 999px;
-      border: 1px solid rgba(142,243,197,.38);
-      color: var(--mint);
-      background: rgba(0,0,0,.10);
-      font-weight: 800;
-      font-size: 12px;
-      cursor: pointer;
-      text-decoration: none;
-      transition: background .15s ease, transform .15s ease, border-color .15s ease;
-    }
-    #rs-signup-btn:hover{
-      transform: translateY(-1px);
-      background: rgba(142,243,197,.08);
-      border-color: rgba(142,243,197,.55);
-    }
-    /* =========================================================
-       //#9 ERROR TEXT
-    ========================================================= */
-    #rs-lock-error{
-      margin-top: 10px;
-      font-size: 12px;
-      color: var(--danger);
-      text-align: center;
-      min-height: 16px;
-    }
-    /* =========================================================
-       //#10 PUBLIC DEVICE TOGGLE
-    ========================================================= */
+    #rs-lock-error{ margin-top: 10px; font-size: 12px; color: var(--danger); text-align: center; min-height: 16px; }
     .rs-toggle{
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 12px;
-      padding: 10px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.10);
+      margin-top: 10px; display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255,255,255,.10);
       background: rgba(12,14,25,.35);
     }
-    .rs-toggle .lbl{
-      color: rgba(233,236,255,.85);
-      font-size: 12px;
-      line-height: 1.35;
-      font-weight: 800;
-      letter-spacing: .02em;
-    }
-    .rs-toggle .sub{
-      display:block;
-      margin-top: 2px;
-      color: rgba(168,176,214,.85);
-      font-weight: 600;
-      font-size: 11px;
-      letter-spacing: 0;
-      text-transform: none;
-    }
+    .rs-toggle .lbl{ color: rgba(233,236,255,.85); font-size: 12px; line-height: 1.35; font-weight: 800; letter-spacing: .02em; }
+    .rs-toggle .sub{ display:block; margin-top: 2px; color: rgba(168,176,214,.85); font-weight: 600; font-size: 11px; }
     .rs-switch{ position: relative; width: 46px; height: 26px; flex: 0 0 auto; }
     .rs-switch input{ opacity: 0; width: 0; height: 0; }
     .rs-slider{
-      position:absolute; inset:0;
-      border-radius: 999px;
-      background: rgba(255,255,255,.14);
-      border: 1px solid rgba(255,255,255,.14);
-      cursor: pointer;
-      transition: .18s ease;
-      box-shadow: inset 0 10px 20px rgba(0,0,0,.45);
+      position:absolute; inset:0; border-radius: 999px;
+      background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.14);
+      cursor: pointer; transition: .18s ease; box-shadow: inset 0 10px 20px rgba(0,0,0,.45);
     }
     .rs-slider:before{
-      content:"";
-      position:absolute;
-      width: 20px; height: 20px;
-      left: 3px; top: 2px;
-      border-radius: 999px;
-      background: rgba(233,236,255,.9);
-      box-shadow: 0 12px 24px rgba(0,0,0,.55);
-      transition: .18s ease;
+      content:""; position:absolute; width: 20px; height: 20px; left: 3px; top: 2px; border-radius: 999px;
+      background: rgba(233,236,255,.9); box-shadow: 0 12px 24px rgba(0,0,0,.55); transition: .18s ease;
     }
-    .rs-switch input:checked + .rs-slider{
-      background: linear-gradient(180deg, rgba(142,243,197,.9), rgba(106,167,255,.85));
-      border-color: rgba(255,255,255,0);
-    }
-    .rs-switch input:checked + .rs-slider:before{
-      transform: translateX(20px);
-      background: #06112b;
-    }
-    /* =========================================================
-       //#11 SESSION HUD (Persistent Log Out pill)
-    ========================================================= */
-    #rs-session-hud{
-      position: fixed;
-      top: 16px;
-      right: 16px;
-      z-index: 2147483645; /* just under overlay */
-      display: none;
-      align-items: center;
-      gap: 10px;
-      padding: 10px 12px;
-      border-radius: 999px;
-      border: 1px solid rgba(255,255,255,.12);
-      background: rgba(16,20,38,.50);
-      -webkit-backdrop-filter: blur(18px) saturate(150%);
-      backdrop-filter: blur(18px) saturate(150%);
-      box-shadow: 0 18px 38px rgba(0,0,0,.68);
-      color: var(--ink);
-      max-width: 92vw;
-    }
-    #rs-session-badge{
-      font-size: 11px;
-      font-weight: 900;
-      letter-spacing: .12em;
-      text-transform: uppercase;
-      color: rgba(168,176,214,.95);
-      white-space: nowrap;
-    }
-    #rs-session-email{
-      font-size: 12px;
-      font-weight: 800;
-      color: rgba(233,236,255,.95);
-      max-width: 40vw;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-    }
-    #rs-session-logout{
-      border: 1px solid rgba(255,255,255,.14);
-      background: rgba(12,14,25,.35);
-      color: rgba(233,236,255,.95);
-      font-weight: 900;
-      font-size: 11px;
-      letter-spacing: .08em;
-      text-transform: uppercase;
-      padding: 9px 12px;
-      border-radius: 999px;
-      cursor: pointer;
-      transition: transform .15s ease, filter .15s ease, background .15s ease;
-      white-space: nowrap;
-    }
-    #rs-session-logout:hover{ transform: translateY(-1px); filter: brightness(1.03); background: rgba(12,14,25,.45); }
-    #rs-session-logout:active{ transform: translateY(0); filter: brightness(.99); }
+    .rs-switch input:checked + .rs-slider{ background: linear-gradient(180deg, rgba(142,243,197,.9), rgba(106,167,255,.85)); border-color: rgba(255,255,255,0); }
+    .rs-switch input:checked + .rs-slider:before{ transform: translateX(20px); background: #06112b; }
+    /* Compatibility-only hidden button (NO TEXT inside) */
+    #rs-session-logout{ display:none !important; }
   </style>
-      <!--  =========================================================
-     //#12 OVERLAY UI
-  =========================================================  -->
       <div id="rs-lock-overlay" aria-hidden="true">
         <div class="rs-lock-centered" role="dialog" aria-labelledby="rs-lock-title" aria-modal="true">
           <div class="rs-lock-card" id="rs-lock-card">
@@ -383,177 +163,226 @@
               <button id="rs-login-btn" type="button">Log In</button>
             </div>
             <div id="rs-lock-error"></div>
-            <div class="rs-lock-foot">
+            <div class="rs-lock-foot" style="margin-top:12px; padding-top:12px; border-top:1px solid rgba(255,255,255,.10); text-align:center; color:rgba(168,176,214,.85); font-size:12px;">
               Not a Prime Member yet?
               <br>
-              <a id="rs-signup-btn" href="/create-account" aria-label="Sign up">Sign Up</a>
+              <a id="rs-signup-btn" href="/create-account" aria-label="Sign up" style="display:inline-block; margin-top:10px; padding:10px 16px; border-radius:999px; border:1px solid rgba(142,243,197,.38); color: #8ef3c5; background: rgba(0,0,0,.10); font-weight:800; font-size:12px; cursor:pointer; text-decoration:none;">
+                Sign Up
+              </a>
             </div>
           </div>
         </div>
       </div>
-      <!--  =========================================================
-     //#13 SESSION HUD (Always available after unlock)
-  =========================================================  -->
-      <div id="rs-session-hud" aria-live="polite">
-        <span id="rs-session-badge">SESSION</span>
-        <span id="rs-session-email">—</span>
-        <button id="rs-session-logout" type="button">Log Out</button>
-      </div>
+      <!--  IMPORTANT: Hidden compatibility logout button has NO TEXT now  -->
+      <button id="rs-session-logout" type="button" aria-label="Log Out" data-action="logout" aria-hidden="true" tabindex="-1"></button>
       <script>
     (function(){
       "use strict";
-      // ============================================================
-      // //#14 CONFIG
-      // ============================================================
-      const API_BASE = "https://theorozcorealty.netlify.app/api";
-      const LOGIN_ENDPOINT = API_BASE + "/login";
-      const KEY_EMAIL   = "realtysass.loginEmail";          // "remember me" (device)
-      const KEY_SESS    = "realtysass.sessionEmail";        // session email (tab/session)
-      const KEY_PUBLIC  = "realtysass.publicDevice.v1";     // public device flag
+      const API_BASE        = "https://pcsunited.netlify.app/api";
+      const LOGIN_ENDPOINT  = API_BASE + "/login";
+      const COMMIT_ENDPOINT = API_BASE + "/commit-intake";
+      const KEY_EMAIL   = "pcsunited.loginEmail";
+      const KEY_SESS    = "pcsunited.sessionEmail";
+      const KEY_PUBLIC  = "pcsunited.publicDevice.v1";
+      const KEY_PROFILE = "pcsunited.profile.v1";
+      const KEY_AUTHOK  = "pcsunited.auth_ok.v1";
+      const KEY_PENDING = "pcsunited.pending_intake.v1";
       const overlay  = document.getElementById("rs-lock-overlay");
       const emailEl  = document.getElementById("rs-email-input");
       const passEl   = document.getElementById("rs-pass-input");
       const btnEl    = document.getElementById("rs-login-btn");
       const errEl    = document.getElementById("rs-lock-error");
       const pubEl    = document.getElementById("rs-public-device");
-      const hudEl    = document.getElementById("rs-session-hud");
-      const hudMail  = document.getElementById("rs-session-email");
-      const hudOut   = document.getElementById("rs-session-logout");
+      const hiddenLogoutBtn = document.getElementById("rs-session-logout");
       if(!overlay || !emailEl || !passEl || !btnEl) return;
       function showOverlay(){
         overlay.setAttribute("aria-hidden","false");
+        overlay.style.display = "flex";
         try { document.documentElement.style.overflow = "hidden"; } catch(_){}
         try { document.body.style.overflow = "hidden"; } catch(_){}
       }
-      function hideOverlay(){
+      function hideOverlayHard(){
         overlay.setAttribute("aria-hidden","true");
+        overlay.style.opacity = "0";
+        overlay.style.visibility = "hidden";
+        overlay.style.pointerEvents = "none";
         try { document.documentElement.style.overflow = ""; } catch(_){}
         try { document.body.style.overflow = ""; } catch(_){}
       }
-      function setError(msg){
-        if(errEl) errEl.textContent = msg || "";
+      function setError(msg){ if(errEl) errEl.textContent = msg || ""; }
+      function readJSON(key, fallback){
+        try{ return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
+        catch(_){ return fallback; }
       }
-      function getSavedEmail(){
-        try{ return (localStorage.getItem(KEY_EMAIL) || "").trim(); }catch(_){ return ""; }
-      }
-      function setSavedEmail(email){
-        try{ localStorage.setItem(KEY_EMAIL, (email||"").trim()); }catch(_){}
-      }
-      function clearSavedEmail(){
-        try{ localStorage.removeItem(KEY_EMAIL); }catch(_){}
-      }
-      function setSessionEmail(email){
-        try{ sessionStorage.setItem(KEY_SESS, (email||"").trim()); }catch(_){}
-      }
-      function getSessionEmail(){
-        try{ return (sessionStorage.getItem(KEY_SESS) || "").trim(); }catch(_){ return ""; }
-      }
-      function clearSessionEmail(){
-        try{ sessionStorage.removeItem(KEY_SESS); }catch(_){}
-      }
-      function setPublicFlag(on){
-        try{ localStorage.setItem(KEY_PUBLIC, on ? "1" : "0"); }catch(_){}
-      }
-      function getPublicFlag(){
-        try{ return (localStorage.getItem(KEY_PUBLIC) || "0") === "1"; }catch(_){ return false; }
-      }
-      function broadcastUnlocked(email){
-        try{
-          window.dispatchEvent(new CustomEvent("realtysass:unlocked", { detail: { email: email || "" } }));
-        }catch(_){}
-      }
+      function writeJSON(key, val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(_){ } }
       function safeRemove(key){ try{ localStorage.removeItem(key); }catch(_){ } }
+      function getSavedEmail(){ try{ return (localStorage.getItem(KEY_EMAIL) || "").trim(); }catch(_){ return ""; } }
+      function setSavedEmail(email){ try{ localStorage.setItem(KEY_EMAIL, (email||"").trim()); }catch(_){ } }
+      function clearSavedEmail(){ try{ localStorage.removeItem(KEY_EMAIL); }catch(_){ } }
+      function setSessionEmail(email){ try{ sessionStorage.setItem(KEY_SESS, (email||"").trim()); }catch(_){ } }
+      function getSessionEmail(){ try{ return (sessionStorage.getItem(KEY_SESS) || "").trim(); }catch(_){ return ""; } }
+      function clearSessionEmail(){ try{ sessionStorage.removeItem(KEY_SESS); }catch(_){ } }
+      function setPublicFlag(on){ try{ localStorage.setItem(KEY_PUBLIC, on ? "1" : "0"); }catch(_){ } }
+      function getPublicFlag(){ try{ return (localStorage.getItem(KEY_PUBLIC) || "0") === "1"; }catch(_){ return false; } }
+      function broadcastUnlocked(email){
+        try{ window.dispatchEvent(new CustomEvent("pcsunited:unlocked", { detail: { email: email || "" } })); }catch(_){}
+      }
+      function broadcastLoggedOut(){
+        try{ window.dispatchEvent(new CustomEvent("pcsunited:loggedout", { detail: {} })); }catch(_){}
+      }
       function clearDevice(){
-        // Gate keys
-        safeRemove("realtysass.loginEmail");
-        safeRemove("realtysass.profile.v1");
-        // Core dashboard keys
-        safeRemove("realtysass.bridge");
-        safeRemove("realtysass.kpi_overrides.v1");
-        // Caches/verdicts/models (safe)
-        safeRemove("realtysass.brain_cache.v1");
-        safeRemove("realtysass.mortgage_cache.v1");
-        safeRemove("realtysass.feasibility.v1");
-        safeRemove("realtysass.ec_verdict.v1");
-        safeRemove("realtysass.expense_buckets.v1");
-        safeRemove("realtysass.derived.housing_monthly.v1");
-        // Optional intake keys (safe)
-        safeRemove("realtysass.aiou_house_intake.v1");
-        safeRemove("realtysass.mortgage_intake.v1");
+        safeRemove(KEY_EMAIL);
+        safeRemove(KEY_PROFILE);
+        safeRemove(KEY_AUTHOK);
+      }
+      async function postJSON(url, body){
+        const r = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body || {})
+        });
+        const j = await r.json().catch(()=> ({}));
+        if (!r.ok || j.ok === false) throw new Error(j.error || j.message || ("HTTP " + r.status));
+        return j;
+      }
+      function getAuthOk(){
+        try{
+          const v = JSON.parse(localStorage.getItem(KEY_AUTHOK) || "null");
+          return (v && v.email && v.ts) ? v : null;
+        }catch(_){ return null; }
+      }
+      async function commitPendingIfAny(email){
+        const auth = getAuthOk();
+        if (!auth || String(auth.email||"").toLowerCase() !== String(email||"").toLowerCase()) return;
+        const pending = readJSON(KEY_PENDING, null);
+        if (!pending || typeof pending !== "object") return;
+        try{
+          const res = await postJSON(COMMIT_ENDPOINT, { email, pending });
+          safeRemove(KEY_PENDING);
+          if (res.profile){
+            try{ localStorage.setItem(KEY_PROFILE, JSON.stringify(res.profile)); }catch(_){}
+          }
+        }catch(e){
+          console.error("commit-intake failed:", e);
+          setError("Login succeeded, but we couldn’t save your intake to the cloud yet. Please try again in a moment.");
+        }
       }
       // ============================================================
-      // //#15 SESSION HUD
+      // LOGOUT (SAFE)
       // ============================================================
-      function showHud(email){
-        if(!hudEl) return;
-        if(hudMail) hudMail.textContent = email || "—";
-        hudEl.style.display = "flex";
-      }
-      function hideHud(){
-        if(!hudEl) return;
-        hudEl.style.display = "none";
-        if(hudMail) hudMail.textContent = "—";
-      }
-      function lockNow(){
-        // hard lock: clear session + show overlay
+      function doLogout(){
+        setError("");
+        clearDevice();
+        clearSavedEmail();
+        setPublicFlag(true);
         clearSessionEmail();
-        hideHud();
-        showOverlay();
+        broadcastLoggedOut();
+        // Clear fields only on real logout (this is fine now)
         try{ passEl.value = ""; }catch(_){}
+        try{ emailEl.value = ""; }catch(_){}
+        try{ if(pubEl) pubEl.checked = true; }catch(_){}
+        showOverlay();
       }
-      if (hudOut){
-        hudOut.addEventListener("click", ()=>{
-          setError("");
-          clearDevice();
-          clearSavedEmail();
-          setPublicFlag(false);
-          lockNow();
-          try{ emailEl.value = ""; }catch(_){}
-          try{ if(pubEl) pubEl.checked = true; }catch(_){}
+      window.PCSU_LOGOUT = doLogout;
+      window.addEventListener("pcsunited:logout", ()=> doLogout());
+      if (hiddenLogoutBtn){
+        hiddenLogoutBtn.addEventListener("click", (e)=>{
+          e.preventDefault();
+          e.stopPropagation();
+          doLogout();
+        }, true);
+      }
+      // ✅ FIXED: only consider CLICKABLE elements as possible logout triggers
+      function isClickable(el){
+        if(!el || el.nodeType !== 1) return false;
+        const tag = (el.tagName || "").toUpperCase();
+        if (tag === "BUTTON" || tag === "A") return true;
+        const role = (el.getAttribute && (el.getAttribute("role") || "")) || "";
+        if (String(role).toLowerCase() === "button") return true;
+        if (el.hasAttribute && (el.hasAttribute("onclick") || el.hasAttribute("data-action") || el.hasAttribute("data-logout"))) return true;
+        return false;
+      }
+      function looksLikeLogout(el){
+        if(!isClickable(el)) return false;
+        const text = (el.textContent || "").replace(/\s+/g," ").trim().toLowerCase();
+        const id   = (el.id || "").toLowerCase();
+        const cls  = (el.className || "").toString().toLowerCase();
+        const aria = ((el.getAttribute && el.getAttribute("aria-label")) || "").toLowerCase();
+        const dataA = ((el.getAttribute && el.getAttribute("data-action")) || "").toLowerCase();
+        const dataL = ((el.getAttribute && el.getAttribute("data-logout")) || "").toLowerCase();
+        if (dataA === "logout" || dataL === "logout") return true;
+        if (aria.includes("log out") || aria.includes("logout")) return true;
+        if (text.includes("log out") || text.includes("logout")) return true;
+        if (id.includes("logout") || id.includes("log-out")) return true;
+        if (cls.includes("logout") || cls.includes("log-out")) return true;
+        return false;
+      }
+      // Capture-phase delegation (safe now)
+      document.addEventListener("click", (e)=>{
+        let el = e.target;
+        // walk up a few levels only
+        for (let i=0; i<6 && el; i++){
+          if (looksLikeLogout(el)){
+            e.preventDefault();
+            e.stopPropagation();
+            doLogout();
+            return;
+          }
+          el = el.parentElement;
+        }
+      }, true);
+      function bindKnownLogoutIds(){
+        const ids = ["logout-btn","log-out-btn","pcsu-logout","pcsu-logout-btn","fid-logout","rs-logout","logout"];
+        ids.forEach(id=>{
+          const x = document.getElementById(id);
+          if (x && !x.__pcsuBound){
+            x.__pcsuBound = true;
+            x.addEventListener("click", (e)=>{
+              e.preventDefault();
+              e.stopPropagation();
+              doLogout();
+            }, true);
+          }
         });
       }
+      bindKnownLogoutIds();
+      const mo = new MutationObserver(()=> bindKnownLogoutIds());
+      mo.observe(document.documentElement, { childList:true, subtree:true });
       // ============================================================
-      // //#16 PREFILL + PUBLIC TOGGLE DEFAULT
+      // INIT
       // ============================================================
       const savedEmail = getSavedEmail();
-      if(savedEmail && !emailEl.value) emailEl.value = savedEmail;
-      // Default public toggle ON if no saved email (safer default on first use)
-      const publicDefault = !savedEmail;
+      const sessEmail  = getSessionEmail();
+      const initialEmail = savedEmail || sessEmail;
+      if(initialEmail && !emailEl.value) emailEl.value = initialEmail;
       const rememberedPublic = getPublicFlag();
-      if (pubEl) pubEl.checked = rememberedPublic ? true : publicDefault;
-      // Persist toggle choice
-      if (pubEl){
-        pubEl.addEventListener("change", ()=> setPublicFlag(!!pubEl.checked));
-      }
-      // ============================================================
-      // //#17 AUTO-UNLOCK PATH (saved email)
-      // ============================================================
-      if (savedEmail){
-        hideOverlay();
-        setSessionEmail(savedEmail);
-        showHud(savedEmail);
-        broadcastUnlocked(savedEmail);
+      const publicDefault = !savedEmail;
+      if (pubEl) pubEl.checked = (rememberedPublic ? true : publicDefault);
+      if (pubEl) pubEl.addEventListener("change", ()=> setPublicFlag(!!pubEl.checked));
+      if (savedEmail || sessEmail){
+        const activeEmail = savedEmail || sessEmail;
+        hideOverlayHard();
+        setSessionEmail(activeEmail);
+        broadcastUnlocked(activeEmail);
+        commitPendingIfAny(activeEmail);
       } else {
         showOverlay();
       }
-      // ============================================================
-      // //#18 PUBLIC MODE: clear on tab close (optional hard safety)
-      // ============================================================
       window.addEventListener("beforeunload", ()=>{
         try{
-          const isPublic = getPublicFlag();
-          if (isPublic){
+          if (getPublicFlag()){
             clearDevice();
             clearSavedEmail();
+            clearSessionEmail();
           }
         }catch(_){}
       });
       // ============================================================
-      // //#19 LOGIN FLOW
+      // LOGIN FLOW
       // ============================================================
       async function doLogin(){
         setError("");
-        const email = (emailEl.value || "").trim();
+        const email = (emailEl.value || "").trim().toLowerCase();
         const password = (passEl.value || "").trim();
         if(!email || !password){
           setError("Please enter your email and password.");
@@ -562,34 +391,19 @@
         btnEl.disabled = true;
         btnEl.textContent = "Logging in…";
         try{
-          const r = await fetch(LOGIN_ENDPOINT, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({ email, password })
-          });
-          const data = await r.json().catch(()=> ({}));
-          if(!r.ok || !data || data.ok !== true){
-            const msg = (data && (data.error || data.message)) ? (data.error || data.message) : ("Login failed (" + r.status + ")");
-            throw new Error(msg);
-          }
-          // Always set session email (HUD + in-tab use)
+          const data = await postJSON(LOGIN_ENDPOINT, { email, password });
+          writeJSON(KEY_AUTHOK, { email, ts: Date.now() });
           setSessionEmail(email);
-          // Public/shared device? => do NOT remember email
           const isPublicDevice = !!(pubEl && pubEl.checked);
           setPublicFlag(isPublicDevice);
-          if (!isPublicDevice){
-            setSavedEmail(email);
-          } else {
-            clearSavedEmail();
+          if (!isPublicDevice) setSavedEmail(email);
+          else clearSavedEmail();
+          if (data.profile){
+            try{ localStorage.setItem(KEY_PROFILE, JSON.stringify(data.profile)); }catch(_){}
           }
-          // store profile if returned (non-breaking)
-          if(data.profile){
-            try{ localStorage.setItem("realtysass.profile.v1", JSON.stringify(data.profile)); }catch(_){}
-          }
-          // unlock
-          hideOverlay();
-          showHud(email);
+          hideOverlayHard();
           broadcastUnlocked(email);
+          await commitPendingIfAny(email);
         }catch(e){
           setError(e.message || "Login failed.");
         }finally{
@@ -608,11 +422,10 @@
 Fiduciary Snapshot — v3.9.5 (SPLIT EMBEDS)
 EMBED #1 = SHELL ONLY (HTML + CSS)
 ✅ KEEP SAME AS YOUR WORKING VERSION (structure + IDs)
-✅ UPDATE (Requested):
-- Visual UX aligned to AIOU / House of SaSS “transparent strip” style:
-  * glassy depth, pill buttons, input glow, refined cards
-- Everything else unchanged
-- Keeps hidden #fid-export so existing JS won’t crash
+✅ UPDATE:
+- Add "LOG OUT" button next to SAVE
+- SAVE light still works the same
+- LOG OUT triggers the logout engine from the Login/HUD embed (no logic changes to Embed #2)
 =========================================================  -->
     <section id="fid-fullscreen-shell" style="all: initial;">
       <!--  //#1 Chart.js CDN (must load BEFORE EMBED #2 runs)  -->
@@ -792,6 +605,13 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       overflow:hidden;
       text-overflow:ellipsis;
     }
+    /* ✅ Right-side actions container */
+    #ec-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex:0 0 auto;
+    }
     #ec-aiBtn{
       flex:0 0 auto;
       display:inline-flex;
@@ -817,12 +637,62 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }
     #ec-aiBtn:hover{ transform:translateY(-1px); filter:brightness(1.08); }
     #ec-aiBtn:active{ transform:translateY(0px); filter:brightness(1.00); }
+    /* ✅ Save light (default OFF) */
     #ec-aiDot{
       width:9px; height:9px; border-radius:99px;
-      background: radial-gradient(circle at top left, var(--ec-accent), var(--ec-accent2));
-      box-shadow:0 0 0 4px rgba(106,167,255,.10);
+      background: rgba(233,236,255,.18);
+      border:1px solid rgba(255,255,255,.18);
+      box-shadow: 0 0 0 4px rgba(255,255,255,.06);
       flex:0 0 auto;
     }
+    /* ✅ Save light ON after any KPI change */
+    .fid-dirty #ec-aiDot{
+      border-color: rgba(142,243,197,.55);
+      background: radial-gradient(circle at top left, var(--accent2), var(--accent));
+      box-shadow:
+        0 0 0 4px rgba(106,167,255,.10),
+        0 0 18px rgba(142,243,197,.45),
+        0 0 28px rgba(106,167,255,.25);
+      animation: fidPulse 1.35s ease-in-out infinite;
+    }
+    .fid-dirty #ec-aiBtn{
+      border-color: rgba(142,243,197,.35);
+      filter: brightness(1.05);
+    }
+    @keyframes fidPulse{
+      0%   { transform: scale(1);   filter: brightness(1); }
+      50%  { transform: scale(1.08); filter: brightness(1.15); }
+      100% { transform: scale(1);   filter: brightness(1); }
+    }
+    /* ✅ NEW: Top-strip LOG OUT button (matches House of SaSS) */
+    #ec-logoutBtn{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 14px;
+      border-radius: var(--radiusPill);
+      border:1px solid rgba(255,255,255,.12);
+      background:
+        radial-gradient(120px 40px at 30% 50%, rgba(255,107,107,.14), transparent 60%),
+        rgba(12,14,25,0.55);
+      backdrop-filter: var(--blurSm);
+      color:rgba(233,236,255,.92);
+      font-size:11px;
+      font-weight:950;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      white-space:nowrap;
+      box-shadow:0 14px 30px rgba(0,0,0,.55);
+      transition:.18s ease;
+      user-select:none;
+      cursor:pointer;
+    }
+    #ec-logoutBtn:hover{
+      transform: translateY(-1px);
+      filter: brightness(1.06);
+      border-color: rgba(255,107,107,.38);
+    }
+    #ec-logoutBtn:active{ transform: translateY(0px); filter: brightness(1.00); }
     /* KPI strip (5 cards) */
     .kpi-strip{
       display:grid;
@@ -1336,12 +1206,21 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
                   <span id="ec-blufTag">BLUF</span>
                   <span id="ec-blufText">Loading verdict…</span>
                 </div>
-                <a id="ec-aiBtn" href="https://new-real-estate-purchase.webflow.io/features/fiduciary-memo" target="_self" rel="noopener" aria-label="Open A.I Analysis">
-                  <span id="ec-aiDot"></span>
-                  <span id="ec-aiText">A.I. ANALYSIS</span>
-                </a>
+                <!--  ✅ SAVE + LOG OUT  -->
+                <div id="ec-actions">
+                  <a id="ec-aiBtn" href="https://new-real-estate-purchase.webflow.io/features/fiduciary-memo" target="_self" rel="noopener" aria-label="Save (open memo)">
+                    <span id="ec-aiDot" aria-hidden="true"></span>
+                    <span id="ec-aiText">SAVE</span>
+                  </a>
+                  <button id="ec-logoutBtn" type="button" aria-label="Log out">
+                    LOG OUT
+                  </button>
+                </div>
               </header>
             </div>
+            <!--  =========================
+          KPI STRIP (unchanged)
+        ==========================  -->
             <div class="kpi-strip">
               <!--  KPI #1  -->
               <div class="kpi-card" id="kpi-income" data-kpi="income">
@@ -1433,7 +1312,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
                   <span>Income → Housing + Expenses + Savings Target → Residual</span>
                 </h3>
                 <div class="fs-wrap">
-                  <!--  ✅ SIMPLE WRITTEN ROWS  -->
                   <div class="fs-simple" aria-label="feasibility-top-rows">
                     <div class="fs-line">
                       <div class="fs-left">
@@ -1546,7 +1424,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
                   </div>
                   <div class="city-hero" aria-hidden="true"></div>
                 </div>
-                <!--  ✅ SIMPLE WRITTEN ROWS  -->
                 <div class="city-simple" aria-label="city-simple-rows">
                   <div class="city-line">
                     <div class="city-left">
@@ -1580,7 +1457,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
                 </div>
               </div>
             </div>
-            <!--  ✅ RENT VS BUY (full section + footer IDs)  -->
+            <!--  ✅ RENT VS BUY  -->
             <div class="card-mini rvb" id="rentbuy-card">
               <div class="rvb-top">
                 <div>
@@ -1611,49 +1488,394 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
           </div>
         </div>
       </div>
+      <!--  ============================================================
+    //#4 SAVE LIGHT RUNTIME (Shell-only)
+    - Turns on the top-right dot after user changes any KPI control
+    - No dependencies on Embed #2 logic
+  ============================================================  -->
+      <script>
+  (() => {
+    "use strict";
+    const DIRTY_CLASS = "fid-dirty";
+    let dirty = false;
+    const watchIds = [
+      "in-addIncome",
+      "in-expensesOverride",
+      "in-housingOverride",
+      "in-savingsOverride",
+      "score-slider"
+    ];
+    const watchClicks = [
+      "kpi-income-edit",
+      "kpi-expense-edit",
+      "kpi-mtg-edit",
+      "kpi-save-edit",
+      "kpi-income-save",
+      "kpi-expense-save",
+      "kpi-mtg-save",
+      "kpi-save-save",
+      "kpi-score-save"
+    ];
+    function setDirty(on){
+      if (on === dirty) return;
+      dirty = on;
+      document.documentElement.classList.toggle(DIRTY_CLASS, !!on);
+    }
+    function markDirty(){ setDirty(true); }
+    function bind(){
+      watchIds.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        ["input","change","keyup","pointerup","mouseup","touchend"].forEach((ev) => {
+          el.addEventListener(ev, markDirty, { passive: true });
+        });
+      });
+      watchClicks.forEach((id) => {
+        const el = document.getElementById(id);
+        if (!el) return;
+        el.addEventListener("click", markDirty);
+      });
+    }
+    let lastKeyBlob = "";
+    function readKeyBlob(){
+      try{
+        const a = localStorage.getItem("realtysass.kpi_overrides.v1") || "";
+        const b = localStorage.getItem("pcsunited.kpi_overrides.v1") || "";
+        const c = localStorage.getItem("realtysass.bridge") || "";
+        const d = localStorage.getItem("pcsunited.bridge") || "";
+        return a + "||" + b + "||" + c + "||" + d;
+      }catch(e){
+        return "";
+      }
+    }
+    function startStorageWatch(){
+      lastKeyBlob = readKeyBlob();
+      setInterval(() => {
+        const now = readKeyBlob();
+        if (now !== lastKeyBlob){
+          lastKeyBlob = now;
+          markDirty();
+        }
+      }, 650);
+    }
+    if (document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", () => { bind(); startStorageWatch(); });
+    } else {
+      bind(); startStorageWatch();
+    }
+  })();
+  </script>
+      <!--  ============================================================
+    //#5 TOP LOGOUT BUTTON BRIDGE (Shell-only)
+    - Calls the logout engine from the Login/HUD embed if present
+    - No dependency on Embed #2
+  ============================================================  -->
+      <script>
+  (() => {
+    "use strict";
+    function triggerLogout(){
+      // 1) If the login embed exposes a global logout function, use it.
+      if (typeof window.PCSU_LOGOUT === "function"){
+        try { window.PCSU_LOGOUT(); return; } catch(_) {}
+      }
+      // 2) Otherwise, click the hidden/logout button from the login embed (most reliable).
+      const btn = document.getElementById("rs-session-logout");
+      if (btn){
+        btn.click();
+        return;
+      }
+      // 3) As a fallback, broadcast an event (login embed listens in the slim version below).
+      try { window.dispatchEvent(new CustomEvent("pcsunited:logout")); } catch(_) {}
+    }
+    function bind(){
+      const b = document.getElementById("ec-logoutBtn");
+      if (!b) return;
+      b.addEventListener("click", triggerLogout);
+    }
+    if (document.readyState === "loading"){
+      document.addEventListener("DOMContentLoaded", bind);
+    } else {
+      bind();
+    }
+  })();
+  </script>
     </section>
+  </div>
+  <div class="code-embed-17 w-embed w-script">
+    <script>
+(() => {
+  "use strict";
+  // ============================================================
+  // PCSUnited • 1A BRIDGE LOADER (Supabase -> localStorage -> 2A)
+  // ✅ UPDATE: Align bridge to CANONICAL Profile Fields list (Fix 1)
+  //
+  // Canonical fields (bridge should mirror these when available):
+  // id, created_at, email, first_name, last_name, phone, mode, rank,
+  // va_disability, yos, family, base, rank_paygrade, role,
+  // profiles_user_id_unique, notes, full_name,
+  // monthly_expenses, projected_home_price, downpayment, credit_score,
+  // time_to_buy, bedrooms, bathrooms, sqft, property_type, amenities, home_condition
+  //
+  // Behavior kept:
+  // - Fetch profile by email (/api/profile-by-email)
+  // - Writes bridge to pcsunited.bridge / pcsunited.bridge.v1 / realtysass.bridge (compat)
+  // - Broadcasts postMessages + CustomEvent so 2A can repaint
+  // - Retries because login may occur after page load
+  // ============================================================
+  if (window.PCS_1A && window.PCS_1A.__mounted) return;
+  const ONEA = (window.PCS_1A = window.PCS_1A || {});
+  ONEA.__mounted = true;
+  // ============================================================
+  // //#1 CONFIG
+  // ============================================================
+  const API_BASE = "https://pcsunited.netlify.app/api";
+  const PROFILE_ENDPOINT = API_BASE + "/profile-by-email";
+  const TIMEOUT_MS = 9000;
+  // ============================================================
+  // //#2 STORAGE KEYS (feeds 2A)
+  // ============================================================
+  const KEYS = {
+    // PCS keys
+    email_saved:    "pcsunited.loginEmail",
+    email_sess:     "pcsunited.sessionEmail",
+    profile:        "pcsunited.profile.v1",
+    bridge_new:     "pcsunited.bridge",
+    bridge_v1:      "pcsunited.bridge.v1",
+    // legacy compat
+    bridge_legacy:  "realtysass.bridge",
+    legacy_email:   "realtysass.loginEmail",
+    legacy_ident:   "realtysass.identity"
+  };
+  const LS = window.localStorage;
+  const SS = window.sessionStorage;
+  // ============================================================
+  // //#3 HELPERS
+  // ============================================================
+  function safeParseJSON(s){
+    try{ return JSON.parse(s); }catch(_){ return null; }
+  }
+  function writeJSON(key, val){
+    try{ LS.setItem(key, JSON.stringify(val)); }catch(_){}
+  }
+  function normStr(v){
+    if (v === undefined || v === null) return "";
+    const s = String(v).trim();
+    return s;
+  }
+  function lowerEmail(v){
+    const s = normStr(v).toLowerCase();
+    return s;
+  }
+  function numOrNull(v){
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  }
+  function pickFirst(obj, keys){
+    for (const k of keys){
+      const v = obj?.[k];
+      if (v !== undefined && v !== null && v !== "") return v;
+    }
+    return null;
+  }
+  function getEmail(){
+    try{
+      // 1) querystring override
+      const qp = new URLSearchParams(location.search);
+      const q = lowerEmail(qp.get("email") || "");
+      if (q) return q;
+      // 2) PCS session
+      const sess = lowerEmail(SS.getItem(KEYS.email_sess) || "");
+      if (sess) return sess;
+      // 3) PCS saved
+      const saved = lowerEmail(LS.getItem(KEYS.email_saved) || "");
+      if (saved) return saved;
+      // 4) legacy loginEmail (if any old flow wrote it)
+      const legacy = lowerEmail(LS.getItem(KEYS.legacy_email) || "");
+      if (legacy) return legacy;
+      // 5) legacy identity blob (from signup/verify flows)
+      const ident = safeParseJSON(LS.getItem(KEYS.legacy_ident) || "null");
+      const identEmail = lowerEmail(ident?.email || ident?.profile?.email || "");
+      if (identEmail) return identEmail;
+    }catch(_){}
+    return "";
+  }
+  async function postJSON(url, body){
+    const ctrl = new AbortController();
+    const t = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
+    try{
+      const r = await fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body || {}),
+        signal: ctrl.signal
+      });
+      const j = await r.json().catch(() => ({}));
+      if (!r.ok || j.ok === false) throw new Error(j.error || j.message || ("HTTP " + r.status));
+      return j;
+    } finally {
+      clearTimeout(t);
+    }
+  }
+  function broadcastBridge(bridge){
+    try{ window.postMessage({ type: "pcsunited-bridge", payload: bridge }, "*"); }catch(_){}
+    try{ window.postMessage({ type: "realtysass-bridge", payload: bridge }, "*"); }catch(_){}
+    try{ window.dispatchEvent(new CustomEvent("pcsunited:bridge-ready", { detail: { bridge } })); }catch(_){}
+  }
+  // ============================================================
+  // //#4 NORMALIZE → CANONICAL PROFILE FIELDS BRIDGE
+  // ============================================================
+  function normalizeBridgeFromProfile(p){
+    const b = {};
+    // ---- Canonical identity ----
+    b.id                    = p.id ?? null;
+    b.created_at            = p.created_at ?? null;
+    b.email                 = lowerEmail(p.email || "");
+    b.first_name            = normStr(p.first_name || "");
+    b.last_name             = normStr(p.last_name || "");
+    b.phone                 = normStr(p.phone || "");
+    // full_name canonical (prefer full_name, else build)
+    const fullName =
+      normStr(p.full_name || "") ||
+      normStr(p.fullName || "") ||
+      normStr(p.name || "") ||
+      normStr([p.first_name, p.last_name].filter(Boolean).join(" "));
+    b.full_name             = fullName;
+    // ---- Canonical service + role ----
+    b.mode                  = normStr(p.mode || p.user_type || "");
+    b.rank                  = normStr(p.rank || p.rank_paygrade || "");
+    b.rank_paygrade         = normStr(p.rank_paygrade || p.rank || "");
+    b.va_disability         = (numOrNull(p.va_disability) ?? numOrNull(p.va) ?? null);
+    b.yos                   = (numOrNull(p.yos) ?? numOrNull(p.years_of_service) ?? null);
+    b.family                = (numOrNull(p.family) ?? null);
+    b.base                  = normStr(p.base || "");
+    b.role                  = normStr(p.role || "");
+    b.profiles_user_id_unique = normStr(p.profiles_user_id_unique || p.profilesUserIdUnique || "");
+    b.notes                 = normStr(p.notes || "");
+    // ---- Canonical financial inputs ----
+    b.monthly_expenses      = (numOrNull(p.monthly_expenses) ?? numOrNull(p.monthlyExpenses) ?? null);
+    b.projected_home_price  = (numOrNull(p.projected_home_price) ?? numOrNull(p.projectedHomePrice) ?? numOrNull(p.price) ?? null);
+    b.downpayment           = (numOrNull(p.downpayment) ?? numOrNull(p.downPayment) ?? numOrNull(p.dpAmt) ?? null);
+    b.credit_score          = (numOrNull(p.credit_score) ?? numOrNull(p.creditScore) ?? null);
+    b.time_to_buy           = normStr(p.time_to_buy || p.timeToBuy || "");
+    // ---- Canonical home preferences (AIOU-ish) ----
+    b.bedrooms              = (numOrNull(p.bedrooms) ?? null);
+    b.bathrooms             = (numOrNull(p.bathrooms) ?? null);
+    b.sqft                  = (numOrNull(p.sqft) ?? null);
+    b.property_type         = normStr(p.property_type || p.propertyType || "");
+    b.amenities             = normStr(p.amenities || "");
+    b.home_condition        = normStr(p.home_condition || p.homeCondition || "");
+    // ============================================================
+    // COMPAT (2A + existing modules): also publish legacy-shaped aliases
+    // ============================================================
+    // 2A historically expects:
+    // - bridge.expenses, bridge.price, bridge.dpAmt, bridge.creditScore, etc.
+    if (b.projected_home_price != null) b.price = b.projected_home_price;
+    if (b.monthly_expenses != null)     b.expenses = b.monthly_expenses;
+    if (b.downpayment != null)          b.dpAmt = b.downpayment;
+    if (b.credit_score != null)         b.creditScore = b.credit_score;
+    // Keep these (they're already used elsewhere)
+    b.user_type = b.mode;
+    return b;
+  }
+  // ============================================================
+  // //#5 RUN (idempotent + safe)
+  // ============================================================
+  let inFlight = false;
+  let lastEmail = "";
+  async function run(emailOverride){
+    const email = lowerEmail(emailOverride || getEmail() || "");
+    if (!email) return;
+    if (inFlight) return;
+    inFlight = true;
+    lastEmail = email;
+    // Publish cached profile instantly (if available)
+    const cachedProfile = safeParseJSON(LS.getItem(KEYS.profile) || "null");
+    if (cachedProfile && lowerEmail(cachedProfile.email || "") === email){
+      const cachedBridge = normalizeBridgeFromProfile(cachedProfile);
+      writeJSON(KEYS.bridge_new, cachedBridge);
+      writeJSON(KEYS.bridge_v1, cachedBridge);
+      writeJSON(KEYS.bridge_legacy, cachedBridge);
+      broadcastBridge(cachedBridge);
+    }
+    // Source-of-truth refresh
+    try{
+      const res = await postJSON(PROFILE_ENDPOINT, { email });
+      const profile = res.profile || res.data || res || null;
+      if (!profile || typeof profile !== "object") return;
+      writeJSON(KEYS.profile, profile);
+      const bridge = normalizeBridgeFromProfile(profile);
+      writeJSON(KEYS.bridge_new, bridge);
+      writeJSON(KEYS.bridge_v1, bridge);
+      writeJSON(KEYS.bridge_legacy, bridge);
+      broadcastBridge(bridge);
+    }catch(e){
+      console.warn("[PCS 1A] profile-by-email failed:", e);
+      try{
+        window.dispatchEvent(new CustomEvent("pcsunited:bridge-failed", {
+          detail: { email, error: String(e.message || e) }
+        }));
+      }catch(_){}
+    } finally {
+      inFlight = false;
+    }
+  }
+  // ============================================================
+  // //#6 AUTO-RETRY (covers “login happens after load”)
+  // ============================================================
+  function retryForEmail(maxTries = 20, delayMs = 250){
+    let tries = 0;
+    const tick = () => {
+      tries++;
+      const email = getEmail();
+      if (email) { run(email); return; }
+      if (tries < maxTries) setTimeout(tick, delayMs);
+    };
+    tick();
+  }
+  // Run on initial load
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", () => {
+      run();
+      retryForEmail();
+    });
+  } else {
+    run();
+    retryForEmail();
+  }
+  // Run immediately after your login overlay unlocks
+  window.addEventListener("pcsunited:unlocked", (e) => {
+    const email = e?.detail?.email || "";
+    if (email) {
+      try{ SS.setItem(KEYS.email_sess, lowerEmail(email)); }catch(_){}
+      try{ LS.setItem(KEYS.email_saved, lowerEmail(email)); }catch(_){}
+    }
+    run(email);
+  });
+  // Legacy compat
+  window.addEventListener("realtysass:unlocked", (e) => {
+    const email = e?.detail?.email || "";
+    run(email);
+  });
+})();
+</script>
   </div>
   <div class="w-embed w-script">
     <script>
 (() => {
   // ============================================================
-  // RS_FID • CORE RUNTIME (must load FIRST)
-  // Section A (2A): KPIs + Feasibility Snapshot + Shared state + brain fetch
-  //
-  // ✅ FIX (DO NOT MOVE CHARTS / DO NOT CHANGE LAYOUT):
-  // - Income prefers BRAIN TOTAL PAY (base+BAH+BAS+etc)
-  // - Bridge income used ONLY if brain total missing
-  //
-  // ✅ UPDATED:
-  // - Mortgage Breakdown now uses /api/mortgage (mortgage.js) as source of truth:
-  //   Principal • Interest • Taxes • Insurance • HOA
-  // - Taxes/Insurance/HOA no longer stuck at $0 when brain lacks fields
-  //
-  // ✅ UPDATED (Requested):
-  // - Bottom "RESIDUAL INCOME" row becomes "MORTGAGE ESTIMATE" (All-In)
-  //
-  // ✅ Bridge to BLUF:
-  // - Publish Feasibility Snapshot → localStorage: realtysass.feasibility.v1
-  // - Mirror verdict → localStorage: realtysass.ec_verdict.v1
-  //
-  // ✅ Feasibility 4 tiles refresh (unchanged from your provided 2A):
-  // - Tile #1 TOTAL MONTHLY INCOME
-  // - Tile #2 TOTAL MONTHLY EXPENSES = Monthly Expenses + Estimated Mortgage
-  // - Tile #3 DISPOSABLE INCOME = Income - Total Monthly Expenses
-  // - Tile #4 FINANCIAL HEALTH = Grade (28% rule + disposable %)
-  //
-  // ✅ PATCH (THIS REQUEST):
-  // - Credit Score slider NOW updates Mortgage Estimate immediately (local calc),
-  //   and then re-syncs to mortgage.js once the network response returns.
-  //   (Prevents “stuck” estimate due to async timing / stale breakdown.)
-  // - Taxes / Insurance / HOA now default from brain.city rates (if bridge doesn’t supply them)
-  // - If mortgage endpoint returns no breakdown, we still compute Tax/Ins/HOA monthly from city rates
-  // - Monthly Expenses fallback: if bridge.expenses is missing, sum bridge.itemizedRows monthly
-  //
-  // ✅ NEW (Needed fix only):
-  // - ONLY trust mortgage.js breakdown when it matches the CURRENT mortgage request key.
-  //   If mortgage.js response doesn't echo inputs (common), old breakdown could be reused and look "stuck".
-  //   We now stamp each mortgage response with __key and require __key === current key.
+  // PCSUnited • RS_FID • CORE RUNTIME (2A)
+  // ✅ UPDATE (Fix 1): Align runtime fallbacks to CANONICAL Profile Fields
+  // ✅ EDIT-IN-PLACE (Requested):
+  // - TOTAL MONTHLY INCOME  (#k-income) = EDIT-IN-PLACE (NO prompt)
+  // - TOTAL MONTHLY EXPENSE (#k-expense)= EDIT-IN-PLACE (NO prompt)
+  // - HOUSING COST          (#k-mtg)    = EDIT-IN-PLACE (NO prompt)
+  // - ESTIMATED DOWNPAYMENT (#k-save)   = EDIT-IN-PLACE (NO prompt)
+  // ✅ RESTORED:
+  // - % pill for Total Monthly Expense  = expenses / income
+  // - % pill for Estimated Downpayment  = downpayment / housing cost
+  // ✅ UI:
+  // - Remove the edit pencil from all four top KPI cards
+  // - Everything else stays the same
   // ============================================================
   if (window.RS_FID && window.RS_FID.__coreMounted) return;
   const CORE = (window.RS_FID = window.RS_FID || {});
@@ -1673,9 +1895,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     minimumFractionDigits:d, maximumFractionDigits:d
   });
   const signed = (n) => (n>=0 ? cur(n,0) : ("-"+cur(Math.abs(n),0)));
-  // ---------- Small numeric helper ----------
   function n0(x){ const n = Number(x); return Number.isFinite(n) ? n : 0; }
-  // ---------- Math ----------
   function pmti(P,r,n){
     P = n0(P);
     if (P<=0) return 0;
@@ -1703,30 +1923,68 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     if(s>=620) return "Weak";
     return "Subprime";
   }
-  // ---------- Brain API origin fix ----------
-  const RS_LIVE_API_ORIGIN = "https://theorozcorealty.netlify.app";
+  // ✅ Percent pill formatter (keeps your “+x%” look)
+  function fmtPct(p){
+    if (!Number.isFinite(p)) return "+0%";
+    const abs = Math.abs(p);
+    const d = (abs < 10 && abs > 0) ? 1 : 0; // matches your +1.3% style
+    const v = (d ? p.toFixed(1) : String(Math.round(p)));
+    // always show "+" for consistency with your pills
+    return (p >= 0 ? "+" : "−") + v.replace(/^-/, "") + "%";
+  }
+  // ✅ Robustly find the % pill within a KPI card (without requiring exact class names)
+  function setKpiPillForValue(valueEl, text){
+    try{
+      if (!valueEl) return;
+      // likely card wrappers (covers your shell variants)
+      const card =
+        valueEl.closest(".kpi, .kpi-card, .kpiCard, .kpi-tile, .kpiTile, .tile, .card, .mini-card, .stat, [data-kpi]") ||
+        valueEl.parentElement;
+      if (!card) return;
+      // common pill selectors
+      const pill =
+        card.querySelector(".pill, .kpi-pill, .kpiPill, .pct, .delta, .badge, .chip, .tag") ||
+        null;
+      if (!pill) return;
+      pill.textContent = text;
+    }catch(_){}
+  }
+  // ============================================================
+  // //#1 PCSUnited API origin fix (Webflow-safe)
+  // ============================================================
+  const PCS_LIVE_API_ORIGIN = "https://pcsunited.netlify.app";
   const RS_API_ORIGIN = (() => {
     const host = String(location.hostname || "").toLowerCase();
-    if (host.endsWith(".webflow.io")) return RS_LIVE_API_ORIGIN;
-    return "";
+    if (host.endsWith(".webflow.io")) return PCS_LIVE_API_ORIGIN;
+    return ""; // Netlify-hosted pages can use relative /api
   })();
   const rsApiUrl = (path) => {
     const base = (RS_API_ORIGIN || "");
     if (!base) return path;
     return base.replace(/\/+$/,"") + "/" + String(path||"").replace(/^\/+/,"");
   };
-  // ---------- Email resolver ----------
+  // ============================================================
+  // //#2 Email resolver (PCS first; no fake default email)
+  // ============================================================
   function resolveEmail(){
-    const a = localStorage.getItem("realtysass.loginEmail");
-    if (a) return a;
+    const pcsSaved = localStorage.getItem("pcsunited.loginEmail");
+    if (pcsSaved) return String(pcsSaved).trim().toLowerCase();
+    const pcsSess = sessionStorage.getItem("pcsunited.sessionEmail");
+    if (pcsSess) return String(pcsSess).trim().toLowerCase();
+    const legacy = localStorage.getItem("realtysass.loginEmail");
+    if (legacy) return String(legacy).trim().toLowerCase();
+    try{
+      const ident = JSON.parse(localStorage.getItem("realtysass.identity")||"{}");
+      const e = (ident?.email || ident?.profile?.email || "").trim().toLowerCase();
+      if (e) return e;
+    }catch(_){}
     try{
       const pl = JSON.parse(localStorage.getItem("realtysass.profile_lookup")||"{}");
       const b = pl?.profile?.email;
-      if (b) return b;
+      if (b) return String(b).trim().toLowerCase();
     }catch(_){}
-    return "orozco@me.com";
+    return "";
   }
-  // ---------- pickFirst ----------
   function pickFirst(obj, keys){
     for (const k of keys){
       const v = obj?.[k];
@@ -1734,14 +1992,31 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }
     return null;
   }
-  // ---------- Bridge state ----------
+  // ============================================================
+  // //#3 Bridge load (PCS first)
+  // ============================================================
   CORE.bridge = CORE.bridge || null;
   function loadBridge(){
     let bridge = null;
+    // PCS keys first
     try{
-      const raw = localStorage.getItem("realtysass.bridge");
-      if (raw) bridge = JSON.parse(raw);
+      const rawPCS = localStorage.getItem("pcsunited.bridge");
+      if (rawPCS) bridge = JSON.parse(rawPCS);
     }catch(_){}
+    if (!bridge){
+      try{
+        const rawPCSv1 = localStorage.getItem("pcsunited.bridge.v1");
+        if (rawPCSv1) bridge = JSON.parse(rawPCSv1);
+      }catch(_){}
+    }
+    // Legacy key
+    if (!bridge){
+      try{
+        const raw = localStorage.getItem("realtysass.bridge");
+        if (raw) bridge = JSON.parse(raw);
+      }catch(_){}
+    }
+    // hash fallback
     if (!bridge && location.hash){
       const m = location.hash.match(/(?:^|#|&)rsb=([A-Za-z0-9\-_]+)/);
       if (m){
@@ -1764,14 +2039,13 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }catch(_){}
     CORE.bridge = bridge;
   }
-  // listen for bridge messages
+  // Listen for bridge messages (PCS + legacy)
   window.addEventListener("message", (ev)=>{
     try{
       const msg = ev.data || {};
-      if (msg.type==="realtysass-bridge" && msg.payload){
+      if ((msg.type==="pcsunited-bridge" || msg.type==="realtysass-bridge") && msg.payload){
         CORE.bridge = msg.payload;
         CORE.state.rentStartOverride = null;
-        // ✅ Chain so brain loads before mortgage tries to use city rates
         Promise.resolve()
           .then(()=>CORE.fetchBrain?.())
           .then(()=>CORE.fetchMortgage?.())
@@ -1781,7 +2055,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }catch(_){}
   }, false);
   // ============================================================
-  // ✅ KPI Overrides (Back-compat with your Shell + older saves)
+  // //#4 KPI Overrides (keeps legacy key so shell wiring still works)
   // ============================================================
   const OV_KEY = "realtysass.kpi_overrides.v1";
   function readOverrides(){
@@ -1790,7 +2064,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   }
   function writeOverrides(obj){
     try{ localStorage.setItem(OV_KEY, JSON.stringify(obj||{})); }
-    catch(_){ }
+    catch(_){}
   }
   function numOrNull(v){ const n = Number(v); return Number.isFinite(n) ? n : null; }
   function getOv(){
@@ -1808,7 +2082,29 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   CORE.readOverrides = readOverrides;
   CORE.writeOverrides = writeOverrides;
   // ============================================================
-  // ✅ BRAIN FETCH (cached)
+  // //#5 Profile extractor (CANONICAL Profile Fields fallbacks)
+  // ============================================================
+  function extractProfileFromBrain(brain){
+    if (!brain) return null;
+    const p =
+      brain.profileEffective ||
+      brain.profile ||
+      brain?.data?.profileEffective ||
+      brain?.data?.profile ||
+      brain?.payload?.profileEffective ||
+      brain?.payload?.profile ||
+      null;
+    return (p && typeof p === "object") ? p : null;
+  }
+  function profileNum(brain, keys){
+    const p = extractProfileFromBrain(brain);
+    if (!p) return null;
+    const v = pickFirst(p, keys);
+    const n = Number(v);
+    return Number.isFinite(n) ? n : null;
+  }
+  // ============================================================
+  // //#6 BRAIN FETCH (cached)
   // ============================================================
   const BRAIN_KEY = "realtysass.brain_cache.v1";
   CORE.brain = CORE.brain || null;
@@ -1816,19 +2112,26 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const email = resolveEmail();
     const b = CORE.bridge || {};
     const ov = getOv();
+    const profPrice = profileNum(CORE.brain, ["projected_home_price"]) ?? profileNum(CORE.brain, ["projectedHomePrice"]);
+    const profDown  = profileNum(CORE.brain, ["downpayment"]) ?? profileNum(CORE.brain, ["downPayment"]);
+    const profScore = profileNum(CORE.brain, ["credit_score"]) ?? profileNum(CORE.brain, ["creditScore"]);
+    const profBeds  = profileNum(CORE.brain, ["bedrooms"]);
     const price =
-      (ov.housing != null ? n0(ov.housing) : n0(b.housing || b.price || b.homePrice || b.purchasePrice || 0));
+      (ov.housing != null ? n0(ov.housing) : n0(b.housing || b.price || b.homePrice || b.purchasePrice || 0)) ||
+      (profPrice != null ? profPrice : 0);
     const dpAmt =
       n0(b.dpAmt || b.downPayment || b.downPaymentAmt || b.down_payment || 0) ||
-      n0(ov.savings != null ? ov.savings : b.savings);
+      (ov.savings != null ? n0(ov.savings) : 0) ||
+      (profDown != null ? profDown : 0);
     const dpPct =
       n0(b.dpPct || b.downPaymentPct || b.down_payment_pct || 0) ||
       (price>0 && dpAmt>0 ? ((dpAmt/price)*100) : 0);
     const creditScore =
-      (ov.creditScore != null ? ov.creditScore : (b.creditScore || b.credit_score || null));
+      (ov.creditScore != null ? ov.creditScore : (b.creditScore || b.credit_score || null)) ??
+      (profScore != null ? profScore : null);
     const termYears = n0(b.termYears || b.term || b.term_years || 30) || 30;
     const cityKey = b.cityKey || b.city || "SanAntonio";
-    const bedrooms = n0(b.bedrooms || 4) || 4;
+    const bedrooms = n0(b.bedrooms || 0) || (profBeds != null ? profBeds : 4);
     return {
       email,
       cityKey,
@@ -1841,6 +2144,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   }
   CORE.fetchBrain = async function fetchBrain(){
     const payload = buildBrainPayload();
+    if (!payload.email) return null;
     try{
       const r = await fetch(rsApiUrl("/api/brain"),{
         method:"POST",
@@ -1854,7 +2158,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
         return j;
       }
     }catch(_){}
-    // fallback cache
     try{
       const c = JSON.parse(localStorage.getItem(BRAIN_KEY)||"{}");
       if (c?.data){
@@ -1865,7 +2168,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     return null;
   };
   // ============================================================
-  // ✅ CITY RATE EXTRACTION (from brain.city JSON)
+  // //#7 CITY RATE EXTRACTION (from brain.city JSON)
   // ============================================================
   function extractCityFromBrain(brain){
     if (!brain) return null;
@@ -1881,8 +2184,8 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   function toFractionFromMaybePercent(x){
     const v = Number(x);
     if (!Number.isFinite(v) || v < 0) return null;
-    if (v > 0.25) return v / 100; // likely percent like 1.12
-    return v; // already a fraction like 0.0112
+    if (v > 0.25) return v / 100;
+    return v;
   }
   function cityRatesForPrice(price){
     const city = extractCityFromBrain(CORE.brain) || {};
@@ -1893,46 +2196,47 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const insRateFrac = toFractionFromMaybePercent(insRaw);
     const hoaMonthly  = Number.isFinite(Number(hoaRaw)) ? Math.max(0, Number(hoaRaw)) : null;
     const insuranceAnnual =
-      (insRateFrac != null && price > 0)
-        ? (price * insRateFrac)
-        : null;
+      (insRateFrac != null && price > 0) ? (price * insRateFrac) : null;
     return { taxRateFrac, insuranceAnnual, hoaMonthly, __city: city };
   }
   // ============================================================
-  // ✅ MORTGAGE FETCH (mortgage.js) — deterministic breakdown
+  // //#8 MORTGAGE FETCH (mortgage.js)
   // ============================================================
   const MORT_KEY = "realtysass.mortgage_cache.v1";
   CORE.mortgage = CORE.mortgage || null;
   CORE.__mortKey = CORE.__mortKey || "";
-  CORE.__mortSeq = CORE.__mortSeq || 0; // ✅ request sequencing to avoid stale paints
+  CORE.__mortSeq = CORE.__mortSeq || 0;
   function buildMortgagePayload(){
     const b = CORE.bridge || {};
     const ov = getOv();
+    const profPrice = profileNum(CORE.brain, ["projected_home_price"]) ?? profileNum(CORE.brain, ["projectedHomePrice"]);
+    const profDown  = profileNum(CORE.brain, ["downpayment"]) ?? profileNum(CORE.brain, ["downPayment"]);
+    const profScore = profileNum(CORE.brain, ["credit_score"]) ?? profileNum(CORE.brain, ["creditScore"]);
     const price =
-      (ov.housing != null ? n0(ov.housing) : n0(b.housing || b.price || b.homePrice || b.purchasePrice || 0));
+      (ov.housing != null ? n0(ov.housing) : n0(b.housing || b.price || b.homePrice || b.purchasePrice || 0)) ||
+      (profPrice != null ? profPrice : 0);
     const down =
       n0(b.dpAmt || b.downPayment || b.downPaymentAmt || b.down_payment || 0) ||
-      n0(ov.savings != null ? ov.savings : b.savings);
+      (ov.savings != null ? n0(ov.savings) : 0) ||
+      (profDown != null ? profDown : 0);
     const creditScore =
       (ov.creditScore != null ? ov.creditScore : (Number(b.creditScore)||Number(b.credit_score)||NaN));
+    const scoreFinal =
+      Number.isFinite(Number(creditScore)) ? Number(creditScore) : (profScore != null ? profScore : undefined);
     const termYears = n0(b.termYears || b.term || b.term_years || 30) || 30;
     const loanType = String(pickFirst(b, ["loanType","loan_type"]) || "conventional");
-    // Optional passthroughs if you ever add them to bridge
-    const taxRateFromBridge = numOrNull(pickFirst(b, ["taxRate","tax_rate"]));               // fraction like 0.021
+    const taxRateFromBridge = numOrNull(pickFirst(b, ["taxRate","tax_rate"]));
     const taxAnnualFromBridge = numOrNull(pickFirst(b, ["taxAnnual","tax_annual"]));
     const insuranceAnnualFromBridge = numOrNull(pickFirst(b, ["insuranceAnnual","insAnnual"]));
     const hoaMonthlyFromBridge = numOrNull(pickFirst(b, ["hoaMonthly","hoaMo","hoa"]));
-    // ✅ City defaults (only used if bridge doesn’t supply)
     const rates = cityRatesForPrice(price);
-    // Allow explicit APR override if you pass it (otherwise mortgage.js uses its own tiers)
     const aprOverride = numOrNull(pickFirst(b, ["aprOverride","apr_override","apr"]));
     return {
       price: price>0 ? price : 0,
       down: down>0 ? down : 0,
-      creditScore: Number.isFinite(Number(creditScore)) ? Number(creditScore) : undefined,
+      creditScore: scoreFinal,
       termYears,
       loanType,
-      // ✅ Defaults: bridge > city
       taxRate: (taxRateFromBridge != null ? taxRateFromBridge : (rates.taxRateFrac != null ? rates.taxRateFrac : undefined)),
       taxAnnual: (taxAnnualFromBridge != null ? taxAnnualFromBridge : undefined),
       insuranceAnnual: (insuranceAnnualFromBridge != null ? insuranceAnnualFromBridge : (rates.insuranceAnnual != null ? rates.insuranceAnnual : undefined)),
@@ -1941,7 +2245,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     };
   }
   function mortKeyFromPayload(p){
-    // stable cache key so we don't spam Netlify
     return [
       "p", Math.round(n0(p.price)),
       "d", Math.round(n0(p.down)),
@@ -1962,7 +2265,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     if (key === CORE.__mortKey && CORE.mortgage?.ok) return CORE.mortgage;
     CORE.__mortKey = key;
     const mySeq = ++CORE.__mortSeq;
-    // Try live
     try{
       const r = await fetch(rsApiUrl("/api/mortgage"),{
         method:"POST",
@@ -1971,9 +2273,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       });
       const j = await r.json();
       if (j && j.ok){
-        // ✅ only accept if still the latest request
         if (mySeq === CORE.__mortSeq){
-          // ✅ PATCH: stamp response with key so snapshot can verify it matches CURRENT inputs
           try{ j.__key = key; }catch(_){}
           CORE.mortgage = j;
           try{ localStorage.setItem(MORT_KEY, JSON.stringify({ t:Date.now(), key, data:j })); }catch(_){}
@@ -1981,12 +2281,10 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
         return j;
       }
     }catch(_){}
-    // Cache fallback (only if same key)
     try{
       const c = JSON.parse(localStorage.getItem(MORT_KEY)||"{}");
       if (c?.data && c?.key === key){
         if (mySeq === CORE.__mortSeq){
-          // ✅ PATCH: stamp cached response too
           try{ c.data.__key = key; }catch(_){}
           CORE.mortgage = c.data;
         }
@@ -1996,7 +2294,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     return null;
   };
   // ============================================================
-  // ✅ PAY PICKER (BRAIN TOTAL PAY > BRIDGE INCOME)
+  // //#9 PAY PICKER (BRAIN TOTAL PAY > BRIDGE INCOME)
   // ============================================================
   function extractBrainPay(brain){
     const pay = brain?.pay || brain || {};
@@ -2019,7 +2317,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const total = (totalExplicit > 0 ? totalExplicit : (computed > 0 ? computed : 0));
     return { total, base, bah, bas, disability, computed, totalExplicit };
   }
-  // ✅ Mortgage extractor from brain (kept as fallback)
   function extractBrainMortgage(brain){
     const candidates = [];
     candidates.push(n0(brain?.estimatedMonthlyMortgage));
@@ -2035,13 +2332,11 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     candidates.push(n0(m?.principal_interest));
     candidates.push(n0(m?.pAndI));
     candidates.push(n0(m?.p_and_i));
-    const best = candidates
+    return candidates
       .map(v => Number(v)||0)
       .filter(v => v > 0)
       .sort((a,b)=>b-a)[0] || 0;
-    return best;
   }
-  // ✅ local mortgage fallback (returns P&I + total)
   function computeMortgageMonthlyLocal({ price, dpAmt, creditScore, termYears, tihoa, pmi, aprOverride }){
     price = Math.max(0, n0(price));
     dpAmt = Math.max(0, n0(dpAmt));
@@ -2055,7 +2350,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     return { mortgageMonthly: (pAndI + extra), apr, pAndI, loan, termN, mRate };
   }
   // ============================================================
-  // ✅ Feasibility → BLUF publisher (cross-page bridge)
+  // //#10 Feasibility publisher
   // ============================================================
   const FEAS_KEY = "realtysass.feasibility.v1";
   const VERDICT_KEY = "realtysass.ec_verdict.v1";
@@ -2095,7 +2390,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
           page: location.pathname || "",
           href: String(location.href || ""),
           widget: "analyze-2A",
-          version: "2A+publisher.v3(mortgage.js-breakdown+city-fallback)"
+          version: "PCS-2A.profile-fields-aligned"
         },
         email,
         status: v.status,
@@ -2136,82 +2431,69 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }catch(_){}
   }
   // ============================================================
-  // ✅ Snapshot builder (now prefers mortgage.js breakdown)
-  // ✅ PATCH: instant credit-score responsiveness:
-  //     If the cached mortgage.js response doesn’t match the CURRENT inputs,
-  //     ignore it and use local calc until the fresh response lands.
+  // //#11 Snapshot builder (Profile Fields aligned)
   // ============================================================
   CORE.snapshotFromBridge = function snapshotFromBridge(){
     const b = CORE.bridge || {};
     const ov = getOv();
     const brain = CORE.brain;
+    const profExpenses = profileNum(brain, ["monthly_expenses"]) ?? profileNum(brain, ["monthlyExpenses"]);
+    const profPrice    = profileNum(brain, ["projected_home_price"]) ?? profileNum(brain, ["projectedHomePrice"]);
+    const profDown     = profileNum(brain, ["downpayment"]) ?? profileNum(brain, ["downPayment"]);
+    const profScore    = profileNum(brain, ["credit_score"]) ?? profileNum(brain, ["creditScore"]);
     const bp = extractBrainPay(brain);
-    // ✅ Income priority
     const brainTotal = n0(bp.total);
     const bridgeIncome = n0(b.income);
     const brainBase = n0(bp.base);
     const baseIncome = (brainTotal > 0 ? brainTotal : (bridgeIncome > 0 ? bridgeIncome : brainBase));
     const income     = baseIncome + (ov.addIncome || 0);
-    // ✅ Monthly Expenses fallback:
-    // - Use bridge.expenses if present
-    // - Else sum itemizedRows (monthly) if available
     const expensesFromBridge = n0(b.expenses);
     const expensesFromRows = (() => {
       const rows = Array.isArray(b.itemizedRows) ? b.itemizedRows : [];
       if (!rows.length) return 0;
       let sum = 0;
       for (const r of rows){
-        const m = n0(r?.monthly ?? r?.month ?? r?.mo ?? 0);
-        sum += m;
+        sum += n0(r?.monthly ?? r?.month ?? r?.mo ?? 0);
       }
       return Math.max(0, sum);
     })();
-    const expenses0 = (expensesFromBridge > 0 ? expensesFromBridge : (expensesFromRows > 0 ? expensesFromRows : 0));
+    const expenses0 =
+      (expensesFromBridge > 0 ? expensesFromBridge :
+        (expensesFromRows > 0 ? expensesFromRows :
+          (profExpenses != null ? profExpenses : 0)));
     const expenses = (ov.expenses==null ? expenses0 : Math.max(0, ov.expenses));
-    // Downpayment amount (KPI #4)
     const dpAmt =
       n0(b.dpAmt || b.downPayment || b.downPaymentAmt || b.down_payment || 0) ||
-      n0(ov.savings != null ? ov.savings : b.savings);
-    // Home price (KPI #3)
+      n0(ov.savings != null ? ov.savings : (b.savings || 0)) ||
+      (profDown != null ? profDown : 0);
     const price =
-      (ov.housing != null ? n0(ov.housing) : n0(b.housing || b.price || b.homePrice || b.purchasePrice || 0));
+      (ov.housing != null ? n0(ov.housing) : n0(b.housing || b.price || b.homePrice || b.purchasePrice || 0)) ||
+      (profPrice != null ? profPrice : 0);
     const termYears = n0(b.termYears) || 30;
     const creditScore = (ov.creditScore==null
-      ? (Number(b.creditScore)||720)
+      ? (Number(b.creditScore)||Number(b.credit_score)|| (profScore != null ? profScore : 720))
       : Math.max(300, Math.min(850, ov.creditScore)));
     const aprOverride = n0(pickFirst(b, ["aprOverride","apr_override","apr"]));
-    // pull extras (if present)
     const pmi   = n0(b.pmi);
-    // ✅ City rate fallback (monthly)
     const rates = cityRatesForPrice(price);
     const taxMoLocal = (rates.taxRateFrac != null && price>0) ? ((price * rates.taxRateFrac)/12) : 0;
     const insMoLocal = (rates.insuranceAnnual != null) ? (rates.insuranceAnnual/12) : 0;
     const hoaMoLocal = (rates.hoaMonthly != null) ? rates.hoaMonthly : 0;
-    // ✅ Local calc uses TI+HOA if bridge didn’t pass tihoa
     const tihoaFromBridge = n0(b.tihoa);
     const tihoa = (tihoaFromBridge > 0 ? tihoaFromBridge : (taxMoLocal + insMoLocal + hoaMoLocal));
-    // ✅ Local calc (fallback for principal/interest math)
     const localM = computeMortgageMonthlyLocal({ price, dpAmt, creditScore, termYears, tihoa, pmi, aprOverride });
-    // ✅ Brain mortgage as fallback
     const brainMortgage = extractBrainMortgage(brain);
-    // ✅ Mortgage.js breakdown (preferred ONLY when it matches current key)
     const mjRaw = CORE.mortgage?.ok ? CORE.mortgage : null;
-    // ✅ PATCH: compute the CURRENT expected mortgage key and require mjRaw.__key === expectedKey
     let expectedKey = "";
-    try{
-      expectedKey = mortKeyFromPayload(buildMortgagePayload());
-    }catch(_){ expectedKey = ""; }
+    try{ expectedKey = mortKeyFromPayload(buildMortgagePayload()); }catch(_){ expectedKey = ""; }
     const mj = (mjRaw && mjRaw.__key && expectedKey && (mjRaw.__key === expectedKey)) ? mjRaw : null;
-    const bj = mj?.breakdown || null;
-    // 1) Determine All-in Mortgage Monthly
+    const bj = (mj && mj.breakdown) ? mj.breakdown : null;
     let mortgageMonthly =
       (bj && n0(bj.allIn) > 0) ? n0(bj.allIn)
       : Math.max(0, brainMortgage, n0(localM.mortgageMonthly));
-    // 2) Determine APR used (mortgage.js apr > override > local tier)
     const aprUsed =
       (mj && n0(mj.apr) > 0) ? n0(mj.apr)
       : (n0(aprOverride) > 0 ? n0(aprOverride) : scoreAPR(creditScore));
-    // 3) Determine breakdown components (mortgage.js wins; else city fallback)
     const piCombined =
       (bj && n0(bj.pi) > 0) ? n0(bj.pi)
       : n0(localM.pAndI);
@@ -2223,27 +2505,22 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       (bj && (bj.hoa != null) && n0(bj.hoa) >= 0) ? n0(bj.hoa) : hoaMoLocal;
     const pmiMo =
       (bj && (bj.pmi != null) && n0(bj.pmi) >= 0) ? n0(bj.pmi) : 0;
-    // Fold PMI into insurance for your 5-label bars
     insMo = Math.max(0, insMo) + Math.max(0, pmiMo);
-    // 4) Split PI into Principal vs Interest (first-month approximation)
     const loan =
       (mj && n0(mj.loanAmount) > 0) ? n0(mj.loanAmount)
       : Math.max(0, n0(localM.loan));
     const mRate = (aprUsed/100)/12;
     const interestMo = loan > 0 ? (loan * mRate) : 0;
     const principalMo = Math.max(0, piCombined - interestMo);
-    // 5) Ensure component sum matches all-in as closely as possible
     const compTotal = Math.max(0, principalMo + interestMo + taxMo + insMo + hoaMo);
     if (compTotal > 0) mortgageMonthly = Math.max(mortgageMonthly, compTotal);
-    // ✅ Feasibility tiles
     const residualIncome = income - expenses;
     const disposableAfterMortgage = residualIncome - mortgageMonthly;
     const allowances = Math.max(0, (brainTotal>0 ? (brainTotal - brainBase) : 0));
     return {
       income,
       expenses,
-      // KPI #4 display (downpayment)
-      savings: (ov.savings==null ? n0(b.savings) : Math.max(0, ov.savings)),
+      savings: (ov.savings==null ? (n0(b.savings) || (profDown != null ? profDown : 0)) : Math.max(0, ov.savings)),
       price,
       dpAmt,
       creditScore,
@@ -2251,7 +2528,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       mortgageMonthly,
       residualIncome,
       disposableAfterMortgage,
-      // ✅ breakdown fields for 2A bars
       principalMo,
       interestMo,
       taxMo,
@@ -2264,30 +2540,8 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       __brainAllowances: allowances
     };
   };
-  // ---------- Grade (existing) ----------
-  function localGrade(s){
-    const income = (s.income||1);
-    const expenses = n0(s.expenses);
-    const mort = n0(s.mortgageMonthly);
-    const totalShare = (expenses + mort) / income;
-    const housingShare = mort / income;
-    let g=92;
-    if(totalShare>=0.85) g-=30; else if(totalShare>=0.70) g-=15; else g+=4;
-    if(housingShare>0.40) g-=18; else if(housingShare>0.33) g-=8; else g+=4;
-    const disp = n0(s.disposableAfterMortgage);
-    if (disp<0) g-=30;
-    else if((disp/income)<0.10) g-=10;
-    else if((disp/income)>=0.20) g+=4;
-    g=Math.max(0,Math.min(100,g));
-    const letter =
-      g>=98?'A+': g>=92?'A': g>=88?'A-'
-    : g>=82?'B+': g>=76?'B': g>=72?'B-'
-    : g>=66?'C+': g>=60?'C': g>=55?'C-'
-    : g>=50?'D+': g>=45?'D':'F';
-    return {letter, totalShare};
-  }
   // ============================================================
-  // ✅ Financial Health Grade (28% rule + disposable %)
+  // //#12 Financial Health Grade (28% rule + disposable %)
   // ============================================================
   function financialHealthGrade28(s){
     const income = Math.max(0, n0(s.income));
@@ -2299,23 +2553,14 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const housingPct = mort / income;
     const disposablePct = disposable / income;
     let letter = "F";
-    if (disposable < 0 || housingPct > 0.45) {
-      letter = "F";
-    } else if (housingPct <= 0.28 && disposablePct >= 0.20) {
-      letter = "A";
-    } else if (housingPct <= 0.28 && disposablePct >= 0.15) {
-      letter = "A-";
-    } else if (housingPct <= 0.28 && disposablePct >= 0.10) {
-      letter = "B+";
-    } else if (housingPct <= 0.33 && disposablePct >= 0.10) {
-      letter = "B";
-    } else if (housingPct <= 0.33 && disposablePct >= 0.05) {
-      letter = "C";
-    } else if (housingPct <= 0.40 && disposablePct >= 0.00) {
-      letter = "D";
-    } else {
-      letter = "F";
-    }
+    if (disposable < 0 || housingPct > 0.45) letter = "F";
+    else if (housingPct <= 0.28 && disposablePct >= 0.20) letter = "A";
+    else if (housingPct <= 0.28 && disposablePct >= 0.15) letter = "A-";
+    else if (housingPct <= 0.28 && disposablePct >= 0.10) letter = "B+";
+    else if (housingPct <= 0.33 && disposablePct >= 0.10) letter = "B";
+    else if (housingPct <= 0.33 && disposablePct >= 0.05) letter = "C";
+    else if (housingPct <= 0.40 && disposablePct >= 0.00) letter = "D";
+    else letter = "F";
     return { letter, housingPct, disposablePct };
   }
   // ---------- Painter registry ----------
@@ -2333,7 +2578,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     lineChart: null
   };
   // ============================================================
-  // ✅ Mortgage Breakdown Row Injector (adds HOA row)
+  // //#13 Mortgage Breakdown Row Injector (adds HOA row)
   // ============================================================
   let __breakdownWired = false;
   function ensureMortgageBreakdownRows(){
@@ -2342,10 +2587,10 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const bars = document.querySelector('.fs-bars');
     if (!bars) return;
     const rows = bars.querySelectorAll('.fs-row');
-    if (rows[0]) rows[0].querySelector('.name') && (rows[0].querySelector('.name').textContent = "Principal");
-    if (rows[1]) rows[1].querySelector('.name') && (rows[1].querySelector('.name').textContent = "Interest");
-    if (rows[2]) rows[2].querySelector('.name') && (rows[2].querySelector('.name').textContent = "Taxes");
-    if (rows[3]) rows[3].querySelector('.name') && (rows[3].querySelector('.name').textContent = "Insurance");
+    if (rows[0]?.querySelector('.name')) rows[0].querySelector('.name').textContent = "Principal";
+    if (rows[1]?.querySelector('.name')) rows[1].querySelector('.name').textContent = "Interest";
+    if (rows[2]?.querySelector('.name')) rows[2].querySelector('.name').textContent = "Taxes";
+    if (rows[3]?.querySelector('.name')) rows[3].querySelector('.name').textContent = "Insurance";
     if (!document.getElementById("fs-bar-hoa")){
       const row = document.createElement("div");
       row.className = "fs-row";
@@ -2361,16 +2606,11 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       note.textContent = "Bars show the Mortgage Estimate broken down by Principal, Interest, Taxes, Insurance, and HOA.";
     }
   }
-  // ============================================================
-  // ✅ Bottom label swap: RESIDUAL INCOME → MORTGAGE ESTIMATE
-  // ============================================================
   function setBottomLabelToMortgage(){
-    // Try explicit ids/classes first
     const byId = document.getElementById("fs-residual-label");
     if (byId) { byId.textContent = "MORTGAGE ESTIMATE"; return; }
     const byClass = document.querySelector(".fs-residual-label");
     if (byClass) { byClass.textContent = "MORTGAGE ESTIMATE"; return; }
-    // Otherwise, find the closest caption near #fs-residual and change common patterns
     const v = document.getElementById("fs-residual");
     if (!v) return;
     const container = v.closest(".fs-residual, .fs-bottom, .fs-foot, .fs-footer, .fs-row, .fs-tile") || v.parentElement;
@@ -2384,9 +2624,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       }
     }
   }
-  // ============================================================
-  // ✅ FEASIBILITY SNAPSHOT painter (Mortgage Breakdown Bars)
-  // ============================================================
   function clampPct(x){ x = Number(x)||0; return Math.max(0, Math.min(100, x)); }
   function setBar(id, pct){
     const el = document.getElementById(id);
@@ -2398,9 +2635,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     try{
       const vEl = document.getElementById(valueId);
       if (!vEl) return;
-      const directId = valueId.replace("fs-","fs-") + "-lbl";
-      const direct = document.getElementById(directId);
-      if (direct) { direct.textContent = titleText; return; }
       const tile = vEl.closest(".fs-tile, .fs-box, .fs-card, .fs-cell, .tile, .card") || vEl.parentElement;
       if (!tile) return;
       const label =
@@ -2422,7 +2656,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const mortgage = Math.max(0, n0(s.mortgageMonthly));
     const totalMonthlyExpenses = expenses + mortgage;
     const disposableIncome = income - totalMonthlyExpenses;
-    // TILE #1
     const incomeEl = document.getElementById("fs-income");
     if (incomeEl) incomeEl.textContent = cur(income,0);
     setFsTileTitleByValueId("fs-income", "TOTAL MONTHLY INCOME");
@@ -2442,7 +2675,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
           add>0 ? `Base ${cur(bi,0)} + Add’l ${cur(add,0)}` : `Base ${cur(bi,0)}`;
       }
     }
-    // TILE #2
     const housingEl = document.getElementById("fs-housing");
     if (housingEl) housingEl.textContent = cur(totalMonthlyExpenses,0);
     setFsTileTitleByValueId("fs-housing", "TOTAL MONTHLY EXPENSES");
@@ -2450,7 +2682,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     if (subHou){
       subHou.textContent = `Monthly Expenses ${cur(expenses,0)} + Mortgage ${cur(mortgage,0)}`;
     }
-    // TILE #3
     const expEl = document.getElementById("fs-expenses");
     if (expEl) expEl.textContent = signed(disposableIncome);
     setFsTileTitleByValueId("fs-expenses", "DISPOSABLE INCOME");
@@ -2463,7 +2694,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
         subExp.textContent = "Based on Total Income - Total Monthly Expenses";
       }
     }
-    // TILE #4
     const savEl = document.getElementById("fs-saving");
     const fh = financialHealthGrade28({ income, expenses, mortgageMonthly:mortgage });
     if (savEl) savEl.textContent = fh.letter;
@@ -2472,7 +2702,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     if (subSav){
       subSav.textContent = "Based on Disposable Income and Mortgage %";
     }
-    // Bars
     const P = Math.max(0, n0(s.principalMo));
     const I = Math.max(0, n0(s.interestMo));
     const T = Math.max(0, n0(s.taxMo));
@@ -2494,14 +2723,12 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     if (aSav) aSav.textContent = cur(T,0);
     if (aRes) aRes.textContent = cur(N,0);
     if (aHoa) aHoa.textContent = cur(H,0);
-    // ✅ Bottom row: MORTGAGE ESTIMATE (All-In)
     setBottomLabelToMortgage();
     const resEl = document.getElementById("fs-residual");
     if (resEl){
       resEl.textContent = cur(mortgage,0);
     }
   }
-  // ---------- KPI/Top bar painter ----------
   function paintHeaderKpis(s){
     const ki = $("#k-income");
     const ke = $("#k-expense");
@@ -2509,10 +2736,19 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const ks = $("#k-save");
     if (ki) ki.textContent = cur(s.income,0);
     if (ke) ke.textContent = cur(s.expenses,0);
-    // KPI #3 stays HOME PRICE (Housing Cost)
     if (km) km.textContent = cur(s.price,0);
-    // KPI #4 stays downpayment
     if (ks) ks.textContent = cur(s.savings,0);
+    // ✅ RESTORED: KPI % pills
+    // Total Monthly Expense % = expenses / income
+    const income = Math.max(0, n0(s.income));
+    const exp = Math.max(0, n0(s.expenses));
+    const expPct = (income > 0) ? ((exp / income) * 100) : 0;
+    if (ke) setKpiPillForValue(ke, fmtPct(expPct));
+    // Estimated Downpayment % = downpayment / housing cost (price)
+    const price = Math.max(0, n0(s.price));
+    const dp = Math.max(0, n0(s.savings));
+    const dpPct = (price > 0) ? ((dp / price) * 100) : 0;
+    if (ks) setKpiPillForValue(ks, fmtPct(dpPct));
     const cs = Number(s.creditScore)||720;
     const kscore = $("#k-score");
     const band = $("#score-band");
@@ -2527,236 +2763,286 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     if (slider && document.activeElement !== slider){
       slider.value = String(cs);
     }
-    const disp = $("#fid-disp");
-    if (disp) disp.textContent = signed(s.disposableAfterMortgage);
-    const {letter, totalShare} = localGrade(s);
-    const grade = $("#fid-grade");
-    const dot = $("#fid-dot");
-    const meter = $("#fid-meter");
-    if (grade) grade.textContent = letter + " / Disposable";
-    if (dot){
-      dot.style.background =
-        (letter[0]==="A"||letter[0]==="B") ? "var(--ok)"
-        : (letter[0]==="C" ? "var(--warn)" : "var(--bad)");
-    }
-    if (meter) meter.style.width = (Math.max(0, Math.min(1, totalShare))*100) + "%";
-  }
-  // ---------- KPI edit wiring ----------
-  function setEditing(cardId, isEditing){
-    const el = document.getElementById(cardId);
-    if (!el) return;
-    el.classList.toggle("is-editing", !!isEditing);
-  }
-  function showActions(prefix, mode){
-    const edit = document.getElementById(prefix+"-edit");
-    const save = document.getElementById(prefix+"-save");
-    const cancel = document.getElementById(prefix+"-cancel");
-    if (edit) edit.style.display = (mode==="view") ? "" : "none";
-    if (save) save.style.display = (mode==="edit") ? "" : "none";
-    if (cancel) cancel.style.display = (mode==="edit") ? "" : "none";
-  }
-  function wireMoneyKpi(opts){
-    const card = document.getElementById(opts.cardId);
-    const edit = document.getElementById(opts.prefix+"-edit");
-    const save = document.getElementById(opts.prefix+"-save");
-    const cancel = document.getElementById(opts.prefix+"-cancel");
-    const input = document.getElementById(opts.inputId);
-    if (!card || !input) return;
-    const open = ()=>{
-      const ov = readOverrides();
-      const s = CORE.snapshotFromBridge();
-      input.value = String(opts.onOpenFill({ ov, s }) ?? "");
-      setEditing(opts.cardId, true);
-      showActions(opts.prefix, "edit");
-      input.focus();
-      input.select?.();
-    };
-    const close = ()=>{
-      setEditing(opts.cardId, false);
-      showActions(opts.prefix, "view");
-    };
-    const commit = ()=>{
-      const n = Math.max(0, Number(input.value || 0) || 0);
-      const ov = readOverrides();
-      const next = opts.onSaveTransform({ n, ov });
-      writeOverrides(next);
-      close();
-      // ✅ Paint immediately (local calc reacts instantly), then resync mortgage.js and repaint
-      CORE.paintAll();
-      const mySeq = ++CORE.__mortSeq;
-      Promise.resolve()
-        .then(()=>CORE.fetchBrain?.())
-        .then(()=>CORE.fetchMortgage?.())
-        .then(()=>{ if (mySeq === CORE.__mortSeq) CORE.paintAll(); })
-        .catch(()=>{});
-    };
-    edit && edit.addEventListener("click", open);
-    cancel && cancel.addEventListener("click", ()=>{ close(); CORE.paintAll(); });
-    save && save.addEventListener("click", commit);
-    input.addEventListener("keydown", (e)=>{
-      if (e.key === "Enter") commit();
-      if (e.key === "Escape") { close(); CORE.paintAll(); }
-    });
-  }
-  function wireCreditSlider(){
-    const slider = document.getElementById("score-slider");
-    const save = document.getElementById("kpi-score-save");
-    const cancel = document.getElementById("kpi-score-cancel");
-    if (!slider || !save || !cancel) return;
-    let baseline = null;
-    function enterEdit(){ save.style.display = ""; cancel.style.display = ""; }
-    function exitEdit(){ save.style.display = "none"; cancel.style.display = "none"; baseline = null; }
-    slider.addEventListener("pointerdown", ()=>{
-      const s = CORE.snapshotFromBridge();
-      baseline = Number(s.creditScore) || 720;
-      enterEdit();
-    });
-    slider.addEventListener("input", ()=>{
-      const liveDraft = Number(slider.value) || 720;
-      // save override
-      const ov = readOverrides();
-      ov.creditScore = Math.max(300, Math.min(850, liveDraft));
-      writeOverrides(ov);
-      // ✅ IMMEDIATE update (local calc responds instantly because snapshot reads overrides)
-      CORE.paintAll();
-      // ✅ Then fetch mortgage.js with new score and repaint when it returns (no stale results)
-      const mySeq = ++CORE.__mortSeq;
-      Promise.resolve()
-        .then(()=>CORE.fetchBrain?.())
-        .then(()=>CORE.fetchMortgage?.())
-        .then(()=>{ if (mySeq === CORE.__mortSeq) CORE.paintAll(); })
-        .catch(()=>{});
-    });
-    save.addEventListener("click", ()=>{ exitEdit(); CORE.paintAll(); });
-    cancel.addEventListener("click", ()=>{
-      const ov = readOverrides();
-      if (baseline != null){
-        ov.creditScore = Math.max(300, Math.min(850, baseline));
-      } else {
-        delete ov.creditScore;
-      }
-      writeOverrides(ov);
-      // ✅ immediate local repaint
-      CORE.paintAll();
-      // ✅ resync mortgage.js and repaint
-      const mySeq = ++CORE.__mortSeq;
-      Promise.resolve()
-        .then(()=>CORE.fetchBrain?.())
-        .then(()=>CORE.fetchMortgage?.())
-        .then(()=>{ if (mySeq === CORE.__mortSeq) CORE.paintAll(); })
-        .catch(()=>{});
-      exitEdit();
-    });
-  }
-  function wireExport(){
-    const btn = document.getElementById("fid-export");
-    if (!btn || btn.__wired) return;
-    btn.__wired = true;
-    btn.addEventListener("click", async ()=>{
-      const el = document.getElementById("fid-card");
-      if (!el) return;
-      const rect = el.getBoundingClientRect();
-      const scale = Math.max(2, window.devicePixelRatio || 2);
-      const cloned = el.cloneNode(true);
-      const serializer = new XMLSerializer();
-      const markup = serializer.serializeToString(cloned);
-      const svg = '<svg xmlns="http://www.w3.org/2000/svg" width="'+(rect.width*scale)+'" height="'+(rect.height*scale)+'">' +
-                    '<foreignObject x="0" y="0" width="100%" height="100%">' +
-                      markup +
-                    '</foreignObject>' +
-                  '</svg>';
-      const blob = new Blob([svg], {type:"image/svg+xml;charset=utf-8"});
-      const url = URL.createObjectURL(blob);
-      const img = new Image();
-      img.onload = ()=>{
-        const canvas = document.createElement("canvas");
-        canvas.width = rect.width*scale;
-        canvas.height = rect.height*scale;
-        const ctx = canvas.getContext("2d");
-        ctx.fillStyle = "#0f1220";
-        ctx.fillRect(0,0,canvas.width,canvas.height);
-        ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-        URL.revokeObjectURL(url);
-        const a = document.createElement("a");
-        a.download = "Fiduciary-Snapshot.png";
-        a.href = canvas.toDataURL("image/png");
-        a.click();
-      };
-      img.src = url;
-    });
   }
   // ---------- Core paintAll ----------
   CORE.paintAll = function paintAll(){
     const s = CORE.snapshotFromBridge();
-    const ov = getOv();
-    // keep inputs synced when not editing
-    const addIn = document.getElementById("in-addIncome");
-    const exIn  = document.getElementById("in-expensesOverride");
-    const hoIn  = document.getElementById("in-housingOverride");
-    const saIn  = document.getElementById("in-savingsOverride");
-    if (addIn && !document.getElementById("kpi-income")?.classList.contains("is-editing")) addIn.value = String(ov.addIncome || 0);
-    if (exIn  && !document.getElementById("kpi-expense")?.classList.contains("is-editing")) exIn.value  = String(ov.expenses==null ? "" : ov.expenses);
-    if (hoIn  && !document.getElementById("kpi-mtg")?.classList.contains("is-editing"))    hoIn.value  = String(ov.housing==null ? "" : ov.housing);
-    if (saIn  && !document.getElementById("kpi-save")?.classList.contains("is-editing"))   saIn.value  = String(ov.savings==null ? "" : ov.savings);
     paintHeaderKpis(s);
     paintFeasibilitySnapshot(s);
-    // publish feasibility snapshot + BLUF verdict
     publishFeasibility(s);
     (CORE.painters || []).forEach(p=>{
       try{ p.fn({ s, brain: CORE.brain, bridge: CORE.bridge, state: CORE.state, utils: CORE.utils }); }catch(_){}
     });
   };
-  // ---------- expose utils ----------
   CORE.utils = CORE.utils || {};
   Object.assign(CORE.utils, { $, cur, signed, pmti, scoreAPR, bandFromScore, pickFirst });
-  // ---------- Boot ----------
+  // ============================================================
+  // //#15 EDIT-IN-PLACE (NO POPUPS) for:
+  // - #k-income  (TOTAL MONTHLY INCOME)
+  // - #k-expense (TOTAL MONTHLY EXPENSE)
+  // - #k-mtg     (HOUSING COST)
+  // - #k-save    (ESTIMATED DOWNPAYMENT)
+  // Everything else untouched.
+  // ============================================================
+  function safeParseJSON(s){ try{ return JSON.parse(s||"{}"); }catch(_){ return {}; } }
+  function writeJSON(key,val){ try{ localStorage.setItem(key, JSON.stringify(val)); }catch(_){ } }
+  function digitsOnly(str){ return String(str||"").replace(/[^\d]/g,""); }
+  function getTextNumber(el){
+    const raw = digitsOnly(el?.textContent || "");
+    const n = Number(raw || 0);
+    return Number.isFinite(n) ? n : 0;
+  }
+  function updateBridges(patch){
+    try{ CORE.bridge = Object.assign({}, CORE.bridge||{}, patch||{}); }catch(_){}
+    try{
+      const pcsA = safeParseJSON(localStorage.getItem("pcsunited.bridge") || "{}");
+      const nextA = Object.assign({}, pcsA||{}, CORE.bridge||{}, patch||{});
+      writeJSON("pcsunited.bridge", nextA);
+    }catch(_){}
+    try{
+      const pcsB = safeParseJSON(localStorage.getItem("pcsunited.bridge.v1") || "{}");
+      const nextB = Object.assign({}, pcsB||{}, CORE.bridge||{}, patch||{});
+      writeJSON("pcsunited.bridge.v1", nextB);
+    }catch(_){}
+    try{
+      const rs = safeParseJSON(localStorage.getItem("realtysass.bridge") || "{}");
+      const nextR = Object.assign({}, rs||{}, CORE.bridge||{}, patch||{});
+      writeJSON("realtysass.bridge", nextR);
+    }catch(_){}
+  }
+  function setOverrideExpenses(value){
+    const t = Math.max(0, Math.round(Number(value)||0));
+    const o = readOverrides();
+    o.expensesOverride = t;
+    o.expenses = t; // back-compat
+    writeOverrides(o);
+    updateBridges({ expenses:t, monthly_expenses:t });
+    try{ CORE.paintAll(); }catch(_){}
+  }
+  async function setOverrideDownpayment(value){
+    const t = Math.max(0, Math.round(Number(value)||0));
+    const o = readOverrides();
+    o.savingsOverride = t;
+    o.savings = t; // back-compat
+    o.downpayment = t; // extra back-compat
+    writeOverrides(o);
+    updateBridges({
+      dpAmt: t,
+      downpayment: t,
+      down_payment: t,
+      savings: t
+    });
+    try{ await CORE.fetchMortgage?.(); }catch(_){}
+    try{ CORE.paintAll(); }catch(_){}
+  }
+  // ✅ TOTAL MONTHLY INCOME edit-in-place:
+  // We keep deterministic base pay; user edit becomes "Additional Income".
+  function setOverrideTotalIncome(value){
+    const desired = Math.max(0, Math.round(Number(value)||0));
+    // compute base income from current snapshot (brain/bridge), then store delta as addIncome
+    let base = 0;
+    try{
+      const s = CORE.snapshotFromBridge();
+      base = Math.max(0, n0(s.__baseIncome));
+    }catch(_){ base = 0; }
+    const add = Math.max(0, desired - base);
+    const o = readOverrides();
+    o.addIncome = add;
+    o.add_income = add;
+    o.addIncomeOverride = add;
+    o.incomeAdd = add;
+    o.additionalIncome = add;
+    writeOverrides(o);
+    updateBridges({ addIncome:add, add_income:add, additionalIncome:add });
+    try{ CORE.paintAll(); }catch(_){}
+  }
+  // ✅ HOUSING COST edit-in-place: becomes housingOverride (price)
+  async function setOverrideHousingCost(value){
+    const t = Math.max(0, Math.round(Number(value)||0));
+    const o = readOverrides();
+    o.housingOverride = t;
+    o.housing = t; // back-compat
+    o.homePrice = t;
+    o.priceOverride = t;
+    writeOverrides(o);
+    updateBridges({
+      housing: t,
+      price: t,
+      homePrice: t,
+      purchasePrice: t
+    });
+    try{ await CORE.fetchMortgage?.(); }catch(_){}
+    try{ CORE.paintAll(); }catch(_){}
+  }
+  function startInlineEdit(el, { getValue, commitValue }){
+    if (!el) return;
+    if (el.__rsEditing) return;
+    el.__rsEditing = true;
+    const r = el.getBoundingClientRect();
+    const input = document.createElement("input");
+    input.type = "text";
+    input.inputMode = "numeric";
+    input.autocomplete = "off";
+    input.spellcheck = false;
+    input.value = String(Math.round(Number(getValue())||0));
+    input.style.cssText = [
+      "position:fixed",
+      "z-index:2147483647",
+      `left:${Math.max(0,r.left)}px`,
+      `top:${Math.max(0,r.top)}px`,
+      `width:${Math.max(40,r.width)}px`,
+      `height:${Math.max(28,r.height)}px`,
+      "padding:0 8px",
+      "border-radius:10px",
+      "border:1px solid rgba(142,243,197,.55)",
+      "outline:none",
+      "background:rgba(12,14,25,.92)",
+      "color:#e9ecff",
+      "font-weight:900",
+      "font-size:16px",
+      "text-align:left",
+      "box-shadow:0 14px 30px rgba(0,0,0,.70), 0 0 0 1px rgba(106,167,255,.20) inset"
+    ].join(";");
+    function cleanup(){
+      try{ input.remove(); }catch(_){}
+      el.__rsEditing = false;
+    }
+    function commit(){
+      const n = Number(digitsOnly(input.value)||0);
+      Promise.resolve(commitValue(n)).finally(()=>cleanup());
+    }
+    input.addEventListener("keydown", (e)=>{
+      if (e.key === "Enter"){ e.preventDefault(); commit(); }
+      if (e.key === "Escape"){ e.preventDefault(); cleanup(); }
+    });
+    input.addEventListener("blur", ()=> commit());
+    document.body.appendChild(input);
+    input.focus();
+    input.select();
+  }
+  function wireInlineEdits(){
+    // capture-phase interceptor so any older prompt handlers never fire
+    document.addEventListener("click", (ev)=>{
+      const t = ev.target;
+      const incEl = t?.closest?.("#k-income");
+      if (incEl){
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation?.();
+        startInlineEdit(incEl, {
+          getValue: ()=> getTextNumber(incEl),
+          commitValue: (n)=> setOverrideTotalIncome(n)
+        });
+        return;
+      }
+      const expEl = t?.closest?.("#k-expense");
+      if (expEl){
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation?.();
+        startInlineEdit(expEl, {
+          getValue: ()=> getTextNumber(expEl),
+          commitValue: (n)=> setOverrideExpenses(n)
+        });
+        return;
+      }
+      const mtgEl = t?.closest?.("#k-mtg");
+      if (mtgEl){
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation?.();
+        startInlineEdit(mtgEl, {
+          getValue: ()=> getTextNumber(mtgEl),
+          commitValue: (n)=> setOverrideHousingCost(n)
+        });
+        return;
+      }
+      const savEl = t?.closest?.("#k-save");
+      if (savEl){
+        ev.preventDefault();
+        ev.stopPropagation();
+        ev.stopImmediatePropagation?.();
+        startInlineEdit(savEl, {
+          getValue: ()=> getTextNumber(savEl),
+          commitValue: (n)=> setOverrideDownpayment(n)
+        });
+        return;
+      }
+    }, true);
+  }
+  // ============================================================
+  // //#15.5 Remove edit pencil from all four KPI cards
+  // (safe runtime hide; no layout changes)
+  // ============================================================
+  function nearestKpiCard(valueEl){
+    if (!valueEl) return null;
+    return (
+      valueEl.closest(".kpi, .kpi-card, .kpiCard, .kpi-tile, .kpiTile, .tile, .card, .mini-card, .stat, [data-kpi]") ||
+      valueEl.parentElement
+    );
+  }
+  function hidePencilsInCard(card){
+    if (!card) return;
+    const kill = (el) => {
+      try{
+        el.style.display = "none";
+        el.style.visibility = "hidden";
+        el.style.pointerEvents = "none";
+      }catch(_){}
+    };
+    // Common explicit selectors (if your pencil has any of these)
+    const direct = card.querySelectorAll(
+      ".edit, .edit-btn, .editBtn, .kpi-edit, .kpiEdit, .pencil, .pen, .icon-edit, .iconEdit, [data-edit], [data-action='edit']," +
+      "button[aria-label*='edit' i], a[aria-label*='edit' i], [title*='edit' i], img[alt*='edit' i], svg[aria-label*='edit' i]"
+    );
+    direct.forEach(kill);
+    // Fallback heuristic: top-right “icon-only” click targets that smell like edit
+    const all = card.querySelectorAll("button, a, div, span");
+    all.forEach((el)=>{
+      try{
+        const cls = String(el.className||"");
+        const aria = String(el.getAttribute?.("aria-label")||"");
+        const title = String(el.getAttribute?.("title")||"");
+        const role = String(el.getAttribute?.("role")||"");
+        const txt = String(el.textContent||"").trim();
+        const looksEdit =
+          /edit|pencil|pen/i.test(cls) ||
+          /edit|pencil|pen/i.test(aria) ||
+          /edit|pencil|pen/i.test(title);
+        // icon-only clickable element (often the pencil)
+        const iconOnlyClickable =
+          (el.tagName === "BUTTON" || el.tagName === "A" || role === "button") &&
+          txt.length === 0 &&
+          (el.querySelector("svg, img") != null);
+        if (looksEdit || iconOnlyClickable){
+          kill(el);
+        }
+      }catch(_){}
+    });
+  }
+  function removeKpiPencils(){
+    const ids = ["#k-income","#k-expense","#k-mtg","#k-save"];
+    ids.forEach((id)=>{
+      const v = $(id);
+      const card = nearestKpiCard(v);
+      hidePencilsInCard(card);
+    });
+  }
+  // ============================================================
+  // //#16 Boot
+  // ============================================================
   onReady(async ()=>{
     loadBridge();
-    // KPI #1 add income
-    wireMoneyKpi({
-      cardId:"kpi-income", prefix:"kpi-income",
-      inputId:"in-addIncome",
-      onOpenFill: ({ov}) => Number(pickFirst(ov, ["addIncome","add_income"]) || 0) || 0,
-      onSaveTransform: ({n, ov}) => { ov.addIncome = Math.max(0, n); return ov; }
-    });
-    // KPI #2 expenses override
-    wireMoneyKpi({
-      cardId:"kpi-expense", prefix:"kpi-expense",
-      inputId:"in-expensesOverride",
-      onOpenFill: ({ov, s}) => {
-        const v = numOrNull(pickFirst(ov, ["expensesOverride","expenses","monthlyExpenses"]));
-        return (v==null ? s.expenses : v);
-      },
-      onSaveTransform: ({n, ov}) => { ov.expensesOverride = Math.max(0, n); return ov; }
-    });
-    // KPI #3 home price override
-    wireMoneyKpi({
-      cardId:"kpi-mtg", prefix:"kpi-mtg",
-      inputId:"in-housingOverride",
-      onOpenFill: ({ov, s}) => {
-        const v = numOrNull(pickFirst(ov, ["housingOverride","housing","homePrice","priceOverride"]));
-        return (v==null ? s.price : v);
-      },
-      onSaveTransform: ({n, ov}) => { ov.housingOverride = Math.max(0, n); return ov; }
-    });
-    // KPI #4 downpayment override
-    wireMoneyKpi({
-      cardId:"kpi-save", prefix:"kpi-save",
-      inputId:"in-savingsOverride",
-      onOpenFill: ({ov, s}) => {
-        const v = numOrNull(pickFirst(ov, ["savingsOverride","savings","downpayment","dpAmt"]));
-        return (v==null ? s.savings : v);
-      },
-      onSaveTransform: ({n, ov}) => { ov.savingsOverride = Math.max(0, n); return ov; }
-    });
-    wireCreditSlider();
-    wireExport();
-    // ✅ Load brain + mortgage breakdown before first paint (best effort)
     await CORE.fetchBrain();
     await CORE.fetchMortgage();
     CORE.__booted = true;
+    // ✅ Inline edit for 4 KPIs
+    wireInlineEdits();
+    // ✅ Hide pencils (run now + again shortly in case Webflow animates in)
+    removeKpiPencils();
+    setTimeout(removeKpiPencils, 250);
+    setTimeout(removeKpiPencils, 900);
     CORE.paintAll();
-    // ✅ If mortgage returns slightly after first render (cache/network), repaint once more
     setTimeout(async ()=>{
       const before = CORE.mortgage?.ok ? (CORE.mortgage?.breakdown?.allIn || 0) : 0;
       await CORE.fetchMortgage();
@@ -2781,9 +3067,10 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
      ✅ FIX (Requested):
      - Clicking Update MUST update the TOP KPI "TOTAL MONTHLY EXPENSE"
        by writing to:
-         1) CORE.bridge.expenses
-         2) localStorage "realtysass.bridge"
-         3) localStorage "realtysass.kpi_overrides.v1" -> expensesOverride (primary)
+         1) CORE.bridge.expenses (+ monthly_expenses canonical)
+         2) localStorage "pcsunited.bridge" + "pcsunited.bridge.v1" (Fix 1 aligned)
+         3) localStorage "realtysass.bridge" (back-compat)
+         4) localStorage "realtysass.kpi_overrides.v1" -> expensesOverride (primary)
             + expenses (back-compat)
        - Then trigger CORE.paintAll()
      Notes:
@@ -2815,6 +3102,9 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   function safeParseJSON(s){
     try{ return JSON.parse(s); }catch(_){ return null; }
   }
+  function writeJSON(key, val){
+    try{ localStorage.setItem(key, JSON.stringify(val)); }catch(_){}
+  }
   function sumModel(model){
     return BUCKETS.reduce((a,k)=> a + (Number(model[k])||0), 0);
   }
@@ -2831,14 +3121,20 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   }
   /* ============================================================
      //#2B.1 — CITY UTILITIES (SEED BASELINE)
+     ✅ Fix: prefer canonical bedrooms + profileEffective/profile
   ============================================================ */
   function getCityUtilitiesAvg(){
     try{
+      const b = CORE.bridge || {};
+      const prof =
+        (CORE.brain && (CORE.brain.profileEffective || CORE.brain.profile)) ||
+        (CORE.brain && CORE.brain.data && (CORE.brain.data.profileEffective || CORE.brain.data.profile)) ||
+        null;
       const beds =
-        Number((CORE.bridge && (CORE.bridge.beds || CORE.bridge.bedrooms || CORE.bridge.bedroom)) || 0) ||
-        Number((CORE.brain && CORE.brain.profile && CORE.brain.profile.beds) || 0) ||
+        Number(pick(b, ["bedrooms","beds","bedroom","bedsCount","bed_count"]) || 0) ||
+        Number(prof && pick(prof, ["bedrooms","beds","bedroom"]) || 0) ||
         4;
-      const city = (CORE.brain && CORE.brain.city) ? CORE.brain.city : {};
+      const city = (CORE.brain && (CORE.brain.city || CORE.brain.cityData)) ? (CORE.brain.city || CORE.brain.cityData) : {};
       const raw  = city.raw || {};
       const byBed =
         city.by_bedroom || raw.by_bedroom ||
@@ -2903,8 +3199,9 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     return null;
   }
   function deriveMonthlyMortgageFromPrice(s){
-    const price = Math.max(0, Number(s.housing)||0);          // purchase price (KPI #3)
-    const down  = Math.max(0, Number(s.savings)||0);          // downpayment (KPI #4)
+    // ✅ Fix: 2A snapshot uses s.price (purchase price) + s.savings (downpayment)
+    const price = Math.max(0, Number(s.price)||0);            // purchase price (KPI #3 in shell)
+    const down  = Math.max(0, Number(s.savings)||0);          // downpayment (KPI #4 in shell)
     const score = Math.max(300, Math.min(850, Number(s.creditScore||0) || 720));
     const termYears = Number(
       pick(s, ["termYears","term_years","mortgageTermYears","loanTermYears"]) || 30
@@ -2912,7 +3209,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const apr = Number(
       pick(s, ["apr","APR","interestRate","rate","mortgageApr","mortgageAPR"]) || aprFromScore(score)
     ) || aprFromScore(score);
-    // Backward compatible: if "housing" is actually monthly already (small), treat it as monthly
+    // Backward compatible: if "price" is actually monthly already (small), treat it as monthly
     if (price > 0 && price < 25000) return price;
     if (!price || price < 50000) return 0;
     const loan = Math.max(0, price - down);
@@ -3057,16 +3354,33 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       }));
     }catch(_){}
   }
-  // ✅ FIX: Commit total in the exact keys #2A expects
+  // ✅ FIX: Commit total in the exact keys #2A expects (+ PCS keys for Fix 1)
   function commitTotalToSystem(total){
     const t = round0(total);
-    // 1) Bridge
+    // 1) Update in-memory bridge
     try{
       CORE.bridge = CORE.bridge || {};
       CORE.bridge.expenses = t;
-      localStorage.setItem("realtysass.bridge", JSON.stringify(CORE.bridge));
+      CORE.bridge.monthly_expenses = t; // canonical
     }catch(_){}
-    // 2) KPI overrides (PRIMARY for #2A)
+    // 2) Write PCS bridge keys (Fix 1 aligned)
+    try{
+      const pcsRaw =
+        localStorage.getItem("pcsunited.bridge") ||
+        localStorage.getItem("pcsunited.bridge.v1") ||
+        null;
+      const pcs = (pcsRaw ? safeParseJSON(pcsRaw) : null) || {};
+      const nextPCS = Object.assign({}, pcs, CORE.bridge || {});
+      nextPCS.expenses = t;
+      nextPCS.monthly_expenses = t;
+      writeJSON("pcsunited.bridge", nextPCS);
+      writeJSON("pcsunited.bridge.v1", nextPCS);
+    }catch(_){}
+    // 3) Legacy bridge key (back-compat)
+    try{
+      writeJSON("realtysass.bridge", CORE.bridge || { expenses:t, monthly_expenses:t });
+    }catch(_){}
+    // 4) KPI overrides (PRIMARY for #2A)
     try{
       const k = safeParseJSON(localStorage.getItem("realtysass.kpi_overrides.v1") || "{}") || {};
       // Primary key used by #2A
@@ -3076,12 +3390,12 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       k.expensesMonthly = t;
       localStorage.setItem("realtysass.kpi_overrides.v1", JSON.stringify(k));
     }catch(_){}
-    // 3) Update top input immediately (if present) so UI reflects instantly
+    // 5) Update top input immediately (if present) so UI reflects instantly
     try{
       const topInput = document.getElementById("in-expensesOverride");
       if (topInput) topInput.value = String(t);
     }catch(_){}
-    // 4) Repaint
+    // 6) Repaint
     try{
       if (typeof CORE.paintAll === "function") CORE.paintAll();
       else if (typeof CORE.requestRepaint === "function") CORE.requestRepaint();
@@ -3308,7 +3622,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     storeDerivedMonthlyMortgage(derivedMtg, {
       source: "2B",
       note: "Derived monthly mortgage stored for other modules; Housing removed from bars.",
-      price: Number(s.housing)||0,
+      price: Number(s.price)||0,
       down: Number(s.savings)||0,
       score: Number(s.creditScore)||0
     });
@@ -3371,7 +3685,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   // Section C: City Estimates (rent/home/mortgage/utilities)
   // ✅ Bedroom stepper (▲/▼) next to ct-beds
   // ✅ Mouse wheel scroll on the stepper to adjust
-  // ✅ Override persists in localStorage
+  // ✅ Override persists in localStorage (PCSUnited-first; legacy back-compat)
   // ✅ CLEAN UI: NO "MANUAL" + NO "RESET" text shown
   //    - Hidden reset: double-click the bedroom number (or arrow pill) to return to AUTO
   //
@@ -3382,19 +3696,32 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   //    * family 4 => 3 bed
   //    * family 5 => 4 bed
   //    * family >= 6 => 5 bed
+  //
+  // ✅ UPDATE (Requested):
+  // - Replace City card image with US.png (RealtySaSS cohesive art)
   // ============================================================
   const CORE = window.RS_FID;
   if (!CORE || !CORE.__coreMounted) return;
   const { cur, pickFirst } = CORE.utils;
   // ---------- constants ----------
-  const BEDS_OVERRIDE_KEY = "realtysass.cityTargets.bedsOverride.v1";
+  // ✅ PCSUnited-first keys
+  const BEDS_OVERRIDE_KEY_PCS = "pcsunited.cityTargets.bedsOverride.v1";
+  const BEDS_OVERRIDE_KEY_LEG = "realtysass.cityTargets.bedsOverride.v1";
+  const EXP_BUCKETS_KEY = "realtysass.expense_buckets.v1";
+  const DERIVED_MTG_KEY = "realtysass.derived.housing_monthly.v1";
   const BEDS_MIN = 1;
   const BEDS_MAX = 9;
+  // ✅ City card image (replace generic house/tree)
+  const CITY_CARD_IMAGE_URL =
+    "https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6979a91253e7336c4f58d173_US.png";
   // ---------- helpers ----------
   const safeNum = (x)=> {
     const n = Number(x);
     return Number.isFinite(n) ? n : null;
   };
+  function safeParseJSON(s){
+    try{ return JSON.parse(s); }catch(_){ return null; }
+  }
   function numFromAny(x){
     if (x == null) return null;
     if (typeof x === "number") return safeNum(x);
@@ -3457,6 +3784,53 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     if (L<=0 && H<=0) return null;
     return `${cur(L,0)} – ${cur(H,0)}`;
   }
+  // ✅ Replace the City card hero image (supports <img> OR background-image tile)
+  function setCityCardImage(url){
+    try{
+      if (!url) return;
+      const card = document.getElementById("city-targets-card");
+      if (!card) return;
+      // 1) Prefer an img inside the card (your current layout looks like this)
+      const img =
+        card.querySelector('img[data-city-image]') ||
+        card.querySelector('img[alt*="city"]') ||
+        card.querySelector('img') ||
+        null;
+      if (img && img.tagName === "IMG"){
+        if (img.src !== url) img.src = url;
+        img.alt = img.alt || "PCS United • City Estimate";
+        img.loading = img.loading || "lazy";
+        img.decoding = img.decoding || "async";
+        // Keep it clean in whatever container Webflow uses
+        img.style.objectFit = img.style.objectFit || "cover";
+        img.style.width = img.style.width || "100%";
+        img.style.height = img.style.height || "100%";
+        return;
+      }
+      // 2) If not an <img>, try a “hero tile” div that uses background-image
+      const hero =
+        card.querySelector('[data-city-hero]') ||
+        card.querySelector('.city-hero') ||
+        card.querySelector('.ct-hero') ||
+        card.querySelector('.city-image') ||
+        null;
+      if (hero){
+        hero.style.backgroundImage = `url("${url}")`;
+        hero.style.backgroundSize = hero.style.backgroundSize || "cover";
+        hero.style.backgroundPosition = hero.style.backgroundPosition || "center";
+        hero.style.backgroundRepeat = "no-repeat";
+      }
+    }catch(_){}
+  }
+  // ✅ Prefer Utilities from 2B buckets if available
+  function utilitiesFromBuckets(){
+    try{
+      const j = safeParseJSON(localStorage.getItem(EXP_BUCKETS_KEY) || "null");
+      const u = j && j.buckets ? Number(j.buckets.Utilities || 0) : 0;
+      return u > 0 ? u : null;
+    }catch(_){}
+    return null;
+  }
   function utilitiesFromBridge(){
     const b = CORE.bridge || {};
     const rows = Array.isArray(b.itemizedRows) ? b.itemizedRows : [];
@@ -3472,6 +3846,18 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       if (rx.test(name)) sum += Math.max(0, amt);
     }
     return sum>0 ? sum : null;
+  }
+  // ✅ Prefer derived mortgage from 2B / CORE state before brain fallback
+  function getDerivedMortgage(){
+    try{
+      const s = CORE.state || {};
+      const v1 = Number(s.__rsMonthlyMortgage || 0);
+      if (Number.isFinite(v1) && v1 > 0) return v1;
+      const cached = safeParseJSON(localStorage.getItem(DERIVED_MTG_KEY) || "null");
+      const v2 = cached ? Number(cached.value || 0) : 0;
+      if (Number.isFinite(v2) && v2 > 0) return v2;
+    }catch(_){}
+    return 0;
   }
   // ---------- profile + base ----------
   function getProfile(){
@@ -3498,19 +3884,29 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       "";
     return String(base || "").trim();
   }
-  // ---------- beds override ----------
+  // ---------- beds override (PCSUnited-first; legacy back-compat) ----------
   function readBedsOverride(){
     try{
-      const raw = localStorage.getItem(BEDS_OVERRIDE_KEY);
-      const n = parseInt(String(raw||""), 10);
-      if (Number.isFinite(n) && n >= BEDS_MIN && n <= BEDS_MAX) return n;
+      const rawPCS = localStorage.getItem(BEDS_OVERRIDE_KEY_PCS);
+      const nPCS = parseInt(String(rawPCS||""), 10);
+      if (Number.isFinite(nPCS) && nPCS >= BEDS_MIN && nPCS <= BEDS_MAX) return nPCS;
+    }catch(_){}
+    try{
+      const rawLEG = localStorage.getItem(BEDS_OVERRIDE_KEY_LEG);
+      const nLEG = parseInt(String(rawLEG||""), 10);
+      if (Number.isFinite(nLEG) && nLEG >= BEDS_MIN && nLEG <= BEDS_MAX) return nLEG;
     }catch(_){}
     return null;
   }
   function writeBedsOverride(n){
     try{
-      if (n == null) localStorage.removeItem(BEDS_OVERRIDE_KEY);
-      else localStorage.setItem(BEDS_OVERRIDE_KEY, String(n));
+      if (n == null){
+        localStorage.removeItem(BEDS_OVERRIDE_KEY_PCS);
+        localStorage.removeItem(BEDS_OVERRIDE_KEY_LEG);
+      }else{
+        localStorage.setItem(BEDS_OVERRIDE_KEY_PCS, String(n));
+        localStorage.setItem(BEDS_OVERRIDE_KEY_LEG, String(n));
+      }
     }catch(_){}
   }
   function clampBeds(n){
@@ -3591,13 +3987,11 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       }
       if (up) up.addEventListener("click", ()=> applyDelta(+1));
       if (dn) dn.addEventListener("click", ()=> applyDelta(-1));
-      // wheel adjusts
       stepper.addEventListener("wheel", (ev)=>{
         ev.preventDefault();
         const delta = ev.deltaY > 0 ? -1 : +1;
         applyDelta(delta);
       }, { passive:false });
-      // hidden reset: double-click (beds number OR arrow pill)
       bedsEl.addEventListener("dblclick", (ev)=>{ ev.preventDefault(); resetToAuto(); });
       stepper.addEventListener("dblclick", (ev)=>{ ev.preventDefault(); resetToAuto(); });
     }
@@ -3656,7 +4050,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       city?.byBedroom || raw?.byBedroom ||
       null;
     if (!bedroomsRoot || typeof bedroomsRoot !== "object") return null;
-    return bedroomsRoot[key] || bedroomsRoot[Number(key)] || null; // strict to this city only
+    return bedroomsRoot[key] || bedroomsRoot[Number(key)] || null;
   }
   function setNoPcsMode(reason){
     const titleEl = document.querySelector("#city-targets-card h3 span:first-child");
@@ -3714,6 +4108,8 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       setNoPcsMode(`NO PCS Base Available • PCS base found (“${base}”), but city mapping was not resolved from base.`);
       return;
     }
+    // ✅ Force hero image to your new cohesive City art
+    setCityCardImage(CITY_CARD_IMAGE_URL);
     const titleEl = document.querySelector("#city-targets-card h3 span:first-child");
     if (titleEl) titleEl.textContent = `${prettyCityName()} Estimates`;
     const auto = deriveBedroomsFromFamily(profile);
@@ -3721,11 +4117,9 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const beds = clampBeds(override ?? auto.beds);
     const bedsEl = document.getElementById("ct-beds");
     if (bedsEl) bedsEl.textContent = String(beds);
-    // ✅ Clean arrows-only UI next to the number
     mountBedStepper(bedsEl, ()=> auto.beds);
     const sub = document.getElementById("ct-subtitle");
     if (sub){
-      // keep it clean (no MANUAL/RESET language)
       sub.textContent = auto.fam
         ? `Derived from family size (${auto.fam}) • Auto: ${auto.beds}-bed`
         : `Derived bedrooms • Auto: ${auto.beds}-bed`;
@@ -3776,7 +4170,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const utilAsOf = bed?.utilities?.as_of || bed?.utilities?.asOf || utilTotal.as_of || utilTotal.asOf || null;
     const egAvg = numFromAny(bed?.utilities?.electric_gas?.avg ?? bed?.utilities?.electricGas?.avg);
     const wsAvg = numFromAny(bed?.utilities?.water_sewer?.avg ?? bed?.utilities?.waterSewer?.avg);
-    // In-city fallback only (no city switching)
     const city = CORE.brain?.city || {};
     const raw  = city?.raw || {};
     const market = city?.market || raw?.market || {};
@@ -3792,9 +4185,9 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       rentAvg = Math.round(homeAvg * 0.01);
     }
     if (utilAvg == null){
-      utilAvg = utilitiesFromBridge();
+      utilAvg = utilitiesFromBuckets() ?? utilitiesFromBridge();
     }
-    const dashHousing = Math.max(0, Number(s.housing)||0);
+    const derivedMtg = Math.max(0, getDerivedMortgage());
     const brainMortgage = Math.max(0,
       Number(CORE.brain?.estimatedMonthlyMortgage || 0) ||
       Number(CORE.brain?.mortgage?.totalMonthly || 0) ||
@@ -3802,7 +4195,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     );
     const mortgageEst =
       (mtgAvg != null && mtgAvg > 0) ? mtgAvg :
-      (dashHousing > 0 ? dashHousing : brainMortgage);
+      (derivedMtg > 0 ? derivedMtg : brainMortgage);
     const mortgageEl = document.getElementById("ct-rent");
     const homeEl     = document.getElementById("ct-home");
     const rentEl     = document.getElementById("ct-target-home");
@@ -3819,8 +4212,8 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       const assumptions = mortgageAssumptionsLine(bed);
       mortgageSub.textContent =
         assumptions ||
-        (dashHousing > 0
-          ? "Assumes your dashboard model inputs (price/APR/term/overrides)."
+        (derivedMtg > 0
+          ? "Assumes your dashboard mortgage model (derived from price/score/downpayment/overrides)."
           : (brainMortgage > 0 ? "Assumes brain estimate." : "Mortgage assumptions not available yet."));
     }
     if (homeSub){
@@ -3854,18 +4247,27 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
 (() => {
   "use strict";
   /* ============================================================
-    RS • 2D (REPLACEMENT) — BLUF RUNTIME v1.0.2
+    RS • 2D (REPLACEMENT) — BLUF RUNTIME v1.0.3 (PCSUnited aligned)
     ✅ Reads the SAME displayed dashboard numbers as 2A
     ✅ No /api/bluf call (prevents flicker + mismatch)
     ✅ No double-counting housing
-    ✅ Writes a shared verdict object to localStorage for reuse
+    ✅ Writes verdict to PCSUnited keyspace + legacy mirror
+    Storage:
+      - Primary: pcsunited.ec_verdict.v1
+      - Mirror : realtysass.ec_verdict.v1 (back-compat)
+    Mortgage sourcing priority:
+      1) CORE.state.__rsMonthlyMortgage (best, 2B writes)
+      2) localStorage realtysass.derived.housing_monthly.v1 (2B writes)
+      3) mortgage_cache (pcsunited or realtysass)
+      4) DOM fallbacks (fs-* fields)
   ============================================================ */
-  if (window.__RS_BLUF_2D_V102__) return;
-  window.__RS_BLUF_2D_V102__ = true;
+  if (window.__RS_BLUF_2D_V103__) return;
+  window.__RS_BLUF_2D_V103__ = true;
   const blufEl = document.getElementById("ec-blufText");
   const tagEl  = document.getElementById("ec-blufTag");
   if (!blufEl) return;
-  const LS_VERDICT = "realtysass.ec_verdict.v1";
+  const LS_VERDICT_PCS = "pcsunited.ec_verdict.v1";
+  const LS_VERDICT_LEG = "realtysass.ec_verdict.v1";
   function safeJSON(key, fallback){
     try{ return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
     catch(_){ return fallback; }
@@ -3904,40 +4306,49 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const derived = safeJSON("realtysass.derived.housing_monthly.v1", null);
     const dNum = Number(derived?.monthly || derived?.housingMonthly || derived?.value || derived || 0);
     if (Number.isFinite(dNum) && dNum > 0) return dNum;
-    // 3) mortgage_cache (2A caches mortgage.js results)
-    const mc = safeJSON("realtysass.mortgage_cache.v1", null);
-    const maybeAllIn =
-      Number(mc?.allInMonthly || mc?.all_in_monthly || mc?.result?.allInMonthly || mc?.response?.allInMonthly || 0);
-    if (Number.isFinite(maybeAllIn) && maybeAllIn > 0) return maybeAllIn;
+    // 3) mortgage_cache (2A caches mortgage.js results) — PCS + legacy
+    const mcPCS = safeJSON("pcsunited.mortgage_cache.v1", null);
+    const mcLEG = safeJSON("realtysass.mortgage_cache.v1", null);
+    const pickAllIn = (mc) => {
+      const v =
+        Number(mc?.allInMonthly || mc?.all_in_monthly || mc?.result?.allInMonthly || mc?.response?.allInMonthly || 0);
+      return (Number.isFinite(v) && v > 0) ? v : 0;
+    };
+    const allIn = pickAllIn(mcPCS) || pickAllIn(mcLEG);
+    if (allIn > 0) return allIn;
     // 4) DOM fallback: 2A paints mortgage estimate into feasibility area
-    // Try both places and pick the most “mortgage-like” value.
-    const a = readElMoney("fs-residual");
+    const a = readElMoney("fs-residual"); // often shows mortgage estimate label in your build
     const b = readElMoney("fs-housing");
     const picks = [a,b].filter(n => Number.isFinite(n) && n > 0);
     if (!picks.length) return 0;
-    // Prefer the one that looks like a monthly mortgage (usually 300–15000)
     const inRange = picks.filter(n => n >= 300 && n <= 15000);
     return (inRange.length ? inRange[0] : picks[0]) || 0;
   }
   function computeBluf(){
     // Always use the KPIs the user actually sees/edits:
     const income   = readElMoney("k-income");   // KPI #1
-    const expenses = readElMoney("k-expense");  // KPI #2 (base expenses, NOT including mortgage)
-    const housing  = readDerivedMortgage();     // mortgage.js all-in monthly, as painted by 2A
+    const expenses = readElMoney("k-expense");  // KPI #2 (Monthly Expenses ONLY)
+    const housing  = readDerivedMortgage();     // mortgage all-in monthly from 2B/2A
     if (!income || income <= 0){
-      return { status:"NEEDS PROFILE", bluf:"NEEDS PROFILE: unlock and load your email so pay tables can produce a deterministic verdict.", income, expenses, housing };
+      return {
+        status:"NEEDS PROFILE",
+        bluf:"NEEDS PROFILE: unlock and load your email so pay tables can produce a deterministic verdict.",
+        income, expenses, housing
+      };
     }
     if (!housing || housing <= 0){
-      return { status:"SET HOUSING", bluf:"SET HOUSING: enter a target home price + downpayment so the mortgage estimate can drive the verdict.", income, expenses, housing };
+      return {
+        status:"SET HOUSING",
+        bluf:"SET HOUSING: enter a target home price + downpayment so the mortgage estimate can drive the verdict.",
+        income, expenses, housing
+      };
     }
-    const cap = income * 0.30; // safe housing cap (matches your current dashboard behavior)
+    const cap = income * 0.30; // safe housing cap (matches your dashboard)
     const buffer = income - expenses - housing;
     const pct = income > 0 ? (buffer / income) : 0;
-    // Decide status
     let status = "GREEN";
     if (housing > cap) status = "NO-GO";
     else if (buffer < income * 0.08) status = "CAUTION";
-    // Compose BLUF (stable + consistent)
     let bluf = "";
     if (status === "NO-GO"){
       bluf = `NO-GO: Housing is ${fmtUSD(housing)}/mo vs a safe cap of ${fmtUSD(cap)}/mo. Reduce by ~${fmtUSD(housing - cap)}.`;
@@ -3949,26 +4360,26 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     return { status, bluf, income, expenses, housing, cap, buffer, pct };
   }
   function paint(out){
-    // Tag shows status (matches your screenshot vibe)
     if (tagEl){
       const t = String(out.status || "BLUF").toUpperCase();
       tagEl.textContent = t;
     }
     blufEl.textContent = String(out.bluf || "Loading verdict…");
-    try{
-      localStorage.setItem(LS_VERDICT, JSON.stringify({
-        ts: Date.now(),
-        ok: true,
-        status: out.status,
-        bluf: out.bluf,
-        income: out.income,
-        expenses: out.expenses,
-        housingMonthly: out.housing,
-        cap: out.cap,
-        buffer: out.buffer,
-        pct: out.pct
-      }));
-    }catch(_){}
+    const payload = {
+      ts: Date.now(),
+      ok: true,
+      status: out.status,
+      bluf: out.bluf,
+      income: out.income,
+      expenses: out.expenses,
+      housingMonthly: out.housing,
+      cap: out.cap,
+      buffer: out.buffer,
+      pct: out.pct
+    };
+    // ✅ Write PCSUnited + legacy mirror (keeps other embeds happy)
+    try{ localStorage.setItem(LS_VERDICT_PCS, JSON.stringify(payload)); }catch(_){}
+    try{ localStorage.setItem(LS_VERDICT_LEG, JSON.stringify(payload)); }catch(_){}
   }
   let LAST_SIG = "";
   function sig(out){
@@ -3984,15 +4395,22 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }
   }
   // Fast initial paint from last stored verdict (prevents “blank”)
-  const cached = safeJSON(LS_VERDICT, null);
+  const cachedPCS = safeJSON(LS_VERDICT_PCS, null);
+  const cachedLEG = safeJSON(LS_VERDICT_LEG, null);
+  const cached = (cachedPCS && cachedPCS.bluf) ? cachedPCS : cachedLEG;
   if (cached?.bluf){
     if (tagEl && cached?.status) tagEl.textContent = String(cached.status).toUpperCase();
     blufEl.textContent = String(cached.bluf);
   } else {
     blufEl.textContent = "Loading verdict…";
   }
-  // React to your system events (instant updates)
+  // ✅ React fast to typical dashboard events
   window.addEventListener("message", () => tick(), false);
+  window.addEventListener("pcsunited:bridge-ready", () => tick(), false);
+  window.addEventListener("realtysass:bridge-ready", () => tick(), false);
+  window.addEventListener("pcsunited:unlocked", () => tick(), false);
+  window.addEventListener("realtysass:unlocked", () => tick(), false);
+  window.addEventListener("storage", () => tick(), false);
   // Slow loop as a safety net
   setInterval(tick, 450);
   tick();
@@ -4005,9 +4423,12 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   "use strict";
   // ============================================================
   // RS_FID • EMBED 2E — RENT vs BUY (Equity + Break-even + Drag Cursor)
-  // - Uses existing Shell IDs:
-  //   canvas#fid-line, #rvb-gain, #rvb-rentCost
-  // - Injects Break-even label into the footer (no Shell edits needed)
+  // v1.0.3 FIXES:
+  // ✅ Rent reads from the correct tile:
+  //    - 2C uses ct-target-home for RENT (ct-rent is mortgage)
+  // ✅ Derived mortgage reads .value properly (2B stores object)
+  // ✅ Cursor drag uses correct chart pixel math (DPR-safe)
+  // ✅ PCSUnited-first keys, legacy back-compat
   // ============================================================
   if (window.RS_RVB_2E && window.RS_RVB_2E.__mounted) return;
   // ----------------------------
@@ -4026,6 +4447,13 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   const readJSON = (key) => {
     try { return JSON.parse(localStorage.getItem(key) || "null"); } catch(e){ return null; }
   };
+  const pick = (...vals) => {
+    for (const v of vals){
+      const n = Number(v);
+      if (Number.isFinite(n) && n !== 0) return n;
+    }
+    return 0;
+  };
   function pmti(P, r, n){
     if (!P || !n) return 0;
     if (r === 0) return P / n;
@@ -4040,34 +4468,54 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     if (s >= 660) return 7.80;
     return 8.50;
   }
+  function normalizeDerivedMortgage(v){
+    // 2B stores: { value, meta, updatedAt }
+    if (v == null) return 0;
+    if (typeof v === "number") return (Number.isFinite(v) ? v : 0);
+    if (typeof v === "string") return pick(Number(v));
+    if (typeof v === "object"){
+      return pick(v.value, v.monthly, v.housingMonthly, v.allInMonthly, v.mortgageMonthly);
+    }
+    return 0;
+  }
   // ----------------------------
   // //#2 Pull snapshot inputs from RS_FID + localStorage + DOM
   // ----------------------------
   function buildSnapshot(){
     const CORE = window.RS_FID || null;
-    const ov = readJSON("realtysass.kpi_overrides.v1") || {};
-    const mortCache = readJSON("realtysass.mortgage_cache.v1") || {};
-    const derivedMortgage = readJSON("realtysass.derived.housing_monthly.v1") || null;
-    // Price = Housing Cost KPI (this is purchase price, not monthly)
+    // PCSUnited-first overrides/cache, then legacy
+    const ovPCS = readJSON("pcsunited.kpi_overrides.v1") || {};
+    const ovLEG = readJSON("realtysass.kpi_overrides.v1") || {};
+    const ov = (ovPCS && typeof ovPCS === "object" && Object.keys(ovPCS).length) ? ovPCS : ovLEG;
+    const mortCachePCS = readJSON("pcsunited.mortgage_cache.v1") || {};
+    const mortCacheLEG = readJSON("realtysass.mortgage_cache.v1") || {};
+    const mortCache = (mortCachePCS && typeof mortCachePCS === "object" && Object.keys(mortCachePCS).length) ? mortCachePCS : mortCacheLEG;
+    const derivedPCS = readJSON("pcsunited.derived.housing_monthly.v1");
+    const derivedLEG = readJSON("realtysass.derived.housing_monthly.v1");
+    const derivedMortgage = (derivedPCS != null) ? derivedPCS : derivedLEG;
+    // Price = Housing Cost KPI (purchase price, not monthly)
     let price =
       (CORE && CORE.state && Number(CORE.state.housingOverride)) ||
       Number(ov.housingOverride) ||
       numFromText(getEl("k-mtg")?.textContent) ||
       350000;
+    // Guard: if someone accidentally stored a "monthly" number here, ignore it
+    if (price > 0 && price < 50000) price = 350000;
     // Downpayment amount
     let dpAmt =
       (CORE && CORE.state && (Number(CORE.state.savingsOverride) || Number(CORE.state.savings))) ||
       Number(ov.savingsOverride) ||
       numFromText(getEl("k-save")?.textContent) ||
       Math.round(price * 0.05);
+    if (dpAmt < 0) dpAmt = 0;
+    if (dpAmt > price) dpAmt = Math.round(price * 0.20);
     // Credit score -> APR fallback
     const score =
       (CORE && CORE.state && Number(CORE.state.creditScore)) ||
       Number(ov.creditScore) ||
       numFromText(getEl("k-score")?.textContent) ||
       720;
-    // Mortgage cache can be shaped differently depending on your mortgage.js response.
-    // Try multiple likely keys.
+    // Mortgage cache shape can vary depending on your mortgage.js response
     const mc = mortCache && (mortCache.data || mortCache.payload || mortCache) || {};
     const apr =
       Number(mc.apr) ||
@@ -4078,7 +4526,6 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       Number(mc.termYears) ||
       Number(mc.term) ||
       30;
-    // Monthly components (preferred from mortgage.js)
     const pi =
       Number(mc.piMonthly) ||
       Number(mc.pi) ||
@@ -4098,24 +4545,22 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       Number(mc.pmiMonthly) ||
       Number(mc.pmi) ||
       0;
-    // All-in monthly mortgage (fallback to derived/local DOM if cache missing)
+    const derivedAllIn = normalizeDerivedMortgage(derivedMortgage);
     const allIn =
       Number(mc.allInMonthly) ||
       Number(mc.monthly) ||
-      Number(derivedMortgage) ||
+      derivedAllIn ||
       numFromText(getEl("fs-housing")?.textContent) ||
       0;
-    // If we have no tax/ins/hoa, create a conservative baseline so equity model isn't nonsense.
-    // (Only used when mortgage.js didn't supply details.)
+    // If no TIHOA details, create a conservative baseline (only when mortgage.js didn’t supply details)
     let tihoa = (tax + ins + hoa);
     if (!tihoa && price){
       const taxMo = (price * 0.0115) / 12;   // ~1.15% property tax
       const insMo = (price * 0.0040) / 12;   // ~0.40% insurance
-      const hoaMo = 0;                       // unknown
+      const hoaMo = 0;
       tihoa = taxMo + insMo + hoaMo;
     }
-    // If PI is missing but we have APR/term, compute PI from price/dp.
-    // Loan amount:
+    // Compute PI if missing
     const loan0 = Math.max(0, price - dpAmt);
     const r_m = (apr / 100) / 12;
     const nTot = termYears * 12;
@@ -4123,11 +4568,11 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     if (!piMo && loan0 > 0){
       piMo = pmti(loan0, r_m, nTot);
     }
-    // Rent monthly: prefer City Target Rent tile (ct-rent) if available
+    // ✅ Rent monthly: 2C paints rent into ct-target-home
     let rentMonthly =
-      numFromText(getEl("ct-rent")?.textContent) ||
+      numFromText(getEl("ct-target-home")?.textContent) ||
       0;
-    // If ct-rent is empty, use a baseline rent heuristic (1% rule-ish)
+    // If ct-target-home is empty, use heuristic
     if (!rentMonthly){
       rentMonthly = Math.max(1200, Math.round((price * 0.0095)));
     }
@@ -4165,10 +4610,9 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const termYears = Number(s.termYears) || 30;
     const r_m = (apr / 100) / 12;
     const nTot = termYears * 12;
-    // Use PI from snapshot if trustworthy, else compute
     const piMo = Number(s.piMo) || (loan0 > 0 ? pmti(loan0, r_m, nTot) : 0);
-    const tihoa = Number(s.tihoa) || 0;
-    const pmi   = Number(s.pmi) || 0;
+    const tihoa = Math.max(0, Number(s.tihoa) || 0);
+    const pmi   = Math.max(0, Number(s.pmi) || 0);
     const maintMo = (price * MODEL.MAINT_Y) / 12;
     const closing = price * MODEL.CLOSE_PCT;
     const upfront = down + closing;
@@ -4180,7 +4624,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     let homeVal = price;
     let cumRent = 0;
     let cumOwner = upfront;
-    // Alternative investment: renter invests the downpayment (opportunity cost model)
+    // Renter invests downpayment (opportunity-cost model)
     let altInvest = down;
     const buySeries = [upfront];
     const rentSeries = [0];
@@ -4188,11 +4632,11 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     const cumRentByYear = [0];
     let beMonth = null;
     for (let m = 1; m <= N; m++){
-      // RENT: pay rent, rent grows, invested cash grows
+      // RENT
       const rent_m = rent0 * Math.pow(1 + rent_g_m, m - 1);
       cumRent += rent_m;
       altInvest *= (1 + inv_m);
-      // BUY: amortization + all-in owner costs
+      // BUY amortization + owner costs
       const interest  = bal * r_m;
       const principal = Math.max(0, piMo - interest);
       bal = Math.max(0, bal - principal);
@@ -4202,10 +4646,8 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       const equity = Math.max(0, homeVal - bal);
       const sellCost = homeVal * MODEL.SELL_PCT;
       const netIfSold = Math.max(homeVal - sellCost - bal, 0);
-      // Net costs:
-      // - BuyNet = what you paid (cumOwner) minus what you could walk away with if sold now (netIfSold)
+      // Net costs
       const buyNet = Math.max(0, cumOwner - netIfSold);
-      // - RentNet = rent paid minus net growth of invested downpayment cash (altInvest - down)
       const rentNet = Math.max(0, cumRent - (altInvest - down));
       if (beMonth === null && buyNet <= rentNet) beMonth = m;
       if (m % 12 === 0){
@@ -4216,14 +4658,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       }
     }
     const beYears = (beMonth !== null) ? (beMonth / 12) : null;
-    return {
-      labels,
-      buySeries,
-      rentSeries,
-      equityByYear,
-      cumRentByYear,
-      beYears
-    };
+    return { labels, buySeries, rentSeries, equityByYear, cumRentByYear, beYears };
   }
   // ----------------------------
   // //#4 Chart + Drag Cursor Plugin
@@ -4233,18 +4668,28 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
   let lastSeries = null;
   let lastSnap = null;
   function ensureBreakEvenBadge(){
-    const footer = getEl("rentbuy-card")?.querySelector(".rvb-footer");
+    // Be resilient: locate a likely footer near the line chart
+    const canvas = getEl("fid-line");
+    if (!canvas) return;
+    const card = canvas.closest(".sec-card") || canvas.closest(".card-mini") || canvas.parentElement;
+    if (!card) return;
+    const footer =
+      card.querySelector(".rvb-footer") ||
+      card.querySelector("[data-rvb-footer]") ||
+      card.querySelector(".footer") ||
+      null;
     if (!footer) return;
     if (!getEl("rvb-be")){
       const wrap = document.createElement("div");
       wrap.className = "rvb-metric";
+      wrap.style.cssText = "display:flex;gap:8px;align-items:baseline;";
       wrap.innerHTML = `Break-even: <b id="rvb-be">—</b>`;
       footer.insertBefore(wrap, footer.children[1] || null);
     }
   }
   const cursorPlugin = {
     id: "rsRvbCursor",
-    afterDatasetsDraw(c, args, opts){
+    afterDatasetsDraw(c){
       try{
         const meta = c.getDatasetMeta(0);
         if (!meta || !meta.data || !meta.data.length) return;
@@ -4260,16 +4705,14 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
         ctx.moveTo(x, chartArea.top);
         ctx.lineTo(x, chartArea.bottom);
         ctx.stroke();
-        // Label pill
         const label = idx === 0 ? "T" : `Year ${idx}`;
-        const padX = 10, padY = 6;
+        const padX = 10;
         ctx.font = "800 11px Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial";
         const w = ctx.measureText(label).width + padX*2;
         const h = 24;
         let lx = x - w/2;
         lx = Math.max(chartArea.left + 6, Math.min(lx, chartArea.right - w - 6));
         const ly = chartArea.top + 10;
-        // Rounded rect
         const r = 10;
         ctx.fillStyle = "rgba(0,0,0,0.55)";
         ctx.strokeStyle = "rgba(255,255,255,0.18)";
@@ -4286,36 +4729,20 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
         ctx.textBaseline = "middle";
         ctx.fillText(label, lx + padX, ly + h/2);
         ctx.restore();
-      }catch(e){}
+      }catch(_){}
     }
   };
   function initChart(){
     const canvas = getEl("fid-line");
-    if (!canvas) return;
+    if (!canvas || !window.Chart) return;
     const ctx = canvas.getContext("2d");
     chart = new Chart(ctx, {
       type: "line",
       data: {
         labels: [],
         datasets: [
-          {
-            label:"Buying — Net Cost",
-            data: [],
-            tension: 0.35,
-            fill: false,
-            borderWidth: 2,
-            pointRadius: 0,
-            borderColor: "#6aa7ff"
-          },
-          {
-            label:"Renting — Net Cost",
-            data: [],
-            tension: 0.35,
-            fill: false,
-            borderWidth: 2,
-            pointRadius: 0,
-            borderColor: "#ff5c8a"
-          }
+          { label:"Buying — Net Cost",  data: [], tension:0.35, fill:false, borderWidth:2, pointRadius:0, borderColor:"#6aa7ff" },
+          { label:"Renting — Net Cost", data: [], tension:0.35, fill:false, borderWidth:2, pointRadius:0, borderColor:"#ff5c8a" }
         ]
       },
       options: {
@@ -4323,10 +4750,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
         maintainAspectRatio: false,
         interaction: { mode:"index", intersect:false },
         plugins: {
-          legend: {
-            display: true,
-            labels: { color:"#fff", boxWidth:12, boxHeight:12 }
-          },
+          legend: { display:true, labels:{ color:"#fff", boxWidth:12, boxHeight:12 } },
           tooltip: {
             callbacks: {
               label: (item) => {
@@ -4346,10 +4770,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
           }
         },
         scales: {
-          x: {
-            ticks: { color:"rgba(255,255,255,0.75)", font:{ weight:700 } },
-            grid: { color:"rgba(255,255,255,0.06)" }
-          },
+          x: { ticks:{ color:"rgba(255,255,255,0.75)", font:{ weight:700 } }, grid:{ color:"rgba(255,255,255,0.06)" } },
           y: {
             ticks: {
               color:"rgba(255,255,255,0.75)",
@@ -4366,22 +4787,24 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       },
       plugins: [cursorPlugin]
     });
-    // Drag handler (mouse/touch/pointer)
+    // Drag handler (pointer)
     let dragging = false;
     const setIdxFromEvent = (ev) => {
       if (!chart) return;
-      const e = ev.touches ? ev.touches[0] : ev;
+      const canvas = chart.canvas;
       const rect = canvas.getBoundingClientRect();
-      const x = (e.clientX - rect.left);
-      const xScale = chart.scales.x;
-      if (!xScale) return;
-      // Find closest tick/index by pixel
-      const pixels = chart.getDatasetMeta(0).data.map(p => p.x);
+      const e = ev.touches ? ev.touches[0] : ev;
+      // Convert to canvas pixel coordinates (DPR-safe)
+      const scaleX = canvas.width / rect.width;
+      const x = (e.clientX - rect.left) * scaleX;
+      const meta = chart.getDatasetMeta(0);
+      const pts = meta?.data || [];
+      if (!pts.length) return;
       let best = 0;
       let bestD = Infinity;
-      for (let i=0; i<pixels.length; i++){
-        const d = Math.abs(pixels[i] - (xScale.left + x));
-        if (d < bestD){ bestD = d; best = i; }
+      for (let i=0; i<pts.length; i++){
+        const dx = Math.abs((pts[i].x || 0) - x);
+        if (dx < bestD){ bestD = dx; best = i; }
       }
       selectedIndex = best;
       chart.update("none");
@@ -4389,7 +4812,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     };
     canvas.addEventListener("pointerdown", (ev) => {
       dragging = true;
-      canvas.setPointerCapture?.(ev.pointerId);
+      try{ canvas.setPointerCapture?.(ev.pointerId); }catch(_){}
       setIdxFromEvent(ev);
     });
     canvas.addEventListener("pointermove", (ev) => {
@@ -4397,7 +4820,7 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       setIdxFromEvent(ev);
     });
     window.addEventListener("pointerup", () => { dragging = false; }, { passive:true });
-    // Touch fallback (older iOS webviews)
+    // Touch fallback
     canvas.addEventListener("touchstart", (ev) => { dragging = true; setIdxFromEvent(ev); }, { passive:true });
     canvas.addEventListener("touchmove",  (ev) => { if (dragging) setIdxFromEvent(ev); }, { passive:true });
     window.addEventListener("touchend",   () => { dragging = false; }, { passive:true });
@@ -4437,15 +4860,14 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
     }
   }
   function paintAll(){
+    if (!window.Chart) return; // chart.js must exist (Shell has it)
     if (!chart) initChart();
     if (!chart) return;
     ensureBreakEvenBadge();
     const snap = buildSnapshot();
     lastSnap = snap;
-    // Build equity-aware series
     const series = buildSeries10Y(snap);
     lastSeries = series;
-    // Keep cursor index in range
     if (selectedIndex > series.labels.length - 1) selectedIndex = series.labels.length - 1;
     if (selectedIndex < 0) selectedIndex = 0;
     chart.data.labels = series.labels;
@@ -4466,21 +4888,28 @@ EMBED #1 = SHELL ONLY (HTML + CSS)
       paintAll();
     });
   };
-  // a) Listen for feasibility publish (your core runtime posts this)
+  // a) Listen for feasibility publish (support both namespaces)
   window.addEventListener("message", (ev) => {
     try{
       const d = ev?.data || {};
-      if (d && d.type === "realtysass-feasibility") schedulePaint();
-    }catch(e){}
+      const t = d?.type || "";
+      if (t === "realtysass-feasibility" || t === "pcsunited-feasibility") schedulePaint();
+      if (t === "realtysass-bridge" || t === "pcsunited-bridge") schedulePaint();
+    }catch(_){}
   });
-  // b) Soft poll fallback (covers first load + any missed events)
+  // b) Poll fallback (covers first load + missed events)
   let lastKey = "";
   setInterval(() => {
-    const ov = readJSON("realtysass.kpi_overrides.v1") || {};
-    const mc = readJSON("realtysass.mortgage_cache.v1") || {};
+    const ovPCS = readJSON("pcsunited.kpi_overrides.v1") || {};
+    const ovLEG = readJSON("realtysass.kpi_overrides.v1") || {};
+    const mcPCS = readJSON("pcsunited.mortgage_cache.v1") || {};
+    const mcLEG = readJSON("realtysass.mortgage_cache.v1") || {};
     const sig = JSON.stringify({
-      h: ov.housingOverride, s: ov.savingsOverride, c: ov.creditScore,
-      m: mc && (mc.key || mc.__key || mc.ts || mc.updatedAt || null)
+      h: ovPCS.housingOverride ?? ovLEG.housingOverride,
+      s: ovPCS.savingsOverride ?? ovLEG.savingsOverride,
+      c: ovPCS.creditScore     ?? ovLEG.creditScore,
+      m: (mcPCS && (mcPCS.key || mcPCS.__key || mcPCS.ts || mcPCS.updatedAt)) ||
+         (mcLEG && (mcLEG.key || mcLEG.__key || mcLEG.ts || mcLEG.updatedAt)) || null
     });
     if (sig !== lastKey){
       lastKey = sig;

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Jan 26 2026 07:19:35 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Feb 11 2026 06:11:19 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="696731f983d4f50d006664d1" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -26,353 +26,767 @@
 </head>
 <body>
   <div class="w-embed w-script"><!--  =========================================================
-  PCS SNAPSHOT v3.2.2 • House of SaSS (PCS UNITED)
-  ✅ Theme Update: Match AIOU “House of SaSS” (tokens, cards, buttons, typography)
-  ✅ Keeps your IDs + structure + logic intact
-  ✅ Charts still fit 1 screen (your sizing stays)
+  PCS SNAPSHOT v3.2.3 • House of SaSS (PCS UNITED)
+  ✅ Base Comparison injected under header
+  ✅ City QuickFacts moved below comparison w/ spacing
+  ✅ FIX: Base images now read from city.image_url (JSON)
+  ✅ FIX: Posters display FULL LENGTH (4:5) — no crop
+  ✅ Full code (HTML + CSS + JS)
 =========================================================  -->
     <div id="pcs-snapshot-shell" style="all: initial;">
       <!--  FONTS + CHART LIBRARIES  -->
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
       <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
       <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-      <style>
-    /* =========================================================
-       //#0 – FULL SCREEN OVERRIDE (KEPT)
-    ========================================================= */
-    #pcs-snapshot-shell{
-      position: fixed !important;
-      inset: 0 !important;
-      width: 100vw !important;
-      height: 100vh !important;
-      overflow: auto !important;
-      background: #0b0e1a !important;
-      z-index: 2147483646 !important;
-      display: block !important;
-      margin: 0 !important;
-      padding: 0 !important;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-      isolation: isolate;
-    }
-    #pcs-snapshot-shell{
-      padding-top: env(safe-area-inset-top);
-      padding-right: env(safe-area-inset-right);
-      padding-bottom: env(safe-area-inset-bottom);
-      padding-left: env(safe-area-inset-left);
-    }
-    /* =========================================================
-       //#1 GLOBAL TOKENS / RESET (AIOU THEME)
-    ========================================================= */
-    #pcs-snapshot-shell,
-    #pcs-snapshot-shell * {
-      box-sizing: border-box;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    :root{
-      --bg:#0b0e1a;
-      --panel:#101426;
-      --panel-2:#0f1324;
-      --ink:#e9ecff;
-      --muted:#a8b0d6;
-      --border:rgba(255,255,255,.10);
-      --accent:#8ef3c5;
-      --accent2:#6aa7ff;
-      --danger:#ff8aa6;
-      /* AIOU chip gradient */
-      --chip-bg-start:#6aa7ff;
-      --chip-bg-end:#4f86ff;
-      /* extra */
-      --shadow: 0 24px 48px rgba(0,0,0,.8);
-      --shadow-inset: 0 16px 32px rgba(0,0,0,.6) inset;
-      --radius: 18px;
-    }
-    h2,h3,h4 { margin: 0; padding: 0; }
-    /* =========================================================
-       //#2 WRAP (AIOU-LIKE SPACING)
-    ========================================================= */
-    #pcs-snapshot-wrap{
-      width: 100%;
-      max-width: 1400px;
-      min-width: 1024px;
-      margin: 0 auto;
-      min-height: 100vh;
-      padding: 22px 24px 28px;
-      background: var(--bg);
-      color: var(--ink);
-    }
-    @media(max-width:1100px){
-      #pcs-snapshot-wrap{
-        min-width: 0;
-        max-width: 100%;
-        padding: 18px 14px 22px;
-      }
-    }
-    /* =========================================================
-       //#3 HEADER (AIOU LOOK)
-    ========================================================= */
-    .pcs-header-center{
-      background:
-        radial-gradient(circle at 0% 0%, rgba(255,255,255,.07) 0%, rgba(0,0,0,0) 60%),
-        linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015) 60%,rgba(0,0,0,0) 100%);
-      background-color: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px 18px 14px;
-      margin-bottom: 14px;
-    }
-    .pcs-header-center h2{
-      font-size: 22px;
-      font-weight: 900;
-      line-height: 1.25;
-      letter-spacing: .2px;
-      text-transform: uppercase;
-      margin-bottom: 8px;
-    }
-    .pcs-tagline{
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 2px;
-      line-height: 1.4;
-    }
-    .pcs-income-main{
-      font-size: 18px;
-      font-weight: 900;
-      color: var(--ink);
-      margin: 10px 0 2px;
-      letter-spacing: .2px;
-    }
-    .pcs-income-breakdown{
-      font-size: 12px;
-      color: var(--muted);
-      margin: 0 0 14px;
-      line-height: 1.4;
-    }
-    /* =========================================================
-       //#4 CARD STYLE (AIOU-CARD EQUIVALENT)
-    ========================================================= */
-    .pcs-panel{
-      background:
-        radial-gradient(circle at 0% 0%, rgba(255,255,255,.07) 0%, rgba(0,0,0,0) 60%),
-        linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015) 60%,rgba(0,0,0,0) 100%);
-      background-color: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      padding: 14px 14px 14px;
-      box-shadow: var(--shadow);
-      position: relative;
-      color: var(--ink);
-    }
-    .pcs-panel h4{
-      font-size: 14px;
-      font-weight: 800;
-      text-transform: uppercase;
-      letter-spacing: .2px;
-      margin-bottom: 6px;
-    }
-    .pcs-small{
-      font-size: 12px;
-      color: var(--muted);
-      margin-top: 6px;
-      line-height: 1.4;
-    }
-    .pcs-highlight-teal{ color: var(--accent); font-weight: 800; }
-    .pcs-highlight-blue{ color: var(--accent2); font-weight: 800; }
-    /* =========================================================
-       //#5 GRID (KEPT STRUCTURE, AIOU SPACING)
-    ========================================================= */
-    .pcs-grid-2{
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-      margin-top: 14px;
-    }
-    @media (max-width: 900px) {
-      .pcs-grid-2 { grid-template-columns: 1fr; }
-    }
-    /* =========================================================
-       //#6 CHART SIZING (KEPT)
-    ========================================================= */
-    .pcs-canvas{
-      width: 100% !important;
-      max-height: 170px !important;
-      display: block;
-    }
-    .pcs-canvas-tall{
-      width: 100% !important;
-      max-height: 190px !important;
-      display: block;
-    }
-    @media (max-width: 900px) {
-      .pcs-canvas, .pcs-canvas-tall { max-height: 220px !important; }
-    }
-    /* =========================================================
-       //#7 TREND TOGGLES (AIOU BUTTON STYLE)
-    ========================================================= */
-    .trend-toggle{
-      display: flex;
-      gap: 10px;
-      margin-top: 8px;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-    }
-    .trend-btn{
-      border: 1px solid rgba(255,255,255,.14);
-      background: var(--panel-2);
-      color: var(--ink);
-      padding: 9px 12px;
-      border-radius: 999px;
-      cursor: pointer;
-      font-weight: 900;
-      font-size: 12px;
-      line-height: 1.2;
-      letter-spacing: .02em;
-      box-shadow: 0 12px 26px rgba(0,0,0,.65);
-    }
-    .trend-btn.active{
-      background: linear-gradient(180deg,var(--chip-bg-start),var(--chip-bg-end));
-      border: none;
-      color: #06112b;
-      box-shadow: 0 16px 32px rgba(0,0,0,.8);
-    }
-    #pcs-trend-chart-apex{
-      width: 100%;
-      height: 200px;
-      margin-top: 6px;
-      border-radius: 12px;
-      overflow: hidden;
-    }
-    @media (max-width: 900px){
-      #pcs-trend-chart-apex { height: 220px; }
-    }
-    /* =========================================================
-       //#8 QUICKFACTS (AIOU CARD MINI)
-    ========================================================= */
-    h3.pcs-qf-title{
-      margin-top: 16px;
-      margin-bottom: 8px;
-      font-size: 14px;
-      font-weight: 900;
-      text-transform: uppercase;
-      letter-spacing: .2px;
-      color: var(--ink);
-    }
-    .pcs-quickfacts{
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 12px;
-    }
-    @media (max-width: 900px){
-      .pcs-quickfacts{ grid-template-columns: 1fr; }
-    }
-    .pcs-fact{
-      background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 12px;
-      padding: 12px 14px;
-      box-shadow: var(--shadow);
-    }
-    .pcs-fact-label{
-      font-size: 11px;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: var(--muted);
-      margin-bottom: 6px;
-      font-weight: 800;
-    }
-    .pcs-fact-value{
-      font-size: 14px;
-      font-weight: 900;
-      color: var(--ink);
-      line-height: 1.2;
-    }
-    /* subtle divider style to match AIOU */
-    .pcs-divider{
-      border: 0;
-      border-top: 1px solid rgba(255,255,255,.08);
-      margin: 12px 0;
-    }
-    /* keep text selection safe */
-    #pcs-snapshot-wrap ::selection{
-      background: rgba(142,243,197,.22);
-    }
-  </style>
-      <div id="pcs-snapshot-wrap">
-        <!--  HEADER  -->
-        <div class="pcs-header-center">
-          <h2>Permanent Change of Duty Station PCS Snapshot</h2>
-          <div class="pcs-tagline" id="pcs-city-line">Loading city data…</div>
-          <div id="pcs-income-main" class="pcs-income-main">$0 / month</div>
-          <div id="pcs-income-breakdown" class="pcs-income-breakdown">
-            Base Pay: — • BAH: — • BAS: —
-          </div>
-        </div>
-        <!--  =================== TOP GRID ===================  -->
-        <div class="pcs-grid-2">
-          <!--  LEFT: Income  -->
-          <div class="pcs-panel">
-            <h4>Your Income vs City Average</h4>
-            <div class="pcs-small">Annual comparison (Low / Avg / High / You)</div>
-            <canvas id="pcs-income-chart" class="pcs-canvas" height="160"></canvas>
-            <div id="pcs-income-summary" class="pcs-small pcs-highlight-teal"></div>
-          </div>
-          <!--  RIGHT: Mortgage  -->
-          <div class="pcs-panel">
-            <h4>Your BAH vs Average Mortgage</h4>
-            <div class="pcs-small">Monthly comparison (Low / Avg / High / Your BAH)</div>
-            <canvas id="pcs-bah-chart" class="pcs-canvas" height="160"></canvas>
-            <div id="pcs-bah-summary" class="pcs-small pcs-highlight-blue"></div>
-            <div class="pcs-small" style="margin-top:4px;color:#7a86a8;">
-              Mortgage estimate based on 6.75% interest rate.
-            </div>
-          </div>
-        </div>
-        <!--  =================== BOTTOM GRID ===================  -->
-        <div class="pcs-grid-2" style="margin-top:14px;">
-          <!--  LEFT: APEXCHART TREND + PRICE BREAKDOWN  -->
-          <div class="pcs-panel">
-            <h4>12-Month Housing Trend</h4>
-            <div class="pcs-small">Median home price (interactive trend)</div>
-            <div class="trend-toggle">
-              <button class="trend-btn active" id="btn-1yr" type="button">1 Year</button>
-              <button class="trend-btn" id="btn-3yr" type="button">3 Years</button>
-            </div>
-            <div id="pcs-trend-chart-apex"></div>
-            <div id="pcs-trend-summary" class="pcs-small pcs-highlight-teal"></div>
-            <hr class="pcs-divider">
-            <h4>Market Price Breakdown</h4>
-            <div class="pcs-small">Median Sale • Avg Sale • Median Listing</div>
-            <canvas id="pcs-pricebreak-chart" class="pcs-canvas" height="150"></canvas>
-            <div id="pcs-pricebreak-note" class="pcs-small" style="margin-top:6px;color:#7a86a8;"></div>
-          </div>
-          <!--  RIGHT: Affordability  -->
-          <div class="pcs-panel">
-            <h4>Affordability Index</h4>
-            <div class="pcs-small">Higher score = better fit for your income</div>
-            <canvas id="pcs-afford-chart" class="pcs-canvas-tall" height="190"></canvas>
-            <div id="pcs-afford-summary" class="pcs-small"></div>
-          </div>
-        </div>
-        <!--  QUICKFACTS  -->
-        <h3 class="pcs-qf-title">City QuickFacts</h3>
-        <div id="pcs-quickfacts" class="pcs-quickfacts"></div>
-      </div>
       <!--  =========================================================
-       JAVASCRIPT (UNCHANGED LOGIC)
+       CSS — PCS SNAPSHOT (MIDNIGHT FROST)
   =========================================================  -->
-      <script>
+      <style id="pcs-snapshot-css">
+  /* =========================================================
+    PCS SNAPSHOT v3.2.3 • House of SaSS (PCS UNITED)
+    ✅ Theme Update: Midnight Frost (SecureGlass look)
+    ✅ UPDATE: Base Comparison inserted under header
+    ✅ UPDATE: City QuickFacts moved BELOW Base Comparison
+    ✅ FIX: Base posters show FULL LENGTH (4:5) – no crop
+    ✅ Keeps your IDs + structure + logic intact
+  ========================================================= */
+  /* =========================================================
+     //#0 – FULL SCREEN OVERRIDE (KEPT)
+  ========================================================= */
+  #pcs-snapshot-shell{
+    position: fixed !important;
+    inset: 0 !important;
+    width: 100vw !important;
+    height: 100vh !important;
+    overflow: auto !important;
+    z-index: 2147483646 !important;
+    display: block !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    /* Midnight Frost background */
+    background:
+      radial-gradient(1200px 900px at 12% 10%, rgba(106,167,255,.18) 0%, rgba(106,167,255,0) 55%),
+      radial-gradient(900px 700px at 88% 18%, rgba(142,243,197,.14) 0%, rgba(142,243,197,0) 60%),
+      radial-gradient(900px 900px at 50% 110%, rgba(0,0,0,.55) 0%, rgba(0,0,0,.0) 60%),
+      linear-gradient(180deg, rgba(0,0,0,.42) 0%, rgba(0,0,0,.78) 85%),
+      #0b0e1a !important;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    isolation: isolate;
+  }
+  #pcs-snapshot-shell{
+    padding-top: env(safe-area-inset-top);
+    padding-right: env(safe-area-inset-right);
+    padding-bottom: env(safe-area-inset-bottom);
+    padding-left: env(safe-area-inset-left);
+  }
+  /* =========================================================
+     //#1 GLOBAL TOKENS / RESET (MIDNIGHT FROST)
+  ========================================================= */
+  #pcs-snapshot-shell,
+  #pcs-snapshot-shell * {
+    box-sizing: border-box;
+    font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  }
+  :root{
+    --bg:#0b0e1a;
+    --ink:#e9ecff;
+    --muted:#a8b0d6;
+    --mint:#8ef3c5;
+    --sapphire:#6aa7ff;
+    --danger:#ff8aa6;
+    --overlayWash: rgba(11,14,26,.48);
+    --vignetteA: rgba(0,0,0,.40);
+    --vignetteB: rgba(0,0,0,.78);
+    --cardAlpha: .40;
+    --cardBlur: 26px;
+    --border: rgba(255,255,255,.10);
+    --borderSoft: rgba(255,255,255,.08);
+    --strokeA: rgba(142,243,197,.20);
+    --strokeB: rgba(106,167,255,.22);
+    --shadow: 0 24px 60px rgba(0,0,0,.75);
+    --shadowSoft: 0 18px 44px rgba(0,0,0,.62);
+    --radius: 18px;
+    --chip-bg-start: #8ef3c5;
+    --chip-bg-end: #6aa7ff;
+  }
+  h2,h3,h4 { margin: 0; padding: 0; }
+  /* =========================================================
+     //#2 WRAP
+  ========================================================= */
+  #pcs-snapshot-wrap{
+    width: 100%;
+    max-width: 1400px;
+    min-width: 1024px;
+    margin: 0 auto;
+    min-height: 100vh;
+    padding: 22px 24px 28px;
+    color: var(--ink);
+    background:
+      radial-gradient(900px 650px at 18% 0%, rgba(255,255,255,.06) 0%, rgba(255,255,255,0) 55%),
+      radial-gradient(900px 650px at 82% 0%, rgba(255,255,255,.05) 0%, rgba(255,255,255,0) 60%),
+      linear-gradient(180deg, rgba(11,14,26,.25), rgba(11,14,26,.10));
+    backdrop-filter: blur(2px);
+    -webkit-backdrop-filter: blur(2px);
+  }
+  @media(max-width:1100px){
+    #pcs-snapshot-wrap{
+      min-width: 0;
+      max-width: 100%;
+      padding: 18px 14px 22px;
+    }
+  }
+  /* =========================================================
+     //#3 SECUREGLASS CARD PRIMITIVE
+  ========================================================= */
+  .pcs-glass{
+    background: rgba(16,20,38,var(--cardAlpha));
+    border-radius: var(--radius);
+    border: 1px solid var(--borderSoft);
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(var(--cardBlur)) saturate(165%);
+    -webkit-backdrop-filter: blur(var(--cardBlur)) saturate(165%);
+    position: relative;
+    overflow: hidden;
+  }
+  .pcs-glass::before{
+    content:"";
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--strokeA), var(--strokeB), rgba(255,255,255,.08));
+    -webkit-mask:
+      linear-gradient(#000 0 0) content-box,
+      linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: .9;
+  }
+  .pcs-glass::after{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    pointer-events:none;
+    border-radius: inherit;
+    background:
+      radial-gradient(700px 260px at 20% 0%, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 70%),
+      radial-gradient(520px 220px at 85% 10%, rgba(255,255,255,.08) 0%, rgba(255,255,255,0) 72%);
+    opacity: .9;
+    mix-blend-mode: screen;
+  }
+  /* =========================================================
+     //#4 HEADER
+  ========================================================= */
+  .pcs-header-center{
+    padding: 18px 18px 14px;
+    margin-bottom: 14px;
+  }
+  .pcs-header-center h2{
+    font-size: 22px;
+    font-weight: 900;
+    line-height: 1.25;
+    letter-spacing: .22px;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+  }
+  .pcs-tagline{
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+    line-height: 1.4;
+  }
+  .pcs-income-main{
+    font-size: 18px;
+    font-weight: 900;
+    color: var(--ink);
+    margin: 10px 0 2px;
+    letter-spacing: .2px;
+  }
+  .pcs-income-breakdown{
+    font-size: 12px;
+    color: var(--muted);
+    margin: 0 0 14px;
+    line-height: 1.4;
+  }
+  /* =========================================================
+     //#5 PANELS
+  ========================================================= */
+  .pcs-panel{
+    padding: 14px 14px 14px;
+    color: var(--ink);
+  }
+  .pcs-panel h4{
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .22px;
+    margin-bottom: 6px;
+  }
+  .pcs-small{
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 6px;
+    line-height: 1.4;
+  }
+  .pcs-highlight-teal{ color: var(--mint); font-weight: 900; }
+  .pcs-highlight-blue{ color: var(--sapphire); font-weight: 900; }
+  /* =========================================================
+     //#6 GRID
+  ========================================================= */
+  .pcs-grid-2{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    margin-top: 14px;
+  }
+  @media (max-width: 900px) {
+    .pcs-grid-2 { grid-template-columns: 1fr; }
+  }
+  /* =========================================================
+     //#7 CHART SIZING
+  ========================================================= */
+  .pcs-canvas{
+    width: 100% !important;
+    max-height: 170px !important;
+    display: block;
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+  }
+  .pcs-canvas-tall{
+    width: 100% !important;
+    max-height: 190px !important;
+    display: block;
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+  }
+  @media (max-width: 900px) {
+    .pcs-canvas, .pcs-canvas-tall { max-height: 220px !important; }
+  }
+  /* =========================================================
+     //#8 TREND TOGGLES
+  ========================================================= */
+  .trend-toggle{
+    display: flex;
+    gap: 10px;
+    margin-top: 8px;
+    margin-bottom: 8px;
+    flex-wrap: wrap;
+  }
+  .trend-btn{
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(12,14,25,.50);
+    color: var(--ink);
+    padding: 9px 12px;
+    border-radius: 999px;
+    cursor: pointer;
+    font-weight: 900;
+    font-size: 12px;
+    line-height: 1.2;
+    letter-spacing: .02em;
+    box-shadow: 0 14px 30px rgba(0,0,0,.60);
+    backdrop-filter: blur(14px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%);
+    transition: transform .12s ease, filter .12s ease, border-color .12s ease;
+  }
+  .trend-btn:hover{
+    transform: translateY(-1px);
+    border-color: rgba(142,243,197,.28);
+    filter: brightness(1.06);
+  }
+  .trend-btn.active{
+    background: radial-gradient(circle at 30% 20%, var(--chip-bg-start), var(--chip-bg-end));
+    border: 0;
+    color: #050712;
+    box-shadow: 0 18px 44px rgba(0,0,0,.72);
+    filter: brightness(1.02);
+  }
+  #pcs-trend-chart-apex{
+    width: 100%;
+    height: 200px;
+    margin-top: 6px;
+    border-radius: 12px;
+    overflow: hidden;
+    background: rgba(12,14,25,.40);
+    border: 1px solid rgba(255,255,255,.08);
+    box-shadow: var(--shadowSoft);
+    backdrop-filter: blur(18px) saturate(155%);
+    -webkit-backdrop-filter: blur(18px) saturate(155%);
+  }
+  @media (max-width: 900px){
+    #pcs-trend-chart-apex { height: 220px; }
+  }
+  /* =========================================================
+     //#9 BASE COMPARISON
+  ========================================================= */
+  #pcs-compare-block{
+    margin-top: 14px;
+    margin-bottom: 18px;
+  }
+  #pcs-compare-block *{
+    box-sizing: border-box;
+  }
+  #pcsc-frame{
+    position: relative;
+    border-radius: 22px;
+    padding: 16px;
+    background:
+      radial-gradient(900px 520px at 12% 10%, rgba(106,167,255,.22), rgba(0,0,0,0) 60%),
+      radial-gradient(900px 520px at 88% 14%, rgba(142,243,197,.16), rgba(0,0,0,0) 60%),
+      radial-gradient(900px 520px at 50% 120%, rgba(0,0,0,.65), rgba(0,0,0,0) 60%),
+      linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02));
+    background-color: var(--bg);
+    border: 1px solid rgba(255,255,255,.10);
+    box-shadow: var(--shadowSoft);
+    overflow:hidden;
+  }
+  #pcsc-grid{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media(max-width: 980px){
+    #pcsc-grid{ grid-template-columns: 1fr; }
+  }
+  .pcsc-side{
+    border-radius: 18px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(10,12,20,.55);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    overflow:hidden;
+    position: relative;
+  }
+  .pcsc-side-header{
+    height: 56px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-weight: 900;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: rgba(233,236,255,.96);
+    background: linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03));
+    border-bottom: 1px solid rgba(255,255,255,.10);
+  }
+  .pcsc-body{
+    padding: 14px;
+    display:grid;
+    grid-template-columns: 270px 1fr;
+    gap: 14px;
+  }
+  @media(max-width: 980px){
+    .pcsc-body{ grid-template-columns: 1fr; }
+  }
+  /* ✅ FIX: Poster container respects 4:5 and allows full-length view */
+  .pcsc-img{
+    width: 100%;
+    aspect-ratio: 4 / 5;     /* matches 320x400 posters */
+    height: auto;            /* let aspect-ratio define height */
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.12);
+    overflow:hidden;
+    position: relative;
+    background:
+      radial-gradient(circle at 30% 20%, rgba(106,167,255,.22), rgba(0,0,0,0) 55%),
+      radial-gradient(circle at 70% 80%, rgba(142,243,197,.16), rgba(0,0,0,0) 60%),
+      linear-gradient(180deg, rgba(255,255,255,.06), rgba(0,0,0,0));
+    background-color: rgba(12,14,25,.65);
+  }
+  .pcsc-img img{
+    width:100%;
+    height:100%;
+    object-fit: contain;     /* ✅ show entire poster (no crop) */
+    object-position: center;
+    display:block;
+    background: rgba(0,0,0,.10); /* subtle letterbox if needed */
+    filter: saturate(1.05) contrast(1.05);
+  }
+  .pcsc-stats{
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.12);
+    background: rgba(12,14,25,.62);
+    backdrop-filter: blur(22px) saturate(165%);
+    -webkit-backdrop-filter: blur(22px) saturate(165%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    padding: 12px 12px 10px;
+  }
+  .pcsc-row{
+    display:flex;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 7px 0;
+    border-bottom: 1px solid rgba(255,255,255,.08);
+  }
+  .pcsc-row:last-child{ border-bottom: none; }
+  .pcsc-k{
+    color: rgba(168,176,214,.95);
+    font-size: 12px;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    font-weight: 800;
+    white-space: nowrap;
+  }
+  .pcsc-v{
+    color: rgba(233,236,255,.98);
+    font-size: 13px;
+    font-weight: 800;
+    text-align:right;
+  }
+  .pcsc-v strong{
+    font-size: 15px;
+    font-weight: 900;
+  }
+  .pcsc-mini-row{
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+    padding: 0 14px 14px;
+  }
+  @media(max-width: 520px){
+    .pcsc-mini-row{ grid-template-columns: 1fr; }
+  }
+  .pcsc-mini{
+    border-radius: 14px;
+    border: 1px solid rgba(255,255,255,.10);
+    background: rgba(12,14,25,.62);
+    backdrop-filter: blur(22px) saturate(165%);
+    -webkit-backdrop-filter: blur(22px) saturate(165%);
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.08);
+    padding: 10px 12px 10px;
+    min-height: 132px;
+  }
+  .pcsc-mini h4{
+    margin: 0 0 8px;
+    font-size: 12px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .10em;
+    color: rgba(233,236,255,.92);
+  }
+  .pcsc-canvas{
+    width:100% !important;
+    height: 78px !important;
+    display:block;
+  }
+  .pcsc-rating{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 4px;
+  }
+  .pcsc-score{
+    font-size: 34px;
+    font-weight: 900;
+    color: rgba(233,236,255,.98);
+    line-height: 1;
+  }
+  .pcsc-stars{
+    font-size: 20px;
+    letter-spacing: 2px;
+    color: #ffbf4a;
+    text-shadow: 0 6px 14px rgba(0,0,0,.65);
+    user-select:none;
+    white-space: nowrap;
+  }
+  .pcsc-facts{
+    margin-top: 12px;
+    border-top: 1px solid rgba(255,255,255,.08);
+    padding-top: 10px;
+    display:grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 14px;
+  }
+  .pcsc-fact{
+    display:flex;
+    align-items:flex-start;
+    gap: 10px;
+    color: rgba(233,236,255,.92);
+    font-size: 12px;
+    line-height: 1.25;
+    font-weight: 700;
+  }
+  .pcsc-dot{
+    width: 10px; height: 10px;
+    border-radius: 3px;
+    background: rgba(106,167,255,.95);
+    box-shadow: 0 0 0 2px rgba(106,167,255,.18);
+    margin-top: 2px;
+    flex: 0 0 auto;
+  }
+  #pcsc-status{
+    margin-top: 10px;
+    font-size: 12px;
+    color: rgba(168,176,214,.95);
+    text-align:center;
+    letter-spacing:.01em;
+  }
+  /* =========================================================
+     //#10 QUICKFACTS
+  ========================================================= */
+  h3.pcs-qf-title{
+    margin-top: 0px;
+    margin-bottom: 8px;
+    font-size: 14px;
+    font-weight: 900;
+    text-transform: uppercase;
+    letter-spacing: .22px;
+    color: var(--ink);
+  }
+  #pcs-qf-block{
+    margin-top: 26px;
+    margin-bottom: 2px;
+  }
+  .pcs-quickfacts{
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  @media (max-width: 900px){
+    .pcs-quickfacts{ grid-template-columns: 1fr; }
+  }
+  .pcs-fact{
+    background: rgba(16,20,38,.32);
+    border: 1px solid rgba(255,255,255,.10);
+    border-radius: 14px;
+    padding: 12px 14px;
+    box-shadow: var(--shadowSoft);
+    backdrop-filter: blur(18px) saturate(155%);
+    -webkit-backdrop-filter: blur(18px) saturate(155%);
+    position: relative;
+    overflow: hidden;
+  }
+  .pcs-fact::after{
+    content:"";
+    position:absolute;
+    inset:-2px;
+    pointer-events:none;
+    background: radial-gradient(520px 220px at 10% 0%, rgba(255,255,255,.08) 0%, rgba(255,255,255,0) 70%);
+    opacity:.85;
+    mix-blend-mode: screen;
+  }
+  .pcs-fact-label{
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: .1em;
+    color: var(--muted);
+    margin-bottom: 6px;
+    font-weight: 900;
+  }
+  .pcs-fact-value{
+    font-size: 14px;
+    font-weight: 900;
+    color: var(--ink);
+    line-height: 1.2;
+  }
+  .pcs-divider{
+    border: 0;
+    border-top: 1px solid rgba(255,255,255,.08);
+    margin: 12px 0;
+  }
+  #pcs-snapshot-wrap ::selection{
+    background: rgba(142,243,197,.22);
+  }
+  </style>
+    </div>
+    <div class="w-embed w-script"><!--  =========================================================
+  PCS SNAPSHOT v3.2.3 • House of SaSS (PCS UNITED)
+  ✅ Base Comparison injected under header
+  ✅ City QuickFacts moved below comparison w/ spacing
+  ✅ FIX: Uses city.image_url for images (no more empty BASE_IMAGE map)
+  ✅ FIX: Robust city loader: /api/city -> /.netlify/functions/city -> GitHub raw fallback
+=========================================================  -->
+      <div id="pcs-snapshot-shell" style="all: initial;">
+        <!--  FONTS + CHART LIBRARIES  -->
+        <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <div id="pcs-snapshot-wrap">
+          <!--  HEADER  -->
+          <div class="pcs-header-center pcs-glass">
+            <h2>Permanent Change of Duty Station PCS Snapshot</h2>
+            <div class="pcs-tagline" id="pcs-city-line">Loading city data…</div>
+            <div id="pcs-income-main" class="pcs-income-main">$0 / month</div>
+            <div id="pcs-income-breakdown" class="pcs-income-breakdown">
+              Base Pay: — • BAH: — • BAS: —
+            </div>
+          </div>
+          <!--  =========================================================
+      ✅ BASE COMPARISON (NOW BELOW HEADER)
+    =========================================================  -->
+          <div id="pcs-compare-block">
+            <div id="pcsc-frame">
+              <div id="pcsc-grid">
+                <!--  LEFT: CURRENT  -->
+                <div class="pcsc-side" id="side-current">
+                  <div class="pcsc-side-header">Current Duty Station</div>
+                  <div class="pcsc-body">
+                    <div class="pcsc-img">
+                      <img id="img-current" alt="Current location image">
+                    </div>
+                    <div class="pcsc-stats">
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">Location</div>
+                        <div class="pcsc-v" id="loc-current">—</div>
+                      </div>
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">BAH</div>
+                        <div class="pcsc-v"><strong id="bah-current">$0</strong></div>
+                      </div>
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">Median Price</div>
+                        <div class="pcsc-v" id="price-current">—</div>
+                      </div>
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">YoY Change</div>
+                        <div class="pcsc-v" id="yoy-current">—</div>
+                      </div>
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">Avg DOM</div>
+                        <div class="pcsc-v" id="dom-current">—</div>
+                      </div>
+                      <div class="pcsc-facts" id="facts-current"></div>
+                    </div>
+                  </div>
+                  <div class="pcsc-mini-row">
+                    <div class="pcsc-mini">
+                      <h4>Housing Costs</h4>
+                      <canvas id="chart-current" class="pcsc-canvas"></canvas>
+                    </div>
+                    <div class="pcsc-mini">
+                      <h4>Community Rating</h4>
+                      <div class="pcsc-rating">
+                        <div class="pcsc-score" id="rating-current">—</div>
+                        <div class="pcsc-stars" id="stars-current">☆☆☆☆☆</div>
+                      </div>
+                      <div style="margin-top:10px;color:rgba(168,176,214,.95);font-size:12px;font-weight:700;">
+                        Ownership fit (affordability + stability)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!--  RIGHT: UPCOMING  -->
+                <div class="pcsc-side" id="side-upcoming">
+                  <div class="pcsc-side-header">Upcoming Base</div>
+                  <div class="pcsc-body">
+                    <div class="pcsc-img">
+                      <img id="img-upcoming" alt="Upcoming location image">
+                    </div>
+                    <div class="pcsc-stats">
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">Location</div>
+                        <div class="pcsc-v" id="loc-upcoming">—</div>
+                      </div>
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">BAH</div>
+                        <div class="pcsc-v"><strong id="bah-upcoming">$0</strong></div>
+                      </div>
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">Median Price</div>
+                        <div class="pcsc-v" id="price-upcoming">—</div>
+                      </div>
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">YoY Change</div>
+                        <div class="pcsc-v" id="yoy-upcoming">—</div>
+                      </div>
+                      <div class="pcsc-row">
+                        <div class="pcsc-k">Avg DOM</div>
+                        <div class="pcsc-v" id="dom-upcoming">—</div>
+                      </div>
+                      <div class="pcsc-facts" id="facts-upcoming"></div>
+                    </div>
+                  </div>
+                  <div class="pcsc-mini-row">
+                    <div class="pcsc-mini">
+                      <h4>Housing Costs</h4>
+                      <canvas id="chart-upcoming" class="pcsc-canvas"></canvas>
+                    </div>
+                    <div class="pcsc-mini">
+                      <h4>Community Rating</h4>
+                      <div class="pcsc-rating">
+                        <div class="pcsc-score" id="rating-upcoming">—</div>
+                        <div class="pcsc-stars" id="stars-upcoming">☆☆☆☆☆</div>
+                      </div>
+                      <div style="margin-top:10px;color:rgba(168,176,214,.95);font-size:12px;font-weight:700;">
+                        Ownership fit (affordability + stability)
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div id="pcsc-status">Loading base comparison…</div>
+            </div>
+          </div>
+          <!--  ✅ MOVED HERE: QUICKFACTS (NOW BELOW COMPARISON + SPACING)  -->
+          <div id="pcs-qf-block">
+            <h3 class="pcs-qf-title">City QuickFacts</h3>
+            <div id="pcs-quickfacts" class="pcs-quickfacts"></div>
+          </div>
+          <!--  =================== TOP GRID ===================  -->
+          <div class="pcs-grid-2">
+            <!--  LEFT: Income  -->
+            <div class="pcs-panel pcs-glass">
+              <h4>Your Income vs City Average</h4>
+              <div class="pcs-small">Annual comparison (Low / Avg / High / You)</div>
+              <canvas id="pcs-income-chart" class="pcs-canvas" height="160"></canvas>
+              <div id="pcs-income-summary" class="pcs-small pcs-highlight-teal"></div>
+            </div>
+            <!--  RIGHT: Mortgage  -->
+            <div class="pcs-panel pcs-glass">
+              <h4>Your BAH vs Average Mortgage</h4>
+              <div class="pcs-small">Monthly comparison (Low / Avg / High / Your BAH)</div>
+              <canvas id="pcs-bah-chart" class="pcs-canvas" height="160"></canvas>
+              <div id="pcs-bah-summary" class="pcs-small pcs-highlight-blue"></div>
+              <div class="pcs-small" style="margin-top:4px;color:#a8b0d6;">
+                Mortgage estimate based on 6.75% interest rate.
+              </div>
+            </div>
+          </div>
+          <!--  =================== BOTTOM GRID ===================  -->
+          <div class="pcs-grid-2" style="margin-top:14px;">
+            <!--  LEFT: APEXCHART TREND + PRICE BREAKDOWN  -->
+            <div class="pcs-panel pcs-glass">
+              <h4>12-Month Housing Trend</h4>
+              <div class="pcs-small">Median home price (interactive trend)</div>
+              <div class="trend-toggle">
+                <button class="trend-btn active" id="btn-1yr" type="button">1 Year</button>
+                <button class="trend-btn" id="btn-3yr" type="button">3 Years</button>
+              </div>
+              <div id="pcs-trend-chart-apex"></div>
+              <div id="pcs-trend-summary" class="pcs-small pcs-highlight-teal"></div>
+              <hr class="pcs-divider">
+              <h4>Market Price Breakdown</h4>
+              <div class="pcs-small">Median Sale • Avg Sale • Median Listing</div>
+              <canvas id="pcs-pricebreak-chart" class="pcs-canvas" height="150"></canvas>
+              <div id="pcs-pricebreak-note" class="pcs-small" style="margin-top:6px;color:#a8b0d6;"></div>
+            </div>
+            <!--  RIGHT: Affordability  -->
+            <div class="pcs-panel pcs-glass">
+              <h4>Affordability Index</h4>
+              <div class="pcs-small">Higher score = better fit for your income</div>
+              <canvas id="pcs-afford-chart" class="pcs-canvas-tall" height="190"></canvas>
+              <div id="pcs-afford-summary" class="pcs-small"></div>
+            </div>
+          </div>
+        </div>
+        <!--  =========================================================
+       JAVASCRIPT — PCS SNAPSHOT (UNCHANGED LOGIC, BETTER CITY LOADER)
+  =========================================================  -->
+        <script>
 (function () {
   "use strict";
   // ============================================================
   // //#0 CONFIG
   // ============================================================
-  const API_BASE = "https://theorozcorealty.netlify.app/api";
+  const API_BASE = "https://pcsunited.netlify.app/api";
   const MILPAY_JSON_URL =
     "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/militaryPayTables.json";
-  // Backup (only used if Netlify /api/city returns 404)
+  // Backup fallback (PCSUnited repo)
   const CITY_GITHUB_RAW_BASE =
-    "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/cities/";
+    "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/";
+  // Direct function fallback (works even if /api redirect fails)
+  const DIRECT_FN_BASE =
+    "https://pcsunited.netlify.app/.netlify/functions";
   // ============================================================
   // //#1 HELPERS
   // ============================================================
@@ -385,10 +799,9 @@
       family: parseInt(u.searchParams.get("family") || "1", 10),
       base: u.searchParams.get("base") || "Lackland",
       va: parseInt(u.searchParams.get("va") || "0", 10),
-      cityKey: u.searchParams.get("cityKey") || ""   // can be base-key now
+      cityKey: u.searchParams.get("cityKey") || ""
     };
   }
-  // FIX: handle E4, E-4, O3, O-3 safely (prevents E--4)
   function normRank(r) {
     const s = String(r || "").toUpperCase().trim();
     const m = s.match(/^([EO])\s*-\s*(\d+)$/) || s.match(/^([EO])(\d+)$/) || s.match(/^(E)\s*-\s*(\d+)$/) || s.match(/^(E)(\d+)$/);
@@ -418,22 +831,22 @@
   async function load(url){
     const r = await fetch(url, { cache: "no-store" });
     if(!r.ok) throw new Error("load fail "+url+" ("+r.status+")");
+    const ct = (r.headers.get("content-type") || "").toLowerCase();
+    // If we got HTML (like your “Click image…” page), treat as a failure and fall back.
+    if (ct.includes("text/html")) throw new Error("non-json response "+url+" (html)");
     return await r.json();
   }
   function normalizeCityKey(key, baseFallback){
     const raw = String(key || "").trim();
     const base = String(baseFallback || "").trim();
-    // Prefer explicit cityKey; else use base
     const primary = (raw ? raw : base) || "Lackland";
-    // Try a few likely filename formats (because your folder uses hyphens in some names)
     const variants = [];
     const push = (v)=>{ if (v && !variants.includes(v)) variants.push(v); };
     push(primary);
-    push(primary.replace(/\s+/g,"-"));      // "Fort Sam Houston" -> "Fort-Sam-Houston"
-    push(primary.replace(/\s+/g,""));       // "FortSamHouston"
-    push(primary.replace(/-/g,""));         // "FortSamHouston"
+    push(primary.replace(/\s+/g,"-"));
+    push(primary.replace(/\s+/g,""));
+    push(primary.replace(/-/g,""));
     push(primary.replace(/[^A-Za-z0-9-]/g,""));
-    // Compatibility: if someone passes "SanAntonio" or "San Antonio" treat it as Lackland
     if (/^SAN\s*ANTONIO$/i.test(primary) || /^SANANTONIO$/i.test(primary)){
       push("Lackland");
     }
@@ -441,30 +854,26 @@
   }
   async function loadCity(cityKey, baseLoc){
     const keysToTry = normalizeCityKey(cityKey, baseLoc);
-    // 1) Try Netlify /api/city first
+    // 1) Try /api redirect
     for (const k of keysToTry){
       const url = `${API_BASE}/city?cityKey=${encodeURIComponent(k)}`;
-      try{
-        return await load(url);
-      } catch(e){
-        // continue
-      }
+      try{ return await load(url); } catch(e){}
     }
-    // 2) Fallback to GitHub raw (ONLY if Netlify fails)
+    // 2) Try direct Netlify function (bypasses /api rewrite)
+    for (const k of keysToTry){
+      const url = `${DIRECT_FN_BASE}/city?cityKey=${encodeURIComponent(k)}`;
+      try{ return await load(url); } catch(e){}
+    }
+    // 3) GitHub raw fallback
     for (const k of keysToTry){
       const url = `${CITY_GITHUB_RAW_BASE}${encodeURIComponent(k)}.json`;
-      try{
-        return await load(url);
-      } catch(e){
-        // continue
-      }
+      try{ return await load(url); } catch(e){}
     }
     throw new Error("City load failed for: " + keysToTry.join(", "));
   }
   function normalizeTrendDate(dt){
     const s = String(dt || "").trim();
     if (!s) return null;
-    // Handles "2025-12-W1" style: convert to a reasonable day in month
     const m = s.match(/^(\d{4})-(\d{2})-W(\d{1,2})$/);
     if (m){
       const y = Number(m[1]), mo = Number(m[2]), w = Number(m[3]);
@@ -476,9 +885,6 @@
     const d = new Date(s);
     return isNaN(d.getTime()) ? null : d;
   }
-  /* ======================================================
-       APEXCHARTS TREND RENDERER
-  ====================================================== */
   function renderTrendApex(fullData) {
     const chartEl = document.querySelector("#pcs-trend-chart-apex");
     if (!chartEl) return;
@@ -493,41 +899,19 @@
       return (x && Number.isFinite(y)) ? { x, y } : null;
     }).filter(Boolean);
     const options = {
-      chart: {
-        type: 'line',
-        height: 200,
-        foreColor: '#e9ecff',
-        toolbar: { show: false }
-      },
-      stroke: {
-        width: 3,
-        curve: 'smooth',
-        colors: ['#8ef3c5']
-      },
-      series: [{
-        name: "Median Sale Price",
-        data: seriesData
-      }],
+      chart: { type: 'line', height: 200, foreColor: '#e9ecff', toolbar: { show: false } },
+      stroke: { width: 3, curve: 'smooth', colors: ['#8ef3c5'] },
+      series: [{ name: "Median Sale Price", data: seriesData }],
       xaxis: { type: 'datetime', labels: { style: { colors: '#e9ecff' } } },
       yaxis: {
-        labels: {
-          style: { colors: '#e9ecff' },
-          formatter: val => "$" + Math.round(val).toLocaleString()
-        }
+        labels: { style: { colors: '#e9ecff' }, formatter: val => "$" + Math.round(val).toLocaleString() }
       },
-      tooltip: {
-        theme: 'dark',
-        x: { format: "MMM yyyy" },
-        y: { formatter: v => "$" + Math.round(v).toLocaleString() }
-      },
+      tooltip: { theme: 'dark', x: { format: "MMM yyyy" }, y: { formatter: v => "$" + Math.round(v).toLocaleString() } },
       grid: { borderColor: "rgba(255,255,255,0.08)" }
     };
     window.pcsTrendChart = new ApexCharts(chartEl, options);
     window.pcsTrendChart.render();
   }
-  /* ======================================================
-       MAIN INIT
-  ====================================================== */
   async function init(){
     const p = getQuery();
     const rankKey = normRank(p.rank);
@@ -536,26 +920,16 @@
       loadCity(p.cityKey, p.base),
       load(MILPAY_JSON_URL)
     ]);
-    /* ------------------------------------
-       PAY CALCULATION — UPDATED BAH LOOKUP (FIX)
-       - Uses pay.BAH.base_to_zip + pay.BAH.by_zip first
-       - Falls back to pay.BAH_TX if needed
-    ------------------------------------ */
     let base=0, bah=0, bas=0;
     if (isAD) {
       const table = (pay.BASEPAY && pay.BASEPAY[rankKey]) ? pay.BASEPAY[rankKey] : {};
       const yKey = pickYOS(p.yos, table);
       base = table[yKey] || 0;
-      bas = isE(rankKey)
-        ? safe(pay,"BAS.enlisted",0)
-        : safe(pay,"BAS.officer",0);
-      // ZIP from base name
+      bas = isE(rankKey) ? safe(pay,"BAS.enlisted",0) : safe(pay,"BAS.officer",0);
       const baseToZip = safe(pay, "BAH.base_to_zip", {}) || {};
       const zip = baseToZip[p.base] || baseToZip[(p.base + " AFB")] || baseToZip[(p.base + " Air Force Base")] || baseToZip["Lackland"] || "78236";
-      // Prefer pay.BAH.by_zip
       const byZip = safe(pay, "BAH.by_zip", {}) || {};
       const rec1 = byZip[String(zip)] || null;
-      // Fallback: pay.BAH_TX if present
       const bahTX = pay.BAH_TX || {};
       const rec2 = bahTX[String(zip)] || null;
       const rec = rec1 || rec2;
@@ -580,9 +954,6 @@
       money(total) + " / month";
     document.getElementById("pcs-income-breakdown").textContent =
       "Base Pay: " + money(base) + " • BAH: " + money(bah) + " • BAS: " + money(bas);
-    /* ------------------------------------
-       INCOME VS CITY (UPDATED to match your new schema)
-    ------------------------------------ */
     const medInc =
       safe(city,"income.median_household_income", null) ??
       safe(city,"demographics.income.median_household_income", null) ??
@@ -615,9 +986,6 @@
       ((userA-avg)>=0? "+" : "") +
       (((userA-avg)/Math.max(avg,1))*100).toFixed(1) +
       "% vs median household income";
-    /* ------------------------------------
-       MORTGAGE USING 6.75% — Resilient to your new JSON fields
-    ------------------------------------ */
     const P =
       safe(city,"housing.market.median_listing_price_realtor", null) ??
       safe(city,"housing.market.median_listing_price", null) ??
@@ -656,9 +1024,6 @@
       (bah > 0 && bahAvg > 0)
         ? ("Your BAH covers ~"+((bah/bahAvg)*100).toFixed(1)+"% of estimated mortgage.")
         : ("BAH not found for this rank/base yet — pay tables may be missing that row.");
-    /* ======================================================
-         TREND (supports 2025-12-W1 format)
-    ====================================================== */
     const allMonths =
       safe(city,"housing.market.sale_history_36_months", null) ??
       safe(city,"housing.sale_history_36_months", null) ??
@@ -684,12 +1049,6 @@
     document.getElementById("pcs-trend-summary").textContent =
       "12-month change: "+(Number(yoy)||0)+"% • " +
       (safe(city,"housing.market.market_type_summary","") || "");
-    /* ------------------------------------
-       PRICE BREAKDOWN — FIXED FOR YOUR NEW JSON
-       - Median Sale: uses median_sale_price_current OR q1_2025.median_sale_price
-       - Avg Sale: uses average_sale_price if present, otherwise uses median sale as proxy
-       - Median List: uses median_listing_price_realtor (present in your Lackland.json)
-    ------------------------------------ */
     const medSale =
       safe(city,"housing.market.q1.median_sale_price", null) ??
       safe(city,"housing.market.q1_2025.median_sale_price", null) ??
@@ -729,9 +1088,6 @@
         }
       }
     });
-    /* ------------------------------------
-       AFFORDABILITY — unchanged
-    ------------------------------------ */
     const annual = total*12;
     let score = 100 - (Number(P)/Math.max(annual,1))*35;
     score = Math.max(0,Math.min(100,score));
@@ -754,9 +1110,6 @@
     });
     document.getElementById("pcs-afford-summary").textContent =
       "Affordability Score: "+score.toFixed(0)+"/100.";
-    /* ------------------------------------
-       QUICKFACTS — updated for your new JSON
-    ------------------------------------ */
     const popEst = safe(city,"population.estimate", safe(city,"population",0)) || 0;
     const days =
       safe(city,"housing.market.average_days_on_market", null) ??
@@ -793,9 +1146,314 @@
   }
 })();
   </script>
+        <!--  =========================================================
+       JAVASCRIPT — BASE COMPARISON
+       ✅ FIX: Reads images from city.image_url
+  =========================================================  -->
+        <script>
+  (function(){
+    "use strict";
+    const API_BASE = "https://pcsunited.netlify.app/api";
+    const DIRECT_FN_BASE = "https://pcsunited.netlify.app/.netlify/functions";
+    const MILPAY_JSON_URL =
+      "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/militaryPayTables.json";
+    const CITY_GITHUB_RAW_BASE =
+      "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/";
+    const $ = (q)=>document.querySelector(q);
+    function money(n){
+      const x = Number(n);
+      if (!Number.isFinite(x)) return "$0";
+      return "$" + Math.round(x).toLocaleString();
+    }
+    function safe(obj, path, fb){
+      try { return path.split(".").reduce((a,k)=>a && a[k], obj) ?? fb; }
+      catch { return fb; }
+    }
+    function normRank(r) {
+      const s = String(r || "").toUpperCase().trim();
+      const m = s.match(/^([EO])\s*-\s*(\d+)$/) || s.match(/^([EO])(\d+)$/) || s.match(/^(E)\s*-\s*(\d+)$/) || s.match(/^(E)(\d+)$/);
+      if (m) return m[1] + "-" + m[2];
+      return s.replace(/\s+/g,"");
+    }
+    function isE(rankKey){ return String(rankKey||"").startsWith("E-"); }
+    function pickYOS(y, table){
+      const ks = Object.keys(table || {}).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
+      if(!ks.length) return String(y);
+      let best = ks[0], diff = Math.abs(y-best);
+      ks.forEach(k=>{
+        const d = Math.abs(y-k);
+        if(d<diff){diff=d;best=k;}
+      });
+      return String(best);
+    }
+    function normalizeBaseKey(raw){
+      const s = String(raw || "").trim();
+      if (s.toLowerCase() === "san antonio") return "Lackland";
+      if (s.toLowerCase() === "fort sam houston") return "Fort-Sam-Houston";
+      return (s || "Lackland").replace(/[^A-Za-z0-9-]/g, "");
+    }
+    async function load(url){
+      const r = await fetch(url, { cache: "no-store" });
+      if(!r.ok) throw new Error("load fail "+url+" ("+r.status+")");
+      const ct = (r.headers.get("content-type") || "").toLowerCase();
+      if (ct.includes("text/html")) throw new Error("non-json response "+url+" (html)");
+      return await r.json();
+    }
+    async function loadCityByBase(baseLoc){
+      const cityKey = normalizeBaseKey(baseLoc);
+      // 1) /api redirect
+      try { return await load(`${API_BASE}/city?cityKey=${encodeURIComponent(cityKey)}`); } catch(e){}
+      // 2) direct function
+      try { return await load(`${DIRECT_FN_BASE}/city?cityKey=${encodeURIComponent(cityKey)}`); } catch(e){}
+      // 3) github raw fallback
+      return await load(`${CITY_GITHUB_RAW_BASE}${encodeURIComponent(cityKey)}.json`);
+    }
+    async function calcBah({ rank, yos, family, baseLoc }){
+      const pay = await load(MILPAY_JSON_URL);
+      const rankKey = normRank(rank);
+      const table = (pay.BASEPAY && pay.BASEPAY[rankKey]) ? pay.BASEPAY[rankKey] : {};
+      const yKey = pickYOS(parseInt(yos,10), table);
+      const basePay = table[yKey] || 0;
+      const bas = isE(rankKey) ? safe(pay,"BAS.enlisted",0) : safe(pay,"BAS.officer",0);
+      const baseToZip = safe(pay, "BAH.base_to_zip", {}) || {};
+      const zip =
+        baseToZip[baseLoc] ||
+        baseToZip[(baseLoc + " AFB")] ||
+        baseToZip[(baseLoc + " Air Force Base")] ||
+        baseToZip["Lackland"] ||
+        "78236";
+      const byZip = safe(pay, "BAH.by_zip", {}) || {};
+      const rec1 = byZip[String(zip)] || null;
+      const bahTX = pay.BAH_TX || {};
+      const rec2 = bahTX[String(zip)] || null;
+      const rec = rec1 || rec2;
+      const grp = (parseInt(family,10) > 1) ? safe(rec, "with", null) : safe(rec, "without", null);
+      let bah = 0;
+      if (grp && grp[rankKey] != null) bah = Number(grp[rankKey]) || 0;
+      return { bah, basePay, bas, zip };
+    }
+    function monthlyMortgageEstimate(price, annualRate){
+      const P = Number(price);
+      if(!Number.isFinite(P) || P<=0) return 0;
+      const r = (Number(annualRate)||0.0675)/12;
+      const N = 360;
+      const M = P * (r*Math.pow(1+r,N)) / (Math.pow(1+r,N)-1);
+      return Number.isFinite(M) ? M : 0;
+    }
+    function affordabilityScore(monthlyIncome, medianPrice){
+      const annual = (Number(monthlyIncome)||0) * 12;
+      const P = Number(medianPrice)||0;
+      let score = 100 - (P/Math.max(annual,1))*35;
+      score = Math.max(0, Math.min(100, score));
+      return score;
+    }
+    function starsFromScore(score){
+      const raw = 1 + (Number(score)||0) * 0.04;
+      const snapped = Math.round(raw*2)/2;
+      const full = Math.floor(snapped);
+      const half = (snapped - full) >= 0.5;
+      let s = "";
+      for(let i=0;i<5;i++){
+        if(i < full) s += "★";
+        else if(i===full && half) s += "⯪";
+        else s += "☆";
+      }
+      return { value: snapped.toFixed(1), stars: s };
+    }
+    function factBullets(city){
+      const marketType = safe(city,"housing.market.market_type_summary","") || "Market status not available";
+      const yoy =
+        safe(city,"housing.market.zillow_one_year_change_percent", null) ??
+        safe(city,"housing.market.one_year_change_percent", null);
+      const dom =
+        safe(city,"housing.market.average_days_on_market", null) ??
+        safe(city,"housing.market.average_days_on_market_range.low", null);
+      const income =
+        safe(city,"income.median_household_income", null) ??
+        safe(city,"demographics.income.median_household_income", null);
+      const pop =
+        safe(city,"population.estimate", safe(city,"population",null));
+      const bullets = [];
+      if (marketType) bullets.push(marketType);
+      if (yoy != null) bullets.push(`Home prices ${Number(yoy)||0}% YoY`);
+      if (dom != null) bullets.push(`Avg days on market: ${dom}`);
+      if (income != null) bullets.push(`Median income: ${money(income)}`);
+      if (pop != null) bullets.push(`Population: ${Number(pop).toLocaleString()}`);
+      return bullets.slice(0,4);
+    }
+    function pickMedianPrice(city){
+      return (
+        safe(city,"housing.market.median_listing_price_realtor", null) ??
+        safe(city,"housing.market.median_listing_price", null) ??
+        safe(city,"housing.market.median_list_price", null) ??
+        safe(city,"avg_home_value", null) ??
+        safe(city,"average_home_value", null) ??
+        safe(city,"housing.median_value_owner_occupied", null) ??
+        0
+      );
+    }
+    function pickYoY(city){
+      const yoy =
+        safe(city,"housing.market.zillow_one_year_change_percent", null) ??
+        safe(city,"housing.market.one_year_change_percent", null) ??
+        safe(city,"yoy_change_percent", null);
+      return yoy;
+    }
+    function pickDOM(city){
+      return (
+        safe(city,"housing.market.average_days_on_market", null) ??
+        safe(city,"housing.market.average_days_on_market_range.low", null) ??
+        null
+      );
+    }
+    function locationName(city, baseLoc){
+      return (city.place || city.city || city.name || baseLoc || "—");
+    }
+    // ✅ NEW: set image from city.image_url
+    function setImgFromCity(imgEl, city){
+      if(!imgEl) return;
+      const url = safe(city, "image_url", "") || safe(city, "imageUrl", "") || "";
+      if (url && String(url).startsWith("http")){
+        imgEl.src = String(url);
+        imgEl.style.opacity = "1";
+      } else {
+        imgEl.removeAttribute("src");
+        imgEl.style.opacity = "0";
+      }
+    }
+    function renderFacts(containerId, bullets){
+      const el = $(containerId);
+      if(!el) return;
+      el.innerHTML = bullets.map(t => `
+        <div class="pcsc-fact">
+          <div class="pcsc-dot"></div>
+          <div>${String(t)}</div>
+        </div>
+      `).join("");
+    }
+    let chartCurrent = null;
+    let chartUpcoming = null;
+    function renderHousingChart(canvasId, bah, mortgage){
+      const el = $(canvasId);
+      if(!el) return null;
+      const avg = Number(mortgage)||0;
+      const low = avg * 0.85;
+      const high = avg * 1.15;
+      const data = [low, avg, high, Number(bah)||0];
+      return new Chart(el, {
+        type:"bar",
+        data:{
+          labels:["Low","Avg","High","BAH"],
+          datasets:[{
+            data,
+            backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#8ef3c5"],
+            borderWidth: 0
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:{ legend:{ display:false }, tooltip:{ enabled:false } },
+          scales:{
+            y:{ ticks:{ color:"#e9ecff", callback:(v)=>"$"+Math.round(v) }, grid:{ color:"rgba(255,255,255,.08)" } },
+            x:{ ticks:{ color:"#e9ecff" }, grid:{ display:false } }
+          }
+        }
+      });
+    }
+    function getInputs(){
+      const u = new URL(window.location.href);
+      const fromUrl = {
+        rank: u.searchParams.get("rank"),
+        yos: u.searchParams.get("yos"),
+        family: u.searchParams.get("family"),
+        curBase: u.searchParams.get("curBase"),
+        newBase: u.searchParams.get("newBase") || u.searchParams.get("base")
+      };
+      const fromSession = {
+        rank: sessionStorage.getItem("pcs_rank"),
+        yos: sessionStorage.getItem("pcs_yos"),
+        family: sessionStorage.getItem("pcs_family"),
+        curBase: sessionStorage.getItem("pcs_current_base"),
+        newBase: sessionStorage.getItem("pcs_new_base")
+      };
+      const rank = (fromUrl.rank || fromSession.rank || "E7");
+      const yos = parseInt(fromUrl.yos || fromSession.yos || "16", 10);
+      const family = parseInt(fromUrl.family || fromSession.family || "4", 10);
+      const curBase = (fromUrl.curBase || fromSession.curBase || "").trim();
+      const newBase = (fromUrl.newBase || fromSession.newBase || u.searchParams.get("base") || "Lackland").trim();
+      return { rank, yos, family, curBase, newBase };
+    }
+    async function init(){
+      const status = $("#pcsc-status");
+      const { rank, yos, family, curBase, newBase } = getInputs();
+      if(!curBase || !newBase){
+        status.textContent = "Missing selections: choose Current Duty Station + Upcoming Base on the input strip, then Analyze.";
+        return;
+      }
+      status.textContent = "Loading base comparison…";
+      const [cityCur, cityNew, bahCur, bahNew] = await Promise.all([
+        loadCityByBase(curBase),
+        loadCityByBase(newBase),
+        calcBah({ rank, yos, family, baseLoc: curBase }),
+        calcBah({ rank, yos, family, baseLoc: newBase })
+      ]);
+      // ✅ NEW: images from JSON
+      setImgFromCity($("#img-current"), cityCur);
+      setImgFromCity($("#img-upcoming"), cityNew);
+      const priceCur = pickMedianPrice(cityCur);
+      const priceNew = pickMedianPrice(cityNew);
+      const mortCur = monthlyMortgageEstimate(priceCur, 0.0675);
+      const mortNew = monthlyMortgageEstimate(priceNew, 0.0675);
+      $("#loc-current").textContent = locationName(cityCur, curBase);
+      $("#loc-upcoming").textContent = locationName(cityNew, newBase);
+      $("#bah-current").textContent = money(bahCur.bah);
+      $("#bah-upcoming").textContent = money(bahNew.bah);
+      $("#price-current").textContent = money(priceCur);
+      $("#price-upcoming").textContent = money(priceNew);
+      const yoyCur = pickYoY(cityCur);
+      const yoyNew = pickYoY(cityNew);
+      $("#yoy-current").textContent = (yoyCur == null ? "—" : (String(yoyCur) + "%"));
+      $("#yoy-upcoming").textContent = (yoyNew == null ? "—" : (String(yoyNew) + "%"));
+      const domCur = pickDOM(cityCur);
+      const domNew = pickDOM(cityNew);
+      $("#dom-current").textContent = (domCur == null ? "—" : String(domCur));
+      $("#dom-upcoming").textContent = (domNew == null ? "—" : String(domNew));
+      renderFacts("#facts-current", factBullets(cityCur));
+      renderFacts("#facts-upcoming", factBullets(cityNew));
+      const monthlyIncomeCur = (bahCur.basePay || 0) + (bahCur.bas || 0) + (bahCur.bah || 0);
+      const monthlyIncomeNew = (bahNew.basePay || 0) + (bahNew.bas || 0) + (bahNew.bah || 0);
+      const scoreCur = affordabilityScore(monthlyIncomeCur, priceCur);
+      const scoreNew = affordabilityScore(monthlyIncomeNew, priceNew);
+      const starCur = starsFromScore(scoreCur);
+      const starNew = starsFromScore(scoreNew);
+      $("#rating-current").textContent = starCur.value;
+      $("#stars-current").textContent = starCur.stars;
+      $("#rating-upcoming").textContent = starNew.value;
+      $("#stars-upcoming").textContent = starNew.stars;
+      if(chartCurrent){ try{ chartCurrent.destroy(); } catch(e){} }
+      if(chartUpcoming){ try{ chartUpcoming.destroy(); } catch(e){} }
+      chartCurrent = renderHousingChart("#chart-current", bahCur.bah, mortCur);
+      chartUpcoming = renderHousingChart("#chart-upcoming", bahNew.bah, mortNew);
+      status.textContent = "Loaded.";
+    }
+    function boot(){
+      init().catch(err=>{
+        console.error("PCS compare card error:", err);
+        const status = $("#pcsc-status");
+        status.textContent = "Base comparison unavailable right now. Check console for details.";
+      });
+    }
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", boot);
+    } else {
+      boot();
+    }
+  })();
+  </script>
+      </div>
     </div>
-  </div>
-  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69658389f59da527c04bcbd4" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
-  <script src="js/webflow.js" type="text/javascript"></script>
-</body>
+    <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69658389f59da527c04bcbd4" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+    <script src="js/webflow.js" type="text/javascript"></script>
+</div></body>
 </html>

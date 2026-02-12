@@ -1,10 +1,6 @@
 // netlify/functions/orders-extract.js
 // PCS Orders Translator — Option A (no file storage)
-// v1.1.0 — POST {text} -> structured JSON (with redaction)
-// ✅ ESM export (matches package.json: "type":"module")
-// ✅ Returns fields that 2A paints: blufText, details{}, next_steps[], important_notes[]
-// ✅ Also returns brief{} for backward compatibility
-// ✅ If OCR/scanned PDF image is sent (pdf_base64/image_base64) -> 422 with clear message
+// v1.1.0 — FIX: better duty location + RNLTD heuristics, add extracted schema
 
 const CORS_HEADERS = {
   "Access-Control-Allow-Origin": "*",
@@ -19,9 +15,9 @@ function respond(statusCode, payload) {
 
 function redactPII(raw) {
   if (!raw) return "";
-  let t = String(raw);
+  let t = raw;
 
-  // SSN patterns
+  // SSN
   t = t.replace(/\b\d{3}-\d{2}-\d{4}\b/g, "[REDACTED_SSN]");
   t = t.replace(/\b\d{3}\s?\d{2}\s?\d{4}\b/g, "[REDACTED_SSN]");
 
@@ -34,63 +30,140 @@ function redactPII(raw) {
   return t;
 }
 
-function pickFirstDate(text) {
-  const m = text.match(/\b(\d{1,2})\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\s+(\d{4})\b/i);
-  if (!m) return null;
-  const d = String(m[1]).padStart(2, "0");
-  const mon = m[2].toUpperCase();
-  const y = m[3];
-  return `${d} ${mon} ${y}`;
+function normZip(z) {
+  const s = String(z || "").trim();
+  // handle 9-digit "871170000" => take first 5 if last 4 are zeros
+  if (/^\d{9}$/.test(s) && s.endsWith("0000")) return s.slice(0, 5);
+  if (/^\d{5}$/.test(s)) return s;
+  if (/^\d{5}-\d{4}$/.test(s)) return s.slice(0, 5);
+  return s;
 }
 
-function extractLocations(text) {
-  const candidates = [];
-  const re =
-    /\b([A-Z][A-Z0-9'\- ]{2,30})\s+(NM|TX|CA|FL|VA|WA|CO|AZ|NV|NC|SC|GA|AL|LA|OK|UT|ID|OR|IL|MD|PA|OH|MI|IN|MO|TN|KY|MS|AR|KS|NE|IA|MN|WI|ND|SD|NY|NJ|CT|MA|RI|VT|NH|ME|HI|AK|JP|DE|GB|IT|KR|BE|NL|ES)\s+(\d{5})/g;
+function formatDMY(d, mon, y) {
+  const dd = String(d).padStart(2, "0");
+  return `${dd} ${String(mon).toUpperCase()} ${String(y)}`;
+}
 
-  let m;
-  while ((m = re.exec(text)) !== null) {
-    candidates.push({
-      place: m[1].trim().replace(/\s{2,}/g, " "),
-      region: m[2],
-      zip: m[3],
-    });
+function pickRNLTD(text) {
+  if (!text) return null;
+
+  // 1) Explicit RNLTD patterns
+  // e.g., "... RNLTD ... 15 SEP 2024"
+  {
+    const m = text.match(/\bRNLTD\b[\s\S]{0,80}\b(\d{1,2})\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\s+(\d{2,4})\b/i);
+    if (m) return formatDMY(m[1], m[2], m[3].length === 2 ? `20${m[3]}` : m[3]);
   }
 
-  const losing = candidates[0] || null;
-  const gaining = candidates[1] || null;
-  return { losing, gaining, candidates };
-}
+  // 2) "REPORT ... NLT:" patterns (sometimes the label is separated)
+  {
+    const m = text.match(/\b(NLT|REPORT\s+TO\s+COMDR)[\s\S]{0,120}\b(\d{1,2})\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\s+(\d{4})\b/i);
+    if (m) return formatDMY(m[2], m[3], m[4]);
+  }
 
-function extractUnit(text) {
-  // Try a few common patterns (very lightweight heuristic)
-  const t = text.replace(/\s+/g, " ");
-
-  const m1 = t.match(/\bGAINING\s+UNIT\b\s*[:\-]?\s*([A-Z0-9&'().,\- ]{4,80})/i);
-  if (m1 && m1[1]) return m1[1].trim();
-
-  const m2 = t.match(/\bUNIT\b\s*[:\-]?\s*([A-Z0-9&'().,\- ]{4,80})/i);
-  if (m2 && m2[1]) return m2[1].trim();
+  // 3) Fallback: "SECURITY ... <date> <date>" (common in parsed text)
+  // Your PDF shows: "... SECURITY ... 18 AUG 2010 31 JAN 2025 ..."
+  {
+    const m = text.match(/\bSECURITY\b[\s\S]{0,80}\b(\d{1,2})\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\s+(\d{4})\s+(\d{1,2})\s+(JAN|FEB|MAR|APR|MAY|JUN|JUL|AUG|SEP|OCT|NOV|DEC)\s+(\d{4})\b/i);
+    if (m) {
+      // interpret: first date = last investigation, second date = reporting anchor
+      return formatDMY(m[4], m[5], m[6]);
+    }
+  }
 
   return null;
 }
 
+function looksLikeStreet(place) {
+  if (!place) return false;
+  // catches "SUNDROP PL SE", "MAIN ST", etc
+  return /\b(PL|PLACE|ST|STREET|RD|ROAD|DR|DRIVE|AVE|AVENUE|BLVD|BOULEVARD|LN|LANE|CT|COURT|WAY|PKWY|PARKWAY)\b/i.test(place);
+}
+
+function extractDutyLocations(text) {
+  // Match: PLACE REGION ZIP(5 or 9 or 5-4)
+  const re = /\b([A-Z][A-Z0-9'\/\-\.\s]{2,40})\s+(NM|TX|CA|FL|VA|WA|CO|AZ|NV|NC|SC|GA|AL|LA|OK|UT|ID|OR|IL|MD|PA|OH|MI|IN|MO|TN|KY|MS|AR|KS|NE|IA|MN|WI|ND|SD|NY|NJ|CT|MA|RI|VT|NH|ME|HI|AK|JP|DE|GB|IT|KR|BE|NL|ES|AP|AE|AA)\s+(\d{5}(?:-\d{4})?|\d{9})/g;
+
+  const candidates = [];
+  let m;
+  while ((m = re.exec(text)) !== null) {
+    const place = m[1].trim().replace(/\s{2,}/g, " ");
+    const region = m[2];
+    const zipRaw = m[3];
+    const zip = normZip(zipRaw);
+
+    // scoring: prefer duty locations, punish street-like tokens
+    let score = 0;
+
+    const nonUS = /^(JP|DE|GB|IT|KR|BE|NL|ES)$/.test(region);
+    if (nonUS) score += 8;
+
+    if (/\b(AFB|AB|AFB,| AB,)\b/.test(place)) score += 6;
+
+    if (!looksLikeStreet(place)) score += 4;
+    else score -= 6;
+
+    // If it's near "KIRTLAND" or "KADENA" in your doc, it’s almost certainly the station line
+    if (/\bKIRTLAND\b/i.test(place)) score += 8;
+    if (/\bKADENA\b/i.test(place)) score += 8;
+
+    candidates.push({
+      place,
+      region,
+      zip,
+      idx: m.index,
+      score,
+      raw: `${place} ${region} ${zipRaw}`,
+    });
+  }
+
+  if (!candidates.length) return { losing: null, gaining: null };
+
+  // pick gaining = best non-US if available, else best overall
+  const sorted = [...candidates].sort((a, b) => b.score - a.score);
+  const bestNonUS = sorted.find((c) => /^(JP|DE|GB|IT|KR|BE|NL|ES)$/.test(c.region));
+  const gaining = bestNonUS || sorted[0];
+
+  // pick losing = best US candidate occurring before gaining (fallback best US overall)
+  const usCandidates = sorted.filter((c) => !/^(JP|DE|GB|IT|KR|BE|NL|ES)$/.test(c.region));
+  let losing = usCandidates.find((c) => c.idx < gaining.idx) || usCandidates[0] || null;
+
+  // guard: if losing==gaining (can happen if only one match), null out losing
+  if (losing && gaining && losing.idx === gaining.idx) losing = null;
+
+  return { losing, gaining };
+}
+
+function extractUnits(text) {
+  // Very light heuristics for your specific parse:
+  // GBS ... (losing-ish) and PAF ... (gaining-ish) appear near station lines.
+  let losingUnit = null;
+  let gainingUnit = null;
+
+  const gbs = text.match(/\bGBS\s+\d+\s+([A-Z0-9 \-\/]{4,80})\b/i);
+  if (gbs) losingUnit = gbs[1].trim().replace(/\s{2,}/g, " ");
+
+  const paf = text.match(/\bPAF\s+\d+\s+([A-Z0-9 \-\/]{4,80})\b/i);
+  if (paf) gainingUnit = paf[1].trim().replace(/\s{2,}/g, " ");
+
+  return { losingUnit, gainingUnit };
+}
+
 function extractDependents(text) {
-  const t = text.toUpperCase();
-  if (/(DEPENDENT|DEPENDENTS)\s+(AUTHORIZED|YES|AUTH)/.test(t)) return "Authorized";
-  if (/(DEPENDENT|DEPENDENTS)\s+(NOT\s+AUTHORIZED|NO|NOT\s+AUTH)/.test(t)) return "Not Authorized";
-  if (/DEPENDENT|DEPENDENTS|SPOUSE|CHILD/.test(t)) return "Likely Authorized (detected)";
+  if (!text) return "Unknown";
+
+  // if the form explicitly shows concurrent travel is automatic
+  if (/\bCONCURRENT\s+TRAVEL\s+IS\s+AUTOMATIC\b/i.test(text)) {
+    return "Authorized (Concurrent travel automatic)";
+  }
+
+  if (/\bDEPENDENT(S)?\b/i.test(text) && /\b(CHILD|SPOUSE)\b/i.test(text)) {
+    return "Likely Authorized (dependents detected)";
+  }
+
   return "Unknown";
 }
 
-function extractTravelMode(text) {
-  const t = text.replace(/\s+/g, " ");
-  const m = t.match(/\b(MODE\s+OF\s+TRAVEL|TRAVEL\s+MODE)\b\s*[:\-]?\s*([A-Z0-9\/\-\s]{3,50})/i);
-  if (m && m[2]) return m[2].trim();
-  return "Unknown";
-}
-
-export const handler = async (event) => {
+exports.handler = async (event) => {
   if (event.httpMethod === "OPTIONS") {
     return { statusCode: 200, headers: CORS_HEADERS, body: "" };
   }
@@ -100,22 +173,9 @@ export const handler = async (event) => {
 
   try {
     const body = JSON.parse(event.body || "{}");
-
     const filename = body.filename || "orders.pdf";
     const redact = body.redact !== false; // default true
-
-    const hasBase64 = !!(body.pdf_base64 || body.image_base64);
     const rawText = String(body.text || "");
-
-    // If 2A fell back to base64, it means this was likely scanned/OCR needed.
-    if ((!rawText || rawText.length < 50) && hasBase64) {
-      return respond(422, {
-        ok: false,
-        error: "This file appears to be scanned (no selectable text). OCR is not enabled yet.",
-        hint: "Try uploading a PDF with selectable text, or enable OCR in orders-extract later.",
-        meta: { filename, redactApplied: redact, source: "orders-extract.v1.1.0" },
-      });
-    }
 
     if (!rawText || rawText.length < 50) {
       return respond(400, { ok: false, error: "Missing or too-short text" });
@@ -123,73 +183,71 @@ export const handler = async (event) => {
 
     const text = redact ? redactPII(rawText) : rawText;
 
-    const rnltd = pickFirstDate(text);
-    const { losing, gaining } = extractLocations(text);
-
-    const from = losing ? `${losing.place}, ${losing.region} ${losing.zip}` : "Unknown";
-    const to = gaining ? `${gaining.place}, ${gaining.region} ${gaining.zip}` : "Unknown";
-
-    const reportNoLater = rnltd || "Unknown";
-    const unit = extractUnit(text) || (gaining ? `${gaining.place}` : "Unknown");
+    const { losing, gaining } = extractDutyLocations(text);
+    const rnltd = pickRNLTD(text);
+    const { losingUnit, gainingUnit } = extractUnits(text);
     const dependents = extractDependents(text);
-    const travel = extractTravelMode(text);
 
-    const blufText =
-      (to !== "Unknown" && reportNoLater !== "Unknown")
-        ? `Your Assignment: Move to ${to} by ${reportNoLater}.`
-        : "Orders interpreted — review your brief below.";
+    const losingStr = losing ? `${losing.place}, ${losing.region} ${losing.zip}` : "Unknown";
+    const gainingStr = gaining ? `${gaining.place}, ${gaining.region} ${gaining.zip}` : "Unknown";
 
-    const next_steps = [
-      "Schedule MPF out-processing + final out appointment",
-      "Start TMO counseling / DPS move flow",
-      "Confirm Finance items (DLA/TLE/TLA as applicable)",
-    ];
+    // confidence (simple, deterministic)
+    const conf =
+      gaining && losing && rnltd ? "high" :
+      gaining && losing ? "medium" :
+      gaining ? "medium" : "low";
 
-    const important_notes = [
-      "OCONUS moves often require extra steps (medical, passports, clearances).",
-      "Keep a redacted copy for housing/utilities (never share SSN).",
-      "Always verify critical dates with MPF/TMO/Finance.",
-    ];
+    const extracted = {
+      losingLocation: losingStr,
+      gainingLocation: gainingStr,
+      gainingUnit: gainingUnit || "",
+      losingUnit: losingUnit || "",
+      rnltd: rnltd || "",
+      dependents,
+      // best-effort: infer CONUS/OCONUS from gaining region
+      conus: gaining ? !/^(JP|DE|GB|IT|KR|BE|NL|ES)$/.test(gaining.region) : null,
+      tourType: gaining ? (/^(JP|DE|GB|IT|KR|BE|NL|ES)$/.test(gaining.region) ? "OCONUS" : "CONUS") : "",
+      travelMode: "", // not reliably present in your parse yet
+      assignmentType: "PCS",
+      installation: gaining ? gaining.place : "",
+    };
 
-    // ✅ This structure matches your 2A painter paths
     const payload = {
       ok: true,
       meta: {
         filename,
         redactApplied: redact,
         source: "orders-extract.v1.1.0",
+        confidence: conf,
       },
 
-      // 2A-friendly fields
-      blufText,
-      details: {
-        rnltd: reportNoLater,
-        unit,
-        dependents,
-        travel,
-        losing: from,
-        gaining: to,
-      },
-      next_steps,
-      important_notes,
+      // ✅ Add extracted for modules like 2B/2C/2D
+      extracted,
 
-      // Back-compat / alternate consumption
+      // Keep brief for the Shell cards
       brief: {
         assignment: {
-          from,
-          to,
-          reportNoLater,
+          from: losingStr,
+          to: gainingStr,
+          reportNoLater: rnltd || "Unknown",
         },
         keyDetails: {
-          reportNoLater,
-          losing: from,
-          gaining: to,
-          unit,
+          reportNoLater: rnltd || "Unknown",
+          losing: losingStr,
+          gaining: gainingStr,
           dependents,
-          travel,
+          unit: gainingUnit || "",
         },
-        nextSteps: next_steps,
-        importantNotes: important_notes,
+        nextSteps: [
+          "Schedule MPF out-processing + final out appointment",
+          "Start TMO counseling / DPS flow",
+          "Confirm Finance items (DLA/TLE/TLA as applicable)",
+        ],
+        importantNotes: [
+          "OCONUS moves often require extra steps (medical, passports, etc.)",
+          "Keep a redacted copy for housing/utilities (never share SSN)",
+          "Always verify critical dates with MPF/TMO/Finance",
+        ],
       },
     };
 

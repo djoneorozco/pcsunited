@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Feb 11 2026 06:11:19 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Mar 10 2026 08:08:06 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69829d20e104c468235e8e33" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -20,12 +20,15 @@
 </head>
 <body>
   <section>
-    <div class="w-embed"><!--  ============================================================
-  PCS Orders Translator — SHELL ONLY (HTML + CSS)
-  v0.1 (No JS)
-  Purpose:
-  - UI shell for upload + tabs + Orders Brief cards
-  - Provides stable IDs/hooks for future runtime wiring
+    <div class="w-embed w-script"><!--  ============================================================
+  PCS Orders Translator — SHELL + CORE Runtime (2A)
+  v2.1.0 — FIXES:
+  ✅ ID mismatch fixed (shell uses #pcsu-fileInput; runtime now matches)
+  ✅ Dropzone is clickable + drag/drop (without wrapping buttons inside <label>)
+  ✅ Upload status text updates (file name / states)
+  ✅ Redact toggle wired into API payload
+  ✅ Image uploads supported (sent as base64 to API) + PDF text via PDF.js
+  ✅ “Paint” results into the brief (safe fallbacks)
 ===============================================================  -->
       <div id="pcsu-orders" style="all: initial;">
         <!--  #1 Fonts  -->
@@ -142,6 +145,7 @@
       padding: 16px;
       box-shadow: 0 10px 22px rgba(7, 14, 28, 0.06);
     }
+    /* ✅ Dropzone is now a plain div (no nested label/buttons issues) */
     .pcsu-dropzone{
       border: 2px dashed rgba(45, 120, 232, 0.28);
       background: #fbfcff;
@@ -151,7 +155,19 @@
       place-items: center;
       text-align: center;
       position: relative;
-      cursor: pointer; /* ✅ helps communicate clickable */
+      cursor: pointer;
+      transition: border-color .12s ease, transform .12s ease, filter .12s ease;
+      outline: none;
+    }
+    .pcsu-dropzone:hover{
+      border-color: rgba(45, 120, 232, 0.45);
+      filter: brightness(1.01);
+      transform: translateY(-1px);
+    }
+    .pcsu-dropzone:active{ transform: translateY(0px); filter: brightness(0.99); }
+    .pcsu-dropzone.is-dragover{
+      border-color: rgba(45, 120, 232, 0.72);
+      box-shadow: 0 0 0 4px rgba(45, 120, 232, 0.10);
     }
     .pcsu-docicon{
       width: 54px;
@@ -216,14 +232,14 @@
     }
     .pcsu-btn:hover{ transform: translateY(-1px); filter: brightness(1.02); }
     .pcsu-btn:active{ transform: translateY(0px); filter: brightness(0.98); }
-    /* Hidden file input (future JS can hook it) */
-    /* ✅ UPDATED ID */
+    .pcsu-btn[disabled]{ opacity:.65; cursor:not-allowed; filter:saturate(.8); transform:none !important; }
+    /* Hidden file input (2A uses this) */
     #pcsu-fileInput{ display:none; }
-    /* ✅ Optional status hook (doesn't change layout) */
+    /* Optional status hook (tiny, no layout change) */
     .pcsu-upload-status{
       font-size: 12px;
       color: var(--pcsu-sub);
-      font-weight: 700;
+      font-weight: 800;
     }
     /* ============================================================
       #6 Tabs Row
@@ -246,7 +262,7 @@
       color: #243a5c;
       font-weight: 800;
       font-size: 13px;
-      cursor: default; /* no JS yet */
+      cursor: default;
       position: relative;
       overflow: hidden;
     }
@@ -302,7 +318,7 @@
       margin: 0;
       font-size: 12px;
       color: var(--pcsu-sub);
-      font-weight: 700;
+      font-weight: 800;
     }
     .pcsu-bluf{
       background: rgba(31, 122, 76, 0.12);
@@ -420,7 +436,7 @@
       font-weight: 900;
       padding: 11px 14px;
       border-radius: 12px;
-      cursor: default; /* no JS yet */
+      cursor: default;
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -434,7 +450,7 @@
       font-weight: 900;
       padding: 12px 16px;
       border-radius: 12px;
-      cursor: default; /* no JS yet */
+      cursor: default;
       display: inline-flex;
       align-items: center;
       gap: 10px;
@@ -484,8 +500,8 @@
             <main class="pcsu-body">
               <!--  Upload  -->
               <section class="pcsu-upload-card" aria-label="Upload PCS Orders">
-                <!--  ✅ UPDATED: div -> label so click opens file picker  -->
-                <label class="pcsu-dropzone" id="pcsu-dropzone" for="pcsu-fileInput">
+                <!--  ✅ Clickable dropzone (2A triggers file picker)  -->
+                <div class="pcsu-dropzone" id="pcsu-dropzone" role="button" tabindex="0" aria-label="Upload PCS Orders">
                   <div class="pcsu-docicon" aria-hidden="true">
                     <svg width="26" height="26" viewbox="0 0 24 24" fill="none">
                       <path d="M6 2h8l4 4v16H6V2z" fill="rgba(45,120,232,0.18)"></path>
@@ -495,23 +511,22 @@
                     </svg>
                   </div>
                   <h2>Upload Your PCS Orders (PDF or Photo)</h2>
-                  <p class="pcsu-subline">Drop a file here or click to select (shell only)</p>
-                  <div class="pcsu-controls">
-                    <label class="pcsu-toggle" for="pcsu-redactToggle">
-                      <span aria-hidden="true">🔒</span>
-                      <span>Automatically redact sensitive info</span>
-                      <small>| Recommended</small>
-                      <input id="pcsu-redactToggle" type="checkbox" checked="" style="margin-left:10px; transform: scale(1.1);">
-                    </label>
-                    <button class="pcsu-btn" id="pcsu-explainBtn" type="button">
-                      Explain My Orders
-                    </button>
-                    <!--  ✅ NEW: status hook for 2A (optional, tiny, no layout change)  -->
-                    <div id="pcsu-uploadStatus" class="pcsu-upload-status">No file selected</div>
-                    <!--  ✅ UPDATED ID for 2A  -->
-                    <input id="pcsu-fileInput" type="file" accept=".pdf,image/*">
-                  </div>
-                </label>
+                  <p class="pcsu-subline">Drop a file here or click to select</p>
+                </div>
+                <div class="pcsu-controls">
+                  <label class="pcsu-toggle" for="pcsu-redactToggle">
+                    <span aria-hidden="true">🔒</span>
+                    <span>Automatically redact sensitive info</span>
+                    <small>| Recommended</small>
+                    <input id="pcsu-redactToggle" type="checkbox" checked="" style="margin-left:10px; transform: scale(1.1);">
+                  </label>
+                  <button class="pcsu-btn" id="pcsu-explainBtn" type="button">
+                    Explain My Orders
+                  </button>
+                  <div id="pcsu-uploadStatus" class="pcsu-upload-status">No file selected</div>
+                  <!--  ✅ Canonical shell input ID  -->
+                  <input id="pcsu-fileInput" type="file" accept=".pdf,image/*">
+                </div>
               </section>
               <!--  Tabs  -->
               <nav class="pcsu-tabs" aria-label="Orders Translator Tabs">
@@ -536,7 +551,7 @@
                 </div>
                 <div class="pcsu-bluf" id="pcsu-bluf">
                   <span aria-hidden="true">📌</span>
-                  <span id="pcsu-blufText">Your Assignment: Move to Ramstein AB, Germany by 15 SEP 2024.</span>
+                  <span id="pcsu-blufText">Upload your orders to generate a clean, human-friendly brief.</span>
                 </div>
                 <div class="pcsu-grid">
                   <article class="pcsu-box" id="pcsu-card-details">
@@ -549,28 +564,28 @@
                         <div class="pcsu-dot" aria-hidden="true">🗓️</div>
                         <div>
                           <b>Report No Later</b>
-                          <p id="pcsu-detail-rnltd">15 SEP 2024</p>
+                          <p id="pcsu-detail-rnltd">—</p>
                         </div>
                       </div>
                       <div class="pcsu-row">
                         <div class="pcsu-dot" aria-hidden="true">🏢</div>
                         <div>
                           <b>New Unit</b>
-                          <p id="pcsu-detail-unit">86th AW, Ramstein AB</p>
+                          <p id="pcsu-detail-unit">—</p>
                         </div>
                       </div>
                       <div class="pcsu-row">
                         <div class="pcsu-dot" aria-hidden="true">👨‍👩‍👧‍👦</div>
                         <div>
                           <b>Dependents</b>
-                          <p id="pcsu-detail-deps">Authorized</p>
+                          <p id="pcsu-detail-deps">—</p>
                         </div>
                       </div>
                       <div class="pcsu-row">
                         <div class="pcsu-dot" aria-hidden="true">✈️</div>
                         <div>
                           <b>Travel Mode</b>
-                          <p id="pcsu-detail-travel">Fly / Ship Car</p>
+                          <p id="pcsu-detail-travel">—</p>
                         </div>
                       </div>
                     </div>
@@ -585,21 +600,21 @@
                         <div class="pcsu-dot" aria-hidden="true">📦</div>
                         <div>
                           <b>Schedule TMO Briefing</b>
-                          <p id="pcsu-next-1">Use DPS / move.mil after counseling</p>
+                          <p id="pcsu-next-1">—</p>
                         </div>
                       </div>
                       <div class="pcsu-row">
                         <div class="pcsu-dot" aria-hidden="true">🏨</div>
                         <div>
                           <b>Arrange Temporary Lodging</b>
-                          <p id="pcsu-next-2">Confirm TLA/TLE rules with Finance</p>
+                          <p id="pcsu-next-2">—</p>
                         </div>
                       </div>
                       <div class="pcsu-row">
                         <div class="pcsu-dot" aria-hidden="true">💳</div>
                         <div>
                           <b>Contact Finance for DLA</b>
-                          <p id="pcsu-next-3">Ask timing + required documents</p>
+                          <p id="pcsu-next-3">—</p>
                         </div>
                       </div>
                     </div>
@@ -614,21 +629,21 @@
                         <div class="pcsu-dot" aria-hidden="true">🛂</div>
                         <div>
                           <b>Confirm Passport &amp; Visas</b>
-                          <p id="pcsu-note-1">OCONUS may require additional steps</p>
+                          <p id="pcsu-note-1">—</p>
                         </div>
                       </div>
                       <div class="pcsu-row">
                         <div class="pcsu-dot" aria-hidden="true">⚖️</div>
                         <div>
                           <b>HHG Weight Limit</b>
-                          <p id="pcsu-note-2">10,000 lbs (example placeholder)</p>
+                          <p id="pcsu-note-2">—</p>
                         </div>
                       </div>
                       <div class="pcsu-row">
                         <div class="pcsu-dot" aria-hidden="true">🩺</div>
                         <div>
                           <b>Check Medical Clearance</b>
-                          <p id="pcsu-note-3">Confirm any required screenings early</p>
+                          <p id="pcsu-note-3">—</p>
                         </div>
                       </div>
                     </div>
@@ -653,12 +668,14 @@
           </div>
         </section>
       </div>
-    </div>
-    <div class="w-embed w-script">
       <script>
 /* ============================================================
   PCS Orders Translator — CORE Runtime (2A)
-  v2.0.1 — FIX: Webflow -> Netlify API origin
+  v2.1.0
+  ✅ FIX: binds to #pcsu-fileInput (shell ID)
+  ✅ Dropzone click + drag/drop
+  ✅ PDF -> text via PDF.js, Images -> base64 (API can OCR server-side)
+  ✅ Paint results into cards (safe fallbacks)
 =============================================================== */
 (() => {
   if (window.PCSU_ORDERS && window.PCSU_ORDERS.__mounted) return;
@@ -673,13 +690,106 @@
   )
     ? "https://pcsunited.netlify.app/api"
     : "/api";
+  const els = {
+    dropzone: null,
+    fileInput: null,
+    explainBtn: null,
+    redactToggle: null,
+    uploadStatus: null,
+    statusText: null,
+    // brief fields
+    blufText: null,
+    rnltd: null,
+    unit: null,
+    deps: null,
+    travel: null,
+    next1: null,
+    next2: null,
+    next3: null,
+    note1: null,
+    note2: null,
+    note3: null,
+  };
   function setStatus(msg){
-    const el = $("#pcsu-statusText");
-    if (el) el.textContent = msg;
+    if (els.statusText) els.statusText.textContent = msg;
+  }
+  function setUploadStatus(msg){
+    if (els.uploadStatus) els.uploadStatus.textContent = msg;
   }
   function saveState(data){
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
-    window.dispatchEvent(new StorageEvent("storage", { key: STORAGE_KEY }));
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      // lightweight notify (some Webflow embeds like this pattern)
+      window.dispatchEvent(new StorageEvent("storage", { key: STORAGE_KEY }));
+    } catch(e){
+      // ignore storage failures
+    }
+  }
+  function safeGet(obj, path, fallback=""){
+    try{
+      return path.split(".").reduce((a,k)=> (a && a[k] != null ? a[k] : undefined), obj) ?? fallback;
+    } catch(e){
+      return fallback;
+    }
+  }
+  function paintBrief(data){
+    if (!data) return;
+    // BLUF: prefer blufText / bluf / summary / assignment
+    const bluf =
+      safeGet(data, "blufText") ||
+      safeGet(data, "bluf") ||
+      safeGet(data, "summary") ||
+      safeGet(data, "assignment") ||
+      safeGet(data, "brief.bluf") ||
+      "";
+    if (els.blufText) els.blufText.textContent = bluf || "Orders interpreted — review your brief below.";
+    // Details (best-effort)
+    const rnltd =
+      safeGet(data, "details.rnltd") ||
+      safeGet(data, "rnltd") ||
+      safeGet(data, "key_details.report_no_later") ||
+      "—";
+    const unit =
+      safeGet(data, "details.unit") ||
+      safeGet(data, "unit") ||
+      safeGet(data, "gaining_unit") ||
+      "—";
+    const deps =
+      safeGet(data, "details.dependents") ||
+      safeGet(data, "dependents") ||
+      safeGet(data, "details.deps") ||
+      "—";
+    const travel =
+      safeGet(data, "details.travel") ||
+      safeGet(data, "travel_mode") ||
+      safeGet(data, "travel") ||
+      "—";
+    if (els.rnltd) els.rnltd.textContent = rnltd;
+    if (els.unit) els.unit.textContent = unit;
+    if (els.deps) els.deps.textContent = deps;
+    if (els.travel) els.travel.textContent = travel;
+    // Next steps (array or fields)
+    const nextArr =
+      safeGet(data, "next_steps", null) ||
+      safeGet(data, "nextSteps", null) ||
+      safeGet(data, "brief.next_steps", null);
+    const n1 = (Array.isArray(nextArr) && nextArr[0]) ? String(nextArr[0]) : (safeGet(data, "next.1") || safeGet(data, "next1") || "—");
+    const n2 = (Array.isArray(nextArr) && nextArr[1]) ? String(nextArr[1]) : (safeGet(data, "next.2") || safeGet(data, "next2") || "—");
+    const n3 = (Array.isArray(nextArr) && nextArr[2]) ? String(nextArr[2]) : (safeGet(data, "next.3") || safeGet(data, "next3") || "—");
+    if (els.next1) els.next1.textContent = n1;
+    if (els.next2) els.next2.textContent = n2;
+    if (els.next3) els.next3.textContent = n3;
+    // Notes (array or fields)
+    const noteArr =
+      safeGet(data, "important_notes", null) ||
+      safeGet(data, "importantNotes", null) ||
+      safeGet(data, "brief.notes", null);
+    const m1 = (Array.isArray(noteArr) && noteArr[0]) ? String(noteArr[0]) : (safeGet(data, "notes.1") || safeGet(data, "note1") || "—");
+    const m2 = (Array.isArray(noteArr) && noteArr[1]) ? String(noteArr[1]) : (safeGet(data, "notes.2") || safeGet(data, "note2") || "—");
+    const m3 = (Array.isArray(noteArr) && noteArr[2]) ? String(noteArr[2]) : (safeGet(data, "notes.3") || safeGet(data, "note3") || "—");
+    if (els.note1) els.note1.textContent = m1;
+    if (els.note2) els.note2.textContent = m2;
+    if (els.note3) els.note3.textContent = m3;
   }
   function loadPDFJS(){
     return new Promise((resolve, reject) => {
@@ -708,50 +818,618 @@
     }
     return fullText.trim();
   }
+  function readAsDataURL(file){
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(String(r.result || ""));
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+  function normalizeDataUrl(dataUrl){
+    // "data:application/pdf;base64,AAAA" -> { mime, base64 }
+    const m = /^data:([^;]+);base64,(.+)$/i.exec(dataUrl || "");
+    if (!m) return { mime: "", base64: "" };
+    return { mime: m[1] || "", base64: m[2] || "" };
+  }
+  async function callOrdersExtract(payload){
+    const res = await fetch(`${API_BASE}/orders-extract`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      throw new Error(`API error: ${res.status} ${errText}`);
+    }
+    return res.json();
+  }
   async function handleFile(file){
-    if (!file || !/pdf$/i.test(file.name)){
-      setStatus("Please upload a PDF file");
+    if (!file){
+      setStatus("Upload your PCS orders first");
       return;
     }
+    const redact = !!(els.redactToggle && els.redactToggle.checked);
+    // UX
+    $("#pcsu-explainBtn")?.setAttribute("disabled", "true");
     setStatus("Reading orders…");
     try {
-      const text = await extractPDFText(file);
-      if (!text || text.length < 50){
-        setStatus("Could not read text from PDF");
+      const isPDF = /pdf$/i.test(file.name) || (file.type === "application/pdf");
+      const isImage = /^image\//i.test(file.type);
+      let payload = {
+        filename: file.name || "upload",
+        redact
+      };
+      if (isPDF){
+        const text = await extractPDFText(file);
+        if (!text || text.length < 50){
+          // fallback: send PDF as base64 so server can try
+          setStatus("PDF text was limited — sending file for processing…");
+          const dataUrl = await readAsDataURL(file);
+          const norm = normalizeDataUrl(dataUrl);
+          payload.pdf_base64 = norm.base64;
+          payload.mime = norm.mime || file.type || "application/pdf";
+        } else {
+          payload.text = text;
+        }
+      } else if (isImage){
+        setStatus("Preparing image…");
+        const dataUrl = await readAsDataURL(file);
+        const norm = normalizeDataUrl(dataUrl);
+        payload.image_base64 = norm.base64;
+        payload.mime = norm.mime || file.type || "image/*";
+      } else {
+        setStatus("Please upload a PDF or photo");
         return;
       }
       setStatus("Interpreting orders…");
-      const res = await fetch(`${API_BASE}/orders-extract`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          text,
-          filename: file.name,
-          redact: true
-        })
-      });
-      if (!res.ok) {
-        const errText = await res.text().catch(() => "");
-        throw new Error(`API error: ${res.status} ${errText}`);
-      }
-      const data = await res.json();
+      const data = await callOrdersExtract(payload);
       saveState(data);
+      paintBrief(data);
       setStatus("Orders interpreted successfully");
+      setUploadStatus(`✅ Ready: ${file.name}`);
     } catch (err){
       console.error(err);
       setStatus("Unable to interpret orders — try another file");
+      setUploadStatus("⚠️ Upload failed — try again");
+    } finally {
+      $("#pcsu-explainBtn")?.removeAttribute("disabled");
     }
   }
+  function bindDropzone(){
+    if (!els.dropzone || !els.fileInput) return;
+    const openPicker = () => els.fileInput && els.fileInput.click();
+    els.dropzone.addEventListener("click", openPicker);
+    els.dropzone.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openPicker();
+      }
+    });
+    // drag/drop
+    const over = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.add("is-dragover");
+    };
+    const leave = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.remove("is-dragover");
+    };
+    const drop = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.remove("is-dragover");
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (!f) return;
+      // mirror selection into input (best-effort)
+      try{
+        const dt = new DataTransfer();
+        dt.items.add(f);
+        els.fileInput.files = dt.files;
+      } catch(e){}
+      setUploadStatus(`Selected: ${f.name}`);
+      setStatus("File selected — click “Explain My Orders”");
+    };
+    els.dropzone.addEventListener("dragenter", over);
+    els.dropzone.addEventListener("dragover", over);
+    els.dropzone.addEventListener("dragleave", leave);
+    els.dropzone.addEventListener("drop", drop);
+  }
   function bindUI(){
-    const fileInput = $("#pcsu-ordersFile"); // your shell ID
-    const explainBtn = $("#pcsu-explainBtn");
-    explainBtn?.addEventListener("click", () => {
-      if (!fileInput || !fileInput.files.length){
-        setStatus("Upload your PCS orders first");
+    els.dropzone = $("#pcsu-dropzone");
+    els.fileInput = $("#pcsu-fileInput");
+    els.explainBtn = $("#pcsu-explainBtn");
+    els.redactToggle = $("#pcsu-redactToggle");
+    els.uploadStatus = $("#pcsu-uploadStatus");
+    els.statusText = $("#pcsu-statusText");
+    // brief fields
+    els.blufText = $("#pcsu-blufText");
+    els.rnltd = $("#pcsu-detail-rnltd");
+    els.unit = $("#pcsu-detail-unit");
+    els.deps = $("#pcsu-detail-deps");
+    els.travel = $("#pcsu-detail-travel");
+    els.next1 = $("#pcsu-next-1");
+    els.next2 = $("#pcsu-next-2");
+    els.next3 = $("#pcsu-next-3");
+    els.note1 = $("#pcsu-note-1");
+    els.note2 = $("#pcsu-note-2");
+    els.note3 = $("#pcsu-note-3");
+    // file selection -> status
+    els.fileInput?.addEventListener("change", () => {
+      const f = els.fileInput && els.fileInput.files && els.fileInput.files[0];
+      if (!f){
+        setUploadStatus("No file selected");
+        setStatus("Ready for upload");
         return;
       }
-      handleFile(fileInput.files[0]);
+      setUploadStatus(`Selected: ${f.name}`);
+      setStatus("File selected — click “Explain My Orders”");
     });
+    // explain button
+    els.explainBtn?.addEventListener("click", () => {
+      const f = els.fileInput && els.fileInput.files && els.fileInput.files[0];
+      if (!f){
+        setStatus("Upload your PCS orders first");
+        setUploadStatus("No file selected");
+        return;
+      }
+      handleFile(f);
+    });
+    bindDropzone();
+    // restore last state if exists
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw){
+        const parsed = JSON.parse(raw);
+        paintBrief(parsed);
+        setStatus("Loaded last brief (local)");
+      }
+    } catch(e){}
+  }
+  function init(){ bindUI(); }
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else init();
+})();
+</script>
+    </div>
+    <div class="w-embed w-script">
+      <script>
+/* ============================================================
+  PCS Orders Translator — CORE Runtime (2A)
+  v2.1.1 — FIXES / UPGRADES:
+  ✅ Silences noisy PDF.js TT warnings (does NOT affect parsing)
+  ✅ Binds to shell IDs: #pcsu-fileInput, #pcsu-dropzone, #pcsu-explainBtn
+  ✅ Dropzone click + drag/drop + keyboard
+  ✅ PDF -> text via PDF.js, Images -> base64 (server can OCR)
+  ✅ Redact toggle wired
+  ✅ Robust “normalize + paint” for API responses that wrap data (data.result/brief/extracted/etc)
+  ✅ Client-side fallback extraction (regex) if API returns partial fields
+=============================================================== */
+(() => {
+  if (window.PCSU_ORDERS && window.PCSU_ORDERS.__mounted) return;
+  // 🔇 Silence noisy PDF.js font warnings in console
+  // (These are common + harmless; this just keeps your console clean.)
+  try{
+    const _warn = console.warn;
+    console.warn = (...args) => {
+      const a0 = args && args.length ? args[0] : "";
+      if (typeof a0 === "string" && a0.includes("Warning: TT:")) return;
+      _warn.apply(console, args);
+    };
+  } catch(e){}
+  const CORE = (window.PCSU_ORDERS = window.PCSU_ORDERS || {});
+  CORE.__mounted = true;
+  const $ = (q) => document.querySelector(q);
+  const STORAGE_KEY = "pcsunited.orders.v1";
+  const DEBUG = (
+    new URLSearchParams(location.search).get("debug") === "1" ||
+    localStorage.getItem("pcsunited.orders.debug") === "1"
+  );
+  // ✅ IMPORTANT: Webflow pages must call Netlify directly
+  const API_BASE = (
+    location.hostname.endsWith("webflow.io") ||
+    location.hostname.endsWith("webflow.com")
+  )
+    ? "https://pcsunited.netlify.app/api"
+    : "/api";
+  const els = {
+    dropzone: null,
+    fileInput: null,
+    explainBtn: null,
+    redactToggle: null,
+    uploadStatus: null,
+    statusText: null,
+    // brief fields
+    blufText: null,
+    rnltd: null,
+    unit: null,
+    deps: null,
+    travel: null,
+    next1: null,
+    next2: null,
+    next3: null,
+    note1: null,
+    note2: null,
+    note3: null,
+  };
+  function dlog(...args){ if (DEBUG) console.log("[PCSU_ORDERS]", ...args); }
+  function setStatus(msg){
+    if (els.statusText) els.statusText.textContent = msg;
+  }
+  function setUploadStatus(msg){
+    if (els.uploadStatus) els.uploadStatus.textContent = msg;
+  }
+  function saveState(data){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      window.dispatchEvent(new StorageEvent("storage", { key: STORAGE_KEY }));
+    } catch(e){}
+  }
+  function safeGet(obj, path, fallback=""){
+    try{
+      return path.split(".").reduce((a,k)=> (a && a[k] != null ? a[k] : undefined), obj) ?? fallback;
+    } catch(e){
+      return fallback;
+    }
+  }
+  function pickFirst(obj, paths, fallback=""){
+    for (const p of paths){
+      const v = safeGet(obj, p, "");
+      if (v !== "" && v != null) return v;
+    }
+    return fallback;
+  }
+  function normalizeResponse(apiData){
+    // Handles: {ok:true, brief:{...}}, {data:{...}}, {result:{...}}, {extracted:{...}}, etc.
+    if (!apiData || typeof apiData !== "object") return { raw: apiData, brief: null };
+    const candidates = [
+      apiData,
+      apiData.brief,
+      apiData.extracted,
+      apiData.result,
+      apiData.data,
+      apiData.payload,
+      apiData.output,
+      apiData.response,
+      safeGet(apiData, "data.brief", null),
+      safeGet(apiData, "result.brief", null),
+      safeGet(apiData, "extracted.brief", null),
+      safeGet(apiData, "brief.data", null),
+    ].filter(Boolean);
+    // Heuristic: pick object that contains any “brief-ish” keys
+    const score = (o) => {
+      if (!o || typeof o !== "object") return 0;
+      const keys = Object.keys(o);
+      const hits = [
+        "bluf","blufText","summary","assignment",
+        "details","key_details","keyDetails",
+        "next_steps","nextSteps","important_notes","importantNotes",
+        "rnltd","report_no_later","unit","dependents","travel"
+      ];
+      let s = 0;
+      for (const h of hits){
+        if (keys.includes(h)) s += 2;
+      }
+      if (o.details) s += 3;
+      if (o.next_steps || o.nextSteps) s += 2;
+      if (o.important_notes || o.importantNotes) s += 2;
+      return s;
+    };
+    let best = candidates[0] || null;
+    let bestScore = score(best);
+    for (const c of candidates){
+      const sc = score(c);
+      if (sc > bestScore){
+        best = c;
+        bestScore = sc;
+      }
+    }
+    // If the best is still wrapper-like, attempt one more unwrap
+    const maybeInner =
+      best && typeof best === "object"
+        ? (best.brief || best.data || best.result || best.extracted || best.payload || null)
+        : null;
+    if (maybeInner && score(maybeInner) >= bestScore) best = maybeInner;
+    return { raw: apiData, brief: best };
+  }
+  function extractFallbackFromText(text){
+    if (!text || typeof text !== "string") return {};
+    const t = text.replace(/\s+/g, " ").trim();
+    // Common date formats: 15 SEP 2024 / 15 Sep 2024 / 2024-09-15
+    const date1 = /(\d{1,2}\s+[A-Z]{3}\s+\d{4})/;
+    const date2 = /(\d{4}-\d{2}-\d{2})/;
+    const rnltd =
+      (/(RNLTD|REPORT\s+NO\s+LATER\s+THAN|REPORT\s+NO\s+LATER)\s*[:\-]?\s*([0-9]{1,2}\s+[A-Z]{3}\s+\d{4}|\d{4}-\d{2}-\d{2})/i.exec(t) || [])[2] ||
+      (/(ARRIVE\s+NLT|ARRIVE\s+NO\s+LATER\s+THAN)\s*[:\-]?\s*([0-9]{1,2}\s+[A-Z]{3}\s+\d{4}|\d{4}-\d{2}-\d{2})/i.exec(t) || [])[2] ||
+      (date1.exec(t) || date2.exec(t) || [])[1] ||
+      "";
+    const unit =
+      (/(GAINING\s+UNIT|UNIT|ORGANIZATION)\s*[:\-]?\s*([A-Z0-9&\-\.,\s]{6,60})/i.exec(t) || [])[2] ||
+      "";
+    const deps =
+      (/(DEPENDENTS)\s*[:\-]?\s*(AUTHORIZED|NOT\s+AUTHORIZED|YES|NO)/i.exec(t) || [])[2] ||
+      (/(DEPENDENT\s+TRAVEL)\s*[:\-]?\s*(AUTHORIZED|NOT\s+AUTHORIZED|YES|NO)/i.exec(t) || [])[2] ||
+      "";
+    const travel =
+      (/(MODE\s+OF\s+TRAVEL|TRAVEL\s+MODE)\s*[:\-]?\s*([A-Z0-9\/\-\s]{3,40})/i.exec(t) || [])[2] ||
+      "";
+    return {
+      details: {
+        rnltd: rnltd ? rnltd.toUpperCase() : "",
+        unit: unit ? unit.trim() : "",
+        dependents: deps ? deps.toUpperCase() : "",
+        travel: travel ? travel.trim() : ""
+      }
+    };
+  }
+  function paintBrief(apiData, sourceTextForFallback=""){
+    const norm = normalizeResponse(apiData);
+    const data = norm.brief || {};
+    dlog("API raw:", norm.raw);
+    dlog("Chosen brief object:", data);
+    // If we still got nothing useful, try fallback parsing from extracted PDF text
+    const hasAnyField =
+      !!pickFirst(data, ["blufText","bluf","summary","assignment","details.rnltd","rnltd","details.unit","unit"], "");
+    const merged = hasAnyField ? data : Object.assign({}, extractFallbackFromText(sourceTextForFallback), data);
+    // BLUF
+    const bluf =
+      pickFirst(merged, [
+        "blufText","bluf","summary","assignment",
+        "brief.blufText","brief.bluf","brief.summary","brief.assignment"
+      ], "");
+    if (els.blufText){
+      els.blufText.textContent = bluf || "Orders interpreted — review your brief below.";
+    }
+    // Details
+    const rnltd = pickFirst(merged, [
+      "details.rnltd","rnltd",
+      "key_details.report_no_later","keyDetails.reportNoLater",
+      "details.report_no_later","details.reportNoLater",
+      "report_no_later","reportNoLater"
+    ], "—");
+    const unit = pickFirst(merged, [
+      "details.unit","unit",
+      "details.gaining_unit","gaining_unit",
+      "details.gainingUnit","gainingUnit",
+      "key_details.new_unit","keyDetails.newUnit"
+    ], "—");
+    const deps = pickFirst(merged, [
+      "details.dependents","dependents",
+      "details.deps","deps",
+      "key_details.dependents","keyDetails.dependents"
+    ], "—");
+    const travel = pickFirst(merged, [
+      "details.travel","travel",
+      "travel_mode","travelMode",
+      "details.travel_mode","details.travelMode"
+    ], "—");
+    if (els.rnltd) els.rnltd.textContent = String(rnltd || "—");
+    if (els.unit) els.unit.textContent = String(unit || "—");
+    if (els.deps) els.deps.textContent = String(deps || "—");
+    if (els.travel) els.travel.textContent = String(travel || "—");
+    // Next steps (array or single fields)
+    const nextArr =
+      pickFirst(merged, ["next_steps","nextSteps","brief.next_steps","brief.nextSteps"], null);
+    const n1 = (Array.isArray(nextArr) && nextArr[0]) ? String(nextArr[0]) : pickFirst(merged, ["next.1","next1","brief.next1"], "—");
+    const n2 = (Array.isArray(nextArr) && nextArr[1]) ? String(nextArr[1]) : pickFirst(merged, ["next.2","next2","brief.next2"], "—");
+    const n3 = (Array.isArray(nextArr) && nextArr[2]) ? String(nextArr[2]) : pickFirst(merged, ["next.3","next3","brief.next3"], "—");
+    if (els.next1) els.next1.textContent = n1 || "—";
+    if (els.next2) els.next2.textContent = n2 || "—";
+    if (els.next3) els.next3.textContent = n3 || "—";
+    // Notes (array or single fields)
+    const noteArr =
+      pickFirst(merged, ["important_notes","importantNotes","brief.notes","brief.important_notes","brief.importantNotes"], null);
+    const m1 = (Array.isArray(noteArr) && noteArr[0]) ? String(noteArr[0]) : pickFirst(merged, ["notes.1","note1","brief.note1"], "—");
+    const m2 = (Array.isArray(noteArr) && noteArr[1]) ? String(noteArr[1]) : pickFirst(merged, ["notes.2","note2","brief.note2"], "—");
+    const m3 = (Array.isArray(noteArr) && noteArr[2]) ? String(noteArr[2]) : pickFirst(merged, ["notes.3","note3","brief.note3"], "—");
+    if (els.note1) els.note1.textContent = m1 || "—";
+    if (els.note2) els.note2.textContent = m2 || "—";
+    if (els.note3) els.note3.textContent = m3 || "—";
+  }
+  function loadPDFJS(){
+    return new Promise((resolve, reject) => {
+      if (window.pdfjsLib) return resolve();
+      const s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+      s.onload = () => {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        resolve();
+      };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+  async function extractPDFText(file){
+    await loadPDFJS();
+    const buf = await file.arrayBuffer();
+    // These options are safe; if any are unsupported, PDF.js ignores them.
+    const loadingTask = window.pdfjsLib.getDocument({
+      data: buf,
+      // Lower verbosity from PDF.js (worker still may warn; we filter above)
+      verbosity: 0,
+      // Helpful for some embedded fonts
+      useSystemFonts: true,
+      disableFontFace: true
+    });
+    const pdf = await loadingTask.promise;
+    let fullText = "";
+    for (let i = 1; i <= pdf.numPages; i++){
+      const page = await pdf.getPage(i);
+      const txt = await page.getTextContent();
+      const pageText = txt.items.map(x => x.str).join(" ");
+      fullText += "\n" + pageText;
+    }
+    return fullText.trim();
+  }
+  function readAsDataURL(file){
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(String(r.result || ""));
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+  function normalizeDataUrl(dataUrl){
+    const m = /^data:([^;]+);base64,(.+)$/i.exec(dataUrl || "");
+    if (!m) return { mime: "", base64: "" };
+    return { mime: m[1] || "", base64: m[2] || "" };
+  }
+  async function callOrdersExtract(payload){
+    dlog("POST", `${API_BASE}/orders-extract`, payload);
+    const res = await fetch(`${API_BASE}/orders-extract`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      throw new Error(`API error: ${res.status} ${errText}`);
+    }
+    return res.json();
+  }
+  async function handleFile(file){
+    if (!file){
+      setStatus("Upload your PCS orders first");
+      return;
+    }
+    const redact = !!(els.redactToggle && els.redactToggle.checked);
+    els.explainBtn?.setAttribute("disabled", "true");
+    setStatus("Reading orders…");
+    try {
+      const isPDF = /pdf$/i.test(file.name) || (file.type === "application/pdf");
+      const isImage = /^image\//i.test(file.type);
+      let payload = {
+        filename: file.name || "upload",
+        redact
+      };
+      let extractedTextForFallback = "";
+      if (isPDF){
+        extractedTextForFallback = await extractPDFText(file);
+        if (!extractedTextForFallback || extractedTextForFallback.length < 50){
+          // fallback: send PDF as base64 so server can try OCR or alternative parsing
+          setStatus("PDF text was limited — sending file for processing…");
+          const dataUrl = await readAsDataURL(file);
+          const norm = normalizeDataUrl(dataUrl);
+          payload.pdf_base64 = norm.base64;
+          payload.mime = norm.mime || file.type || "application/pdf";
+        } else {
+          payload.text = extractedTextForFallback;
+        }
+      } else if (isImage){
+        setStatus("Preparing image…");
+        const dataUrl = await readAsDataURL(file);
+        const norm = normalizeDataUrl(dataUrl);
+        payload.image_base64 = norm.base64;
+        payload.mime = norm.mime || file.type || "image/*";
+      } else {
+        setStatus("Please upload a PDF or photo");
+        return;
+      }
+      setStatus("Interpreting orders…");
+      const apiData = await callOrdersExtract(payload);
+      saveState(apiData);
+      paintBrief(apiData, extractedTextForFallback);
+      setStatus("Orders interpreted successfully");
+      setUploadStatus(`✅ Ready: ${file.name}`);
+    } catch (err){
+      console.error(err);
+      setStatus("Unable to interpret orders — try another file");
+      setUploadStatus("⚠️ Upload failed — try again");
+    } finally {
+      els.explainBtn?.removeAttribute("disabled");
+    }
+  }
+  function bindDropzone(){
+    if (!els.dropzone || !els.fileInput) return;
+    const openPicker = () => els.fileInput && els.fileInput.click();
+    els.dropzone.addEventListener("click", openPicker);
+    els.dropzone.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openPicker();
+      }
+    });
+    const over = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.add("is-dragover");
+    };
+    const leave = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.remove("is-dragover");
+    };
+    const drop = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.remove("is-dragover");
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (!f) return;
+      try{
+        const dt = new DataTransfer();
+        dt.items.add(f);
+        els.fileInput.files = dt.files;
+      } catch(e){}
+      setUploadStatus(`Selected: ${f.name}`);
+      setStatus("File selected — click “Explain My Orders”");
+    };
+    els.dropzone.addEventListener("dragenter", over);
+    els.dropzone.addEventListener("dragover", over);
+    els.dropzone.addEventListener("dragleave", leave);
+    els.dropzone.addEventListener("drop", drop);
+  }
+  function bindUI(){
+    els.dropzone = $("#pcsu-dropzone");
+    els.fileInput = $("#pcsu-fileInput");
+    els.explainBtn = $("#pcsu-explainBtn");
+    els.redactToggle = $("#pcsu-redactToggle");
+    els.uploadStatus = $("#pcsu-uploadStatus");
+    els.statusText = $("#pcsu-statusText");
+    // brief fields
+    els.blufText = $("#pcsu-blufText");
+    els.rnltd = $("#pcsu-detail-rnltd");
+    els.unit = $("#pcsu-detail-unit");
+    els.deps = $("#pcsu-detail-deps");
+    els.travel = $("#pcsu-detail-travel");
+    els.next1 = $("#pcsu-next-1");
+    els.next2 = $("#pcsu-next-2");
+    els.next3 = $("#pcsu-next-3");
+    els.note1 = $("#pcsu-note-1");
+    els.note2 = $("#pcsu-note-2");
+    els.note3 = $("#pcsu-note-3");
+    els.fileInput?.addEventListener("change", () => {
+      const f = els.fileInput && els.fileInput.files && els.fileInput.files[0];
+      if (!f){
+        setUploadStatus("No file selected");
+        setStatus("Ready for upload");
+        return;
+      }
+      setUploadStatus(`Selected: ${f.name}`);
+      setStatus("File selected — click “Explain My Orders”");
+    });
+    els.explainBtn?.addEventListener("click", () => {
+      const f = els.fileInput && els.fileInput.files && els.fileInput.files[0];
+      if (!f){
+        setStatus("Upload your PCS orders first");
+        setUploadStatus("No file selected");
+        return;
+      }
+      handleFile(f);
+    });
+    bindDropzone();
+    // restore last state if exists
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw){
+        const parsed = JSON.parse(raw);
+        paintBrief(parsed, "");
+        setStatus("Loaded last brief (local)");
+      }
+    } catch(e){}
   }
   function init(){ bindUI(); }
   if (document.readyState === "loading"){
@@ -765,12 +1443,19 @@
 /* ============================================================
   PCS Orders Translator — Module (2B)
   "What It Means" Renderer
-  v1.0.0 — DEMO/LOCAL MODE (reads pcsunited.orders.v1)
+  v1.1.0 — UPDATED for orders-extract v1.1.x + 2A storage
+  ✅ Reads localStorage: pcsunited.orders.v1
+  ✅ Works with NEW payload shape:
+     - blufText
+     - details { rnltd, unit, dependents, travel, losing, gaining }
+     - next_steps[], important_notes[]
+     - brief{} (back-compat)
+  ✅ Also supports legacy shapes (data.extracted.*)
+  ✅ No network calls. No extra storage.
   Purpose:
-  - Inject a "What It Means" panel into the Shell
+  - Inject "What It Means" panel into the Shell
   - Render plain-English decoding from extracted JSON
   - Toggle visibility when the Meaning tab is active
-  - NO network calls, NO storage beyond localStorage cache
 =============================================================== */
 (() => {
   if (window.PCSU_ORDERS_2B && window.PCSU_ORDERS_2B.__mounted) return;
@@ -784,11 +1469,115 @@
   function loadState(){
     return safeJSONParse(localStorage.getItem(STORAGE_KEY));
   }
+  function safeGet(obj, path, fallback=""){
+    try{
+      return path.split(".").reduce((a,k)=> (a && a[k] != null ? a[k] : undefined), obj) ?? fallback;
+    } catch {
+      return fallback;
+    }
+  }
+  function pickFirst(obj, paths, fallback=""){
+    for (const p of paths){
+      const v = safeGet(obj, p, "");
+      if (v !== "" && v != null) return v;
+    }
+    return fallback;
+  }
+  function normalizeData(data){
+    // Supports:
+    // - New: { details:{...}, next_steps:[], important_notes:[], meta:{} }
+    // - Old: { extracted:{...}, meta:{} }
+    // - Back-compat: { brief:{ assignment:{...}, keyDetails:{...}, ... } }
+    const d = data || {};
+    const details = d.details || {};
+    const brief = d.brief || {};
+    const extracted = d.extracted || {};
+    const rnltd =
+      pickFirst(d, [
+        "details.rnltd",
+        "brief.keyDetails.reportNoLater",
+        "brief.assignment.reportNoLater",
+        "extracted.rnltd",
+        "extracted.reportNoLater",
+        "extracted.report_no_later",
+      ], "");
+    const unit =
+      pickFirst(d, [
+        "details.unit",
+        "brief.keyDetails.unit",
+        "brief.keyDetails.gainingUnit",
+        "extracted.gainingUnit",
+        "extracted.unit",
+      ], "");
+    const dependents =
+      pickFirst(d, [
+        "details.dependents",
+        "brief.keyDetails.dependents",
+        "extracted.dependents",
+      ], "");
+    const travel =
+      pickFirst(d, [
+        "details.travel",
+        "brief.keyDetails.travel",
+        "extracted.travelMode",
+        "extracted.travel",
+      ], "");
+    const losing =
+      pickFirst(d, [
+        "details.losing",
+        "brief.assignment.from",
+        "brief.keyDetails.losing",
+        "extracted.losing",
+        "extracted.from",
+      ], "");
+    const gaining =
+      pickFirst(d, [
+        "details.gaining",
+        "brief.assignment.to",
+        "brief.keyDetails.gaining",
+        "extracted.installation",
+        "extracted.to",
+      ], "");
+    const blufText =
+      pickFirst(d, [
+        "blufText",
+        "brief.blufText",
+        "brief.summary",
+        "brief.assignmentSummary",
+      ], "");
+    const nextSteps =
+      (Array.isArray(d.next_steps) && d.next_steps.length ? d.next_steps :
+      (Array.isArray(brief.nextSteps) && brief.nextSteps.length ? brief.nextSteps :
+      (Array.isArray(d.nextSteps) && d.nextSteps.length ? d.nextSteps : [])));
+    const importantNotes =
+      (Array.isArray(d.important_notes) && d.important_notes.length ? d.important_notes :
+      (Array.isArray(brief.importantNotes) && brief.importantNotes.length ? brief.importantNotes :
+      (Array.isArray(d.importantNotes) && d.importantNotes.length ? d.importantNotes : [])));
+    const confidence =
+      String(pickFirst(d, ["meta.confidence","meta.confidenceLevel","meta.quality"], "medium")).toLowerCase();
+    // Derived “OCONUS” guess (very lightweight)
+    const oconus = /\b(JP|KOREA|KR|GERMANY|DE|UK|GB|ITALY|IT|SPAIN|ES|OCONUS)\b/i.test(String(gaining || ""));
+    return {
+      meta: d.meta || {},
+      confidence,
+      blufText,
+      rnltd,
+      unit,
+      dependents,
+      travel,
+      losing,
+      gaining,
+      nextSteps,
+      importantNotes,
+      oconus,
+      // legacy extracted passthrough (in case you want it later)
+      extracted
+    };
+  }
   /* ============================================================
     #1 Panel Injection (minimal layout impact)
   ============================================================ */
   function ensurePanel(){
-    // We attach inside the Orders Brief container
     const brief = $(".pcsu-brief");
     if (!brief) return null;
     let panel = $("#pcsu-meaningPanel");
@@ -877,16 +1666,13 @@
         </div>
       </div>
     `;
-    // Insert panel after the 3-card grid, before bottom actions
     const grid = $(".pcsu-grid");
     const actions = $(".pcsu-actions");
     if (grid && actions && actions.parentElement === brief){
       brief.insertBefore(panel, actions);
     } else {
-      // Fallback: append to brief
       brief.appendChild(panel);
     }
-    // Responsive tweak: one column on small screens
     const style = document.createElement("style");
     style.textContent = `
       @media (max-width: 900px){
@@ -909,8 +1695,9 @@
   }
   function row(label, value, confidence){
     const c = confTag(confidence || "medium");
-    const safeVal = value && String(value).trim().length ? value : "Missing — confirm with MPF";
-    const dot = value && String(value).trim().length ? "✅" : "❓";
+    const ok = value && String(value).trim().length;
+    const safeVal = ok ? value : "Missing — confirm with MPF";
+    const dot = ok ? "✅" : "❓";
     return `
       <div style="
         display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
@@ -955,17 +1742,15 @@
       </div>
     `;
   }
-  function buildSummary(data){
-    const ex = data?.extracted || {};
-    const type = ex.assignmentType || "Assignment";
-    const loc = ex.installation || "your next duty location";
-    const rnltd = ex.rnltd ? formatDate(ex.rnltd) : "your RNLTD";
-    const deps = ex.dependents || "Dependent status";
-    const tour = ex.tourType || (ex.conus === false ? "OCONUS tour" : "CONUS assignment");
-    return `This appears to be a <b>${type}</b> to <b>${loc}</b> (${tour}). Your <b>Report No Later Than Date</b> is <b>${rnltd}</b>. Dependents: <b>${deps}</b>.`;
+  function normalizeDateStr(s){
+    // Accepts: "15 SEP 2024" OR "2024-09-15"
+    if (!s) return "";
+    const v = String(s).trim();
+    if (/^\d{1,2}\s+[A-Z]{3}\s+\d{4}$/i.test(v)) return v.toUpperCase();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return formatISO(v);
+    return v;
   }
-  function formatDate(iso){
-    // ISO yyyy-mm-dd → "DD MMM YYYY" (simple)
+  function formatISO(iso){
     try{
       const d = new Date(iso + "T00:00:00");
       const dd = String(d.getDate()).padStart(2,"0");
@@ -977,80 +1762,89 @@
       return iso;
     }
   }
-  function buildImplies(data){
-    const ex = data?.extracted || {};
+  function buildSummary(n){
+    // Prefer server-provided blufText if available
+    if (n.blufText && String(n.blufText).trim().length){
+      return String(n.blufText).trim();
+    }
+    const dest = n.gaining || "your next duty location";
+    const date = n.rnltd ? normalizeDateStr(n.rnltd) : "your RNLTD";
+    const deps = n.dependents || "Dependent status";
+    const tour = n.oconus ? "OCONUS tour" : "CONUS assignment";
+    return `This appears to be an <b>assignment</b> to <b>${dest}</b> (${tour}). Your <b>Report No Later</b> date is <b>${date}</b>. Dependents: <b>${deps}</b>.`;
+  }
+  function buildImplies(n){
     const items = [];
-    // OCONUS implications
-    if (ex.conus === false || (ex.tourType && /OCONUS/i.test(ex.tourType))){
-      items.push("Because this is an OCONUS move, expect additional steps like passports/medical clearance/port-call instructions. Start early.");
+    if (n.oconus){
+      items.push("Because this looks like an OCONUS move, expect extra steps like passports, medical clearance, and travel/port-call instructions. Start early.");
     }
-    // Dependents
-    if ((ex.dependents || "").toLowerCase().includes("authorized")){
-      items.push("Dependent travel and housing planning usually become time-critical. Coordinate early with MPF and Housing.");
-    } else if (ex.dependents){
-      items.push("If dependents are not authorized, confirm what that means for housing and entitlements with MPF/Finance.");
+    if ((n.dependents || "").toLowerCase().includes("authorized")){
+      items.push("Dependent travel/housing planning becomes time-critical. Coordinate early with MPF and Housing.");
+    } else if ((n.dependents || "").toLowerCase().includes("not")){
+      items.push("If dependents are NOT authorized, confirm housing rules and entitlements with MPF/Finance.");
+    } else {
+      items.push("Confirm dependent authorization status with MPF — it affects travel, housing, and some entitlements.");
     }
-    // Travel mode
-    if (ex.travelMode){
-      items.push(`Travel mode is noted as "${ex.travelMode}". This often influences what you coordinate with TMO (HHG/POV) and how travel is booked.`);
+    if (n.travel && n.travel !== "Unknown"){
+      items.push(`Travel mode is listed as "${n.travel}". This often affects how travel is booked and what you coordinate with TMO (HHG/POV).`);
+    } else {
+      items.push("Travel mode wasn’t clearly extracted. Confirm whether travel is arranged by CTO/Finance and how POV/HHG applies.");
     }
-    // RNLTD
-    if (ex.rnltd){
+    if (n.rnltd){
       items.push("Your RNLTD is the hard backstop. Your actual departure date may be flexible, but reporting late can create problems — confirm your window with MPF.");
     } else {
       items.push("Your RNLTD wasn’t extracted. Confirm the report-no-later date with MPF.");
     }
-    // Generic safe close
-    items.push("Orders authorize movement. Payment/allowances are determined by travel rules and processed by Finance — confirm anything that affects reimbursement.");
+    if (n.nextSteps && n.nextSteps.length){
+      items.push("Your orders usually imply you should start outbound actions now (out-processing, TMO counseling, Finance planning).");
+    }
+    items.push("Orders authorize movement. Allowances and reimbursement depend on travel rules processed by Finance — verify anything that affects payment.");
     return items;
   }
   function renderMeaning(){
     const panel = ensurePanel();
     if (!panel) return;
-    const data = loadState();
+    const raw = loadState();
     const badge = $("#pcsu-meaningBadge");
     const summary = $("#pcsu-meaningSummary");
     const decodedBody = $("#pcsu-meaningDecodedBody");
     const impliesBody = $("#pcsu-meaningImpliesBody");
-    if (!data){
+    if (!raw){
       badge.textContent = "Confidence: —";
       summary.textContent = "Upload orders to generate a plain-English summary.";
       decodedBody.innerHTML = "";
       impliesBody.innerHTML = "";
       return;
     }
+    const n = normalizeData(raw);
     // Badge
-    const level = (data.meta?.confidence || "medium").toLowerCase();
+    const level = (n.confidence || "medium").toLowerCase();
     const c = confTag(level);
     badge.textContent = `Confidence: ${c.txt}`;
     badge.style.background = c.bg;
     badge.style.borderColor = c.br;
     badge.style.color = c.fg;
     // Summary
-    summary.innerHTML = buildSummary(data);
-    // Decoded rows
-    const ex = data.extracted || {};
+    summary.innerHTML = buildSummary(n);
+    // Decoded rows (now based on NEW payload)
     decodedBody.innerHTML = [
-      row("Assignment Type", ex.assignmentType, "high"),
-      row("Duty Location", ex.installation, ex.installation ? "high" : "low"),
-      row("Gaining Unit", ex.gainingUnit, ex.gainingUnit ? "medium" : "low"),
-      row("RNLTD (Report No Later)", ex.rnltd ? formatDate(ex.rnltd) : "", ex.rnltd ? "high" : "low"),
-      row("Tour Type", ex.tourType, ex.tourType ? "medium" : "low"),
-      row("Dependents", ex.dependents, ex.dependents ? "high" : "low"),
-      row("Travel Mode", ex.travelMode, ex.travelMode ? "medium" : "low"),
+      row("Losing Location", n.losing, n.losing ? "medium" : "low"),
+      row("Gaining Location", n.gaining, n.gaining ? "high" : "low"),
+      row("Gaining Unit", n.unit, n.unit ? "medium" : "low"),
+      row("RNLTD (Report No Later)", n.rnltd ? normalizeDateStr(n.rnltd) : "", n.rnltd ? "high" : "low"),
+      row("Dependents", n.dependents, n.dependents ? "medium" : "low"),
+      row("Travel Mode", n.travel, (n.travel && n.travel !== "Unknown") ? "medium" : "low"),
     ].join("");
     // Implies bullets
-    const implies = buildImplies(data);
+    const implies = buildImplies(n);
     impliesBody.innerHTML = implies.map(bullet).join("") + `
       <div style="padding-top:8px; font-size:11px; font-weight:800; color:rgba(92,107,132,0.95);">
         Tip: If anything looks missing or unclear, use the “Questions to Ask” tab to confirm with MPF/TMO/Finance.
       </div>
     `;
-    // Remove bottom borders on last items (cosmetic)
-    const lastDecoded = decodedBody.querySelector("div:last-child");
-    if (lastDecoded) lastDecoded.style.borderBottom = "0";
-    const impliesNodes = impliesBody.querySelectorAll("div");
-    if (impliesNodes.length) impliesNodes[impliesNodes.length - 2].style.borderBottom = "0";
+    // Cosmetic: remove last border in decoded list
+    const decodedRows = decodedBody.querySelectorAll("div");
+    if (decodedRows.length) decodedRows[decodedRows.length - 1].style.borderBottom = "0";
   }
   /* ============================================================
     #3 Visibility Control (only show when Meaning tab active)
@@ -1065,26 +1859,24 @@
     panel.style.display = isMeaningActive() ? "block" : "none";
   }
   function bindTabHooks(){
-    // We hook tab clicks to re-render + toggle visibility.
     ["#pcsu-tab-meaning","#pcsu-tab-checklist","#pcsu-tab-questions"].forEach(sel=>{
       const el = $(sel);
       if (!el) return;
       el.addEventListener("click", () => {
-        // Let 2A set the active class first, then update.
         setTimeout(() => {
           applyVisibility();
           if (isMeaningActive()) renderMeaning();
         }, 0);
       });
     });
-    // Also re-render after Explain button
+    // re-render after Explain button completes (storage event might already handle this)
     const explainBtn = $("#pcsu-explainBtn");
     if (explainBtn){
       explainBtn.addEventListener("click", () => {
         setTimeout(() => {
           renderMeaning();
           applyVisibility();
-        }, 0);
+        }, 200);
       });
     }
   }
@@ -1096,7 +1888,6 @@
     renderMeaning();
     applyVisibility();
     bindTabHooks();
-    // Keep it synced if state changes from elsewhere
     window.addEventListener("storage", (e) => {
       if (e.key === STORAGE_KEY){
         renderMeaning();

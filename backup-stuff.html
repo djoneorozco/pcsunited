@@ -1,0 +1,4277 @@
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Mar 10 2026 08:08:06 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="69a912c0ac5ddabbbf7a82ff" data-wf-site="69658389f59da527c04bcbd4" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Backup Stuff</title>
+  <meta content="Backup Stuff" property="og:title">
+  <meta content="Backup Stuff" property="twitter:title">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="Webflow" name="generator">
+  <link href="css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="css/webflow.css" rel="stylesheet" type="text/css">
+  <link href="css/pcs-united.webflow.css" rel="stylesheet" type="text/css">
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
+  <script type="text/javascript">WebFont.load({  google: {    families: ["Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic"]  }});</script>
+  <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
+  <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
+  <link href="images/webclip.png" rel="apple-touch-icon">
+</head>
+<body>
+  <div class="code-embed-22 w-embed w-script"><!--  =========================================================
+  HOUSE OF SASS • PCS-STYLE PAY SNAPSHOT (MODEL-AWARE via brain.js)
+  ✅ Updated for PCSUnited login + keyspace
+  ✅ Works AFTER login (listens to pcsunited:unlocked)
+  ✅ Calls PCSUnited Netlify: https://pcsunited.netlify.app/api/brain
+  ✅ Back-compat: still falls back to legacy realtysass keys if present
+  ✅ NEW: Uses pcsunited.identity.email as primary source of truth
+=========================================================  -->
+    <div id="sass-mortgage-strip" style="all: initial;">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+      <style>
+    #sass-mortgage-strip, #sass-mortgage-strip * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    #sass-shell {
+      width: 100%;
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 16px 0;
+    }
+    #sass-input-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      #sass-input-row { grid-template-columns: repeat(2, 1fr); }
+    }
+    .sass-field-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #a8b0d6;
+      letter-spacing: .1em;
+      margin-bottom: 6px;
+      display: block;
+    }
+    .sass-number {
+      width: 100%;
+      padding: 9px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(12,14,25,0.65);
+      color: #e9ecff;
+      font-size: 14px;
+      outline: none;
+    }
+    /* hidden unless error */
+    #pay-mini-error{
+      margin-top:10px;
+      font-size:12px;
+      color:#ff8787;
+      min-height:16px;
+      opacity:0;
+      transform:translateY(-2px);
+      transition:.15s ease;
+      white-space:pre-wrap;
+    }
+    #pay-mini-error.show{ opacity:1; transform:translateY(0); }
+  </style>
+      <div id="sass-shell">
+        <div id="sass-input-row">
+          <div>
+            <label class="sass-field-label" id="pay-l1">Base Pay</label>
+            <input id="pay-base" class="sass-number" type="text" readonly="" value="$—">
+          </div>
+          <div>
+            <label class="sass-field-label" id="pay-l2">BAH</label>
+            <input id="pay-bah" class="sass-number" type="text" readonly="" value="$—">
+          </div>
+          <div>
+            <label class="sass-field-label" id="pay-l3">BAS</label>
+            <input id="pay-bas" class="sass-number" type="text" readonly="" value="$—">
+          </div>
+          <div>
+            <label class="sass-field-label" id="pay-l4">Total Pay</label>
+            <input id="pay-total" class="sass-number" type="text" readonly="" value="$—">
+          </div>
+        </div>
+        <div id="pay-mini-error"></div>
+      </div>
+      <script>
+    (function(){
+      "use strict";
+      // =========================================================
+      // //#1 CONFIG (PCSUnited)
+      // =========================================================
+      const API_BASE = "https://pcsunited.netlify.app/api";
+      const BRAIN_ENDPOINT = API_BASE + "/brain";
+      // ✅ For testing only. Leave blank to require real login identity.
+      const FORCE_EMAIL_FALLBACK = ""; // e.g. "orozco@me.com"
+      const DEFAULT_CITYKEY = "SanAntonio";
+      const DEFAULT_BEDROOMS = 4;
+      const KEY_IDENTITY = "pcsunited.identity";
+      // =========================================================
+      // //#2 DOM
+      // =========================================================
+      const baseEl  = document.getElementById("pay-base");
+      const bahEl   = document.getElementById("pay-bah");
+      const basEl   = document.getElementById("pay-bas");
+      const totalEl = document.getElementById("pay-total");
+      const errEl   = document.getElementById("pay-mini-error");
+      const l1 = document.getElementById("pay-l1");
+      const l2 = document.getElementById("pay-l2");
+      const l3 = document.getElementById("pay-l3");
+      const l4 = document.getElementById("pay-l4");
+      function setErr(msg){
+        const m = msg ? String(msg) : "";
+        errEl.textContent = m;
+        errEl.classList.toggle("show", !!m);
+      }
+      function fmtUSD2(n){
+        const v = Number(n);
+        if (!Number.isFinite(v)) return "$—";
+        return v.toLocaleString(undefined, {
+          style:"currency",
+          currency:"USD",
+          minimumFractionDigits:2,
+          maximumFractionDigits:2
+        });
+      }
+      function setLoading(){
+        baseEl.value  = "$—";
+        bahEl.value   = "$—";
+        basEl.value   = "$—";
+        totalEl.value = "$—";
+      }
+      function setLabels(a,b,c,d){
+        if (l1) l1.textContent = a;
+        if (l2) l2.textContent = b;
+        if (l3) l3.textContent = c;
+        if (l4) l4.textContent = d;
+      }
+      function readJSON(key){
+        try { return JSON.parse(localStorage.getItem(key) || "null"); } catch(_) { return null; }
+      }
+      // =========================================================
+      // //#3 IDENTITY + EMAIL SOURCES (PCSUnited-first, legacy fallback)
+      // =========================================================
+      function getIdentityEmail(){
+        const raw = localStorage.getItem(KEY_IDENTITY);
+        if (!raw) return "";
+        try{
+          const o = JSON.parse(raw);
+          const em = o?.email;
+          return em ? String(em).trim().toLowerCase() : "";
+        }catch(_){
+          // sometimes people store raw email string
+          if (raw.includes("@")) return raw.trim().toLowerCase();
+          return "";
+        }
+      }
+      function setIdentityEmail(email){
+        const em = String(email || "").trim().toLowerCase();
+        if (!em || !em.includes("@")) return;
+        let current = {};
+        try{ current = JSON.parse(localStorage.getItem(KEY_IDENTITY) || "{}"); }catch(_){ current = {}; }
+        const next = { ...(current||{}), email: em, ts: Date.now() };
+        try{ localStorage.setItem(KEY_IDENTITY, JSON.stringify(next)); }catch(_){}
+      }
+      function getPCSLoginEmail(){
+        try{ return String(localStorage.getItem("pcsunited.loginEmail") || "").trim().toLowerCase(); }
+        catch(_){ return ""; }
+      }
+      function getLegacyLoginEmail(){
+        try{ return String(localStorage.getItem("realtysass.loginEmail") || "").trim().toLowerCase(); }
+        catch(_){ return ""; }
+      }
+      function getPCSProfileEmail(){
+        const p = readJSON("pcsunited.profile.v1");
+        const em = p && p.email ? String(p.email) : "";
+        return String(em || "").trim().toLowerCase();
+      }
+      function getLegacyProfileLookupEmail(){
+        const blob = readJSON("realtysass.profile_lookup");
+        const em = blob && blob.profile && blob.profile.email ? String(blob.profile.email) : "";
+        return String(em || "").trim().toLowerCase();
+      }
+      function resolveBestEmail(){
+        const em =
+          getIdentityEmail() ||
+          getPCSLoginEmail() ||
+          getPCSProfileEmail() ||
+          getLegacyLoginEmail() ||
+          getLegacyProfileLookupEmail() ||
+          "";
+        if (em) return em;
+        const fallback = String(FORCE_EMAIL_FALLBACK || "").trim().toLowerCase();
+        return fallback;
+      }
+      function isLocked(){
+        const overlay = document.getElementById("rs-lock-overlay");
+        if (!overlay) return false;
+        if (overlay.classList && overlay.classList.contains("rs-hidden")) return false;
+        if (overlay.getAttribute("aria-hidden") === "true") return false;
+        const vis = String(overlay.style && overlay.style.visibility || "").toLowerCase();
+        const op  = String(overlay.style && overlay.style.opacity || "");
+        if (vis === "hidden") return false;
+        if (String(op).trim() === "0") return false;
+        return true;
+      }
+      // =========================================================
+      // //#4 NO-PREFLIGHT POST (Webflow → Netlify safe)
+      // =========================================================
+      async function postJSON_NoPreflight(url, body){
+        const r = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=UTF-8" },
+          body: JSON.stringify(body || {})
+        });
+        const j = await r.json().catch(()=>({}));
+        if (!r.ok || j.ok === false) throw new Error(j.error || ("HTTP " + r.status));
+        return j;
+      }
+      // =========================================================
+      // //#5 MODEL DETECTION
+      // =========================================================
+      function detectModel(brain){
+        const pay = brain?.pay || {};
+        const p = brain?.profile || {};
+        const payModel = String(pay.payModel || "").trim().toLowerCase();
+        const profileMode = String(p.mode || "").trim().toLowerCase();
+        if (payModel.includes("vet")) return "veteran";
+        if (payModel.includes("active")) return "active_duty";
+        if (profileMode === "vet" || profileMode === "veteran" || profileMode === "retired") return "veteran";
+        if (profileMode === "ad" || profileMode === "active" || profileMode === "active_duty") return "active_duty";
+        const hasVetFields =
+          Number.isFinite(Number(pay.retirementPay)) ||
+          Number.isFinite(Number(pay.vaDisabilityPay)) ||
+          String(pay.payAccuracy || "").toLowerCase().includes("retirement");
+        return hasVetFields ? "veteran" : "active_duty";
+      }
+      // =========================================================
+      // //#6 LOAD + PAINT (brain.js as source of truth)
+      // =========================================================
+      async function paintFromBrain(email){
+        setErr("");
+        setLoading();
+        // keep identity synced so console tests never fail
+        setIdentityEmail(email);
+        const brain = await postJSON_NoPreflight(BRAIN_ENDPOINT, {
+          email,
+          cityKey: DEFAULT_CITYKEY,
+          bedrooms: DEFAULT_BEDROOMS
+        });
+        if (brain?.profile?.email){
+          try{ localStorage.setItem("pcsunited.profile.v1", JSON.stringify(brain.profile)); }catch(_){}
+          try{ localStorage.setItem("realtysass.profile_lookup", JSON.stringify({ ok:true, profile: brain.profile })); }catch(_){}
+          setIdentityEmail(brain.profile.email);
+        }
+        if (brain.ok !== true){
+          const miss = (brain.missing || []).join(", ");
+          setErr(miss ? ("Missing: " + miss) : "Brain returned ok=false.");
+        }
+        const model = detectModel(brain);
+        const pay = brain.pay || {};
+        const p = brain.profile || {};
+        if (model === "veteran") {
+          setLabels("Retirement Pay", "VA Disability", "BAS", "Total Pay");
+          const retirementPay = Number(pay.retirementPay);
+          const vaPay = Number(pay.vaDisabilityPay);
+          const retirement = Number.isFinite(retirementPay) ? retirementPay : NaN;
+          const va = Number.isFinite(vaPay) ? vaPay : NaN;
+          const total = Number.isFinite(Number(pay.totalPay))
+            ? Number(pay.totalPay)
+            : (Number.isFinite(retirement) ? retirement : 0) + (Number.isFinite(va) ? va : 0);
+          baseEl.value  = fmtUSD2(retirement);
+          bahEl.value   = fmtUSD2(va);
+          basEl.value   = fmtUSD2(0);
+          totalEl.value = fmtUSD2(total);
+          const snap = {
+            ok:true,
+            at:new Date().toISOString(),
+            email,
+            model:"veteran",
+            rank: (p.rank_paygrade || p.rank || null),
+            yos: (p.yos ?? null),
+            retirementPay: Number.isFinite(retirement) ? retirement : null,
+            vaDisabilityPay: Number.isFinite(va) ? va : null,
+            bas: 0,
+            totalPay: Number.isFinite(total) ? total : null
+          };
+          try{ localStorage.setItem("pcsunited.pay_snapshot.v1", JSON.stringify(snap)); }catch(_){}
+          try{ localStorage.setItem("realtysass.pay_snapshot", JSON.stringify(snap)); }catch(_){}
+        } else {
+          setLabels("Base Pay", "BAH", "BAS", "Total Pay");
+          const basePay = Number(pay.basePay);
+          const bah = Number(pay.bah);
+          const bas = Number(pay.bas);
+          const total = Number(pay.totalPay);
+          baseEl.value  = fmtUSD2(basePay);
+          bahEl.value   = fmtUSD2(bah);
+          basEl.value   = fmtUSD2(bas);
+          totalEl.value = fmtUSD2(total);
+          const snap = {
+            ok:true,
+            at:new Date().toISOString(),
+            email,
+            model:"active_duty",
+            rank: (p.rank_paygrade || p.rank || null),
+            yos: (p.yos ?? null),
+            zip: (p.zip || null),
+            basePay: Number.isFinite(basePay) ? basePay : null,
+            bah: Number.isFinite(bah) ? bah : null,
+            bas: Number.isFinite(bas) ? bas : null,
+            totalPay: Number.isFinite(total) ? total : null
+          };
+          try{ localStorage.setItem("pcsunited.pay_snapshot.v1", JSON.stringify(snap)); }catch(_){}
+          try{ localStorage.setItem("realtysass.pay_snapshot", JSON.stringify(snap)); }catch(_){}
+        }
+      }
+      // =========================================================
+      // //#7 BOOT: wait for PCS login, then paint
+      // =========================================================
+      let painted = false;
+      async function tryPaint(reason){
+        if (painted) return;
+        if (isLocked()) return;
+        const email = resolveBestEmail();
+        if (!email){
+          setErr("Waiting for login… (no pcsunited.identity email yet)");
+          return;
+        }
+        painted = true;
+        try{
+          await paintFromBrain(email);
+        }catch(e){
+          painted = false;
+          setErr(String(e?.message || e));
+        }
+      }
+      function boot(){
+        setLoading();
+        setErr("");
+        tryPaint("boot");
+        window.addEventListener("pcsunited:unlocked", (ev)=>{
+          const em = (ev && ev.detail && ev.detail.email) ? String(ev.detail.email).trim().toLowerCase() : "";
+          if (em){
+            try{ localStorage.setItem("pcsunited.loginEmail", em); }catch(_){}
+            setIdentityEmail(em);
+          }
+          tryPaint("pcsunited:unlocked");
+        });
+        const maxMs = 30000, tickMs = 250;
+        let waited = 0;
+        const timer = setInterval(()=>{
+          waited += tickMs;
+          if (!painted) tryPaint("poll");
+          if (painted || waited >= maxMs) clearInterval(timer);
+        }, tickMs);
+        window.addEventListener("pcsunited:profile_loaded", ()=> { painted = false; tryPaint("profile_loaded"); });
+      }
+      boot();
+    })();
+  </script>
+    </div>
+  </div>
+  <div class="about_mision_wrapper">
+    <div data-w-id="dc64e014-dfeb-6d73-8d08-5f5b689f4f35" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="about_mision_content">
+      <div class="code-embed-27 w-embed w-script"><!--  ============================================================
+  PCSUnited • Base Image Only (320x400) — v1.0
+  Purpose: Display base image based on selected base name
+  Reads base from localStorage:
+    pcsunited.bridge / pcsunited.bridge.v1 / realtysass.bridge
+===============================================================  -->
+        <div id="pcsu-base-img" style="all: initial;">
+          <style>
+    #pcsu-base-img, #pcsu-base-img *{ box-sizing:border-box; }
+    .pcsu-wrap{
+      width:320px;
+      height:400px;
+      border-radius:16px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.25);
+    }
+    .pcsu-wrap img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+    }
+  </style>
+          <div class="pcsu-wrap">
+            <img id="pcsuBaseImage" alt="Selected base image" loading="eager" src="images/NellisAFB_LasVegas_320x400_LABELED.jpg">
+          </div>
+          <script>
+    (() => {
+      const img = document.getElementById("pcsuBaseImage");
+      if (!img) return;
+      // ---- 1) Where we read the base the user selected
+      function safeParse(s){ try { return JSON.parse(s); } catch(e){ return null; } }
+      function getBridge(){
+        return (
+          safeParse(localStorage.getItem("pcsunited.bridge")) ||
+          safeParse(localStorage.getItem("pcsunited.bridge.v1")) ||
+          safeParse(localStorage.getItem("realtysass.bridge")) ||
+          null
+        );
+      }
+      function getSelectedBase(){
+        const b = getBridge();
+        return (b?.base || b?.base_name || b?.installation || "").toString().trim();
+      }
+      // ---- 2) Your base → image URL map (THIS is where you add images)
+      const BASE_IMAGES = {
+        "Nellis AFB": "https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696af7b254e41da694a1a239_22ed27607c8d41cd625b28546b52dd90_NellisAFB_LasVegas_320x400_LABELED.jpg"
+        // Add more like:
+        // "JBSA-Lackland": "https://.../Lackland_320x400_LABELED.jpg",
+        // "Davis-Monthan AFB": "https://.../DavisMonthan_320x400_LABELED.jpg"
+      };
+      // Optional fallback if base not found
+      const FALLBACK = BASE_IMAGES["Nellis AFB"];
+      function paint(){
+        const base = getSelectedBase();
+        const url = BASE_IMAGES[base] || FALLBACK;
+        if (url) img.src = url;
+      }
+      paint();
+      // Repaint if bridge changes later
+      window.addEventListener("storage", (ev) => {
+        if (!ev || !ev.key) return;
+        if (ev.key === "pcsunited.bridge" || ev.key === "pcsunited.bridge.v1" || ev.key === "realtysass.bridge") {
+          paint();
+        }
+      });
+      window.addEventListener("pcsunited:bridge-ready", paint);
+      window.addEventListener("realtysass:bridge-ready", paint);
+    })();
+  </script>
+        </div>
+      </div>
+    </div>
+    <div class="code-embed-29 w-embed w-script"><!--  ============================================================
+PCSUnited • User BLUF Readiness Card — v3.0
+Purpose:
+Show user what PCSUnited currently knows and what inputs are missing
+Acts as a "PCS Readiness Brief"
+✅ NO APIs
+✅ NO Netlify
+✅ Reads localStorage bridge
+===============================================================  -->
+      <div id="pcsu-summary" style="all: initial;">
+        <style>
+#pcsu-summary, #pcsu-summary *{
+box-sizing:border-box;
+font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+.pcsu-card{
+width:min(900px,100%);
+margin:0 auto;
+border-radius:18px;
+padding:22px;
+background:rgba(255,255,255,.06);
+border:1px solid rgba(255,255,255,.12);
+backdrop-filter:blur(12px);
+color:rgba(255,255,255,.9);
+}
+.pcsu-title{
+font-size:12px;
+letter-spacing:.18em;
+text-transform:uppercase;
+color:rgba(255,255,255,.72);
+margin-bottom:12px;
+display:flex;
+align-items:center;
+gap:10px;
+}
+.pcsu-dot{
+width:8px;
+height:8px;
+border-radius:999px;
+background:rgba(227,175,90,.95);
+box-shadow:0 0 0 6px rgba(227,175,90,.12);
+}
+.pcsu-body{
+font-size:14px;
+line-height:1.6;
+}
+.pcsu-body strong{
+color:rgba(227,175,90,.95);
+font-weight:900;
+}
+.pcsu-list{
+margin-top:14px;
+padding-left:16px;
+}
+.pcsu-list li{
+margin-bottom:6px;
+}
+.pcsu-foot{
+margin-top:14px;
+padding-top:12px;
+border-top:1px solid rgba(255,255,255,.1);
+font-size:12px;
+color:rgba(255,255,255,.7);
+display:flex;
+justify-content:space-between;
+flex-wrap:wrap;
+gap:10px;
+}
+.pcsu-foot em{
+font-style:normal;
+color:rgba(227,175,90,.95);
+font-weight:800;
+}
+</style>
+        <div class="pcsu-card">
+          <div class="pcsu-title">
+            <span class="pcsu-dot"></span>
+            Financial Health
+          </div>
+          <div class="pcsu-body" id="pcsuSummaryText">
+            Loading readiness briefing…
+          </div>
+          <div class="pcsu-foot">
+            <div id="pcsuSummaryMeta">—</div>
+            <div><em>Tip:</em> Complete missing inputs to unlock your full PCS report.</div>
+          </div>
+        </div>
+        <script>
+(()=>{
+const $text=document.getElementById("pcsuSummaryText");
+const $meta=document.getElementById("pcsuSummaryMeta");
+function safeParse(v){
+try{return JSON.parse(v)}catch{return null}
+}
+function getBridge(){
+return (
+safeParse(localStorage.getItem("pcsunited.bridge")) ||
+safeParse(localStorage.getItem("pcsunited.bridge.v1")) ||
+safeParse(localStorage.getItem("realtysass.bridge")) ||
+null
+);
+}
+function getIdentity(){
+return safeParse(localStorage.getItem("realtysass.identity"));
+}
+function pick(...vals){
+for(const v of vals){
+if(v!=null && String(v).trim()!=="") return v
+}
+return null
+}
+function money(n){
+if(!n) return "—";
+return Number(n).toLocaleString(undefined,{style:"currency",currency:"USD",maximumFractionDigits:0});
+}
+function intFmt(n){
+if(!n) return "—";
+return Number(n).toLocaleString();
+}
+function normalizeRank(raw){
+const map={
+"E-1":"AB","E-2":"Amn","E-3":"A1C","E-4":"SrA","E-5":"SSgt",
+"E-6":"TSgt","E-7":"MSgt","E-8":"SMSgt","E-9":"CMSgt",
+"O-1":"2d Lt","O-2":"1st Lt","O-3":"Capt","O-4":"Maj",
+"O-5":"Lt Col","O-6":"Col"
+};
+return map[raw] || raw || "Service Member";
+}
+function paint(){
+const bridge=getBridge();
+const identity=getIdentity();
+const last = pick(
+bridge?.last_name,
+bridge?.lastName,
+identity?.lastName
+) || "Member";
+const rank = normalizeRank(pick(
+bridge?.rankTitle,
+bridge?.rank,
+bridge?.rank_paygrade
+));
+const yos = Number(pick(
+bridge?.yos,
+bridge?.years_of_service
+));
+const family = Number(pick(
+bridge?.family,
+bridge?.family_size,
+bridge?.dependents
+));
+const base = pick(
+bridge?.base,
+bridge?.base_name,
+bridge?.installation
+) || "your assigned base";
+const income = Number(pick(
+bridge?.income,
+bridge?.monthly_income,
+bridge?.pay?.total
+));
+const price = Number(pick(
+bridge?.price,
+bridge?.projected_home_price
+));
+/* Determine missing inputs */
+let needsFinancial = !income;
+let needsHomePrefs = !price;
+let needsTimeline = !bridge?.timeline;
+let needsAIOU = !bridge?.aiou_complete;
+let checklist=[];
+if(needsFinancial)
+checklist.push("Update your income and expenses in the <strong>Financial Readiness Dashboard</strong>.");
+if(needsHomePrefs)
+checklist.push("Set your <strong>Home Preferences</strong> so PCSUnited can estimate the correct housing market.");
+if(needsTimeline)
+checklist.push("Build your <strong>PCS Timeline</strong> to generate a mission planning roadmap.");
+if(needsAIOU)
+checklist.push("Complete the <strong>AIOU Psychology Quiz</strong> to personalize your homebuying strategy.");
+/* Build briefing */
+$text.innerHTML=
+`Welcome <strong>${rank} ${last}</strong>. 
+You currently have <strong>${intFmt(yos)}</strong> years of service and are assigned to <strong>${base}</strong>.
+With a family size of <strong>${intFmt(family)}</strong> and a monthly income of <strong>${money(income)}</strong>, your projected purchase price of <strong>${money(price)}</strong> places your current financial readiness in a <strong>${income ? "Preliminary" : "Needs Inputs"}</strong> position.
+${checklist.length ? `
+<br><br>
+To generate your full PCSUnited report, complete the following:
+<ul class="pcsu-list">
+${checklist.map(v=>`<li>${v}</li>`).join("")}
+</ul>
+` : `
+<br><br>
+Your core profile inputs are complete. You can now run the <strong>Financial Readiness Report</strong> for a full PCS housing analysis.
+`}
+`;
+$meta.textContent = [
+`YOS ${intFmt(yos)}`,
+`Family ${intFmt(family)}`,
+`Income ${money(income)}`,
+`Target ${money(price)}`
+].filter(Boolean).join(" • ");
+}
+paint();
+window.addEventListener("storage",(ev)=>{
+if(
+ev.key==="pcsunited.bridge" ||
+ev.key==="pcsunited.bridge.v1" ||
+ev.key==="realtysass.bridge" ||
+ev.key==="realtysass.identity"
+){
+paint();
+}
+});
+window.addEventListener("pcsunited:bridge-ready",paint);
+window.addEventListener("realtysass:bridge-ready",paint);
+})();
+</script>
+      </div>
+    </div>
+  </div>
+  <div class="code-embed-31 w-embed w-script"><!--  //#0 HOUSE OF SASS • PCS UNITED • USER DASHBOARD SCORE SHELL (SINGLE EMBED)
+     SHELL ONLY → native container-friendly layout
+     PURPOSE:
+     - Rebuild the Fintech Shell in the same visual behavior as the Financial Intake embed
+     - No giant standalone slab
+     - House of SaSS / Midnight Frost styling
+     - Keep runtime-ready IDs intact
+ -->
+    <div id="pcsu-score-shell-strip" style="all: initial;">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+      <style>
+    /* //#1 SCOPE RESET */
+    #pcsu-score-shell-strip,
+    #pcsu-score-shell-strip *{
+      box-sizing:border-box;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+    #pcsu-score-shell-strip{
+      width:100%;
+      padding:16px 0;
+      color:#e9ecff;
+    }
+    /* //#2 TOKENS — HOUSE OF SASS */
+    #pcsu-score-shell-strip{
+      --ink:#e9ecff;
+      --muted:#a8b0d6;
+      --sub:rgba(233,236,255,.68);
+      --mint:#8ef3c5;
+      --sapphire:#6aa7ff;
+      --gold1:#f6d06d;
+      --gold2:#ffb24a;
+      --gold3:rgba(255,210,120,.95);
+      --green:#9bffbf;
+      --greenBg:rgba(38,145,90,.18);
+      --greenBd:rgba(120,255,170,.24);
+      --glass:rgba(12,14,25,.60);
+      --glass2:rgba(12,14,25,.46);
+      --stroke:rgba(255,255,255,.10);
+      --stroke2:rgba(255,255,255,.08);
+      --shadow-lg:0 24px 48px rgba(0,0,0,.42);
+      --shadow-md:0 14px 30px rgba(0,0,0,.28);
+      --inner:inset 0 1px 0 rgba(255,255,255,.05);
+      --radius-xl:18px;
+      --radius-lg:14px;
+      --radius-md:12px;
+    }
+    /* //#3 SHELL WIDTH — SAME AS INTAKE */
+    #pcsu-score-shell{
+      width:100%;
+      max-width:980px;
+      margin:0 auto;
+      padding:0;
+    }
+    /* //#4 CARD SYSTEM */
+    .pcsu-card{
+      position:relative;
+      overflow:hidden;
+      border-radius:18px;
+      background:
+        radial-gradient(circle at top left, rgba(142,243,197,.04), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(106,167,255,.05), transparent 36%),
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)),
+        rgba(12,14,25,.56);
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(10px) saturate(140%);
+      -webkit-backdrop-filter:blur(10px) saturate(140%);
+      box-shadow:var(--shadow-lg), var(--inner);
+    }
+    .pcsu-cardPad{
+      position:relative;
+      padding:16px;
+    }
+    /* //#5 TOP ROW */
+    .pcsu-top{
+      display:grid;
+      grid-template-columns:320px 1fr;
+      gap:16px;
+      align-items:center;
+      padding-bottom:8px;
+    }
+    @media (max-width:760px){
+      .pcsu-top{ grid-template-columns:1fr; }
+    }
+    /* //#6 GAUGE CARD */
+    .pcsu-gaugeCard{
+      border-radius:14px;
+      padding:14px;
+      background:rgba(12,14,25,.40);
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+      position:relative;
+      overflow:hidden;
+    }
+    .pcsu-gaugeCard::before{
+      content:"";
+      position:absolute; left:0; right:0; top:0; height:52%;
+      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
+      opacity:.75;
+      pointer-events:none;
+    }
+    .pcsu-gaugeWrap{
+      position:relative;
+      width:100%;
+      max-width:290px;
+      height:168px;
+      margin:0 auto;
+      display:flex;
+      align-items:flex-start;
+      justify-content:flex-start;
+    }
+    .pcsu-gaugeSvg{
+      width:290px;
+      height:160px;
+      display:block;
+      filter:drop-shadow(0 14px 18px rgba(0,0,0,.45));
+    }
+    .pcsu-needle{
+      position:absolute;
+      left:142px;
+      top:18px;
+      width:92px;
+      height:14px;
+      transform-origin:10px 50%;
+      transform:rotate(24deg);
+      pointer-events:none;
+      filter:drop-shadow(0 8px 10px rgba(0,0,0,.60));
+    }
+    .pcsu-needle::before{
+      content:"";
+      position:absolute; left:0; top:0; bottom:0;
+      width:92px;
+      clip-path:polygon(0 50%, 18% 0, 100% 50%, 18% 100%);
+      background:linear-gradient(180deg, #ffe1a0, #ffb23f 55%, #d48a1b);
+      border:1px solid rgba(255,255,255,.22);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.22);
+      border-radius:2px;
+    }
+    .pcsu-needle::after{
+      content:"";
+      position:absolute;
+      left:-10px;
+      top:50%;
+      transform:translateY(-50%);
+      width:14px;
+      height:14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.88);
+      box-shadow:0 0 0 5px rgba(255,200,120,.12);
+    }
+    /* //#7 SCALE BAR */
+    .pcsu-scaleRow{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      margin-top:8px;
+      padding:0 6px;
+    }
+    .pcsu-scaleLabel{
+      font-size:11px;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .pcsu-scaleBar{
+      flex:1;
+      height:12px;
+      border-radius:999px;
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.06);
+      box-shadow:inset 0 0 0 1px rgba(0,0,0,.26);
+    }
+    .pcsu-scaleBar .fill{
+      position:absolute; inset:0;
+      background:linear-gradient(90deg,
+        rgba(193,58,58,.95) 0%,
+        rgba(217,156,47,.95) 36%,
+        rgba(231,227,93,.95) 66%,
+        rgba(105,194,143,.95) 100%);
+    }
+    .pcsu-scaleBar .gloss{
+      position:absolute; left:0; right:0; top:0;
+      height:55%;
+      background:linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,0));
+      opacity:.50;
+      mix-blend-mode:overlay;
+    }
+    .pcsu-scaleBar .segs{
+      position:absolute; inset:0;
+      background:
+        linear-gradient(90deg,
+          transparent 0%,
+          transparent 12%,
+          rgba(0,0,0,.42) 12%,
+          rgba(0,0,0,.42) 12.6%,
+          transparent 12.6%,
+          transparent 28%,
+          rgba(0,0,0,.42) 28%,
+          rgba(0,0,0,.42) 28.6%,
+          transparent 28.6%,
+          transparent 48%,
+          rgba(0,0,0,.42) 48%,
+          rgba(0,0,0,.42) 48.6%,
+          transparent 48.6%,
+          transparent 68%,
+          rgba(0,0,0,.42) 68%,
+          rgba(0,0,0,.42) 68.6%,
+          transparent 68.6%,
+          transparent 84%,
+          rgba(0,0,0,.42) 84%,
+          rgba(0,0,0,.42) 84.6%,
+          transparent 84.6%,
+          transparent 100%);
+      opacity:.88;
+      mix-blend-mode:multiply;
+    }
+    .pcsu-barNotch{
+      position:absolute;
+      top:-3px;
+      left:54%;
+      width:0; height:0;
+      border-left:7px solid transparent;
+      border-right:7px solid transparent;
+      border-top:10px solid rgba(0,0,0,.82);
+      filter:drop-shadow(0 2px 5px rgba(0,0,0,.45));
+    }
+    .pcsu-barMarker{
+      position:absolute;
+      top:-6px;
+      left:62%;
+      width:0; height:0;
+      border-left:8px solid transparent;
+      border-right:8px solid transparent;
+      border-top:10px solid rgba(255,255,255,.78);
+      opacity:0;
+      pointer-events:none;
+    }
+    /* //#8 SCORE BLOCK */
+    .pcsu-scoreBlock{
+      text-align:center;
+      padding:4px 6px 0;
+    }
+    .pcsu-scoreTitle{
+      font-size:13px;
+      letter-spacing:.26em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:800;
+      margin-bottom:10px;
+    }
+    .pcsu-scoreLine{
+      display:flex;
+      align-items:baseline;
+      justify-content:center;
+      gap:10px;
+      margin-bottom:12px;
+      line-height:1;
+    }
+    .pcsu-scoreNum{
+      font-size:78px;
+      font-weight:900;
+      line-height:1;
+      background:linear-gradient(90deg, var(--gold1), var(--gold2));
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .pcsu-scoreDen{
+      font-size:48px;
+      font-weight:900;
+      color:rgba(233,236,255,.60);
+      letter-spacing:.02em;
+    }
+    .pcsu-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:10px 20px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:12px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--green);
+      background:
+        radial-gradient(circle at top left, rgba(142,243,197,.16), rgba(106,167,255,.04)),
+        rgba(38,145,90,.16);
+      border:1px solid var(--greenBd);
+      box-shadow:0 10px 24px rgba(0,0,0,.32), inset 0 1px 0 rgba(255,255,255,.05);
+    }
+    /* //#9 DESCRIPTION */
+    .pcsu-desc{
+      text-align:center;
+      margin-top:10px;
+      margin-bottom:14px;
+      color:var(--sub);
+      font-size:14px;
+      line-height:1.45;
+    }
+    .pcsu-divider{
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+      opacity:.85;
+      margin:12px 0 16px;
+    }
+    /* //#10 LOWER GRID */
+    .pcsu-lower{
+      display:grid;
+      grid-template-columns:1fr 290px;
+      gap:16px;
+      align-items:start;
+    }
+    @media (max-width:900px){
+      .pcsu-lower{ grid-template-columns:1fr; }
+    }
+    /* //#11 FINANCIAL */
+    .pcsu-finTitle{
+      font-size:11px;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:800;
+      margin-bottom:8px;
+    }
+    .pcsu-finTitle b{
+      color:var(--gold3);
+      font-weight:900;
+      letter-spacing:.06em;
+    }
+    .pcsu-finLine{
+      color:var(--sub);
+      line-height:1.5;
+      font-size:14px;
+      margin-bottom:14px;
+    }
+    .pcsu-finLine .hl{
+      color:#fff;
+      font-weight:900;
+    }
+    .pcsu-finLine .gold{
+      color:var(--gold3);
+      font-weight:900;
+    }
+    .pcsu-kpis{
+      border-radius:12px;
+      background:rgba(12,14,25,.36);
+      border:1px solid rgba(255,255,255,.08);
+      overflow:hidden;
+      display:grid;
+      grid-template-columns:200px 1fr;
+    }
+    @media (max-width:760px){
+      .pcsu-kpis{ grid-template-columns:1fr; }
+    }
+    .pcsu-kpis .left{
+      padding:14px;
+      border-right:1px solid rgba(255,255,255,.08);
+      display:grid;
+      gap:10px;
+    }
+    @media (max-width:760px){
+      .pcsu-kpis .left{
+        border-right:0;
+        border-bottom:1px solid rgba(255,255,255,.08);
+      }
+    }
+    .pcsu-miniRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      color:var(--sub);
+      font-size:14px;
+    }
+    .pcsu-dot{
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      background:rgba(255,210,120,.85);
+      box-shadow:0 0 0 4px rgba(255,210,120,.10);
+      margin-right:10px;
+      flex:0 0 auto;
+    }
+    .pcsu-miniRow .label{
+      display:flex;
+      align-items:center;
+      color:var(--sub);
+    }
+    .pcsu-miniRow .val{
+      font-weight:900;
+      color:#fff;
+    }
+    .pcsu-kpis .right{
+      padding:14px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+    @media (max-width:520px){
+      .pcsu-kpis .right{ grid-template-columns:1fr; }
+    }
+    .pcsu-bigLabel{
+      font-size:11px;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:800;
+      margin-bottom:4px;
+    }
+    .pcsu-bigVal{
+      font-size:20px;
+      font-weight:900;
+      color:#fff;
+      line-height:1.12;
+    }
+    /* //#12 RANGE CARD */
+    .pcsu-rangeCard{
+      border-radius:14px;
+      padding:14px;
+      background:rgba(12,14,25,.38);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+    }
+    .pcsu-rangeInner{
+      border-radius:12px;
+      padding:14px;
+      background:
+        radial-gradient(circle at top left, rgba(255,210,120,.12), transparent 40%),
+        linear-gradient(180deg, rgba(255,200,120,.08), rgba(0,0,0,.16));
+      border:1px solid rgba(255,200,120,.24);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
+    }
+    .pcsu-rangeTitle{
+      font-size:11px;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:800;
+      margin-bottom:8px;
+    }
+    .pcsu-rangeVal{
+      font-size:30px;
+      font-weight:900;
+      color:rgba(255,210,140,.95);
+      letter-spacing:.02em;
+      line-height:1.1;
+    }
+    .pcsu-rangeHint{
+      margin-top:10px;
+      color:var(--sub);
+      font-size:13px;
+      line-height:1.45;
+      padding:0 2px;
+    }
+    /* //#13 CHECKLIST */
+    .pcsu-checkTitle{
+      margin-top:18px;
+      font-size:11px;
+      letter-spacing:.20em;
+      text-transform:uppercase;
+      color:var(--muted);
+      font-weight:800;
+    }
+    .pcsu-checklist{
+      margin-top:10px;
+      display:grid;
+      gap:10px;
+    }
+    .pcsu-item{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      color:var(--sub);
+      font-size:14px;
+      line-height:1.35;
+    }
+    .pcsu-item .mark{
+      width:18px;
+      flex:0 0 auto;
+      margin-top:1px;
+      font-weight:900;
+      color:rgba(255,210,140,.95);
+    }
+    .pcsu-item b{
+      color:rgba(255,210,140,.95);
+      font-weight:900;
+    }
+    .pcsu-bottomDivider{
+      margin:14px 0 10px;
+      height:1px;
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
+      opacity:.85;
+    }
+    .pcsu-tip{
+      color:var(--sub);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .pcsu-tip b{
+      color:rgba(255,210,140,.95);
+      font-weight:900;
+    }
+  </style>
+      <div id="pcsu-score-shell">
+        <section class="pcsu-card">
+          <div class="pcsu-cardPad">
+            <!--  //#14 TOP: GAUGE + SCORE  -->
+            <div class="pcsu-top">
+              <!--  LEFT: GAUGE  -->
+              <div class="pcsu-gaugeCard">
+                <div class="pcsu-gaugeWrap">
+                  <svg class="pcsu-gaugeSvg" viewbox="0 0 320 180" aria-hidden="true" role="img">
+                    <defs>
+                      <lineargradient id="pcsuArcGrad" x1="0" y1="0" x2="1" y2="0">
+                        <stop offset="0%" stop-color="#c13a3a" stop-opacity=".95"></stop>
+                        <stop offset="38%" stop-color="#d99c2f" stop-opacity=".95"></stop>
+                        <stop offset="68%" stop-color="#e7e35d" stop-opacity=".95"></stop>
+                        <stop offset="100%" stop-color="#69c28f" stop-opacity=".95"></stop>
+                      </lineargradient>
+                      <lineargradient id="pcsuMetal" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stop-color="rgba(255,255,255,.22)"></stop>
+                        <stop offset="40%" stop-color="rgba(255,255,255,.06)"></stop>
+                        <stop offset="100%" stop-color="rgba(0,0,0,.42)"></stop>
+                      </lineargradient>
+                      <filter id="pcsuInnerShadow" x="-50%" y="-50%" width="200%" height="200%">
+                        <feoffset dx="0" dy="2">
+                        <fegaussianblur stddeviation="3" result="blur">
+                        <fecomposite in="blur" in2="SourceAlpha" operator="arithmetic" k2="-1" k3="1" result="inner">
+                        <fecolormatrix in="inner" type="matrix" values="0 0 0 0 0
+                              0 0 0 0 0
+                              0 0 0 0 0
+                              0 0 0 .65 0">
+                        <fecomposite in2="SourceGraphic" operator="over">
+                      </fecomposite></fecolormatrix></fecomposite></fegaussianblur></feoffset></filter>
+                    </defs>
+                    <!--  outer metal rim  -->
+                    <path d="M48 148 A112 112 0 0 1 272 148" fill="none" stroke="url(#pcsuMetal)" stroke-width="34" stroke-linecap="round" opacity=".85"></path>
+                    <!--  colored arc  -->
+                    <path d="M58 148 A102 102 0 0 1 262 148" fill="none" stroke="url(#pcsuArcGrad)" stroke-width="20" stroke-linecap="round" filter="url(#pcsuInnerShadow)"></path>
+                    <!--  inner rim  -->
+                    <path d="M76 148 A84 84 0 0 1 244 148" fill="none" stroke="rgba(0,0,0,.55)" stroke-width="12" stroke-linecap="round" opacity=".35"></path>
+                    <!--  ticks  -->
+                    <g opacity=".75">
+                      <g stroke="rgba(0,0,0,.55)" stroke-width="2.2">
+                        <line x1="72" y1="142" x2="64" y2="152"></line>
+                        <line x1="98" y1="112" x2="90" y2="122"></line>
+                        <line x1="132" y1="92" x2="126" y2="104"></line>
+                        <line x1="160" y1="86" x2="160" y2="100"></line>
+                        <line x1="188" y1="92" x2="194" y2="104"></line>
+                        <line x1="222" y1="112" x2="230" y2="122"></line>
+                        <line x1="248" y1="142" x2="256" y2="152"></line>
+                      </g>
+                      <g stroke="rgba(0,0,0,.45)" stroke-width="1.6" opacity=".9">
+                        <line x1="84" y1="128" x2="78" y2="136"></line>
+                        <line x1="112" y1="102" x2="106" y2="110"></line>
+                        <line x1="146" y1="88" x2="143" y2="98"></line>
+                        <line x1="174" y1="88" x2="177" y2="98"></line>
+                        <line x1="208" y1="102" x2="214" y2="110"></line>
+                        <line x1="236" y1="128" x2="242" y2="136"></line>
+                      </g>
+                    </g>
+                  </svg>
+                  <div class="pcsu-needle" id="pcsuNeedle"></div>
+                </div>
+                <div class="pcsu-scaleRow">
+                  <div class="pcsu-scaleLabel">Low</div>
+                  <div class="pcsu-scaleBar">
+                    <div class="fill"></div>
+                    <div class="gloss"></div>
+                    <div class="segs"></div>
+                    <div class="pcsu-barNotch"></div>
+                    <div class="pcsu-barMarker" id="pcsuBarMarker"></div>
+                  </div>
+                  <div class="pcsu-scaleLabel">High</div>
+                </div>
+              </div>
+              <!--  RIGHT: SCORE  -->
+              <div class="pcsu-scoreBlock">
+                <div class="pcsu-scoreTitle">PCS SUCCESS SCORE</div>
+                <div class="pcsu-scoreLine">
+                  <div class="pcsu-scoreNum" id="pcsuScoreNum">80</div>
+                  <div class="pcsu-scoreDen" id="pcsuScoreDen">/100</div>
+                </div>
+                <div class="pcsu-pill" id="pcsuStatusPill">Mission Ready</div>
+              </div>
+            </div>
+            <div class="pcsu-desc">
+              Your current PCS score factors in your financial readiness, timeline, home preferences, and target affordability.
+            </div>
+            <div class="pcsu-divider"></div>
+            <!--  //#15 LOWER  -->
+            <div class="pcsu-lower">
+              <!--  LEFT  -->
+              <div>
+                <div class="pcsu-finTitle">
+                  Financial Health: <b id="pcsuFinancialGrade">B-</b>
+                </div>
+                <div class="pcsu-finLine">
+                  Based on your current data, your <span class="hl">housing cost</span> of
+                  <span class="gold" id="pcsuHousingCost">$4,619</span> exceeds the safe cap of
+                  <span class="gold" id="pcsuSafeCap">$3,857</span> (<span class="gold" id="pcsuOverPct">+20%</span>).
+                </div>
+                <div class="pcsu-kpis">
+                  <div class="left">
+                    <div class="pcsu-miniRow">
+                      <div class="label"><span class="pcsu-dot"></span>Income</div>
+                      <div class="val" id="pcsuIncome">$12,857</div>
+                    </div>
+                    <div class="pcsu-miniRow">
+                      <div class="label"><span class="pcsu-dot"></span>Expenses</div>
+                      <div class="val" id="pcsuExpenses">$8,448</div>
+                    </div>
+                  </div>
+                  <div class="right">
+                    <div>
+                      <div class="pcsu-bigLabel">Expenses</div>
+                      <div class="pcsu-bigVal" id="pcsuExpensesBig">$8,448</div>
+                    </div>
+                    <div>
+                      <div class="pcsu-bigLabel">Mortgage</div>
+                      <div class="pcsu-bigVal" id="pcsuMortgage">$4,619</div>
+                    </div>
+                    <div>
+                      <div class="pcsu-bigLabel">Disposable</div>
+                      <div class="pcsu-bigVal" id="pcsuDisposable">$4,409</div>
+                    </div>
+                  </div>
+                </div>
+                <div class="pcsu-checkTitle">Saving the Mission Checklist</div>
+                <div class="pcsu-checklist" id="pcsuChecklist">
+                  <div class="pcsu-item">
+                    <div class="mark">✓</div>
+                    <div>Update financial inputs in the <b>Financial Readiness Dashboard</b>.</div>
+                  </div>
+                  <div class="pcsu-item">
+                    <div class="mark">✓</div>
+                    <div>Set <b>Home Preferences</b> to refine your housing target.</div>
+                  </div>
+                  <div class="pcsu-item">
+                    <div class="mark">✓</div>
+                    <div>Build your <b>PCS Timeline</b> to align decision timing.</div>
+                  </div>
+                  <div class="pcsu-item">
+                    <div class="mark">○</div>
+                    <div>Complete <b>AIOU Psychology Quiz</b> to personalize your strategy.</div>
+                  </div>
+                </div>
+                <div class="pcsu-bottomDivider"></div>
+                <div class="pcsu-tip">
+                  <b>Tip:</b> Elevate your PCS score to make smarter, affordable, and timely decisions.
+                </div>
+              </div>
+              <!--  RIGHT  -->
+              <div class="pcsu-rangeCard">
+                <div class="pcsu-rangeInner">
+                  <div class="pcsu-rangeTitle">Recommended Range</div>
+                  <div class="pcsu-rangeVal" id="pcsuRange">$420K - $480K</div>
+                </div>
+                <div class="pcsu-rangeHint">
+                  Adjust price, debt, or downpayment to improve affordability.
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+      <script>
+    (function(){
+      "use strict";
+      // =========================================================
+      // //#16 ROOT
+      // =========================================================
+      const root = document.getElementById("pcsu-score-shell-strip");
+      if (!root) return;
+      const scoreEl = root.querySelector("#pcsuScoreNum");
+      const needleEl = root.querySelector("#pcsuNeedle");
+      const markerEl = root.querySelector("#pcsuBarMarker");
+      const expensesEl = root.querySelector("#pcsuExpenses");
+      const expensesBigEl = root.querySelector("#pcsuExpensesBig");
+      // =========================================================
+      // //#17 HELPERS
+      // =========================================================
+      function clamp(n,min,max){
+        return Math.max(min, Math.min(max, n));
+      }
+      function syncText(a,b){
+        if(a && b) b.textContent = a.textContent || "";
+      }
+      // =========================================================
+      // //#18 NEEDLE PAINT
+      // =========================================================
+      function paintNeedle(){
+        if(!scoreEl || !needleEl) return;
+        const score = clamp(parseFloat(scoreEl.textContent || "80") || 80, 0, 100);
+        // 0 -> -64deg, 100 -> 64deg
+        const deg = -64 + (score / 100) * 128;
+        needleEl.style.transform = "rotate(" + deg + "deg)";
+      }
+      // =========================================================
+      // //#19 OPTIONAL SCALE MARKER
+      // =========================================================
+      function paintMarker(){
+        if(!scoreEl || !markerEl) return;
+        const score = clamp(parseFloat(scoreEl.textContent || "80") || 80, 0, 100);
+        // keep inside bar visually
+        const leftPct = 4 + (score * 0.92);
+        markerEl.style.left = leftPct + "%";
+        // hidden by default; uncomment next line later if you want visible
+        // markerEl.style.opacity = ".95";
+      }
+      // =========================================================
+      // //#20 SYNC
+      // =========================================================
+      function syncFields(){
+        syncText(expensesEl, expensesBigEl);
+      }
+      // =========================================================
+      // //#21 INIT
+      // =========================================================
+      syncFields();
+      paintNeedle();
+      paintMarker();
+    })();
+  </script>
+    </div>
+  </div>
+  <div class="code-embed-30 w-embed w-script"><!--  ============================================================
+  RealtySaSS • Profile Dashboard (Mode-aware) + Fiduciary Gate — v1.0.2
+  ✅ FIX: Fiduciary button now routes to /fiduciary-memo
+  ✅ FIX: Writes memo-ready bridge payload to pcsunited.bridge.v1 + realtysass.bridge
+===============================================================  -->
+    <div id="rs-profile" style="all: initial;">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+      <style>
+    /* ============================================================
+      //#1 TOKENS + RESET (RealtySaSS / House of SaSS vibe)
+    ============================================================ */
+    #rs-profile, #rs-profile *{ box-sizing:border-box; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    :root{
+      --bg:#0b0e1a;
+      --panel: rgba(255,255,255,.06);
+      --panel2: rgba(0,0,0,.22);
+      --card: rgba(255,255,255,.07);
+      --line: rgba(255,255,255,.12);
+      --ink: rgba(255,255,255,.92);
+      --sub: rgba(255,255,255,.70);
+      --muted: rgba(255,255,255,.56);
+      --gold: rgba(227,175,90,.95);
+      --ok: rgba(108, 255, 187, .95);
+      --warn: rgba(255, 204, 102, .95);
+      --bad: rgba(255, 115, 135, .95);
+      --shadow: 0 18px 60px rgba(0,0,0,.45);
+      --r12: 12px;
+      --r16: 16px;
+      --r20: 20px;
+    }
+    .rs-wrap{
+      width:min(1200px, 100%);
+      margin: 0 auto;
+      padding: 18px 16px 28px 16px;
+      color: var(--ink);
+    }
+    .rs-shell{
+      border-radius: var(--r20);
+      border: 1px solid var(--line);
+      background: radial-gradient(1200px 600px at 15% 0%, rgba(227,175,90,.10), transparent 60%),
+                  radial-gradient(900px 600px at 95% 10%, rgba(110,255,190,.08), transparent 55%),
+                  var(--panel2);
+      box-shadow: var(--shadow);
+      overflow:hidden;
+    }
+    .rs-topbar{
+      display:flex;
+      align-items:flex-start;
+      justify-content:space-between;
+      gap:14px;
+      padding: 16px 16px 12px 16px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(0,0,0,.16);
+    }
+    .rs-title{
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+      min-width: 240px;
+    }
+    .rs-title .kicker{
+      font-size: 12px;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: var(--sub);
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .rs-dot{
+      width:8px; height:8px; border-radius:999px;
+      background: var(--gold);
+      box-shadow: 0 0 0 6px rgba(227,175,90,.12);
+      flex:0 0 auto;
+    }
+    .rs-title h2{
+      margin:0;
+      font-size: 22px;
+      line-height: 1.15;
+      letter-spacing: .01em;
+    }
+    .rs-title p{
+      margin:0;
+      color: var(--sub);
+      font-size: 13px;
+      line-height: 1.45;
+      max-width: 620px;
+    }
+    .rs-actions{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .rs-pill{
+      padding: 10px 12px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255,255,255,.05);
+      color: var(--sub);
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .02em;
+      white-space:nowrap;
+    }
+    .rs-pill strong{ color: var(--gold); }
+    .rs-btn{
+      appearance:none;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.18);
+      color: var(--ink);
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      cursor:pointer;
+      transition: transform .12s ease, background .12s ease, border-color .12s ease, opacity .12s ease;
+      user-select:none;
+    }
+    .rs-btn:hover{ transform: translateY(-1px); border-color: rgba(227,175,90,.30); }
+    .rs-btn:active{ transform: translateY(0px); }
+    .rs-btn.secondary{ background: rgba(255,255,255,.06); }
+    .rs-grid{
+      display:grid;
+      grid-template-columns: 1fr 420px;
+      gap: 14px;
+      padding: 14px 14px 16px 14px;
+    }
+    @media (max-width: 980px){
+      .rs-grid{ grid-template-columns: 1fr; }
+    }
+    .rs-card{
+      border-radius: var(--r16);
+      border: 1px solid var(--line);
+      background: var(--panel);
+      overflow:hidden;
+    }
+    .rs-card .hd{
+      padding: 12px 12px;
+      border-bottom: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.10);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+    }
+    .rs-card .hd .label{
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--sub);
+      font-weight: 900;
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .rs-miniDot{
+      width:7px; height:7px; border-radius:999px;
+      background: rgba(255,255,255,.28);
+      box-shadow: 0 0 0 5px rgba(255,255,255,.06);
+    }
+    .rs-card .bd{ padding: 12px 12px; }
+    .rs-basic{
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+    }
+    @media (max-width: 980px){
+      .rs-basic{ grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 520px){
+      .rs-basic{ grid-template-columns: 1fr; }
+    }
+    .rs-kpi{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      padding: 10px 10px;
+      min-height: 62px;
+    }
+    .rs-kpi .k{
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .rs-kpi .v{
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--ink);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .rs-kpi .s{
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--sub);
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    .rs-form{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    @media (max-width: 980px){
+      .rs-form{ grid-template-columns: 1fr; }
+    }
+    .rs-field{
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      padding: 10px 10px;
+    }
+    .rs-field .k{
+      font-size: 10px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--muted);
+      font-weight: 900;
+      margin-bottom: 6px;
+    }
+    .rs-field input,
+    .rs-field select,
+    .rs-field textarea{
+      width:100%;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.12);
+      background: rgba(255,255,255,.06);
+      color: var(--ink);
+      padding: 10px 10px;
+      outline:none;
+      font-size: 13px;
+      font-weight: 700;
+    }
+    .rs-field textarea{ min-height: 92px; resize: vertical; font-weight: 650; }
+    .rs-field .h{
+      margin-top: 6px;
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.35;
+    }
+    .rs-field.required{
+      border-color: rgba(227,175,90,.22);
+      box-shadow: inset 0 0 0 1px rgba(227,175,90,.10);
+    }
+    .rs-field.missing{
+      border-color: rgba(255,115,135,.35);
+      box-shadow: inset 0 0 0 1px rgba(255,115,135,.12);
+    }
+    .rs-hidden{ display:none !important; }
+    .rs-progress{
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .rs-meter{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      padding: 12px 12px;
+    }
+    .rs-meterRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      margin-bottom: 10px;
+    }
+    .rs-meterRow .left{
+      font-size: 12px;
+      color: var(--sub);
+      font-weight: 800;
+    }
+    .rs-meterRow .right{
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--ink);
+    }
+    .rs-bar{
+      width:100%;
+      height: 10px;
+      border-radius: 999px;
+      background: rgba(255,255,255,.08);
+      border: 1px solid rgba(255,255,255,.10);
+      overflow:hidden;
+    }
+    .rs-fill{
+      height:100%;
+      width: 0%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, rgba(227,175,90,.95), rgba(110,255,190,.90));
+      transition: width .18s ease;
+    }
+    .rs-note{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.4;
+    }
+    .rs-gate{
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      padding: 12px 12px;
+    }
+    .rs-gate .k{
+      font-size: 11px;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      color: var(--sub);
+      font-weight: 900;
+      margin-bottom: 10px;
+    }
+    .rs-gate .desc{
+      font-size: 12px;
+      color: var(--sub);
+      line-height: 1.45;
+      margin-bottom: 12px;
+    }
+    .rs-fidBtn{
+      width:100%;
+      padding: 12px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,.14);
+      background: rgba(0,0,0,.20);
+      cursor:not-allowed;
+      opacity:.55;
+      user-select:none;
+      transition: opacity .15s ease, transform .12s ease, border-color .12s ease, box-shadow .12s ease;
+    }
+    .rs-fidBtn.armed{
+      cursor:pointer;
+      opacity:1;
+      border-color: rgba(227,175,90,.30);
+      box-shadow: 0 0 0 6px rgba(227,175,90,.10);
+    }
+    .rs-fidBtn.armed:hover{
+      transform: translateY(-1px);
+      border-color: rgba(110,255,190,.40);
+      box-shadow: 0 0 0 7px rgba(110,255,190,.10);
+    }
+    .rs-fidText{
+      display:flex;
+      justify-content:center;
+      gap: 0px;
+      font-size: 12px;
+      font-weight: 950;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,.82);
+    }
+    .rs-fidText span{
+      display:inline-block;
+      padding: 0 0.5px;
+      transition: color .15s ease, text-shadow .15s ease, transform .15s ease;
+    }
+    .rs-fidBtn.armed .rs-fidText span{
+      color: rgba(255,255,255,.92);
+      text-shadow:
+        0 0 10px rgba(227,175,90,.30),
+        0 0 18px rgba(110,255,190,.22);
+      animation: rsGlow 1.65s ease-in-out infinite;
+      animation-delay: calc(var(--i) * 0.04s);
+    }
+    @keyframes rsGlow{
+      0%, 100%{ transform: translateY(0px); filter:saturate(1.0); }
+      50%{ transform: translateY(-1px); filter:saturate(1.15); }
+    }
+    .rs-miniBtns{
+      display:flex;
+      gap:10px;
+      margin-top: 10px;
+      flex-wrap:wrap;
+    }
+    .rs-miniBtns .rs-btn{ flex: 1 1 140px; }
+    .rs-toast{
+      margin-top: 10px;
+      font-size: 12px;
+      color: var(--sub);
+      line-height:1.35;
+    }
+    .rs-toast strong{ color: var(--gold); }
+  </style>
+      <div class="rs-wrap">
+        <div class="rs-shell">
+          <div class="rs-topbar">
+            <div class="rs-title">
+              <div class="kicker"><span class="rs-dot"></span> RealtySaSS Profile Builder</div>
+              <h2 id="rsHello">Complete your profile for a Fiduciary Memo.</h2>
+              <p>
+                This confirms what you entered at account creation, then lets you finish the full profile.
+                Your <b>Fiduciary Analysis</b> unlocks only when every required field is complete (and consent is granted).
+              </p>
+            </div>
+            <div class="rs-actions">
+              <div class="rs-pill" id="rsStatusPill">Completion: <strong>0%</strong></div>
+              <button class="rs-btn secondary" id="rsLoadBtn" type="button">Load Saved</button>
+              <button class="rs-btn" id="rsSaveBtn" type="button">Save Profile</button>
+            </div>
+          </div>
+          <div class="rs-grid">
+            <div class="rs-card">
+              <div class="hd">
+                <div class="label"><span class="rs-miniDot"></span> Basic Info (from account creation)</div>
+                <div class="rs-pill" id="rsWhoPill"><strong>—</strong></div>
+              </div>
+              <div class="bd">
+                <div class="rs-basic" id="rsBasicStrip">
+                  <div class="rs-kpi">
+                    <div class="k">Email</div>
+                    <div class="v" id="bEmail">—</div>
+                    <div class="s" id="bMode">—</div>
+                  </div>
+                  <div class="rs-kpi">
+                    <div class="k">Rank</div>
+                    <div class="v" id="bRank">—</div>
+                    <div class="s" id="bYos">—</div>
+                  </div>
+                  <div class="rs-kpi">
+                    <div class="k">Base</div>
+                    <div class="v" id="bBase">—</div>
+                    <div class="s" id="bZip">—</div>
+                  </div>
+                  <div class="rs-kpi">
+                    <div class="k">Family</div>
+                    <div class="v" id="bFamily">—</div>
+                    <div class="s" id="bVA">—</div>
+                  </div>
+                </div>
+                <div style="height:12px"></div>
+                <div class="rs-card" style="border-radius:16px;">
+                  <div class="hd">
+                    <div class="label"><span class="rs-miniDot"></span> Profile Fields (mode-aware)</div>
+                    <div class="rs-pill" id="rsReqPill"><strong>Required</strong> fields highlighted</div>
+                  </div>
+                  <div class="bd">
+                    <div class="rs-form" id="rsForm">
+                      <div class="rs-field required" data-key="email" data-required="true">
+                        <div class="k">Email (read-only)</div>
+                        <input id="f_email" type="email" disabled="">
+                        <div class="h">Your login email. (Locked)</div>
+                      </div>
+                      <div class="rs-field required" data-key="mode" data-required="true">
+                        <div class="k">Mode</div>
+                        <select id="f_mode">
+                          <option value="">Select…</option>
+                          <option value="ad">Active Duty</option>
+                          <option value="vet">Veteran</option>
+                        </select>
+                        <div class="h">This toggles which fields are required.</div>
+                      </div>
+                      <div class="rs-field required" data-key="first_name" data-required="true">
+                        <div class="k">First Name</div>
+                        <input id="f_first_name" type="text" placeholder="First name">
+                      </div>
+                      <div class="rs-field required" data-key="last_name" data-required="true">
+                        <div class="k">Last Name</div>
+                        <input id="f_last_name" type="text" placeholder="Last name">
+                      </div>
+                      <div class="rs-field required" data-key="full_name" data-required="true">
+                        <div class="k">Full Name</div>
+                        <input id="f_full_name" type="text" placeholder="Full legal name">
+                        <div class="h">Auto-builds from first/last if blank.</div>
+                      </div>
+                      <div class="rs-field required" data-key="phone" data-required="true">
+                        <div class="k">Phone</div>
+                        <input id="f_phone" type="tel" placeholder="(###) ###-####">
+                      </div>
+                      <div class="rs-field required" data-key="rank_paygrade" data-required="true">
+                        <div class="k">Rank Paygrade</div>
+                        <input id="f_rank_paygrade" type="text" placeholder="E-7, O-4, etc.">
+                      </div>
+                      <div class="rs-field required" data-key="rank" data-required="true">
+                        <div class="k">Rank Title</div>
+                        <input id="f_rank" type="text" placeholder="MSgt, Maj, Capt, etc.">
+                      </div>
+                      <div class="rs-field required" data-key="yos" data-required="true">
+                        <div class="k">Years of Service (YOS)</div>
+                        <input id="f_yos" type="number" min="0" step="1" placeholder="16">
+                      </div>
+                      <div class="rs-field required" data-key="family" data-required="true">
+                        <div class="k">Family Size</div>
+                        <input id="f_family" type="number" min="1" step="1" placeholder="7">
+                      </div>
+                      <div class="rs-field required" data-key="base" data-required="true">
+                        <div class="k">Selected Base</div>
+                        <input id="f_base" type="text" placeholder="Nellis AFB">
+                      </div>
+                      <div class="rs-field required" data-key="zip" data-required="true">
+                        <div class="k">Base ZIP</div>
+                        <input id="f_zip" type="text" placeholder="89191">
+                      </div>
+                      <div class="rs-field required" data-key="family_has_dependents" data-required="true">
+                        <div class="k">Dependents (BAH)</div>
+                        <select id="f_family_has_dependents">
+                          <option value="">Select…</option>
+                          <option value="true">With Dependents</option>
+                          <option value="false">Without Dependents</option>
+                        </select>
+                      </div>
+                      <div class="rs-field required" data-key="marital_status" data-required="true">
+                        <div class="k">Marital Status</div>
+                        <select id="f_marital_status">
+                          <option value="">Select…</option>
+                          <option value="single">Single</option>
+                          <option value="married">Married</option>
+                          <option value="separated">Separated</option>
+                          <option value="divorced">Divorced</option>
+                          <option value="widowed">Widowed</option>
+                        </select>
+                      </div>
+                      <div class="rs-field required" data-key="housing_intent" data-required="true">
+                        <div class="k">Housing Intent</div>
+                        <select id="f_housing_intent">
+                          <option value="">Select…</option>
+                          <option value="buy">Buy</option>
+                          <option value="rent">Rent</option>
+                          <option value="undecided">Undecided</option>
+                        </select>
+                      </div>
+                      <div class="rs-field required" data-key="timeline" data-required="true">
+                        <div class="k">Purchase Timeline</div>
+                        <select id="f_timeline">
+                          <option value="">Select…</option>
+                          <option value="0-3">0–3 months</option>
+                          <option value="3-6">3–6 months</option>
+                          <option value="6-12">6–12 months</option>
+                          <option value="12+">12+ months</option>
+                        </select>
+                      </div>
+                      <div class="rs-field required" data-key="credit_score" data-required="true">
+                        <div class="k">Credit Score</div>
+                        <input id="f_credit_score" type="number" min="300" max="850" step="1" placeholder="720">
+                      </div>
+                      <div class="rs-field required" data-key="monthly_expenses" data-required="true">
+                        <div class="k">Monthly Expenses</div>
+                        <input id="f_monthly_expenses" type="number" min="0" step="1" placeholder="4800">
+                      </div>
+                      <div class="rs-field required" data-key="projected_home_price" data-required="true">
+                        <div class="k">Projected Home Price</div>
+                        <input id="f_projected_home_price" type="number" min="0" step="1" placeholder="550000">
+                      </div>
+                      <div class="rs-field required" data-key="downpayment" data-required="true">
+                        <div class="k">Down Payment</div>
+                        <input id="f_downpayment" type="number" min="0" step="1" placeholder="27500">
+                      </div>
+                      <div class="rs-field required" data-key="income_other" data-required="true">
+                        <div class="k">Other Monthly Income</div>
+                        <input id="f_income_other" type="number" min="0" step="1" placeholder="0">
+                        <div class="h">Spouse income, rental income, side income, etc.</div>
+                      </div>
+                      <div class="rs-field required" data-key="notes" data-required="true" style="grid-column:1 / -1;">
+                        <div class="k">Notes (context for fiduciary memo)</div>
+                        <textarea id="f_notes" placeholder="Anything we should know? Work schedule, risk tolerance, upcoming PCS, etc."></textarea>
+                      </div>
+                      <div class="rs-field required" data-key="consent_share" data-required="true">
+                        <div class="k">Consent to use data for memo</div>
+                        <select id="f_consent_share">
+                          <option value="">Select…</option>
+                          <option value="yes">Yes — generate Fiduciary Memo</option>
+                          <option value="no">No — keep profile only</option>
+                        </select>
+                      </div>
+                      <div class="rs-field rs-vet-only" data-key="va_disability" data-mode-only="vet" data-required-when-mode="vet">
+                        <div class="k">VA Disability % (veteran only)</div>
+                        <input id="f_va_disability" type="number" min="0" max="100" step="1" placeholder="70">
+                      </div>
+                      <div class="rs-field rs-vet-only" data-key="retired" data-mode-only="vet" data-required-when-mode="vet">
+                        <div class="k">Retired? (veteran only)</div>
+                        <select id="f_retired">
+                          <option value="">Select…</option>
+                          <option value="false">No</option>
+                          <option value="true">Yes</option>
+                        </select>
+                        <div class="h">If yes, retirement fields below become required.</div>
+                      </div>
+                      <div class="rs-field rs-vet-only" data-key="retirement_plan" data-mode-only="vet" data-required-when="retired:true">
+                        <div class="k">Retirement Plan (if retired)</div>
+                        <select id="f_retirement_plan">
+                          <option value="">Select…</option>
+                          <option value="high3">High-3</option>
+                          <option value="brs">BRS</option>
+                        </select>
+                      </div>
+                      <div class="rs-field rs-vet-only" data-key="retired_rank_paygrade" data-mode-only="vet" data-required-when="retired:true">
+                        <div class="k">Retired Rank Paygrade (if retired)</div>
+                        <input id="f_retired_rank_paygrade" type="text" placeholder="E-7, O-4, etc.">
+                      </div>
+                      <div class="rs-field rs-vet-only" data-key="retired_yos" data-mode-only="vet" data-required-when="retired:true">
+                        <div class="k">Retired YOS (if retired)</div>
+                        <input id="f_retired_yos" type="number" min="0" step="1" placeholder="20">
+                      </div>
+                    </div>
+                    <div class="rs-miniBtns">
+                      <button class="rs-btn secondary" id="rsAutofillBtn" type="button">Autofill from Signup</button>
+                      <button class="rs-btn" id="rsSaveBtn2" type="button">Save Profile</button>
+                    </div>
+                    <div class="rs-toast" id="rsToast">—</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="rs-progress">
+              <div class="rs-card">
+                <div class="hd">
+                  <div class="label"><span class="rs-miniDot"></span> Completion</div>
+                  <div class="rs-pill" id="rsMissingPill"><strong>—</strong></div>
+                </div>
+                <div class="bd">
+                  <div class="rs-meter">
+                    <div class="rs-meterRow">
+                      <div class="left">Required fields completed</div>
+                      <div class="right" id="rsPct">0%</div>
+                    </div>
+                    <div class="rs-bar">
+                      <div class="rs-fill" id="rsFill"></div>
+                    </div>
+                    <div class="rs-note" id="rsNote">Fill every required field to unlock Fiduciary Analysis.</div>
+                  </div>
+                </div>
+              </div>
+              <div class="rs-card">
+                <div class="hd">
+                  <div class="label"><span class="rs-miniDot"></span> Fiduciary Analysis</div>
+                  <div class="rs-pill" id="rsGatePill"><strong>Locked</strong></div>
+                </div>
+                <div class="bd">
+                  <div class="rs-gate">
+                    <div class="k">Gate rule</div>
+                    <div class="desc" id="rsGateDesc">Unlocks when all required fields are complete + consent is granted.</div>
+                    <!--  ✅ CHANGE: now routes to /fiduciary-memo  -->
+                    <div class="rs-fidBtn" id="rsFidBtn" role="button" aria-disabled="true" data-target="/fiduciary-memo">
+                      <div class="rs-fidText" id="rsFidText"></div>
+                    </div>
+                    <div class="rs-toast" id="rsGateToast">
+                      <strong>Locked:</strong> Complete the remaining required fields.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <script>
+    (() => {
+      const $ = (id) => document.getElementById(id);
+      const LS = {
+        bridgeA: "pcsunited.bridge",
+        bridgeB: "pcsunited.bridge.v1",
+        bridgeLegacy: "realtysass.bridge",
+        identityA: "pcsunited.identity",
+        identityB: "realtysass.identity",
+        profileA: "pcsunited.profile.v1",
+        profileB: "realtysass.profile.v1"
+      };
+      function safeParse(s){ try { return JSON.parse(s); } catch(e){ return null; } }
+      function safeString(v){ return (v ?? "").toString().trim(); }
+      function toNum(v){
+        const n = Number(String(v ?? "").replace(/[,$\s]/g,""));
+        return isFinite(n) ? n : null;
+      }
+      function getBridge(){
+        return (
+          safeParse(localStorage.getItem(LS.bridgeA)) ||
+          safeParse(localStorage.getItem(LS.bridgeB)) ||
+          safeParse(localStorage.getItem(LS.bridgeLegacy)) ||
+          null
+        );
+      }
+      function setToast(msg){
+        const el = $("rsToast");
+        if (el) el.textContent = msg || "—";
+      }
+      function readField(domId){
+        const el = $(domId);
+        if (!el) return "";
+        return safeString(el.value);
+      }
+      function writeField(domId, val, {force=false}={}){
+        const el = $(domId);
+        if (!el) return;
+        if (!force && safeString(el.value)) return;
+        el.value = val ?? "";
+      }
+      function currentMode(){ return readField("f_mode"); }
+      const FIELD_MAP = [
+        ["email", "f_email"],
+        ["mode", "f_mode"],
+        ["first_name", "f_first_name"],
+        ["last_name", "f_last_name"],
+        ["full_name", "f_full_name"],
+        ["phone", "f_phone"],
+        ["rank_paygrade", "f_rank_paygrade"],
+        ["rank", "f_rank"],
+        ["yos", "f_yos"],
+        ["family", "f_family"],
+        ["base", "f_base"],
+        ["zip", "f_zip"],
+        ["family_has_dependents", "f_family_has_dependents"],
+        ["marital_status", "f_marital_status"],
+        ["housing_intent", "f_housing_intent"],
+        ["timeline", "f_timeline"],
+        ["credit_score", "f_credit_score"],
+        ["monthly_expenses", "f_monthly_expenses"],
+        ["projected_home_price", "f_projected_home_price"],
+        ["downpayment", "f_downpayment"],
+        ["income_other", "f_income_other"],
+        ["notes", "f_notes"],
+        ["consent_share", "f_consent_share"],
+        ["va_disability", "f_va_disability"],
+        ["retired", "f_retired"],
+        ["retirement_plan", "f_retirement_plan"],
+        ["retired_rank_paygrade", "f_retired_rank_paygrade"],
+        ["retired_yos", "f_retired_yos"]
+      ];
+      function mountFidText(){
+        const text = "Fiduciary Analysis";
+        const host = $("rsFidText");
+        if (!host) return;
+        host.innerHTML = "";
+        [...text].forEach((ch, i) => {
+          const span = document.createElement("span");
+          span.textContent = ch;
+          span.style.setProperty("--i", i);
+          host.appendChild(span);
+        });
+      }
+      function normalizeRankFromPaygrade(paygrade){
+        const map = {
+          "E-1":"AB","E-2":"Amn","E-3":"A1C","E-4":"SrA","E-5":"SSgt","E-6":"TSgt","E-7":"MSgt","E-8":"SMSgt","E-9":"CMSgt",
+          "O-1":"2d Lt","O-2":"1st Lt","O-3":"Capt","O-4":"Maj","O-5":"Lt Col","O-6":"Col"
+        };
+        const k = safeString(paygrade);
+        return map[k] || "";
+      }
+      function autofillFromSignup(){
+        const b = getBridge() || {};
+        const email = safeString(b.email);
+        const full = safeString(b.full_name || b.fullName);
+        const last = safeString(b.last_name || b.lastName);
+        const phone = safeString(b.phone);
+        const mode = safeString(b.mode);
+        const rank_paygrade = safeString(b.rank_paygrade || b.paygrade);
+        const rank = safeString(b.rank || b.rankTitle) || normalizeRankFromPaygrade(rank_paygrade);
+        const yos = safeString(b.yos);
+        const family = safeString(b.family);
+        const base = safeString(b.base || b.base_name || b.installation);
+        const zip = safeString(b.zip);
+        const va = safeString(b.va_disability);
+        writeField("f_email", email, {force:true});
+        writeField("f_full_name", full);
+        writeField("f_last_name", last);
+        writeField("f_phone", phone);
+        if (full && !$("f_first_name").value){
+          const parts = full.split(" ").filter(Boolean);
+          if (parts.length >= 1) writeField("f_first_name", parts[0]);
+        }
+        writeField("f_mode", mode);
+        writeField("f_rank_paygrade", rank_paygrade);
+        writeField("f_rank", rank);
+        writeField("f_yos", yos);
+        writeField("f_family", family);
+        writeField("f_base", base);
+        writeField("f_zip", zip);
+        writeField("f_va_disability", va);
+        setToast("Autofill complete. Review and fill remaining fields to unlock Fiduciary Analysis.");
+        paintBasicHeader();
+        validateAll();
+      }
+      function paintBasicHeader(){
+        const b = getBridge() || {};
+        const email = safeString(b.email) || safeString(readField("f_email")) || "—";
+        const mode = safeString(b.mode) || safeString(readField("f_mode")) || "—";
+        const rank = safeString(b.rank || b.rankTitle || b.rank_paygrade || b.paygrade) || "—";
+        const yos = safeString(b.yos) ? ("YOS " + safeString(b.yos)) : "YOS —";
+        const base = safeString(b.base || b.base_name || b.installation) || "—";
+        const zip = safeString(b.zip) ? ("ZIP " + safeString(b.zip)) : "ZIP —";
+        const family = safeString(b.family) ? safeString(b.family) : "—";
+        $("bEmail").textContent = email;
+        $("bMode").textContent = "Mode: " + (mode ? mode.toUpperCase() : "—");
+        $("bRank").textContent = rank;
+        $("bYos").textContent = yos;
+        $("bBase").textContent = base;
+        $("bZip").textContent = zip;
+        $("bFamily").textContent = family;
+        if (String(mode).toLowerCase() === "vet"){
+          const va = safeString(b.va_disability) ? safeString(b.va_disability) + "%" : "—";
+          $("bVA").textContent = "VA: " + va;
+        } else {
+          $("bVA").textContent = "VA: n/a";
+        }
+        const last = safeString(readField("f_last_name")) || "Member";
+        $("rsWhoPill").innerHTML = `<strong>${rank}</strong> ${last}`;
+        $("rsHello").textContent = `Complete your profile, ${rank} ${last}.`;
+      }
+      function applyModeVisibility(){
+        const mode = String(currentMode() || "").toLowerCase();
+        const vetOnly = document.querySelectorAll(".rs-vet-only");
+        vetOnly.forEach(el => el.classList.toggle("rs-hidden", mode !== "vet"));
+        if (mode === "ad"){
+          writeField("f_va_disability", 0, {force:true});
+          writeField("f_retired", "false", {force:true});
+          writeField("f_retirement_plan", "", {force:true});
+          writeField("f_retired_rank_paygrade", "", {force:true});
+          writeField("f_retired_yos", "", {force:true});
+        }
+      }
+      function collectProfile(){
+        const out = {};
+        FIELD_MAP.forEach(([key, domId]) => { out[key] = readField(domId); });
+        out.yos = toNum(out.yos);
+        out.family = toNum(out.family);
+        out.credit_score = toNum(out.credit_score);
+        out.monthly_expenses = toNum(out.monthly_expenses);
+        out.projected_home_price = toNum(out.projected_home_price);
+        out.downpayment = toNum(out.downpayment);
+        out.income_other = toNum(out.income_other);
+        out.va_disability = toNum(out.va_disability);
+        out.retired_yos = toNum(out.retired_yos);
+        if (out.family_has_dependents === "true") out.family_has_dependents = true;
+        if (out.family_has_dependents === "false") out.family_has_dependents = false;
+        if (out.retired === "true") out.retired = true;
+        if (out.retired === "false") out.retired = false;
+        out.updated_at = new Date().toISOString();
+        return out;
+      }
+      function saveProfile(){
+        const p = collectProfile();
+        localStorage.setItem(LS.profileA, JSON.stringify(p));
+        localStorage.setItem(LS.profileB, JSON.stringify(p));
+        setToast("Saved. Your profile is now available for the Fiduciary Memo and other modules.");
+        validateAll();
+        return p;
+      }
+      function getSavedProfile(){
+        return (
+          safeParse(localStorage.getItem(LS.profileA)) ||
+          safeParse(localStorage.getItem(LS.profileB)) ||
+          null
+        );
+      }
+      function loadProfile(){
+        const saved = getSavedProfile();
+        if (!saved){
+          setToast("No saved profile found yet. Use Autofill from Signup to begin.");
+          return;
+        }
+        FIELD_MAP.forEach(([key, domId]) => writeField(domId, saved[key], {force:true}));
+        writeField("f_email", saved.email, {force:true});
+        setToast("Loaded saved profile.");
+        paintBasicHeader();
+        applyModeVisibility();
+        validateAll();
+      }
+      function isMissing(val){
+        const s = safeString(val);
+        return !s || s === "—";
+      }
+      function fieldRequired(fieldEl){
+        if (!fieldEl) return false;
+        const modeOnly = fieldEl.getAttribute("data-mode-only");
+        if (modeOnly){
+          const mode = String(currentMode() || "").toLowerCase();
+          if (String(modeOnly).toLowerCase() !== mode) return false;
+        }
+        if (fieldEl.getAttribute("data-required") === "true") return true;
+        const reqMode = fieldEl.getAttribute("data-required-when-mode");
+        if (reqMode){
+          const mode = String(currentMode() || "").toLowerCase();
+          if (String(reqMode).toLowerCase() === mode) return true;
+        }
+        const cond = fieldEl.getAttribute("data-required-when");
+        if (!cond) return false;
+        const [k, v] = cond.split(":");
+        const cur = readField("f_" + k);
+        return String(cur) === String(v);
+      }
+      function validateAll(){
+        applyModeVisibility();
+        const form = $("rsForm");
+        if (!form) return;
+        const fn = readField("f_first_name");
+        const ln = readField("f_last_name");
+        if (!readField("f_full_name") && fn && ln) writeField("f_full_name", `${fn} ${ln}`, {force:true});
+        const fieldEls = [...form.querySelectorAll(".rs-field")];
+        let requiredCount = 0;
+        let okCount = 0;
+        fieldEls.forEach(el => {
+          if (el.classList.contains("rs-hidden")) {
+            el.classList.remove("missing");
+            el.classList.remove("required");
+            return;
+          }
+          const required = fieldRequired(el);
+          el.classList.toggle("required", required);
+          const input = el.querySelector("input, select, textarea");
+          const val = input ? safeString(input.value) : "";
+          const missing = required && isMissing(val);
+          el.classList.toggle("missing", missing);
+          if (required){
+            requiredCount++;
+            if (!missing) okCount++;
+          }
+        });
+        const pct = requiredCount ? Math.round((okCount / requiredCount) * 100) : 0;
+        $("rsPct").textContent = pct + "%";
+        $("rsFill").style.width = pct + "%";
+        $("rsStatusPill").innerHTML = `Completion: <strong>${pct}%</strong>`;
+        $("rsMissingPill").innerHTML = `<strong>${requiredCount - okCount}</strong> missing`;
+        $("rsNote").textContent =
+          (requiredCount - okCount === 0)
+            ? "Perfect. Your Fiduciary Analysis is unlocked."
+            : "Fill the remaining required fields to unlock Fiduciary Analysis.";
+        const consent = readField("f_consent_share");
+        const unlocked = (pct === 100) && (consent === "yes");
+        const fidBtn = $("rsFidBtn");
+        const gatePill = $("rsGatePill");
+        const gateToast = $("rsGateToast");
+        const gateDesc = $("rsGateDesc");
+        if (unlocked){
+          fidBtn.classList.add("armed");
+          fidBtn.setAttribute("aria-disabled","false");
+          gatePill.innerHTML = `<strong style="color:rgba(108,255,187,.95)">Unlocked</strong>`;
+          gateToast.innerHTML = `<strong style="color:rgba(108,255,187,.95)">Ready:</strong> Generate your Fiduciary Memo.`;
+          gateDesc.textContent = "All required fields are complete and consent is granted.";
+        } else {
+          fidBtn.classList.remove("armed");
+          fidBtn.setAttribute("aria-disabled","true");
+          if (pct === 100 && consent !== "yes"){
+            gateToast.innerHTML = `<strong>Locked:</strong> Set consent to “Yes — generate Fiduciary Memo.”`;
+            gateDesc.textContent = "All required fields are complete, but memo generation requires consent.";
+          } else {
+            gateToast.innerHTML = `<strong>Locked:</strong> Complete the remaining required fields.`;
+            gateDesc.textContent = "Unlocks when all required fields are complete + consent is granted.";
+          }
+          gatePill.innerHTML = `<strong>Locked</strong>`;
+        }
+        paintBasicHeader();
+        return { pct, unlocked, missing: requiredCount - okCount };
+      }
+      // ✅ NEW: build a clean memo payload (prevents $0 memo)
+      function buildMemoBridge(profile){
+        const b = getBridge() || {};
+        const p = profile || getSavedProfile() || collectProfile();
+        const incomeBase = Number(b.income || b.totalIncome || 0);
+        const incomeOther = Number(p.income_other || 0);
+        const income = incomeBase + incomeOther;
+        const memoBridge = {
+          // money + scenario
+          income: income,
+          expenses: Number(p.monthly_expenses || 0),
+          savings: Number(p.downpayment || 0),
+          price: Number(p.projected_home_price || 0),
+          dpAmt: Number(p.downpayment || 0),
+          creditScore: Number(p.credit_score || 720),
+          // profile identity
+          profile: {
+            email: p.email,
+            first_name: p.first_name,
+            last_name: p.last_name,
+            full_name: p.full_name,
+            phone: p.phone,
+            mode: p.mode,
+            rank: p.rank,
+            rank_paygrade: p.rank_paygrade,
+            yos: p.yos,
+            family: p.family,
+            base: p.base,
+            zip: p.zip,
+            notes: p.notes
+          }
+        };
+        // write to BOTH namespaces to avoid cross-embed weirdness
+        localStorage.setItem(LS.bridgeB, JSON.stringify(memoBridge));
+        localStorage.setItem(LS.bridgeLegacy, JSON.stringify(memoBridge));
+        // also write identity
+        const ident = {
+          email: p.email,
+          firstName: p.first_name,
+          lastName: p.last_name,
+          rankTitle: p.rank,
+          paygrade: p.rank_paygrade,
+          mode: p.mode,
+          ts: Date.now()
+        };
+        localStorage.setItem(LS.identityA, JSON.stringify(ident));
+        localStorage.setItem(LS.identityB, JSON.stringify(ident));
+        return memoBridge;
+      }
+      function wire(){
+        $("rsSaveBtn").addEventListener("click", saveProfile);
+        $("rsSaveBtn2").addEventListener("click", saveProfile);
+        $("rsLoadBtn").addEventListener("click", loadProfile);
+        $("rsAutofillBtn").addEventListener("click", autofillFromSignup);
+        const form = $("rsForm");
+        form.addEventListener("input", () => validateAll());
+        form.addEventListener("change", () => validateAll());
+        $("rsFidBtn").addEventListener("click", () => {
+          const state = validateAll();
+          if (!state || !state.unlocked) return;
+          const p = saveProfile();
+          buildMemoBridge(p);
+          const target = $("rsFidBtn").getAttribute("data-target") || "/fiduciary-memo";
+          const url = new URL(target, window.location.origin);
+          url.searchParams.set("from", "profile");
+          window.location.href = url.toString();
+        });
+        mountFidText();
+      }
+      function init(){
+        paintBasicHeader();
+        const b = getBridge() || {};
+        writeField("f_email", safeString(b.email), {force:true});
+        const saved = getSavedProfile();
+        if (saved) loadProfile();
+        else autofillFromSignup();
+        applyModeVisibility();
+        validateAll();
+        setToast("Tip: Mode controls which fields appear (Active Duty vs Veteran).");
+      }
+      wire();
+      init();
+      window.addEventListener("storage", (ev) => {
+        if (!ev || !ev.key) return;
+        if (ev.key === LS.bridgeA || ev.key === LS.bridgeB || ev.key === LS.bridgeLegacy){
+          paintBasicHeader();
+        }
+      });
+    })();
+  </script>
+    </div>
+  </div>
+  <div class="code-embed-32 w-embed w-script"><!--  //#0 HOUSE OF SASS • PCS UNITED • USER DASHBOARD (SINGLE EMBED)
+     v4.1.0 — TRUE INTAKE-STYLE / FINANCIAL-INTAKE PALETTE
+     PURPOSE:
+     - Match the Financial Intake embed philosophy closely
+     - NO separate dashboard background world
+     - NO bulky glass cards
+     - Use ONLY the Financial Intake color palette:
+       mint #8ef3c5, sapphire #6aa7ff, white ink #e9ecff, muted #a8b0d6
+     - Keep runtime-ready IDs for future 2A logic
+     - Remove duplicate PCS Timeline block
+ -->
+    <div id="pcsu-user-dashboard-strip" style="all: initial;">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+      <style>
+    /* //#1 SCOPE RESET */
+    #pcsu-user-dashboard-strip,
+    #pcsu-user-dashboard-strip *{
+      box-sizing:border-box;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+    #pcsu-user-dashboard-strip{
+      width:100%;
+      color:#e9ecff;
+      padding:16px 0;
+    }
+    /* //#2 SHELL — SAME CONTAINER PHILOSOPHY AS FINANCIAL INTAKE */
+    #pcsu-user-shell{
+      width:100%;
+      max-width:980px;
+      margin:0 auto;
+      padding:0;
+      background:transparent;
+    }
+    /* //#3 TOKENS — FINANCIAL INTAKE PALETTE ONLY */
+    #pcsu-user-dashboard-strip{
+      --ink:#e9ecff;
+      --muted:#a8b0d6;
+      --sub:rgba(233,236,255,.68);
+      --field:rgba(12,14,25,.65);
+      --field-soft:rgba(12,14,25,.42);
+      --stroke:rgba(255,255,255,.10);
+      --stroke-soft:rgba(255,255,255,.08);
+      --mint:#8ef3c5;
+      --sapphire:#6aa7ff;
+      --mint-soft:rgba(142,243,197,.22);
+      --sapphire-soft:rgba(106,167,255,.22);
+      --radius-xl:18px;
+      --radius-lg:14px;
+      --radius-md:10px;
+      --shadow-pill:0 14px 30px rgba(0,0,0,.38);
+      --shadow-soft:0 8px 18px rgba(0,0,0,.14);
+    }
+    /* //#4 GLOBAL LAYOUT */
+    .pcsu-layout{
+      display:grid;
+      grid-template-columns:minmax(0,1.78fr) minmax(280px,.92fr);
+      gap:18px;
+      align-items:start;
+    }
+    .pcsu-left,
+    .pcsu-right{
+      display:grid;
+      gap:18px;
+    }
+    @media (max-width: 920px){
+      .pcsu-layout{ grid-template-columns:1fr; }
+    }
+    /* //#5 SECTION SYSTEM */
+    .pcsu-section{
+      position:relative;
+      background:transparent;
+      border:0;
+      border-radius:0;
+      box-shadow:none;
+      padding:0;
+    }
+    .pcsu-sectionTitle{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:12px;
+    }
+    .pcsu-sectionTitle .label{
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      color:var(--muted);
+      white-space:nowrap;
+    }
+    .pcsu-sectionTitle .line{
+      flex:1 1 auto;
+      height:1px;
+      background:rgba(255,255,255,.08);
+    }
+    /* //#6 HERO */
+    .pcsu-hero{
+      display:grid;
+      grid-template-columns:300px 1fr;
+      gap:18px;
+      align-items:center;
+      padding-bottom:18px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    @media (max-width: 760px){
+      .pcsu-hero{ grid-template-columns:1fr; }
+    }
+    .pcsu-gaugeCard{
+      min-height:188px;
+      border-radius:16px;
+      background:rgba(12,14,25,.28);
+      border:1px solid rgba(255,255,255,.08);
+      padding:12px;
+    }
+    .pcsu-gaugeWrap{
+      position:relative;
+      width:100%;
+      max-width:260px;
+      height:160px;
+      margin:0 auto;
+    }
+    .pcsu-gaugeSvg{
+      width:100%;
+      height:100%;
+      display:block;
+      filter:drop-shadow(0 6px 12px rgba(0,0,0,.16));
+    }
+    #pcsuNeedle{
+      position:absolute;
+      left:50%;
+      top:79%;
+      width:100px;
+      height:14px;
+      transform-origin:10px 50%;
+      transform:translate(-50%,-50%) rotate(28deg);
+      pointer-events:none;
+      z-index:3;
+      filter:drop-shadow(0 4px 8px rgba(0,0,0,.18));
+    }
+    #pcsuNeedle::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      clip-path:polygon(0 50%, 16% 0, 100% 50%, 16% 100%);
+      background:linear-gradient(180deg,#dffcf1,#8ef3c5 54%,#6aa7ff 100%);
+      border-radius:3px;
+    }
+    #pcsuNeedle::after{
+      content:"";
+      position:absolute;
+      left:-9px;
+      top:50%;
+      transform:translateY(-50%);
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      background:rgba(255,255,255,.92);
+      box-shadow:0 0 0 4px rgba(255,255,255,.06);
+    }
+    .pcsu-scoreBlock{
+      text-align:center;
+      padding:0 4px;
+    }
+    .pcsu-scoreTitle{
+      font-size:13px;
+      font-weight:800;
+      letter-spacing:.28em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:14px;
+    }
+    .pcsu-scoreLine{
+      display:flex;
+      align-items:flex-end;
+      justify-content:center;
+      gap:8px;
+      line-height:1;
+      margin-bottom:18px;
+    }
+    .pcsu-scoreNum{
+      font-size:78px;
+      font-weight:900;
+      line-height:.92;
+      background:linear-gradient(90deg,var(--mint),var(--sapphire));
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .pcsu-scoreDen{
+      font-size:48px;
+      font-weight:900;
+      line-height:1;
+      color:#e9ecff;
+    }
+    .pcsu-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:42px;
+      padding:10px 20px;
+      border-radius:999px;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+      border:1px solid rgba(255,255,255,.12);
+      background:var(--field);
+      color:var(--mint);
+      box-shadow:var(--shadow-pill);
+    }
+    .pcsu-heroMeta{
+      display:grid;
+      grid-template-columns:1fr auto;
+      gap:12px;
+      align-items:center;
+      padding-top:14px;
+    }
+    @media (max-width: 760px){
+      .pcsu-heroMeta{ grid-template-columns:1fr; }
+    }
+    .pcsu-healthBlock{
+      min-width:0;
+    }
+    .pcsu-healthLabel{
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:8px;
+    }
+    .pcsu-healthLabel span{
+      color:var(--mint);
+    }
+    .pcsu-miniSegments{
+      display:flex;
+      gap:6px;
+      align-items:center;
+    }
+    .pcsu-miniSegments span{
+      width:22px;
+      height:6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.10);
+    }
+    .pcsu-miniSegments span.active{
+      background:linear-gradient(90deg,var(--mint),var(--sapphire));
+    }
+    .pcsu-chipRow{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      justify-content:flex-end;
+    }
+    .pcsu-chip{
+      min-height:34px;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:8px 14px;
+      border-radius:999px;
+      background:var(--field);
+      border:1px solid rgba(255,255,255,.12);
+      color:#e9ecff;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      box-shadow:0 8px 18px rgba(0,0,0,.18);
+    }
+    /* //#7 SNAPSHOT / FINANCIAL */
+    .pcsu-finLine{
+      color:var(--sub);
+      line-height:1.52;
+      font-size:14px;
+      margin-bottom:14px;
+    }
+    .pcsu-finLine .hl{
+      color:#fff;
+      font-weight:900;
+    }
+    .pcsu-finLine .accent{
+      color:var(--mint);
+      font-weight:900;
+    }
+    .pcsu-kpis{
+      display:grid;
+      grid-template-columns:210px 1fr;
+      gap:0;
+      border-radius:14px;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(12,14,25,.20);
+    }
+    .pcsu-kpis .left{
+      padding:14px;
+      border-right:1px solid rgba(255,255,255,.08);
+      display:grid;
+      gap:10px;
+    }
+    .pcsu-kpis .right{
+      padding:14px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:12px;
+    }
+    @media (max-width: 760px){
+      .pcsu-kpis{ grid-template-columns:1fr; }
+      .pcsu-kpis .left{
+        border-right:0;
+        border-bottom:1px solid rgba(255,255,255,.08);
+      }
+    }
+    @media (max-width: 520px){
+      .pcsu-kpis .right{ grid-template-columns:1fr; }
+    }
+    .pcsu-miniRow{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      color:var(--sub);
+      font-size:14px;
+    }
+    .pcsu-miniRow .label{
+      display:flex;
+      align-items:center;
+      gap:10px;
+    }
+    .pcsu-dot{
+      width:7px;
+      height:7px;
+      border-radius:999px;
+      background:var(--mint);
+      flex:0 0 auto;
+      box-shadow:0 0 0 4px rgba(142,243,197,.10);
+    }
+    .pcsu-miniRow .val{
+      font-weight:900;
+      color:#fff;
+    }
+    .pcsu-bigLabel{
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      color:var(--muted);
+      margin-bottom:6px;
+    }
+    .pcsu-bigVal{
+      font-size:20px;
+      font-weight:900;
+      color:#fff;
+      line-height:1.12;
+    }
+    /* //#8 CHECKLIST */
+    .pcsu-checklist{
+      display:grid;
+      gap:10px;
+      margin-top:4px;
+      padding-bottom:2px;
+    }
+    .pcsu-item{
+      display:flex;
+      align-items:flex-start;
+      gap:10px;
+      color:var(--sub);
+      font-size:14px;
+      line-height:1.42;
+    }
+    .pcsu-item .mark{
+      flex:0 0 auto;
+      color:var(--mint);
+      font-weight:900;
+      margin-top:1px;
+    }
+    .pcsu-item b{
+      color:var(--mint);
+      font-weight:900;
+    }
+    .pcsu-bottomDivider{
+      margin:14px 0 10px;
+      height:1px;
+      background:rgba(255,255,255,.08);
+    }
+    .pcsu-tip{
+      color:var(--sub);
+      font-size:13px;
+      line-height:1.45;
+    }
+    .pcsu-tip b{
+      color:var(--mint);
+      font-weight:900;
+    }
+    /* //#9 RIGHT COLUMN BLOCKS */
+    .pcsu-sideBlock{
+      padding:0 0 2px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .pcsu-sideBlock:last-child{
+      border-bottom:0;
+      padding-bottom:0;
+    }
+    /* //#10 TIMELINE */
+    .pcsu-dateRow{
+      display:grid;
+      grid-template-columns:repeat(4,1fr);
+      gap:8px;
+      margin-bottom:16px;
+    }
+    .pcsu-dateCell{
+      min-height:50px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      padding:8px 6px;
+      border-radius:12px;
+      background:var(--field);
+      border:1px solid rgba(255,255,255,.10);
+      color:#e9ecff;
+      font-size:12px;
+      font-weight:800;
+    }
+    .pcsu-dateCell.days{
+      color:var(--mint);
+    }
+    .pcsu-trackWrap{
+      padding:8px 2px 4px;
+    }
+    .pcsu-track{
+      position:relative;
+      height:6px;
+      border-radius:999px;
+      background:rgba(255,255,255,.10);
+      overflow:visible;
+    }
+    .pcsu-track .fill{
+      position:absolute;
+      inset:0;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--sapphire),var(--mint));
+    }
+    .pcsu-track .node{
+      position:absolute;
+      top:50%;
+      width:14px;
+      height:14px;
+      border-radius:999px;
+      transform:translate(-50%,-50%);
+      background:linear-gradient(180deg,#dffcf1,var(--mint));
+      box-shadow:0 4px 10px rgba(0,0,0,.14);
+    }
+    .pcsu-track .finish{
+      position:absolute;
+      right:0;
+      top:50%;
+      transform:translateY(-50%);
+      width:16px;
+      height:16px;
+      border-radius:999px;
+      background:radial-gradient(circle at 35% 35%,rgba(255,255,255,.92),rgba(255,255,255,.18) 50%,rgba(142,243,197,.98) 52%);
+      box-shadow:0 0 12px rgba(142,243,197,.18);
+    }
+    .pcsu-trackLabels{
+      margin-top:14px;
+      display:grid;
+      grid-template-columns:repeat(3,1fr);
+      gap:10px;
+      text-align:center;
+      color:var(--sub);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.12em;
+      text-transform:uppercase;
+      line-height:1.45;
+    }
+    /* //#11 EXPENSE */
+    .pcsu-expenseTop{
+      display:flex;
+      align-items:flex-end;
+      justify-content:space-between;
+      gap:10px;
+      margin-bottom:10px;
+    }
+    .pcsu-expenseSub{
+      color:var(--sub);
+      font-size:14px;
+    }
+    .pcsu-expenseVal{
+      font-size:34px;
+      font-weight:900;
+      line-height:1;
+      background:linear-gradient(90deg,var(--mint),var(--sapphire));
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .pcsu-allocBar{
+      position:relative;
+      height:10px;
+      border-radius:999px;
+      overflow:hidden;
+      background:rgba(255,255,255,.08);
+      margin-bottom:10px;
+    }
+    .pcsu-allocBar .fill{
+      position:absolute;
+      inset:0 9% 0 0;
+      border-radius:999px;
+      background:linear-gradient(90deg,var(--mint),var(--sapphire));
+    }
+    .pcsu-expenseMeta{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:8px;
+      color:var(--muted);
+      font-size:12px;
+    }
+    .pcsu-expenseMeta .ready{
+      color:var(--mint);
+      font-weight:900;
+      letter-spacing:.10em;
+      text-transform:uppercase;
+    }
+    /* //#12 BUYER PROFILE */
+    .pcsu-buyerGrid{
+      display:grid;
+      grid-template-columns:1fr 118px;
+      gap:12px;
+      align-items:center;
+    }
+    @media (max-width: 520px){
+      .pcsu-buyerGrid{ grid-template-columns:1fr; }
+    }
+    .pcsu-buyerLeft .small{
+      color:var(--sub);
+      font-size:14px;
+      margin-bottom:6px;
+    }
+    .pcsu-buyerLeft .spec{
+      color:#fff;
+      font-size:17px;
+      margin-bottom:14px;
+    }
+    .pcsu-buyerLeft .sub{
+      color:var(--muted);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+      margin-bottom:6px;
+    }
+    .pcsu-price{
+      font-size:42px;
+      line-height:.98;
+      font-weight:900;
+      margin-bottom:14px;
+      background:linear-gradient(90deg,var(--mint),var(--sapphire));
+      -webkit-background-clip:text;
+      background-clip:text;
+      -webkit-text-fill-color:transparent;
+    }
+    .pcsu-rangeBtn{
+      display:inline-flex;
+      align-items:center;
+      gap:10px;
+      min-height:44px;
+      padding:10px 14px;
+      border-radius:999px;
+      text-decoration:none;
+      color:#e9ecff;
+      font-size:14px;
+      font-weight:800;
+      background:var(--field);
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:0 8px 18px rgba(0,0,0,.16);
+    }
+    .pcsu-rangeBtn .arrow{
+      font-size:18px;
+      line-height:1;
+      color:var(--mint);
+    }
+    .pcsu-matchChart{
+      width:118px;
+      height:118px;
+      border-radius:50%;
+      position:relative;
+      margin-inline:auto;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(8,12,22,.96) 0 26%, transparent 27%),
+        conic-gradient(
+          from -16deg,
+          rgba(142,243,197,.88) 0 22%,
+          rgba(255,255,255,.05) 22% 23.5%,
+          rgba(106,167,255,.82) 23.5% 47%,
+          rgba(255,255,255,.05) 47% 48.5%,
+          rgba(168,176,214,.60) 48.5% 72%,
+          rgba(255,255,255,.05) 72% 73.5%,
+          rgba(233,236,255,.36) 73.5% 100%
+        );
+      border:1px solid rgba(255,255,255,.10);
+      box-shadow:0 8px 18px rgba(0,0,0,.12);
+    }
+    .pcsu-matchChart::after{
+      content:"";
+      position:absolute;
+      left:50%;
+      top:50%;
+      width:12px;
+      height:12px;
+      border-radius:50%;
+      transform:translate(-50%, -50%);
+      background:linear-gradient(180deg,#ffffff,#8ef3c5);
+    }
+  </style>
+      <div id="pcsu-user-shell">
+        <div class="pcsu-layout">
+          <!--  //#13 LEFT COLUMN  -->
+          <div class="pcsu-left">
+            <!--  HERO  -->
+            <section class="pcsu-section">
+              <div class="pcsu-hero">
+                <div class="pcsu-gaugeCard">
+                  <div class="pcsu-gaugeWrap">
+                    <svg class="pcsu-gaugeSvg" viewbox="0 0 320 190" aria-hidden="true" role="img">
+                      <defs>
+                        <lineargradient id="pcsuArcGradMain" x1="0" y1="0" x2="1" y2="0">
+                          <stop offset="0%" stop-color="#8ef3c5" stop-opacity=".96"></stop>
+                          <stop offset="50%" stop-color="#b8f6dd" stop-opacity=".96"></stop>
+                          <stop offset="100%" stop-color="#6aa7ff" stop-opacity=".96"></stop>
+                        </lineargradient>
+                        <lineargradient id="pcsuMetalMain" x1="0" y1="0" x2="0" y2="1">
+                          <stop offset="0%" stop-color="rgba(255,255,255,.16)"></stop>
+                          <stop offset="40%" stop-color="rgba(255,255,255,.06)"></stop>
+                          <stop offset="100%" stop-color="rgba(0,0,0,.18)"></stop>
+                        </lineargradient>
+                      </defs>
+                      <path d="M52 148 A108 108 0 0 1 268 148" fill="none" stroke="url(#pcsuMetalMain)" stroke-width="26" stroke-linecap="round" opacity=".92"></path>
+                      <path d="M66 148 A94 94 0 0 1 254 148" fill="none" stroke="url(#pcsuArcGradMain)" stroke-width="18" stroke-linecap="round"></path>
+                      <path d="M83 148 A77 77 0 0 1 237 148" fill="none" stroke="rgba(0,0,0,.26)" stroke-width="12" stroke-linecap="round" opacity=".40"></path>
+                      <g opacity=".48" stroke="rgba(255,255,255,.18)" stroke-width="2">
+                        <line x1="78" y1="136" x2="69" y2="140"></line>
+                        <line x1="100" y1="101" x2="93" y2="108"></line>
+                        <line x1="134" y1="77" x2="131" y2="88"></line>
+                        <line x1="160" y1="70" x2="160" y2="82"></line>
+                        <line x1="186" y1="77" x2="189" y2="88"></line>
+                        <line x1="220" y1="101" x2="227" y2="108"></line>
+                        <line x1="242" y1="136" x2="251" y2="140"></line>
+                      </g>
+                      <circle cx="160" cy="148" r="26" fill="rgba(255,255,255,.04)"></circle>
+                      <circle cx="160" cy="148" r="16" fill="rgba(255,255,255,.06)"></circle>
+                      <circle cx="160" cy="148" r="8" fill="rgba(255,255,255,.10)"></circle>
+                    </svg>
+                    <div id="pcsuNeedle"></div>
+                  </div>
+                </div>
+                <div class="pcsu-scoreBlock">
+                  <div class="pcsu-scoreTitle">PCS Success Score</div>
+                  <div class="pcsu-scoreLine">
+                    <div class="pcsu-scoreNum" id="pcsuScoreNum">82</div>
+                    <div class="pcsu-scoreDen" id="pcsuScoreDen">/100</div>
+                  </div>
+                  <div class="pcsu-pill" id="pcsuStatusPill">Mission Ready</div>
+                </div>
+              </div>
+              <div class="pcsu-heroMeta">
+                <div class="pcsu-healthBlock">
+                  <div class="pcsu-healthLabel">Financial Health: <span id="pcsuFinancialGrade">B+</span></div>
+                  <div class="pcsu-miniSegments" aria-hidden="true">
+                    <span class="active"></span>
+                    <span class="active"></span>
+                    <span class="active"></span>
+                    <span class="active"></span>
+                    <span></span>
+                  </div>
+                </div>
+                <div class="pcsu-chipRow">
+                  <div class="pcsu-chip">Housing Target Verified</div>
+                  <div class="pcsu-chip">Orders Intel Confirmed</div>
+                </div>
+              </div>
+            </section>
+            <!--  FINANCIAL  -->
+            <section class="pcsu-section">
+              <div class="pcsu-sectionTitle">
+                <div class="label">Financial Snapshot: <span style="color:#8ef3c5;" id="pcsuFinancialGradeInline">B+</span></div>
+                <div class="line"></div>
+              </div>
+              <div class="pcsu-finLine">
+                Based on your current data, your <span class="hl">housing cost</span> of
+                <span class="accent" id="pcsuHousingCost">$4,619</span> exceeds the safe cap of
+                <span class="accent" id="pcsuSafeCap">$3,857</span> (<span class="accent" id="pcsuOverPct">+20%</span>).
+              </div>
+              <div class="pcsu-kpis">
+                <div class="left">
+                  <div class="pcsu-miniRow">
+                    <div class="label"><span class="pcsu-dot"></span>Income</div>
+                    <div class="val" id="pcsuIncome">$12,857</div>
+                  </div>
+                  <div class="pcsu-miniRow">
+                    <div class="label"><span class="pcsu-dot"></span>Expenses</div>
+                    <div class="val" id="pcsuExpenses">$8,448</div>
+                  </div>
+                </div>
+                <div class="right">
+                  <div>
+                    <div class="pcsu-bigLabel">Expenses</div>
+                    <div class="pcsu-bigVal" id="pcsuExpensesBig">$8,448</div>
+                  </div>
+                  <div>
+                    <div class="pcsu-bigLabel">Mortgage</div>
+                    <div class="pcsu-bigVal" id="pcsuMortgage">$4,619</div>
+                  </div>
+                  <div>
+                    <div class="pcsu-bigLabel">Disposable</div>
+                    <div class="pcsu-bigVal" id="pcsuDisposable">$4,409</div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!--  CHECKLIST  -->
+            <section class="pcsu-section">
+              <div class="pcsu-sectionTitle">
+                <div class="label">Saving the Mission Checklist</div>
+                <div class="line"></div>
+              </div>
+              <div class="pcsu-checklist" id="pcsuChecklist">
+                <div class="pcsu-item">
+                  <div class="mark">✓</div>
+                  <div>Update financial inputs in the <b>Financial Readiness Dashboard</b>.</div>
+                </div>
+                <div class="pcsu-item">
+                  <div class="mark">✓</div>
+                  <div>Set <b>Home Preferences</b> to refine your housing target.</div>
+                </div>
+                <div class="pcsu-item">
+                  <div class="mark">✓</div>
+                  <div>Build your <b>PCS Timeline</b> to align decision timing.</div>
+                </div>
+                <div class="pcsu-item">
+                  <div class="mark">✓</div>
+                  <div>Complete <b>AIOU Psychology Quiz</b> to personalize your strategy.</div>
+                </div>
+              </div>
+              <div class="pcsu-bottomDivider"></div>
+              <div class="pcsu-tip">
+                <b>Tip:</b> Elevate your PCS score to make smarter, affordable, and timely decisions.
+              </div>
+            </section>
+          </div>
+          <!--  //#14 RIGHT COLUMN  -->
+          <div class="pcsu-right">
+            <!--  TIMELINE  -->
+            <section class="pcsu-sideBlock">
+              <div class="pcsu-sectionTitle">
+                <div class="label">PCS Timeline</div>
+                <div class="line"></div>
+              </div>
+              <div class="pcsu-dateRow">
+                <div class="pcsu-dateCell">April 1</div>
+                <div class="pcsu-dateCell">June</div>
+                <div class="pcsu-dateCell">Sep 2024</div>
+                <div class="pcsu-dateCell days" id="pcsuTimelineDays">96 Days</div>
+              </div>
+              <div class="pcsu-trackWrap">
+                <div class="pcsu-track">
+                  <div class="fill"></div>
+                  <span class="node" style="left:12%;"></span>
+                  <span class="node" style="left:36%;"></span>
+                  <span class="node" style="left:58%;"></span>
+                  <span class="node" style="left:78%;"></span>
+                  <span class="node" style="left:91%;"></span>
+                  <span class="finish"></span>
+                </div>
+              </div>
+              <div class="pcsu-trackLabels">
+                <div>Orders<br>Received</div>
+                <div>Housing<br>Search</div>
+                <div>Report<br>To Base</div>
+              </div>
+            </section>
+            <!--  EXPENSE  -->
+            <section class="pcsu-sideBlock">
+              <div class="pcsu-sectionTitle">
+                <div class="label">Expense Breakdown</div>
+                <div class="line"></div>
+              </div>
+              <div class="pcsu-expenseTop">
+                <div class="pcsu-expenseSub">Income Allocation</div>
+                <div class="pcsu-expenseVal">$420K</div>
+              </div>
+              <div class="pcsu-allocBar" aria-hidden="true">
+                <div class="fill"></div>
+              </div>
+              <div class="pcsu-expenseMeta">
+                <div>44° ≈Z AUAL - 18:19</div>
+                <div class="ready">Mission Ready</div>
+              </div>
+            </section>
+            <!--  BUYER PROFILE  -->
+            <section class="pcsu-sideBlock">
+              <div class="pcsu-sectionTitle">
+                <div class="label">Buyer Profile Match</div>
+                <div class="line"></div>
+              </div>
+              <div class="pcsu-buyerGrid">
+                <div class="pcsu-buyerLeft">
+                  <div class="small">Matched Home Target</div>
+                  <div class="spec">4 beds | 3 baths</div>
+                  <div class="sub">Current Market</div>
+                  <div class="pcsu-price" id="pcsuBuyerPrice">$475,000</div>
+                  <a href="#" class="pcsu-rangeBtn" id="pcsuRange">
+                    <span id="pcsuBuyerRange">$520K - $520K</span>
+                    <span class="arrow">›</span>
+                  </a>
+                </div>
+                <div class="pcsu-matchChart" aria-hidden="true"></div>
+              </div>
+            </section>
+          </div>
+        </div>
+      </div>
+      <script>
+    (function(){
+      "use strict";
+      // =========================================================
+      // //#15 ROOT
+      // =========================================================
+      const root = document.getElementById("pcsu-user-dashboard-strip");
+      if (!root) return;
+      const scoreEl = root.querySelector("#pcsuScoreNum");
+      const needleEl = root.querySelector("#pcsuNeedle");
+      const gradeMain = root.querySelector("#pcsuFinancialGrade");
+      const gradeInline = root.querySelector("#pcsuFinancialGradeInline");
+      const expensesEl = root.querySelector("#pcsuExpenses");
+      const expensesBigEl = root.querySelector("#pcsuExpensesBig");
+      // =========================================================
+      // //#16 HELPERS
+      // =========================================================
+      function clamp(n, min, max){
+        return Math.max(min, Math.min(max, n));
+      }
+      function syncText(a, b){
+        if (a && b) b.textContent = a.textContent || "";
+      }
+      // =========================================================
+      // //#17 PAINT NEEDLE
+      // =========================================================
+      function paintNeedle(){
+        if (!scoreEl || !needleEl) return;
+        const score = clamp(parseFloat(scoreEl.textContent || "82") || 82, 0, 100);
+        // 0 -> -64deg, 100 -> 64deg
+        const deg = -64 + (score / 100) * 128;
+        needleEl.style.transform = "translate(-50%,-50%) rotate(" + deg + "deg)";
+      }
+      // =========================================================
+      // //#18 SYNC DUPLICATE DISPLAY FIELDS
+      // =========================================================
+      function syncFields(){
+        syncText(gradeMain, gradeInline);
+        syncText(expensesEl, expensesBigEl);
+      }
+      // =========================================================
+      // //#19 INIT
+      // =========================================================
+      syncFields();
+      paintNeedle();
+    })();
+  </script>
+    </div>
+  </div>
+  <div class="code-embed-28 w-embed w-script"><!--  ============================================================
+  PCSUnited • Welcome Title (Rank + Last Name) — v1.0
+  Purpose: Display "Welcome <Rank> <LastName>" based on user's profile
+  Reads from localStorage (priority):
+  - pcsunited.bridge
+  - pcsunited.bridge.v1
+  - realtysass.bridge
+  - (fallback) realtysass.identity
+  Version: 2026-01-29
+===============================================================  -->
+    <div id="pcsu-welcome" style="all: initial;">
+      <style>
+    /* Keep it clean, let Webflow handle positioning */
+    #pcsu-welcome, #pcsu-welcome *{
+      box-sizing:border-box;
+      font-family: Georgia, "Times New Roman", Times, serif; /* matches your classic welcome vibe */
+    }
+    .pcsu-welcome{
+      width:100%;
+      text-align:center;
+      color:#15110a;           /* adjust if your section uses a different color */
+      font-size:56px;          /* scale down in Webflow if needed */
+      font-weight:500;
+      letter-spacing:.02em;
+      line-height:1.05;
+    }
+    .pcsu-welcome em{
+      font-style:italic;
+      font-weight:500;
+    }
+    @media (max-width: 768px){
+      .pcsu-welcome{ font-size:40px; }
+    }
+    @media (max-width: 480px){
+      .pcsu-welcome{ font-size:32px; }
+    }
+  </style>
+      <div class="pcsu-welcome" id="pcsuWelcomeText">Welcome</div>
+      <script>
+    (() => {
+      const el = document.getElementById("pcsuWelcomeText");
+      if (!el) return;
+      function safeParse(s){ try { return JSON.parse(s); } catch(e){ return null; } }
+      function getBridge(){
+        return (
+          safeParse(localStorage.getItem("pcsunited.bridge")) ||
+          safeParse(localStorage.getItem("pcsunited.bridge.v1")) ||
+          safeParse(localStorage.getItem("realtysass.bridge")) ||
+          null
+        );
+      }
+      function getIdentity(){
+        return safeParse(localStorage.getItem("realtysass.identity")) || null;
+      }
+      function pickLastName(bridge, identity){
+        // Most likely fields you use across your flows:
+        const candidates = [
+          bridge?.last_name,
+          bridge?.lastName,
+          bridge?.lastname,
+          bridge?.lname,
+          identity?.lastName,
+          identity?.last_name
+        ];
+        for (const v of candidates){
+          const s = (v || "").toString().trim();
+          if (s) return s;
+        }
+        // If you only have full name, take last token
+        const full = (bridge?.full_name || bridge?.fullName || identity?.fullName || identity?.full_name || "").toString().trim();
+        if (full && full.split(" ").length > 1) return full.split(" ").slice(-1)[0];
+        return "Member";
+      }
+      function pickRank(bridge){
+        // If you store a human rank string, use it.
+        const candidates = [
+          bridge?.rankTitle,
+          bridge?.rank_title,
+          bridge?.rank,
+          bridge?.rank_paygrade,
+          bridge?.paygrade
+        ];
+        for (const v of candidates){
+          const s = (v || "").toString().trim();
+          if (s) return s;
+        }
+        return ""; // okay to be blank
+      }
+      function normalizeRank(raw){
+        // Keep it lightweight—only convert common paygrades if needed.
+        const map = {
+          "E-1":"AB","E-2":"Amn","E-3":"A1C","E-4":"SrA","E-5":"SSgt","E-6":"TSgt","E-7":"MSgt","E-8":"SMSgt","E-9":"CMSgt",
+          "O-1":"2d Lt","O-2":"1st Lt","O-3":"Capt","O-4":"Maj","O-5":"Lt Col","O-6":"Col"
+        };
+        const key = (raw || "").toString().trim();
+        return map[key] || key;
+      }
+      function paint(){
+        const bridge = getBridge();
+        const identity = getIdentity();
+        const last = pickLastName(bridge, identity);
+        const rankRaw = pickRank(bridge);
+        const rank = normalizeRank(rankRaw);
+        // If rank missing, just show last name (still feels personal)
+        const label = rank ? `Welcome ${rank} ` : "Welcome ";
+        el.innerHTML = label + "<em>" + last + "</em>";
+      }
+      paint();
+      // Repaint if your system updates bridge later
+      window.addEventListener("storage", (ev) => {
+        if (!ev || !ev.key) return;
+        if (ev.key === "pcsunited.bridge" || ev.key === "pcsunited.bridge.v1" || ev.key === "realtysass.bridge" || ev.key === "realtysass.identity"){
+          paint();
+        }
+      });
+      window.addEventListener("pcsunited:bridge-ready", paint);
+      window.addEventListener("realtysass:bridge-ready", paint);
+    })();
+  </script>
+    </div>
+  </div>
+  <div class="w-embed w-script">
+    <script>
+/* ============================================================
+  PCSUnited • 2E Analyst Intelligence Renderer
+  v1.0.0 — FULL EMBED
+  PURPOSE
+  - Reads Brain Schema X from localStorage
+  - Renders a professional “Financial Analyst Intelligence” card
+  - Creates the card automatically BELOW Affordability Zone & Strategy
+  - Updates live when:
+      1) Brain Schema X updates
+      2) Bridge updates
+      3) Page loads late
+  - Gives analyst-style findings, flags, and actions
+  REQUIRES
+  - Brain Schema X / Orchestrator already running
+  - localStorage key:
+      pcsunited.brain_schema_x.v1
+  SAFE
+  - No API calls
+  - No mutation of financial values
+  - Read-only renderer
+  OUTPUT
+  - Analyst BLUF
+  - Strengths
+  - Risks / pressure points
+  - Opportunities
+  - Priority actions
+  NOTES
+  - This is designed to feel like a real analyst memo layer
+  - It does NOT replace 2B / 2C
+  - It complements them
+============================================================ */
+(() => {
+  "use strict";
+  //#1) SINGLETON GUARD
+  if (window.PCSU_2E_ANALYST_RENDERER && window.PCSU_2E_ANALYST_RENDERER.__mounted) return;
+  window.PCSU_2E_ANALYST_RENDERER = { __mounted: true };
+  //#2) STORAGE KEYS
+  const KEYS = {
+    schema: "pcsunited.brain_schema_x.v1",
+    schemaLegacy: "realtysass.brain_schema_x.v1",
+    bridge: "pcsunited.bridge",
+    bridgeV1: "pcsunited.bridge.v1",
+    bridgeLegacy: "realtysass.bridge",
+    profile: "pcsunited.profile.v1"
+  };
+  //#3) HELPERS
+  const $ = (sel, root = document) => root.querySelector(sel);
+  const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
+  function readJSON(key, fallback = null){
+    try{
+      const raw = localStorage.getItem(key);
+      if (!raw) return fallback;
+      return JSON.parse(raw);
+    }catch(_){
+      return fallback;
+    }
+  }
+  function n0(v){
+    const n = Number(v);
+    return Number.isFinite(n) ? n : 0;
+  }
+  function clamp(v, min, max){
+    return Math.max(min, Math.min(max, v));
+  }
+  function str(v){
+    return String(v == null ? "" : v).trim();
+  }
+  function titleCase(value){
+    const s = str(value).toLowerCase();
+    if (!s) return "";
+    return s
+      .split(/\s+/)
+      .map(part => part ? part.charAt(0).toUpperCase() + part.slice(1) : "")
+      .join(" ");
+  }
+  function round0(v){
+    return Math.round(n0(v));
+  }
+  function money(v){
+    const n = round0(v);
+    return n.toLocaleString("en-US", {
+      style: "currency",
+      currency: "USD",
+      maximumFractionDigits: 0
+    });
+  }
+  function pct(v){
+    return `${Math.round(n0(v))}%`;
+  }
+  function pick(obj, keys){
+    if (!obj || typeof obj !== "object") return null;
+    for (const k of keys){
+      const v = obj[k];
+      if (v !== undefined && v !== null && v !== "") return v;
+    }
+    return null;
+  }
+  function pickBridge(){
+    return (
+      readJSON(KEYS.bridge, null) ||
+      readJSON(KEYS.bridgeV1, null) ||
+      readJSON(KEYS.bridgeLegacy, null) ||
+      {}
+    );
+  }
+  function pickProfile(){
+    return readJSON(KEYS.profile, {}) || {};
+  }
+  function pickSchema(){
+    return (
+      readJSON(KEYS.schema, null) ||
+      readJSON(KEYS.schemaLegacy, null) ||
+      null
+    );
+  }
+  //#4) STYLE INJECTION
+  function injectStyles(){
+    if (document.getElementById("pcsu-2e-analyst-styles")) return;
+    const style = document.createElement("style");
+    style.id = "pcsu-2e-analyst-styles";
+    style.textContent = `
+      #pcsu-2e-analyst-wrap,
+      #pcsu-2e-analyst-wrap *{
+        box-sizing:border-box;
+        font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+      }
+      #pcsu-2e-analyst-wrap{
+        width:100%;
+        margin:18px 0 0;
+        color:#e9ecff;
+      }
+      .pcsu-2e-card{
+        position:relative;
+        border-radius:22px;
+        padding:18px;
+        overflow:hidden;
+        background:
+          radial-gradient(900px 420px at 14% 10%, rgba(106,167,255,.11), transparent 60%),
+          radial-gradient(900px 420px at 78% 18%, rgba(142,243,197,.10), transparent 60%),
+          linear-gradient(180deg, rgba(16,20,38,.94), rgba(15,19,36,.74));
+        border:1px solid rgba(255,255,255,.10);
+        box-shadow:0 24px 48px rgba(0,0,0,.78);
+        backdrop-filter:blur(10px);
+      }
+      .pcsu-2e-top{
+        display:flex;
+        justify-content:space-between;
+        align-items:flex-start;
+        gap:14px;
+        flex-wrap:wrap;
+        margin-bottom:14px;
+      }
+      .pcsu-2e-kicker{
+        font-size:12px;
+        color:rgba(168,176,214,.95);
+        font-weight:950;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+        margin:0 0 6px;
+      }
+      .pcsu-2e-title{
+        margin:0;
+        font-size:28px;
+        line-height:1.04;
+        font-weight:900;
+        color:#f5f7ff;
+      }
+      .pcsu-2e-sub{
+        margin:8px 0 0;
+        font-size:12px;
+        line-height:1.45;
+        color:rgba(168,176,214,.85);
+        max-width:760px;
+      }
+      .pcsu-2e-pill{
+        display:inline-flex;
+        align-items:center;
+        gap:8px;
+        min-height:34px;
+        padding:0 12px;
+        border-radius:999px;
+        border:1px solid rgba(255,255,255,.12);
+        background:rgba(12,14,25,.62);
+        color:#e9ecff;
+        font-size:11px;
+        font-weight:950;
+        letter-spacing:.11em;
+        text-transform:uppercase;
+        white-space:nowrap;
+        box-shadow:0 12px 26px rgba(0,0,0,.35);
+      }
+      .pcsu-2e-pill.ok{
+        border-color:rgba(85,211,153,.30);
+        color:#8ef3c5;
+      }
+      .pcsu-2e-pill.warn{
+        border-color:rgba(249,199,79,.28);
+        color:#f9c74f;
+      }
+      .pcsu-2e-pill.bad{
+        border-color:rgba(255,107,107,.30);
+        color:#ff9cab;
+      }
+      .pcsu-2e-bluf{
+        margin-top:8px;
+        padding:16px 16px;
+        border-radius:18px;
+        border:1px solid rgba(255,255,255,.10);
+        background:
+          radial-gradient(700px 180px at 18% 50%, rgba(106,167,255,.11), transparent 60%),
+          radial-gradient(700px 180px at 74% 50%, rgba(142,243,197,.10), transparent 60%),
+          rgba(12,14,25,.56);
+        box-shadow:0 18px 38px rgba(0,0,0,.42);
+      }
+      .pcsu-2e-bluf-label{
+        font-size:10px;
+        font-weight:950;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+        color:rgba(168,176,214,.90);
+        margin-bottom:8px;
+      }
+      .pcsu-2e-bluf-copy{
+        font-size:16px;
+        line-height:1.5;
+        font-weight:700;
+        color:#f2f5ff;
+      }
+      .pcsu-2e-stats{
+        display:grid;
+        grid-template-columns:repeat(4,minmax(0,1fr));
+        gap:14px;
+        margin-top:16px;
+      }
+      .pcsu-2e-stat{
+        min-width:0;
+        border-radius:16px;
+        padding:14px;
+        border:1px solid rgba(255,255,255,.10);
+        background:
+          radial-gradient(320px 160px at 18% 18%, rgba(142,243,197,.08), transparent 60%),
+          rgba(12,14,25,.56);
+        box-shadow:0 14px 28px rgba(0,0,0,.34);
+      }
+      .pcsu-2e-stat-label{
+        font-size:10px;
+        font-weight:900;
+        letter-spacing:.13em;
+        text-transform:uppercase;
+        color:rgba(168,176,214,.86);
+      }
+      .pcsu-2e-stat-value{
+        margin-top:8px;
+        font-size:24px;
+        line-height:1;
+        font-weight:950;
+        color:#ffffff;
+      }
+      .pcsu-2e-stat-sub{
+        margin-top:6px;
+        font-size:11px;
+        line-height:1.35;
+        color:rgba(168,176,214,.78);
+      }
+      .pcsu-2e-grid{
+        display:grid;
+        grid-template-columns:1.05fr .95fr;
+        gap:16px;
+        margin-top:16px;
+      }
+      .pcsu-2e-panel{
+        border-radius:18px;
+        padding:16px;
+        border:1px solid rgba(255,255,255,.10);
+        background:
+          radial-gradient(520px 260px at 16% 16%, rgba(106,167,255,.08), transparent 60%),
+          rgba(12,14,25,.54);
+        box-shadow:0 18px 36px rgba(0,0,0,.36);
+      }
+      .pcsu-2e-panel-title{
+        font-size:12px;
+        color:rgba(168,176,214,.95);
+        font-weight:950;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+        margin:0 0 12px;
+      }
+      .pcsu-2e-list{
+        display:flex;
+        flex-direction:column;
+        gap:10px;
+      }
+      .pcsu-2e-item{
+        display:flex;
+        align-items:flex-start;
+        gap:10px;
+        min-width:0;
+      }
+      .pcsu-2e-dot{
+        width:10px;
+        height:10px;
+        border-radius:999px;
+        flex:0 0 auto;
+        margin-top:5px;
+        box-shadow:0 0 0 4px rgba(255,255,255,.04);
+      }
+      .pcsu-2e-dot.ok{ background:#8ef3c5; }
+      .pcsu-2e-dot.warn{ background:#f9c74f; }
+      .pcsu-2e-dot.bad{ background:#ff8aa6; }
+      .pcsu-2e-dot.info{ background:#8ab6ff; }
+      .pcsu-2e-item-copy{
+        min-width:0;
+        font-size:15px;
+        line-height:1.5;
+        color:#e8ebff;
+      }
+      .pcsu-2e-item-copy strong{
+        color:#ffffff;
+        font-weight:900;
+      }
+      .pcsu-2e-actions{
+        display:grid;
+        grid-template-columns:repeat(2,minmax(0,1fr));
+        gap:10px;
+      }
+      .pcsu-2e-action{
+        border-radius:14px;
+        padding:12px 12px;
+        border:1px solid rgba(255,255,255,.10);
+        background:rgba(12,14,25,.56);
+      }
+      .pcsu-2e-action-num{
+        font-size:11px;
+        font-weight:950;
+        letter-spacing:.12em;
+        text-transform:uppercase;
+        color:#8ef3c5;
+      }
+      .pcsu-2e-action-copy{
+        margin-top:6px;
+        font-size:14px;
+        line-height:1.45;
+        color:#f0f3ff;
+        font-weight:700;
+      }
+      .pcsu-2e-empty{
+        font-size:14px;
+        color:rgba(168,176,214,.82);
+        line-height:1.45;
+      }
+      @media (max-width: 1100px){
+        .pcsu-2e-stats{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+        .pcsu-2e-grid{ grid-template-columns:1fr; }
+      }
+      @media (max-width: 640px){
+        .pcsu-2e-stats{ grid-template-columns:1fr; }
+        .pcsu-2e-actions{ grid-template-columns:1fr; }
+        .pcsu-2e-title{ font-size:23px; }
+        .pcsu-2e-bluf-copy{ font-size:15px; }
+      }
+    `;
+    document.head.appendChild(style);
+  }
+  //#5) FIND WHERE TO INSERT
+  function findStrategyCard(){
+    const cards = $$(".pcsu-card");
+    for (const card of cards){
+      const titleEl = $(".pcsu-card-title span", card);
+      if (!titleEl) continue;
+      const txt = str(titleEl.textContent).toLowerCase();
+      if (txt.includes("affordability zone") || txt.includes("strategy")) return card;
+    }
+    return null;
+  }
+  function ensureMount(){
+    let mount = $("#pcsu-2e-analyst-wrap");
+    if (mount) return mount;
+    const strategyCard = findStrategyCard();
+    if (!strategyCard || !strategyCard.parentNode) return null;
+    mount = document.createElement("div");
+    mount.id = "pcsu-2e-analyst-wrap";
+    strategyCard.parentNode.insertBefore(mount, strategyCard.nextSibling);
+    return mount;
+  }
+  //#6) SCHEMA EXTRACTION
+  function extractIdentity(schema, bridge, profile){
+    const identity = schema?.identity || {};
+    const service = schema?.service || {};
+    return {
+      rank: titleCase(
+        pick(identity, ["rank", "rankPaygrade"]) ||
+        pick(service, ["rank", "rankPaygrade"]) ||
+        pick(profile, ["rank", "rank_paygrade"]) ||
+        pick(bridge, ["rank", "rank_paygrade"]) ||
+        "Not Set"
+      ),
+      yos: round0(
+        pick(identity, ["yos"]) ||
+        pick(service, ["yos"]) ||
+        pick(profile, ["yos"]) ||
+        pick(bridge, ["yos"]) ||
+        0
+      ),
+      familySize: round0(
+        pick(identity, ["familySize", "family"]) ||
+        pick(service, ["familySize", "family"]) ||
+        pick(profile, ["family"]) ||
+        pick(bridge, ["family"]) ||
+        0
+      ),
+      base: titleCase(
+        pick(identity, ["base"]) ||
+        pick(service, ["base"]) ||
+        pick(profile, ["base"]) ||
+        pick(bridge, ["base"]) ||
+        "PCS Base"
+      )
+    };
+  }
+  function extractHousing(schema, bridge, profile){
+    const hp = schema?.housingPrefs || schema?.housing || {};
+    return {
+      bedrooms: round0(
+        pick(hp, ["bedrooms"]) ||
+        pick(profile, ["bedrooms"]) ||
+        pick(bridge, ["bedrooms"]) ||
+        0
+      ),
+      bathrooms: n0(
+        pick(hp, ["bathrooms"]) ||
+        pick(profile, ["bathrooms"]) ||
+        pick(bridge, ["bathrooms"]) ||
+        0
+      ),
+      sqft: round0(
+        pick(hp, ["sqft"]) ||
+        pick(profile, ["sqft"]) ||
+        pick(bridge, ["sqft"]) ||
+        0
+      ),
+      propertyType: titleCase(
+        pick(hp, ["propertyType", "property_type"]) ||
+        pick(profile, ["property_type"]) ||
+        pick(bridge, ["property_type"]) ||
+        "Not Set"
+      ),
+      condition: titleCase(
+        pick(hp, ["homeCondition", "home_condition"]) ||
+        pick(profile, ["home_condition"]) ||
+        pick(bridge, ["home_condition"]) ||
+        "Not Set"
+      ),
+      amenities: str(
+        pick(hp, ["amenities"]) ||
+        pick(profile, ["amenities"]) ||
+        pick(bridge, ["amenities"]) ||
+        ""
+      ),
+      targetPrice: round0(
+        pick(schema?.financial, ["price", "homePrice", "targetPrice"]) ||
+        pick(schema?.readinessSnapshot, ["homePrice"]) ||
+        pick(schema?.strategySnapshot, ["targetPrice"]) ||
+        pick(bridge, ["projected_home_price", "price", "homePrice"]) ||
+        0
+      )
+    };
+  }
+  function extractFinancial(schema, bridge, profile){
+    const fin = schema?.financial || {};
+    const read = schema?.readinessSnapshot || {};
+    const strat = schema?.strategySnapshot || {};
+    const income = round0(
+      pick(fin, ["income", "monthlyIncome"]) ||
+      pick(read, ["income"]) ||
+      pick(bridge, ["income", "monthly_income", "total_monthly_income"]) ||
+      pick(profile, ["income", "monthly_income"]) ||
+      0
+    );
+    const debt = round0(
+      pick(fin, ["debt", "monthlyDebt", "nonHousingDebt"]) ||
+      pick(read, ["debt"]) ||
+      pick(bridge, ["debt", "monthly_debt", "monthlyDebt", "non_housing_debt"]) ||
+      pick(profile, ["debt", "monthly_debt"]) ||
+      0
+    );
+    const expenses = round0(
+      pick(fin, ["expenses", "monthlyExpenses"]) ||
+      pick(read, ["expenses"]) ||
+      pick(bridge, ["monthly_expenses", "expenses", "monthlyExpenses"]) ||
+      pick(profile, ["monthly_expenses", "expenses"]) ||
+      0
+    );
+    const savings = round0(
+      pick(fin, ["savings", "downpayment"]) ||
+      pick(read, ["savings"]) ||
+      pick(bridge, ["savings", "downpayment", "dpAmt"]) ||
+      pick(profile, ["savings", "downpayment"]) ||
+      0
+    );
+    const housingMonthly = round0(
+      pick(fin, ["housingMonthly", "mortgageMonthly"]) ||
+      pick(read, ["housingMonthly"]) ||
+      pick(strat, ["safePayment"]) ||
+      0
+    );
+    const creditScore = round0(
+      pick(fin, ["creditScore"]) ||
+      pick(read, ["creditScore"]) ||
+      pick(bridge, ["credit_score", "creditScore", "score", "fico"]) ||
+      pick(profile, ["credit_score", "creditScore"]) ||
+      0
+    );
+    const housingRatio = income > 0 ? (housingMonthly / income) * 100 : 0;
+    const debtRatio = income > 0 ? (debt / income) * 100 : 0;
+    const expenseRatio = income > 0 ? (expenses / income) * 100 : 0;
+    const entertainmentMonthly = round0(
+      pick(fin, ["entertainmentMonthly", "entertainment"]) ||
+      pick(schema?.spending, ["entertainmentMonthly", "entertainment"]) ||
+      0
+    );
+    return {
+      income,
+      debt,
+      expenses,
+      savings,
+      housingMonthly,
+      creditScore,
+      housingRatio,
+      debtRatio,
+      expenseRatio,
+      entertainmentMonthly,
+      disposableAfterCore: round0(income - debt - expenses - housingMonthly)
+    };
+  }
+  function extractReadiness(schema){
+    const r = schema?.readinessSnapshot || {};
+    return {
+      score: round0(pick(r, ["score"]) || 0),
+      grade: str(pick(r, ["grade"]) || "—"),
+      verdict: str(pick(r, ["verdict"]) || ""),
+      risk: str(pick(r, ["risk"]) || "")
+    };
+  }
+  //#7) INTELLIGENCE ENGINE
+  function buildInsights(schema){
+    const bridge = pickBridge();
+    const profile = pickProfile();
+    const identity = extractIdentity(schema, bridge, profile);
+    const housing = extractHousing(schema, bridge, profile);
+    const fin = extractFinancial(schema, bridge, profile);
+    const readiness = extractReadiness(schema);
+    const strengths = [];
+    const risks = [];
+    const opportunities = [];
+    const actions = [];
+    //#7.1 strengths
+    if (fin.income >= 10000){
+      strengths.push(`Household income is strong at <strong>${money(fin.income)}/mo</strong>, which gives this profile meaningful buying power.`);
+    }
+    if (fin.savings >= 10000){
+      strengths.push(`Savings of <strong>${money(fin.savings)}</strong> provide at least some closing-cost and shock-absorption buffer.`);
+    }
+    if (fin.creditScore >= 720){
+      strengths.push(`Credit is currently in a healthier band at <strong>${fin.creditScore}</strong>, which should support better financing terms.`);
+    }
+    if (fin.debtRatio <= 10 && fin.debt > 0){
+      strengths.push(`Non-housing debt appears manageable relative to income at only <strong>${pct(fin.debtRatio)}</strong> of monthly cash flow.`);
+    }
+    if (!strengths.length){
+      strengths.push(`The profile has usable baseline data, which is enough to start shaping a more disciplined recommendation.`);
+    }
+    //#7.2 risks
+    if (fin.housingRatio >= 33){
+      risks.push(`Projected housing load is elevated at <strong>${pct(fin.housingRatio)}</strong> of monthly income, which compresses flexibility.`);
+    }
+    if (fin.expenseRatio >= 35){
+      risks.push(`Existing monthly expenses already absorb <strong>${pct(fin.expenseRatio)}</strong> of income before the housing decision is fully layered in.`);
+    }
+    if (fin.debt >= 2500){
+      risks.push(`Non-housing debt is heavy at <strong>${money(fin.debt)}/mo</strong>, which materially weakens affordability resilience.`);
+    }
+    if (identity.familySize > 0 && housing.bedrooms > 0){
+      const recommendedBedrooms =
+        identity.familySize <= 2 ? 2 :
+        identity.familySize <= 4 ? 3 :
+        identity.familySize <= 6 ? 4 : 5;
+      if (housing.bedrooms >= recommendedBedrooms + 2){
+        risks.push(`The requested <strong>${housing.bedrooms}-bedroom</strong> target may be oversized for a household of <strong>${identity.familySize}</strong>, which can unnecessarily inflate purchase cost.`);
+      } else if (housing.bedrooms === recommendedBedrooms + 1){
+        risks.push(`The requested bedroom count is slightly above a typical efficiency baseline for this household size, so it should be treated as a preference premium rather than a need.`);
+      }
+    }
+    if (readiness.score > 0 && readiness.score < 70){
+      risks.push(`Current readiness score is only <strong>${readiness.score}%</strong>, so this profile still needs tightening before it looks institutionally strong.`);
+    }
+    if (!risks.length){
+      risks.push(`No major red flags stand out yet, but the system should still stress-test debt, spending discipline, and home-size realism before green-lighting the decision.`);
+    }
+    //#7.3 opportunities
+    if (fin.entertainmentMonthly >= 500){
+      const annual = fin.entertainmentMonthly * 12;
+      opportunities.push(`Entertainment spending is roughly <strong>${money(fin.entertainmentMonthly)}/mo</strong>. Trimming that alone could free about <strong>${money(annual)}</strong> per year for reserves, payoff, or down payment growth.`);
+    }
+    if (fin.debt >= 1000){
+      const targetReduction = Math.round(fin.debt * 0.20);
+      opportunities.push(`A 20% reduction in non-housing debt would recover about <strong>${money(targetReduction)}/mo</strong> of cash flow and noticeably improve flexibility.`);
+    }
+    if (fin.housingRatio >= 30){
+      const cheaper = Math.round(fin.housingMonthly * 0.12);
+      opportunities.push(`Stepping down one price tier could reduce housing pressure by roughly <strong>${money(cheaper)}/mo</strong>, depending on market and financing structure.`);
+    }
+    if (fin.creditScore > 0 && fin.creditScore < 720){
+      opportunities.push(`Improving credit from <strong>${fin.creditScore}</strong> into the 720+ band would likely improve payment efficiency and widen safer options.`);
+    }
+    if (fin.savings < 15000){
+      opportunities.push(`Building a larger post-close buffer should be a near-term priority so the household is not forced into a thin-margin purchase.`);
+    }
+    if (!opportunities.length){
+      opportunities.push(`The biggest upside now is maintaining discipline and avoiding “wants” that create avoidable pressure in the final purchase profile.`);
+    }
+    //#7.4 actions
+    if (fin.entertainmentMonthly >= 500){
+      actions.push(`Set a hard entertainment cap and redirect the difference into savings or debt reduction for the next 90 days.`);
+    }
+    if (fin.debt >= 1000){
+      actions.push(`Attack the highest-friction non-housing debt first so the affordability profile improves before locking a home decision.`);
+    }
+    if (housing.bedrooms > 0 && identity.familySize > 0){
+      actions.push(`Separate “needs” from “premium wants” on bedroom count, garage size, and amenities before raising the home target further.`);
+    }
+    if (fin.housingRatio >= 30){
+      actions.push(`Keep the purchase target in the conservative band until monthly obligations are cleaner and breathing room improves.`);
+    }
+    if (!actions.length){
+      actions.push(`Preserve the current posture and continue collecting cleaner behavioral inputs so the recommendation stays defensible.`);
+    }
+    const overallPressure =
+      (fin.housingRatio * 0.45) +
+      (fin.debtRatio * 0.25) +
+      (fin.expenseRatio * 0.20) +
+      ((fin.creditScore > 0 ? (850 - fin.creditScore) / 10 : 12) * 0.10);
+    let pressureLabel = "Balanced";
+    let pressureTone = "ok";
+    if (overallPressure >= 30){
+      pressureLabel = "Elevated";
+      pressureTone = "warn";
+    }
+    if (overallPressure >= 40){
+      pressureLabel = "High Pressure";
+      pressureTone = "bad";
+    }
+    let bluf = `This profile is ${pressureLabel.toLowerCase()} right now. `;
+    if (fin.income > 0 && fin.housingMonthly > 0){
+      bluf += `Income of ${money(fin.income)}/mo can support movement, but ${money(fin.housingMonthly)}/mo in housing plus existing obligations means the system should favor discipline over stretch. `;
+    }
+    if (housing.bedrooms > 0 && identity.familySize > 0){
+      bluf += `The requested home profile should be checked for “want inflation,” especially where bedroom count or upgrades exceed likely household need. `;
+    }
+    if (fin.entertainmentMonthly >= 500){
+      bluf += `There is visible room to improve affordability simply by cutting discretionary spending before pushing price higher.`;
+    } else if (fin.debt >= 1000){
+      bluf += `The clearest path to a stronger recommendation is reducing non-housing debt before increasing home ambition.`;
+    } else {
+      bluf += `The best next move is to preserve monthly breathing room and keep the target inside a conservative zone.`;
+    }
+    return {
+      identity,
+      housing,
+      financial: fin,
+      readiness,
+      strengths: strengths.slice(0, 4),
+      risks: risks.slice(0, 4),
+      opportunities: opportunities.slice(0, 4),
+      actions: actions.slice(0, 4),
+      bluf,
+      pressureLabel,
+      pressureTone
+    };
+  }
+  //#8) RENDER
+  function renderCard(model){
+    const mount = ensureMount();
+    if (!mount) return;
+    const grade = model.readiness.grade || "—";
+    const score = model.readiness.score || 0;
+    const pressureClass =
+      model.pressureTone === "bad" ? "bad" :
+      model.pressureTone === "warn" ? "warn" : "ok";
+    mount.innerHTML = `
+      <div class="pcsu-2e-card">
+        <div class="pcsu-2e-top">
+          <div>
+            <div class="pcsu-2e-kicker">2E Analyst Intelligence</div>
+            <h2 class="pcsu-2e-title">Financial Analyst Observations</h2>
+            <p class="pcsu-2e-sub">
+              This layer interprets the household profile like an analyst would — combining affordability, debt pressure, household size, and preference realism into one decision view.
+            </p>
+          </div>
+          <div class="pcsu-2e-pill ${pressureClass}">
+            ${model.pressureLabel}
+          </div>
+        </div>
+        <div class="pcsu-2e-bluf">
+          <div class="pcsu-2e-bluf-label">BLUF</div>
+          <div class="pcsu-2e-bluf-copy">${model.bluf}</div>
+        </div>
+        <div class="pcsu-2e-stats">
+          <div class="pcsu-2e-stat">
+            <div class="pcsu-2e-stat-label">Income</div>
+            <div class="pcsu-2e-stat-value">${money(model.financial.income)}</div>
+            <div class="pcsu-2e-stat-sub">Monthly household income currently used by the system.</div>
+          </div>
+          <div class="pcsu-2e-stat">
+            <div class="pcsu-2e-stat-label">Debt Load</div>
+            <div class="pcsu-2e-stat-value">${money(model.financial.debt)}</div>
+            <div class="pcsu-2e-stat-sub">Non-housing monthly debt with a ${pct(model.financial.debtRatio)} ratio.</div>
+          </div>
+          <div class="pcsu-2e-stat">
+            <div class="pcsu-2e-stat-label">Housing Load</div>
+            <div class="pcsu-2e-stat-value">${pct(model.financial.housingRatio)}</div>
+            <div class="pcsu-2e-stat-sub">${money(model.financial.housingMonthly)}/mo against current income.</div>
+          </div>
+          <div class="pcsu-2e-stat">
+            <div class="pcsu-2e-stat-label">Readiness</div>
+            <div class="pcsu-2e-stat-value">${grade} ${score ? `• ${score}%` : ""}</div>
+            <div class="pcsu-2e-stat-sub">${model.readiness.verdict || "Live profile rating from the readiness layer."}</div>
+          </div>
+        </div>
+        <div class="pcsu-2e-grid">
+          <div class="pcsu-2e-panel">
+            <div class="pcsu-2e-panel-title">Strengths & Risks</div>
+            <div class="pcsu-2e-list">
+              ${model.strengths.map(item => `
+                <div class="pcsu-2e-item">
+                  <span class="pcsu-2e-dot ok"></span>
+                  <div class="pcsu-2e-item-copy">${item}</div>
+                </div>
+              `).join("")}
+              ${model.risks.map(item => `
+                <div class="pcsu-2e-item">
+                  <span class="pcsu-2e-dot warn"></span>
+                  <div class="pcsu-2e-item-copy">${item}</div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+          <div class="pcsu-2e-panel">
+            <div class="pcsu-2e-panel-title">Opportunities & Priority Actions</div>
+            <div class="pcsu-2e-list">
+              ${model.opportunities.map(item => `
+                <div class="pcsu-2e-item">
+                  <span class="pcsu-2e-dot info"></span>
+                  <div class="pcsu-2e-item-copy">${item}</div>
+                </div>
+              `).join("")}
+            </div>
+            <div style="height:14px"></div>
+            <div class="pcsu-2e-actions">
+              ${model.actions.map((item, i) => `
+                <div class="pcsu-2e-action">
+                  <div class="pcsu-2e-action-num">Action ${i + 1}</div>
+                  <div class="pcsu-2e-action-copy">${item}</div>
+                </div>
+              `).join("")}
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  //#9) EMPTY STATE
+  function renderEmpty(message){
+    const mount = ensureMount();
+    if (!mount) return;
+    mount.innerHTML = `
+      <div class="pcsu-2e-card">
+        <div class="pcsu-2e-kicker">2E Analyst Intelligence</div>
+        <h2 class="pcsu-2e-title">Financial Analyst Observations</h2>
+        <div class="pcsu-2e-bluf">
+          <div class="pcsu-2e-bluf-label">Status</div>
+          <div class="pcsu-2e-empty">${message}</div>
+        </div>
+      </div>
+    `;
+  }
+  //#10) MAIN
+  function repaint(){
+    const schema = pickSchema();
+    if (!schema || typeof schema !== "object" || schema.ok === false){
+      renderEmpty("Brain Schema X has not been generated yet, so the analyst layer does not have enough structured intelligence to render.");
+      return;
+    }
+    const model = buildInsights(schema);
+    renderCard(model);
+    try{
+      console.groupCollapsed("PCSU 2E Analyst Intelligence");
+      console.log("schema:", schema);
+      console.log("renderModel:", model);
+      console.groupEnd();
+    }catch(_){}
+  }
+  //#11) PUBLIC API
+  window.PCSU_2E_ANALYST_RENDERER.repaint = repaint;
+  //#12) BOOT
+  function scheduleRepaint(){
+    clearTimeout(scheduleRepaint.__t);
+    scheduleRepaint.__t = setTimeout(() => {
+      try{
+        repaint();
+      }catch(err){
+        console.error("PCSU 2E Analyst Intelligence repaint failed:", err);
+      }
+    }, 80);
+  }
+  function boot(){
+    injectStyles();
+    scheduleRepaint();
+  }
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", boot, { once:true });
+  } else {
+    boot();
+  }
+  window.addEventListener("pcsunited:bridge-ready", scheduleRepaint);
+  window.addEventListener("realtysass:bridge-ready", scheduleRepaint);
+  window.addEventListener("pcsunited:unlocked", scheduleRepaint);
+  window.addEventListener("storage", scheduleRepaint);
+  window.addEventListener("load", () => {
+    scheduleRepaint();
+    setTimeout(scheduleRepaint, 180);
+    setTimeout(scheduleRepaint, 700);
+    setTimeout(scheduleRepaint, 1400);
+  });
+})();
+</script>
+  </div>
+  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69658389f59da527c04bcbd4" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="js/webflow.js" type="text/javascript"></script>
+</body>
+</html>

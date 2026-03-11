@@ -1653,8 +1653,9 @@ figcaption {
   background-color: #4d4747;
   margin-top: -114px;
   margin-bottom: 0;
-  padding-top: 0;
+  padding-top: .9rem;
   padding-bottom: 4rem;
+  padding-right: 2.3rem;
 }
 
 .intro-section-main-page.padding-section-medium-copy-copy {
@@ -1680,6 +1681,7 @@ figcaption {
 
 .intro-section-main-page.p1adding-section-medium-copy {
   background-color: #4d4848;
+  margin-top: 60px;
   margin-bottom: 111px;
   padding: 0 1rem .6rem;
 }
@@ -1758,15 +1760,15 @@ figcaption {
   border-radius: 7px;
   min-height: 600px;
   margin-top: 60px;
-  margin-bottom: 9px;
+  margin-bottom: 0;
   box-shadow: 0 2px 5px #000000ad;
 }
 
 .intro-section-main-page.p1adding-section-medium-copy-copy {
   background-color: var(--color-neutral--shade-100);
-  margin-top: -12px;
+  margin-top: 0;
   margin-bottom: 0;
-  padding: 8rem 1rem 0;
+  padding: 2rem 1rem 0;
 }
 
 .intro-section-main-page.padding-section-small-copy-copy {
@@ -1784,6 +1786,7 @@ figcaption {
   background-color: #221b0f;
   margin-top: -6px;
   margin-bottom: 0;
+  margin-left: -26px;
   box-shadow: 0 2px 5px #000000b3;
 }
 
@@ -3316,7 +3319,7 @@ figcaption {
   place-items: center;
   width: 1300px;
   height: 100px;
-  margin-top: 6px;
+  margin-top: 15px;
   margin-left: -47px;
   padding-bottom: 0;
   padding-right: 20px;
@@ -3779,8 +3782,8 @@ figcaption {
   border-radius: var(--radius--default);
   object-fit: cover;
   object-position: 50% 0%;
-  width: 290.672px;
-  height: 300px;
+  width: 100%;
+  height: 100%;
   padding-left: 0;
   overflow: hidden;
   box-shadow: 0 2px 5px #000000d9;
@@ -3807,21 +3810,23 @@ figcaption {
 
 .tabs-menu {
   max-width: var(--content-width--medium);
+  grid-column-gap: 8px;
+  grid-row-gap: 8px;
   justify-content: center;
   align-items: center;
   margin-bottom: 3rem;
-  margin-left: auto;
-  margin-right: auto;
+  margin-left: 25px;
+  margin-right: 25px;
   display: flex;
 }
 
 .tabs-link {
-  grid-column-gap: 4px;
-  grid-row-gap: 4px;
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
   border-radius: var(--radius--default);
   color: var(--color-neutral--shade-900);
   text-align: center;
-  background-color: #0000;
+  background-color: #5c5454;
   flex: 1;
   justify-content: center;
   align-items: center;
@@ -3886,12 +3891,14 @@ figcaption {
 }
 
 .post_featured_card {
-  grid-column-gap: .375rem;
-  grid-row-gap: .375rem;
+  grid-column-gap: .7rem;
+  grid-row-gap: .7rem;
   grid-template-rows: auto;
   grid-template-columns: 1fr 1fr;
   grid-auto-columns: 1fr;
   min-height: 43.75rem;
+  margin-left: 10px;
+  margin-right: 10px;
   display: grid;
 }
 
@@ -4630,8 +4637,8 @@ figcaption {
 }
 
 .home1_benefit_grid {
-  grid-column-gap: 63px;
-  grid-row-gap: 63px;
+  grid-column-gap: 62px;
+  grid-row-gap: 62px;
   grid-template-rows: auto;
   grid-template-columns: 1fr 1fr 1fr;
   grid-auto-columns: 1fr;
@@ -4650,6 +4657,7 @@ figcaption {
   align-items: center;
   width: 115%;
   display: flex;
+  box-shadow: 0 2px 5px #0000001f;
 }
 
 .home1_benefit_metric-grid {
@@ -6588,6 +6596,8 @@ figcaption {
 
 .text-size-small-3 {
   margin-top: 0;
+  padding-left: 10px;
+  padding-right: 10px;
   font-size: .8755rem;
 }
 
@@ -6601,7 +6611,7 @@ figcaption {
 }
 
 .italic-text {
-  font-size: 3.7rem;
+  font-size: 4.2rem;
 }
 
 .container-large-2 {
@@ -6622,10 +6632,11 @@ figcaption {
 }
 
 .section_header-2.is-centered {
+  color: var(--color-base--white);
   text-align: center;
   justify-content: center;
   align-items: center;
-  margin: 20px auto 12px;
+  margin: 40px auto 12px;
   padding-left: 62px;
 }
 
@@ -6636,9 +6647,10 @@ figcaption {
 }
 
 .heading-7 {
+  color: var(--accent);
   margin-top: 2.3rem;
   margin-left: 59px;
-  font-size: 3.6rem;
+  font-size: 4.1rem;
 }
 
 .heading-style-h5-3 {
@@ -6862,7 +6874,7 @@ figcaption {
 
 .heading-8 {
   font-family: var(--fonts--badge);
-  color: var(--color-neutral--shade-500);
+  color: var(--pcs-brown);
   text-align: center;
   margin-top: -.7rem;
   margin-bottom: 2rem;
@@ -6900,7 +6912,7 @@ figcaption {
   margin-top: 0;
   padding: 0 2.5rem;
   display: flex;
-  box-shadow: 0 2px 5px #000000c9;
+  box-shadow: -1px 1px 5px #000000d4;
 }
 
 .image-11 {
@@ -7880,7 +7892,7 @@ figcaption {
   grid-auto-columns: 1fr;
   place-items: center start;
   min-height: 600px;
-  margin-top: 18px;
+  margin-top: 40px;
   padding: 10px 10px 10px 0;
   display: grid;
   box-shadow: 0 2px 5px #1f1c1c;
@@ -8594,7 +8606,7 @@ figcaption {
 }
 
 .heading-58 {
-  color: var(--color-neutral--shade-400);
+  color: var(--accent);
   margin-left: 29px;
 }
 
@@ -8606,6 +8618,15 @@ figcaption {
 .form-2 {
   margin-top: -24px;
   margin-left: 134px;
+}
+
+.paragraph-3 {
+  color: var(--color-neutral--shade-500);
+}
+
+.heading-59 {
+  color: var(--color-neutral--shade-200);
+  margin-top: -3rem;
 }
 
 .contactreatltorcontainer {
@@ -8846,6 +8867,51 @@ figcaption {
   background-color: var(--color-neutral--shade-400);
 }
 
+.stories_video-copy {
+  z-index: 2;
+  border-radius: var(--radius--default);
+  height: 100%;
+  position: absolute;
+  inset: 0%;
+}
+
+.quick-stack-4 {
+  margin-bottom: 20px;
+}
+
+.blog-backdrop {
+  background-color: #6b6767;
+  margin-top: auto;
+  overflow: hidden;
+}
+
+.image-91 {
+  height: 100%;
+}
+
+.blog-1, .blog-2, .blog-3 {
+  border-radius: var(--radius--default);
+  flex-flow: column;
+  flex: 1;
+  justify-content: space-between;
+  padding: 24px;
+  display: flex;
+}
+
+.tabs {
+  margin-bottom: 220px;
+}
+
+.blog-cab {
+  grid-column-gap: 12px;
+  grid-row-gap: 12px;
+  grid-template-rows: auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  margin-top: 144px;
+  display: grid;
+}
+
 @media screen and (min-width: 1280px) {
   .text-size-small.text-style-muted60 {
     color: var(--color-neutral--shade-200);
@@ -8989,20 +9055,22 @@ figcaption {
 
   .heading-style-h1 {
     color: var(--pcs-brown);
+    font-size: 3.6rem;
+  }
+
+  .intro-section-main-page.another {
+    margin-bottom: 20px;
   }
 
   .intro-section-main-page.padding-section-medium {
-    margin-top: -6px;
-    margin-bottom: -9px;
+    margin-top: -111px;
+    margin-bottom: 18px;
+    padding-top: 2.1rem;
     padding-bottom: 4.3rem;
   }
 
   .intro-section-main-page.p1adding-section-medium-copy {
-    margin-top: 69px;
-    margin-bottom: -57px;
-    padding-bottom: 6.6rem;
-    padding-left: .5rem;
-    padding-right: .5rem;
+    padding-left: 12px;
   }
 
   .intro-section-main-page.another-copy {
@@ -9012,12 +9080,21 @@ figcaption {
     padding-bottom: 0;
   }
 
+  .intro-section-main-page.padding-section-small-copy {
+    margin-top: 220px;
+  }
+
   .padding-section-small {
     margin-top: 0;
   }
 
   .text-size-small.text-weight-medium {
     color: var(--pcs-brown);
+  }
+
+  .text-size-small.text-style-muted60 {
+    color: var(--pcs-brown);
+    width: 686px;
   }
 
   .text-size-small.text-style-muted60-copy {
@@ -9038,6 +9115,7 @@ figcaption {
 
   .text-style-badge.is-white {
     margin-top: -54px;
+    margin-left: 149px;
   }
 
   .nav-logo {
@@ -9072,8 +9150,40 @@ figcaption {
     margin-top: 0;
   }
 
+  .blog_grid.is-v2 {
+    grid-column-gap: 11px;
+    grid-row-gap: 11px;
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .home2_hero_image {
+    height: 600px;
+    margin-top: -18px;
+  }
+
+  .tabs-menu {
+    grid-column-gap: 16px;
+    grid-row-gap: 16px;
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+
+  .tabs-link {
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    color: var(--color-neutral--shade-200);
+    background-color: #5f5656;
+  }
+
   .home1_hero_info {
     margin-bottom: 20px;
+  }
+
+  .programs_info {
+    padding-top: 2px;
+    padding-left: 0;
+    padding-right: 0;
   }
 
   .home3_about_grid {
@@ -9108,6 +9218,10 @@ figcaption {
 
   .section_heading-2 {
     margin-top: 20px;
+  }
+
+  .section_header-2.is-centered {
+    margin-bottom: 0;
   }
 
   .heading-7 {
@@ -9198,7 +9312,7 @@ figcaption {
   }
 
   .home3_hero_grid-2 {
-    margin-top: 0;
+    margin-top: 60px;
   }
 
   .primary-glow-wrapper {
@@ -9245,8 +9359,9 @@ figcaption {
   }
 
   .heading-59 {
-    text-align: center;
-    margin-top: 5.3rem;
+    text-align: left;
+    margin-top: 0;
+    margin-left: 44px;
   }
 
   .contactreatltorcontainer {
@@ -9274,6 +9389,58 @@ figcaption {
 
   .for-account-create {
     color: var(--color-neutral--shade-700);
+  }
+
+  .blog-backdrop {
+    background-color: #918c8c;
+  }
+
+  .image-91 {
+    box-shadow: 0 2px 5px #000000bf;
+  }
+
+  .paragraph-4 {
+    margin-bottom: -2.2rem;
+  }
+
+  .blog-3 {
+    padding-top: 10px;
+    padding-bottom: 0;
+  }
+
+  .text-block-8 {
+    color: var(--color-neutral--shade-100);
+  }
+
+  .text-block-9 {
+    color: var(--color-neutral--shade-200);
+  }
+
+  .tabs {
+    margin-bottom: 60px;
+  }
+
+  .image-92 {
+    width: 100%;
+  }
+
+  .blog-cab {
+    margin-top: 6px;
+    margin-bottom: 20px;
+  }
+
+  .image-93 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+
+  .background-video {
+    width: 652px;
+    height: 219.094px;
+  }
+
+  .heading-60 {
+    margin-top: 1.5rem;
   }
 }
 
@@ -10821,6 +10988,10 @@ figcaption {
     padding-top: 6rem;
     padding-bottom: 6rem;
   }
+
+  .blog-cab {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media screen and (max-width: 479px) {
@@ -11705,6 +11876,10 @@ figcaption {
   .create-account-container.another, .create-account-container.padding-section-medium, .create-account-container.padding-section-medium, .create-account-container.padding-section-medium, .create-account-container.padding-section-medium, .create-account-container.padding-section-medium, .create-account-container.padding-section-medium, .create-account-container.padding-section-medium-copy, .create-account-container.padding-section-medium-copy-copy, .create-account-container.padding-section-medium-copy, .create-account-container.padding-section-medium-copy-copy, .create-account-container.financial-dashboard, .create-account-container.padding-section-medium-copy, .create-account-container.padding-section-medium2-copy, .create-account-container.p1adding-section-medium-copy, .create-account-container.snapshottitle, .create-account-container.padding-section-medium-copy, .create-account-container.padding-section-medium-copy, .create-account-container.another-copy, .create-account-container.padding-section-medium-copy-copy, .create-account-container.padding-section-medium-copy-copy-copy, .create-account-container.another-copy, .create-account-container.padding-section-medium-copy-copy-copy, .create-account-container.padding-section-medium-copy-copy-copy-copy, .create-account-container.p1adding-section-medium-copy-copy {
     padding-top: 6rem;
     padding-bottom: 6rem;
+  }
+
+  .blog-backdrop {
+    overflow: hidden;
   }
 }
 

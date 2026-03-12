@@ -1,7 +1,7 @@
 {
   "version": "2026 (Final, effective Jan 1)",
   "source": "DoD Military Pay Tables (DFAS/DoD FMR Vol 7A), BAS (DFAS), BAH (DTMO), VA Disability (VA.gov) (2026)",
-  "updated": "2026-01-27",
+  "updated": "2026-03-12",
   "RETIREMENT": {
     "retired_pay_base": "High-3 average (highest 36 months of basic pay) for members entered on/after 1980-09-08",
     "systems": {
@@ -327,26 +327,141 @@
     }
   },
   "BAH": {
-    "notes": "BAH is looked up by ZIP. If profile.zip is missing, brain.js derives ZIP from profile.base using base_to_zip.",
+    "notes": "BAH is looked up by ZIP. If profile.zip is missing, brain.js derives ZIP from profile.base using base_to_zip. base_to_zip is expanded for all current bases. by_zip currently contains only values already loaded/verified in the supplied file; do not assume missing ZIPs are zero.",
     "base_to_zip": {
+      "Andrews": "20762",
+      "AndrewsAFB": "20762",
+      "Andrews AFB": "20762",
+      "Joint Base Andrews": "20762",
+      "JB Andrews": "20762",
+
+      "Barksdale": "71110",
+      "BarksdaleAFB": "71110",
+      "Barksdale AFB": "71110",
+
+      "Charleston": "29404",
+      "CharlestonAFB": "29404",
+      "Charleston AFB": "29404",
+      "Joint Base Charleston": "29404",
+      "JB Charleston": "29404",
+
       "Davis-Monthan": "85707",
+      "DavisMonthan": "85707",
+      "DavisMonthanAFB": "85707",
       "Davis-Monthan AFB": "85707",
+      "DMAFB": "85707",
+
+      "Dover": "19902",
+      "DoverAFB": "19902",
+      "Dover AFB": "19902",
+
       "Dyess": "79607",
+      "DyessAFB": "79607",
       "Dyess AFB": "79607",
+
+      "Eglin": "32542",
+      "EglinAFB": "32542",
+      "Eglin AFB": "32542",
+
+      "Elmendorf": "99506",
+      "ElmendorfAFB": "99506",
+      "Elmendorf AFB": "99506",
+      "JBER": "99506",
+      "Joint Base Elmendorf-Richardson": "99506",
+
       "Fort Sam Houston": "78234",
+      "Fort-Sam-Houston": "78234",
+      "FortSamHouston": "78234",
       "JBSA-Fort Sam Houston": "78234",
+      "JBSA-Fort-Sam-Houston": "78234",
+
       "Kirtland": "87117",
+      "KirtlandAFB": "87117",
       "Kirtland AFB": "87117",
-      "Laughlin": "78843",
-      "Laughlin AFB": "78843",
-      "Luke": "85309",
-      "Luke AFB": "85309",
-      "Nellis": "89191",
-      "Nellis AFB": "89191",
-      "Randolph": "78150",
-      "JBSA-Randolph": "78150",
+
       "Lackland": "78236",
+      "LacklandAFB": "78236",
       "JBSA-Lackland": "78236",
+      "JBSA Lackland": "78236",
+
+      "Langley": "23665",
+      "LangleyAFB": "23665",
+      "Langley AFB": "23665",
+      "Joint Base Langley-Eustis": "23665",
+
+      "Laughlin": "78843",
+      "LaughlinAFB": "78843",
+      "Laughlin AFB": "78843",
+
+      "Little Rock": "72099",
+      "LittleRock": "72099",
+      "LittleRockAFB": "72099",
+      "Little Rock AFB": "72099",
+      "Little-Rock": "72099",
+
+      "Luke": "85309",
+      "LukeAFB": "85309",
+      "Luke AFB": "85309",
+
+      "MacDill": "33621",
+      "MacDillAFB": "33621",
+      "MacDill AFB": "33621",
+
+      "McConnell": "67221",
+      "McConnellAFB": "67221",
+      "McConnell AFB": "67221",
+
+      "McGuire": "08641",
+      "McGuireAFB": "08641",
+      "McGuire AFB": "08641",
+      "JBMDL": "08641",
+      "Joint Base McGuire-Dix-Lakehurst": "08641",
+
+      "Minot": "58705",
+      "MinotAFB": "58705",
+      "Minot AFB": "58705",
+
+      "Nellis": "89191",
+      "NellisAFB": "89191",
+      "Nellis AFB": "89191",
+
+      "Offutt": "68113",
+      "OffuttAFB": "68113",
+      "Offutt AFB": "68113",
+
+      "Peterson": "80914",
+      "PetersonAFB": "80914",
+      "Peterson AFB": "80914",
+      "Peterson SFB": "80914",
+      "Peterson Space Force Base": "80914",
+
+      "Randolph": "78150",
+      "RandolphAFB": "78150",
+      "JBSA-Randolph": "78150",
+      "JBSA Randolph": "78150",
+
+      "Robins": "31098",
+      "RobinsAFB": "31098",
+      "Robins AFB": "31098",
+
+      "Scott": "62225",
+      "ScottAFB": "62225",
+      "Scott AFB": "62225",
+
+      "Tinker": "73145",
+      "TinkerAFB": "73145",
+      "Tinker AFB": "73145",
+
+      "Travis": "94535",
+      "TravisAFB": "94535",
+      "Travis AFB": "94535",
+
+      "Wright-Patterson": "45433",
+      "WrightPatterson": "45433",
+      "WrightPattersonAFB": "45433",
+      "Wright-Patterson AFB": "45433",
+      "WPAFB": "45433",
+
       "San Antonio": "78236",
       "JBSA": "78236"
     },
@@ -428,50 +543,6 @@
         "without": { "E-5": 1145, "E-6": 1219, "E-7": 1296, "E-8": 1395, "E-9": 1481, "O-1": 1219, "O-2": 1296, "O-3": 1395, "O-4": 1562, "O-5": 1701, "O-6": 1804, "O-7": 1804 },
         "verified": false
       }
-    }
-  },
-  "BAH_TX": {
-    "79607": {
-      "base": "Dyess Air Force Base",
-      "location": "Abilene",
-      "with": { "E-5": 1560, "E-6": 1665, "E-7": 1826, "E-8": 1990, "E-9": 2160, "O-1": 1665, "O-2": 1826, "O-3": 1990, "O-4": 2370, "O-5": 2540, "O-6": 2656, "O-7": 2656 },
-      "without": { "E-5": 1245, "E-6": 1341, "E-7": 1438, "E-8": 1540, "E-9": 1648, "O-1": 1341, "O-2": 1438, "O-3": 1540, "O-4": 1735, "O-5": 1862, "O-6": 1965, "O-7": 1965 },
-      "verified": true
-    },
-    "76908": {
-      "base": "Goodfellow Air Force Base",
-      "location": "San Angelo",
-      "with": { "E-5": 1530, "E-6": 1530, "E-7": 1610, "E-8": 1774, "E-9": 1888, "O-1": 1610, "O-2": 1689, "O-3": 1774, "O-4": 2073, "O-5": 2199, "O-6": 2364, "O-7": 2364 },
-      "without": { "E-5": 1145, "E-6": 1219, "E-7": 1296, "E-8": 1395, "E-9": 1481, "O-1": 1219, "O-2": 1296, "O-3": 1395, "O-4": 1562, "O-5": 1701, "O-6": 1804, "O-7": 1804 },
-      "verified": false
-    },
-    "78236": {
-      "base": "JBSA-Lackland",
-      "location": "San Antonio (MHA TX285)",
-      "with": { "E-5": 1935, "E-6": 2154, "E-7": 2172, "E-8": 2181, "E-9": 2208, "O-1": 1968, "O-2": 2151, "O-3": 2187, "O-4": 2340, "O-5": 2466, "O-6": 2487, "O-7": 2505 },
-      "without": { "E-5": 1530, "E-6": 1656, "E-7": 1794, "E-8": 1983, "E-9": 2037, "O-1": 1644, "O-2": 1890, "O-3": 2070, "O-4": 2148, "O-5": 2160, "O-6": 2163, "O-7": 2178 },
-      "verified": true
-    },
-    "78150": {
-      "base": "JBSA-Randolph",
-      "location": "Universal City / San Antonio (MHA TX285)",
-      "with": { "E-5": 1935, "E-6": 2154, "E-7": 2172, "E-8": 2181, "E-9": 2208, "O-1": 1968, "O-2": 2151, "O-3": 2187, "O-4": 2340, "O-5": 2466, "O-6": 2487, "O-7": 2505 },
-      "without": { "E-5": 1530, "E-6": 1656, "E-7": 1794, "E-8": 1983, "E-9": 2037, "O-1": 1644, "O-2": 1890, "O-3": 2070, "O-4": 2148, "O-5": 2160, "O-6": 2163, "O-7": 2178 },
-      "verified": true
-    },
-    "78234": {
-      "base": "JBSA-Fort Sam Houston",
-      "location": "San Antonio (MHA TX285)",
-      "with": { "E-5": 1935, "E-6": 2154, "E-7": 2172, "E-8": 2181, "E-9": 2208, "O-1": 1968, "O-2": 2151, "O-3": 2187, "O-4": 2340, "O-5": 2466, "O-6": 2487, "O-7": 2505 },
-      "without": { "E-5": 1530, "E-6": 1656, "E-7": 1794, "E-8": 1983, "E-9": 2037, "O-1": 1644, "O-2": 1890, "O-3": 2070, "O-4": 2148, "O-5": 2160, "O-6": 2163, "O-7": 2178 },
-      "verified": true
-    },
-    "78843": {
-      "base": "Laughlin Air Force Base",
-      "location": "Del Rio",
-      "with": { "E-5": 1557, "E-6": 1557, "E-7": 1627, "E-8": 1785, "E-9": 1943, "O-1": 1627, "O-2": 1717, "O-3": 1785, "O-4": 2085, "O-5": 2212, "O-6": 2377, "O-7": 2377 },
-      "without": { "E-5": 1178, "E-6": 1253, "E-7": 1332, "E-8": 1435, "E-9": 1528, "O-1": 1253, "O-2": 1332, "O-3": 1435, "O-4": 1612, "O-5": 1756, "O-6": 1860, "O-7": 1860 },
-      "verified": true
     }
   }
 }

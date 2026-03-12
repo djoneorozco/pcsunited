@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Mar 11 2026 06:43:14 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Mar 12 2026 16:17:45 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="696731f983d4f50d006664d1" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -590,19 +590,344 @@
   </style>
     </div>
     <div class="w-embed w-script"><!--  =========================================================
-  PCS SNAPSHOT v3.2.3 • House of SaSS (PCS UNITED)
-  ✅ Base Comparison injected under header
-  ✅ City QuickFacts moved below comparison w/ spacing
-  ✅ FIX: Uses city.image_url for images (no more empty BASE_IMAGE map)
-  ✅ FIX: Robust city loader: /api/city -> /.netlify/functions/city -> GitHub raw fallback
+  PCS SNAPSHOT v3.3.0 • House of SaSS (FULL FIXED)
+  ✅ Exact file-key registry shared in snapshot runtime
+  ✅ No more fake filenames like AndrewsAFB.json
+  ✅ Reads curFileKey / newFileKey / sessionStorage first
+  ✅ Robust city loading from exact JSON names
+  ✅ Base comparison + header use same normalization
 =========================================================  -->
       <div id="pcs-snapshot-shell" style="all: initial;">
-        <!--  FONTS + CHART LIBRARIES  -->
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
         <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <style>
+    #pcs-snapshot-shell, #pcs-snapshot-shell * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    #pcs-snapshot-wrap{
+      width:min(1200px, 100%);
+      margin:0 auto;
+      padding:18px 14px 30px;
+      color:#e9ecff;
+      background:
+        radial-gradient(1200px 500px at 15% 10%, rgba(106,167,255,.10), transparent 45%),
+        radial-gradient(900px 450px at 85% 15%, rgba(142,243,197,.08), transparent 45%),
+        linear-gradient(180deg, #070b16 0%, #090d19 100%);
+    }
+    .pcs-glass{
+      background: linear-gradient(180deg, rgba(16,22,40,.78), rgba(7,11,22,.86));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.04),
+        0 18px 40px rgba(0,0,0,.35);
+      border-radius:22px;
+      backdrop-filter: blur(10px);
+    }
+    .pcs-header-center{
+      padding:24px 22px 18px;
+      margin-bottom:16px;
+    }
+    .pcs-header-center h2{
+      margin:0 0 6px;
+      font-size:18px;
+      line-height:1.2;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.02em;
+      color:#f4f7ff;
+    }
+    .pcs-tagline{
+      color:#a8b0d6;
+      font-size:13px;
+      font-weight:700;
+      margin-bottom:10px;
+    }
+    .pcs-income-main{
+      font-size:20px;
+      font-weight:900;
+      margin-bottom:2px;
+      color:#ffffff;
+    }
+    .pcs-income-breakdown{
+      font-size:13px;
+      color:#c7d0f5;
+      font-weight:700;
+    }
+    #pcs-compare-block{
+      margin-top:8px;
+      margin-bottom:20px;
+    }
+    #pcsc-frame{
+      border-radius:22px;
+      background: linear-gradient(180deg, rgba(16,22,40,.78), rgba(7,11,22,.86));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 18px 40px rgba(0,0,0,.35);
+      padding:14px;
+    }
+    #pcsc-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .pcsc-side{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
+      overflow:hidden;
+      background: linear-gradient(180deg, rgba(14,19,35,.88), rgba(6,10,22,.92));
+    }
+    .pcsc-side-header{
+      padding:14px 16px;
+      text-align:center;
+      font-size:14px;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:#f4f7ff;
+      border-bottom:1px solid rgba(255,255,255,.08);
+    }
+    .pcsc-body{
+      display:grid;
+      grid-template-columns: 1.65fr .95fr;
+      gap:12px;
+      padding:12px;
+    }
+    .pcsc-img{
+      min-height:295px;
+      border-radius:14px;
+      overflow:hidden;
+      background: radial-gradient(circle at 50% 30%, rgba(106,167,255,.18), rgba(8,12,24,.96));
+      border:1px solid rgba(255,255,255,.08);
+    }
+    .pcsc-img img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+      display:block;
+      opacity:1;
+    }
+    .pcsc-stats{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:12px;
+      background: linear-gradient(180deg, rgba(10,15,30,.86), rgba(4,8,18,.96));
+    }
+    .pcsc-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:10px;
+      padding:6px 0;
+      border-bottom:1px solid rgba(255,255,255,.06);
+    }
+    .pcsc-row:last-of-type{
+      border-bottom:none;
+    }
+    .pcsc-k{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.08em;
+      color:#a8b0d6;
+      font-weight:800;
+    }
+    .pcsc-v{
+      font-size:12px;
+      color:#f1f4ff;
+      font-weight:800;
+      text-align:right;
+    }
+    .pcsc-facts{
+      margin-top:10px;
+      display:grid;
+      gap:8px;
+    }
+    .pcsc-fact{
+      display:flex;
+      align-items:flex-start;
+      gap:8px;
+      color:#c7d0f5;
+      font-size:12px;
+      line-height:1.35;
+      font-weight:700;
+    }
+    .pcsc-dot{
+      width:8px;
+      height:8px;
+      border-radius:999px;
+      margin-top:4px;
+      flex:0 0 8px;
+      background: radial-gradient(circle at top left, #8ef3c5, #6aa7ff);
+      box-shadow:0 0 12px rgba(106,167,255,.45);
+    }
+    .pcsc-mini-row{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:12px;
+      padding:0 12px 12px;
+    }
+    .pcsc-mini{
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:14px;
+      padding:12px;
+      background: linear-gradient(180deg, rgba(10,15,30,.86), rgba(4,8,18,.96));
+      min-height:120px;
+    }
+    .pcsc-mini h4{
+      margin:0 0 10px;
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      color:#f4f7ff;
+      font-weight:900;
+    }
+    .pcsc-canvas{
+      width:100% !important;
+      height:84px !important;
+    }
+    .pcsc-rating{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+    .pcsc-score{
+      font-size:24px;
+      font-weight:900;
+      color:#f4f7ff;
+      min-width:44px;
+    }
+    .pcsc-stars{
+      font-size:20px;
+      letter-spacing:.08em;
+      color:#ffcf5a;
+    }
+    #pcsc-status{
+      text-align:center;
+      margin-top:10px;
+      color:#a8b0d6;
+      font-size:13px;
+      font-weight:700;
+    }
+    #pcs-qf-block{
+      margin-top:8px;
+      margin-bottom:16px;
+    }
+    .pcs-qf-title{
+      margin:0 0 10px;
+      font-size:15px;
+      text-transform:uppercase;
+      font-weight:900;
+      letter-spacing:.08em;
+      color:#f4f7ff;
+    }
+    .pcs-quickfacts{
+      display:grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap:12px;
+    }
+    .pcs-fact{
+      border-radius:16px;
+      padding:14px;
+      background: linear-gradient(180deg, rgba(16,22,40,.78), rgba(7,11,22,.86));
+      border:1px solid rgba(255,255,255,.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,.04), 0 18px 40px rgba(0,0,0,.25);
+    }
+    .pcs-fact-label{
+      font-size:11px;
+      text-transform:uppercase;
+      letter-spacing:.1em;
+      color:#a8b0d6;
+      margin-bottom:6px;
+      font-weight:800;
+    }
+    .pcs-fact-value{
+      font-size:16px;
+      font-weight:900;
+      color:#f4f7ff;
+    }
+    .pcs-grid-2{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap:14px;
+    }
+    .pcs-panel{
+      padding:16px;
+    }
+    .pcs-panel h4{
+      margin:0 0 4px;
+      font-size:14px;
+      font-weight:900;
+      color:#f4f7ff;
+    }
+    .pcs-small{
+      font-size:12px;
+      color:#a8b0d6;
+      font-weight:700;
+    }
+    .pcs-highlight-teal{
+      color:#8ef3c5;
+      margin-top:8px;
+    }
+    .pcs-highlight-blue{
+      color:#9bc7ff;
+      margin-top:8px;
+    }
+    .pcs-canvas{
+      width:100% !important;
+      height:180px !important;
+      margin-top:10px;
+    }
+    .pcs-canvas-tall{
+      width:100% !important;
+      height:210px !important;
+      margin-top:10px;
+    }
+    .trend-toggle{
+      margin-top:10px;
+      display:flex;
+      gap:8px;
+    }
+    .trend-btn{
+      appearance:none;
+      border:none;
+      padding:8px 14px;
+      border-radius:999px;
+      background:rgba(255,255,255,.06);
+      color:#d9e2ff;
+      font-size:12px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      cursor:pointer;
+    }
+    .trend-btn.active{
+      background: radial-gradient(circle at top left, #8ef3c5, #6aa7ff);
+      color:#050712;
+      box-shadow:0 10px 24px rgba(0,0,0,.28);
+    }
+    #pcs-trend-chart-apex{
+      margin-top:10px;
+      min-height:220px;
+    }
+    .pcs-divider{
+      border:none;
+      border-top:1px solid rgba(255,255,255,.08);
+      margin:14px 0;
+    }
+    @media (max-width: 980px){
+      #pcsc-grid,
+      .pcs-grid-2,
+      .pcs-quickfacts{
+        grid-template-columns: 1fr;
+      }
+      .pcsc-body,
+      .pcsc-mini-row{
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
         <div id="pcs-snapshot-wrap">
-          <!--  HEADER  -->
           <div class="pcs-header-center pcs-glass">
             <h2>Permanent Change of Duty Station PCS Snapshot</h2>
             <div class="pcs-tagline" id="pcs-city-line">Loading city data…</div>
@@ -611,13 +936,9 @@
               Base Pay: — • BAH: — • BAS: —
             </div>
           </div>
-          <!--  =========================================================
-      ✅ BASE COMPARISON (NOW BELOW HEADER)
-    =========================================================  -->
           <div id="pcs-compare-block">
             <div id="pcsc-frame">
               <div id="pcsc-grid">
-                <!--  LEFT: CURRENT  -->
                 <div class="pcsc-side" id="side-current">
                   <div class="pcsc-side-header">Current Duty Station</div>
                   <div class="pcsc-body">
@@ -665,7 +986,6 @@
                     </div>
                   </div>
                 </div>
-                <!--  RIGHT: UPCOMING  -->
                 <div class="pcsc-side" id="side-upcoming">
                   <div class="pcsc-side-header">Upcoming Base</div>
                   <div class="pcsc-body">
@@ -717,21 +1037,17 @@
               <div id="pcsc-status">Loading base comparison…</div>
             </div>
           </div>
-          <!--  ✅ MOVED HERE: QUICKFACTS (NOW BELOW COMPARISON + SPACING)  -->
           <div id="pcs-qf-block">
             <h3 class="pcs-qf-title">City QuickFacts</h3>
             <div id="pcs-quickfacts" class="pcs-quickfacts"></div>
           </div>
-          <!--  =================== TOP GRID ===================  -->
           <div class="pcs-grid-2">
-            <!--  LEFT: Income  -->
             <div class="pcs-panel pcs-glass">
               <h4>Your Income vs City Average</h4>
               <div class="pcs-small">Annual comparison (Low / Avg / High / You)</div>
               <canvas id="pcs-income-chart" class="pcs-canvas" height="160"></canvas>
               <div id="pcs-income-summary" class="pcs-small pcs-highlight-teal"></div>
             </div>
-            <!--  RIGHT: Mortgage  -->
             <div class="pcs-panel pcs-glass">
               <h4>Your BAH vs Average Mortgage</h4>
               <div class="pcs-small">Monthly comparison (Low / Avg / High / Your BAH)</div>
@@ -742,9 +1058,7 @@
               </div>
             </div>
           </div>
-          <!--  =================== BOTTOM GRID ===================  -->
           <div class="pcs-grid-2" style="margin-top:14px;">
-            <!--  LEFT: APEXCHART TREND + PRICE BREAKDOWN  -->
             <div class="pcs-panel pcs-glass">
               <h4>12-Month Housing Trend</h4>
               <div class="pcs-small">Median home price (interactive trend)</div>
@@ -760,7 +1074,6 @@
               <canvas id="pcs-pricebreak-chart" class="pcs-canvas" height="150"></canvas>
               <div id="pcs-pricebreak-note" class="pcs-small" style="margin-top:6px;color:#a8b0d6;"></div>
             </div>
-            <!--  RIGHT: Affordability  -->
             <div class="pcs-panel pcs-glass">
               <h4>Affordability Index</h4>
               <div class="pcs-small">Higher score = better fit for your income</div>
@@ -769,403 +1082,138 @@
             </div>
           </div>
         </div>
-        <!--  =========================================================
-       JAVASCRIPT — PCS SNAPSHOT (UNCHANGED LOGIC, BETTER CITY LOADER)
-  =========================================================  -->
         <script>
-(function () {
-  "use strict";
-  // ============================================================
-  // //#0 CONFIG
-  // ============================================================
-  const API_BASE = "https://pcsunited.netlify.app/api";
-  const MILPAY_JSON_URL =
-    "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/militaryPayTables.json";
-  // Backup fallback (PCSUnited repo)
-  const CITY_GITHUB_RAW_BASE =
-    "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/";
-  // Direct function fallback (works even if /api redirect fails)
-  const DIRECT_FN_BASE =
-    "https://pcsunited.netlify.app/.netlify/functions";
-  // ============================================================
-  // //#1 HELPERS
-  // ============================================================
-  function getQuery() {
-    const u = new URL(window.location.href);
-    return {
-      type: (u.searchParams.get("type") || "ad").toLowerCase(),
-      rank: u.searchParams.get("rank") || "E4",
-      yos: parseInt(u.searchParams.get("yos") || "2", 10),
-      family: parseInt(u.searchParams.get("family") || "1", 10),
-      base: u.searchParams.get("base") || "Lackland",
-      va: parseInt(u.searchParams.get("va") || "0", 10),
-      cityKey: u.searchParams.get("cityKey") || ""
-    };
-  }
-  function normRank(r) {
-    const s = String(r || "").toUpperCase().trim();
-    const m = s.match(/^([EO])\s*-\s*(\d+)$/) || s.match(/^([EO])(\d+)$/) || s.match(/^(E)\s*-\s*(\d+)$/) || s.match(/^(E)(\d+)$/);
-    if (m) return m[1] + "-" + m[2];
-    return s.replace(/\s+/g,"");
-  }
-  function isE(rankKey) { return String(rankKey || "").startsWith("E-"); }
-  function pickYOS(y, table) {
-    const ks = Object.keys(table || {}).map(k => parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
-    if (!ks.length) return String(y);
-    let best = ks[0], diff = Math.abs(y - best);
-    ks.forEach(k => {
-      const d = Math.abs(y-k);
-      if (d < diff){ diff = d; best = k; }
-    });
-    return String(best);
-  }
-  function money(n){
-    const x = Number(n);
-    if (!Number.isFinite(x)) return "$0";
-    return "$" + Math.round(x).toLocaleString();
-  }
-  function safe(obj, path, fb) {
-    try { return path.split(".").reduce((a,k)=>a && a[k], obj) ?? fb; }
-    catch { return fb; }
-  }
-  async function load(url){
-    const r = await fetch(url, { cache: "no-store" });
-    if(!r.ok) throw new Error("load fail "+url+" ("+r.status+")");
-    const ct = (r.headers.get("content-type") || "").toLowerCase();
-    // If we got HTML (like your “Click image…” page), treat as a failure and fall back.
-    if (ct.includes("text/html")) throw new Error("non-json response "+url+" (html)");
-    return await r.json();
-  }
-  function normalizeCityKey(key, baseFallback){
-    const raw = String(key || "").trim();
-    const base = String(baseFallback || "").trim();
-    const primary = (raw ? raw : base) || "Lackland";
-    const variants = [];
-    const push = (v)=>{ if (v && !variants.includes(v)) variants.push(v); };
-    push(primary);
-    push(primary.replace(/\s+/g,"-"));
-    push(primary.replace(/\s+/g,""));
-    push(primary.replace(/-/g,""));
-    push(primary.replace(/[^A-Za-z0-9-]/g,""));
-    if (/^SAN\s*ANTONIO$/i.test(primary) || /^SANANTONIO$/i.test(primary)){
-      push("Lackland");
-    }
-    return variants;
-  }
-  async function loadCity(cityKey, baseLoc){
-    const keysToTry = normalizeCityKey(cityKey, baseLoc);
-    // 1) Try /api redirect
-    for (const k of keysToTry){
-      const url = `${API_BASE}/city?cityKey=${encodeURIComponent(k)}`;
-      try{ return await load(url); } catch(e){}
-    }
-    // 2) Try direct Netlify function (bypasses /api rewrite)
-    for (const k of keysToTry){
-      const url = `${DIRECT_FN_BASE}/city?cityKey=${encodeURIComponent(k)}`;
-      try{ return await load(url); } catch(e){}
-    }
-    // 3) GitHub raw fallback
-    for (const k of keysToTry){
-      const url = `${CITY_GITHUB_RAW_BASE}${encodeURIComponent(k)}.json`;
-      try{ return await load(url); } catch(e){}
-    }
-    throw new Error("City load failed for: " + keysToTry.join(", "));
-  }
-  function normalizeTrendDate(dt){
-    const s = String(dt || "").trim();
-    if (!s) return null;
-    const m = s.match(/^(\d{4})-(\d{2})-W(\d{1,2})$/);
-    if (m){
-      const y = Number(m[1]), mo = Number(m[2]), w = Number(m[3]);
-      const day = Math.min(28, 1 + (w-1)*7);
-      const iso = `${y}-${String(mo).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-      const d = new Date(iso);
-      return isNaN(d.getTime()) ? null : d;
-    }
-    const d = new Date(s);
-    return isNaN(d.getTime()) ? null : d;
-  }
-  function renderTrendApex(fullData) {
-    const chartEl = document.querySelector("#pcs-trend-chart-apex");
-    if (!chartEl) return;
-    if (window.pcsTrendChart) {
-      try { window.pcsTrendChart.destroy(); } catch {}
-    }
-    const seriesData = (Array.isArray(fullData) ? fullData : []).map(d => {
-      const dt = d.month || d.date || d.period || d.timestamp || null;
-      const price = d.median_sale_price ?? d.medianSalePrice ?? d.median ?? d.value ?? null;
-      const x = normalizeTrendDate(dt);
-      const y = Number(price);
-      return (x && Number.isFinite(y)) ? { x, y } : null;
-    }).filter(Boolean);
-    const options = {
-      chart: { type: 'line', height: 200, foreColor: '#e9ecff', toolbar: { show: false } },
-      stroke: { width: 3, curve: 'smooth', colors: ['#8ef3c5'] },
-      series: [{ name: "Median Sale Price", data: seriesData }],
-      xaxis: { type: 'datetime', labels: { style: { colors: '#e9ecff' } } },
-      yaxis: {
-        labels: { style: { colors: '#e9ecff' }, formatter: val => "$" + Math.round(val).toLocaleString() }
-      },
-      tooltip: { theme: 'dark', x: { format: "MMM yyyy" }, y: { formatter: v => "$" + Math.round(v).toLocaleString() } },
-      grid: { borderColor: "rgba(255,255,255,0.08)" }
-    };
-    window.pcsTrendChart = new ApexCharts(chartEl, options);
-    window.pcsTrendChart.render();
-  }
-  async function init(){
-    const p = getQuery();
-    const rankKey = normRank(p.rank);
-    const isAD = p.type === "ad";
-    const [city, pay] = await Promise.all([
-      loadCity(p.cityKey, p.base),
-      load(MILPAY_JSON_URL)
-    ]);
-    let base=0, bah=0, bas=0;
-    if (isAD) {
-      const table = (pay.BASEPAY && pay.BASEPAY[rankKey]) ? pay.BASEPAY[rankKey] : {};
-      const yKey = pickYOS(p.yos, table);
-      base = table[yKey] || 0;
-      bas = isE(rankKey) ? safe(pay,"BAS.enlisted",0) : safe(pay,"BAS.officer",0);
-      const baseToZip = safe(pay, "BAH.base_to_zip", {}) || {};
-      const zip = baseToZip[p.base] || baseToZip[(p.base + " AFB")] || baseToZip[(p.base + " Air Force Base")] || baseToZip["Lackland"] || "78236";
-      const byZip = safe(pay, "BAH.by_zip", {}) || {};
-      const rec1 = byZip[String(zip)] || null;
-      const bahTX = pay.BAH_TX || {};
-      const rec2 = bahTX[String(zip)] || null;
-      const rec = rec1 || rec2;
-      const grp = (p.family > 1) ? safe(rec, "with", null) : safe(rec, "without", null);
-      if (grp && grp[rankKey] != null) bah = Number(grp[rankKey]) || 0;
-    } else {
-      const full = pay.DISABILITY_FULL || {};
-      const keys = Object.keys(full).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
-      let best = keys[0] ?? 0, diff=Math.abs(p.va-best);
-      keys.forEach(k=>{
-        const d = Math.abs(p.va-k);
-        if(d < diff){ diff=d; best=k; }
-      });
-      const row = full[String(best)];
-      base = row ? row.veteran : 0;
-      bah = 0; bas = 0;
-    }
-    const total = base + bah + bas;
-    document.getElementById("pcs-city-line").textContent =
-      (city.place || city.city || city.name || "Selected Location") + " • Quick PCS Snapshot";
-    document.getElementById("pcs-income-main").textContent =
-      money(total) + " / month";
-    document.getElementById("pcs-income-breakdown").textContent =
-      "Base Pay: " + money(base) + " • BAH: " + money(bah) + " • BAS: " + money(bas);
-    const medInc =
-      safe(city,"income.median_household_income", null) ??
-      safe(city,"demographics.income.median_household_income", null) ??
-      safe(city,"median_household_income", 60000);
-    const low = medInc*0.6;
-    const avg = medInc;
-    const high = medInc*1.35;
-    const userA = total*12;
-    new Chart(document.getElementById("pcs-income-chart"),{
-      type:"bar",
-      data:{
-        labels:["Low","Avg","High","You"],
-        datasets:[{
-          data:[low,avg,high,userA],
-          backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#8ef3c5"]
-        }]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{legend:{display:false}},
-        scales:{
-          y:{ticks:{color:"#e9ecff", callback:v=>"$"+(v/1000)+"k"},
-             grid:{color:"rgba(255,255,255,.06)"}},
-          x:{ticks:{color:"#e9ecff"}, grid:{display:false}}
-        }
-      }
-    });
-    document.getElementById("pcs-income-summary").textContent =
-      ((userA-avg)>=0? "+" : "") +
-      (((userA-avg)/Math.max(avg,1))*100).toFixed(1) +
-      "% vs median household income";
-    const P =
-      safe(city,"housing.market.median_listing_price_realtor", null) ??
-      safe(city,"housing.market.median_listing_price", null) ??
-      safe(city,"housing.market.median_list_price", null) ??
-      safe(city,"housing.market.median_listing_price_realtor", null) ??
-      safe(city,"avg_home_value", null) ??
-      safe(city,"average_home_value", null) ??
-      safe(city,"housing.median_value_owner_occupied", 295000);
-    const rate = 0.0675/12;
-    const N = 360;
-    const M = Number(P) * (rate*Math.pow(1+rate,N)) / (Math.pow(1+rate,N)-1);
-    const bahLow = M*0.85;
-    const bahAvg = M;
-    const bahHigh = M*1.15;
-    new Chart(document.getElementById("pcs-bah-chart"),{
-      type:"bar",
-      data:{
-        labels:["Low","Avg","High","Your BAH"],
-        datasets:[{
-          data:[bahLow,bahAvg,bahHigh,bah],
-          backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#6aa7ff"]
-        }]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{legend:{display:false}},
-        scales:{
-          y:{ticks:{color:"#e9ecff",callback:v=>"$"+Math.round(v)},
-             grid:{color:"rgba(255,255,255,.06)"}},
-          x:{ticks:{color:"#e9ecff"},grid:{display:false}}
-        }
-      }
-    });
-    document.getElementById("pcs-bah-summary").textContent =
-      (bah > 0 && bahAvg > 0)
-        ? ("Your BAH covers ~"+((bah/bahAvg)*100).toFixed(1)+"% of estimated mortgage.")
-        : ("BAH not found for this rank/base yet — pay tables may be missing that row.");
-    const allMonths =
-      safe(city,"housing.market.sale_history_36_months", null) ??
-      safe(city,"housing.sale_history_36_months", null) ??
-      safe(city,"market.sale_history_36_months", []) ??
-      [];
-    const last12 = Array.isArray(allMonths) ? allMonths.slice(-12) : [];
-    const last36 = Array.isArray(allMonths) ? allMonths.slice(-36) : [];
-    renderTrendApex(last12);
-    document.getElementById("btn-1yr").onclick = () => {
-      document.getElementById("btn-1yr").classList.add("active");
-      document.getElementById("btn-3yr").classList.remove("active");
-      renderTrendApex(last12);
-    };
-    document.getElementById("btn-3yr").onclick = () => {
-      document.getElementById("btn-3yr").classList.add("active");
-      document.getElementById("btn-1yr").classList.remove("active");
-      renderTrendApex(last36);
-    };
-    const yoy =
-      safe(city,"housing.market.zillow_one_year_change_percent", null) ??
-      safe(city,"housing.market.one_year_change_percent", null) ??
-      safe(city,"yoy_change_percent", 0);
-    document.getElementById("pcs-trend-summary").textContent =
-      "12-month change: "+(Number(yoy)||0)+"% • " +
-      (safe(city,"housing.market.market_type_summary","") || "");
-    const medSale =
-      safe(city,"housing.market.q1.median_sale_price", null) ??
-      safe(city,"housing.market.q1_2025.median_sale_price", null) ??
-      safe(city,"housing.market.median_sale_price_current", null) ??
-      safe(city,"housing.market.median_sale_price", 0);
-    let avgSale =
-      safe(city,"housing.market.q1.average_sale_price", null) ??
-      safe(city,"housing.market.q1_2025.average_sale_price", null) ??
-      safe(city,"housing.market.average_sale_price", null);
-    const medList =
-      safe(city,"housing.market.median_listing_price_realtor", null) ??
-      safe(city,"housing.market.median_listing_price", null) ??
-      safe(city,"housing.market.median_list_price", 0);
-    let note = "";
-    if (avgSale == null || !Number.isFinite(Number(avgSale)) || Number(avgSale) <= 0){
-      avgSale = Number(medSale) || 0;
-      if (avgSale > 0) note = "Avg Sale not provided in this base JSON — using Median Sale as a placeholder.";
-    }
-    document.getElementById("pcs-pricebreak-note").textContent = note;
-    new Chart(document.getElementById("pcs-pricebreak-chart"),{
-      type:"bar",
-      data:{
-        labels:["Median Sale","Avg Sale","Median List"],
-        datasets:[{
-          data:[Number(medSale)||0, Number(avgSale)||0, Number(medList)||0],
-          backgroundColor:["#8ef3c5","#6aa7ff","#4f86ff"]
-        }]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{legend:{display:false}},
-        scales:{
-          y:{ticks:{color:"#e9ecff",callback:v=>"$"+(v/1000)+"k"},
-             grid:{color:"rgba(255,255,255,.06)"}},
-          x:{ticks:{color:"#e9ecff"},grid:{display:false}}
-        }
-      }
-    });
-    const annual = total*12;
-    let score = 100 - (Number(P)/Math.max(annual,1))*35;
-    score = Math.max(0,Math.min(100,score));
-    new Chart(document.getElementById("pcs-afford-chart"),{
-      type:"doughnut",
-      data:{
-        labels:["Score","Remaining"],
-        datasets:[{
-          data:[score,100-score],
-          backgroundColor:["#6aa7ff","#1a2239"],
-          borderWidth:0,
-          cutout:"70%"
-        }]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{legend:{display:false},tooltip:{enabled:false}}
-      }
-    });
-    document.getElementById("pcs-afford-summary").textContent =
-      "Affordability Score: "+score.toFixed(0)+"/100.";
-    const popEst = safe(city,"population.estimate", safe(city,"population",0)) || 0;
-    const days =
-      safe(city,"housing.market.average_days_on_market", null) ??
-      safe(city,"housing.market.average_days_on_market_range.low", null);
-    const facts=[
-      {label:"Population",value:Number(popEst).toLocaleString()},
-      {label:"Median Age",value:safe(city,"population.median_age", safe(city,"median_age", 0))},
-      {label:"Median Household Income",value:money(medInc)},
-      {label:"Poverty Rate",value:(safe(city,"income.poverty_rate_percent", safe(city,"poverty_rate_percent",0)) || 0) + "%"},
-      {label:"Median Home Value",value:money(safe(city,"housing.median_value_owner_occupied", P))},
-      {label:"Avg Days on Market",value:(days != null ? String(days) : "—")}
-    ];
-    let html="";
-    facts.forEach(f=>{
-      html+=`
-        <div class="pcs-fact">
-          <div class="pcs-fact-label">${f.label}</div>
-          <div class="pcs-fact-value">${f.value}</div>
-        </div>`;
-    });
-    document.getElementById("pcs-quickfacts").innerHTML=html;
-  }
-  function boot(){
-    init().catch(err=>{
-      console.error("PCS Snapshot error:",err);
-      document.getElementById("pcs-snapshot-wrap").innerHTML =
-        "<div style='color:#e9ecff;font-size:14px;padding:24px;'>PCS Snapshot is temporarily unavailable. Try again later.</div>";
-    });
-  }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-})();
-  </script>
-        <!--  =========================================================
-       JAVASCRIPT — BASE COMPARISON
-       ✅ FIX: Reads images from city.image_url
-  =========================================================  -->
-        <script>
-  (function(){
+  (function () {
     "use strict";
     const API_BASE = "https://pcsunited.netlify.app/api";
     const DIRECT_FN_BASE = "https://pcsunited.netlify.app/.netlify/functions";
-    const MILPAY_JSON_URL =
-      "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/militaryPayTables.json";
-    const CITY_GITHUB_RAW_BASE =
-      "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/";
-    const $ = (q)=>document.querySelector(q);
+    const MILPAY_JSON_URL = "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/militaryPayTables.json";
+    const CITY_GITHUB_RAW_BASE = "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/";
+    const PCS_BASE_REGISTRY = {
+      "Andrews AFB":          { fileKey: "Andrews",          zip: "20762" },
+      "Barksdale AFB":        { fileKey: "Barksdale",        zip: "71110" },
+      "Charleston AFB":       { fileKey: "Charleston",       zip: "29404" },
+      "Davis-Monthan AFB":    { fileKey: "Davis-Monthan",    zip: "85707" },
+      "Dover AFB":            { fileKey: "Dover",            zip: "19902" },
+      "Dyess AFB":            { fileKey: "Dyess",            zip: "79607" },
+      "Eglin AFB":            { fileKey: "Eglin",            zip: "32542" },
+      "Elmendorf AFB":        { fileKey: "Elmendorf",        zip: "99506" },
+      "Fort Sam Houston":     { fileKey: "Fort-Sam-Houston", zip: "78234" },
+      "Kirtland AFB":         { fileKey: "Kirtland",         zip: "87117" },
+      "Lackland":             { fileKey: "Lackland",         zip: "78236" },
+      "Langley AFB":          { fileKey: "Langley",          zip: "23665" },
+      "Laughlin AFB":         { fileKey: "Laughlin",         zip: "78843" },
+      "Little Rock AFB":      { fileKey: "Little-Rock",      zip: "72099" },
+      "Luke AFB":             { fileKey: "Luke",             zip: "85309" },
+      "MacDill AFB":          { fileKey: "MacDill",          zip: "33621" },
+      "McConnell AFB":        { fileKey: "McConnell",        zip: "67221" },
+      "McGuire AFB":          { fileKey: "McGuire",          zip: "08641" },
+      "Minot AFB":            { fileKey: "Minot",            zip: "58705" },
+      "Nellis AFB":           { fileKey: "Nellis",           zip: "89191" },
+      "Offutt AFB":           { fileKey: "Offutt",           zip: "68113" },
+      "Peterson AFB":         { fileKey: "Peterson",         zip: "80914" },
+      "Randolph":             { fileKey: "Randolph",         zip: "78150" },
+      "Robins AFB":           { fileKey: "Robins",           zip: "31098" },
+      "Scott AFB":            { fileKey: "Scott",            zip: "62225" },
+      "Tinker AFB":           { fileKey: "Tinker",           zip: "73145" },
+      "Travis AFB":           { fileKey: "Travis",           zip: "94535" },
+      "Wright-Patterson AFB": { fileKey: "Wright-Patterson", zip: "45433" }
+    };
+    const PCS_BASE_ALIASES = {
+      "Andrews": "Andrews AFB",
+      "AndrewsAFB": "Andrews AFB",
+      "Barksdale": "Barksdale AFB",
+      "BarksdaleAFB": "Barksdale AFB",
+      "Charleston": "Charleston AFB",
+      "CharlestonAFB": "Charleston AFB",
+      "Davis-Monthan": "Davis-Monthan AFB",
+      "DavisMonthan": "Davis-Monthan AFB",
+      "DavisMonthanAFB": "Davis-Monthan AFB",
+      "DMAFB": "Davis-Monthan AFB",
+      "Dover": "Dover AFB",
+      "DoverAFB": "Dover AFB",
+      "Dyess": "Dyess AFB",
+      "DyessAFB": "Dyess AFB",
+      "Eglin": "Eglin AFB",
+      "EglinAFB": "Eglin AFB",
+      "Elmendorf": "Elmendorf AFB",
+      "ElmendorfAFB": "Elmendorf AFB",
+      "JBER": "Elmendorf AFB",
+      "Joint Base Elmendorf-Richardson": "Elmendorf AFB",
+      "Fort-Sam-Houston": "Fort Sam Houston",
+      "FortSamHouston": "Fort Sam Houston",
+      "JBSA-Fort-Sam-Houston": "Fort Sam Houston",
+      "JBSA-Fort Sam Houston": "Fort Sam Houston",
+      "Kirtland": "Kirtland AFB",
+      "KirtlandAFB": "Kirtland AFB",
+      "LacklandAFB": "Lackland",
+      "JBSA-Lackland": "Lackland",
+      "JBSA Lackland": "Lackland",
+      "Langley": "Langley AFB",
+      "LangleyAFB": "Langley AFB",
+      "Joint Base Langley-Eustis": "Langley AFB",
+      "Laughlin": "Laughlin AFB",
+      "LaughlinAFB": "Laughlin AFB",
+      "Little-Rock": "Little Rock AFB",
+      "LittleRock": "Little Rock AFB",
+      "LittleRockAFB": "Little Rock AFB",
+      "Luke": "Luke AFB",
+      "LukeAFB": "Luke AFB",
+      "MacDill": "MacDill AFB",
+      "MacDillAFB": "MacDill AFB",
+      "McConnell": "McConnell AFB",
+      "McConnellAFB": "McConnell AFB",
+      "McGuire": "McGuire AFB",
+      "McGuireAFB": "McGuire AFB",
+      "JBMDL": "McGuire AFB",
+      "Joint Base McGuire-Dix-Lakehurst": "McGuire AFB",
+      "Minot": "Minot AFB",
+      "MinotAFB": "Minot AFB",
+      "Nellis": "Nellis AFB",
+      "NellisAFB": "Nellis AFB",
+      "Offutt": "Offutt AFB",
+      "OffuttAFB": "Offutt AFB",
+      "Peterson": "Peterson AFB",
+      "PetersonAFB": "Peterson AFB",
+      "Peterson SFB": "Peterson AFB",
+      "Peterson Space Force Base": "Peterson AFB",
+      "Randolph AFB": "Randolph",
+      "RandolphAFB": "Randolph",
+      "JBSA-Randolph": "Randolph",
+      "JBSA Randolph": "Randolph",
+      "Robins": "Robins AFB",
+      "RobinsAFB": "Robins AFB",
+      "Scott": "Scott AFB",
+      "ScottAFB": "Scott AFB",
+      "Tinker": "Tinker AFB",
+      "TinkerAFB": "Tinker AFB",
+      "Travis": "Travis AFB",
+      "TravisAFB": "Travis AFB",
+      "Wright-Patterson": "Wright-Patterson AFB",
+      "WrightPatterson": "Wright-Patterson AFB",
+      "WrightPattersonAFB": "Wright-Patterson AFB",
+      "WPAFB": "Wright-Patterson AFB"
+    };
+    function pcsCanonicalBaseName(raw) {
+      const s = String(raw || "").trim();
+      if (!s) return "";
+      return PCS_BASE_REGISTRY[s] ? s : (PCS_BASE_ALIASES[s] || s);
+    }
+    function pcsFileKeyFromBase(raw) {
+      const base = pcsCanonicalBaseName(raw);
+      return (PCS_BASE_REGISTRY[base] && PCS_BASE_REGISTRY[base].fileKey) || "Lackland";
+    }
+    function pcsZipFromBase(raw) {
+      const base = pcsCanonicalBaseName(raw);
+      return (PCS_BASE_REGISTRY[base] && PCS_BASE_REGISTRY[base].zip) || "78236";
+    }
+    function $(q){ return document.querySelector(q); }
     function money(n){
       const x = Number(n);
       if (!Number.isFinite(x)) return "$0";
       return "$" + Math.round(x).toLocaleString();
     }
-    function safe(obj, path, fb){
+    function safe(obj, path, fb) {
       try { return path.split(".").reduce((a,k)=>a && a[k], obj) ?? fb; }
       catch { return fb; }
     }
@@ -1175,59 +1223,98 @@
       if (m) return m[1] + "-" + m[2];
       return s.replace(/\s+/g,"");
     }
-    function isE(rankKey){ return String(rankKey||"").startsWith("E-"); }
-    function pickYOS(y, table){
-      const ks = Object.keys(table || {}).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
-      if(!ks.length) return String(y);
-      let best = ks[0], diff = Math.abs(y-best);
-      ks.forEach(k=>{
-        const d = Math.abs(y-k);
-        if(d<diff){diff=d;best=k;}
-      });
-      return String(best);
-    }
-    function normalizeBaseKey(raw){
-      const s = String(raw || "").trim();
-      if (s.toLowerCase() === "san antonio") return "Lackland";
-      if (s.toLowerCase() === "fort sam houston") return "Fort-Sam-Houston";
-      return (s || "Lackland").replace(/[^A-Za-z0-9-]/g, "");
+    function isE(rankKey) { return String(rankKey || "").startsWith("E-"); }
+    function pickYOS(y, table) {
+      const ks = Object.keys(table || {}).map(k => parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
+      if (!ks.length) return String(y);
+      let chosen = ks[0];
+      for (const k of ks) {
+        if (k <= y) chosen = k;
+      }
+      return String(chosen);
     }
     async function load(url){
       const r = await fetch(url, { cache: "no-store" });
-      if(!r.ok) throw new Error("load fail "+url+" ("+r.status+")");
+      if(!r.ok) throw new Error("load fail " + url + " (" + r.status + ")");
       const ct = (r.headers.get("content-type") || "").toLowerCase();
-      if (ct.includes("text/html")) throw new Error("non-json response "+url+" (html)");
+      if (ct.includes("text/html")) throw new Error("non-json response " + url + " (html)");
       return await r.json();
     }
-    async function loadCityByBase(baseLoc){
-      const cityKey = normalizeBaseKey(baseLoc);
-      // 1) /api redirect
-      try { return await load(`${API_BASE}/city?cityKey=${encodeURIComponent(cityKey)}`); } catch(e){}
-      // 2) direct function
-      try { return await load(`${DIRECT_FN_BASE}/city?cityKey=${encodeURIComponent(cityKey)}`); } catch(e){}
-      // 3) github raw fallback
-      return await load(`${CITY_GITHUB_RAW_BASE}${encodeURIComponent(cityKey)}.json`);
+    async function loadCityExact(fileKey){
+      const clean = String(fileKey || "").trim() || "Lackland";
+      try { return await load(`${API_BASE}/city?cityKey=${encodeURIComponent(clean)}`); } catch(e){}
+      try { return await load(`${DIRECT_FN_BASE}/city?cityKey=${encodeURIComponent(clean)}`); } catch(e){}
+      return await load(`${CITY_GITHUB_RAW_BASE}${encodeURIComponent(clean)}.json`);
     }
-    async function calcBah({ rank, yos, family, baseLoc }){
-      const pay = await load(MILPAY_JSON_URL);
-      const rankKey = normRank(rank);
+    function normalizeTrendDate(dt){
+      const s = String(dt || "").trim();
+      if (!s) return null;
+      const m = s.match(/^(\d{4})-(\d{2})-W(\d{1,2})$/);
+      if (m){
+        const y = Number(m[1]), mo = Number(m[2]), w = Number(m[3]);
+        const day = Math.min(28, 1 + (w-1)*7);
+        const iso = `${y}-${String(mo).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+        const d = new Date(iso);
+        return isNaN(d.getTime()) ? null : d;
+      }
+      const d = new Date(s);
+      return isNaN(d.getTime()) ? null : d;
+    }
+    function renderTrendApex(fullData) {
+      const chartEl = document.querySelector("#pcs-trend-chart-apex");
+      if (!chartEl) return;
+      if (window.pcsTrendChart) {
+        try { window.pcsTrendChart.destroy(); } catch {}
+      }
+      const seriesData = (Array.isArray(fullData) ? fullData : []).map(d => {
+        const dt = d.month || d.date || d.period || d.timestamp || null;
+        const price = d.median_sale_price ?? d.medianSalePrice ?? d.median ?? d.value ?? null;
+        const x = normalizeTrendDate(dt);
+        const y = Number(price);
+        return (x && Number.isFinite(y)) ? { x, y } : null;
+      }).filter(Boolean);
+      const options = {
+        chart: { type: 'line', height: 200, foreColor: '#e9ecff', toolbar: { show: false } },
+        stroke: { width: 3, curve: 'smooth', colors: ['#8ef3c5'] },
+        series: [{ name: "Median Sale Price", data: seriesData }],
+        xaxis: { type: 'datetime', labels: { style: { colors: '#e9ecff' } } },
+        yaxis: {
+          labels: { style: { colors: '#e9ecff' }, formatter: val => "$" + Math.round(val).toLocaleString() }
+        },
+        tooltip: { theme: 'dark', x: { format: "MMM yyyy" }, y: { formatter: v => "$" + Math.round(v).toLocaleString() } },
+        grid: { borderColor: "rgba(255,255,255,0.08)" }
+      };
+      window.pcsTrendChart = new ApexCharts(chartEl, options);
+      window.pcsTrendChart.render();
+    }
+    function getQuery() {
+      const u = new URL(window.location.href);
+      return {
+        type: (u.searchParams.get("type") || "ad").toLowerCase(),
+        rank: u.searchParams.get("rank") || sessionStorage.getItem("pcs_rank") || "E4",
+        yos: parseInt(u.searchParams.get("yos") || sessionStorage.getItem("pcs_yos") || "2", 10),
+        family: parseInt(u.searchParams.get("family") || sessionStorage.getItem("pcs_family") || "1", 10),
+        base: u.searchParams.get("base") || sessionStorage.getItem("pcs_new_base") || "Lackland",
+        cityKey: u.searchParams.get("cityKey") || sessionStorage.getItem("pcs_new_fileKey") || "Lackland",
+        curBase: u.searchParams.get("curBase") || sessionStorage.getItem("pcs_current_base") || "",
+        newBase: u.searchParams.get("newBase") || sessionStorage.getItem("pcs_new_base") || u.searchParams.get("base") || "Lackland",
+        curFileKey: u.searchParams.get("curFileKey") || sessionStorage.getItem("pcs_current_fileKey") || "",
+        newFileKey: u.searchParams.get("newFileKey") || sessionStorage.getItem("pcs_new_fileKey") || "",
+        curZip: u.searchParams.get("curZip") || sessionStorage.getItem("pcs_current_zip") || "",
+        newZip: u.searchParams.get("newZip") || sessionStorage.getItem("pcs_new_zip") || "",
+        va: parseInt(u.searchParams.get("va") || "0", 10)
+      };
+    }
+    async function calcBahFromPay(pay, opts){
+      const rankKey = normRank(opts.rank);
       const table = (pay.BASEPAY && pay.BASEPAY[rankKey]) ? pay.BASEPAY[rankKey] : {};
-      const yKey = pickYOS(parseInt(yos,10), table);
+      const yKey = pickYOS(parseInt(opts.yos,10), table);
       const basePay = table[yKey] || 0;
-      const bas = isE(rankKey) ? safe(pay,"BAS.enlisted",0) : safe(pay,"BAS.officer",0);
-      const baseToZip = safe(pay, "BAH.base_to_zip", {}) || {};
-      const zip =
-        baseToZip[baseLoc] ||
-        baseToZip[(baseLoc + " AFB")] ||
-        baseToZip[(baseLoc + " Air Force Base")] ||
-        baseToZip["Lackland"] ||
-        "78236";
+      const bas = isE(rankKey) ? safe(pay, "BAS.enlisted", 0) : safe(pay, "BAS.officer", 0);
+      const zip = String(opts.zip || pcsZipFromBase(opts.baseLoc) || "78236");
       const byZip = safe(pay, "BAH.by_zip", {}) || {};
-      const rec1 = byZip[String(zip)] || null;
-      const bahTX = pay.BAH_TX || {};
-      const rec2 = bahTX[String(zip)] || null;
-      const rec = rec1 || rec2;
-      const grp = (parseInt(family,10) > 1) ? safe(rec, "with", null) : safe(rec, "without", null);
+      const rec = byZip[zip] || null;
+      const grp = (parseInt(opts.family,10) > 1) ? safe(rec, "with", null) : safe(rec, "without", null);
       let bah = 0;
       if (grp && grp[rankKey] != null) bah = Number(grp[rankKey]) || 0;
       return { bah, basePay, bas, zip };
@@ -1293,11 +1380,11 @@
       );
     }
     function pickYoY(city){
-      const yoy =
+      return (
         safe(city,"housing.market.zillow_one_year_change_percent", null) ??
         safe(city,"housing.market.one_year_change_percent", null) ??
-        safe(city,"yoy_change_percent", null);
-      return yoy;
+        safe(city,"yoy_change_percent", null)
+      );
     }
     function pickDOM(city){
       return (
@@ -1309,7 +1396,6 @@
     function locationName(city, baseLoc){
       return (city.place || city.city || city.name || baseLoc || "—");
     }
-    // ✅ NEW: set image from city.image_url
     function setImgFromCity(imgEl, city){
       if(!imgEl) return;
       const url = safe(city, "image_url", "") || safe(city, "imageUrl", "") || "";
@@ -1361,44 +1447,239 @@
         }
       });
     }
-    function getInputs(){
-      const u = new URL(window.location.href);
-      const fromUrl = {
-        rank: u.searchParams.get("rank"),
-        yos: u.searchParams.get("yos"),
-        family: u.searchParams.get("family"),
-        curBase: u.searchParams.get("curBase"),
-        newBase: u.searchParams.get("newBase") || u.searchParams.get("base")
-      };
-      const fromSession = {
-        rank: sessionStorage.getItem("pcs_rank"),
-        yos: sessionStorage.getItem("pcs_yos"),
-        family: sessionStorage.getItem("pcs_family"),
-        curBase: sessionStorage.getItem("pcs_current_base"),
-        newBase: sessionStorage.getItem("pcs_new_base")
-      };
-      const rank = (fromUrl.rank || fromSession.rank || "E7");
-      const yos = parseInt(fromUrl.yos || fromSession.yos || "16", 10);
-      const family = parseInt(fromUrl.family || fromSession.family || "4", 10);
-      const curBase = (fromUrl.curBase || fromSession.curBase || "").trim();
-      const newBase = (fromUrl.newBase || fromSession.newBase || u.searchParams.get("base") || "Lackland").trim();
-      return { rank, yos, family, curBase, newBase };
+    function renderQuickFacts(city, fallbackPrice){
+      const medInc =
+        safe(city,"income.median_household_income", null) ??
+        safe(city,"demographics.income.median_household_income", null) ??
+        safe(city,"median_household_income", 60000);
+      const popEst = safe(city,"population.estimate", safe(city,"population",0)) || 0;
+      const days =
+        safe(city,"housing.market.average_days_on_market", null) ??
+        safe(city,"housing.market.average_days_on_market_range.low", null);
+      const facts = [
+        {label:"Population", value:Number(popEst).toLocaleString()},
+        {label:"Median Age", value:safe(city,"population.median_age", safe(city,"median_age", 0))},
+        {label:"Median Household Income", value:money(medInc)},
+        {label:"Poverty Rate", value:(safe(city,"income.poverty_rate_percent", safe(city,"poverty_rate_percent",0)) || 0) + "%"},
+        {label:"Median Home Value", value:money(safe(city,"housing.median_value_owner_occupied", fallbackPrice))},
+        {label:"Avg Days on Market", value:(days != null ? String(days) : "—")}
+      ];
+      let html = "";
+      facts.forEach(f=>{
+        html += `
+          <div class="pcs-fact">
+            <div class="pcs-fact-label">${f.label}</div>
+            <div class="pcs-fact-value">${f.value}</div>
+          </div>`;
+      });
+      $("#pcs-quickfacts").innerHTML = html;
     }
-    async function init(){
+    async function initHeaderAndCharts(pay, p, city){
+      const rankKey = normRank(p.rank);
+      const isAD = p.type === "ad";
+      let base=0, bah=0, bas=0;
+      if (isAD) {
+        const vals = await calcBahFromPay(pay, {
+          rank: p.rank,
+          yos: p.yos,
+          family: p.family,
+          baseLoc: p.newBase || p.base,
+          zip: p.newZip || pcsZipFromBase(p.newBase || p.base)
+        });
+        base = vals.basePay || 0;
+        bah = vals.bah || 0;
+        bas = vals.bas || 0;
+      } else {
+        const full = pay.DISABILITY_FULL || {};
+        const keys = Object.keys(full).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
+        let best = keys[0] ?? 0, diff=Math.abs(p.va-best);
+        keys.forEach(k=>{
+          const d = Math.abs(p.va-k);
+          if(d < diff){ diff=d; best=k; }
+        });
+        const row = full[String(best)];
+        base = row ? row.veteran : 0;
+        bah = 0;
+        bas = 0;
+      }
+      const total = base + bah + bas;
+      $("#pcs-city-line").textContent =
+        (city.place || city.city || city.name || "Selected Location") + " • Quick PCS Snapshot";
+      $("#pcs-income-main").textContent = money(total) + " / month";
+      $("#pcs-income-breakdown").textContent =
+        "Base Pay: " + money(base) + " • BAH: " + money(bah) + " • BAS: " + money(bas);
+      const medInc =
+        safe(city,"income.median_household_income", null) ??
+        safe(city,"demographics.income.median_household_income", null) ??
+        safe(city,"median_household_income", 60000);
+      const low = medInc * 0.6;
+      const avg = medInc;
+      const high = medInc * 1.35;
+      const userA = total * 12;
+      new Chart(document.getElementById("pcs-income-chart"),{
+        type:"bar",
+        data:{
+          labels:["Low","Avg","High","You"],
+          datasets:[{
+            data:[low,avg,high,userA],
+            backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#8ef3c5"]
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:{legend:{display:false}},
+          scales:{
+            y:{ticks:{color:"#e9ecff", callback:v=>"$"+(v/1000)+"k"}, grid:{color:"rgba(255,255,255,.06)"}},
+            x:{ticks:{color:"#e9ecff"}, grid:{display:false}}
+          }
+        }
+      });
+      $("#pcs-income-summary").textContent =
+        ((userA-avg)>=0? "+" : "") +
+        (((userA-avg)/Math.max(avg,1))*100).toFixed(1) +
+        "% vs median household income";
+      const P =
+        safe(city,"housing.market.median_listing_price_realtor", null) ??
+        safe(city,"housing.market.median_listing_price", null) ??
+        safe(city,"housing.market.median_list_price", null) ??
+        safe(city,"avg_home_value", null) ??
+        safe(city,"average_home_value", null) ??
+        safe(city,"housing.median_value_owner_occupied", 295000);
+      const rate = 0.0675/12;
+      const N = 360;
+      const M = Number(P) * (rate*Math.pow(1+rate,N)) / (Math.pow(1+rate,N)-1);
+      const bahLow = M*0.85;
+      const bahAvg = M;
+      const bahHigh = M*1.15;
+      new Chart(document.getElementById("pcs-bah-chart"),{
+        type:"bar",
+        data:{
+          labels:["Low","Avg","High","Your BAH"],
+          datasets:[{
+            data:[bahLow,bahAvg,bahHigh,bah],
+            backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#6aa7ff"]
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:{legend:{display:false}},
+          scales:{
+            y:{ticks:{color:"#e9ecff",callback:v=>"$"+Math.round(v)}, grid:{color:"rgba(255,255,255,.06)"}},
+            x:{ticks:{color:"#e9ecff"},grid:{display:false}}
+          }
+        }
+      });
+      $("#pcs-bah-summary").textContent =
+        (bah > 0 && bahAvg > 0)
+          ? ("Your BAH covers ~"+((bah/bahAvg)*100).toFixed(1)+"% of estimated mortgage.")
+          : ("BAH not found for this rank/base yet — pay tables may be missing that row.");
+      const allMonths =
+        safe(city,"housing.market.sale_history_36_months", null) ??
+        safe(city,"housing.sale_history_36_months", null) ??
+        safe(city,"market.sale_history_36_months", []) ??
+        [];
+      const last12 = Array.isArray(allMonths) ? allMonths.slice(-12) : [];
+      const last36 = Array.isArray(allMonths) ? allMonths.slice(-36) : [];
+      renderTrendApex(last12);
+      $("#btn-1yr").onclick = () => {
+        $("#btn-1yr").classList.add("active");
+        $("#btn-3yr").classList.remove("active");
+        renderTrendApex(last12);
+      };
+      $("#btn-3yr").onclick = () => {
+        $("#btn-3yr").classList.add("active");
+        $("#btn-1yr").classList.remove("active");
+        renderTrendApex(last36);
+      };
+      const yoy =
+        safe(city,"housing.market.zillow_one_year_change_percent", null) ??
+        safe(city,"housing.market.one_year_change_percent", null) ??
+        safe(city,"yoy_change_percent", 0);
+      $("#pcs-trend-summary").textContent =
+        "12-month change: "+(Number(yoy)||0)+"% • " +
+        (safe(city,"housing.market.market_type_summary","") || "");
+      const medSale =
+        safe(city,"housing.market.q1.median_sale_price", null) ??
+        safe(city,"housing.market.q1_2025.median_sale_price", null) ??
+        safe(city,"housing.market.median_sale_price_current", null) ??
+        safe(city,"housing.market.median_sale_price", 0);
+      let avgSale =
+        safe(city,"housing.market.q1.average_sale_price", null) ??
+        safe(city,"housing.market.q1_2025.average_sale_price", null) ??
+        safe(city,"housing.market.average_sale_price", null);
+      const medList =
+        safe(city,"housing.market.median_listing_price_realtor", null) ??
+        safe(city,"housing.market.median_listing_price", null) ??
+        safe(city,"housing.market.median_list_price", 0);
+      let note = "";
+      if (avgSale == null || !Number.isFinite(Number(avgSale)) || Number(avgSale) <= 0){
+        avgSale = Number(medSale) || 0;
+        if (avgSale > 0) note = "Avg Sale not provided in this base JSON — using Median Sale as a placeholder.";
+      }
+      $("#pcs-pricebreak-note").textContent = note;
+      new Chart(document.getElementById("pcs-pricebreak-chart"),{
+        type:"bar",
+        data:{
+          labels:["Median Sale","Avg Sale","Median List"],
+          datasets:[{
+            data:[Number(medSale)||0, Number(avgSale)||0, Number(medList)||0],
+            backgroundColor:["#8ef3c5","#6aa7ff","#4f86ff"]
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:{legend:{display:false}},
+          scales:{
+            y:{ticks:{color:"#e9ecff",callback:v=>"$"+(v/1000)+"k"}, grid:{color:"rgba(255,255,255,.06)"}},
+            x:{ticks:{color:"#e9ecff"},grid:{display:false}}
+          }
+        }
+      });
+      const annual = total*12;
+      let score = 100 - (Number(P)/Math.max(annual,1))*35;
+      score = Math.max(0,Math.min(100,score));
+      new Chart(document.getElementById("pcs-afford-chart"),{
+        type:"doughnut",
+        data:{
+          labels:["Score","Remaining"],
+          datasets:[{
+            data:[score,100-score],
+            backgroundColor:["#6aa7ff","#1a2239"],
+            borderWidth:0,
+            cutout:"70%"
+          }]
+        },
+        options:{
+          responsive:true,
+          maintainAspectRatio:false,
+          plugins:{legend:{display:false},tooltip:{enabled:false}}
+        }
+      });
+      $("#pcs-afford-summary").textContent = "Affordability Score: "+score.toFixed(0)+"/100.";
+      renderQuickFacts(city, P);
+    }
+    async function initComparison(pay, p){
       const status = $("#pcsc-status");
-      const { rank, yos, family, curBase, newBase } = getInputs();
+      const curBase = pcsCanonicalBaseName(p.curBase || "");
+      const newBase = pcsCanonicalBaseName(p.newBase || p.base || "Lackland");
       if(!curBase || !newBase){
         status.textContent = "Missing selections: choose Current Duty Station + Upcoming Base on the input strip, then Analyze.";
         return;
       }
+      const curFileKey = String(p.curFileKey || pcsFileKeyFromBase(curBase)).trim();
+      const newFileKey = String(p.newFileKey || pcsFileKeyFromBase(newBase)).trim();
+      const curZip = String(p.curZip || pcsZipFromBase(curBase)).trim();
+      const newZip = String(p.newZip || pcsZipFromBase(newBase)).trim();
       status.textContent = "Loading base comparison…";
       const [cityCur, cityNew, bahCur, bahNew] = await Promise.all([
-        loadCityByBase(curBase),
-        loadCityByBase(newBase),
-        calcBah({ rank, yos, family, baseLoc: curBase }),
-        calcBah({ rank, yos, family, baseLoc: newBase })
+        loadCityExact(curFileKey),
+        loadCityExact(newFileKey),
+        calcBahFromPay(pay, { rank: p.rank, yos: p.yos, family: p.family, baseLoc: curBase, zip: curZip }),
+        calcBahFromPay(pay, { rank: p.rank, yos: p.yos, family: p.family, baseLoc: newBase, zip: newZip })
       ]);
-      // ✅ NEW: images from JSON
       setImgFromCity($("#img-current"), cityCur);
       setImgFromCity($("#img-upcoming"), cityNew);
       const priceCur = pickMedianPrice(cityCur);
@@ -1437,11 +1718,22 @@
       chartUpcoming = renderHousingChart("#chart-upcoming", bahNew.bah, mortNew);
       status.textContent = "Loaded.";
     }
+    async function init(){
+      const p = getQuery();
+      const pay = await load(MILPAY_JSON_URL);
+      const primaryFileKey = String(p.newFileKey || p.cityKey || pcsFileKeyFromBase(p.newBase || p.base)).trim();
+      const primaryCity = await loadCityExact(primaryFileKey);
+      await initHeaderAndCharts(pay, p, primaryCity);
+      await initComparison(pay, p);
+    }
     function boot(){
       init().catch(err=>{
-        console.error("PCS compare card error:", err);
-        const status = $("#pcsc-status");
-        status.textContent = "Base comparison unavailable right now. Check console for details.";
+        console.error("PCS Snapshot error:", err);
+        const wrap = document.getElementById("pcs-snapshot-wrap");
+        if (wrap) {
+          wrap.innerHTML =
+            "<div style='color:#e9ecff;font-size:14px;padding:24px;'>PCS Snapshot is temporarily unavailable. Try again later.</div>";
+        }
       });
     }
     if (document.readyState === "loading") {

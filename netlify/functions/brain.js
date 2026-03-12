@@ -1,29 +1,30 @@
 // netlify/functions/brain.js
 // ============================================================
-// CENTRAL BRAIN (v1.9.3-cjs) — Pay + City + FULL Mortgage Breakdown (BACKWARD-COMPAT)
+// CENTRAL BRAIN (v2.0.0-cjs) — Pay + City + FULL Mortgage Breakdown
 //
-// ✅ CITY FIX (Base-named JSON compatibility):
-// Your /netlify/functions/cities folder uses BASE-NAMED files:
-//   Nellis.json, Davis-Monthan.json, Fort-Sam-Houston.json, Randolph.json, etc.
-// But callers often use canonical city keys like: LasVegas, Tucson, SanAntonio.
-// This keeps canonical cityKey for output/debug, BUT loads the correct FILE key.
+// ✅ INDEX ROUTING UPGRADE:
+// - Uses /netlify/functions/cities/index.byBase.json as the routing authority
+// - Resolves base aliases -> canonical base -> cityKey/file/zip
+// - Removes dependence on fragile hardcoded base/city/file maps
 //
-// ✅ MORTGAGE CHANGE (Option 1):
-// - Mortgage MATH is REMOVED from brain.js
-// - brain.js calls mortgage.js (single source of truth) and maps the result
-// - Output shape remains backward-compatible (mortgage.breakdown + legacy aliases)
+// ✅ MORTGAGE:
+// - No mortgage math in brain.js
+// - Calls mortgage.js as single source of truth
 //
-// ✅ FIX (Credit Score not affecting APR):
-// - Do NOT pass aprOverride from profile when creditScore is present.
-// - Only pass aprOverride when user explicitly provides body.apr OR when creditScore is missing.
-// - This allows mortgage.js creditScore tiers to drive APR as intended.
+// ✅ PAY / BAH:
+// - Uses militaryPayTables.json for pay tables
+// - Uses BAH.by_zip as canonical source
+// - ZIP derivation priority:
+//    1) explicit profile/body zip
+//    2) index.byBase.json
+//    3) militaryPayTables.json BAH.base_to_zip
 //
 // ✅ NETLIFY STABILITY:
-// - CommonJS only (no top-level ESM import/export, no shim, no dynamic import)
-// - Works with the rest of your functions that already use require()
+// - CommonJS only
+// - No top-level ESM import/export
 //
 // ENDPOINT:
-//   POST /api/brain   (via netlify.toml redirect)
+//   POST /api/brain
 // ============================================================
 
 "use strict";
@@ -31,21 +32,25 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const { createClient } = require("@supabase/supabase-js");
-
-// Local mortgage engine handler (must be CommonJS: exports.handler = ...)
 const { handler: mortgageHandler } = require("./mortgage.js");
 
-const SCHEMA_VERSION = "1.2";
+const SCHEMA_VERSION = "2.0";
 
 // -----------------------------
 // //#0 Paths (Netlify-safe)
 // -----------------------------
-const __ROOT = process.cwd(); // /var/task
+const __ROOT = process.cwd();
+
 const __PAY_TABLES_PATHS = [
   path.join(__ROOT, "netlify", "functions", "militaryPayTables.json"),
   path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
 ];
+
 const __CITIES_DIR = path.join(__ROOT, "netlify", "functions", "cities");
+
+const __BASE_INDEX_PATHS = [
+  path.join(__ROOT, "netlify", "functions", "cities", "index.byBase.json"),
+];
 
 // -----------------------------
 // //#1 CORS (robust)
@@ -68,7 +73,11 @@ function buildCorsHeaders(event) {
 }
 
 function respond(event, statusCode, obj) {
-  return { statusCode, headers: buildCorsHeaders(event), body: JSON.stringify(obj) };
+  return {
+    statusCode,
+    headers: buildCorsHeaders(event),
+    body: JSON.stringify(obj),
+  };
 }
 
 // -----------------------------
@@ -130,7 +139,7 @@ function pickFirst(obj, keys) {
 }
 
 // -----------------------------
-// //#2.5 Restored helper functions (model + overrides)
+// //#2.5 Pay model + overrides
 // -----------------------------
 function detectPayModel(profile) {
   const modeRaw = lower(profile?.mode);
@@ -255,62 +264,17 @@ function applyOverridesToProfile(profile, overrides) {
 }
 
 // -----------------------------
-// //#2.05 CityKey from Base (PATCH)
-// -----------------------------
-function deriveCityKeyFromBase(profile, payTables) {
-  const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
-  const norm = normalizeBaseName(baseRaw);
-  if (!norm) return { cityKey: null, source: "none", base: String(baseRaw || "").trim() };
-
-  const tbl = payTables?.CITY_BY_BASE || payTables?.CITY?.by_base || payTables?.city_by_base || null;
-
-  if (tbl && typeof tbl === "object") {
-    const mapped = tbl[norm] || tbl[String(baseRaw || "").trim()] || null;
-    if (mapped)
-      return {
-        cityKey: safeKey(mapped),
-        source: "payTables.CITY_BY_BASE",
-        base: String(baseRaw || "").trim(),
-      };
-  }
-
-  const MAP = {
-    NELLIS: "LasVegas",
-    NELLISAFB: "LasVegas",
-    DAVISMONTHAN: "Tucson",
-    DAVISMONTHANAFB: "Tucson",
-
-    FORTSAMHOUSTON: "SanAntonio",
-    JBSALACKLAND: "SanAntonio",
-    LACKLAND: "SanAntonio",
-    RANDOLPH: "SanAntonio",
-    RANDOLPHAFB: "SanAntonio",
-    LUKE: "Phoenix",
-    LUKEAFB: "Phoenix",
-    DYESS: "Abilene",
-    DYESSAFB: "Abilene",
-    KIRTLAND: "Albuquerque",
-    KIRTLANDAFB: "Albuquerque",
-    LAUGHLIN: "DelRio",
-    LAUGHLINAFB: "DelRio",
-  };
-
-  const hit = MAP[norm] || null;
-  return {
-    cityKey: hit ? safeKey(hit) : null,
-    source: hit ? "internalBaseCityMap" : "none",
-    base: String(baseRaw || "").trim(),
-  };
-}
-
-// -----------------------------
 // //#3 File loading (Netlify-safe)
 // -----------------------------
 let __PAY_TABLES_CACHE__ = null;
 let __PAY_TABLES_PATH_USED__ = null;
 
-const __CITY_CACHE__ = new Map(); // cache by fileKey
-let __CITY_FILE_INDEX__ = null;   // cached directory listing
+let __BASE_INDEX_CACHE__ = null;
+let __BASE_INDEX_PATH_USED__ = null;
+let __BASE_INDEX_NORMALIZED__ = null;
+
+const __CITY_CACHE__ = new Map();
+let __CITY_FILE_INDEX__ = null;
 
 function loadPayTables() {
   if (__PAY_TABLES_CACHE__) return __PAY_TABLES_CACHE__;
@@ -325,8 +289,8 @@ function loadPayTables() {
 
   if (!found) {
     throw new Error(
-      `militaryPayTables.json not found. Tried:\n- ${( __PAY_TABLES_PATHS || []).join("\n- ")}\n` +
-      `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
+      `militaryPayTables.json not found. Tried:\n- ${(__PAY_TABLES_PATHS || []).join("\n- ")}\n` +
+        `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
     );
   }
 
@@ -334,6 +298,62 @@ function loadPayTables() {
   __PAY_TABLES_CACHE__ = JSON.parse(raw);
   __PAY_TABLES_PATH_USED__ = found;
   return __PAY_TABLES_CACHE__;
+}
+
+function loadBaseIndex() {
+  if (__BASE_INDEX_CACHE__) return __BASE_INDEX_CACHE__;
+
+  let found = null;
+  for (const p of __BASE_INDEX_PATHS || []) {
+    if (fs.existsSync(p)) {
+      found = p;
+      break;
+    }
+  }
+
+  if (!found) {
+    throw new Error(
+      `index.byBase.json not found. Tried:\n- ${(__BASE_INDEX_PATHS || []).join("\n- ")}\n` +
+        `Fix: ensure the file exists at netlify/functions/cities/index.byBase.json and is bundled.`
+    );
+  }
+
+  const raw = fs.readFileSync(found, "utf8");
+  __BASE_INDEX_CACHE__ = JSON.parse(raw);
+  __BASE_INDEX_PATH_USED__ = found;
+  __BASE_INDEX_NORMALIZED__ = normalizeBaseIndex(__BASE_INDEX_CACHE__);
+  return __BASE_INDEX_CACHE__;
+}
+
+function normalizeBaseIndex(indexRaw) {
+  const bases = indexRaw?.bases || {};
+  const aliases = indexRaw?.aliases || {};
+
+  const byCanonicalNorm = new Map();
+  const aliasToCanonical = new Map();
+
+  for (const [canonicalName, meta] of Object.entries(bases)) {
+    const norm = normalizeBaseName(canonicalName);
+    if (!norm) continue;
+    byCanonicalNorm.set(norm, {
+      canonicalBase: canonicalName,
+      cityKey: safeKey(meta?.cityKey || ""),
+      file: safeKey(meta?.file || ""),
+      zip: String(meta?.zip || "").trim() || null,
+      raw: meta || {},
+    });
+    aliasToCanonical.set(norm, canonicalName);
+  }
+
+  for (const [alias, canonicalName] of Object.entries(aliases)) {
+    const aliasNorm = normalizeBaseName(alias);
+    if (!aliasNorm) continue;
+    if (bases[canonicalName]) {
+      aliasToCanonical.set(aliasNorm, canonicalName);
+    }
+  }
+
+  return { byCanonicalNorm, aliasToCanonical };
 }
 
 function listCityFiles() {
@@ -358,72 +378,101 @@ function cityFileExists(fileKey) {
   return idx.has(k);
 }
 
-function baseToCityFileKey(baseRaw) {
+// -----------------------------
+// //#3.5 Base index routing
+// -----------------------------
+function resolveBaseMeta(baseRaw) {
+  loadBaseIndex();
+
   const norm = normalizeBaseName(baseRaw);
-  if (!norm) return null;
+  if (!norm) {
+    return {
+      ok: false,
+      inputBase: String(baseRaw || "").trim(),
+      canonicalBase: null,
+      cityKey: null,
+      file: null,
+      zip: null,
+      source: "none",
+    };
+  }
 
-  const MAP = {
-    NELLIS: "Nellis",
-    NELLISAFB: "Nellis",
+  const normalized = __BASE_INDEX_NORMALIZED__;
+  const canonicalBase = normalized?.aliasToCanonical?.get(norm) || null;
 
-    DAVISMONTHAN: "Davis-Monthan",
-    DAVISMONTHANAFB: "Davis-Monthan",
+  if (!canonicalBase) {
+    return {
+      ok: false,
+      inputBase: String(baseRaw || "").trim(),
+      canonicalBase: null,
+      cityKey: null,
+      file: null,
+      zip: null,
+      source: "unmatched",
+    };
+  }
 
-    FORTSAMHOUSTON: "Fort-Sam-Houston",
-    JBSALACKLAND: "Lackland",
-    LACKLAND: "Lackland",
-    RANDOLPH: "Randolph",
-    RANDOLPHAFB: "Randolph",
+  const canonicalNorm = normalizeBaseName(canonicalBase);
+  const hit = normalized?.byCanonicalNorm?.get(canonicalNorm) || null;
 
-    LUKE: "Luke",
-    LUKEAFB: "Luke",
+  if (!hit) {
+    return {
+      ok: false,
+      inputBase: String(baseRaw || "").trim(),
+      canonicalBase,
+      cityKey: null,
+      file: null,
+      zip: null,
+      source: "canonical_without_meta",
+    };
+  }
 
-    DYESS: "Dyess",
-    DYESSAFB: "Dyess",
+  const source =
+    normalizeBaseName(baseRaw) === canonicalNorm ? "baseIndex.canonical" : "baseIndex.alias";
 
-    KIRTLAND: "Kirtland",
-    KIRTLANDAFB: "Kirtland",
-
-    LAUGHLIN: "Laughlin",
-    LAUGHLINAFB: "Laughlin",
+  return {
+    ok: true,
+    inputBase: String(baseRaw || "").trim(),
+    canonicalBase: hit.canonicalBase,
+    cityKey: hit.cityKey || null,
+    file: hit.file || null,
+    zip: hit.zip || null,
+    source,
+    raw: hit.raw,
   };
-
-  const hit = MAP[norm] || null;
-  return hit ? safeKey(hit) : null;
 }
 
-function canonicalCityToFileFallback(cityKeyCanonical) {
-  const k = safeKey(cityKeyCanonical);
-  if (!k) return null;
+function deriveCityKeyFromBase(profile) {
+  const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
+  const meta = resolveBaseMeta(baseRaw);
 
-  const MAP = {
-    LasVegas: "Nellis",
-    Tucson: "Davis-Monthan",
-    SanAntonio: "Fort-Sam-Houston",
-    Phoenix: "Luke",
-    Abilene: "Dyess",
-    Albuquerque: "Kirtland",
-    DelRio: "Laughlin",
+  return {
+    cityKey: meta.ok ? safeKey(meta.cityKey) : null,
+    source: meta.ok ? meta.source : "none",
+    base: meta.ok ? meta.canonicalBase : String(baseRaw || "").trim(),
+    file: meta.ok ? meta.file : null,
+    zip: meta.ok ? meta.zip : null,
   };
-
-  const hit = MAP[k] || null;
-  return hit ? safeKey(hit) : null;
 }
 
 function resolveCityFileKey({ cityKeyCanonical, profile }) {
   const canonical = safeKey(cityKeyCanonical || "SanAntonio");
   const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
+  const baseMeta = resolveBaseMeta(baseRaw);
 
   const candidates = [];
-  candidates.push(canonical);
 
-  const baseFile = baseToCityFileKey(baseRaw);
-  if (baseFile) candidates.push(baseFile);
+  if (baseMeta?.file) candidates.push(baseMeta.file);
+  if (canonical) candidates.push(canonical);
 
-  const canonicalFallback = canonicalCityToFileFallback(canonical);
-  if (canonicalFallback) candidates.push(canonicalFallback);
-
-  candidates.push("Fort-Sam-Houston");
+  if (canonical === "SanAntonio") {
+    if (baseMeta?.file && cityFileExists(baseMeta.file)) {
+      candidates.push(baseMeta.file);
+    }
+    candidates.push("Fort-Sam-Houston");
+    candidates.push("Lackland");
+    candidates.push("Randolph");
+  }
 
   const uniq = [];
   const seen = new Set();
@@ -440,15 +489,14 @@ function resolveCityFileKey({ cityKeyCanonical, profile }) {
         ok: true,
         fileKey: c,
         via:
-          c === canonical
-            ? "direct"
-            : c === baseFile
-              ? "baseToFileKey"
-              : c === canonicalFallback
-                ? "canonicalToFileFallback"
-                : "lastResort",
+          c === baseMeta?.file
+            ? "baseIndex.file"
+            : c === canonical
+              ? "direct"
+              : "fallback",
         candidates: uniq,
-        baseUsed: String(baseRaw || "").trim(),
+        baseUsed: baseMeta?.canonicalBase || String(baseRaw || "").trim(),
+        baseMeta,
       };
     }
   }
@@ -458,19 +506,22 @@ function resolveCityFileKey({ cityKeyCanonical, profile }) {
     fileKey: null,
     via: "none",
     candidates: uniq,
-    baseUsed: String(baseRaw || "").trim(),
+    baseUsed: baseMeta?.canonicalBase || String(baseRaw || "").trim(),
+    baseMeta,
   };
 }
 
 function loadCity(cityKeyCanonical, profileForFilePick) {
   const canonical = safeKey(cityKeyCanonical || "SanAntonio");
-
-  const res = resolveCityFileKey({ cityKeyCanonical: canonical, profile: profileForFilePick || {} });
+  const res = resolveCityFileKey({
+    cityKeyCanonical: canonical,
+    profile: profileForFilePick || {},
+  });
   const idx = listCityFiles();
 
   if (!res.ok || !res.fileKey) {
     throw new Error(
-      `City JSON not found. requested="${canonical}" canonical="${canonical}" availableFiles=${Array.from(idx).sort().join(", ")}`
+      `City JSON not found. requested="${canonical}" availableFiles=${Array.from(idx).sort().join(", ")}`
     );
   }
 
@@ -486,6 +537,7 @@ function loadCity(cityKeyCanonical, profileForFilePick) {
       cityFileVia: res.via,
       cityFileCandidates: res.candidates,
       baseUsedForCityFile: res.baseUsed || null,
+      baseMeta: res.baseMeta || null,
     };
   }
 
@@ -536,7 +588,10 @@ function loadCity(cityKeyCanonical, profileForFilePick) {
     null;
 
   const bedroomsUsed =
-    (data?.bedrooms && "bedrooms") || (data?.by_bedroom && "by_bedroom") || (data?.byBedroom && "byBedroom") || null;
+    (data?.bedrooms && "bedrooms") ||
+    (data?.by_bedroom && "by_bedroom") ||
+    (data?.byBedroom && "byBedroom") ||
+    null;
 
   function avgFromBedroomPath(obj, getter) {
     if (!obj || typeof obj !== "object") return null;
@@ -554,6 +609,7 @@ function loadCity(cityKeyCanonical, profileForFilePick) {
     bedrooms,
     (b) => b?.rent_monthly?.avg ?? b?.rentMonthly?.avg ?? b?.rent?.avg
   );
+
   const derivedUtilities = avgFromBedroomPath(
     bedrooms,
     (b) => b?.utilities?.total?.avg ?? b?.utilities_total?.avg ?? b?.utilities?.avg
@@ -584,10 +640,19 @@ function loadCity(cityKeyCanonical, profileForFilePick) {
     target_rent: targetRent,
     targetRent: targetRent,
 
-    avg_home_value: toNum(data?.avg_home_value ?? data?.average_home_value ?? data?.avgHome ?? data?.city_avg_home) ?? avgHome ?? null,
-    average_home_value: toNum(data?.average_home_value) ?? (toNum(data?.avg_home_value) ?? avgHome ?? null),
-    avgHome: toNum(data?.avgHome) ?? (toNum(data?.avg_home_value) ?? avgHome ?? null),
-    city_avg_home: toNum(data?.city_avg_home) ?? (toNum(data?.avg_home_value) ?? avgHome ?? null),
+    avg_home_value:
+      toNum(data?.avg_home_value ?? data?.average_home_value ?? data?.avgHome ?? data?.city_avg_home) ??
+      avgHome ??
+      null,
+    average_home_value:
+      toNum(data?.average_home_value) ??
+      (toNum(data?.avg_home_value) ?? avgHome ?? null),
+    avgHome:
+      toNum(data?.avgHome) ??
+      (toNum(data?.avg_home_value) ?? avgHome ?? null),
+    city_avg_home:
+      toNum(data?.city_avg_home) ??
+      (toNum(data?.avg_home_value) ?? avgHome ?? null),
 
     avg_utilities: avgUtilities,
     average_utilities: avgUtilities,
@@ -598,6 +663,7 @@ function loadCity(cityKeyCanonical, profileForFilePick) {
     cityFileVia: res.via,
     cityFileCandidates: res.candidates,
     baseUsedForCityFile: res.baseUsed || null,
+    baseMeta: res.baseMeta || null,
   };
 
   __CITY_CACHE__.set(fileKey, out);
@@ -628,27 +694,72 @@ function computeBAS(rank, payTables) {
   return Number(isOfficer ? basObj.officer : basObj.enlisted) || 0;
 }
 
+function deriveZip(profile, payTables) {
+  const explicitZip = String(profile?.zip || profile?.postal_code || "").trim();
+  if (explicitZip) {
+    return { zip: explicitZip, source: "profile.zip" };
+  }
+
+  const baseName = String(profile?.base || profile?.duty_station || profile?.station || "").trim();
+  const baseMeta = resolveBaseMeta(baseName);
+
+  if (baseMeta?.ok && baseMeta?.zip) {
+    return { zip: String(baseMeta.zip).trim(), source: "index.byBase" };
+  }
+
+  const baseToZipRaw =
+    payTables?.BAH?.base_to_zip ||
+    payTables?.BAH?.baseToZip ||
+    payTables?.BASE_ZIP ||
+    {};
+
+  const baseToZipNorm = new Map();
+  for (const [k, v] of Object.entries(baseToZipRaw || {})) {
+    const nk = normalizeBaseName(k);
+    if (nk) baseToZipNorm.set(nk, String(v || "").trim());
+  }
+
+  const derived = baseToZipNorm.get(normalizeBaseName(baseName));
+  if (derived) {
+    return { zip: derived, source: "payTables.BAH.base_to_zip" };
+  }
+
+  return { zip: null, source: "none" };
+}
+
 function computeBAH(rank, familyBool, zip, payTables, missing) {
   let bah = 0;
-  if (zip && rank) {
-    const bahByZip = payTables?.BAH?.by_zip || payTables?.BAH?.byZip || null;
-    const bahZip = (bahByZip && bahByZip?.[zip]) || payTables?.BAH_TX?.[zip] || payTables?.BAH?.[zip] || null;
 
-    if (!bahZip) {
-      missing.push("bah_zip_not_found");
-    } else {
-      const bucket = familyBool ? bahZip.with : bahZip.without;
-      if (!bucket) {
-        missing.push("bah_bucket_missing");
-      } else {
-        const val = bucket?.[rank];
-        if (val == null) missing.push("bah_rank_not_found");
-        else bah = Number(val) || 0;
-      }
-    }
-  } else {
-    if (!zip) missing.push("bah_zip_missing");
+  if (!zip) {
+    missing.push("bah_zip_missing");
+    return bah;
   }
+
+  if (!rank) {
+    missing.push("rank_paygrade");
+    return bah;
+  }
+
+  const bahZip = payTables?.BAH?.by_zip?.[zip] || null;
+
+  if (!bahZip) {
+    missing.push("bah_zip_not_found");
+    return bah;
+  }
+
+  const bucket = familyBool ? bahZip.with : bahZip.without;
+  if (!bucket) {
+    missing.push("bah_bucket_missing");
+    return bah;
+  }
+
+  const val = bucket?.[rank];
+  if (val == null) {
+    missing.push("bah_rank_not_found");
+    return bah;
+  }
+
+  bah = Number(val) || 0;
   return bah;
 }
 
@@ -678,7 +789,17 @@ function computeVaDisability(profile, payTables, missing) {
 
     return {
       amount,
-      debug: { pct, method: "DISABILITY_FULL", familySize, hasSpouse, kidsUnder18, baseKey, base, addPerChild, extraKids },
+      debug: {
+        pct,
+        method: "DISABILITY_FULL",
+        familySize,
+        hasSpouse,
+        kidsUnder18,
+        baseKey,
+        base,
+        addPerChild,
+        extraKids,
+      },
     };
   }
 
@@ -703,7 +824,11 @@ function computeRetirementPay(profile, rank, yos, payTables, missing) {
     return { amount: 0, debug: { method: "missing_basepay_table" } };
   }
 
-  const keys = Object.keys(baseTable).map(Number).filter(Number.isFinite).sort((a, b) => a - b);
+  const keys = Object.keys(baseTable)
+    .map(Number)
+    .filter(Number.isFinite)
+    .sort((a, b) => a - b);
+
   const eligible = keys.filter((k) => k <= yos);
 
   if (!eligible.length) {
@@ -712,7 +837,9 @@ function computeRetirementPay(profile, rank, yos, payTables, missing) {
   }
 
   const lastSteps = eligible.slice(Math.max(eligible.length - 3, 0));
-  const pays = lastSteps.map((k) => Number(baseTable[String(k)]) || 0).filter((v) => v > 0);
+  const pays = lastSteps
+    .map((k) => Number(baseTable[String(k)]) || 0)
+    .filter((v) => v > 0);
 
   if (!pays.length) {
     missing.push("high3_values_missing");
@@ -724,32 +851,43 @@ function computeRetirementPay(profile, rank, yos, payTables, missing) {
   const sysRaw = lower(profile?.retirement_system || profile?.retirementSystem || "high3");
   const sys = sysRaw === "brs" || sysRaw === "blended" ? "brs" : "high3";
 
-  const multPerYear = toNum(payTables?.RETIREMENT?.systems?.[sys]?.multiplier_per_year) ?? (sys === "brs" ? 0.02 : 0.025);
-  const rawMultiplier = multPerYear * yos;
+  const multPerYear =
+    toNum(payTables?.RETIREMENT?.systems?.[sys]?.multiplier_per_year) ??
+    (sys === "brs" ? 0.02 : 0.025);
 
+  const rawMultiplier = multPerYear * yos;
   const cap = sys === "brs" ? 0.6 : 0.75;
   const multiplier = Math.min(rawMultiplier, cap);
 
   const amount = high3 * multiplier;
 
-  return { amount, debug: { method: "high3_estimate_from_BASEPAY", sys, multPerYear, yos, multiplier, high3, stepsUsed: lastSteps, paysUsed: pays } };
+  return {
+    amount,
+    debug: {
+      method: "high3_estimate_from_BASEPAY",
+      sys,
+      multPerYear,
+      yos,
+      multiplier,
+      high3,
+      stepsUsed: lastSteps,
+      paysUsed: pays,
+    },
+  };
 }
 
 function computePay(profile, payTables) {
   const missing = [];
 
   const payModel = detectPayModel(profile);
-
   const rank = normalizeRank(profile?.rank_paygrade || profile?.rank || "");
   const yos = toInt(profile?.yos ?? profile?.years_of_service ?? profile?.yearsOfService);
 
   const famRaw = profile?.family ?? profile?.dependents ?? profile?.has_dependents;
   const familyBool =
-    String(famRaw).toLowerCase() === "true" || famRaw === true || (toInt(famRaw) || 0) >= 2;
-
-  const explicitZip = String(profile?.zip || profile?.postal_code || "").trim();
-  const baseName = String(profile?.base || profile?.duty_station || profile?.station || "").trim();
-  let zip = explicitZip;
+    String(famRaw).toLowerCase() === "true" ||
+    famRaw === true ||
+    (toInt(famRaw) || 0) >= 2;
 
   if (!rank) missing.push("rank_paygrade");
   if (yos === null) missing.push("yos");
@@ -765,7 +903,6 @@ function computePay(profile, payTables) {
 
     const retirementPay = Number(ret.amount) || 0;
     const vaDisabilityPay = Number(va.amount) || 0;
-
     const totalPay = retirementPay + vaDisabilityPay;
 
     return {
@@ -782,30 +919,24 @@ function computePay(profile, payTables) {
         vaDisabilityPay,
         totalPay,
         total: totalPay,
-        zipUsed: zip || null,
+        zipUsed: null,
+        zipSource: null,
         familyUsed: familyBool,
         rankUsed: rank || null,
         yosUsed: yos,
-        debug: { retirement: ret.debug, va: va.debug },
+        debug: {
+          retirement: ret.debug,
+          va: va.debug,
+        },
       },
     };
   }
 
-  if (!zip && baseName) {
-    const baseToZipRaw = payTables?.BAH?.base_to_zip || payTables?.BAH?.baseToZip || payTables?.BASE_ZIP || {};
-    const baseToZipNorm = new Map();
-    for (const [k, v] of Object.entries(baseToZipRaw || {})) {
-      const nk = normalizeBaseName(k);
-      if (nk) baseToZipNorm.set(nk, String(v || "").trim());
-    }
-
-    const derived = baseToZipNorm.get(normalizeBaseName(baseName));
-    if (derived) zip = derived;
-    else missing.push("bah_base_zip_missing");
-  }
+  const derivedZip = deriveZip(profile, payTables);
+  if (!derivedZip.zip) missing.push("bah_base_zip_missing");
 
   const bas = computeBAS(rank, payTables);
-  const bah = computeBAH(rank, familyBool, zip, payTables, missing);
+  const bah = computeBAH(rank, familyBool, derivedZip.zip, payTables, missing);
   const totalPay = basePay + bas + bah;
 
   return {
@@ -820,7 +951,8 @@ function computePay(profile, payTables) {
       bas,
       totalPay,
       total: totalPay,
-      zipUsed: zip || null,
+      zipUsed: derivedZip.zip || null,
+      zipSource: derivedZip.source || null,
       familyUsed: familyBool,
       rankUsed: rank || null,
       yosUsed: yos,
@@ -829,7 +961,7 @@ function computePay(profile, payTables) {
 }
 
 // -----------------------------
-// //#4.5 Mortgage (NO MATH) — call mortgage.js + map output
+// //#4.5 Mortgage — call mortgage.js + map output
 // -----------------------------
 function pickMortgagePrice({ body, profile, city, bedrooms }) {
   const bodyPrice = toNum(body?.price ?? body?.homePrice ?? body?.purchase_price ?? body?.purchasePrice);
@@ -879,14 +1011,20 @@ function pickMortgagePrice({ body, profile, city, bedrooms }) {
 function defaultPmiRatePct({ loanType, dpPct }) {
   const lt = String(loanType || "").trim().toLowerCase();
   if (lt === "va") return 0;
-  if (lt === "fha") return 0.55; // percent
+  if (lt === "fha") return 0.55;
   if (dpPct >= 20) return 0;
-  return 0.5; // percent
+  return 0.5;
 }
 
 async function callMortgageEngine(payload) {
   if (typeof mortgageHandler !== "function") {
-    return { res: { statusCode: 500, body: JSON.stringify({ ok: false, error: "mortgage.js handler missing" }) }, out: null };
+    return {
+      res: {
+        statusCode: 500,
+        body: JSON.stringify({ ok: false, error: "mortgage.js handler missing" }),
+      },
+      out: null,
+    };
   }
 
   const evt = {
@@ -915,7 +1053,14 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
   if (!price || price <= 0) {
     return {
       ok: false,
-      breakdown: { principalInterest: 0, propertyTax: 0, insurance: 0, hoa: 0, pmi: 0, totalMonthly: 0 },
+      breakdown: {
+        principalInterest: 0,
+        propertyTax: 0,
+        insurance: 0,
+        hoa: 0,
+        pmi: 0,
+        totalMonthly: 0,
+      },
       assumptions: { note: "No price available yet." },
       sources,
       meta: { error: null },
@@ -952,9 +1097,6 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
 
   const creditScore = toInt(body?.creditScore ?? profile?.creditScore ?? profile?.credit_score) ?? null;
 
-  // Only allow aprOverride when:
-  // - caller explicitly sets body.apr OR
-  // - creditScore is missing (then we may use profile/city fallback)
   const bodyApr = toNum(body?.apr);
   const profileApr = toNum(profile?.apr);
 
@@ -1028,22 +1170,26 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
     defaultPmiRatePct({ loanType, dpPct });
 
   sources.pmiRate =
-    body?.pmiRate != null ? "body.pmiRate" : profile?.pmiRate != null ? "profile.pmiRate" : "defaultPmiRatePct(loanType,dpPct)";
+    body?.pmiRate != null
+      ? "body.pmiRate"
+      : profile?.pmiRate != null
+        ? "profile.pmiRate"
+        : "defaultPmiRatePct(loanType,dpPct)";
 
   const mortgagePayload = {
     price: price,
-    down: dpPct, // percent (mortgage.js supports percent)
+    down: dpPct,
     creditScore: creditScore ?? undefined,
     termYears: termYears,
-    taxRate: Number.isFinite(taxRatePct) ? (taxRatePct / 100) : undefined, // fraction
-    insuranceAnnual: Number.isFinite(insRatePct) ? (price * (insRatePct / 100)) : undefined,
+    taxRate: Number.isFinite(taxRatePct) ? taxRatePct / 100 : undefined,
+    insuranceAnnual: Number.isFinite(insRatePct) ? price * (insRatePct / 100) : undefined,
     hoaMonthly: Number.isFinite(hoa) ? hoa : 0,
     loanType: String(loanType || "conventional").toLowerCase(),
     aprOverride:
       (bodyApr != null || creditScore == null)
         ? (Number.isFinite(aprOverrideCandidate) ? aprOverrideCandidate : undefined)
         : undefined,
-    pmiRate: Number.isFinite(pmiRatePct) ? (pmiRatePct / 100) : undefined, // fraction
+    pmiRate: Number.isFinite(pmiRatePct) ? pmiRatePct / 100 : undefined,
   };
 
   let engine = null;
@@ -1064,7 +1210,14 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
   if (engineErr || !engine) {
     return {
       ok: false,
-      breakdown: { principalInterest: 0, propertyTax: 0, insurance: 0, hoa: 0, pmi: 0, totalMonthly: 0 },
+      breakdown: {
+        principalInterest: 0,
+        propertyTax: 0,
+        insurance: 0,
+        hoa: 0,
+        pmi: 0,
+        totalMonthly: 0,
+      },
       assumptions: { note: "Mortgage engine error.", error: engineErr },
       sources,
       meta: { error: engineErr },
@@ -1152,35 +1305,50 @@ exports.handler = async function handler(event) {
     }
 
     if (event.httpMethod !== "POST") {
-      return respond(event, 405, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Method not allowed." });
+      return respond(event, 405, {
+        ok: false,
+        schemaVersion: SCHEMA_VERSION,
+        error: "Method not allowed.",
+      });
     }
 
     let body = {};
     try {
       body = JSON.parse(event.body || "{}");
     } catch (e) {
-      return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Invalid JSON body." });
+      return respond(event, 400, {
+        ok: false,
+        schemaVersion: SCHEMA_VERSION,
+        error: "Invalid JSON body.",
+      });
     }
 
     const email = String(body.email || "").trim().toLowerCase();
-    if (!email) return respond(event, 400, { ok: false, schemaVersion: SCHEMA_VERSION, error: "Missing email." });
+    if (!email) {
+      return respond(event, 400, {
+        ok: false,
+        schemaVersion: SCHEMA_VERSION,
+        error: "Missing email.",
+      });
+    }
 
     const cityKeyRaw = body.cityKey == null ? "" : String(body.cityKey);
     const cityKeyClean = safeKey(cityKeyRaw);
     const bedrooms = toInt(body.bedrooms) ?? 4;
 
     const payTables = loadPayTables();
-    const profile = await fetchProfileByEmail(email);
+    loadBaseIndex();
 
+    const profile = await fetchProfileByEmail(email);
     const { profileEffective, overridesApplied } = applyOverridesToProfile(profile, body.overrides);
 
     const callerDidNotChooseCity = !cityKeyClean || lower(cityKeyClean) === "sanantonio";
 
     let resolvedCityKey = cityKeyClean || "SanAntonio";
-    let cityResolve = { cityKey: null, source: "none", base: "" };
+    let cityResolve = { cityKey: null, source: "none", base: "", file: null, zip: null };
 
     if (callerDidNotChooseCity) {
-      cityResolve = deriveCityKeyFromBase(profileEffective, payTables);
+      cityResolve = deriveCityKeyFromBase(profileEffective);
       if (cityResolve.cityKey) resolvedCityKey = cityResolve.cityKey;
     }
 
@@ -1204,17 +1372,19 @@ exports.handler = async function handler(event) {
     }
 
     const computed = computePay(profileEffective, payTables);
+    const mortgageCore = await computeMortgageEstimate({
+      body,
+      profile: profileEffective,
+      city,
+      bedrooms,
+    });
 
-    const mortgageCore = await computeMortgageEstimate({ body, profile: profileEffective, city, bedrooms });
-
-    // Backward-compatible mortgage output
     const mortgage = {
       ok: !!mortgageCore.ok,
       breakdown: mortgageCore.breakdown,
       assumptions: mortgageCore.assumptions,
       sources: mortgageCore.sources,
 
-      // legacy aliases used across older dashboards
       totalMonthly: Number(mortgageCore?.breakdown?.totalMonthly || 0) || 0,
       principalInterestMonthly: Number(mortgageCore?.breakdown?.principalInterest || 0) || 0,
       taxMonthly: Number(mortgageCore?.breakdown?.propertyTax || 0) || 0,
@@ -1237,6 +1407,8 @@ exports.handler = async function handler(event) {
 
       debug: {
         payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
+        baseIndexPathUsed: __BASE_INDEX_PATH_USED__ || null,
+
         cityKeyRaw: cityKeyRaw || null,
         cityKeyResolved: resolvedCityKey,
         cityKeySource:
@@ -1245,7 +1417,18 @@ exports.handler = async function handler(event) {
             : cityKeyClean
               ? "body.cityKey"
               : "default",
-        baseUsedForCity: callerDidNotChooseCity && cityResolve.cityKey ? cityResolve.base || null : null,
+
+        baseUsedForCity: callerDidNotChooseCity && cityResolve.cityKey
+          ? cityResolve.base || null
+          : null,
+
+        baseFileFromIndex: callerDidNotChooseCity && cityResolve.file
+          ? cityResolve.file
+          : null,
+
+        baseZipFromIndex: callerDidNotChooseCity && cityResolve.zip
+          ? cityResolve.zip
+          : null,
 
         cityFileRequested: city?.cityFileRequested || null,
         cityFileUsed: city?.cityFileUsed || null,
@@ -1268,6 +1451,10 @@ exports.handler = async function handler(event) {
       estimatedMonthlyMortgage: mortgage.totalMonthly,
     });
   } catch (e) {
-    return respond(event, 500, { ok: false, schemaVersion: SCHEMA_VERSION, error: String(e?.message || e) });
+    return respond(event, 500, {
+      ok: false,
+      schemaVersion: SCHEMA_VERSION,
+      error: String(e?.message || e),
+    });
   }
 };

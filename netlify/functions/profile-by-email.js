@@ -7,33 +7,46 @@
 //    2) public.user_financial_inputs   (latest by updated_at)
 //    3) public.financial_intakes       (first matching row fallback)
 //    4) public.user_aiou_inputs        (latest by updated_at)
-// - CORS + OPTIONS support
-//
-// WHY THIS VERSION EXISTS
-// - Your old version only queried `profiles`
-// - That meant the User page never received saved financial inputs
-// - This version merges the latest known financial + preference data
-//
-// IMPORTANT
-// - If income / debt are NOT stored in Supabase, this function cannot invent them
-// - FAD income still should come from /api/brain -> brain.pay.total
+// - Dynamic CORS + OPTIONS support
 // ============================================================
 
 const { createClient } = require("@supabase/supabase-js");
 
-const CORS_HEADERS = {
-  "Access-Control-Allow-Origin": "*",
-  "Access-Control-Allow-Headers": "*",
-  "Access-Control-Allow-Methods": "POST, OPTIONS",
-  "Access-Control-Max-Age": "86400",
-  "Vary": "Origin",
-  "Content-Type": "application/json"
-};
+const ALLOWED_ORIGINS = new Set([
+  "https://pcsunited.com",
+  "https://www.pcsunited.com",
+  "https://pcs-united.webflow.io",
+  "http://localhost:3000",
+  "http://127.0.0.1:3000",
+  "http://localhost:8888",
+  "http://127.0.0.1:8888"
+]);
 
-function respond(statusCode, payload) {
+function getCorsHeaders(event) {
+  const origin =
+    event?.headers?.origin ||
+    event?.headers?.Origin ||
+    "";
+
+  const allowOrigin = ALLOWED_ORIGINS.has(origin)
+    ? origin
+    : "https://pcsunited.com";
+
+  return {
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Headers": "Content-Type, Authorization",
+    "Access-Control-Allow-Methods": "POST, OPTIONS",
+    "Access-Control-Allow-Credentials": "true",
+    "Access-Control-Max-Age": "86400",
+    "Vary": "Origin",
+    "Content-Type": "application/json"
+  };
+}
+
+function respond(event, statusCode, payload) {
   return {
     statusCode,
-    headers: CORS_HEADERS,
+    headers: getCorsHeaders(event),
     body: JSON.stringify(payload || {})
   };
 }
@@ -62,14 +75,8 @@ function mergeProfile({
   const fi = financialIntakeRow || {};
   const ai = aiouRow || {};
 
-  // ------------------------------------------------------------
-  // 1) Base identity/service fields from profiles
-  // ------------------------------------------------------------
-  const merged = {
-    ...p
-  };
+  const merged = { ...p };
 
-  // Canonical basics
   merged.email = cleanString(p.email || "");
   merged.first_name = cleanString(p.first_name || "");
   merged.last_name = cleanString(p.last_name || "");
@@ -86,13 +93,6 @@ function mergeProfile({
   merged.yos = toNumberOrNull(p.yos);
   merged.va_disability = toNumberOrNull(p.va_disability);
 
-  // ------------------------------------------------------------
-  // 2) Financial fields
-  // Priority:
-  //    user_financial_inputs
-  //    financial_intakes
-  //    profiles fallback if present
-  // ------------------------------------------------------------
   merged.monthly_expenses =
     toNumberOrNull(uf.monthly_expenses) ??
     toNumberOrNull(fi.expenses) ??
@@ -121,12 +121,6 @@ function mergeProfile({
     cleanString(uf.purchase_time || "") ||
     cleanString(p.time_to_buy || "");
 
-  // ------------------------------------------------------------
-  // 3) House preference / AIOU fields
-  // Priority:
-  //    user_aiou_inputs
-  //    profiles fallback
-  // ------------------------------------------------------------
   merged.bedrooms =
     toNumberOrNull(ai.bedrooms) ??
     toNumberOrNull(p.bedrooms) ??
@@ -151,12 +145,9 @@ function mergeProfile({
     cleanString(p.amenities || "");
 
   merged.home_condition =
-    cleanString(ai.home_year || "") || // keeping your current schema naming
+    cleanString(ai.home_year || "") ||
     cleanString(p.home_condition || "");
 
-  // ------------------------------------------------------------
-  // 4) Helpful aliases for frontend compatibility
-  // ------------------------------------------------------------
   merged.price = merged.projected_home_price;
   merged.homePrice = merged.projected_home_price;
 
@@ -174,12 +165,6 @@ function mergeProfile({
   merged.pcs_base = merged.base;
   merged.pcsBase = merged.base;
 
-  // ------------------------------------------------------------
-  // 5) Income / Debt passthrough if they actually exist
-  // NOTE:
-  // This does NOT compute military pay.
-  // If these columns are absent in DB, they stay null.
-  // ------------------------------------------------------------
   merged.income =
     toNumberOrNull(uf.income) ??
     toNumberOrNull(fi.income) ??
@@ -209,38 +194,34 @@ function mergeProfile({
 }
 
 exports.handler = async function (event) {
-  // ------------------------------------------------------------
   // 0) CORS preflight
-  // ------------------------------------------------------------
   if (event.httpMethod === "OPTIONS") {
-    return respond(200, {});
+    return {
+      statusCode: 204,
+      headers: getCorsHeaders(event),
+      body: ""
+    };
   }
 
-  // ------------------------------------------------------------
   // 1) Enforce POST
-  // ------------------------------------------------------------
   if (event.httpMethod !== "POST") {
-    return respond(405, { ok: false, error: "Method not allowed" });
+    return respond(event, 405, { ok: false, error: "Method not allowed" });
   }
 
-  // ------------------------------------------------------------
   // 2) Parse body
-  // ------------------------------------------------------------
   let body = {};
   try {
     body = JSON.parse(event.body || "{}");
   } catch (_) {
-    return respond(400, { ok: false, error: "Invalid JSON body" });
+    return respond(event, 400, { ok: false, error: "Invalid JSON body" });
   }
 
   const email = String(body.email || "").trim().toLowerCase();
   if (!email) {
-    return respond(400, { ok: false, error: "Email is required" });
+    return respond(event, 400, { ok: false, error: "Email is required" });
   }
 
-  // ------------------------------------------------------------
   // 3) Env
-  // ------------------------------------------------------------
   const SUPABASE_URL =
     process.env.SUPABASE_URL ||
     process.env.SUPABASE_PROJECT_URL ||
@@ -252,7 +233,7 @@ exports.handler = async function (event) {
     "";
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    return respond(500, {
+    return respond(event, 500, {
       ok: false,
       error: "Missing Supabase env vars (need SUPABASE_URL and a service key).",
       missing: {
@@ -267,9 +248,6 @@ exports.handler = async function (event) {
       auth: { persistSession: false, autoRefreshToken: false }
     });
 
-    // ----------------------------------------------------------
-    // 4) Query all relevant tables
-    // ----------------------------------------------------------
     const [
       profileRes,
       userFinancialRes,
@@ -304,16 +282,16 @@ exports.handler = async function (event) {
     ]);
 
     if (profileRes.error) {
-      return respond(500, { ok: false, error: profileRes.error.message });
+      return respond(event, 500, { ok: false, error: profileRes.error.message });
     }
     if (userFinancialRes.error) {
-      return respond(500, { ok: false, error: userFinancialRes.error.message });
+      return respond(event, 500, { ok: false, error: userFinancialRes.error.message });
     }
     if (financialIntakeRes.error) {
-      return respond(500, { ok: false, error: financialIntakeRes.error.message });
+      return respond(event, 500, { ok: false, error: financialIntakeRes.error.message });
     }
     if (aiouRes.error) {
-      return respond(500, { ok: false, error: aiouRes.error.message });
+      return respond(event, 500, { ok: false, error: aiouRes.error.message });
     }
 
     const profileRow = profileRes.data || null;
@@ -328,7 +306,7 @@ exports.handler = async function (event) {
       aiouRow
     });
 
-    return respond(200, {
+    return respond(event, 200, {
       ok: true,
       email,
       profile: mergedProfile,
@@ -342,6 +320,9 @@ exports.handler = async function (event) {
       }
     });
   } catch (e) {
-    return respond(500, { ok: false, error: e?.message || "Server error" });
+    return respond(event, 500, {
+      ok: false,
+      error: e?.message || "Server error"
+    });
   }
 };

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Mar 13 2026 02:11:57 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Mar 15 2026 12:41:25 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69ae21832273e6c229da7baa" data-wf-site="69658389f59da527c04bcbd4" lang="en">
 <head>
   <meta charset="utf-8">
@@ -20,12 +20,11 @@
 </head>
 <body class="body-3">
   <div class="w-embed w-script"><!--  =========================================================
-  PCSUnited • Login Lock (Overlay Removed)
-  ✅ FIX: Clicking "Log In" no longer triggers logout
-  ✅ Logout detector now only matches real clickable elements
-  ✅ Hidden logout button no longer contains "Log Out" text
-  ✅ Exposes: window.PCSU_LOGOUT()
-  ✅ Listens: pcsunited:logout event
+  PCSUnited • Login Lock (CORS-SAFE + Preview-SAFE)
+  ✅ FIX: Webflow preview uses Netlify absolute API
+  ✅ FIX: Live domain uses same-origin /api
+  ✅ FIX: Better fetch error parsing
+  ✅ Keeps: window.PCSU_LOGOUT(), pcsunited:logout
 =========================================================  -->
     <div id="rs-lock-root" style="all: initial;">
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -129,7 +128,6 @@
     }
     .rs-switch input:checked + .rs-slider{ background: linear-gradient(180deg, rgba(142,243,197,.9), rgba(106,167,255,.85)); border-color: rgba(255,255,255,0); }
     .rs-switch input:checked + .rs-slider:before{ transform: translateX(20px); background: #06112b; }
-    /* Compatibility-only hidden button (NO TEXT inside) */
     #rs-session-logout{ display:none !important; }
   </style>
       <div id="rs-lock-overlay" aria-hidden="true">
@@ -167,12 +165,14 @@
           </div>
         </div>
       </div>
-      <!--  IMPORTANT: Hidden compatibility logout button has NO TEXT now  -->
       <button id="rs-session-logout" type="button" aria-label="Log Out" data-action="logout" aria-hidden="true" tabindex="-1"></button>
       <script>
     (function(){
       "use strict";
-      const API_BASE        = "https://pcsunited.netlify.app/api";
+      const IS_WEBFLOW_PREVIEW = location.hostname.includes("webflow.io");
+      const API_BASE = IS_WEBFLOW_PREVIEW
+        ? "https://pcsunited.netlify.app/api"
+        : "/api";
       const LOGIN_ENDPOINT  = API_BASE + "/login";
       const COMMIT_ENDPOINT = API_BASE + "/commit-intake";
       const KEY_EMAIL   = "pcsunited.loginEmail";
@@ -235,8 +235,17 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(body || {})
         });
-        const j = await r.json().catch(()=> ({}));
-        if (!r.ok || j.ok === false) throw new Error(j.error || j.message || ("HTTP " + r.status));
+        const text = await r.text();
+        let j = {};
+        try { j = text ? JSON.parse(text) : {}; } catch (_) { j = {}; }
+        if (!r.ok || j.ok === false) {
+          throw new Error(
+            j.error ||
+            j.message ||
+            (text && !j.error ? text.slice(0, 180) : "") ||
+            ("HTTP " + r.status)
+          );
+        }
         return j;
       }
       function getAuthOk(){
@@ -261,9 +270,6 @@
           setError("Login succeeded, but we couldn’t save your intake to the cloud yet. Please try again in a moment.");
         }
       }
-      // ============================================================
-      // LOGOUT (SAFE)
-      // ============================================================
       function doLogout(){
         setError("");
         clearDevice();
@@ -271,7 +277,6 @@
         setPublicFlag(true);
         clearSessionEmail();
         broadcastLoggedOut();
-        // Clear fields only on real logout (this is fine now)
         try{ passEl.value = ""; }catch(_){}
         try{ emailEl.value = ""; }catch(_){}
         try{ if(pubEl) pubEl.checked = true; }catch(_){}
@@ -286,7 +291,6 @@
           doLogout();
         }, true);
       }
-      // ✅ FIXED: only consider CLICKABLE elements as possible logout triggers
       function isClickable(el){
         if(!el || el.nodeType !== 1) return false;
         const tag = (el.tagName || "").toUpperCase();
@@ -311,10 +315,8 @@
         if (cls.includes("logout") || cls.includes("log-out")) return true;
         return false;
       }
-      // Capture-phase delegation (safe now)
       document.addEventListener("click", (e)=>{
         let el = e.target;
-        // walk up a few levels only
         for (let i=0; i<6 && el; i++){
           if (looksLikeLogout(el)){
             e.preventDefault();
@@ -342,9 +344,6 @@
       bindKnownLogoutIds();
       const mo = new MutationObserver(()=> bindKnownLogoutIds());
       mo.observe(document.documentElement, { childList:true, subtree:true });
-      // ============================================================
-      // INIT
-      // ============================================================
       const savedEmail = getSavedEmail();
       const sessEmail  = getSessionEmail();
       const initialEmail = savedEmail || sessEmail;
@@ -371,9 +370,6 @@
           }
         }catch(_){}
       });
-      // ============================================================
-      // LOGIN FLOW
-      // ============================================================
       async function doLogin(){
         setError("");
         const email = (emailEl.value || "").trim().toLowerCase();

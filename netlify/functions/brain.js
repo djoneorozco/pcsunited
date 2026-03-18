@@ -1,11 +1,11 @@
 // netlify/functions/brain.js
 // ============================================================
-// CENTRAL BRAIN (v2.0.1-cjs) — Pay + City + FULL Mortgage Breakdown
+// CENTRAL BRAIN (v2.1.0-cjs) — Pay + City + FULL Mortgage Breakdown
 //
-// ✅ INDEX ROUTING UPGRADE:
+// ✅ CANONICAL BASE ROUTING:
 // - Uses /netlify/functions/cities/index.byBase.json as the routing authority
-// - Resolves base aliases -> canonical base -> cityKey/file/zip
-// - Removes dependence on fragile hardcoded base/city/file maps
+// - Resolves aliases -> canonical 44-base AFB names
+// - No more SanAntonio special-case routing
 //
 // ✅ MORTGAGE:
 // - No mortgage math in brain.js
@@ -37,7 +37,7 @@ const path = require("node:path");
 const { createClient } = require("@supabase/supabase-js");
 const { handler: mortgageHandler } = require("./mortgage.js");
 
-const SCHEMA_VERSION = "2.0.1";
+const SCHEMA_VERSION = "2.1.0";
 
 // -----------------------------
 // //#0 Paths (Netlify-safe)
@@ -459,8 +459,19 @@ function resolveBaseMeta(baseRaw) {
   };
 }
 
+function getBaseFromProfileLike(profile) {
+  return pickFirst(profile, [
+    "base",
+    "duty_station",
+    "station",
+    "dutyStation",
+    "pcs_base",
+    "pcsBase",
+  ]);
+}
+
 function deriveCityKeyFromBase(profile) {
-  const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
+  const baseRaw = getBaseFromProfileLike(profile);
   const meta = resolveBaseMeta(baseRaw);
 
   return {
@@ -473,23 +484,14 @@ function deriveCityKeyFromBase(profile) {
 }
 
 function resolveCityFileKey({ cityKeyCanonical, profile }) {
-  const canonical = safeKey(cityKeyCanonical || "SanAntonio");
-  const baseRaw = pickFirst(profile, ["base", "duty_station", "station", "dutyStation", "pcs_base", "pcsBase"]);
+  const canonical = safeKey(cityKeyCanonical || "");
+  const baseRaw = getBaseFromProfileLike(profile);
   const baseMeta = resolveBaseMeta(baseRaw);
 
   const candidates = [];
 
   if (baseMeta?.file) candidates.push(baseMeta.file);
   if (canonical) candidates.push(canonical);
-
-  if (canonical === "SanAntonio") {
-    if (baseMeta?.file && cityFileExists(baseMeta.file)) {
-      candidates.push(baseMeta.file);
-    }
-    candidates.push("Fort-Sam-Houston");
-    candidates.push("Lackland");
-    candidates.push("Randolph");
-  }
 
   const uniq = [];
   const seen = new Set();
@@ -529,7 +531,11 @@ function resolveCityFileKey({ cityKeyCanonical, profile }) {
 }
 
 function loadCity(cityKeyCanonical, profileForFilePick) {
-  const canonical = safeKey(cityKeyCanonical || "SanAntonio");
+  const canonical = safeKey(cityKeyCanonical || "");
+  if (!canonical) {
+    throw new Error("City key could not be resolved.");
+  }
+
   const res = resolveCityFileKey({
     cityKeyCanonical: canonical,
     profile: profileForFilePick || {},
@@ -717,7 +723,7 @@ function deriveZip(profile, payTables) {
     return { zip: explicitZip, source: "profile.zip" };
   }
 
-  const baseName = String(profile?.base || profile?.duty_station || profile?.station || "").trim();
+  const baseName = String(getBaseFromProfileLike(profile) || "").trim();
   const baseMeta = resolveBaseMeta(baseName);
 
   if (baseMeta?.ok && baseMeta?.zip) {
@@ -1321,7 +1327,7 @@ exports.handler = async function handler(event) {
       return respond(event, 200, {
         ok: true,
         schemaVersion: SCHEMA_VERSION,
-        note: "POST JSON: { email, cityKey, bedrooms, price?, dpPct?, termYears?, creditScore?, apr?, taxRate?, insRate?, hoa?, pmiRate?, loanType?, overrides? }",
+        note: "POST JSON: { email, cityKey?, base?, bedrooms, price?, dpPct?, termYears?, creditScore?, apr?, taxRate?, insRate?, hoa?, pmiRate?, loanType?, overrides? }",
       });
     }
 
@@ -1361,16 +1367,44 @@ exports.handler = async function handler(event) {
     loadBaseIndex();
 
     const profile = await fetchProfileByEmail(email);
-    const { profileEffective, overridesApplied } = applyOverridesToProfile(profile, body.overrides);
 
-    const callerDidNotChooseCity = !cityKeyClean || lower(cityKeyClean) === "sanantonio";
+    const baseOverrideFromBody = pickFirst(body, [
+      "base",
+      "duty_station",
+      "station",
+      "dutyStation",
+      "pcs_base",
+      "pcsBase",
+    ]);
 
-    let resolvedCityKey = cityKeyClean || "SanAntonio";
+    const mergedOverrides = {
+      ...(body.overrides && typeof body.overrides === "object" ? body.overrides : {}),
+      ...(baseOverrideFromBody != null && String(baseOverrideFromBody).trim() !== ""
+        ? { base: String(baseOverrideFromBody).trim() }
+        : {}),
+    };
+
+    const { profileEffective, overridesApplied } = applyOverridesToProfile(profile, mergedOverrides);
+
+    let resolvedCityKey = cityKeyClean || "";
     let cityResolve = { cityKey: null, source: "none", base: "", file: null, zip: null };
 
-    if (callerDidNotChooseCity) {
+    if (!resolvedCityKey) {
       cityResolve = deriveCityKeyFromBase(profileEffective);
       if (cityResolve.cityKey) resolvedCityKey = cityResolve.cityKey;
+    }
+
+    if (!resolvedCityKey) {
+      return respond(event, 400, {
+        ok: false,
+        schemaVersion: SCHEMA_VERSION,
+        error: "Unable to resolve cityKey from request or canonical base index.",
+        debug: {
+          cityKeyRaw: cityKeyRaw || null,
+          baseTried: getBaseFromProfileLike(profileEffective) || null,
+          baseIndexPathUsed: __BASE_INDEX_PATH_USED__ || null,
+        },
+      });
     }
 
     let city = null;
@@ -1381,15 +1415,7 @@ exports.handler = async function handler(event) {
       city = loadCity(resolvedCityKey, profileEffective);
     } catch (err) {
       cityLoadError = String(err?.message || err);
-
-      const fallbackKey = cityKeyClean || "SanAntonio";
-      if (fallbackKey && fallbackKey !== resolvedCityKey) {
-        cityLoadFallbackUsed = true;
-        city = loadCity(fallbackKey, profileEffective);
-        resolvedCityKey = fallbackKey;
-      } else {
-        throw err;
-      }
+      throw err;
     }
 
     const computed = computePay(profileEffective, payTables);
@@ -1424,7 +1450,12 @@ exports.handler = async function handler(event) {
     return respond(event, 200, {
       ok: true,
       schemaVersion: SCHEMA_VERSION,
-      input: { email, cityKey: resolvedCityKey, bedrooms },
+      input: {
+        email,
+        cityKey: resolvedCityKey,
+        bedrooms,
+        base: getBaseFromProfileLike(profileEffective) || null,
+      },
 
       debug: {
         payTablesPathUsed: __PAY_TABLES_PATH_USED__ || null,
@@ -1433,23 +1464,18 @@ exports.handler = async function handler(event) {
         cityKeyRaw: cityKeyRaw || null,
         cityKeyResolved: resolvedCityKey,
         cityKeySource:
-          callerDidNotChooseCity && cityResolve.cityKey
-            ? cityResolve.source
-            : cityKeyClean
-              ? "body.cityKey"
-              : "default",
+          cityKeyClean
+            ? "body.cityKey"
+            : cityResolve.cityKey
+              ? cityResolve.source
+              : "none",
 
-        baseUsedForCity: callerDidNotChooseCity && cityResolve.cityKey
+        baseUsedForCity: cityResolve.cityKey
           ? cityResolve.base || null
-          : null,
+          : getBaseFromProfileLike(profileEffective) || null,
 
-        baseFileFromIndex: callerDidNotChooseCity && cityResolve.file
-          ? cityResolve.file
-          : null,
-
-        baseZipFromIndex: callerDidNotChooseCity && cityResolve.zip
-          ? cityResolve.zip
-          : null,
+        baseFileFromIndex: cityResolve.file || null,
+        baseZipFromIndex: cityResolve.zip || null,
 
         cityFileRequested: city?.cityFileRequested || null,
         cityFileUsed: city?.cityFileUsed || null,

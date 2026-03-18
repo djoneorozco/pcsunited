@@ -4,17 +4,14 @@
   "state": "AZ",
   "geo_id": "1600000US0418400",
   "year": 2025,
-  "last_updated_data_from_sources": "January 2026",
+  "last_updated_data_from_sources": "March 2026",
   "image_url": "https://www.dm.af.mil",
-
   "zip": "85707",
   "market_label": "Tucson Metro",
-
   "avg_home_value": 338249,
   "average_home_value": 338249,
   "avgHome": 338249,
   "city_avg_home": 338249,
-
   "mortgage_assumptions": {
     "apr_percent": 6.3,
     "term_years": 30,
@@ -22,55 +19,83 @@
     "includes": "va_loan_all_in",
     "defaults_note": "Calculations based on 2026 VA loan rates for Tucson. APR varies by credit score."
   },
-
-  "property_tax_rate": 1.10,
-  "insurance_rate": 0.40,
+  "property_tax_rate": 1.1,
+  "insurance_rate": 0.4,
   "hoa_monthly": 45,
-
   "avg_home_mortgage_monthly": {
     "avg": 2095,
     "as_of": "2026-01",
     "notes": "Based on Tucson typical home value with VA loan (0% down)."
   },
-
   "population": {
     "estimate": 46000,
     "median_age": 24.5,
     "persons_per_household": 3.1
   },
-
   "households": {
     "total_households": 11000
   },
-
   "income": {
     "median_household_income": 65319,
     "per_capita_income": 32537,
     "poverty_rate_percent": 10.4
   },
-
   "education": {
     "high_school_grad_or_higher_percent": 94.2,
     "bachelors_degree_or_higher_percent": 22.8
   },
-
   "veterans": {
     "veteran_population_percent": 18.5
   },
-
   "immigration": {
     "foreign_born_percent": 8.2
   },
-
   "labor": {
     "mean_travel_time_to_work_minutes": 15.4,
     "unemployment_rate_percent": 4.2
   },
-
+  "crime_status": {
+    "installation": "High security; controlled access environment; significantly lower crime than municipal average.",
+    "metro_tucson": "Property crime approximately 1.8% above national average; violent crime trended down 14% in 2025."
+  },
+  "school_quality": {
+    "on_base": "Borman K-8 (Top 5 in Tucson Unified); high military-student concentration (46%).",
+    "off_base": "University High School ranked #1 in AZ; diverse options in Vail and Catalina Foothills districts."
+  },
+  "rental_vacancy": {
+    "rate_percent": 9.5,
+    "notes": "Higher vacancy (up to 14%) in newer developments in SE Tucson/Base-adjacent areas."
+  },
+  "climate_weather": {
+    "spring": "Mild/Dry; Highs 73-81°F. Ideal outdoor training weather.",
+    "summer": "Extreme Heat; Highs 99°F+. Monsoon season (late June-Aug) brings heavy afternoon storms.",
+    "fall": "Warm/Pleasant; Highs 93°F dropping to 73°F by November.",
+    "winter": "Cool/Sunny; Highs 64°F, Lows 41°F. Freezing rare."
+  },
+  "special_events": [
+    "Thunder and Lightning over Arizona Air Show (Biennial)",
+    "Tucson Gem & Mineral Show (February)",
+    "El Tour de Tucson Bike Race (November)",
+    "Desert Boneyard/AMARG Specialty Tours"
+  ],
+  "military_lifestyle_fit": {
+    "rating": "Excellent",
+    "description": "High community integration; Tucson is exceptionally military-friendly with vast veteran resources and outdoor recreation (Mt. Lemmon/Saguaro National Park)."
+  },
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1150, "high": 1400, "avg": 1270, "as_of": "2026-03" },
-      "home_price": { "low": 245000, "high": 290000, "avg": 267500, "as_of": "2026-01" },
+      "rent_monthly": {
+        "low": 1150,
+        "high": 1400,
+        "avg": 1270,
+        "as_of": "2026-03"
+      },
+      "home_price": {
+        "low": 245000,
+        "high": 290000,
+        "avg": 267500,
+        "as_of": "2026-01"
+      },
       "mortgage_monthly": {
         "low": 1515,
         "high": 1793,
@@ -79,15 +104,37 @@
         "assumptions": "VA Loan P&I"
       },
       "utilities": {
-        "electric_gas": { "low": 140, "high": 190, "avg": 165 },
-        "water_sewer": { "low": 45, "high": 65, "avg": 55 },
-        "total": { "low": 185, "high": 255, "avg": 220 },
+        "electric_gas": {
+          "low": 140,
+          "high": 190,
+          "avg": 165
+        },
+        "water_sewer": {
+          "low": 45,
+          "high": 65,
+          "avg": 55
+        },
+        "total": {
+          "low": 185,
+          "high": 255,
+          "avg": 220
+        },
         "as_of": "2026-01"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1650, "high": 2000, "avg": 1825, "as_of": "2026-03" },
-      "home_price": { "low": 320000, "high": 395000, "avg": 357500, "as_of": "2026-01" },
+      "rent_monthly": {
+        "low": 1650,
+        "high": 2000,
+        "avg": 1825,
+        "as_of": "2026-03"
+      },
+      "home_price": {
+        "low": 320000,
+        "high": 395000,
+        "avg": 357500,
+        "as_of": "2026-01"
+      },
       "mortgage_monthly": {
         "low": 1979,
         "high": 2443,
@@ -96,15 +143,37 @@
         "assumptions": "VA Loan P&I"
       },
       "utilities": {
-        "electric_gas": { "low": 190, "high": 260, "avg": 225 },
-        "water_sewer": { "low": 55, "high": 85, "avg": 70 },
-        "total": { "low": 245, "high": 345, "avg": 295 },
+        "electric_gas": {
+          "low": 190,
+          "high": 260,
+          "avg": 225
+        },
+        "water_sewer": {
+          "low": 55,
+          "high": 85,
+          "avg": 70
+        },
+        "total": {
+          "low": 245,
+          "high": 345,
+          "avg": 295
+        },
         "as_of": "2026-01"
       }
     },
     "4": {
-      "rent_monthly": { "low": 2100, "high": 2800, "avg": 2450, "as_of": "2026-03" },
-      "home_price": { "low": 410000, "high": 525000, "avg": 467500, "as_of": "2026-01" },
+      "rent_monthly": {
+        "low": 2100,
+        "high": 2800,
+        "avg": 2450,
+        "as_of": "2026-03"
+      },
+      "home_price": {
+        "low": 410000,
+        "high": 525000,
+        "avg": 467500,
+        "as_of": "2026-01"
+      },
       "mortgage_monthly": {
         "low": 2535,
         "high": 3247,
@@ -113,15 +182,37 @@
         "assumptions": "VA Loan P&I"
       },
       "utilities": {
-        "electric_gas": { "low": 240, "high": 350, "avg": 295 },
-        "water_sewer": { "low": 75, "high": 115, "avg": 95 },
-        "total": { "low": 315, "high": 465, "avg": 390 },
+        "electric_gas": {
+          "low": 240,
+          "high": 350,
+          "avg": 295
+        },
+        "water_sewer": {
+          "low": 75,
+          "high": 115,
+          "avg": 95
+        },
+        "total": {
+          "low": 315,
+          "high": 465,
+          "avg": 390
+        },
         "as_of": "2026-01"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2600, "high": 3600, "avg": 3100, "as_of": "2026-03" },
-      "home_price": { "low": 550000, "high": 725000, "avg": 637500, "as_of": "2026-01" },
+      "rent_monthly": {
+        "low": 2600,
+        "high": 3600,
+        "avg": 3100,
+        "as_of": "2026-03"
+      },
+      "home_price": {
+        "low": 550000,
+        "high": 725000,
+        "avg": 637500,
+        "as_of": "2026-01"
+      },
       "mortgage_monthly": {
         "low": 3401,
         "high": 4483,
@@ -130,51 +221,86 @@
         "assumptions": "VA Loan P&I"
       },
       "utilities": {
-        "electric_gas": { "low": 320, "high": 480, "avg": 400 },
-        "water_sewer": { "low": 100, "high": 150, "avg": 125 },
-        "total": { "low": 420, "high": 630, "avg": 525 },
+        "electric_gas": {
+          "low": 320,
+          "high": 480,
+          "avg": 400
+        },
+        "water_sewer": {
+          "low": 100,
+          "high": 150,
+          "avg": 125
+        },
+        "total": {
+          "low": 420,
+          "high": 630,
+          "avg": 525
+        },
         "as_of": "2026-01"
       }
     }
   },
-
   "housing": {
     "housing_units": 15500,
     "median_value_owner_occupied": 338249,
-
     "market": {
       "zillow_average_home_value": 338249,
       "zillow_one_year_change_percent": -2.6,
       "market_type_summary": "Balanced market with stabilizing prices; highly affordable relative to Southwest peers",
-
       "average_days_on_market": 45,
-
       "median_sale_price_current": 322667,
       "median_listing_price_realtor": 350000,
       "median_listing_price_per_sqft": 226,
       "active_listings_total": 2912,
-
       "q1_2025": {
         "median_sale_price": 318000
       },
-
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 310000 },
-        { "month": "2024-12", "median_sale_price": 328000 },
-        { "month": "2025-06", "median_sale_price": 335000 },
-        { "month": "2025-12", "median_sale_price": 322667 }
+        {
+          "month": "2023-01",
+          "median_sale_price": 310000
+        },
+        {
+          "month": "2024-12",
+          "median_sale_price": 328000
+        },
+        {
+          "month": "2025-06",
+          "median_sale_price": 335000
+        },
+        {
+          "month": "2025-12",
+          "median_sale_price": 322667
+        }
       ]
     }
   },
-
   "sources": {
-    "demographics": { "provider": "Census Bureau / Military OneSource", "as_of": "2026-01" },
-    "rent": { "provider": "Apartments.com / Zumper / Zillow", "as_of": "2026-03" },
-    "home_price": { "provider": "Tucson Association of Realtors / Zillow", "as_of": "2026-01" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I)", "as_of": "2026-01", "notes": "6.3% APR for Tucson market" },
-    "utilities": { "provider": "TEP / Local Averages", "as_of": "2026-01" },
-    "market": { "provider": "Zillow / Realtor.com", "as_of": "2026-01" },
-
+    "demographics": {
+      "provider": "Census Bureau / Military OneSource",
+      "as_of": "2026-01"
+    },
+    "rent": {
+      "provider": "Apartments.com / Zumper / Zillow",
+      "as_of": "2026-03"
+    },
+    "home_price": {
+      "provider": "Tucson Association of Realtors / Zillow",
+      "as_of": "2026-01"
+    },
+    "mortgage": {
+      "provider": "VA Loan Estimate (P&I)",
+      "as_of": "2026-01",
+      "notes": "6.3% APR for Tucson market"
+    },
+    "utilities": {
+      "provider": "TEP / Local Averages",
+      "as_of": "2026-01"
+    },
+    "market": {
+      "provider": "Zillow / Realtor.com",
+      "as_of": "2026-01"
+    },
     "mortgage_city_defaults": {
       "provider": "Pima County Treasurer",
       "as_of": "2026-01",

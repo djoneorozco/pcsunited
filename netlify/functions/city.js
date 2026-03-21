@@ -1,6 +1,6 @@
 // netlify/functions/city.js
 // ============================================================
-// PCSUnited • City Loader — v2.1.2
+// PCSUnited • City Loader — v2.2.0
 //
 // ROUTES:
 // - GET /.netlify/functions/city?cityKey=LasVegas
@@ -12,30 +12,20 @@
 //
 // PURPOSE:
 // - Loads a city/base JSON file from netlify/functions/cities/
-// - Uses index.byBase.json as canonical routing authority when base is provided
+// - Uses index.byBase.json only when base is provided
 // - Supports canonical base naming + aliases
 //
 // NOTES:
 // - If both base and cityKey are provided, base wins
-// - Uses runtime-safe paths via fileURLToPath(import.meta.url)
-// - Avoids __filename / __dirname redeclaration conflicts
-// - For base requests, loads route.file first, then falls back to route.cityKey
+// - cityKey requests DO NOT depend on index.byBase.json
+// - Uses safe multi-path lookup to avoid Netlify runtime path issues
 // ============================================================
 
 import fs from "fs";
 import path from "path";
-import { fileURLToPath } from "url";
 
 // ============================================================
-// //#1) RUNTIME-SAFE PATHS
-// ============================================================
-const MODULE_FILE_PATH = fileURLToPath(import.meta.url);
-const MODULE_DIR_PATH = path.dirname(MODULE_FILE_PATH);
-const CITIES_DIR_PATH = path.join(MODULE_DIR_PATH, "cities");
-const INDEX_BY_BASE_PATH = path.join(CITIES_DIR_PATH, "index.byBase.json");
-
-// ============================================================
-// //#2) CORS
+// //#1) CORS
 // ============================================================
 const CORS = {
   "Access-Control-Allow-Origin": "*",
@@ -45,7 +35,7 @@ const CORS = {
 };
 
 // ============================================================
-// //#3) RESPONSE HELPERS
+// //#2) RESPONSE HELPERS
 // ============================================================
 function ok(body) {
   return {
@@ -59,27 +49,16 @@ function err(statusCode, message, extra = {}) {
   return {
     statusCode,
     headers: CORS,
-    body: JSON.stringify({ ok: false, error: message, ...extra }),
+    body: JSON.stringify({
+      ok: false,
+      error: message,
+      ...extra,
+    }),
   };
 }
 
 // ============================================================
-// //#4) FILE HELPERS
-// ============================================================
-function fileExists(filePath) {
-  try {
-    return fs.existsSync(filePath);
-  } catch {
-    return false;
-  }
-}
-
-function readJson(filePath) {
-  return JSON.parse(fs.readFileSync(filePath, "utf8"));
-}
-
-// ============================================================
-// //#5) NORMALIZATION HELPERS
+// //#3) NORMALIZATION HELPERS
 // ============================================================
 function normalizeKey(raw) {
   return String(raw || "")
@@ -107,16 +86,83 @@ function buildNormalizedMap(obj) {
 }
 
 // ============================================================
+// //#4) FILE HELPERS
+// ============================================================
+function fileExists(filePath) {
+  try {
+    return !!filePath && fs.existsSync(filePath);
+  } catch {
+    return false;
+  }
+}
+
+function readJson(filePath) {
+  return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+function uniquePaths(paths) {
+  return [...new Set(paths.filter(Boolean))];
+}
+
+// ============================================================
+// //#5) CITIES DIRECTORY RESOLUTION
+// ============================================================
+function getCitiesDirCandidates() {
+  const cwd = process.cwd();
+
+  return uniquePaths([
+    path.join(cwd, "netlify", "functions", "cities"),
+    path.join(cwd, "cities"),
+    path.join("/var/task", "netlify", "functions", "cities"),
+    path.join("/var/task", "cities"),
+  ]);
+}
+
+function resolveCitiesDir() {
+  const candidates = getCitiesDirCandidates();
+
+  for (const dir of candidates) {
+    if (fileExists(dir)) return dir;
+  }
+
+  return null;
+}
+
+function resolveIndexPath() {
+  const dirs = getCitiesDirCandidates();
+  for (const dir of dirs) {
+    const candidate = path.join(dir, "index.byBase.json");
+    if (fileExists(candidate)) return candidate;
+  }
+  return null;
+}
+
+function resolveCityFilePath(fileKey) {
+  const safeKey = normalizeCityKey(fileKey);
+  const dirs = getCitiesDirCandidates();
+
+  for (const dir of dirs) {
+    const candidate = path.join(dir, `${safeKey}.json`);
+    if (fileExists(candidate)) return candidate;
+  }
+
+  return null;
+}
+
+// ============================================================
 // //#6) INDEX LOADER
 // ============================================================
 function loadIndexByBase() {
-  if (!fileExists(INDEX_BY_BASE_PATH)) {
-    throw new Error(`Missing ${INDEX_BY_BASE_PATH}`);
+  const indexPath = resolveIndexPath();
+
+  if (!indexPath) {
+    throw new Error("Missing index.byBase.json");
   }
 
-  const data = readJson(INDEX_BY_BASE_PATH);
+  const data = readJson(indexPath);
 
   return {
+    indexPath,
     version: data?.version || "unknown",
     bases: data?.bases && typeof data.bases === "object" ? data.bases : {},
     aliases: data?.aliases && typeof data.aliases === "object" ? data.aliases : {},
@@ -150,7 +196,7 @@ function resolveCanonicalBaseName(inputBase, indexBases, aliases) {
 // ============================================================
 // //#8) REQUEST RESOLUTION
 // ============================================================
-function resolveRequest(params, indexData) {
+function resolveRequest(params, indexData = null) {
   const rawBase = String(
     params.base || params.baseName || params.installation || ""
   ).trim();
@@ -161,6 +207,17 @@ function resolveRequest(params, indexData) {
   // Base request wins
   // ------------------------------------------------------------
   if (rawBase) {
+    if (!indexData) {
+      return {
+        ok: false,
+        type: "missing-index",
+        requested_base: rawBase,
+        canonical_base: null,
+        cityKey: null,
+        fileKey: null,
+      };
+    }
+
     const canonicalBase = resolveCanonicalBaseName(
       rawBase,
       indexData.bases,
@@ -206,6 +263,7 @@ function resolveRequest(params, indexData) {
 
   // ------------------------------------------------------------
   // Direct cityKey request
+  // This path does NOT require index.byBase.json
   // ------------------------------------------------------------
   if (rawCityKey) {
     const fileKey = normalizeCityKey(rawCityKey);
@@ -233,15 +291,15 @@ function resolveRequest(params, indexData) {
 }
 
 // ============================================================
-// //#9) CITY FILE LOADER
+// //#9) CITY LOADER
 // ============================================================
 function loadCityJson(fileKey) {
-  const filePath = path.join(CITIES_DIR_PATH, `${fileKey}.json`);
+  const filePath = resolveCityFilePath(fileKey);
 
-  if (!fileExists(filePath)) {
+  if (!filePath) {
     return {
       exists: false,
-      filePath,
+      filePath: null,
       json: null,
     };
   }
@@ -277,22 +335,39 @@ export async function handler(event) {
     }
 
     const params = event.queryStringParameters || {};
-    const indexData = loadIndexByBase();
+    const rawBase = String(
+      params.base || params.baseName || params.installation || ""
+    ).trim();
+
+    let indexData = null;
+
+    // Only load index if base was provided
+    if (rawBase) {
+      indexData = loadIndexByBase();
+    }
+
     const resolved = resolveRequest(params, indexData);
 
     if (!resolved.ok) {
       if (resolved.type === "missing") {
         return err(400, "Missing required parameter", {
           hint: "Use ?cityKey=... or ?base=...",
-          index_path: INDEX_BY_BASE_PATH,
+          cities_dir_candidates: getCitiesDirCandidates(),
+        });
+      }
+
+      if (resolved.type === "missing-index") {
+        return err(500, "Base routing index is missing", {
+          requested_base: resolved.requested_base,
+          cities_dir_candidates: getCitiesDirCandidates(),
         });
       }
 
       if (resolved.type === "base") {
         return err(404, "Base not found in index.byBase.json", {
           requested_base: resolved.requested_base,
-          version: indexData.version,
-          index_path: INDEX_BY_BASE_PATH,
+          version: indexData?.version || "unknown",
+          index_path: indexData?.indexPath || null,
         });
       }
 
@@ -305,10 +380,10 @@ export async function handler(event) {
       return err(404, "City file not found", {
         cityKey: resolved.cityKey,
         fileKey: resolved.fileKey,
-        expected: path.join("netlify", "functions", "cities", `${resolved.fileKey}.json`),
+        expected: `netlify/functions/cities/${resolved.fileKey}.json`,
         requested_base: resolved.requested_base,
         canonical_base: resolved.canonical_base,
-        index_path: INDEX_BY_BASE_PATH,
+        cities_dir_candidates: getCitiesDirCandidates(),
       });
     }
 
@@ -333,8 +408,9 @@ export async function handler(event) {
   } catch (e) {
     return err(500, "City function crashed", {
       details: String(e && e.message ? e.message : e),
-      index_path: INDEX_BY_BASE_PATH,
-      cities_dir: CITIES_DIR_PATH,
+      cities_dir_candidates: getCitiesDirCandidates(),
+      resolved_cities_dir: resolveCitiesDir(),
+      resolved_index_path: resolveIndexPath(),
     });
   }
 }

@@ -1632,3 +1632,1050 @@ UPDATED FOR INDEX.HTML:
 
   </div>
 </div>
+
+  </body>
+</html>
+<script>
+(function () {
+  "use strict";
+
+  // ============================================================
+  // PCS SNAPSHOT v4.2.2 RUNTIME
+  // INDEX.HTML SAFE VERSION
+  // UPDATED:
+  // - Ready to paste directly under Code #1
+  // - No structural wrapper changes needed
+  // - Keeps current 4-card header logic
+  // ============================================================
+
+  // ============================================================
+  // //#1) CONFIG
+  // ============================================================
+  const API_BASE = "https://pcsunited.netlify.app/api";
+  const DIRECT_FN_BASE = "https://pcsunited.netlify.app/.netlify/functions";
+  const MILPAY_JSON_URL = "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/militaryPayTables.json";
+  const CITY_GITHUB_RAW_BASE = "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/";
+
+  const DEFAULT_BASE = "Lackland AFB";
+  const DEFAULT_FILE_KEY = "Lackland";
+  const DEFAULT_ZIP = "78236";
+
+  const DONUT_ROTATION_DEG = -8;
+  const CONIC_TO_CARTESIAN_OFFSET_DEG = -90;
+
+  let CURRENT_BEDROOM = 3;
+  let LOADED_PRIMARY_CITY = null;
+  let LOADED_PAY = null;
+  let LOADED_QUERY = null;
+// ============================================================
+  // //#2) BASE REGISTRY
+  // ============================================================
+  const PCS_BASE_REGISTRY = {
+    "Andrews AFB": { fileKey:"Andrews", zip:"20762" },
+    "Barksdale AFB": { fileKey:"Barksdale", zip:"71110" },
+    "Beale AFB": { fileKey:"Beale", zip:"95903" },
+    "Cannon AFB": { fileKey:"Cannon", zip:"88103" },
+    "Charleston AFB": { fileKey:"Charleston", zip:"29404" },
+    "Davis-Monthan AFB": { fileKey:"Davis-Monthan", zip:"85707" },
+    "Dover AFB": { fileKey:"Dover", zip:"19902" },
+    "Dyess AFB": { fileKey:"Dyess", zip:"79607" },
+    "Eglin AFB": { fileKey:"Eglin", zip:"32542" },
+    "Elmendorf AFB": { fileKey:"Elmendorf", zip:"99506" },
+    "F.E-Warren AFB": { fileKey:"F.E-Warren", zip:"82005" },
+    "Fairchild AFB": { fileKey:"Fairchild", zip:"99011" },
+    "Fort-Sam-Houston AFB": { fileKey:"Fort-Sam-Houston", zip:"78234" },
+    "Holloman AFB": { fileKey:"Holloman", zip:"88330" },
+    "Hurlburt AFB": { fileKey:"Hurlburt", zip:"32544" },
+    "Keesler AFB": { fileKey:"Keesler", zip:"39534" },
+    "Kirtland AFB": { fileKey:"Kirtland", zip:"87117" },
+    "Lackland AFB": { fileKey:"Lackland", zip:"78236" },
+    "Langley AFB": { fileKey:"Langley", zip:"23665" },
+    "Laughlin AFB": { fileKey:"Laughlin", zip:"78843" },
+    "Little-Rock AFB": { fileKey:"Little-Rock", zip:"72099" },
+    "Luke AFB": { fileKey:"Luke", zip:"85309" },
+    "MacDill AFB": { fileKey:"MacDill", zip:"33621" },
+    "Malmstrom AFB": { fileKey:"Malmstrom", zip:"59402" },
+    "Maxwell AFB": { fileKey:"Maxwell", zip:"36112" },
+    "McConnell AFB": { fileKey:"McConnell", zip:"67221" },
+    "McGuire AFB": { fileKey:"McGuire", zip:"08641" },
+    "Minot AFB": { fileKey:"Minot", zip:"58705" },
+    "Moody AFB": { fileKey:"Moody", zip:"31699" },
+    "Mountain-Home AFB": { fileKey:"Mountain-Home", zip:"83648" },
+    "Nellis AFB": { fileKey:"Nellis", zip:"89191" },
+    "Offutt AFB": { fileKey:"Offutt", zip:"68113" },
+    "Peterson AFB": { fileKey:"Peterson", zip:"80914" },
+    "Randolph AFB": { fileKey:"Randolph", zip:"78150" },
+    "Robins AFB": { fileKey:"Robins", zip:"31098" },
+    "Scott AFB": { fileKey:"Scott", zip:"62225" },
+    "Seymour-Johnson AFB": { fileKey:"Seymour-Johnson", zip:"27531" },
+    "Shaw AFB": { fileKey:"Shaw", zip:"29152" },
+    "Sheppard AFB": { fileKey:"Sheppard", zip:"76311" },
+    "Tinker AFB": { fileKey:"Tinker", zip:"73145" },
+    "Travis AFB": { fileKey:"Travis", zip:"94535" },
+    "Tyndall AFB": { fileKey:"Tyndall", zip:"32403" },
+    "Whiteman AFB": { fileKey:"Whiteman", zip:"65305" },
+    "Wright-Patterson AFB": { fileKey:"Wright-Patterson", zip:"45433" }
+  };
+
+  const PCS_BASE_ALIASES = {
+    "Andrews":"Andrews AFB","AndrewsAFB":"Andrews AFB","Joint Base Andrews":"Andrews AFB","JB Andrews":"Andrews AFB",
+    "Barksdale":"Barksdale AFB","BarksdaleAFB":"Barksdale AFB",
+    "Beale":"Beale AFB","BealeAFB":"Beale AFB",
+    "Cannon":"Cannon AFB","CannonAFB":"Cannon AFB",
+    "Charleston":"Charleston AFB","CharlestonAFB":"Charleston AFB","Joint Base Charleston":"Charleston AFB",
+    "Davis-Monthan":"Davis-Monthan AFB","DavisMonthan":"Davis-Monthan AFB","DavisMonthanAFB":"Davis-Monthan AFB","DMAFB":"Davis-Monthan AFB",
+    "Dover":"Dover AFB","DoverAFB":"Dover AFB",
+    "Dyess":"Dyess AFB","DyessAFB":"Dyess AFB",
+    "Eglin":"Eglin AFB","EglinAFB":"Eglin AFB",
+    "Elmendorf":"Elmendorf AFB","ElmendorfAFB":"Elmendorf AFB","JBER":"Elmendorf AFB","Joint Base Elmendorf-Richardson":"Elmendorf AFB",
+    "F.E-Warren":"F.E-Warren AFB","FE-Warren":"F.E-Warren AFB","FEWarren":"F.E-Warren AFB","FEWarrenAFB":"F.E-Warren AFB","F E Warren":"F.E-Warren AFB","Francis E. Warren":"F.E-Warren AFB",
+    "Fairchild":"Fairchild AFB","FairchildAFB":"Fairchild AFB",
+    "Fort Sam Houston":"Fort-Sam-Houston AFB","Fort-Sam-Houston":"Fort-Sam-Houston AFB","FortSamHouston":"Fort-Sam-Houston AFB","FortSamHoustonAFB":"Fort-Sam-Houston AFB","Fort Sam Houston AFB":"Fort-Sam-Houston AFB","JBSA-Fort-Sam-Houston":"Fort-Sam-Houston AFB","JBSA-Fort Sam Houston":"Fort-Sam-Houston AFB","JBSA Fort Sam Houston":"Fort-Sam-Houston AFB",
+    "Holloman":"Holloman AFB","HollomanAFB":"Holloman AFB",
+    "Hurlburt":"Hurlburt AFB","HurlburtAFB":"Hurlburt AFB","Hurlburt Field":"Hurlburt AFB",
+    "Keesler":"Keesler AFB","KeeslerAFB":"Keesler AFB",
+    "Kirtland":"Kirtland AFB","KirtlandAFB":"Kirtland AFB",
+    "Lackland":"Lackland AFB","LacklandAFB":"Lackland AFB","JBSA-Lackland":"Lackland AFB","JBSA Lackland":"Lackland AFB","Joint Base San Antonio Lackland":"Lackland AFB",
+    "Langley":"Langley AFB","LangleyAFB":"Langley AFB","Joint Base Langley-Eustis":"Langley AFB",
+    "Laughlin":"Laughlin AFB","LaughlinAFB":"Laughlin AFB",
+    "Little Rock AFB":"Little-Rock AFB","Little-Rock":"Little-Rock AFB","LittleRock":"Little-Rock AFB","LittleRockAFB":"Little-Rock AFB","Little Rock":"Little-Rock AFB",
+    "Luke":"Luke AFB","LukeAFB":"Luke AFB",
+    "MacDill":"MacDill AFB","MacDillAFB":"MacDill AFB",
+    "Malmstrom":"Malmstrom AFB","MalmstromAFB":"Malmstrom AFB",
+    "Maxwell":"Maxwell AFB","MaxwellAFB":"Maxwell AFB",
+    "McConnell":"McConnell AFB","McConnellAFB":"McConnell AFB",
+    "McGuire":"McGuire AFB","McGuireAFB":"McGuire AFB","JBMDL":"McGuire AFB","Joint Base McGuire-Dix-Lakehurst":"McGuire AFB",
+    "Minot":"Minot AFB","MinotAFB":"Minot AFB",
+    "Moody":"Moody AFB","MoodyAFB":"Moody AFB",
+    "Mountain Home AFB":"Mountain-Home AFB","Mountain-Home":"Mountain-Home AFB","MountainHome":"Mountain-Home AFB","MountainHomeAFB":"Mountain-Home AFB","Mountain Home":"Mountain-Home AFB",
+    "Nellis":"Nellis AFB","NellisAFB":"Nellis AFB",
+    "Offutt":"Offutt AFB","OffuttAFB":"Offutt AFB",
+    "Peterson":"Peterson AFB","PetersonAFB":"Peterson AFB","Peterson SFB":"Peterson AFB","Peterson Space Force Base":"Peterson AFB",
+    "Randolph":"Randolph AFB","RandolphAFB":"Randolph AFB","JBSA-Randolph":"Randolph AFB","JBSA Randolph":"Randolph AFB","Joint Base San Antonio Randolph":"Randolph AFB",
+    "Robins":"Robins AFB","RobinsAFB":"Robins AFB",
+    "Scott":"Scott AFB","ScottAFB":"Scott AFB",
+    "Seymour Johnson AFB":"Seymour-Johnson AFB","Seymour-Johnson":"Seymour-Johnson AFB","SeymourJohnson":"Seymour-Johnson AFB","SeymourJohnsonAFB":"Seymour-Johnson AFB",
+    "Shaw":"Shaw AFB","ShawAFB":"Shaw AFB",
+    "Sheppard":"Sheppard AFB","SheppardAFB":"Sheppard AFB",
+    "Tinker":"Tinker AFB","TinkerAFB":"Tinker AFB",
+    "Travis":"Travis AFB","TravisAFB":"Travis AFB",
+    "Tyndall":"Tyndall AFB","TyndallAFB":"Tyndall AFB",
+    "Whiteman":"Whiteman AFB","WhitemanAFB":"Whiteman AFB",
+    "Wright-Patterson":"Wright-Patterson AFB","WrightPatterson":"Wright-Patterson AFB","WrightPattersonAFB":"Wright-Patterson AFB","WPAFB":"Wright-Patterson AFB"
+  };
+
+  // ============================================================
+  // //#3) DOM HELPERS
+  // ============================================================
+  function $(q){ return document.querySelector(q); }
+  function setText(selector, value){ const el = $(selector); if (el) el.textContent = value; }
+  function setHTML(selector, value){ const el = $(selector); if (el) el.innerHTML = value; }
+
+  function money(n){
+    const x = Number(n);
+    if (!Number.isFinite(x)) return "$0";
+    return "$" + Math.round(x).toLocaleString();
+  }
+
+  function pct(n, digits){
+    const x = Number(n);
+    if (!Number.isFinite(x)) return "0%";
+    return x.toFixed(digits == null ? 0 : digits) + "%";
+  }
+
+  function safe(obj, path, fallback){
+    try {
+      const val = path.split(".").reduce((a,k)=>a && a[k], obj);
+      return val == null ? fallback : val;
+    } catch {
+      return fallback;
+    }
+  }
+
+  function clamp(n, min, max){
+    return Math.max(min, Math.min(max, n));
+  }
+
+  // ============================================================
+  // //#4) BASE HELPERS
+  // ============================================================
+  function pcsCanonicalBaseName(raw) {
+    const s = String(raw || "").trim();
+    if (!s) return "";
+    return PCS_BASE_REGISTRY[s] ? s : (PCS_BASE_ALIASES[s] || s);
+  }
+  function pcsFileKeyFromBase(raw) {
+    const base = pcsCanonicalBaseName(raw);
+    return (PCS_BASE_REGISTRY[base] && PCS_BASE_REGISTRY[base].fileKey) || "";
+  }
+  function pcsZipFromBase(raw) {
+    const base = pcsCanonicalBaseName(raw);
+    return (PCS_BASE_REGISTRY[base] && PCS_BASE_REGISTRY[base].zip) || "";
+  }
+  function fallbackBase(raw) { return pcsCanonicalBaseName(raw) || DEFAULT_BASE; }
+  function fallbackFileKey(raw) { return pcsFileKeyFromBase(raw) || DEFAULT_FILE_KEY; }
+  function fallbackZip(raw) { return pcsZipFromBase(raw) || DEFAULT_ZIP; }
+
+  // ============================================================
+  // //#5) PAY HELPERS
+  // ============================================================
+  function normRank(r) {
+    const s = String(r || "").toUpperCase().trim();
+    const m = s.match(/^([EO])\s*-\s*(\d+)$/) || s.match(/^([EO])(\d+)$/) || s.match(/^(W)\s*-\s*(\d+)$/) || s.match(/^(W)(\d+)$/);
+    if (m) return m[1] + "-" + m[2];
+    return s.replace(/\s+/g,"");
+  }
+
+  function isE(rankKey) { return String(rankKey || "").startsWith("E-"); }
+
+  function pickYOS(y, table) {
+    const ks = Object.keys(table || {}).map(k => parseInt(k,10)).filter(n => !isNaN(n)).sort((a,b)=>a-b);
+    if (!ks.length) return String(y || 2);
+    let chosen = ks[0];
+    for (const k of ks) if (k <= y) chosen = k;
+    return String(chosen);
+  }
+
+  async function calcBahFromPay(pay, opts){
+    const rankKey = normRank(opts.rank);
+    const table = (pay.BASEPAY && pay.BASEPAY[rankKey]) ? pay.BASEPAY[rankKey] : {};
+    const yKey = pickYOS(parseInt(opts.yos,10), table);
+    const basePay = Number(table[yKey] || 0) || 0;
+    const bas = isE(rankKey) ? Number(safe(pay, "BAS.enlisted", 0) || 0) : Number(safe(pay, "BAS.officer", 0) || 0);
+
+    const zip = String(opts.zip || fallbackZip(opts.baseLoc) || DEFAULT_ZIP).trim();
+    const byZip = safe(pay, "BAH.by_zip", {}) || {};
+    const rec = byZip[zip] || null;
+    const grp = (parseInt(opts.family,10) > 1) ? safe(rec, "with", null) : safe(rec, "without", null);
+
+    let bah = 0;
+    if (grp && grp[rankKey] != null) bah = Number(grp[rankKey]) || 0;
+
+    return { bah, basePay, bas, zip };
+  }
+
+  // ============================================================
+  // //#6) FETCH HELPERS
+  // ============================================================
+  async function load(url){
+    const r = await fetch(url, { cache: "no-store" });
+    if(!r.ok) throw new Error("load fail " + url + " (" + r.status + ")");
+    const ct = (r.headers.get("content-type") || "").toLowerCase();
+    if (ct.includes("text/html")) throw new Error("non-json response " + url + " (html)");
+    return await r.json();
+  }
+
+  async function loadCityExact(fileKey){
+    const clean = String(fileKey || "").trim() || DEFAULT_FILE_KEY;
+    try { return await load(`${API_BASE}/city?cityKey=${encodeURIComponent(clean)}`); } catch(e){}
+    try { return await load(`${DIRECT_FN_BASE}/city?cityKey=${encodeURIComponent(clean)}`); } catch(e){}
+    return await load(`${CITY_GITHUB_RAW_BASE}${encodeURIComponent(clean)}.json`);
+  }
+
+  function normalizeTrendDate(dt){
+    const s = String(dt || "").trim();
+    if (!s) return null;
+    const m = s.match(/^(\d{4})-(\d{2})-W(\d{1,2})$/);
+    if (m){
+      const y = Number(m[1]), mo = Number(m[2]), w = Number(m[3]);
+      const day = Math.min(28, 1 + (w - 1) * 7);
+      const iso = `${y}-${String(mo).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
+      const d = new Date(iso);
+      return isNaN(d.getTime()) ? null : d;
+    }
+    const d = new Date(s);
+    return isNaN(d.getTime()) ? null : d;
+  }
+
+  // ============================================================
+  // //#7) QUERY INPUTS
+  // ============================================================
+  function getQuery() {
+    const u = new URL(window.location.href);
+
+    const curBase = fallbackBase(u.searchParams.get("curBase") || sessionStorage.getItem("pcs_current_base") || DEFAULT_BASE);
+    const newBase = fallbackBase(u.searchParams.get("newBase") || sessionStorage.getItem("pcs_new_base") || u.searchParams.get("base") || DEFAULT_BASE);
+
+    const curFileKey = u.searchParams.get("curFileKey") || sessionStorage.getItem("pcs_current_fileKey") || pcsFileKeyFromBase(curBase) || DEFAULT_FILE_KEY;
+    const newFileKey = u.searchParams.get("newFileKey") || sessionStorage.getItem("pcs_new_fileKey") || u.searchParams.get("cityKey") || sessionStorage.getItem("pcs_new_cityKey") || pcsFileKeyFromBase(newBase) || DEFAULT_FILE_KEY;
+
+    const curZip = u.searchParams.get("curZip") || sessionStorage.getItem("pcs_current_zip") || pcsZipFromBase(curBase) || DEFAULT_ZIP;
+    const newZip = u.searchParams.get("newZip") || sessionStorage.getItem("pcs_new_zip") || pcsZipFromBase(newBase) || DEFAULT_ZIP;
+
+    return {
+      type: (u.searchParams.get("type") || "ad").toLowerCase(),
+      rank: u.searchParams.get("rank") || sessionStorage.getItem("pcs_rank") || "E-7",
+      yos: parseInt(u.searchParams.get("yos") || sessionStorage.getItem("pcs_yos") || "16", 10),
+      family: parseInt(u.searchParams.get("family") || sessionStorage.getItem("pcs_family") || "4", 10),
+      base: newBase,
+      cityKey: u.searchParams.get("cityKey") || sessionStorage.getItem("pcs_new_cityKey") || newFileKey || DEFAULT_FILE_KEY,
+      curBase, newBase, curFileKey, newFileKey, curZip, newZip,
+      va: parseInt(u.searchParams.get("va") || "0", 10)
+    };
+  }
+
+  // ============================================================
+  // //#8) GENERAL CITY HELPERS
+  // ============================================================
+  function pickMedianPrice(city){
+    return safe(city,"housing.market.median_listing_price_realtor", null)
+      ?? safe(city,"housing.market.median_listing_price", null)
+      ?? safe(city,"housing.market.median_list_price", null)
+      ?? safe(city,"avg_home_value", null)
+      ?? safe(city,"average_home_value", null)
+      ?? safe(city,"housing.median_value_owner_occupied", null)
+      ?? 0;
+  }
+
+  function pickYoY(city){
+    return safe(city,"housing.market.zillow_one_year_change_percent", null)
+      ?? safe(city,"housing.market.one_year_change_percent", null)
+      ?? safe(city,"yoy_change_percent", null);
+  }
+
+  function pickDOM(city){
+    return safe(city,"housing.market.average_days_on_market", null)
+      ?? safe(city,"housing.market.average_days_on_market_range.low", null)
+      ?? null;
+  }
+
+  function locationName(city, baseLoc){ return city.place || city.city || city.name || baseLoc || "—"; }
+
+  function setImgFromCity(imgEl, city){
+    if(!imgEl) return;
+    const url = safe(city, "image_url", "") || safe(city, "imageUrl", "") || "";
+    if (url && String(url).startsWith("http")){
+      imgEl.src = String(url);
+      imgEl.style.opacity = "1";
+    } else {
+      imgEl.removeAttribute("src");
+      imgEl.style.opacity = "0";
+    }
+  }
+
+  function renderFacts(containerId, bullets){
+    const el = $(containerId);
+    if(!el) return;
+    el.innerHTML = bullets.map(t => `
+      <div class="pcs-fact">
+        <span class="pcs-fact-bullet"></span>
+        <span>${String(t)}</span>
+      </div>
+    `).join("");
+  }
+
+  function renderQuickFacts(city, fallbackPrice){
+    const medInc = safe(city,"snapshot.median_household_income", null)
+      ?? safe(city,"income.median_household_income", null)
+      ?? safe(city,"demographics.income.median_household_income", null)
+      ?? safe(city,"median_household_income", 60000);
+
+    const popEst = safe(city,"snapshot.population_city", null)
+      ?? safe(city,"population.estimate", safe(city,"population",0))
+      ?? 0;
+
+    const days = safe(city,"housing.market.average_days_on_market", null)
+      ?? safe(city,"housing.market.average_days_on_market_range.low", null);
+
+    const facts = [
+      { label:"Population", value:Number(popEst).toLocaleString() },
+      { label:"Median Age", value:safe(city,"population.median_age", safe(city,"median_age", 0)) },
+      { label:"Median Household Income", value:money(medInc) },
+      { label:"Poverty Rate", value:(safe(city,"income.poverty_rate_percent", safe(city,"poverty_rate_percent",0)) || 0) + "%" },
+      { label:"Median Home Value", value:money(safe(city,"housing.median_value_owner_occupied", fallbackPrice)) },
+      { label:"Avg Days on Market", value:(days != null ? String(days) : "—") }
+    ];
+
+    setHTML("#pcs-quickfacts", facts.map(f =>
+      `<div class="pcs-fact"><div class="pcs-fact-label">${f.label}</div><div class="pcs-fact-value">${f.value}</div></div>`
+    ).join(""));
+  }
+
+  // ============================================================
+  // //#9) BEDROOM + HOUSING HELPERS
+  // ============================================================
+  function familyToBedrooms(family){
+    const n = Number(family) || 1;
+    if (n <= 3) return 2;
+    if (n === 4) return 3;
+    if (n === 5) return 4;
+    return 5;
+  }
+
+  function getBedroomProfile(city, beds){
+    const rec = safe(city, `by_bedroom.${beds}`, {}) || {};
+    return {
+      beds,
+      rent: Number(safe(rec, "rent_monthly.avg", 0) || 0),
+      mortgage: Number(safe(rec, "mortgage_monthly.avg", 0) || 0),
+      utilities: Number(safe(rec, "utilities.total.avg", 0) || 0),
+      homePrice: Number(safe(rec, "home_price.avg", 0) || 0)
+    };
+  }
+
+  function pickHOA(city, beds){
+    return Number(safe(city, `by_bedroom.${beds}.hoa_monthly.avg`, 0) || 0)
+      || Number(safe(city, "housing.costs.hoa_monthly.avg", 0) || 0)
+      || Number(safe(city, "hoa_monthly", 0) || 0)
+      || Number(safe(city, "avg_hoa_monthly", 0) || 0)
+      || 0;
+  }
+
+  function pickTaxRatePercent(city){
+    return Number(safe(city, "property_tax_rate", 0) || 0)
+      || Number(safe(city, "property_tax_rate_percent", 0) || 0)
+      || Number(safe(city, "mortgage_assumptions.property_tax_percent", 0) || 0)
+      || Number(safe(city, "mortgage_assumptions.tax_rate_percent", 0) || 0)
+      || Number(safe(city, "mortgage_assumptions.tax_percent", 0) || 0)
+      || 0;
+  }
+
+  function pickInsuranceAnnual(city, price){
+    const rate = Number(safe(city, "insurance_rate", 0) || 0)
+      || Number(safe(city, "insurance_rate_percent", 0) || 0)
+      || Number(safe(city, "homeowners_insurance_rate_percent", 0) || 0)
+      || 0;
+    if (rate > 0 && price > 0) return price * (rate / 100);
+    return Number(safe(city, "mortgage_assumptions.insurance_annual", 0) || 0)
+      || Number(safe(city, "mortgage_assumptions.homeowners_insurance_annual", 0) || 0)
+      || Number(safe(city, "avg_homeowners_insurance_annual", 0) || 0)
+      || 0;
+  }
+
+  function estimateTaxesMonthly(city, price){
+    const taxPct = pickTaxRatePercent(city);
+    if (taxPct > 0 && price > 0) return (price * (taxPct / 100)) / 12;
+    return (Number(safe(city, "mortgage_assumptions.property_tax_annual", 0) || 0) / 12)
+      || (Number(safe(city, "mortgage_assumptions.tax_annual", 0) || 0) / 12)
+      || 0;
+  }
+
+  function estimateInsuranceMonthly(city, price){
+    const annual = pickInsuranceAnnual(city, price);
+    return annual > 0 ? annual / 12 : 0;
+  }
+
+  function estimateBuyingPower(monthlyIncome){
+    const income = Number(monthlyIncome) || 0;
+    const housingBudget = income * 0.28;
+    const r = 0.0675 / 12, N = 360;
+    if (housingBudget <= 0) return 0;
+    const loan = housingBudget * ((Math.pow(1+r,N)-1)/(r*Math.pow(1+r,N)));
+    return Number.isFinite(loan) ? loan : 0;
+  }
+
+  function monthlyMortgageEstimate(price, annualRate){
+    const P = Number(price);
+    if(!Number.isFinite(P) || P <= 0) return 0;
+    const r = (Number(annualRate) || 0.0675) / 12;
+    const N = 360;
+    const M = P * (r * Math.pow(1+r,N)) / (Math.pow(1+r,N)-1);
+    return Number.isFinite(M) ? M : 0;
+  }
+
+  function affordabilityScore(monthlyIncome, medianPrice){
+    const annual = (Number(monthlyIncome) || 0) * 12;
+    const P = Number(medianPrice) || 0;
+    let score = 100 - (P / Math.max(annual,1)) * 35;
+    return Math.max(0, Math.min(100, score));
+  }
+
+  function starsFromScore(score){
+    const raw = 1 + (Number(score)||0) * 0.04;
+    const snapped = Math.round(raw * 2) / 2;
+    const full = Math.floor(snapped);
+    const half = (snapped - full) >= 0.5;
+    let s = "";
+    for(let i=0;i<5;i++) s += i < full ? "★" : (i === full && half ? "⯪" : "☆");
+    return { value: snapped.toFixed(1), stars: s };
+  }
+
+  // ============================================================
+  // //#10) TOP STRIP HELPERS
+  // ============================================================
+  function marketSignalFromCity(city){
+    const yoy = Number(
+      safe(city,"snapshot.market_trend_yoy", null)
+      ?? safe(city,"housing.market.zillow_one_year_change_percent", null)
+      ?? safe(city,"housing.market.one_year_change_percent", null)
+      ?? 0
+    ) || 0;
+
+    const dom = Number(
+      safe(city,"housing.market.average_days_on_market", null)
+      ?? safe(city,"housing.market.average_days_on_market_range.low", null)
+      ?? 0
+    ) || 0;
+
+    const marketSummary = safe(city,"market_bluf.bluf_summary","")
+      || safe(city,"housing.market.market_type_summary","")
+      || "";
+
+    const marketType = String(
+      safe(city,"market_bluf.status","")
+      || safe(city,"housing.market.market_type","")
+      || ""
+    ).toLowerCase();
+
+    if (marketType.includes("buyer") || yoy <= -2 || dom >= 55) {
+      return {
+        label: "Buyer-Friendly",
+        sub: marketSummary || "Inventory elevated • Softer prices • Better leverage",
+        meta: "Current market condition"
+      };
+    }
+
+    if (marketType.includes("seller") || yoy >= 2 || dom <= 30) {
+      return {
+        label: "Seller-Leaning",
+        sub: marketSummary || "Tighter inventory • Firmer pricing • Less leverage",
+        meta: "Current market condition"
+      };
+    }
+
+    return {
+      label: "Balanced",
+      sub: marketSummary || "Supply and pricing appear balanced for disciplined entry",
+      meta: "Current market condition"
+    };
+  }
+
+  function purchasePowerFromInputs(totalPay, stack){
+    const ratio = (Number(totalPay) || 0) / Math.max(Number(stack) || 0, 1);
+    let score = 1;
+    if (ratio >= 4.0) score = 5.0;
+    else if (ratio >= 3.3) score = 4.5;
+    else if (ratio >= 2.8) score = 4.0;
+    else if (ratio >= 2.4) score = 3.5;
+    else if (ratio >= 2.1) score = 3.0;
+    else if (ratio >= 1.8) score = 2.5;
+    else if (ratio >= 1.6) score = 2.0;
+    else if (ratio >= 1.4) score = 1.5;
+    return Number(score.toFixed(1));
+  }
+
+  function starsFrom5(score){
+    const rounded = Math.round(Number(score) || 0);
+    let out = "";
+    for (let i = 1; i <= 5; i++) out += i <= rounded ? "★" : "☆";
+    return out;
+  }
+
+  function housingStackForTopCard(city, family){
+    const beds = familyToBedrooms(family);
+    const bedroom = getBedroomProfile(city, beds);
+    const price = Number(bedroom.homePrice || 0) || Number(pickMedianPrice(city) || 0);
+    const mortgage = Number(bedroom.mortgage || 0) || Number(monthlyMortgageEstimate(price, 0.0675) || 0);
+    const taxes = Number(estimateTaxesMonthly(city, price) || 0);
+    const insurance = Number(estimateInsuranceMonthly(city, price) || 0);
+    const hoa = Number(pickHOA(city, beds) || 0);
+    const utilities = Number(bedroom.utilities || 0);
+    return { beds, price, mortgage, taxes, insurance, hoa, utilities, total: mortgage + taxes + insurance + hoa + utilities };
+  }
+
+  function updateTopStripCards(data){
+    const totalPay = Number(data.totalPay || 0);
+    const bahDelta = Number(data.bahDelta || 0);
+    const market = data.market || { label:"Balanced", sub:"", meta:"Current market condition" };
+    const powerScore = Number(data.powerScore || 0);
+
+    setText("#pcs-income-main", money(totalPay));
+    setHTML("#pcs-income-breakdown", `Base Pay: ${money(data.basePay)} <span class="pcs-dot"></span> BAH: ${money(data.bah)} <span class="pcs-dot"></span> BAS: ${money(data.bas)}`);
+    setText("#pts-income-meta", "True disposable baseline before housing");
+
+    setText("#pts-bah-delta", `${bahDelta >= 0 ? "+" : "-"}${money(Math.abs(bahDelta)).replace("$","$")}`);
+    setText("#pts-bah-copy", "Compared with your previous duty station housing allowance.");
+    setText("#pts-bah-meta", "vs. Previous Duty Station");
+
+    setText("#pts-market-signal", market.label);
+    setText("#pts-market-copy", market.sub);
+    setText("#pts-market-meta", market.meta);
+
+    setText("#pts-power-score", powerScore.toFixed(1));
+    setText("#pts-power-stars", starsFrom5(powerScore));
+    setText("#pts-power-copy", "Based on total income & housing market");
+    setText("#pts-power-meta", "Overall affordability signal");
+  }
+
+  // ============================================================
+  // //#11) CHART REFS
+  // ============================================================
+  let chartCurrent = null, chartUpcoming = null, headerIncomeChart = null, headerBahChart = null, affordChart = null;
+
+  function destroyIfExists(chartRef){ if (chartRef) try { chartRef.destroy(); } catch(e) {} }
+
+  function renderHousingChart(canvasId, bah, mortgage){
+    const el = $(canvasId);
+    if(!el || typeof Chart === "undefined") return null;
+    const avg = Number(mortgage) || 0;
+    return new Chart(el, {
+      type:"bar",
+      data:{
+        labels:["Low","Avg","High","BAH"],
+        datasets:[{
+          data:[avg*0.85, avg, avg*1.15, Number(bah)||0],
+          backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#8ef3c5"],
+          borderWidth:0
+        }]
+      },
+      options:{
+        responsive:true,
+        maintainAspectRatio:false,
+        plugins:{ legend:{ display:false }, tooltip:{ enabled:false } },
+        scales:{
+          y:{ ticks:{ color:"#e9ecff", callback:(v)=>"$"+Math.round(v) }, grid:{ color:"rgba(255,255,255,.08)" } },
+          x:{ ticks:{ color:"#e9ecff" }, grid:{ display:false } }
+        }
+      }
+    });
+  }
+
+  function renderTrendApex(fullData) {
+    const chartEl = $("#pcs-trend-chart-apex");
+    if (!chartEl || typeof ApexCharts === "undefined") return;
+    if (window.pcsTrendChart) try { window.pcsTrendChart.destroy(); } catch {}
+    const seriesData = (Array.isArray(fullData) ? fullData : []).map(d => {
+      const x = normalizeTrendDate(d.month || d.date || d.period || d.timestamp || null);
+      const y = Number(d.median_sale_price ?? d.medianSalePrice ?? d.median ?? d.value ?? null);
+      return (x && Number.isFinite(y)) ? { x, y } : null;
+    }).filter(Boolean);
+
+    window.pcsTrendChart = new ApexCharts(chartEl, {
+      chart:{ type:'line', height:200, foreColor:'#e9ecff', toolbar:{ show:false } },
+      stroke:{ width:3, curve:'smooth', colors:['#8ef3c5'] },
+      series:[{ name:"Median Sale Price", data:seriesData }],
+      xaxis:{ type:'datetime', labels:{ style:{ colors:'#e9ecff' } } },
+      yaxis:{ labels:{ style:{ colors:'#e9ecff' }, formatter: val => "$" + Math.round(val).toLocaleString() } },
+      tooltip:{ theme:'dark', x:{ format:"MMM yyyy" }, y:{ formatter:v => "$" + Math.round(v).toLocaleString() } },
+      grid:{ borderColor:"rgba(255,255,255,0.08)" }
+    });
+    window.pcsTrendChart.render();
+  }
+
+  // ============================================================
+  // //#12) HEADER + TOP CHARTS
+  // ============================================================
+  async function initHeaderAndCharts(pay, p, city){
+    const isAD = p.type === "ad";
+    let base = 0, bah = 0, bas = 0, prevBah = 0;
+
+    if (isAD) {
+      const vals = await calcBahFromPay(pay, {
+        rank:p.rank, yos:p.yos, family:p.family,
+        baseLoc:p.newBase || p.base || DEFAULT_BASE,
+        zip:p.newZip || fallbackZip(p.newBase || p.base || DEFAULT_BASE)
+      });
+      const prevVals = await calcBahFromPay(pay, {
+        rank:p.rank, yos:p.yos, family:p.family,
+        baseLoc:p.curBase || DEFAULT_BASE,
+        zip:p.curZip || fallbackZip(p.curBase || DEFAULT_BASE)
+      });
+      base = vals.basePay || 0;
+      bah = vals.bah || 0;
+      bas = vals.bas || 0;
+      prevBah = prevVals.bah || 0;
+    } else {
+      const full = pay.DISABILITY_FULL || {};
+      const keys = Object.keys(full).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
+      let best = keys[0] ?? 0, diff = Math.abs(p.va - best);
+      keys.forEach(k => { const d = Math.abs(p.va - k); if (d < diff){ diff = d; best = k; } });
+      const row = full[String(best)];
+      base = row ? row.veteran : 0;
+      prevBah = 0;
+    }
+
+    const total = base + bah + bas;
+
+    setHTML("#pcs-city-line", `${locationName(city, p.newBase || p.base || DEFAULT_BASE)} <span class="pcs-dot"></span> Quick PCS Snapshot`);
+
+    setText("#pcs-qf-poverty", (safe(city,"income.poverty_rate_percent", safe(city,"poverty_rate_percent",0)) || 0) + "%");
+    setText("#pcs-qf-home", money(safe(city,"housing.median_value_owner_occupied", pickMedianPrice(city))));
+    setText("#pcs-qf-dom", String(pickDOM(city) ?? "—"));
+
+    const medInc = safe(city,"snapshot.median_household_income", null)
+      ?? safe(city,"income.median_household_income", null)
+      ?? safe(city,"demographics.income.median_household_income", null)
+      ?? safe(city,"median_household_income", 60000);
+
+    const low = medInc * 0.6, avg = medInc, high = medInc * 1.35, userA = total * 12;
+
+    destroyIfExists(headerIncomeChart);
+    const incomeEl = $("#pcs-income-chart");
+    if (incomeEl && typeof Chart !== "undefined") {
+      headerIncomeChart = new Chart(incomeEl,{
+        type:"bar",
+        data:{ labels:["Low","Avg","High","You"], datasets:[{ data:[low,avg,high,userA], backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#8ef3c5"] }] },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ticks:{color:"#e9ecff", callback:v=>"$"+(v/1000)+"k"}, grid:{color:"rgba(255,255,255,.06)"}}, x:{ticks:{color:"#e9ecff"}, grid:{display:false}} } }
+      });
+    }
+
+    setText("#pcs-income-summary", (((userA-avg)>=0?"+":"") + (((userA-avg)/Math.max(avg,1))*100).toFixed(1) + "% vs median household income"));
+
+    const P = pickMedianPrice(city) || 295000;
+    const M = monthlyMortgageEstimate(P, 0.0675);
+
+    destroyIfExists(headerBahChart);
+    const bahEl = $("#pcs-bah-chart");
+    if (bahEl && typeof Chart !== "undefined") {
+      headerBahChart = new Chart(bahEl,{
+        type:"bar",
+        data:{ labels:["Low","Avg","High","Your BAH"], datasets:[{ data:[M*0.85,M,M*1.15,bah], backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#6aa7ff"] }] },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ticks:{color:"#e9ecff", callback:v=>"$"+Math.round(v)}, grid:{color:"rgba(255,255,255,.06)"}}, x:{ticks:{color:"#e9ecff"},grid:{display:false}} } }
+      });
+    }
+
+    setText("#pcs-bah-summary", bah > 0 && M > 0 ? `Your BAH covers ~${((bah/M)*100).toFixed(1)}% of estimated mortgage.` : "BAH not found for this rank/base yet — pay tables may be missing that row.");
+
+    const allMonths = safe(city,"housing.market.sale_history_36_months", null) ?? safe(city,"housing.sale_history_36_months", null) ?? safe(city,"market.sale_history_36_months", []) ?? [];
+    const last12 = Array.isArray(allMonths) ? allMonths.slice(-12) : [];
+    const last36 = Array.isArray(allMonths) ? allMonths.slice(-36) : [];
+    renderTrendApex(last12);
+
+    const btn1 = $("#btn-1yr"), btn3 = $("#btn-3yr");
+    if (btn1) btn1.onclick = () => { btn1.classList.add("active"); if (btn3) btn3.classList.remove("active"); renderTrendApex(last12); };
+    if (btn3) btn3.onclick = () => { btn3.classList.add("active"); if (btn1) btn1.classList.remove("active"); renderTrendApex(last36); };
+
+    const yoy = safe(city,"snapshot.market_trend_yoy", null)
+      ?? safe(city,"housing.market.zillow_one_year_change_percent", null)
+      ?? safe(city,"housing.market.one_year_change_percent", null)
+      ?? safe(city,"yoy_change_percent", 0);
+
+    const marketSummary = safe(city,"market_bluf.bluf_summary","")
+      || safe(city,"housing.market.market_type_summary","")
+      || "";
+
+    setText("#pcs-trend-summary", `12-month change: ${Number(yoy)||0}% • ${marketSummary}`);
+
+    let score = 100 - (Number(P)/Math.max(userA,1))*35;
+    score = Math.max(0,Math.min(100,score));
+
+    destroyIfExists(affordChart);
+    const affEl = $("#pcs-afford-chart");
+    if (affEl && typeof Chart !== "undefined") {
+      affordChart = new Chart(affEl,{
+        type:"doughnut",
+        data:{ labels:["Score","Remaining"], datasets:[{ data:[score,100-score], backgroundColor:["#6aa7ff","#1a2239"], borderWidth:0, cutout:"70%" }] },
+        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{enabled:false}} }
+      });
+    }
+
+    setText("#pcs-afford-summary", `Affordability Score: ${score.toFixed(0)}/100.`);
+    renderQuickFacts(city, P);
+
+    const stack = housingStackForTopCard(city, p.family);
+    updateTopStripCards({
+      totalPay: total,
+      basePay: base,
+      bah,
+      bas,
+      bahDelta: bah - prevBah,
+      market: marketSignalFromCity(city),
+      powerScore: purchasePowerFromInputs(total, stack.total)
+    });
+  }
+
+  // ============================================================
+  // //#13) CURRENT / UPCOMING COMPARISON
+  // ============================================================
+  async function initComparison(pay, p){
+    const status = $("#pcsc-status");
+    const newBase = fallbackBase(p.newBase || p.base || DEFAULT_BASE);
+    const newFileKey = String(p.newFileKey || fallbackFileKey(newBase) || DEFAULT_FILE_KEY).trim();
+
+    if (status) status.textContent = "Loading base comparison…";
+
+    const cityNew = await loadCityExact(newFileKey);
+
+    // Visible main city panel = upcoming duty station
+    setImgFromCity($("#img-current"), cityNew);
+    setText("#pcs-current-city", locationName(cityNew, newBase));
+
+    const buyLabel = marketSignalFromCity(cityNew).label;
+    const buySummary = safe(cityNew,"market_bluf.bluf_summary","")
+      || safe(cityNew,"housing.market.market_type_summary","")
+      || "Housing conditions are being evaluated for this market.";
+    setText("#pcs-current-bluf-headline", buyLabel);
+    setText("#pcs-current-bluf-summary", buySummary);
+
+    // Hidden legacy targets preserved
+    const priceNew = pickMedianPrice(cityNew);
+    const yoyNew = pickYoY(cityNew);
+    const domNew = pickDOM(cityNew);
+
+    setText("#loc-upcoming", locationName(cityNew, newBase));
+    setText("#price-upcoming", money(priceNew));
+    setText("#yoy-upcoming", yoyNew == null ? "—" : String(yoyNew) + "%");
+    setText("#dom-upcoming", domNew == null ? "—" : String(domNew));
+
+    if (status) status.textContent = "Loaded.";
+  }
+
+  // ============================================================
+  // //#14) HOUSING AFFORDABILITY BREAKDOWN
+  // ============================================================
+  function setAffordDonutVisual(parts){
+    const values = [
+      Number(parts.mortgage || 0),
+      Number(parts.taxes || 0),
+      Number(parts.insurance || 0),
+      Number(parts.hoa || 0),
+      Number(parts.utilities || 0)
+    ];
+
+    const total = Math.max(values.reduce((sum, v) => sum + v, 0), 1);
+    const mDeg = (values[0] / total) * 360;
+    const tDeg = (values[1] / total) * 360;
+    const iDeg = (values[2] / total) * 360;
+    const hDeg = (values[3] / total) * 360;
+    const uDeg = (values[4] / total) * 360;
+
+    const s1 = mDeg, s2 = s1 + tDeg, s3 = s2 + iDeg, s4 = s3 + hDeg, s5 = s4 + uDeg;
+    const donut = $("#pcs-afford-donut");
+    if (!donut) return;
+
+    donut.style.background = `conic-gradient(
+      #4f7fff 0deg ${s1}deg,
+      #5774ff ${s1}deg ${s2}deg,
+      #203c8d ${s2}deg ${s3}deg,
+      #d3af58 ${s3}deg ${s4}deg,
+      #57b293 ${s4}deg ${s5}deg
+    )`;
+
+    placeAffordDonutLabels([
+      { selector: "#pcs-amt-mortgage", value: values[0] },
+      { selector: "#pcs-amt-taxes", value: values[1] },
+      { selector: "#pcs-amt-insurance", value: values[2] },
+      { selector: "#pcs-amt-hoa", value: values[3] },
+      { selector: "#pcs-amt-utilities", value: values[4] }
+    ], total);
+  }
+
+  function placeAffordDonutLabels(slices, total){
+    const wrap = $(".pcs-donut-wrap");
+    if (!wrap) return;
+
+    const size = wrap.getBoundingClientRect().width;
+    const centerX = size / 2;
+    const centerY = size / 2;
+    const outerRadius = size / 2;
+    const innerRadius = size * (56 / 292);
+    const ringMidRadius = (outerRadius + innerRadius) / 2;
+
+    let startDeg = 0;
+
+    slices.forEach((slice) => {
+      const el = $(slice.selector);
+      if (!el) return;
+
+      const value = Number(slice.value || 0);
+      const sweepDeg = (value / total) * 360;
+      const midDeg = startDeg + (sweepDeg / 2);
+      const cartesianDeg = midDeg + DONUT_ROTATION_DEG + CONIC_TO_CARTESIAN_OFFSET_DEG;
+
+      const radiusBoost = sweepDeg < 8 ? 26 : sweepDeg < 14 ? 18 : sweepDeg < 22 ? 10 : 0;
+      const labelRadius = ringMidRadius + radiusBoost;
+
+      const rad = cartesianDeg * Math.PI / 180;
+      const x = centerX + Math.cos(rad) * labelRadius;
+      const y = centerY + Math.sin(rad) * labelRadius;
+
+      el.style.left = `${x}px`;
+      el.style.top = `${y}px`;
+      el.style.right = "auto";
+      el.style.bottom = "auto";
+      el.style.transform = "translate(-50%, -50%)";
+
+      startDeg += sweepDeg;
+    });
+  }
+
+  async function getPayPacketForPrimary(){
+    const p = LOADED_QUERY;
+    const pay = LOADED_PAY;
+    if (!p || !pay) return { bah:0, basePay:0, bas:0 };
+    if (p.type === "ad") {
+      return await calcBahFromPay(pay, {
+        rank: p.rank,
+        yos: p.yos,
+        family: p.family,
+        baseLoc: p.newBase || p.base || DEFAULT_BASE,
+        zip: p.newZip || fallbackZip(p.newBase || p.base || DEFAULT_BASE)
+      });
+    }
+    const full = pay.DISABILITY_FULL || {};
+    const keys = Object.keys(full).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
+    let best = keys[0] ?? 0, diff=Math.abs(p.va-best);
+    keys.forEach(k=>{ const d=Math.abs(p.va-k); if(d<diff){ diff=d; best=k; } });
+    const row = full[String(best)];
+    return { bah:0, basePay: row ? row.veteran : 0, bas:0 };
+  }
+
+  async function renderAffordabilityBreakdownForBedroom(beds){
+    if (!LOADED_PRIMARY_CITY || !LOADED_PAY || !LOADED_QUERY) return null;
+
+    CURRENT_BEDROOM = clamp(Number(beds) || familyToBedrooms(LOADED_QUERY.family), 2, 5);
+
+    const payVals = await getPayPacketForPrimary();
+    const bah = Number(payVals.bah || 0);
+
+    const city = LOADED_PRIMARY_CITY;
+    const bedroom = getBedroomProfile(city, CURRENT_BEDROOM);
+
+    const avgHomePrice = Number(bedroom.homePrice || 0) || Number(pickMedianPrice(city) || 0);
+    const mortgage = Number(bedroom.mortgage || 0) || Number(monthlyMortgageEstimate(avgHomePrice, 0.0675) || 0);
+    const taxes = Number(estimateTaxesMonthly(city, avgHomePrice) || 0);
+    const insurance = Number(estimateInsuranceMonthly(city, avgHomePrice) || 0);
+    const hoa = Number(pickHOA(city, CURRENT_BEDROOM) || 0);
+    const utilities = Number(bedroom.utilities || 0);
+
+    const stackTotal = mortgage + taxes + insurance + hoa + utilities;
+    const coveragePct = stackTotal > 0 ? (bah / stackTotal) * 100 : 0;
+    const gap = bah - stackTotal;
+    const isPositive = gap >= 0;
+
+    setText("#pcs-bedroom-value", String(CURRENT_BEDROOM));
+    setHTML("#pcs-afford-headline", `${isPositive ? money(gap) : money(Math.abs(gap))} <span>${isPositive ? "Monthly Buffer" : "Required from Base Pay"}</span>`);
+    setHTML("#pcs-afford-subline", `BAH covers <strong>${pct(coveragePct, 0)}</strong> of a typical ${CURRENT_BEDROOM}-bedroom housing stack`);
+
+    setText("#pcs-afford-home-price", money(avgHomePrice));
+    setText("#pcs-afford-mortgage", money(mortgage));
+    setText("#pcs-afford-taxes", money(taxes));
+    setText("#pcs-afford-insurance", money(insurance));
+    setText("#pcs-afford-hoa", money(hoa));
+    setText("#pcs-afford-utilities", money(utilities));
+
+    setText("#pcs-donut-buffer", `${isPositive ? "+" : "-"}${Math.round(Math.abs(gap)).toLocaleString()}`);
+    setText("#pcs-donut-buffer-label", isPositive ? "Monthly Buffer" : "Required from Base Pay");
+
+    setText("#pcs-amt-mortgage", money(mortgage));
+    setText("#pcs-amt-taxes", money(taxes));
+    setText("#pcs-amt-insurance", money(insurance));
+    setText("#pcs-amt-hoa", money(hoa));
+    setText("#pcs-amt-utilities", money(utilities));
+
+    setText("#pcs-leg-mortgage", money(mortgage));
+    setText("#pcs-leg-taxes", money(taxes));
+    setText("#pcs-leg-insurance", money(insurance));
+    setText("#pcs-leg-hoa", money(hoa));
+    setText("#pcs-leg-utilities", money(utilities));
+
+    setText("#pcs-afford-footer",
+      isPositive
+        ? `Based on BAH only, this market leaves an estimated ${money(gap)} monthly housing buffer at the ${CURRENT_BEDROOM}-bedroom level.`
+        : `Based on BAH only, this market would require about ${money(Math.abs(gap))} from base pay each month at the ${CURRENT_BEDROOM}-bedroom level.`
+    );
+
+    setAffordDonutVisual({ mortgage, taxes, insurance, hoa, utilities });
+
+    return { bedroom, bah, avgHomePrice, mortgage, taxes, insurance, hoa, utilities, stackTotal, gap, coveragePct };
+  }
+
+  function bindBedroomControls(){
+    const up = $("#pcs-bedroom-up");
+    const down = $("#pcs-bedroom-down");
+    if (up) up.addEventListener("click", () => { renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM + 1); });
+    if (down) down.addEventListener("click", () => { renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM - 1); });
+  }
+
+  function bindAffordResize(){
+    window.addEventListener("resize", () => {
+      if (!LOADED_PRIMARY_CITY) return;
+      renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM);
+    });
+  }
+
+  // ============================================================
+  // //#15) OWNERSHIP BREAKDOWN
+  // ============================================================
+  function setOwnershipBars(lowCost, highCost, medianPrice){
+    const low = Number(lowCost || 0), high = Number(highCost || 0), median = Number(medianPrice || 0);
+    const maxVal = Math.max(low, high, median, 1);
+    const lowPct = clamp((low / maxVal) * 100, 18, 92);
+    const highPct = clamp((high / maxVal) * 100, 18, 92);
+    const lowBar = $("#pcs-own-bar-low"), highBar = $("#pcs-own-bar-high");
+    if (lowBar) lowBar.style.height = `${lowPct}%`;
+    if (highBar) highBar.style.height = `${highPct}%`;
+
+    const axisTop = Math.ceil(maxVal / 50000) * 50000;
+    const step = axisTop / 4;
+    if ($("#pcs-own-y1")) $("#pcs-own-y1").textContent = money(axisTop);
+    if ($("#pcs-own-y2")) $("#pcs-own-y2").textContent = money(step * 3);
+    if ($("#pcs-own-y3")) $("#pcs-own-y3").textContent = money(step * 2);
+    if ($("#pcs-own-y4")) $("#pcs-own-y4").textContent = money(step);
+  }
+
+  function renderOwnershipBreakdown(affordData, city){
+    const medianPrice = Number(pickMedianPrice(city) || 0);
+    const lowHousingCost = Number(affordData.avgHomePrice || 0) > 0 ? Number(affordData.avgHomePrice) : medianPrice * 0.90;
+    const highHousingCost = Number(medianPrice || 0) > 0 ? medianPrice : lowHousingCost * 1.12;
+
+    setOwnershipBars(lowHousingCost, highHousingCost, medianPrice);
+    setText("#pcs-own-low-value", money(lowHousingCost));
+    setText("#pcs-own-high-value", money(highHousingCost));
+    setText("#pcs-own-chip-median", money(medianPrice));
+    setText("#pcs-own-high-tag", "Market Ceiling");
+
+    const gapLow = lowHousingCost > 0 ? ((medianPrice - lowHousingCost) / lowHousingCost) * 100 : 0;
+    const gapHigh = highHousingCost > 0 ? ((highHousingCost - medianPrice) / highHousingCost) * 100 : 0;
+
+    const gapLowEl = $("#pcs-own-chip-gap-low"), gapHighEl = $("#pcs-own-chip-gap-high");
+    if (gapLowEl) { gapLowEl.textContent = `${gapLow >= 0 ? "+" : ""}${pct(gapLow, 1)}`; gapLowEl.classList.remove("pos", "neg"); gapLowEl.classList.add(gapLow >= 0 ? "pos" : "neg"); }
+    if (gapHighEl) { gapHighEl.textContent = `${gapHigh >= 0 ? "+" : ""}${pct(gapHigh, 1)}`; gapHighEl.classList.remove("pos", "neg"); gapHighEl.classList.add(gapHigh >= 0 ? "pos" : "neg"); }
+
+    const ownershipText = affordData.gap >= 0
+      ? `BAH-only analysis shows entry-level ownership is more plausible than the market median suggests.`
+      : `BAH-only analysis suggests lower-cost housing entry points are more realistic than the median market price.`;
+
+    setText("#pcs-own-gap-note", ownershipText);
+    setText("#pcs-own-right-text", `Projected range: ${money(lowHousingCost)} to ${money(highHousingCost)}`);
+  }
+
+  // ============================================================
+  // //#16) MAIN INIT
+  // ============================================================
+  async function init(){
+    const p = getQuery();
+    const pay = await load(MILPAY_JSON_URL);
+
+    const primaryFileKey = String(p.newFileKey || p.cityKey || fallbackFileKey(p.newBase || p.base || DEFAULT_BASE) || DEFAULT_FILE_KEY).trim() || DEFAULT_FILE_KEY;
+    const primaryCity = await loadCityExact(primaryFileKey);
+
+    LOADED_QUERY = p;
+    LOADED_PAY = pay;
+    LOADED_PRIMARY_CITY = primaryCity;
+    CURRENT_BEDROOM = familyToBedrooms(p.family);
+
+    await initHeaderAndCharts(pay, p, primaryCity);
+    await initComparison(pay, p);
+
+    bindBedroomControls();
+    bindAffordResize();
+
+    const affordData = await renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM);
+    if (affordData) renderOwnershipBreakdown(affordData, primaryCity);
+  }
+
+  // ============================================================
+  // //#17) BOOT
+  // ============================================================
+  function boot(){
+    init().catch(err=>{
+      console.error("PCS Snapshot error:", err);
+      const wrap = document.getElementById("pcs-snapshot-wrap");
+      if (wrap) {
+        wrap.innerHTML = "<div style='color:#e9ecff;font-size:14px;padding:24px;'>PCS Snapshot is temporarily unavailable. Try again later.</div>";
+      }
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot);
+  } else {
+    boot();
+  }
+
+})();
+</script>
+
+</body>
+</html>

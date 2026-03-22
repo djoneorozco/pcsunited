@@ -1,10 +1,10 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Mar 22 2026 15:39:47 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="69ba163c0418d114ff006a91" data-wf-site="69b6b526f23748df9f189b16" lang="en">
+<html data-wf-page="69bff4dc402e838ad540b617" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>PCS-Snapshot</title>
-  <meta content="PCS-Snapshot" property="og:title">
-  <meta content="PCS-Snapshot" property="twitter:title">
+  <title>Original PCS-Snapshot</title>
+  <meta content="Original PCS-Snapshot" property="og:title">
+  <meta content="Original PCS-Snapshot" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
@@ -1450,10 +1450,10 @@ UPDATED:
   // ============================================================
   // PCS SNAPSHOT v4.2.2 RUNTIME
   // UPDATED:
-  // - Removed BASE REGISTRY + ALIASES (moved to GitHub)
-  // - Added dynamic base index loader
-  // - Fixed async query resolution
-  // - Fixed PCS CITY INTELLIGENCE BRIEF visible panel mappings
+  // - Wired new 4-card top header strip
+  // - Fixed Monthly Income card "/ month" duplication
+  // - Removed dead writes to old visible top-strip selectors
+  // - Kept legacy hidden/runtime targets intact where useful
   // ============================================================
   // ============================================================
   // //#1) CONFIG
@@ -1462,7 +1462,6 @@ UPDATED:
   const DIRECT_FN_BASE = "https://pcsunited.netlify.app/.netlify/functions";
   const MILPAY_JSON_URL = "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/militaryPayTables.json";
   const CITY_GITHUB_RAW_BASE = "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/";
-  const BASE_INDEX_URL = "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/index.byBase.json";
   const DEFAULT_BASE = "Lackland AFB";
   const DEFAULT_FILE_KEY = "Lackland";
   const DEFAULT_ZIP = "78236";
@@ -1473,36 +1472,100 @@ UPDATED:
   let LOADED_PAY = null;
   let LOADED_QUERY = null;
   // ============================================================
-  // //#2) BASE INDEX (REPLACES REGISTRY)
+  // //#2) BASE REGISTRY
   // ============================================================
-  let BASE_INDEX = { bases: {}, aliases: {} };
-  async function loadBaseIndex() {
-    if (BASE_INDEX && Object.keys(BASE_INDEX.bases || {}).length) return BASE_INDEX;
-    BASE_INDEX = await fetch(BASE_INDEX_URL, { cache: "no-store" })
-      .then(r => r.json())
-      .catch(() => ({ bases: {}, aliases: {} }));
-    return BASE_INDEX;
-  }
-  function getBaseIndex() {
-    return BASE_INDEX || { bases: {}, aliases: {} };
-  }
-  async function resolveBase(baseInput) {
-    await loadBaseIndex();
-    const index = getBaseIndex();
-    const bases = index.bases || {};
-    const aliases = index.aliases || {};
-    const clean = String(baseInput || "").trim();
-    const canonical = bases[clean]
-      ? clean
-      : aliases[clean] || clean;
-    const record = bases[canonical] || null;
-    return {
-      canonical,
-      fileKey: record?.file || DEFAULT_FILE_KEY,
-      zip: record?.zip || DEFAULT_ZIP,
-      cityKey: record?.cityKey || DEFAULT_FILE_KEY
-    };
-  }
+  const PCS_BASE_REGISTRY = {
+    "Andrews AFB": { fileKey:"Andrews", zip:"20762" },
+    "Barksdale AFB": { fileKey:"Barksdale", zip:"71110" },
+    "Beale AFB": { fileKey:"Beale", zip:"95903" },
+    "Cannon AFB": { fileKey:"Cannon", zip:"88103" },
+    "Charleston AFB": { fileKey:"Charleston", zip:"29404" },
+    "Davis-Monthan AFB": { fileKey:"Davis-Monthan", zip:"85707" },
+    "Dover AFB": { fileKey:"Dover", zip:"19902" },
+    "Dyess AFB": { fileKey:"Dyess", zip:"79607" },
+    "Eglin AFB": { fileKey:"Eglin", zip:"32542" },
+    "Elmendorf AFB": { fileKey:"Elmendorf", zip:"99506" },
+    "F.E-Warren AFB": { fileKey:"F.E-Warren", zip:"82005" },
+    "Fairchild AFB": { fileKey:"Fairchild", zip:"99011" },
+    "Fort-Sam-Houston AFB": { fileKey:"Fort-Sam-Houston", zip:"78234" },
+    "Holloman AFB": { fileKey:"Holloman", zip:"88330" },
+    "Hurlburt AFB": { fileKey:"Hurlburt", zip:"32544" },
+    "Keesler AFB": { fileKey:"Keesler", zip:"39534" },
+    "Kirtland AFB": { fileKey:"Kirtland", zip:"87117" },
+    "Lackland AFB": { fileKey:"Lackland", zip:"78236" },
+    "Langley AFB": { fileKey:"Langley", zip:"23665" },
+    "Laughlin AFB": { fileKey:"Laughlin", zip:"78843" },
+    "Little-Rock AFB": { fileKey:"Little-Rock", zip:"72099" },
+    "Luke AFB": { fileKey:"Luke", zip:"85309" },
+    "MacDill AFB": { fileKey:"MacDill", zip:"33621" },
+    "Malmstrom AFB": { fileKey:"Malmstrom", zip:"59402" },
+    "Maxwell AFB": { fileKey:"Maxwell", zip:"36112" },
+    "McConnell AFB": { fileKey:"McConnell", zip:"67221" },
+    "McGuire AFB": { fileKey:"McGuire", zip:"08641" },
+    "Minot AFB": { fileKey:"Minot", zip:"58705" },
+    "Moody AFB": { fileKey:"Moody", zip:"31699" },
+    "Mountain-Home AFB": { fileKey:"Mountain-Home", zip:"83648" },
+    "Nellis AFB": { fileKey:"Nellis", zip:"89191" },
+    "Offutt AFB": { fileKey:"Offutt", zip:"68113" },
+    "Peterson AFB": { fileKey:"Peterson", zip:"80914" },
+    "Randolph AFB": { fileKey:"Randolph", zip:"78150" },
+    "Robins AFB": { fileKey:"Robins", zip:"31098" },
+    "Scott AFB": { fileKey:"Scott", zip:"62225" },
+    "Seymour-Johnson AFB": { fileKey:"Seymour-Johnson", zip:"27531" },
+    "Shaw AFB": { fileKey:"Shaw", zip:"29152" },
+    "Sheppard AFB": { fileKey:"Sheppard", zip:"76311" },
+    "Tinker AFB": { fileKey:"Tinker", zip:"73145" },
+    "Travis AFB": { fileKey:"Travis", zip:"94535" },
+    "Tyndall AFB": { fileKey:"Tyndall", zip:"32403" },
+    "Whiteman AFB": { fileKey:"Whiteman", zip:"65305" },
+    "Wright-Patterson AFB": { fileKey:"Wright-Patterson", zip:"45433" }
+  };
+  const PCS_BASE_ALIASES = {
+    "Andrews":"Andrews AFB","AndrewsAFB":"Andrews AFB","Joint Base Andrews":"Andrews AFB","JB Andrews":"Andrews AFB",
+    "Barksdale":"Barksdale AFB","BarksdaleAFB":"Barksdale AFB",
+    "Beale":"Beale AFB","BealeAFB":"Beale AFB",
+    "Cannon":"Cannon AFB","CannonAFB":"Cannon AFB",
+    "Charleston":"Charleston AFB","CharlestonAFB":"Charleston AFB","Joint Base Charleston":"Charleston AFB",
+    "Davis-Monthan":"Davis-Monthan AFB","DavisMonthan":"Davis-Monthan AFB","DavisMonthanAFB":"Davis-Monthan AFB","DMAFB":"Davis-Monthan AFB",
+    "Dover":"Dover AFB","DoverAFB":"Dover AFB",
+    "Dyess":"Dyess AFB","DyessAFB":"Dyess AFB",
+    "Eglin":"Eglin AFB","EglinAFB":"Eglin AFB",
+    "Elmendorf":"Elmendorf AFB","ElmendorfAFB":"Elmendorf AFB","JBER":"Elmendorf AFB","Joint Base Elmendorf-Richardson":"Elmendorf AFB",
+    "F.E-Warren":"F.E-Warren AFB","FE-Warren":"F.E-Warren AFB","FEWarren":"F.E-Warren AFB","FEWarrenAFB":"F.E-Warren AFB","F E Warren":"F.E-Warren AFB","Francis E. Warren":"F.E-Warren AFB",
+    "Fairchild":"Fairchild AFB","FairchildAFB":"Fairchild AFB",
+    "Fort Sam Houston":"Fort-Sam-Houston AFB","Fort-Sam-Houston":"Fort-Sam-Houston AFB","FortSamHouston":"Fort-Sam-Houston AFB","FortSamHoustonAFB":"Fort-Sam-Houston AFB","Fort Sam Houston AFB":"Fort-Sam-Houston AFB","JBSA-Fort-Sam-Houston":"Fort-Sam-Houston AFB","JBSA-Fort Sam Houston":"Fort-Sam-Houston AFB","JBSA Fort Sam Houston":"Fort-Sam-Houston AFB",
+    "Holloman":"Holloman AFB","HollomanAFB":"Holloman AFB",
+    "Hurlburt":"Hurlburt AFB","HurlburtAFB":"Hurlburt AFB","Hurlburt Field":"Hurlburt AFB",
+    "Keesler":"Keesler AFB","KeeslerAFB":"Keesler AFB",
+    "Kirtland":"Kirtland AFB","KirtlandAFB":"Kirtland AFB",
+    "Lackland":"Lackland AFB","LacklandAFB":"Lackland AFB","JBSA-Lackland":"Lackland AFB","JBSA Lackland":"Lackland AFB","Joint Base San Antonio Lackland":"Lackland AFB",
+    "Langley":"Langley AFB","LangleyAFB":"Langley AFB","Joint Base Langley-Eustis":"Langley AFB",
+    "Laughlin":"Laughlin AFB","LaughlinAFB":"Laughlin AFB",
+    "Little Rock AFB":"Little-Rock AFB","Little-Rock":"Little-Rock AFB","LittleRock":"Little-Rock AFB","LittleRockAFB":"Little-Rock AFB","Little Rock":"Little-Rock AFB",
+    "Luke":"Luke AFB","LukeAFB":"Luke AFB",
+    "MacDill":"MacDill AFB","MacDillAFB":"MacDill AFB",
+    "Malmstrom":"Malmstrom AFB","MalmstromAFB":"Malmstrom AFB",
+    "Maxwell":"Maxwell AFB","MaxwellAFB":"Maxwell AFB",
+    "McConnell":"McConnell AFB","McConnellAFB":"McConnell AFB",
+    "McGuire":"McGuire AFB","McGuireAFB":"McGuire AFB","JBMDL":"McGuire AFB","Joint Base McGuire-Dix-Lakehurst":"McGuire AFB",
+    "Minot":"Minot AFB","MinotAFB":"Minot AFB",
+    "Moody":"Moody AFB","MoodyAFB":"Moody AFB",
+    "Mountain Home AFB":"Mountain-Home AFB","Mountain-Home":"Mountain-Home AFB","MountainHome":"Mountain-Home AFB","MountainHomeAFB":"Mountain-Home AFB","Mountain Home":"Mountain-Home AFB",
+    "Nellis":"Nellis AFB","NellisAFB":"Nellis AFB",
+    "Offutt":"Offutt AFB","OffuttAFB":"Offutt AFB",
+    "Peterson":"Peterson AFB","PetersonAFB":"Peterson AFB","Peterson SFB":"Peterson AFB","Peterson Space Force Base":"Peterson AFB",
+    "Randolph":"Randolph AFB","RandolphAFB":"Randolph AFB","JBSA-Randolph":"Randolph AFB","JBSA Randolph":"Randolph AFB","Joint Base San Antonio Randolph":"Randolph AFB",
+    "Robins":"Robins AFB","RobinsAFB":"Robins AFB",
+    "Scott":"Scott AFB","ScottAFB":"Scott AFB",
+    "Seymour Johnson AFB":"Seymour-Johnson AFB","Seymour-Johnson":"Seymour-Johnson AFB","SeymourJohnson":"Seymour-Johnson AFB","SeymourJohnsonAFB":"Seymour-Johnson AFB",
+    "Shaw":"Shaw AFB","ShawAFB":"Shaw AFB",
+    "Sheppard":"Sheppard AFB","SheppardAFB":"Sheppard AFB",
+    "Tinker":"Tinker AFB","TinkerAFB":"Tinker AFB",
+    "Travis":"Travis AFB","TravisAFB":"Travis AFB",
+    "Tyndall":"Tyndall AFB","TyndallAFB":"Tyndall AFB",
+    "Whiteman":"Whiteman AFB","WhitemanAFB":"Whiteman AFB",
+    "Wright-Patterson":"Wright-Patterson AFB","WrightPatterson":"Wright-Patterson AFB","WrightPattersonAFB":"Wright-Patterson AFB","WPAFB":"Wright-Patterson AFB"
+  };
   // ============================================================
   // //#3) DOM HELPERS
   // ============================================================
@@ -1530,50 +1593,21 @@ UPDATED:
   function clamp(n, min, max){
     return Math.max(min, Math.min(max, n));
   }
-  function compactPop(n){
-    const x = Number(n || 0);
-    if (!Number.isFinite(x) || x <= 0) return "—";
-    if (x >= 1000000) return (x / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-    if (x >= 1000) return Math.round(x / 1000) + "K";
-    return String(Math.round(x));
-  }
-  function compactMoney(n){
-    const x = Number(n || 0);
-    if (!Number.isFinite(x) || x <= 0) return "$0";
-    if (x >= 1000000) return "$" + (x / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-    if (x >= 1000) return "$" + Math.round(x / 1000) + "K";
-    return "$" + Math.round(x);
-  }
-  function escapeHtml(str){
-    return String(str == null ? "" : str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
-  }
   // ============================================================
   // //#4) BASE HELPERS
   // ============================================================
   function pcsCanonicalBaseName(raw) {
     const s = String(raw || "").trim();
     if (!s) return "";
-    const index = getBaseIndex();
-    const bases = index.bases || {};
-    const aliases = index.aliases || {};
-    return bases[s] ? s : (aliases[s] || s);
+    return PCS_BASE_REGISTRY[s] ? s : (PCS_BASE_ALIASES[s] || s);
   }
   function pcsFileKeyFromBase(raw) {
     const base = pcsCanonicalBaseName(raw);
-    const index = getBaseIndex();
-    const rec = (index.bases || {})[base];
-    return (rec && rec.file) || "";
+    return (PCS_BASE_REGISTRY[base] && PCS_BASE_REGISTRY[base].fileKey) || "";
   }
   function pcsZipFromBase(raw) {
     const base = pcsCanonicalBaseName(raw);
-    const index = getBaseIndex();
-    const rec = (index.bases || {})[base];
-    return (rec && rec.zip) || "";
+    return (PCS_BASE_REGISTRY[base] && PCS_BASE_REGISTRY[base].zip) || "";
   }
   function fallbackBase(raw) { return pcsCanonicalBaseName(raw) || DEFAULT_BASE; }
   function fallbackFileKey(raw) { return pcsFileKeyFromBase(raw) || DEFAULT_FILE_KEY; }
@@ -1642,8 +1676,7 @@ UPDATED:
   // ============================================================
   // //#7) QUERY INPUTS
   // ============================================================
-  async function getQuery() {
-    await loadBaseIndex();
+  function getQuery() {
     const u = new URL(window.location.href);
     const curBase = fallbackBase(u.searchParams.get("curBase") || sessionStorage.getItem("pcs_current_base") || DEFAULT_BASE);
     const newBase = fallbackBase(u.searchParams.get("newBase") || sessionStorage.getItem("pcs_new_base") || u.searchParams.get("base") || DEFAULT_BASE);
@@ -2077,100 +2110,6 @@ UPDATED:
       || "Housing conditions are being evaluated for this market.";
     setText("#pcs-current-bluf-headline", buyLabel);
     setText("#pcs-current-bluf-summary", buySummary);
-    // FIX: WRITE ALL VISIBLE PCS CITY INTELLIGENCE BRIEF FIELDS
-    const popCity =
-      safe(cityNew, "snapshot.population_city", null)
-      ?? safe(cityNew, "population.estimate", null)
-      ?? 0;
-    const popMetro =
-      safe(cityNew, "snapshot.population_metro", null)
-      ?? safe(cityNew, "population.metro", null)
-      ?? null;
-    const medIncome =
-      safe(cityNew, "snapshot.median_household_income", null)
-      ?? safe(cityNew, "income.median_household_income", null)
-      ?? 0;
-    const medHome =
-      safe(cityNew, "snapshot.median_home_price", null)
-      ?? safe(cityNew, "housing.market.median_listing_price_realtor", null)
-      ?? safe(cityNew, "housing.market.median_sale_price_current", null)
-      ?? safe(cityNew, "avg_home_value", null)
-      ?? 0;
-    const yoy =
-      safe(cityNew, "snapshot.market_trend_yoy", null)
-      ?? safe(cityNew, "housing.market.zillow_one_year_change_percent", null)
-      ?? safe(cityNew, "housing.market.one_year_change_percent", null)
-      ?? 0;
-    const traffic =
-      safe(cityNew, "snapshot.traffic_level", null)
-      ?? safe(cityNew, "traffic_level", null)
-      ?? "—";
-    const employment =
-      safe(cityNew, "snapshot.employment_status", null)
-      ?? safe(cityNew, "employment_status", null)
-      ?? "—";
-    setText("#pcs-cur-population-city", compactPop(popCity));
-    setText("#pcs-cur-population-metro", popMetro ? `Metro: ${compactPop(popMetro)}` : "Metro: —");
-    setText("#pcs-cur-median-income", money(medIncome));
-    setText("#pcs-cur-market-trend", `${Number(yoy) > 0 ? "+" : ""}${Number(yoy).toFixed(1)}% YoY`);
-    setText("#pcs-cur-median-home", compactMoney(medHome));
-    setText("#pcs-cur-traffic-level", String(traffic));
-    setText("#pcs-cur-employment-status", String(employment));
-    const tagline =
-      safe(cityNew, "city_identity.display_tagline", "")
-      || safe(cityNew, "city_identity.nickname", "")
-      || safe(cityNew, "market_label", "")
-      || "";
-    if (tagline) {
-      setText("#pcs-current-tagline", `“${tagline}”`);
-    }
-    const lifestyleBulletsRaw =
-      (Array.isArray(safe(cityNew, "lifestyle.outdoor_hubs", null)) ? safe(cityNew, "lifestyle.outdoor_hubs", []) : [])
-        .map(v => String(v || "").trim())
-        .filter(Boolean);
-    const watchoutsRaw =
-      (Array.isArray(safe(cityNew, "pcs_quality_of_life.watchouts", null)) ? safe(cityNew, "pcs_quality_of_life.watchouts", []) : [])
-        .map(v => String(v || "").trim())
-        .filter(Boolean);
-    const lifestyleFallback = [
-      safe(cityNew, "climate_weather.summer", ""),
-      safe(cityNew, "military_lifestyle_fit.description", ""),
-      safe(cityNew, "snapshot.traffic_level", "")
-        ? `${safe(cityNew, "snapshot.traffic_level", "")} congestion with typical commute patterns`
-        : ""
-    ].filter(Boolean);
-    const lifestyleFinal = []
-      .concat(
-        lifestyleBulletsRaw.length ? lifestyleBulletsRaw : [],
-        watchoutsRaw.length ? watchoutsRaw : [],
-        (!lifestyleBulletsRaw.length && !watchoutsRaw.length) ? lifestyleFallback : []
-      )
-      .filter(Boolean)
-      .slice(0, 3);
-    if (lifestyleFinal.length) {
-      setHTML(
-        "#pcs-cur-lifestyle-list",
-        lifestyleFinal.map(item => `
-          <li class="pcs-mini-item">
-            <span class="pcs-mini-dot"></span>
-            <span>${escapeHtml(item)}</span>
-          </li>
-        `).join("")
-      );
-    }
-    setText(
-      "#pcs-cur-financial-headline",
-      safe(cityNew, "market_bluf.verdict", "")
-      || safe(cityNew, "market_bluf.bluf_headline", "")
-      || "Market Opportunity"
-    );
-    setText(
-      "#pcs-cur-financial-summary",
-      safe(cityNew, "financial_brief.buyer_opportunity", "")
-      || safe(cityNew, "financial_brief.affordability_summary", "")
-      || safe(cityNew, "market_bluf.bluf_summary", "")
-      || "Pricing and inventory conditions are being evaluated for this market."
-    );
     // Hidden legacy targets preserved
     const priceNew = pickMedianPrice(cityNew);
     const yoyNew = pickYoY(cityNew);
@@ -2306,8 +2245,8 @@ UPDATED:
     setText("#pcs-leg-utilities", money(utilities));
     setText("#pcs-afford-footer",
       isPositive
-        ? `Based on BAH-only analysis, this market leaves an estimated ${money(gap)} monthly housing buffer at the ${CURRENT_BEDROOM}-bedroom level.`
-        : `Based on BAH-only analysis, this market would require about ${money(Math.abs(gap))} from base pay each month at the ${CURRENT_BEDROOM}-bedroom level.`
+        ? `Based on BAH only, this market leaves an estimated ${money(gap)} monthly housing buffer at the ${CURRENT_BEDROOM}-bedroom level.`
+        : `Based on BAH only, this market would require about ${money(Math.abs(gap))} from base pay each month at the ${CURRENT_BEDROOM}-bedroom level.`
     );
     setAffordDonutVisual({ mortgage, taxes, insurance, hoa, utilities });
     return { bedroom, bah, avgHomePrice, mortgage, taxes, insurance, hoa, utilities, stackTotal, gap, coveragePct };
@@ -2366,7 +2305,7 @@ UPDATED:
   // //#16) MAIN INIT
   // ============================================================
   async function init(){
-    const p = await getQuery();
+    const p = getQuery();
     const pay = await load(MILPAY_JSON_URL);
     const primaryFileKey = String(p.newFileKey || p.cityKey || fallbackFileKey(p.newBase || p.base || DEFAULT_BASE) || DEFAULT_FILE_KEY).trim() || DEFAULT_FILE_KEY;
     const primaryCity = await loadCityExact(primaryFileKey);

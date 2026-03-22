@@ -5,16 +5,13 @@
   "geo_id": "1600000US0418400",
   "year": 2025,
   "last_updated_data_from_sources": "March 2026",
-
   "image_url": "https://www.dm.af.mil",
   "zip": "85707",
   "market_label": "Tucson Metro",
-
   "avg_home_value": 338249,
   "average_home_value": 338249,
   "avgHome": 338249,
   "city_avg_home": 338249,
-
   "mortgage_assumptions": {
     "apr_percent": 6.3,
     "term_years": 30,
@@ -22,108 +19,79 @@
     "includes": "va_loan_all_in",
     "defaults_note": "Calculations based on 2026 VA loan rates for Tucson. APR varies by credit score."
   },
-
   "property_tax_rate": 1.1,
   "insurance_rate": 0.4,
   "hoa_monthly": 45,
-
   "avg_home_mortgage_monthly": {
     "avg": 2095,
     "as_of": "2026-01",
     "notes": "Based on Tucson typical home value with VA loan (0% down)."
   },
-
-  /* =========================================================
-     CORE DEMOGRAPHICS
-  ========================================================= */
-
   "population": {
     "estimate": 46000,
     "median_age": 24.5,
     "persons_per_household": 3.1
   },
-
   "households": {
     "total_households": 11000
   },
-
   "income": {
     "median_household_income": 65319,
     "per_capita_income": 32537,
     "poverty_rate_percent": 10.4
   },
-
   "education": {
     "high_school_grad_or_higher_percent": 94.2,
     "bachelors_degree_or_higher_percent": 22.8
   },
-
   "veterans": {
     "veteran_population_percent": 18.5
   },
-
   "immigration": {
     "foreign_born_percent": 8.2
   },
-
   "labor": {
     "mean_travel_time_to_work_minutes": 15.4,
     "unemployment_rate_percent": 4.2
   },
-
-  /* =========================================================
-     LIFESTYLE + QUALITY LAYERS
-  ========================================================= */
-
   "crime_status": {
     "installation": "High security; controlled access environment; significantly lower crime than municipal average.",
     "metro_tucson": "Property crime approximately 1.8% above national average; violent crime trended down 14% in 2025."
   },
-
   "school_quality": {
-    "on_base": "Borman K-8 (Top 5 in Tucson Unified); high military-student concentration (46%).",
+    "on_base": "Borman K-8 (Top 5 in Tucson Unified); high military-student concentration.",
     "off_base": "University High School ranked #1 in AZ; strong districts in Vail and Catalina Foothills."
   },
-
   "rental_vacancy": {
     "rate_percent": 9.5,
     "notes": "Higher vacancy in newer SE Tucson developments near base."
   },
-
   "climate_weather": {
     "spring": "Mild/Dry; 73–81°F",
     "summer": "Extreme heat; 99°F+ with monsoon storms",
     "fall": "Warm; 73–93°F",
     "winter": "Cool/Sunny; 64°F avg highs"
   },
-
   "special_events": [
     "Thunder and Lightning Air Show",
     "Tucson Gem & Mineral Show",
     "El Tour de Tucson",
     "AMARG Boneyard Tours"
   ],
-
   "military_lifestyle_fit": {
     "rating": "Excellent",
     "description": "Highly military-integrated community with strong outdoor lifestyle and veteran support systems."
   },
-
-  /* =========================================================
-     DECISION ENGINE (CRITICAL ADD)
-  ========================================================= */
-
   "financial_brief": {
     "bah_vs_buy_position": "Favorable",
     "bah_vs_rent_position": "Strong",
     "affordability_summary": "VA loan structure with moderate pricing makes ownership highly attainable.",
-    "buyer_opportunity": "Recent price softening creates entry window for buyers.",
+    "buyer_opportunity": "Recent price softening creates entry window.",
     "renter_advantage": false
   },
-
   "market_bluf": {
     "bluf_headline": "Undervalued Military Market",
-    "bluf_summary": "Davis-Monthan offers strong affordability with VA loan leverage and stable demand, creating a strategic buy opportunity for PCS members.",
+    "bluf_summary": "Davis-Monthan offers strong affordability with VA loan leverage and stable demand.",
     "status": "Balanced with slight buyer advantage",
     "inventory_trend": "Stable",
     "buyer_leverage": "Moderate",
@@ -131,7 +99,6 @@
     "verdict_color": "green",
     "confidence_score": 84
   },
-
   "scorecard": {
     "affordability_score": 88,
     "growth_score": 70,
@@ -139,17 +106,11 @@
     "military_fit_score": 92,
     "overall_score": 82
   },
-
   "rules": {
     "max_safe_housing_ratio": 0.30,
     "warning_ratio": 0.35,
     "danger_ratio": 0.40
   },
-
-  /* =========================================================
-     BEDROOM MODEL (2C + 2D CORE ENGINE)
-  ========================================================= */
-
   "by_bedroom": {
     "2": {
       "rent_monthly": { "low": 1150, "high": 1400, "avg": 1270, "as_of": "2026-03" },
@@ -158,7 +119,8 @@
       "utilities": {
         "electric_gas": { "low": 140, "high": 190, "avg": 165 },
         "water_sewer": { "low": 45, "high": 65, "avg": 55 },
-        "total": { "low": 185, "high": 255, "avg": 220 }
+        "total": { "low": 185, "high": 255, "avg": 220 },
+        "as_of": "2026-01"
       }
     },
     "3": {
@@ -168,7 +130,8 @@
       "utilities": {
         "electric_gas": { "low": 190, "high": 260, "avg": 225 },
         "water_sewer": { "low": 55, "high": 85, "avg": 70 },
-        "total": { "low": 245, "high": 345, "avg": 295 }
+        "total": { "low": 245, "high": 345, "avg": 295 },
+        "as_of": "2026-01"
       }
     },
     "4": {
@@ -178,7 +141,8 @@
       "utilities": {
         "electric_gas": { "low": 240, "high": 350, "avg": 295 },
         "water_sewer": { "low": 75, "high": 115, "avg": 95 },
-        "total": { "low": 315, "high": 465, "avg": 390 }
+        "total": { "low": 315, "high": 465, "avg": 390 },
+        "as_of": "2026-01"
       }
     },
     "5": {
@@ -188,22 +152,18 @@
       "utilities": {
         "electric_gas": { "low": 320, "high": 480, "avg": 400 },
         "water_sewer": { "low": 100, "high": 150, "avg": 125 },
-        "total": { "low": 420, "high": 630, "avg": 525 }
+        "total": { "low": 420, "high": 630, "avg": 525 },
+        "as_of": "2026-01"
       }
     }
   },
-
-  /* =========================================================
-     MARKET DATA
-  ========================================================= */
-
   "housing": {
     "housing_units": 15500,
     "median_value_owner_occupied": 338249,
     "market": {
       "zillow_average_home_value": 338249,
       "zillow_one_year_change_percent": -2.6,
-      "market_type_summary": "Balanced market with stabilizing prices; highly affordable relative to Southwest peers",
+      "market_type_summary": "Balanced market with stabilizing prices",
       "average_days_on_market": 45,
       "median_sale_price_current": 322667,
       "median_listing_price_realtor": 350000,
@@ -218,13 +178,12 @@
       ]
     }
   },
-
   "sources": {
-    "demographics": { "provider": "Census Bureau / Military OneSource", "as_of": "2026-01" },
-    "rent": { "provider": "Apartments.com / Zumper / Zillow", "as_of": "2026-03" },
-    "home_price": { "provider": "Tucson Association of Realtors / Zillow", "as_of": "2026-01" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I)", "as_of": "2026-01" },
-    "utilities": { "provider": "TEP / Local Averages", "as_of": "2026-01" },
+    "demographics": { "provider": "Census / Military OneSource", "as_of": "2026-01" },
+    "rent": { "provider": "Apartments.com / Zillow", "as_of": "2026-03" },
+    "home_price": { "provider": "Tucson Realtors / Zillow", "as_of": "2026-01" },
+    "mortgage": { "provider": "VA Loan Estimate", "as_of": "2026-01" },
+    "utilities": { "provider": "Local Utility Estimates", "as_of": "2026-01" },
     "market": { "provider": "Zillow / Realtor.com", "as_of": "2026-01" }
   }
 }

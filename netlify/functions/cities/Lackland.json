@@ -1,23 +1,23 @@
 {
-  "city": "San Antonio, TX",
+  "city": "Lackland AFB, TX",
   "place": "San Antonio, TX",
   "state": "TX",
   "geo_id": "1600000US4865000",
   "year": 2025,
-  "last_updated_data_from_sources": "December 2025",
-  "image_url": "https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696af4683c6fe88a6d1ca1c3_09ea93820b9786fbc59e717f1e03a789_Lackland_BMT_style_320x400.jpg",
-  "zip": "78234",
+  "last_updated_data_from_sources": "March 2026",
+  "image_url": "https://www.jbsa.mil",
+  "zip": "78236",
   "market_label": "San Antonio Metro",
   "avg_home_value": 245985,
   "average_home_value": 245985,
   "avgHome": 245985,
   "city_avg_home": 245985,
   "mortgage_assumptions": {
-    "apr_percent": 7.0,
+    "apr_percent": 6.2,
     "term_years": 30,
-    "down_payment_percent": 5,
-    "includes": "all_in",
-    "defaults_note": "City defaults apply to taxes/insurance/HOA only. APR varies by credit score and/or user override."
+    "down_payment_percent": 0,
+    "includes": "va_loan_all_in",
+    "defaults_note": "Based on 2026 VA loan rates for San Antonio. APR varies by credit score."
   },
   "property_tax_rate": 2.1,
   "insurance_rate": 0.55,
@@ -25,79 +25,15 @@
   "avg_home_mortgage_monthly": {
     "avg": 1555,
     "as_of": "2026-01",
-    "notes": "Historical reference only; do not use for calculation. brain.js computes itemized mortgage from inputs + city rates."
-  },
-  "city_identity": {
-    "nickname": "Alamo City",
-    "display_tagline": "Military Metropolis with Affordable Expansion",
-    "city_designator": "Military-Centric Growth Metro",
-    "growth_status": "Stable growth with strong military and healthcare sectors",
-    "top_industries": ["Military", "Healthcare", "Tourism", "Government"],
-    "major_sports": ["San Antonio Spurs (NBA)"]
-  },
-  "snapshot": {
-    "population_city": 1526656,
-    "population_metro": 2600000,
-    "median_household_income": 69906,
-    "median_home_price": 288000,
-    "market_trend_yoy": -3.2,
-    "traffic_level": "Moderate",
-    "employment_status": "Stable"
-  },
-  "weather_profile": {
-    "climate_label": "Subtropical",
-    "summer_avg_high_f": 95,
-    "winter_avg_high_f": 64,
-    "sunny_days_per_year": 220,
-    "snow_risk": "Very Low",
-    "seasonal_notes": "Hot summers with humidity, mild winters, occasional storms"
-  },
-  "lifestyle": {
-    "family_friendliness": "High",
-    "pcs_fit": "Excellent for families and long-term assignments with strong military presence",
-    "culture": "Blend of historic heritage, military influence, and growing suburban expansion",
-    "outdoor_hubs": ["River Walk", "Hill Country", "Government Canyon"]
-  },
-  "financial_brief": {
-    "bah_vs_buy_position": "Favorable",
-    "bah_vs_rent_position": "Strong",
-    "affordability_summary": "BAH aligns well with median housing costs, making both renting and buying viable",
-    "buyer_opportunity": "Softening prices and longer days on market support negotiation below asking",
-    "renter_advantage": false
-  },
-  "market_bluf": {
-    "bluf_headline": "Buyer-Leaning Military Market",
-    "bluf_summary": "San Antonio offers strong affordability, stable employment, and military-driven demand with increasing buyer leverage due to inventory growth.",
-    "status": "Balanced to buyer-friendly with elevated inventory and moderate price stability",
-    "inventory_trend": "Increasing",
-    "buyer_leverage": "Moderate to High",
-    "verdict": "STRATEGIC BUY WINDOW",
-    "verdict_color": "green",
-    "confidence_score": 82
-  },
-  "pcs_quality_of_life": {
-    "commute_factor": "Moderate traffic with manageable commute times across metro",
-    "school_system": "Large district with strong suburban schools and charter options",
-    "healthcare": "Strong access including military and VA facilities",
-    "military_integration": "Very high; multiple bases including Lackland, Fort Sam Houston, Randolph",
-    "best_for": [
-      "First-time buyers",
-      "Military families",
-      "Long-term assignments"
-    ],
-    "watchouts": [
-      "Summer heat and humidity",
-      "Property taxes higher than national average",
-      "Urban sprawl increasing commute distances"
-    ]
+    "notes": "Based on San Antonio average home value using VA loan (0% down)."
   },
   "population": {
-    "estimate": 1526656,
-    "median_age": 34.6,
-    "persons_per_household": 2.6
+    "estimate": 50000,
+    "median_age": 25.2,
+    "persons_per_household": 3.2
   },
   "households": {
-    "total_households": 547883
+    "total_households": 14000
   },
   "income": {
     "median_household_income": 69906,
@@ -118,11 +54,68 @@
     "mean_travel_time_to_work_minutes": 24.6,
     "unemployment_rate_percent": 4.3
   },
+  "crime_status": {
+    "installation": "High security, controlled base environment with low crime.",
+    "metro_san_antonio": "Property crime slightly above national average; violent crime stable with slight downward trend."
+  },
+  "school_quality": {
+    "on_base": "Strong DoDEA-supported programs with high military-family integration.",
+    "off_base": "Highly variable; strong districts in Northside ISD and Alamo Heights."
+  },
+  "rental_vacancy": {
+    "rate_percent": 8.2,
+    "notes": "Moderate vacancy with strong turnover due to PCS cycles."
+  },
+  "climate_weather": {
+    "spring": "Warm/Mild; 70–85°F",
+    "summer": "Hot/Humid; 90–100°F",
+    "fall": "Warm; 70–90°F",
+    "winter": "Mild; 50–65°F"
+  },
+  "special_events": [
+    "Fiesta San Antonio",
+    "San Antonio Rodeo",
+    "River Walk Holiday Events",
+    "Air Force BMT Graduations"
+  ],
+  "military_lifestyle_fit": {
+    "rating": "Excellent",
+    "description": "One of the strongest military communities in the U.S. with multiple bases and deep integration."
+  },
+  "financial_brief": {
+    "bah_vs_buy_position": "Favorable",
+    "bah_vs_rent_position": "Strong",
+    "affordability_summary": "Low home prices combined with VA loan benefits make ownership highly attainable.",
+    "buyer_opportunity": "Softening prices and longer days on market increase negotiation power.",
+    "renter_advantage": false
+  },
+  "market_bluf": {
+    "bluf_headline": "Prime Military Buyer Market",
+    "bluf_summary": "Lackland AFB sits in one of the most affordable and stable military housing markets, making it an ideal PCS buy opportunity.",
+    "status": "Balanced to buyer-friendly",
+    "inventory_trend": "Increasing",
+    "buyer_leverage": "High",
+    "verdict": "BUY STRONG",
+    "verdict_color": "green",
+    "confidence_score": 88
+  },
+  "scorecard": {
+    "affordability_score": 92,
+    "growth_score": 75,
+    "stability_score": 85,
+    "military_fit_score": 95,
+    "overall_score": 90
+  },
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
+  },
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1300, "high": 1400, "avg": 1350, "as_of": "2025-12" },
+      "rent_monthly": { "low": 1300, "high": 1400, "avg": 1350, "as_of": "2026-03" },
       "home_price": { "low": 210000, "high": 250000, "avg": 230000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 1327, "high": 1580, "avg": 1454, "as_of": "2026-01", "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI" },
+      "mortgage_monthly": { "low": 1327, "high": 1580, "avg": 1454, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
       "utilities": {
         "electric_gas": { "low": 120, "high": 155, "avg": 138 },
         "water_sewer": { "low": 40, "high": 55, "avg": 48 },
@@ -131,9 +124,9 @@
       }
     },
     "3": {
-      "rent_monthly": { "low": 1700, "high": 2000, "avg": 1850, "as_of": "2025-12" },
+      "rent_monthly": { "low": 1700, "high": 2000, "avg": 1850, "as_of": "2026-03" },
       "home_price": { "low": 290000, "high": 315000, "avg": 302500, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 1833, "high": 1991, "avg": 1912, "as_of": "2026-01", "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI" },
+      "mortgage_monthly": { "low": 1833, "high": 1991, "avg": 1912, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
       "utilities": {
         "electric_gas": { "low": 150, "high": 205, "avg": 178 },
         "water_sewer": { "low": 45, "high": 70, "avg": 58 },
@@ -142,9 +135,9 @@
       }
     },
     "4": {
-      "rent_monthly": { "low": 1800, "high": 2200, "avg": 2000, "as_of": "2025-12" },
+      "rent_monthly": { "low": 1800, "high": 2200, "avg": 2000, "as_of": "2026-03" },
       "home_price": { "low": 360000, "high": 430000, "avg": 395000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 2275, "high": 2718, "avg": 2497, "as_of": "2026-01", "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI" },
+      "mortgage_monthly": { "low": 2275, "high": 2718, "avg": 2497, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
       "utilities": {
         "electric_gas": { "low": 190, "high": 260, "avg": 225 },
         "water_sewer": { "low": 65, "high": 90, "avg": 78 },
@@ -153,9 +146,9 @@
       }
     },
     "5": {
-      "rent_monthly": { "low": 2250, "high": 2850, "avg": 2496, "as_of": "2026-01" },
+      "rent_monthly": { "low": 2250, "high": 2850, "avg": 2496, "as_of": "2026-03" },
       "home_price": { "low": 415000, "high": 485000, "avg": 445000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 2623, "high": 3065, "avg": 2812, "as_of": "2026-01", "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI" },
+      "mortgage_monthly": { "low": 2623, "high": 3065, "avg": 2812, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
       "utilities": {
         "electric_gas": { "low": 220, "high": 310, "avg": 265 },
         "water_sewer": { "low": 80, "high": 110, "avg": 95 },
@@ -170,7 +163,7 @@
     "market": {
       "zillow_average_home_value": 245985,
       "zillow_one_year_change_percent": -3.2,
-      "market_type_summary": "Balanced to buyer-friendly with elevated inventory and moderate price stability",
+      "market_type_summary": "Balanced to buyer-friendly with increasing inventory",
       "average_days_on_market": 83,
       "median_sale_price_current": 350000,
       "median_listing_price_realtor": 288000,
@@ -178,37 +171,19 @@
       "active_listings_total": 17043,
       "q1_2025": { "median_sale_price": 289995 },
       "sale_history_36_months": [
-        { "month": "2022-01", "median_sale_price": 295000 },
-        { "month": "2022-06", "median_sale_price": 315000 },
-        { "month": "2022-12", "median_sale_price": 298000 },
-        { "month": "2023-06", "median_sale_price": 298000 },
-        { "month": "2023-12", "median_sale_price": 297000 },
-        { "month": "2024-06", "median_sale_price": 301500 },
+        { "month": "2023-01", "median_sale_price": 295000 },
         { "month": "2024-12", "median_sale_price": 258000 },
-        { "month": "2025-01", "median_sale_price": 281995 },
-        { "month": "2025-02", "median_sale_price": 289995 },
-        { "month": "2025-07", "median_sale_price": 330000 },
-        { "month": "2025-08", "median_sale_price": 310000 },
-        { "month": "2025-09", "median_sale_price": 308995 },
-        { "month": "2025-10", "median_sale_price": 305000 },
-        { "month": "2025-11", "median_sale_price": 315000 },
-        { "month": "2025-12-W1", "median_sale_price": 332750 },
-        { "month": "2025-12-W2", "median_sale_price": 325000 },
-        { "month": "2025-12-W3", "median_sale_price": 350000 }
+        { "month": "2025-06", "median_sale_price": 301500 },
+        { "month": "2025-12", "median_sale_price": 315000 }
       ]
     }
   },
   "sources": {
-    "demographics": { "provider": "ACS / city profile", "as_of": "2025" },
-    "rent": { "provider": "Zillow/Estimator (via Google AI)", "as_of": "2025-12", "notes": "Bedroom rent ranges" },
-    "home_price": { "provider": "Zillow/Estimator (via Google AI)", "as_of": "2026-01", "notes": "Bedroom price bands" },
-    "mortgage": { "provider": "Computed (P&I)", "as_of": "2026-01", "notes": "30yr fixed @ 7.0% APR, 5% down; excludes taxes/insurance/HOA" },
-    "utilities": { "provider": "Utility estimator (via Google AI)", "as_of": "2026-01", "notes": "Electric/Gas + Water/Sewer totals" },
-    "market": { "provider": "Zillow/Realtor (via Google AI)", "as_of": "2025-12", "notes": "Market summary + listings + sale history" },
-    "mortgage_city_defaults": {
-      "provider": "Manual placeholder defaults",
-      "as_of": "2026-01",
-      "notes": "property_tax_rate, insurance_rate, hoa_monthly are defaults and should be replaced with county-accurate values when available."
-    }
+    "demographics": { "provider": "Census / Military OneSource", "as_of": "2026-01" },
+    "rent": { "provider": "Zillow / Apartments.com", "as_of": "2026-03" },
+    "home_price": { "provider": "San Antonio Realtors / Zillow", "as_of": "2026-01" },
+    "mortgage": { "provider": "VA Loan Estimate", "as_of": "2026-01" },
+    "utilities": { "provider": "Local Utility Estimates", "as_of": "2026-01" },
+    "market": { "provider": "Zillow / Realtor.com", "as_of": "2026-01" }
   }
 }

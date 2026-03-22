@@ -5,16 +5,13 @@
   "geo_id": "1600000US3240000",
   "year": 2025,
   "last_updated_data_from_sources": "March 2026",
-
   "image_url": "https://www.nellis.af.mil",
   "zip": "89115",
   "market_label": "Las Vegas Metro",
-
   "avg_home_value": 430000,
   "average_home_value": 430000,
   "avgHome": 430000,
   "city_avg_home": 430000,
-
   "mortgage_assumptions": {
     "apr_percent": 6.5,
     "term_years": 30,
@@ -22,108 +19,79 @@
     "includes": "va_loan_all_in",
     "defaults_note": "Based on 2026 VA loan rates for Las Vegas. APR varies by credit score."
   },
-
   "property_tax_rate": 0.75,
   "insurance_rate": 0.50,
   "hoa_monthly": 45,
-
   "avg_home_mortgage_monthly": {
     "avg": 2720,
     "as_of": "2026-01",
     "notes": "Based on Las Vegas average home value using VA loan (0% down)."
   },
-
-  /* =========================================================
-     CORE DEMOGRAPHICS
-  ========================================================= */
-
   "population": {
     "estimate": 45000,
     "median_age": 25.8,
     "persons_per_household": 3.0
   },
-
   "households": {
     "total_households": 12000
   },
-
   "income": {
     "median_household_income": 70200,
     "per_capita_income": 34200,
     "poverty_rate_percent": 11.8
   },
-
   "education": {
     "high_school_grad_or_higher_percent": 92.5,
     "bachelors_degree_or_higher_percent": 25.2
   },
-
   "veterans": {
     "veteran_population_percent": 17.2
   },
-
   "immigration": {
     "foreign_born_percent": 16.5
   },
-
   "labor": {
     "mean_travel_time_to_work_minutes": 24.8,
     "unemployment_rate_percent": 5.0
   },
-
-  /* =========================================================
-     LIFESTYLE + QUALITY LAYERS
-  ========================================================= */
-
   "crime_status": {
     "installation": "High security, controlled access; significantly safer than Las Vegas metro.",
     "metro_las_vegas": "Property crime slightly above national average; violent crime trending downward since 2024."
   },
-
   "school_quality": {
     "on_base": "Strong DoDEA-supported environment; high military family concentration.",
     "off_base": "Mixed; better options in Henderson and Summerlin areas."
   },
-
   "rental_vacancy": {
     "rate_percent": 8.8,
     "notes": "Moderate vacancy; higher turnover due to PCS cycles."
   },
-
   "climate_weather": {
     "spring": "Warm/Dry; 70–85°F",
     "summer": "Extreme heat; 100–110°F",
     "fall": "Warm/Pleasant; 70–95°F",
     "winter": "Mild; 55–65°F"
   },
-
   "special_events": [
-    "Aviation Nation Air Show (Nellis AFB)",
+    "Aviation Nation Air Show",
     "Las Vegas Grand Prix",
     "Electric Daisy Carnival",
-    "NFL Raiders Games"
+    "Raiders NFL Games"
   ],
-
   "military_lifestyle_fit": {
     "rating": "Strong",
     "description": "High operational tempo base with strong military presence; ideal for short-term PCS and active lifestyles."
   },
-
-  /* =========================================================
-     DECISION ENGINE (CRITICAL)
-  ========================================================= */
-
   "financial_brief": {
     "bah_vs_buy_position": "Neutral to Challenging",
     "bah_vs_rent_position": "Favorable",
     "affordability_summary": "Higher home prices make ownership harder for mid-tier ranks without dual income.",
-    "buyer_opportunity": "Volatility creates selective buying opportunities in outer suburbs.",
+    "buyer_opportunity": "Volatility creates selective buying opportunities.",
     "renter_advantage": true
   },
-
   "market_bluf": {
     "bluf_headline": "High-Volatility Opportunity Market",
-    "bluf_summary": "Nellis AFB sits in a fast-moving Vegas market with strong upside potential, but requires disciplined buying due to affordability pressure.",
+    "bluf_summary": "Nellis offers strong upside potential but requires disciplined buying due to affordability pressure.",
     "status": "Balanced with volatility risk",
     "inventory_trend": "Stable to increasing",
     "buyer_leverage": "Moderate",
@@ -131,7 +99,6 @@
     "verdict_color": "yellow",
     "confidence_score": 78
   },
-
   "scorecard": {
     "affordability_score": 68,
     "growth_score": 85,
@@ -139,17 +106,11 @@
     "military_fit_score": 80,
     "overall_score": 75
   },
-
   "rules": {
     "max_safe_housing_ratio": 0.30,
     "warning_ratio": 0.35,
     "danger_ratio": 0.40
   },
-
-  /* =========================================================
-     BEDROOM MODEL
-  ========================================================= */
-
   "by_bedroom": {
     "2": {
       "rent_monthly": { "low": 1400, "high": 1700, "avg": 1550, "as_of": "2026-03" },
@@ -158,7 +119,8 @@
       "utilities": {
         "electric_gas": { "low": 140, "high": 200, "avg": 170 },
         "water_sewer": { "low": 50, "high": 70, "avg": 60 },
-        "total": { "low": 190, "high": 270, "avg": 230 }
+        "total": { "low": 190, "high": 270, "avg": 230 },
+        "as_of": "2026-01"
       }
     },
     "3": {
@@ -168,7 +130,8 @@
       "utilities": {
         "electric_gas": { "low": 180, "high": 260, "avg": 220 },
         "water_sewer": { "low": 60, "high": 85, "avg": 72 },
-        "total": { "low": 240, "high": 345, "avg": 292 }
+        "total": { "low": 240, "high": 345, "avg": 292 },
+        "as_of": "2026-01"
       }
     },
     "4": {
@@ -178,7 +141,8 @@
       "utilities": {
         "electric_gas": { "low": 230, "high": 330, "avg": 280 },
         "water_sewer": { "low": 80, "high": 110, "avg": 95 },
-        "total": { "low": 310, "high": 440, "avg": 375 }
+        "total": { "low": 310, "high": 440, "avg": 375 },
+        "as_of": "2026-01"
       }
     },
     "5": {
@@ -188,22 +152,18 @@
       "utilities": {
         "electric_gas": { "low": 280, "high": 400, "avg": 340 },
         "water_sewer": { "low": 100, "high": 140, "avg": 120 },
-        "total": { "low": 380, "high": 540, "avg": 460 }
+        "total": { "low": 380, "high": 540, "avg": 460 },
+        "as_of": "2026-01"
       }
     }
   },
-
-  /* =========================================================
-     MARKET DATA
-  ========================================================= */
-
   "housing": {
     "housing_units": 18000,
     "median_value_owner_occupied": 430000,
     "market": {
       "zillow_average_home_value": 430000,
       "zillow_one_year_change_percent": 2.8,
-      "market_type_summary": "Balanced market with volatility and strong demand cycles",
+      "market_type_summary": "Balanced with volatility and strong demand cycles",
       "average_days_on_market": 55,
       "median_sale_price_current": 445000,
       "median_listing_price_realtor": 440000,
@@ -218,7 +178,6 @@
       ]
     }
   },
-
   "sources": {
     "demographics": { "provider": "Census / Military OneSource", "as_of": "2026-01" },
     "rent": { "provider": "Zillow / Zumper", "as_of": "2026-03" },

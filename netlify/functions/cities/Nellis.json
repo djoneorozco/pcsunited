@@ -1,12 +1,12 @@
 {
-  "city": "Las Vegas, NV",
-  "place": "Las Vegas, NV",
+  "city": "Nellis AFB, NV",
+  "place": "Nellis AFB, NV",
   "state": "NV",
   "geo_id": "1600000US3240000",
   "year": 2025,
-  "last_updated_data_from_sources": "December 2025",
+  "last_updated_data_from_sources": "March 2026",
 
-  "image_url": "https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/las-vegas-nellis-style.jpg",
+  "image_url": "https://www.nellis.af.mil",
   "zip": "89115",
   "market_label": "Las Vegas Metro",
 
@@ -16,11 +16,11 @@
   "city_avg_home": 430000,
 
   "mortgage_assumptions": {
-    "apr_percent": 7.0,
+    "apr_percent": 6.5,
     "term_years": 30,
-    "down_payment_percent": 5,
-    "includes": "all_in",
-    "defaults_note": "City defaults apply to taxes/insurance/HOA only. APR varies by credit score and/or user override."
+    "down_payment_percent": 0,
+    "includes": "va_loan_all_in",
+    "defaults_note": "Based on 2026 VA loan rates for Las Vegas. APR varies by credit score."
   },
 
   "property_tax_rate": 0.75,
@@ -30,120 +30,114 @@
   "avg_home_mortgage_monthly": {
     "avg": 2720,
     "as_of": "2026-01",
-    "notes": "Reference only; do not use for calculation."
+    "notes": "Based on Las Vegas average home value using VA loan (0% down)."
   },
 
-  "city_identity": {
-    "nickname": "Entertainment Capital",
-    "display_tagline": "High-Energy Market with Transient Opportunity",
-    "city_designator": "Tourism-Driven Growth Metro",
-    "growth_status": "Volatile but high-growth driven by tourism and migration",
-    "top_industries": ["Tourism", "Hospitality", "Construction", "Entertainment"],
-    "major_sports": ["Vegas Golden Knights (NHL)", "Las Vegas Raiders (NFL)"]
+  /* =========================================================
+     CORE DEMOGRAPHICS
+  ========================================================= */
+
+  "population": {
+    "estimate": 45000,
+    "median_age": 25.8,
+    "persons_per_household": 3.0
   },
 
-  "snapshot": {
-    "population_city": 641903,
-    "population_metro": 2300000,
-    "median_household_income": 72400,
-    "median_home_price": 445000,
-    "market_trend_yoy": 2.8,
-    "traffic_level": "Moderate",
-    "employment_status": "Moderate volatility"
+  "households": {
+    "total_households": 12000
   },
 
-  "weather_profile": {
-    "climate_label": "Desert",
-    "summer_avg_high_f": 104,
-    "winter_avg_high_f": 59,
-    "sunny_days_per_year": 294,
-    "snow_risk": "Very Low",
-    "seasonal_notes": "Extreme summer heat, dry climate, mild winters"
+  "income": {
+    "median_household_income": 70200,
+    "per_capita_income": 34200,
+    "poverty_rate_percent": 11.8
   },
 
-  "lifestyle": {
-    "family_friendliness": "Moderate",
-    "pcs_fit": "Strong for short-term assignments and investors; mixed for long-term families",
-    "culture": "Entertainment-focused with rapid suburban expansion",
-    "outdoor_hubs": ["Red Rock Canyon", "Lake Mead", "Mount Charleston"]
+  "education": {
+    "high_school_grad_or_higher_percent": 92.5,
+    "bachelors_degree_or_higher_percent": 25.2
   },
+
+  "veterans": {
+    "veteran_population_percent": 17.2
+  },
+
+  "immigration": {
+    "foreign_born_percent": 16.5
+  },
+
+  "labor": {
+    "mean_travel_time_to_work_minutes": 24.8,
+    "unemployment_rate_percent": 5.0
+  },
+
+  /* =========================================================
+     LIFESTYLE + QUALITY LAYERS
+  ========================================================= */
+
+  "crime_status": {
+    "installation": "High security, controlled access; significantly safer than Las Vegas metro.",
+    "metro_las_vegas": "Property crime slightly above national average; violent crime trending downward since 2024."
+  },
+
+  "school_quality": {
+    "on_base": "Strong DoDEA-supported environment; high military family concentration.",
+    "off_base": "Mixed; better options in Henderson and Summerlin areas."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 8.8,
+    "notes": "Moderate vacancy; higher turnover due to PCS cycles."
+  },
+
+  "climate_weather": {
+    "spring": "Warm/Dry; 70–85°F",
+    "summer": "Extreme heat; 100–110°F",
+    "fall": "Warm/Pleasant; 70–95°F",
+    "winter": "Mild; 55–65°F"
+  },
+
+  "special_events": [
+    "Aviation Nation Air Show (Nellis AFB)",
+    "Las Vegas Grand Prix",
+    "Electric Daisy Carnival",
+    "NFL Raiders Games"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Strong",
+    "description": "High operational tempo base with strong military presence; ideal for short-term PCS and active lifestyles."
+  },
+
+  /* =========================================================
+     DECISION ENGINE (CRITICAL)
+  ========================================================= */
 
   "financial_brief": {
-    "bah_vs_buy_position": "Neutral to Slightly Challenging",
+    "bah_vs_buy_position": "Neutral to Challenging",
     "bah_vs_rent_position": "Favorable",
-    "affordability_summary": "BAH supports renting well, but buying requires higher income or dual-income households",
-    "buyer_opportunity": "Price stabilization with pockets of opportunity in outer suburbs",
+    "affordability_summary": "Higher home prices make ownership harder for mid-tier ranks without dual income.",
+    "buyer_opportunity": "Volatility creates selective buying opportunities in outer suburbs.",
     "renter_advantage": true
   },
 
   "market_bluf": {
     "bluf_headline": "High-Volatility Opportunity Market",
-    "bluf_summary": "Las Vegas offers strong upside potential but requires disciplined buying due to price volatility and affordability pressure.",
-    "status": "Balanced with upward pressure and volatility risk",
-    "inventory_trend": "Stable to Increasing",
+    "bluf_summary": "Nellis AFB sits in a fast-moving Vegas market with strong upside potential, but requires disciplined buying due to affordability pressure.",
+    "status": "Balanced with volatility risk",
+    "inventory_trend": "Stable to increasing",
     "buyer_leverage": "Moderate",
-    "verdict": "SELECTIVE BUY / STRONG RENT POSITION",
+    "verdict": "SELECTIVE BUY / RENT STRONG",
     "verdict_color": "yellow",
-    "confidence_score": 76
-  },
-
-  "pcs_quality_of_life": {
-    "commute_factor": "Low to Moderate depending on base proximity",
-    "school_system": "Mixed; stronger in suburban zones like Summerlin and Henderson",
-    "healthcare": "Growing but uneven across metro",
-    "military_integration": "High around Nellis AFB community zones",
-    "best_for": [
-      "Short-term PCS",
-      "Investors",
-      "Single or dual-income households"
-    ],
-    "watchouts": [
-      "Extreme summer heat",
-      "Market volatility",
-      "School variability"
-    ]
-  },
-
-  "population": {
-    "estimate": 641903,
-    "median_age": 38.3,
-    "persons_per_household": 2.7
-  },
-
-  "households": {
-    "total_households": 240462
-  },
-
-  "income": {
-    "median_household_income": 72400,
-    "per_capita_income": 35600,
-    "poverty_rate_percent": 13.8
-  },
-
-  "education": {
-    "high_school_grad_or_higher_percent": 86.5,
-    "bachelors_degree_or_higher_percent": 26.8
-  },
-
-  "veterans": {
-    "veteran_population_percent": 7.5
-  },
-
-  "immigration": {
-    "foreign_born_percent": 19.5
-  },
-
-  "labor": {
-    "mean_travel_time_to_work_minutes": 25.2,
-    "unemployment_rate_percent": 5.1
+    "confidence_score": 78
   },
 
   "scorecard": {
     "affordability_score": 68,
-    "growth_score": 80,
+    "growth_score": 85,
     "stability_score": 65,
-    "military_fit_score": 78,
-    "overall_score": 73
+    "military_fit_score": 80,
+    "overall_score": 75
   },
 
   "rules": {
@@ -152,11 +146,15 @@
     "danger_ratio": 0.40
   },
 
+  /* =========================================================
+     BEDROOM MODEL
+  ========================================================= */
+
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1400, "high": 1700, "avg": 1550, "as_of": "2025-12" },
+      "rent_monthly": { "low": 1400, "high": 1700, "avg": 1550, "as_of": "2026-03" },
       "home_price": { "low": 320000, "high": 370000, "avg": 345000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 2020, "high": 2340, "avg": 2180, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2020, "high": 2340, "avg": 2180, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
       "utilities": {
         "electric_gas": { "low": 140, "high": 200, "avg": 170 },
         "water_sewer": { "low": 50, "high": 70, "avg": 60 },
@@ -164,9 +162,9 @@
       }
     },
     "3": {
-      "rent_monthly": { "low": 1800, "high": 2300, "avg": 2050, "as_of": "2025-12" },
+      "rent_monthly": { "low": 1800, "high": 2300, "avg": 2050, "as_of": "2026-03" },
       "home_price": { "low": 400000, "high": 460000, "avg": 430000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 2520, "high": 2890, "avg": 2700, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2520, "high": 2890, "avg": 2700, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
       "utilities": {
         "electric_gas": { "low": 180, "high": 260, "avg": 220 },
         "water_sewer": { "low": 60, "high": 85, "avg": 72 },
@@ -174,9 +172,9 @@
       }
     },
     "4": {
-      "rent_monthly": { "low": 2300, "high": 2900, "avg": 2600, "as_of": "2025-12" },
+      "rent_monthly": { "low": 2300, "high": 2900, "avg": 2600, "as_of": "2026-03" },
       "home_price": { "low": 470000, "high": 550000, "avg": 510000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 2950, "high": 3460, "avg": 3200, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2950, "high": 3460, "avg": 3200, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
       "utilities": {
         "electric_gas": { "low": 230, "high": 330, "avg": 280 },
         "water_sewer": { "low": 80, "high": 110, "avg": 95 },
@@ -184,9 +182,9 @@
       }
     },
     "5": {
-      "rent_monthly": { "low": 2900, "high": 3600, "avg": 3200, "as_of": "2026-01" },
+      "rent_monthly": { "low": 2900, "high": 3600, "avg": 3200, "as_of": "2026-03" },
       "home_price": { "low": 550000, "high": 650000, "avg": 600000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 3460, "high": 4090, "avg": 3780, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 3460, "high": 4090, "avg": 3780, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
       "utilities": {
         "electric_gas": { "low": 280, "high": 400, "avg": 340 },
         "water_sewer": { "low": 100, "high": 140, "avg": 120 },
@@ -195,27 +193,38 @@
     }
   },
 
+  /* =========================================================
+     MARKET DATA
+  ========================================================= */
+
   "housing": {
-    "housing_units": 300000,
-    "median_value_owner_occupied": 395000,
+    "housing_units": 18000,
+    "median_value_owner_occupied": 430000,
     "market": {
       "zillow_average_home_value": 430000,
       "zillow_one_year_change_percent": 2.8,
-      "market_type_summary": "Balanced with volatility and growth pockets",
+      "market_type_summary": "Balanced market with volatility and strong demand cycles",
       "average_days_on_market": 55,
       "median_sale_price_current": 445000,
       "median_listing_price_realtor": 440000,
       "median_listing_price_per_sqft": 255,
-      "active_listings_total": 9500
+      "active_listings_total": 9500,
+      "q1_2025": { "median_sale_price": 420000 },
+      "sale_history_36_months": [
+        { "month": "2023-01", "median_sale_price": 400000 },
+        { "month": "2024-12", "median_sale_price": 435000 },
+        { "month": "2025-06", "median_sale_price": 455000 },
+        { "month": "2025-12", "median_sale_price": 445000 }
+      ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "ACS / city profile", "as_of": "2025" },
-    "rent": { "provider": "Zillow/Estimator", "as_of": "2025-12" },
-    "home_price": { "provider": "Zillow/Estimator", "as_of": "2026-01" },
-    "mortgage": { "provider": "Computed (P&I)", "as_of": "2026-01" },
-    "utilities": { "provider": "Utility estimator", "as_of": "2026-01" },
-    "market": { "provider": "Zillow/Realtor", "as_of": "2025-12" }
+    "demographics": { "provider": "Census / Military OneSource", "as_of": "2026-01" },
+    "rent": { "provider": "Zillow / Zumper", "as_of": "2026-03" },
+    "home_price": { "provider": "Las Vegas Realtors / Zillow", "as_of": "2026-01" },
+    "mortgage": { "provider": "VA Loan Estimate", "as_of": "2026-01" },
+    "utilities": { "provider": "NV Energy / Local Avg", "as_of": "2026-01" },
+    "market": { "provider": "Zillow / Realtor.com", "as_of": "2026-01" }
   }
 }

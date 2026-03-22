@@ -8,90 +8,119 @@
   "image_url": "https://www.jbsa.mil",
   "zip": "78236",
   "market_label": "San Antonio Metro",
+
   "avg_home_value": 245985,
   "average_home_value": 245985,
   "avgHome": 245985,
   "city_avg_home": 245985,
+
+  "snapshot": {
+    "population_city": 1526656,
+    "population_metro": 2600000,
+    "median_household_income": 69906,
+    "median_home_price": 288000,
+    "market_trend_yoy": -3.2,
+    "traffic_level": "Moderate",
+    "employment_status": "Stable"
+  },
+
   "mortgage_assumptions": {
     "apr_percent": 6.2,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Based on 2026 VA loan rates for San Antonio. APR varies by credit score."
+    "defaults_note": "Based on 2026 VA loan rates for San Antonio."
   },
+
   "property_tax_rate": 2.1,
   "insurance_rate": 0.55,
   "hoa_monthly": 33,
+
   "avg_home_mortgage_monthly": {
     "avg": 1555,
     "as_of": "2026-01",
-    "notes": "Based on San Antonio average home value using VA loan (0% down)."
+    "notes": "VA loan estimate based on San Antonio averages."
   },
+
   "population": {
     "estimate": 50000,
     "median_age": 25.2,
     "persons_per_household": 3.2
   },
+
   "households": {
     "total_households": 14000
   },
+
   "income": {
     "median_household_income": 69906,
     "per_capita_income": 37133,
     "poverty_rate_percent": 14.4
   },
+
   "education": {
     "high_school_grad_or_higher_percent": 84.3,
     "bachelors_degree_or_higher_percent": 28.7
   },
+
   "veterans": {
     "veteran_population_percent": 8.2
   },
+
   "immigration": {
     "foreign_born_percent": 14.3
   },
+
   "labor": {
     "mean_travel_time_to_work_minutes": 24.6,
     "unemployment_rate_percent": 4.3
   },
+
   "crime_status": {
-    "installation": "High security, controlled base environment with low crime.",
-    "metro_san_antonio": "Property crime slightly above national average; violent crime stable with slight downward trend."
+    "installation": "Highly secure military installation.",
+    "metro_san_antonio": "Property crime slightly above national average; violent crime stable."
   },
+
   "school_quality": {
-    "on_base": "Strong DoDEA-supported programs with high military-family integration.",
-    "off_base": "Highly variable; strong districts in Northside ISD and Alamo Heights."
+    "on_base": "Strong DoDEA-supported environment.",
+    "off_base": "Highly variable; strongest in Northside ISD."
   },
+
   "rental_vacancy": {
     "rate_percent": 8.2,
-    "notes": "Moderate vacancy with strong turnover due to PCS cycles."
+    "notes": "Moderate vacancy due to PCS turnover."
   },
+
   "climate_weather": {
     "spring": "Warm/Mild; 70–85°F",
     "summer": "Hot/Humid; 90–100°F",
     "fall": "Warm; 70–90°F",
     "winter": "Mild; 50–65°F"
   },
+
   "special_events": [
     "Fiesta San Antonio",
     "San Antonio Rodeo",
-    "River Walk Holiday Events",
+    "River Walk Events",
     "Air Force BMT Graduations"
   ],
+
   "military_lifestyle_fit": {
     "rating": "Excellent",
-    "description": "One of the strongest military communities in the U.S. with multiple bases and deep integration."
+    "description": "One of the strongest military ecosystems in the U.S. with multiple bases."
   },
+
   "financial_brief": {
     "bah_vs_buy_position": "Favorable",
     "bah_vs_rent_position": "Strong",
-    "affordability_summary": "Low home prices combined with VA loan benefits make ownership highly attainable.",
-    "buyer_opportunity": "Softening prices and longer days on market increase negotiation power.",
+    "affordability_summary": "Low prices + VA loan = strong ownership opportunity.",
+    "buyer_opportunity": "Softening prices and longer DOM create negotiation power.",
     "renter_advantage": false
   },
+
   "market_bluf": {
     "bluf_headline": "Prime Military Buyer Market",
-    "bluf_summary": "Lackland AFB sits in one of the most affordable and stable military housing markets, making it an ideal PCS buy opportunity.",
+    "bluf_summary": "San Antonio offers one of the most affordable and stable PCS housing environments.",
     "status": "Balanced to buyer-friendly",
     "inventory_trend": "Increasing",
     "buyer_leverage": "High",
@@ -99,6 +128,7 @@
     "verdict_color": "green",
     "confidence_score": 88
   },
+
   "scorecard": {
     "affordability_score": 92,
     "growth_score": 75,
@@ -106,57 +136,36 @@
     "military_fit_score": 95,
     "overall_score": 90
   },
+
   "rules": {
     "max_safe_housing_ratio": 0.30,
     "warning_ratio": 0.35,
     "danger_ratio": 0.40
   },
+
   "by_bedroom": {
     "2": {
       "rent_monthly": { "low": 1300, "high": 1400, "avg": 1350, "as_of": "2026-03" },
       "home_price": { "low": 210000, "high": 250000, "avg": 230000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 1327, "high": 1580, "avg": 1454, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
-      "utilities": {
-        "electric_gas": { "low": 120, "high": 155, "avg": 138 },
-        "water_sewer": { "low": 40, "high": 55, "avg": 48 },
-        "total": { "low": 160, "high": 210, "avg": 185 },
-        "as_of": "2026-01"
-      }
+      "mortgage_monthly": { "low": 1327, "high": 1580, "avg": 1454, "as_of": "2026-01" }
     },
     "3": {
-      "rent_monthly": { "low": 1700, "high": 2000, "avg": 1850, "as_of": "2026-03" },
-      "home_price": { "low": 290000, "high": 315000, "avg": 302500, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 1833, "high": 1991, "avg": 1912, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
-      "utilities": {
-        "electric_gas": { "low": 150, "high": 205, "avg": 178 },
-        "water_sewer": { "low": 45, "high": 70, "avg": 58 },
-        "total": { "low": 195, "high": 275, "avg": 235 },
-        "as_of": "2026-01"
-      }
+      "rent_monthly": { "low": 1700, "high": 2000, "avg": 1850 },
+      "home_price": { "low": 290000, "high": 315000, "avg": 302500 },
+      "mortgage_monthly": { "low": 1833, "high": 1991, "avg": 1912 }
     },
     "4": {
-      "rent_monthly": { "low": 1800, "high": 2200, "avg": 2000, "as_of": "2026-03" },
-      "home_price": { "low": 360000, "high": 430000, "avg": 395000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 2275, "high": 2718, "avg": 2497, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
-      "utilities": {
-        "electric_gas": { "low": 190, "high": 260, "avg": 225 },
-        "water_sewer": { "low": 65, "high": 90, "avg": 78 },
-        "total": { "low": 255, "high": 350, "avg": 303 },
-        "as_of": "2026-01"
-      }
+      "rent_monthly": { "low": 1800, "high": 2200, "avg": 2000 },
+      "home_price": { "low": 360000, "high": 430000, "avg": 395000 },
+      "mortgage_monthly": { "low": 2275, "high": 2718, "avg": 2497 }
     },
     "5": {
-      "rent_monthly": { "low": 2250, "high": 2850, "avg": 2496, "as_of": "2026-03" },
-      "home_price": { "low": 415000, "high": 485000, "avg": 445000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 2623, "high": 3065, "avg": 2812, "as_of": "2026-01", "assumptions": "VA Loan P&I" },
-      "utilities": {
-        "electric_gas": { "low": 220, "high": 310, "avg": 265 },
-        "water_sewer": { "low": 80, "high": 110, "avg": 95 },
-        "total": { "low": 300, "high": 420, "avg": 360 },
-        "as_of": "2026-01"
-      }
+      "rent_monthly": { "low": 2250, "high": 2850, "avg": 2496 },
+      "home_price": { "low": 415000, "high": 485000, "avg": 445000 },
+      "mortgage_monthly": { "low": 2623, "high": 3065, "avg": 2812 }
     }
   },
+
   "housing": {
     "housing_units": 603213,
     "median_value_owner_occupied": 219700,
@@ -178,12 +187,10 @@
       ]
     }
   },
+
   "sources": {
-    "demographics": { "provider": "Census / Military OneSource", "as_of": "2026-01" },
-    "rent": { "provider": "Zillow / Apartments.com", "as_of": "2026-03" },
-    "home_price": { "provider": "San Antonio Realtors / Zillow", "as_of": "2026-01" },
-    "mortgage": { "provider": "VA Loan Estimate", "as_of": "2026-01" },
-    "utilities": { "provider": "Local Utility Estimates", "as_of": "2026-01" },
-    "market": { "provider": "Zillow / Realtor.com", "as_of": "2026-01" }
+    "demographics": { "provider": "Census", "as_of": "2026-01" },
+    "rent": { "provider": "Zillow", "as_of": "2026-03" },
+    "home_price": { "provider": "Realtor", "as_of": "2026-01" }
   }
 }

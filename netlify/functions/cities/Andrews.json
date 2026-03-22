@@ -29,7 +29,7 @@
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Based on VA loan averages in DC metro."
+    "defaults_note": "Based on 2026 VA loan rates for DC metro."
   },
 
   "property_tax_rate": 0.85,
@@ -39,17 +39,17 @@
   "avg_home_mortgage_monthly": {
     "avg": 3780,
     "as_of": "2026-01",
-    "notes": "VA loan estimate for DC metro pricing."
+    "notes": "VA loan estimate"
   },
 
   "population": {
-    "estimate": 90000,
-    "median_age": 31.4,
-    "persons_per_household": 2.9
+    "estimate": 670050,
+    "median_age": 34.5,
+    "persons_per_household": 2.8
   },
 
   "households": {
-    "total_households": 32000
+    "total_households": 280000
   },
 
   "income": {
@@ -77,18 +77,18 @@
   },
 
   "crime_status": {
-    "installation": "Highly secure base with restricted access.",
-    "metro_tucson": "Urban crime higher than national average; suburban areas safer."
+    "installation": "Highly secure base environment.",
+    "metro_dc": "Urban crime higher than national average; suburbs safer."
   },
 
   "school_quality": {
-    "on_base": "DoDEA supported; high performance.",
-    "off_base": "Top schools in Fairfax and Montgomery County."
+    "on_base": "Strong DoDEA support.",
+    "off_base": "Top-tier schools in surrounding counties."
   },
 
   "rental_vacancy": {
     "rate_percent": 6.8,
-    "notes": "Tight rental supply in metro region."
+    "notes": "Tight rental supply."
   },
 
   "climate_weather": {
@@ -101,7 +101,8 @@
   "special_events": [
     "National Cherry Blossom Festival",
     "4th of July DC",
-    "Smithsonian Events"
+    "Smithsonian Events",
+    "Capital One Arena Events"
   ],
 
   "military_lifestyle_fit": {
@@ -113,27 +114,27 @@
     "bah_vs_buy_position": "Challenging",
     "bah_vs_rent_position": "Moderate",
     "affordability_summary": "High cost area; BAH often insufficient for ownership.",
-    "buyer_opportunity": "Long-term appreciation in high-demand metro.",
+    "buyer_opportunity": "Long-term appreciation in a stable market.",
     "renter_advantage": true
   },
 
   "market_bluf": {
     "bluf_headline": "Premium Stability Market",
-    "bluf_summary": "Washington DC offers strong economic stability but high entry costs.",
+    "bluf_summary": "Washington DC offers strong stability but high entry costs.",
     "status": "Seller-leaning",
     "inventory_trend": "Low",
     "buyer_leverage": "Low",
     "verdict": "DISCIPLINED ENTRY REQUIRED",
     "verdict_color": "yellow",
-    "confidence_score": 82
+    "confidence_score": 84
   },
 
   "scorecard": {
-    "affordability_score": 45,
+    "affordability_score": 48,
     "growth_score": 78,
     "stability_score": 90,
     "military_fit_score": 85,
-    "overall_score": 74
+    "overall_score": 75
   },
 
   "rules": {
@@ -143,20 +144,60 @@
   },
 
   "by_bedroom": {
-    "2": { "rent_monthly": { "avg": 2300 }, "home_price": { "avg": 450000 }, "mortgage_monthly": { "avg": 2800 } },
-    "3": { "rent_monthly": { "avg": 3000 }, "home_price": { "avg": 610000 }, "mortgage_monthly": { "avg": 3800 } },
-    "4": { "rent_monthly": { "avg": 3800 }, "home_price": { "avg": 780000 }, "mortgage_monthly": { "avg": 4700 } },
-    "5": { "rent_monthly": { "avg": 4500 }, "home_price": { "avg": 920000 }, "mortgage_monthly": { "avg": 5600 } }
+    "2": {
+      "rent_monthly": { "low": 2100, "high": 2500, "avg": 2300 },
+      "home_price": { "low": 420000, "high": 500000, "avg": 460000 },
+      "mortgage_monthly": { "low": 2700, "high": 3200, "avg": 2950 },
+      "utilities": {
+        "electric_gas": { "low": 110, "high": 160, "avg": 135 },
+        "water_sewer": { "low": 45, "high": 70, "avg": 55 },
+        "total": { "low": 155, "high": 230, "avg": 190 },
+        "as_of": "2026-01"
+      }
+    },
+    "3": {
+      "rent_monthly": { "low": 2800, "high": 3400, "avg": 3100 },
+      "home_price": { "low": 550000, "high": 650000, "avg": 610000 },
+      "mortgage_monthly": { "low": 3500, "high": 4200, "avg": 3850 },
+      "utilities": {
+        "electric_gas": { "low": 150, "high": 220, "avg": 185 },
+        "water_sewer": { "low": 60, "high": 90, "avg": 70 },
+        "total": { "low": 210, "high": 310, "avg": 255 },
+        "as_of": "2026-01"
+      }
+    },
+    "4": {
+      "rent_monthly": { "low": 3400, "high": 4200, "avg": 3800 },
+      "home_price": { "low": 700000, "high": 850000, "avg": 780000 },
+      "mortgage_monthly": { "low": 4400, "high": 5400, "avg": 4900 },
+      "utilities": {
+        "electric_gas": { "low": 200, "high": 290, "avg": 245 },
+        "water_sewer": { "low": 75, "high": 110, "avg": 90 },
+        "total": { "low": 275, "high": 400, "avg": 335 },
+        "as_of": "2026-01"
+      }
+    },
+    "5": {
+      "rent_monthly": { "low": 4200, "high": 5000, "avg": 4600 },
+      "home_price": { "low": 850000, "high": 1000000, "avg": 920000 },
+      "mortgage_monthly": { "low": 5400, "high": 6500, "avg": 6000 },
+      "utilities": {
+        "electric_gas": { "low": 240, "high": 350, "avg": 295 },
+        "water_sewer": { "low": 90, "high": 130, "avg": 110 },
+        "total": { "low": 330, "high": 480, "avg": 405 },
+        "as_of": "2026-01"
+      }
+    }
   },
 
   "housing": {
-    "housing_units": 350000,
+    "housing_units": 300000,
     "median_value_owner_occupied": 617500,
     "market": {
       "zillow_average_home_value": 617500,
       "zillow_one_year_change_percent": 1.9,
-      "market_type_summary": "High demand, limited inventory",
-      "average_days_on_market": 32,
+      "market_type_summary": "Seller-leaning with strong demand",
+      "average_days_on_market": 35,
       "median_sale_price_current": 610000,
       "median_listing_price_realtor": 625000,
       "median_listing_price_per_sqft": 410,

@@ -1,185 +1,214 @@
 {
-  "city": "Travis AFB",
-  "place": "Fairfield, CA",
-  "state": "CA",
-  "geo_id": "1600000US0623182",
-  "year": 2026,
+  "city": "Tucson, AZ",
+  "place": "Tucson, AZ",
+  "state": "AZ",
+  "geo_id": "1600000US0477000",
+  "year": 2025,
   "last_updated_data_from_sources": "March 2026",
-  "image_url": "https://www.travis.af.mil",
+  "image_url": "https://upload.wikimedia.org/wikipedia/commons/5/5c/Davis-Monthan_AFB.jpg",
+  "zip": "85707",
+  "market_label": "Tucson Metro",
 
-  "zip": "94535",
-  "market_label": "Solano County / North Bay Metro",
+  "avg_home_value": 305000,
+  "average_home_value": 305000,
+  "avgHome": 305000,
+  "city_avg_home": 305000,
 
-  "avg_home_value": 612450,
-  "average_home_value": 612450,
-  "avgHome": 612450,
-  "city_avg_home": 612450,
+  "snapshot": {
+    "population_city": 548073,
+    "population_metro": 1050000,
+    "median_household_income": 63000,
+    "median_home_price": 310000,
+    "market_trend_yoy": 1.6,
+    "traffic_level": "Low to Moderate",
+    "employment_status": "Stable"
+  },
 
   "mortgage_assumptions": {
-    "apr_percent": 6.45,
+    "apr_percent": 6.5,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Calculations based on March 2026 VA loan rates for Northern California. Prop 13 limits property tax increases, but initial assessments are based on purchase price."
+    "defaults_note": "Based on 2026 VA loan rates for Tucson."
   },
 
-  "property_tax_rate": 1.15,
-  "insurance_rate": 0.42,
-  "hoa_monthly": 45,
+  "property_tax_rate": 0.72,
+  "insurance_rate": 0.45,
+  "hoa_monthly": 30,
 
   "avg_home_mortgage_monthly": {
-    "avg": 4435,
-    "as_of": "2026-03",
-    "notes": "Reflects P&I + CA property taxes for typical Fairfield home value using a VA loan (0% down) at 6.45% APR."
+    "avg": 1950,
+    "as_of": "2026-01",
+    "notes": "VA loan estimate"
   },
 
   "population": {
-    "estimate": 119524,
-    "median_age": 34.2,
-    "persons_per_household": 3.02
+    "estimate": 548073,
+    "median_age": 34.3,
+    "persons_per_household": 2.6
   },
 
   "households": {
-    "total_households": 38450
+    "total_households": 230000
   },
 
   "income": {
-    "median_household_income": 98450,
-    "per_capita_income": 41200,
-    "poverty_rate_percent": 9.2
+    "median_household_income": 63000,
+    "per_capita_income": 31000,
+    "poverty_rate_percent": 16.8
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 88.5,
-    "bachelors_degree_or_higher_percent": 24.8
+    "high_school_grad_or_higher_percent": 86.9,
+    "bachelors_degree_or_higher_percent": 29.5
   },
 
   "veterans": {
-    "veteran_population_percent": 11.2
+    "veteran_population_percent": 10.5
   },
 
   "immigration": {
-    "foreign_born_percent": 21.4
+    "foreign_born_percent": 13.8
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 31.5,
-    "unemployment_rate_percent": 4.8
+    "mean_travel_time_to_work_minutes": 22.1,
+    "unemployment_rate_percent": 4.4
+  },
+
+  "crime_status": {
+    "installation": "Highly secure base environment.",
+    "metro_tucson": "Moderate crime; varies by neighborhood."
+  },
+
+  "school_quality": {
+    "on_base": "Strong DoDEA support.",
+    "off_base": "Mixed; stronger in Vail and Catalina Foothills."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 8.2,
+    "notes": "Moderate vacancy driven by seasonal turnover."
+  },
+
+  "climate_weather": {
+    "spring": "Warm/Dry; 70–90°F",
+    "summer": "Hot; 95–105°F",
+    "fall": "Mild; 70–90°F",
+    "winter": "Cool; 55–70°F"
+  },
+
+  "special_events": [
+    "Tucson Gem & Mineral Show",
+    "All Souls Procession",
+    "Tucson Rodeo"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Strong",
+    "description": "Well-established military community with lower cost of living."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Favorable",
+    "bah_vs_rent_position": "Strong",
+    "affordability_summary": "BAH aligns well with both renting and buying.",
+    "buyer_opportunity": "Stable pricing with moderate appreciation potential.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Balanced Growth Market",
+    "bluf_summary": "Tucson offers affordability with steady growth and strong military demand.",
+    "status": "Balanced",
+    "inventory_trend": "Stable",
+    "buyer_leverage": "Moderate",
+    "verdict": "SMART BUY WINDOW",
+    "verdict_color": "green",
+    "confidence_score": 83
+  },
+
+  "scorecard": {
+    "affordability_score": 85,
+    "growth_score": 72,
+    "stability_score": 82,
+    "military_fit_score": 88,
+    "overall_score": 82
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 2100, "high": 2600, "avg": 2350, "as_of": "2026-03" },
-      "home_price": { "low": 425000, "high": 495000, "avg": 460000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 2673,
-        "high": 3113,
-        "avg": 2893,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1200, "high": 1450, "avg": 1325 },
+      "home_price": { "low": 230000, "high": 270000, "avg": 250000 },
+      "mortgage_monthly": { "low": 1450, "high": 1700, "avg": 1575 },
       "utilities": {
-        "electric_gas": { "low": 210, "high": 310, "avg": 260 },
-        "water_sewer": { "low": 85, "high": 125, "avg": 105 },
-        "total": { "low": 295, "high": 435, "avg": 365 },
-        "as_of": "2026-03"
+        "electric_gas": { "low": 110, "high": 150, "avg": 130 },
+        "water_sewer": { "low": 40, "high": 55, "avg": 48 },
+        "total": { "low": 150, "high": 205, "avg": 178 },
+        "as_of": "2026-01"
       }
     },
     "3": {
-      "rent_monthly": { "low": 2800, "high": 3500, "avg": 3150, "as_of": "2026-03" },
-      "home_price": { "low": 550000, "high": 675000, "avg": 612500, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 3459,
-        "high": 4245,
-        "avg": 3852,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1500, "high": 1900, "avg": 1700 },
+      "home_price": { "low": 280000, "high": 330000, "avg": 310000 },
+      "mortgage_monthly": { "low": 1750, "high": 2100, "avg": 1950 },
       "utilities": {
-        "electric_gas": { "low": 275, "high": 395, "avg": 335 },
-        "water_sewer": { "low": 110, "high": 160, "avg": 135 },
-        "total": { "low": 385, "high": 555, "avg": 470 },
-        "as_of": "2026-03"
+        "electric_gas": { "low": 140, "high": 200, "avg": 170 },
+        "water_sewer": { "low": 50, "high": 70, "avg": 60 },
+        "total": { "low": 190, "high": 270, "avg": 230 },
+        "as_of": "2026-01"
       }
     },
     "4": {
-      "rent_monthly": { "low": 3400, "high": 4500, "avg": 3950, "as_of": "2026-03" },
-      "home_price": { "low": 685000, "high": 895000, "avg": 790000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 4308,
-        "high": 5629,
-        "avg": 4968,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1800, "high": 2300, "avg": 2050 },
+      "home_price": { "low": 340000, "high": 400000, "avg": 370000 },
+      "mortgage_monthly": { "low": 2150, "high": 2550, "avg": 2350 },
       "utilities": {
-        "electric_gas": { "low": 340, "high": 485, "avg": 412 },
-        "water_sewer": { "low": 140, "high": 195, "avg": 167 },
-        "total": { "low": 480, "high": 680, "avg": 579 },
-        "as_of": "2026-03"
+        "electric_gas": { "low": 180, "high": 260, "avg": 220 },
+        "water_sewer": { "low": 65, "high": 90, "avg": 78 },
+        "total": { "low": 245, "high": 350, "avg": 298 },
+        "as_of": "2026-01"
       }
     },
     "5": {
-      "rent_monthly": { "low": 4200, "high": 5800, "avg": 5000, "as_of": "2026-03" },
-      "home_price": { "low": 850000, "high": 1150000, "avg": 1000000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 5346,
-        "high": 7233,
-        "avg": 6289,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2300, "high": 2900, "avg": 2600 },
+      "home_price": { "low": 400000, "high": 470000, "avg": 435000 },
+      "mortgage_monthly": { "low": 2550, "high": 3050, "avg": 2800 },
       "utilities": {
-        "electric_gas": { "low": 425, "high": 610, "avg": 517 },
-        "water_sewer": { "low": 175, "high": 250, "avg": 212 },
-        "total": { "low": 600, "high": 860, "avg": 729 },
-        "as_of": "2026-03"
+        "electric_gas": { "low": 220, "high": 320, "avg": 270 },
+        "water_sewer": { "low": 80, "high": 110, "avg": 95 },
+        "total": { "low": 300, "high": 430, "avg": 365 },
+        "as_of": "2026-01"
       }
     }
   },
 
   "housing": {
-    "housing_units": 40150,
-    "median_value_owner_occupied": 612450,
-
+    "housing_units": 250000,
+    "median_value_owner_occupied": 305000,
     "market": {
-      "zillow_average_home_value": 612450,
-      "zillow_one_year_change_percent": 1.8,
-      "market_type_summary": "Balanced market with low inventory; typical Fairfield sale prices stabilized at ~$612k with consistent commute-driven demand.",
-
-      "average_days_on_market": 42,
-
-      "median_sale_price_current": 625000,
-      "median_listing_price_realtor": 649900,
-      "median_listing_price_per_sqft": 325,
-      "active_listings_total": 312,
-
-      "q1_2026": {
-        "median_sale_price": 618000
-      },
-
-      "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 575000 },
-        { "month": "2024-12", "median_sale_price": 605000 },
-        { "month": "2025-06", "median_sale_price": 635000 },
-        { "month": "2025-12", "median_sale_price": 615000 },
-        { "month": "2026-02", "median_sale_price": 625000 }
-      ]
+      "zillow_average_home_value": 305000,
+      "zillow_one_year_change_percent": 1.6,
+      "market_type_summary": "Balanced market with steady demand",
+      "average_days_on_market": 60,
+      "median_sale_price_current": 310000,
+      "median_listing_price_realtor": 315000,
+      "median_listing_price_per_sqft": 185,
+      "active_listings_total": 7200,
+      "q1_2025": { "median_sale_price": 300000 },
+      "sale_history_36_months": []
     }
   },
 
   "sources": {
-    "demographics": { "provider": "Census Bureau / Solano County Economic Profile", "as_of": "2026-02" },
-    "rent": { "provider": "Zillow Observed Rent Index (ZORI) / RentCafe", "as_of": "2026-03" },
-    "home_price": { "provider": "Zillow / Redfin / BAREIS MLS", "as_of": "2026-03" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I) / 2026 BAH Rates", "as_of": "2026-03", "notes": "6.45% APR for Fairfield market; 2026 BAH rates for Travis AFB rose 4.8%." },
-    "utilities": { "provider": "PG&E / Fairfield Municipal Water / Solano Irrigation District", "as_of": "2026-02" },
-    "market": { "provider": "Redfin / Zillow / Realtor.com", "as_of": "2026-03" },
-
-    "mortgage_city_defaults": {
-      "provider": "Solano County Assessor",
-      "as_of": "2026-01",
-      "notes": "Effective rate approx 1.15% including primary property tax and local special assessments."
-    }
+    "demographics": { "provider": "Census", "as_of": "2026-01" },
+    "rent": { "provider": "Zillow", "as_of": "2026-03" },
+    "home_price": { "provider": "Realtor", "as_of": "2026-01" }
   }
 }

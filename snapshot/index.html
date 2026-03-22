@@ -15,16 +15,15 @@
 </head>
 
 <body>
-<!-- =========================================================
-PCS SNAPSHOT v4.2.1 • House of SaSS
+  <!-- =========================================================
+PCS SNAPSHOT v4.2.2 • House of SaSS
 CODE #1 = FULL HTML + CSS ONLY
 UPDATED:
-- Current Duty Station replaced with compact PCS City Intelligence Brief
-- Keeps the original box footprint / proportions
-- Prevents giant icon scaling and runaway height
-- Everything else stays the same
+- Replaced old top hero with upgraded 4-card header strip
+- Kept existing runtime IDs needed by legacy/current JS
+- Moved old quick-fact IDs to hidden targets for compatibility
+- Leaned out top-strip CSS to help stay under Webflow limit
 ========================================================= -->
-
 
   <!-- //#1) FONTS -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
@@ -36,7 +35,7 @@ UPDATED:
   <!-- //#3) STYLES -->
   <style>
     /* =========================================================
-       //#3.1) SCOPE RESET
+       //#3.1) SCOPE RESET + TOKENS
     ========================================================= */
     #pcs-snapshot-shell,
     #pcs-snapshot-shell *{
@@ -47,19 +46,33 @@ UPDATED:
     #pcs-snapshot-shell{
       width:100%;
       display:block;
+      --pcs-border-06:rgba(255,255,255,.06);
+      --pcs-border-07:rgba(255,255,255,.07);
+      --pcs-border-08:rgba(255,255,255,.08);
+      --pcs-border-10:rgba(255,255,255,.10);
+      --pcs-topline-03:rgba(255,255,255,.03);
+      --pcs-topline-04:rgba(255,255,255,.04);
+      --pcs-shadow-inset-soft:inset 0 1px 0 var(--pcs-topline-03);
+      --pcs-shadow-inset:inset 0 1px 0 var(--pcs-topline-04);
+      --pcs-shadow-card:0 18px 42px rgba(0,0,0,.30);
+      --pcs-shadow-glass:0 22px 44px rgba(0,0,0,.34);
+      --pcs-shadow-wrap:0 30px 80px rgba(0,0,0,.46);
+      --pcs-grad-glass:linear-gradient(180deg, rgba(14,18,38,.74), rgba(8,12,27,.88));
+      --pcs-grad-card:linear-gradient(180deg, rgba(11,16,34,.76), rgba(7,11,24,.90));
+      --pcs-grad-subcard:linear-gradient(180deg, rgba(12,16,34,.88), rgba(7,10,22,.96));
+      --pcs-grad-panel:linear-gradient(180deg, rgba(10,14,30,.82), rgba(7,10,22,.96));
+      --pcs-grad-pill:linear-gradient(180deg, rgba(13,18,38,.92), rgba(8,11,24,.98));
+      --pcs-grad-deep:linear-gradient(180deg, rgba(12,16,34,.90), rgba(7,10,22,.97));
+      --pcs-grad-box:linear-gradient(180deg, rgba(9,14,34,.72), rgba(6,10,26,.88));
     }
 
-    #pcs-snapshot-shell svg{
-      display:block;
-      width:100%;
-      height:100%;
-    }
+    #pcs-snapshot-shell svg{ display:block; }
 
     /* =========================================================
        //#3.2) THEME
     ========================================================= */
     #pcs-snapshot-wrap{
-      width:min(1480px, 100%);
+      width:min(1480px,100%);
       margin:0 auto;
       padding:20px;
       color:#e9ecff;
@@ -67,12 +80,10 @@ UPDATED:
         radial-gradient(1200px 720px at 14% 8%, rgba(52,93,255,.18), transparent 52%),
         radial-gradient(900px 520px at 86% 16%, rgba(126,239,210,.09), transparent 42%),
         radial-gradient(900px 700px at 50% 100%, rgba(32,57,125,.18), transparent 58%),
-        linear-gradient(180deg, #060914 0%, #080d19 38%, #070b16 100%);
+        linear-gradient(180deg,#060914 0%,#080d19 38%,#070b16 100%);
       border-radius:28px;
-      border:1px solid rgba(255,255,255,.07);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.04),
-        0 30px 80px rgba(0,0,0,.46);
+      border:1px solid var(--pcs-border-07);
+      box-shadow:var(--pcs-shadow-inset),var(--pcs-shadow-wrap);
       overflow:hidden;
       position:relative;
       isolation:isolate;
@@ -90,36 +101,20 @@ UPDATED:
       opacity:.55;
     }
 
-    .pcs-glass{
-      background:
-        linear-gradient(180deg, rgba(14,18,38,.74), rgba(8,12,27,.88));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.04),
-        0 22px 44px rgba(0,0,0,.34);
-      backdrop-filter:blur(16px) saturate(150%);
-      -webkit-backdrop-filter:blur(16px) saturate(150%);
-      border-radius:26px;
-    }
-
     .pcs-card{
-      background:
-        linear-gradient(180deg, rgba(11,16,34,.76), rgba(7,11,24,.90));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.04),
-        0 18px 42px rgba(0,0,0,.30);
+      background:var(--pcs-grad-card);
+      border:1px solid var(--pcs-border-08);
+      box-shadow:var(--pcs-shadow-inset),var(--pcs-shadow-card);
       border-radius:24px;
       backdrop-filter:blur(14px) saturate(145%);
       -webkit-backdrop-filter:blur(14px) saturate(145%);
     }
 
     .pcs-subcard{
-      background:
-        linear-gradient(180deg, rgba(12,16,34,.88), rgba(7,10,22,.96));
-      border:1px solid rgba(255,255,255,.07);
+      background:var(--pcs-grad-subcard);
+      border:1px solid var(--pcs-border-07);
       border-radius:20px;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
+      box-shadow:var(--pcs-shadow-inset);
     }
 
     .pcs-title{
@@ -141,101 +136,194 @@ UPDATED:
     }
 
     /* =========================================================
-       //#3.3) TOP HERO
+       //#3.3) TOP STRIP — UPGRADED 4 CARD HEADER
     ========================================================= */
     .pcs-top{
-      display:grid;
-      grid-template-columns: 1.55fr .62fr;
-      gap:18px;
       margin-bottom:18px;
     }
 
-    .pcs-top-left{
-      padding:22px 24px 18px;
-      min-height:176px;
+    .pcs-top-head{
+      margin:0 0 14px;
+      padding:0 2px;
     }
 
-    .pcs-top-left h2{
+    .pcs-top-head .pcs-title{
       font-size:24px;
       line-height:1.08;
-      margin:0 0 10px;
+      margin-bottom:10px;
     }
 
     #pcs-city-line{
       font-size:14px;
       font-weight:600;
       color:#c9d3f6;
-      margin-bottom:18px;
       display:block;
     }
 
-    .pcs-top-facts{
+    .pts-grid{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
-      gap:14px;
+      grid-template-columns:1.18fr 1fr 1fr 1fr;
+      gap:16px;
+      align-items:stretch;
     }
 
-    .pcs-top-fact{
-      min-height:68px;
-      padding:14px 16px;
-      border-radius:18px;
-      background:
-        linear-gradient(180deg, rgba(10,14,30,.84), rgba(8,12,24,.96));
-      border:1px solid rgba(255,255,255,.07);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-    }
-
-    .pcs-top-fact-label{
-      font-size:11px;
-      font-weight:800;
-      letter-spacing:.1em;
-      text-transform:uppercase;
-      color:#b5bfdf;
-      margin-bottom:8px;
-    }
-
-    .pcs-top-fact-value{
-      font-size:15px;
-      font-weight:900;
-      color:#ffffff;
-      line-height:1.1;
-    }
-
-    .pcs-top-right{
-      padding:18px 22px;
-      min-height:176px;
+    .pts-card{
+      min-height:178px;
+      border-radius:24px;
+      border:1px solid var(--pcs-border-08);
+      background:linear-gradient(180deg, rgba(10,15,32,.82), rgba(6,10,24,.94));
+      box-shadow:var(--pcs-shadow-inset),0 12px 28px rgba(0,0,0,.20);
+      padding:20px 20px 18px;
       display:flex;
-      align-items:flex-start;
-      justify-content:flex-start;
+      flex-direction:column;
+      justify-content:space-between;
+      overflow:hidden;
+      position:relative;
     }
 
-    .pcs-income-box{
-      width:100%;
-      min-height:92px;
-      padding:18px 22px;
-      border-radius:22px;
-      background:
-        linear-gradient(180deg, rgba(9,14,34,.72), rgba(6,10,26,.88));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.04),
-        0 14px 34px rgba(0,0,0,.28);
+    .pts-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:radial-gradient(circle at 18% 18%, rgba(255,255,255,.03), transparent 22%);
+      opacity:.8;
     }
 
-    #pcs-income-main{
-      font-size:24px;
+    .pts-card > *{
+      position:relative;
+      z-index:1;
+    }
+
+    .pts-top{
+      display:grid;
+      grid-template-columns:72px 1fr;
+      gap:14px;
+      align-items:center;
+    }
+
+    .pts-icon{
+      width:58px;
+      height:58px;
+      border-radius:999px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      border:1px solid var(--pcs-border-10);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 0 24px rgba(77,121,255,.16);
+      flex:0 0 58px;
+    }
+
+    .pts-icon svg{
+      width:26px;
+      height:26px;
+    }
+
+    .pts-copy{ min-width:0; }
+
+    .pts-kicker{
+      margin:0 0 4px;
+      font-size:12px;
+      line-height:1.15;
       font-weight:900;
-      color:#ffffff;
-      line-height:1.05;
-      margin-bottom:8px;
-      letter-spacing:-.02em;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      color:#9eabdd;
     }
 
-    #pcs-income-breakdown{
+    .pts-bigline{
+      display:flex;
+      align-items:baseline;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .pts-value{
+      margin:0;
+      font-size:27px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.03em;
+      color:#fff;
+    }
+
+    .pts-unit{
+      font-size:14px;
+      line-height:1;
+      font-weight:700;
+      color:#d8def8;
+    }
+
+    .pts-body{ margin-top:16px; }
+
+    .pts-body-copy,
+    .pts-income-breakdown{
+      margin:0;
       font-size:13px;
-      color:#c8d3fb;
-      font-weight:600;
       line-height:1.45;
+      font-weight:700;
+      color:#eef2ff;
+    }
+
+    .pts-meta{
+      margin-top:10px;
+      padding-top:12px;
+      border-top:1px solid var(--pcs-border-08);
+      font-size:12px;
+      line-height:1.4;
+      font-weight:700;
+      color:#cdd5f3;
+    }
+
+    .pts-card-income .pts-icon{
+      background:radial-gradient(circle at 30% 30%, rgba(29,94,255,.40), rgba(20,35,88,.95));
+      color:#1f7dff;
+    }
+
+    .pts-card-income .pts-value,
+    .pts-card-bah .pts-value,
+    .pts-card-market .pts-value{
+      color:#26f0cf;
+    }
+
+    .pts-card-bah .pts-icon{
+      background:radial-gradient(circle at 30% 30%, rgba(57,126,255,.42), rgba(20,35,88,.95));
+      color:#b9d7ff;
+    }
+
+    .pts-card-market .pts-icon{
+      background:radial-gradient(circle at 30% 30%, rgba(31,235,185,.28), rgba(13,68,58,.94));
+      color:#72f1da;
+    }
+
+    .pts-card-market .pts-value{ font-size:26px; }
+
+    .pts-card-power .pts-icon{
+      background:radial-gradient(circle at 30% 30%, rgba(111,95,255,.26), rgba(34,29,73,.95));
+      color:#ffbf45;
+    }
+
+    .pts-power-row{
+      display:flex;
+      align-items:center;
+      gap:12px;
+      flex-wrap:wrap;
+    }
+
+    .pts-power-score{
+      font-size:27px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.03em;
+      color:#fff;
+    }
+
+    .pts-stars{
+      font-size:24px;
+      line-height:1;
+      letter-spacing:.08em;
+      color:#ffc84d;
+      white-space:nowrap;
     }
 
     /* =========================================================
@@ -243,7 +331,7 @@ UPDATED:
     ========================================================= */
     .pcs-main{
       display:grid;
-      grid-template-columns: .98fr 1.02fr;
+      grid-template-columns:.98fr 1.02fr;
       gap:18px;
     }
 
@@ -253,7 +341,7 @@ UPDATED:
     }
 
     /* =========================================================
-       //#3.5) LEFT — CURRENT DUTY STATION (FIXED SIZE BRIEF)
+       //#3.5) LEFT — CURRENT DUTY STATION
     ========================================================= */
     .pcs-current-panel{
       padding:14px;
@@ -292,7 +380,7 @@ UPDATED:
 
     .pcs-current-grid{
       display:grid;
-      grid-template-columns: .93fr 1.07fr;
+      grid-template-columns:.93fr 1.07fr;
       gap:12px;
       align-items:stretch;
       min-height:372px;
@@ -306,7 +394,8 @@ UPDATED:
       background:
         radial-gradient(circle at 50% 20%, rgba(102,160,255,.18), transparent 30%),
         linear-gradient(180deg, rgba(10,14,30,.76), rgba(4,8,20,.95));
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid var(--pcs-border-08);
+      box-shadow:var(--pcs-shadow-inset),0 12px 32px rgba(0,0,0,.22);
     }
 
     .pcs-image-card img{
@@ -324,18 +413,18 @@ UPDATED:
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      height:24px;
+      min-height:24px;
       padding:0 10px;
       border-radius:999px;
-      border:1px solid rgba(255,255,255,.10);
-      background:
-        linear-gradient(180deg, rgba(12,16,34,.78), rgba(8,12,24,.95));
+      border:1px solid var(--pcs-border-10);
+      background:var(--pcs-grad-glass);
       color:#f4f7ff;
       font-size:9px;
       font-weight:900;
       text-transform:uppercase;
       letter-spacing:.14em;
       white-space:nowrap;
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 8px 18px rgba(0,0,0,.18);
     }
 
     .pcs-image-overlay{
@@ -343,8 +432,7 @@ UPDATED:
       inset:auto 0 0 0;
       z-index:2;
       padding:12px 12px 10px;
-      background:
-        linear-gradient(180deg, rgba(4,6,15,0) 0%, rgba(4,6,15,.18) 24%, rgba(4,6,15,.76) 100%);
+      background:linear-gradient(180deg, rgba(4,6,15,0) 0%, rgba(4,6,15,.18) 24%, rgba(4,6,15,.76) 100%);
       text-align:center;
     }
 
@@ -375,6 +463,7 @@ UPDATED:
       display:grid;
       grid-template-rows:auto auto auto 1fr;
       gap:8px;
+      align-self:stretch;
     }
 
     .pcs-brief-banner{
@@ -383,9 +472,9 @@ UPDATED:
       gap:8px;
       padding:10px;
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.07);
-      background:
-        linear-gradient(180deg, rgba(11,16,34,.82), rgba(7,11,24,.94));
+      border:1px solid var(--pcs-border-07);
+      background:var(--pcs-grad-card);
+      box-shadow:var(--pcs-shadow-inset-soft),0 8px 18px rgba(0,0,0,.16);
     }
 
     .pcs-brief-banner-icon{
@@ -397,9 +486,10 @@ UPDATED:
       align-items:center;
       justify-content:center;
       color:#eef7ff;
-      background:
-        radial-gradient(circle at 30% 30%, #88d9ff, #426cff);
+      background:radial-gradient(circle at 30% 30%, #88d9ff, #426cff);
       border:1px solid rgba(255,255,255,.12);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 16px rgba(91,141,255,.28);
+      flex:0 0 22px;
     }
 
     .pcs-brief-banner-icon svg{
@@ -407,16 +497,14 @@ UPDATED:
       height:12px;
     }
 
-    .pcs-brief-banner-copy{
-      min-width:0;
-    }
+    .pcs-brief-banner-copy{ min-width:0; }
 
     .pcs-brief-banner-head{
       margin:0 0 2px;
       font-size:10px;
       line-height:1.2;
       font-weight:900;
-      color:#ffffff;
+      color:#fff;
       text-transform:uppercase;
       letter-spacing:.08em;
     }
@@ -431,10 +519,10 @@ UPDATED:
 
     .pcs-mini-section{
       border-radius:14px;
-      border:1px solid rgba(255,255,255,.07);
-      background:
-        linear-gradient(180deg, rgba(10,14,30,.82), rgba(7,10,22,.96));
+      border:1px solid var(--pcs-border-07);
+      background:var(--pcs-grad-panel);
       padding:9px;
+      box-shadow:var(--pcs-shadow-inset-soft);
     }
 
     .pcs-mini-head{
@@ -453,8 +541,9 @@ UPDATED:
       align-items:center;
       justify-content:center;
       background:rgba(255,255,255,.05);
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid var(--pcs-border-08);
       color:#dfe7ff;
+      flex:0 0 18px;
     }
 
     .pcs-mini-head-icon svg{
@@ -481,9 +570,9 @@ UPDATED:
       min-height:54px;
       border-radius:12px;
       padding:8px 8px 7px;
-      border:1px solid rgba(255,255,255,.06);
-      background:
-        linear-gradient(180deg, rgba(12,16,34,.90), rgba(7,10,22,.97));
+      border:1px solid var(--pcs-border-06);
+      background:var(--pcs-grad-deep);
+      box-shadow:var(--pcs-shadow-inset-soft);
     }
 
     .pcs-mini-label{
@@ -507,7 +596,7 @@ UPDATED:
       font-size:14px;
       line-height:1.08;
       font-weight:900;
-      color:#ffffff;
+      color:#fff;
       letter-spacing:-.02em;
     }
 
@@ -543,17 +632,17 @@ UPDATED:
       min-width:6px;
       border-radius:999px;
       margin-top:4px;
-      background:
-        radial-gradient(circle at 30% 30%, #77c9ff, #4a66ff);
+      background:radial-gradient(circle at 30% 30%, #77c9ff, #4a66ff);
       box-shadow:0 0 10px rgba(90,145,255,.28);
+      flex:0 0 6px;
     }
 
     .pcs-fin-box{
       border-radius:12px;
       padding:9px 9px 8px;
-      border:1px solid rgba(255,255,255,.06);
-      background:
-        linear-gradient(180deg, rgba(12,16,34,.90), rgba(7,10,22,.97));
+      border:1px solid var(--pcs-border-06);
+      background:var(--pcs-grad-deep);
+      box-shadow:var(--pcs-shadow-inset-soft);
       align-self:end;
     }
 
@@ -603,8 +692,8 @@ UPDATED:
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
-      gap:12px;
-      margin-bottom:10px;
+      gap:2px;
+      margin-bottom:6px;
       flex-wrap:wrap;
     }
 
@@ -623,10 +712,9 @@ UPDATED:
       gap:8px;
       padding:8px 10px;
       border-radius:14px;
-      background:
-        linear-gradient(180deg, rgba(13,18,38,.92), rgba(8,11,24,.98));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+      background:var(--pcs-grad-pill);
+      border:1px solid var(--pcs-border-08);
+      box-shadow:var(--pcs-shadow-inset-soft);
       white-space:nowrap;
     }
 
@@ -666,7 +754,7 @@ UPDATED:
       width:20px;
       height:16px;
       border-radius:6px;
-      border:1px solid rgba(255,255,255,.10);
+      border:1px solid var(--pcs-border-10);
       background:rgba(255,255,255,.06);
       color:#f5f7ff;
       font-size:9px;
@@ -678,26 +766,22 @@ UPDATED:
       cursor:pointer;
       padding:0;
       appearance:none;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+      box-shadow:var(--pcs-shadow-inset-soft);
     }
 
-    .pcs-bedroom-btn:hover{
-      background:rgba(255,255,255,.10);
-    }
-
-    .pcs-bedroom-btn:active{
-      transform:translateY(1px);
-    }
+    .pcs-bedroom-btn:hover{ background:rgba(255,255,255,.10); }
+    .pcs-bedroom-btn:active{ transform:translateY(1px); }
 
     .pcs-afford-grid{
       display:grid;
-      grid-template-columns: .98fr .92fr;
+      grid-template-columns:.98fr .92fr;
       gap:10px;
-      align-items:center;
+      align-items:start;
     }
 
     .pcs-afford-copy{
       padding-right:6px;
+      padding-top:2px;
     }
 
     #pcs-afford-headline{
@@ -748,23 +832,23 @@ UPDATED:
       font-size:12px;
       margin-top:1px;
       color:#08111f;
-      background:
-        radial-gradient(circle at 30% 30%, #9ef7d0, #68b3ff);
+      background:radial-gradient(circle at 30% 30%, #9ef7d0, #68b3ff);
       box-shadow:0 0 14px rgba(102,170,255,.28);
     }
 
     .pcs-check strong{
-      color:#ffffff;
+      color:#fff;
       font-weight:900;
     }
 
     .pcs-donut-zone{
       min-height:250px;
       display:flex;
-      align-items:center;
+      align-items:flex-start;
       justify-content:center;
       position:relative;
       overflow:visible;
+      padding-top:4px;
     }
 
     .pcs-donut-wrap{
@@ -782,19 +866,8 @@ UPDATED:
       border-radius:50%;
       position:relative;
       transform:rotate(-8deg);
-      background:
-        conic-gradient(
-          #4f7fff 0deg 72deg,
-          #5774ff 72deg 135deg,
-          #203c8d 135deg 192deg,
-          #d3af58 192deg 232deg,
-          #4ba2b6 232deg 282deg,
-          #57b293 282deg 360deg
-        );
-      box-shadow:
-        inset 0 10px 22px rgba(255,255,255,.08),
-        inset 0 -18px 30px rgba(0,0,0,.28),
-        0 22px 46px rgba(0,0,0,.34);
+      background:conic-gradient(#4f7fff 0deg 72deg,#5774ff 72deg 135deg,#203c8d 135deg 192deg,#d3af58 192deg 232deg,#4ba2b6 232deg 282deg,#57b293 282deg 360deg);
+      box-shadow:inset 0 10px 22px rgba(255,255,255,.08),inset 0 -18px 30px rgba(0,0,0,.28),0 22px 46px rgba(0,0,0,.34);
     }
 
     .pcs-donut::before{
@@ -802,11 +875,8 @@ UPDATED:
       position:absolute;
       inset:56px;
       border-radius:50%;
-      background:
-        radial-gradient(circle at 50% 38%, rgba(33,44,78,.96), rgba(8,12,27,.98));
-      box-shadow:
-        inset 0 2px 10px rgba(255,255,255,.04),
-        0 0 0 8px rgba(255,255,255,.025);
+      background:radial-gradient(circle at 50% 38%, rgba(33,44,78,.96), rgba(8,12,27,.98));
+      box-shadow:inset 0 2px 10px rgba(255,255,255,.04),0 0 0 8px rgba(255,255,255,.025);
     }
 
     .pcs-donut-center{
@@ -860,7 +930,7 @@ UPDATED:
       color:#dfe6ff;
       line-height:1.45;
       padding-top:12px;
-      border-top:1px solid rgba(255,255,255,.08);
+      border-top:1px solid var(--pcs-border-08);
     }
 
     /* =========================================================
@@ -876,7 +946,7 @@ UPDATED:
       font-weight:900;
       letter-spacing:.03em;
       text-transform:uppercase;
-      color:#ffffff;
+      color:#fff;
       margin:0 0 4px;
     }
 
@@ -899,30 +969,28 @@ UPDATED:
       padding:9px 16px;
       border-radius:999px;
       background:rgba(255,255,255,.06);
-      border:1px solid rgba(255,255,255,.08);
+      border:1px solid var(--pcs-border-08);
       color:#dce4ff;
       font-size:12px;
       font-weight:800;
       letter-spacing:.05em;
       text-transform:uppercase;
       cursor:pointer;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+      box-shadow:var(--pcs-shadow-inset-soft);
     }
 
     .trend-btn.active{
       color:#08111e;
       border-color:rgba(173,255,223,.30);
-      background:
-        linear-gradient(180deg, rgba(166,246,218,.96), rgba(130,218,195,.92));
+      background:linear-gradient(180deg, rgba(166,246,218,.96), rgba(130,218,195,.92));
     }
 
     #pcs-trend-chart-apex{
       min-height:232px;
       margin-top:2px;
       border-radius:18px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
-      border:1px solid rgba(255,255,255,.06);
+      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      border:1px solid var(--pcs-border-06);
       padding:6px 8px 0;
       overflow:hidden;
     }
@@ -948,7 +1016,7 @@ UPDATED:
       font-weight:900;
       letter-spacing:.03em;
       text-transform:uppercase;
-      color:#ffffff;
+      color:#fff;
       margin:0 0 10px;
     }
 
@@ -966,7 +1034,7 @@ UPDATED:
 
     .pcs-own-topline strong{
       font-size:14px;
-      color:#ffffff;
+      color:#fff;
       font-weight:900;
     }
 
@@ -986,7 +1054,7 @@ UPDATED:
 
     .pcs-own-pills{
       display:grid;
-      grid-template-columns: repeat(3, minmax(0,1fr));
+      grid-template-columns:repeat(3,minmax(0,1fr));
       gap:12px;
       margin-top:10px;
     }
@@ -999,10 +1067,9 @@ UPDATED:
       align-items:center;
       justify-content:center;
       text-align:center;
-      background:
-        linear-gradient(180deg, rgba(13,18,38,.92), rgba(8,11,24,.98));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
+      background:var(--pcs-grad-pill);
+      border:1px solid var(--pcs-border-08);
+      box-shadow:var(--pcs-shadow-inset-soft);
       font-size:16px;
       font-weight:900;
       color:#f4f7ff;
@@ -1044,66 +1111,58 @@ UPDATED:
     /* =========================================================
        //#3.10) RESPONSIVE
     ========================================================= */
-    @media (max-width: 1180px){
-      .pcs-top{
-        grid-template-columns: 1fr;
-      }
-
-      .pcs-main{
-        grid-template-columns: 1fr;
-      }
+    @media (max-width:1220px){
+      .pts-grid{ grid-template-columns:1fr 1fr; }
     }
 
-    @media (max-width: 860px){
+    @media (max-width:1180px){
+      .pcs-main{ grid-template-columns:1fr; }
+    }
+
+    @media (max-width:860px){
       #pcs-snapshot-wrap{
         padding:14px;
         border-radius:22px;
       }
 
-      .pcs-top-left h2{
-        font-size:20px;
-      }
-
-      .pcs-top-facts{
-        grid-template-columns:1fr;
-      }
-
+      .pcs-top-head .pcs-title{ font-size:20px; }
       .pcs-current-grid,
       .pcs-afford-grid,
-      .pcs-own-pills{
-        grid-template-columns:1fr;
-      }
+      .pcs-own-pills{ grid-template-columns:1fr; }
 
-      .pcs-income-box{
-        min-height:auto;
-      }
-
-      .pcs-image-card{
-        min-height:300px;
-      }
+      .pcs-image-card{ min-height:300px; }
 
       .pcs-info-card{
         min-height:auto;
         grid-template-rows:auto auto auto auto;
       }
 
-      #pcs-afford-headline{
-        font-size:24px;
-      }
+      #pcs-afford-headline{ font-size:24px; }
 
-      .pcs-donut-wrap{
-        width:252px;
-        height:252px;
-      }
-
+      .pcs-donut-wrap,
       .pcs-donut{
         width:252px;
         height:252px;
       }
 
-      .pcs-donut::before{
-        inset:48px;
+      .pcs-donut::before{ inset:48px; }
+    }
+
+    @media (max-width:760px){
+      .pts-grid{ grid-template-columns:1fr; }
+      .pts-card{ min-height:auto; }
+      .pts-top{
+        grid-template-columns:58px 1fr;
+        gap:12px;
       }
+      .pts-icon{
+        width:52px;
+        height:52px;
+        flex-basis:52px;
+      }
+      .pts-value,
+      .pts-power-score{ font-size:24px; }
+      .pts-stars{ font-size:20px; }
     }
   </style>
 
@@ -1114,33 +1173,121 @@ UPDATED:
          //#4.1) TOP STRIP
     ====================================================== -->
     <section class="pcs-top">
-      <div class="pcs-top-left pcs-glass">
+      <div class="pcs-top-head">
         <h2 class="pcs-title">Permanent Change of Duty Station PCS Snapshot</h2>
         <span id="pcs-city-line">San Antonio, TX <span class="pcs-dot"></span> Quick PCS Snapshot</span>
-
-        <div class="pcs-top-facts">
-          <div class="pcs-top-fact">
-            <div class="pcs-top-fact-label">Poverty Rate</div>
-            <div class="pcs-top-fact-value" id="pcs-qf-poverty">14.4%</div>
-          </div>
-
-          <div class="pcs-top-fact">
-            <div class="pcs-top-fact-label">Median Home Value</div>
-            <div class="pcs-top-fact-value" id="pcs-qf-home">$288,700</div>
-          </div>
-
-          <div class="pcs-top-fact">
-            <div class="pcs-top-fact-label">Avg Days on Market</div>
-            <div class="pcs-top-fact-value" id="pcs-qf-dom">83</div>
-          </div>
-        </div>
       </div>
 
-      <div class="pcs-top-right pcs-glass">
-        <div class="pcs-income-box">
-          <div id="pcs-income-main">$8,259 / month</div>
-          <div id="pcs-income-breakdown">Base Pay: $5,621 <span class="pcs-dot"></span> BAH: $2,172 <span class="pcs-dot"></span> BAS: $466</div>
-        </div>
+      <div class="pts-grid">
+
+        <!-- MONTHLY INCOME -->
+        <article class="pts-card pts-card-income">
+          <div class="pts-top">
+            <div class="pts-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <text x="14" y="42" font-size="28" font-weight="900" fill="currentColor" font-family="Georgia, serif">A</text>
+                <text x="30" y="52" font-size="28" font-weight="900" fill="currentColor" font-family="Georgia, serif">F</text>
+              </svg>
+            </div>
+
+            <div class="pts-copy">
+              <p class="pts-kicker">Monthly Income</p>
+              <div class="pts-bigline">
+                <p class="pts-value" id="pcs-income-main">$8,259</p>
+                <span class="pts-unit">/ month</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pts-body">
+            <p class="pts-income-breakdown" id="pcs-income-breakdown">Base Pay: $5,621, BAH $2,172,<br>BAS $466</p>
+          </div>
+
+          <div class="pts-meta" id="pts-income-meta">True disposable baseline before housing</div>
+        </article>
+
+        <!-- BAH COMPARISON -->
+        <article class="pts-card pts-card-bah">
+          <div class="pts-top">
+            <div class="pts-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M8 4v16M8 4l-3 3M8 4l3 3" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M16 20V4M16 20l-3-3M16 20l3-3" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M3 12h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".35"/>
+                <path d="M4.5 9.5h7M12.5 14.5h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".35"/>
+              </svg>
+            </div>
+
+            <div class="pts-copy">
+              <p class="pts-kicker">BAH Comparison</p>
+              <div class="pts-bigline">
+                <p class="pts-value" id="pts-bah-delta">+$350</p>
+                <span class="pts-unit">/ month</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pts-body">
+            <p class="pts-body-copy" id="pts-bah-copy">Compared with your previous duty station housing allowance.</p>
+          </div>
+
+          <div class="pts-meta" id="pts-bah-meta">vs. Previous Duty Station</div>
+        </article>
+
+        <!-- MARKET SIGNAL -->
+        <article class="pts-card pts-card-market">
+          <div class="pts-top">
+            <div class="pts-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M4 10.5 12 5l8 5.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M9 20v-5h6v5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M8 11h.01M12 11h.01M16 11h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <div class="pts-copy">
+              <p class="pts-kicker">Market Signal</p>
+              <div class="pts-bigline">
+                <p class="pts-value" id="pts-market-signal">Buyer-Friendly</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="pts-body">
+            <p class="pts-body-copy" id="pts-market-copy">Inventory elevated • Softer prices • Better leverage</p>
+          </div>
+
+          <div class="pts-meta" id="pts-market-meta">Current market condition</div>
+        </article>
+
+        <!-- PURCHASE POWER -->
+        <article class="pts-card pts-card-power">
+          <div class="pts-top">
+            <div class="pts-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24" fill="none">
+                <path d="M8.5 8.5a4.5 4.5 0 1 1 5.7 6.9L12 18l-2.2-2.1A4.5 4.5 0 0 1 8.5 8.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M15 6.5h3.5a2.5 2.5 0 0 1 0 5H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M5.5 17.5H4a2.5 2.5 0 0 1 0-5h1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                <path d="M9.7 11.6h4.6M12 9.3v4.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+              </svg>
+            </div>
+
+            <div class="pts-copy">
+              <p class="pts-kicker">Purchase Power</p>
+              <div class="pts-power-row">
+                <span class="pts-power-score" id="pts-power-score">4.5</span>
+                <span class="pts-stars" id="pts-power-stars">★★★★★</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="pts-body">
+            <p class="pts-body-copy" id="pts-power-copy">Based on total income &amp; housing market</p>
+          </div>
+
+          <div class="pts-meta" id="pts-power-meta">Overall affordability signal</div>
+        </article>
+
       </div>
     </section>
 
@@ -1451,6 +1598,10 @@ UPDATED:
 
       <div id="pcs-qf-block"></div>
       <div id="pcs-quickfacts"></div>
+      <div id="pcs-qf-poverty">14.4%</div>
+      <div id="pcs-qf-home">$288,700</div>
+      <div id="pcs-qf-dom">83</div>
+
       <canvas id="pcs-income-chart"></canvas>
       <canvas id="pcs-bah-chart"></canvas>
       <div id="pcs-income-summary"></div>
@@ -1483,8 +1634,7 @@ UPDATED:
     </div>
 
   </div>
-</div>  
-<!-- =========================
+  <!-- =========================
      PCS SNAPSHOT RUNTIME (CODE #2)
 ========================= -->
 <script>
@@ -1492,11 +1642,12 @@ UPDATED:
   "use strict";
 
   // ============================================================
-  // PCS SNAPSHOT v4.1.4 RUNTIME
+  // PCS SNAPSHOT v4.2.2 RUNTIME
   // UPDATED:
-  // - Added compact Current Duty Station strip
-  // - Main large city panel now represents UPCOMING duty station
-  // - Everything else stays the same
+  // - Wired new 4-card top header strip
+  // - Fixed Monthly Income card "/ month" duplication
+  // - Removed dead writes to old visible top-strip selectors
+  // - Kept legacy hidden/runtime targets intact where useful
   // ============================================================
 
   // ============================================================
@@ -1805,31 +1956,6 @@ UPDATED:
     }
   }
 
-  function factBullets(city){
-    const bullets = [];
-    const marketType = safe(city,"market_bluf.bluf_summary","")
-      || safe(city,"housing.market.market_type_summary","")
-      || safe(city,"market_bluf.status","")
-      || "Market status not available";
-
-    const yoy = safe(city,"snapshot.market_trend_yoy", null)
-      ?? safe(city,"housing.market.zillow_one_year_change_percent", null)
-      ?? safe(city,"housing.market.one_year_change_percent", null);
-
-    const dom = safe(city,"housing.market.average_days_on_market", null)
-      ?? safe(city,"housing.market.average_days_on_market_range.low", null);
-
-    const income = safe(city,"snapshot.median_household_income", null)
-      ?? safe(city,"income.median_household_income", null)
-      ?? safe(city,"demographics.income.median_household_income", null);
-
-    if (marketType) bullets.push(marketType);
-    if (yoy != null) bullets.push(`Home prices <strong>${Number(yoy) || 0}%</strong> YoY`);
-    if (dom != null) bullets.push(`Avg days on market: <strong>${dom}</strong>`);
-    if (income != null) bullets.push(`Median income: <strong>${money(income)}</strong>`);
-    return bullets.slice(0,4);
-  }
-
   function renderFacts(containerId, bullets){
     const el = $(containerId);
     if(!el) return;
@@ -1863,11 +1989,9 @@ UPDATED:
       { label:"Avg Days on Market", value:(days != null ? String(days) : "—") }
     ];
 
-    let html = "";
-    facts.forEach(f => {
-      html += `<div class="pcs-fact"><div class="pcs-fact-label">${f.label}</div><div class="pcs-fact-value">${f.value}</div></div>`;
-    });
-    setHTML("#pcs-quickfacts", html);
+    setHTML("#pcs-quickfacts", facts.map(f =>
+      `<div class="pcs-fact"><div class="pcs-fact-label">${f.label}</div><div class="pcs-fact-value">${f.value}</div></div>`
+    ).join(""));
   }
 
   // ============================================================
@@ -1970,7 +2094,114 @@ UPDATED:
   }
 
   // ============================================================
-  // //#10) CHART REFS
+  // //#10) TOP STRIP HELPERS
+  // ============================================================
+  function marketSignalFromCity(city){
+    const yoy = Number(
+      safe(city,"snapshot.market_trend_yoy", null)
+      ?? safe(city,"housing.market.zillow_one_year_change_percent", null)
+      ?? safe(city,"housing.market.one_year_change_percent", null)
+      ?? 0
+    ) || 0;
+
+    const dom = Number(
+      safe(city,"housing.market.average_days_on_market", null)
+      ?? safe(city,"housing.market.average_days_on_market_range.low", null)
+      ?? 0
+    ) || 0;
+
+    const marketSummary = safe(city,"market_bluf.bluf_summary","")
+      || safe(city,"housing.market.market_type_summary","")
+      || "";
+
+    const marketType = String(
+      safe(city,"market_bluf.status","")
+      || safe(city,"housing.market.market_type","")
+      || ""
+    ).toLowerCase();
+
+    if (marketType.includes("buyer") || yoy <= -2 || dom >= 55) {
+      return {
+        label: "Buyer-Friendly",
+        sub: marketSummary || "Inventory elevated • Softer prices • Better leverage",
+        meta: "Current market condition"
+      };
+    }
+
+    if (marketType.includes("seller") || yoy >= 2 || dom <= 30) {
+      return {
+        label: "Seller-Leaning",
+        sub: marketSummary || "Tighter inventory • Firmer pricing • Less leverage",
+        meta: "Current market condition"
+      };
+    }
+
+    return {
+      label: "Balanced",
+      sub: marketSummary || "Supply and pricing appear balanced for disciplined entry",
+      meta: "Current market condition"
+    };
+  }
+
+  function purchasePowerFromInputs(totalPay, stack){
+    const ratio = (Number(totalPay) || 0) / Math.max(Number(stack) || 0, 1);
+    let score = 1;
+    if (ratio >= 4.0) score = 5.0;
+    else if (ratio >= 3.3) score = 4.5;
+    else if (ratio >= 2.8) score = 4.0;
+    else if (ratio >= 2.4) score = 3.5;
+    else if (ratio >= 2.1) score = 3.0;
+    else if (ratio >= 1.8) score = 2.5;
+    else if (ratio >= 1.6) score = 2.0;
+    else if (ratio >= 1.4) score = 1.5;
+    return Number(score.toFixed(1));
+  }
+
+  function starsFrom5(score){
+    const rounded = Math.round(Number(score) || 0);
+    let out = "";
+    for (let i = 1; i <= 5; i++) out += i <= rounded ? "★" : "☆";
+    return out;
+  }
+
+  function housingStackForTopCard(city, family){
+    const beds = familyToBedrooms(family);
+    const bedroom = getBedroomProfile(city, beds);
+    const price = Number(bedroom.homePrice || 0) || Number(pickMedianPrice(city) || 0);
+    const mortgage = Number(bedroom.mortgage || 0) || Number(monthlyMortgageEstimate(price, 0.0675) || 0);
+    const taxes = Number(estimateTaxesMonthly(city, price) || 0);
+    const insurance = Number(estimateInsuranceMonthly(city, price) || 0);
+    const hoa = Number(pickHOA(city, beds) || 0);
+    const utilities = Number(bedroom.utilities || 0);
+    return { beds, price, mortgage, taxes, insurance, hoa, utilities, total: mortgage + taxes + insurance + hoa + utilities };
+  }
+
+  function updateTopStripCards(data){
+    const totalPay = Number(data.totalPay || 0);
+    const bahDelta = Number(data.bahDelta || 0);
+    const market = data.market || { label:"Balanced", sub:"", meta:"Current market condition" };
+    const powerScore = Number(data.powerScore || 0);
+
+    setText("#pcs-income-main", money(totalPay));
+    setHTML("#pcs-income-breakdown", `Base Pay: ${money(data.basePay)} <span class="pcs-dot"></span> BAH: ${money(data.bah)} <span class="pcs-dot"></span> BAS: ${money(data.bas)}`);
+    setText("#pts-income-meta", "True disposable baseline before housing");
+
+    setText("#pts-bah-delta", `${bahDelta >= 0 ? "+" : "-"}${money(Math.abs(bahDelta)).replace("$","$")}`);
+    setText("#pts-bah-copy", "Compared with your previous duty station housing allowance.");
+    setText("#pts-bah-meta", "vs. Previous Duty Station");
+
+    setText("#pts-market-signal", market.label);
+    setText("#pts-market-copy", market.sub);
+    setText("#pts-market-meta", market.meta);
+
+    setText("#pts-power-score", powerScore.toFixed(1));
+    setText("#pts-power-stars", starsFrom5(powerScore));
+    setText("#pts-power-copy", "Based on total income & housing market");
+    setText("#pts-power-meta", "Overall affordability signal");
+  }
+
+  // ============================================================
+  // //#11) CHART REFS
   // ============================================================
   let chartCurrent = null, chartUpcoming = null, headerIncomeChart = null, headerBahChart = null, affordChart = null;
 
@@ -2025,29 +2256,40 @@ UPDATED:
   }
 
   // ============================================================
-  // //#11) HEADER + TOP CHARTS
+  // //#12) HEADER + TOP CHARTS
   // ============================================================
   async function initHeaderAndCharts(pay, p, city){
     const isAD = p.type === "ad";
-    let base = 0, bah = 0, bas = 0;
+    let base = 0, bah = 0, bas = 0, prevBah = 0;
 
     if (isAD) {
-      const vals = await calcBahFromPay(pay, { rank:p.rank, yos:p.yos, family:p.family, baseLoc:p.newBase || p.base || DEFAULT_BASE, zip:p.newZip || fallbackZip(p.newBase || p.base || DEFAULT_BASE) });
-      base = vals.basePay || 0; bah = vals.bah || 0; bas = vals.bas || 0;
+      const vals = await calcBahFromPay(pay, {
+        rank:p.rank, yos:p.yos, family:p.family,
+        baseLoc:p.newBase || p.base || DEFAULT_BASE,
+        zip:p.newZip || fallbackZip(p.newBase || p.base || DEFAULT_BASE)
+      });
+      const prevVals = await calcBahFromPay(pay, {
+        rank:p.rank, yos:p.yos, family:p.family,
+        baseLoc:p.curBase || DEFAULT_BASE,
+        zip:p.curZip || fallbackZip(p.curBase || DEFAULT_BASE)
+      });
+      base = vals.basePay || 0;
+      bah = vals.bah || 0;
+      bas = vals.bas || 0;
+      prevBah = prevVals.bah || 0;
     } else {
       const full = pay.DISABILITY_FULL || {};
       const keys = Object.keys(full).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
-      let best = keys[0] ?? 0, diff=Math.abs(p.va-best);
-      keys.forEach(k=>{ const d=Math.abs(p.va-k); if(d<diff){ diff=d; best=k; } });
+      let best = keys[0] ?? 0, diff = Math.abs(p.va - best);
+      keys.forEach(k => { const d = Math.abs(p.va - k); if (d < diff){ diff = d; best = k; } });
       const row = full[String(best)];
       base = row ? row.veteran : 0;
+      prevBah = 0;
     }
 
     const total = base + bah + bas;
 
-    setHTML("#pcs-city-line", `${city.place || city.city || city.name || p.newBase || DEFAULT_BASE} <span class="pcs-dot"></span> Quick PCS Snapshot`);
-    setText("#pcs-income-main", money(total) + " / month");
-    setHTML("#pcs-income-breakdown", `Base Pay: ${money(base)} <span class="pcs-dot"></span> BAH: ${money(bah)} <span class="pcs-dot"></span> BAS: ${money(bas)}`);
+    setHTML("#pcs-city-line", `${locationName(city, p.newBase || p.base || DEFAULT_BASE)} <span class="pcs-dot"></span> Quick PCS Snapshot`);
 
     setText("#pcs-qf-poverty", (safe(city,"income.poverty_rate_percent", safe(city,"poverty_rate_percent",0)) || 0) + "%");
     setText("#pcs-qf-home", money(safe(city,"housing.median_value_owner_occupied", pickMedianPrice(city))));
@@ -2122,86 +2364,57 @@ UPDATED:
 
     setText("#pcs-afford-summary", `Affordability Score: ${score.toFixed(0)}/100.`);
     renderQuickFacts(city, P);
+
+    const stack = housingStackForTopCard(city, p.family);
+    updateTopStripCards({
+      totalPay: total,
+      basePay: base,
+      bah,
+      bas,
+      bahDelta: bah - prevBah,
+      market: marketSignalFromCity(city),
+      powerScore: purchasePowerFromInputs(total, stack.total)
+    });
   }
 
   // ============================================================
-  // //#12) CURRENT / UPCOMING COMPARISON
+  // //#13) CURRENT / UPCOMING COMPARISON
   // ============================================================
   async function initComparison(pay, p){
     const status = $("#pcsc-status");
-    const curBase = fallbackBase(p.curBase || DEFAULT_BASE);
     const newBase = fallbackBase(p.newBase || p.base || DEFAULT_BASE);
-    const curFileKey = String(p.curFileKey || fallbackFileKey(curBase) || DEFAULT_FILE_KEY).trim();
     const newFileKey = String(p.newFileKey || fallbackFileKey(newBase) || DEFAULT_FILE_KEY).trim();
-    const curZip = String(p.curZip || fallbackZip(curBase) || DEFAULT_ZIP).trim();
-    const newZip = String(p.newZip || fallbackZip(newBase) || DEFAULT_ZIP).trim();
 
     if (status) status.textContent = "Loading base comparison…";
 
-    const [cityCur, cityNew, bahCur, bahNew] = await Promise.all([
-      loadCityExact(curFileKey),
-      loadCityExact(newFileKey),
-      calcBahFromPay(pay, { rank:p.rank, yos:p.yos, family:p.family, baseLoc:curBase, zip:curZip }),
-      calcBahFromPay(pay, { rank:p.rank, yos:p.yos, family:p.family, baseLoc:newBase, zip:newZip })
-    ]);
+    const cityNew = await loadCityExact(newFileKey);
 
-    // ==========================================================
-    // Visible compact CURRENT DUTY STATION strip
-    // ==========================================================
-    setText("#pcs-current-base", curBase);
-    setText("#pcs-current-location", locationName(cityCur, curBase));
-    setText("#pcs-current-bah", money(bahCur.bah));
-    setText("#pcs-current-price", money(pickMedianPrice(cityCur)));
-    setText("#pcs-current-dom", pickDOM(cityCur) == null ? "—" : String(pickDOM(cityCur)));
-
-    // ==========================================================
-    // Visible large UPCOMING DUTY STATION panel
-    // ==========================================================
+    // Visible main city panel = upcoming duty station
     setImgFromCity($("#img-current"), cityNew);
-    setText("#img-current-label", newBase);
+    setText("#pcs-current-city", locationName(cityNew, newBase));
 
-    const priceCur = pickMedianPrice(cityCur);
+    const buyLabel = marketSignalFromCity(cityNew).label;
+    const buySummary = safe(cityNew,"market_bluf.bluf_summary","")
+      || safe(cityNew,"housing.market.market_type_summary","")
+      || "Housing conditions are being evaluated for this market.";
+    setText("#pcs-current-bluf-headline", buyLabel);
+    setText("#pcs-current-bluf-summary", buySummary);
+
+    // Hidden legacy targets preserved
     const priceNew = pickMedianPrice(cityNew);
-    const mortCur = monthlyMortgageEstimate(priceCur, 0.0675);
-    const mortNew = monthlyMortgageEstimate(priceNew, 0.0675);
+    const yoyNew = pickYoY(cityNew);
+    const domNew = pickDOM(cityNew);
 
-    setText("#loc-current", locationName(cityNew, newBase));
-    setText("#bah-current", money(bahNew.bah));
-    setText("#price-current", money(priceNew));
-    setText("#yoy-current", pickYoY(cityNew) == null ? "—" : String(pickYoY(cityNew)) + "%");
-    setText("#dom-current", pickDOM(cityNew) == null ? "—" : String(pickDOM(cityNew)));
-    renderFacts("#facts-current", factBullets(cityNew));
-
-    // ==========================================================
-    // Hidden legacy upcoming/current targets kept intact
-    // ==========================================================
     setText("#loc-upcoming", locationName(cityNew, newBase));
-    setText("#bah-upcoming", money(bahNew.bah));
     setText("#price-upcoming", money(priceNew));
-    setText("#yoy-upcoming", pickYoY(cityNew) == null ? "—" : String(pickYoY(cityNew)) + "%");
-    setText("#dom-upcoming", pickDOM(cityNew) == null ? "—" : String(pickDOM(cityNew)));
-    renderFacts("#facts-upcoming", factBullets(cityNew));
-
-    const incomeCur = (bahCur.basePay||0)+(bahCur.bas||0)+(bahCur.bah||0);
-    const incomeNew = (bahNew.basePay||0)+(bahNew.bas||0)+(bahNew.bah||0);
-    const starCur = starsFromScore(affordabilityScore(incomeCur, priceCur));
-    const starNew = starsFromScore(affordabilityScore(incomeNew, priceNew));
-
-    setText("#rating-current", starCur.value);
-    setText("#stars-current", starCur.stars);
-    setText("#rating-upcoming", starNew.value);
-    setText("#stars-upcoming", starNew.stars);
-
-    if(chartCurrent) try{ chartCurrent.destroy(); } catch(e){}
-    if(chartUpcoming) try{ chartUpcoming.destroy(); } catch(e){}
-    chartCurrent = renderHousingChart("#chart-current", bahCur.bah, mortCur);
-    chartUpcoming = renderHousingChart("#chart-upcoming", bahNew.bah, mortNew);
+    setText("#yoy-upcoming", yoyNew == null ? "—" : String(yoyNew) + "%");
+    setText("#dom-upcoming", domNew == null ? "—" : String(domNew));
 
     if (status) status.textContent = "Loaded.";
   }
 
   // ============================================================
-  // //#13) HOUSING AFFORDABILITY BREAKDOWN
+  // //#14) HOUSING AFFORDABILITY BREAKDOWN
   // ============================================================
   function setAffordDonutVisual(parts){
     const values = [
@@ -2375,7 +2588,7 @@ UPDATED:
   }
 
   // ============================================================
-  // //#14) OWNERSHIP BREAKDOWN
+  // //#15) OWNERSHIP BREAKDOWN
   // ============================================================
   function setOwnershipBars(lowCost, highCost, medianPrice){
     const low = Number(lowCost || 0), high = Number(highCost || 0), median = Number(medianPrice || 0);
@@ -2421,7 +2634,7 @@ UPDATED:
   }
 
   // ============================================================
-  // //#15) MAIN INIT
+  // //#16) MAIN INIT
   // ============================================================
   async function init(){
     const p = getQuery();
@@ -2442,11 +2655,11 @@ UPDATED:
     bindAffordResize();
 
     const affordData = await renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM);
-    renderOwnershipBreakdown(affordData, primaryCity);
+    if (affordData) renderOwnershipBreakdown(affordData, primaryCity);
   }
 
   // ============================================================
-  // //#16) BOOT
+  // //#17) BOOT
   // ============================================================
   function boot(){
     init().catch(err=>{
@@ -2466,6 +2679,6 @@ UPDATED:
 
 })();
 </script>
-  
+
 </body>
 </html>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Mar 22 2026 15:39:47 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Mar 23 2026 03:13:00 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69bcf22470380585b4d87df9" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
@@ -15,611 +15,673 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body class="body-2">
-  <div class="w-embed"><!--  =========================================================
-PCS SNAPSHOT • TOP HEADER STRIP
-CODE #1 = FULL HTML + CSS ONLY
-v1.1.0
-UPDATED:
-- First block aligned to match the other 3 blocks
-- All 4 cards now share the same internal structure
-- Styled to match the provided image direction
-=========================================================  -->
-    <div id="pcs-top-strip-shell" style="all: initial;">
-      <!--  //#1) FONTS  -->
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-      <!--  //#2) STYLES  -->
+  <div class="w-embed"><!--  ============================================================
+PCS SNAPSHOT — YOUR LIVING STRATEGY (STANDALONE TEST)
+Code #1 = HTML + CSS
+House of SaSS / Midnight Frost Inspired
+============================================================  -->
+    <div id="pcsu-living-strategy" style="all: initial;">
       <style>
-    /* =========================================================
-       //#2.1) RESET
-    ========================================================= */
-    #pcs-top-strip-shell,
-    #pcs-top-strip-shell *{
-      box-sizing:border-box;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    #pcsu-living-strategy,
+    #pcsu-living-strategy * {
+      box-sizing: border-box;
     }
-    #pcs-top-strip-shell{
-      width:100%;
-      display:block;
-      color:#e9ecff;
+    #pcsu-living-strategy {
+      --bg: #060b1a;
+      --panel: rgba(7, 14, 32, 0.78);
+      --panel-2: rgba(10, 18, 40, 0.86);
+      --card: rgba(10, 18, 40, 0.88);
+      --line: rgba(255,255,255,0.09);
+      --line-2: rgba(255,255,255,0.14);
+      --text: #eef3ff;
+      --muted: #aeb9da;
+      --accent: #8fd4ff;
+      --accent-2: #8ef3c5;
+      --accent-3: #7f8dff;
+      --good: #8ef3c5;
+      --warn: #ffd27a;
+      --bad: #ff8c94;
+      --shadow: 0 24px 60px rgba(0,0,0,0.45);
+      --radius-xl: 28px;
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-pill: 999px;
+      --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      display: block;
+      width: 100%;
+      padding: 22px;
+      font-family: var(--font);
+      color: var(--text);
     }
-    #pcs-top-strip-shell svg{
-      display:block;
-      flex:0 0 auto;
-    }
-    /* =========================================================
-       //#2.2) OUTER WRAP
-    ========================================================= */
-    .pts-wrap{
-      width:100%;
-      margin:0 auto;
-      padding:10px 12px;
-      border-radius:30px;
-      border:1px solid rgba(255,255,255,.08);
+    #pcsu-living-strategy .ls-shell {
+      width: 100%;
+      max-width: 1080px;
+      margin: 0 auto;
+      padding: 28px;
+      border-radius: 34px;
       background:
-        radial-gradient(1200px 720px at 14% 8%, rgba(52,93,255,.16), transparent 52%),
-        radial-gradient(900px 520px at 86% 16%, rgba(126,239,210,.08), transparent 42%),
-        radial-gradient(900px 700px at 50% 100%, rgba(32,57,125,.16), transparent 58%),
-        linear-gradient(180deg, #060914 0%, #080d19 38%, #070b16 100%);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.04),
-        0 18px 52px rgba(0,0,0,.34);
-      position:relative;
-      overflow:hidden;
-      isolation:isolate;
+        radial-gradient(1200px 420px at 20% 0%, rgba(107,149,255,0.14), transparent 55%),
+        radial-gradient(900px 360px at 100% 0%, rgba(142,243,197,0.10), transparent 48%),
+        linear-gradient(180deg, rgba(5,10,25,0.96), rgba(4,8,20,0.98));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      overflow: hidden;
     }
-    .pts-wrap::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
+    #pcsu-living-strategy .ls-title {
+      margin: 0 0 18px;
+      font-size: clamp(28px, 4vw, 56px);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: 0.02em;
+      color: #ffffff;
+      text-transform: uppercase;
+    }
+    #pcsu-living-strategy .ls-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0;
+      margin-bottom: 22px;
+      border: 1px solid rgba(255,255,255,0.09);
+      border-radius: 18px;
+      overflow: hidden;
+      background: rgba(255,255,255,0.02);
+    }
+    #pcsu-living-strategy .ls-tab {
+      appearance: none;
+      border: 0;
+      outline: 0;
+      background: transparent;
+      color: #c8d1ef;
+      min-height: 70px;
+      padding: 16px 18px;
+      font-size: clamp(18px, 2vw, 26px);
+      font-weight: 800;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      transition: all 180ms ease;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    #pcsu-living-strategy .ls-tab:last-child {
+      border-right: 0;
+    }
+    #pcsu-living-strategy .ls-tab:hover {
+      background: rgba(255,255,255,0.03);
+      color: #ffffff;
+    }
+    #pcsu-living-strategy .ls-tab.is-active {
+      color: #ffffff;
       background:
-        linear-gradient(90deg, transparent 0%, rgba(95,125,255,.05) 50%, transparent 100%),
-        radial-gradient(circle at 25% 30%, rgba(255,255,255,.04), transparent 28%);
-      mix-blend-mode:screen;
-      opacity:.55;
+        linear-gradient(180deg, rgba(125,174,255,0.18), rgba(125,174,255,0.08));
+      box-shadow: inset 0 0 0 1px rgba(143,212,255,0.95), 0 0 24px rgba(143,212,255,0.16);
     }
-    .pts-grid{
-      position:relative;
-      z-index:1;
-      display:grid;
-      grid-template-columns:1.18fr 1fr 1fr 1fr;
-      gap:16px;
-      align-items:stretch;
+    #pcsu-living-strategy .ls-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.09);
+      background: rgba(255,255,255,0.03);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #dce5ff;
     }
-    /* =========================================================
-       //#2.3) CARD BASE
-    ========================================================= */
-    .pts-card{
-      min-height:178px;
-      border-radius:24px;
-      border:1px solid rgba(255,255,255,.08);
+    #pcsu-living-strategy .ls-status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex: 0 0 auto;
+      background: var(--accent);
+      box-shadow: 0 0 16px currentColor;
+    }
+    #pcsu-living-strategy .ls-chart-wrap {
+      padding: 16px 8px 8px;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.00));
+    }
+    #pcsu-living-strategy .ls-chart {
+      position: relative;
+      width: 100%;
+      min-height: 360px;
+      border-radius: 24px;
+      overflow: hidden;
+    }
+    #pcsu-living-strategy .ls-chart svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+    #pcsu-living-strategy .ls-y-label,
+    #pcsu-living-strategy .ls-x-label {
+      fill: #b8c3e5;
+      font-family: var(--font);
+      font-weight: 700;
+    }
+    #pcsu-living-strategy .ls-grid {
+      stroke: rgba(255,255,255,0.11);
+      stroke-width: 1;
+    }
+    #pcsu-living-strategy .ls-grid-soft {
+      stroke: rgba(255,255,255,0.06);
+      stroke-width: 1;
+    }
+    #pcsu-living-strategy .ls-line-main {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 6;
+      stroke-linejoin: round;
+      stroke-linecap: round;
+      filter: drop-shadow(0 0 8px rgba(143,212,255,0.22));
+    }
+    #pcsu-living-strategy .ls-line-bah {
+      fill: none;
+      stroke: var(--accent-2);
+      stroke-width: 4;
+      stroke-dasharray: 10 10;
+      stroke-linecap: round;
+      opacity: 0.9;
+    }
+    #pcsu-living-strategy .ls-point {
+      fill: var(--accent);
+      stroke: rgba(255,255,255,0.65);
+      stroke-width: 2.5;
+    }
+    #pcsu-living-strategy .ls-final-tag {
+      fill: #ffffff;
+      font-family: var(--font);
+      font-weight: 900;
+      letter-spacing: 0.01em;
+    }
+    #pcsu-living-strategy .ls-final-guide {
+      stroke: rgba(255,255,255,0.18);
+      stroke-width: 1.5;
+      stroke-dasharray: 5 8;
+    }
+    #pcsu-living-strategy .ls-stats {
+      display: grid;
+      grid-template-columns: 1.25fr 0.85fr;
+      gap: 18px;
+      margin-top: 18px;
+    }
+    #pcsu-living-strategy .ls-card {
+      position: relative;
+      min-height: 210px;
+      padding: 24px 24px 20px;
+      border-radius: 24px;
       background:
-        linear-gradient(180deg, rgba(10,15,32,.82), rgba(6,10,24,.94));
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.04),
-        0 12px 28px rgba(0,0,0,.20);
-      padding:20px 20px 18px;
-      display:flex;
-      flex-direction:column;
-      justify-content:space-between;
-      overflow:hidden;
-      position:relative;
+        radial-gradient(900px 280px at 0% 0%, rgba(120,145,255,0.08), transparent 55%),
+        linear-gradient(180deg, rgba(10,18,40,0.92), rgba(6,12,28,0.96));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
     }
-    .pts-card::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
+    #pcsu-living-strategy .ls-main-value {
+      margin: 0;
+      font-size: clamp(36px, 5vw, 66px);
+      line-height: 0.95;
+      font-weight: 900;
+      color: #ffffff;
+      letter-spacing: -0.03em;
+    }
+    #pcsu-living-strategy .ls-main-sub {
+      margin-top: 6px;
+      font-size: clamp(18px, 2.2vw, 34px);
+      font-weight: 800;
+      color: var(--muted);
+      letter-spacing: -0.01em;
+    }
+    #pcsu-living-strategy .ls-main-sub .positive {
+      color: var(--good);
+    }
+    #pcsu-living-strategy .ls-main-sub .negative {
+      color: var(--bad);
+    }
+    #pcsu-living-strategy .ls-divider {
+      height: 1px;
+      margin: 18px 0 18px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.18), rgba(255,255,255,0.04));
+    }
+    #pcsu-living-strategy .ls-equity {
+      margin: 0;
+      font-size: clamp(28px, 4vw, 48px);
+      line-height: 1;
+      font-weight: 900;
+      color: var(--good);
+      letter-spacing: -0.02em;
+    }
+    #pcsu-living-strategy .ls-equity span {
+      color: #dbe8ff;
+      font-weight: 800;
+    }
+    #pcsu-living-strategy .ls-bluf {
+      margin-top: 18px;
+      font-size: clamp(16px, 1.8vw, 26px);
+      line-height: 1.45;
+      font-weight: 600;
+      color: #d4ddf7;
+    }
+    #pcsu-living-strategy .ls-bluf strong {
+      color: #ffffff;
+      font-weight: 900;
+    }
+    #pcsu-living-strategy .ls-bluf .positive {
+      color: var(--good);
+    }
+    #pcsu-living-strategy .ls-bluf .negative {
+      color: var(--bad);
+    }
+    #pcsu-living-strategy .ls-side {
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 14px;
+    }
+    #pcsu-living-strategy .ls-mini {
+      min-height: 60px;
+      border-radius: 20px;
+      padding: 18px 18px 16px;
       background:
-        radial-gradient(circle at 18% 18%, rgba(255,255,255,.03), transparent 22%);
-      opacity:.8;
+        linear-gradient(180deg, rgba(10,18,40,0.92), rgba(6,12,28,0.96));
+      border: 1px solid rgba(255,255,255,0.08);
     }
-    .pts-card > *{
-      position:relative;
-      z-index:1;
+    #pcsu-living-strategy .ls-mini-label {
+      margin: 0 0 8px;
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #96a3cc;
     }
-    /* =========================================================
-       //#2.4) SHARED TOP ROW
-    ========================================================= */
-    .pts-top{
-      display:grid;
-      grid-template-columns:72px 1fr;
-      gap:14px;
-      align-items:center;
+    #pcsu-living-strategy .ls-mini-value {
+      margin: 0;
+      font-size: clamp(24px, 2.6vw, 42px);
+      line-height: 1;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      color: #ffffff;
     }
-    .pts-icon{
-      width:58px;
-      height:58px;
-      border-radius:999px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      border:1px solid rgba(255,255,255,.10);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.10),
-        0 0 24px rgba(77,121,255,.16);
-      flex:0 0 58px;
+    #pcsu-living-strategy .ls-mini-value.good {
+      color: var(--good);
     }
-    .pts-icon svg{
-      width:26px;
-      height:26px;
+    #pcsu-living-strategy .ls-mini-value.bad {
+      color: var(--bad);
     }
-    .pts-copy{
-      min-width:0;
+    #pcsu-living-strategy .ls-mini-value.accent {
+      color: var(--accent);
     }
-    .pts-kicker{
-      margin:0 0 4px;
-      font-size:12px;
-      line-height:1.15;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      color:#9eabdd;
+    #pcsu-living-strategy .ls-footnote {
+      margin-top: 18px;
+      font-size: 12px;
+      line-height: 1.55;
+      color: #92a0c8;
+      opacity: 0.95;
     }
-    .pts-bigline{
-      display:flex;
-      align-items:baseline;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-    .pts-value{
-      margin:0;
-      font-size:27px;
-      line-height:1;
-      font-weight:900;
-      letter-spacing:-.03em;
-      color:#ffffff;
-    }
-    .pts-unit{
-      font-size:14px;
-      line-height:1;
-      font-weight:700;
-      color:#d8def8;
-    }
-    .pts-body{
-      margin-top:16px;
-    }
-    .pts-body-copy{
-      margin:0;
-      font-size:13px;
-      line-height:1.42;
-      font-weight:600;
-      color:#eef2ff;
-    }
-    .pts-meta{
-      margin-top:10px;
-      padding-top:12px;
-      border-top:1px solid rgba(255,255,255,.08);
-      font-size:12px;
-      line-height:1.4;
-      font-weight:700;
-      color:#cdd5f3;
-    }
-    /* =========================================================
-       //#2.5) CARD-SPECIFIC
-    ========================================================= */
-    .pts-card-income .pts-icon{
-      background:
-        radial-gradient(circle at 30% 30%, rgba(29,94,255,.40), rgba(20,35,88,.95));
-      color:#1f7dff;
-    }
-    .pts-card-income .pts-value{
-      color:#26f0cf;
-    }
-    .pts-card-income .pts-unit{
-      color:#f4f7ff;
-    }
-    .pts-income-breakdown{
-      margin:0;
-      font-size:13px;
-      line-height:1.5;
-      font-weight:700;
-      color:#f1f4ff;
-    }
-    .pts-card-bah .pts-icon{
-      background:
-        radial-gradient(circle at 30% 30%, rgba(57,126,255,.42), rgba(20,35,88,.95));
-      color:#b9d7ff;
-    }
-    .pts-card-bah .pts-value{
-      color:#26f0cf;
-    }
-    .pts-card-market .pts-icon{
-      background:
-        radial-gradient(circle at 30% 30%, rgba(31,235,185,.28), rgba(13,68,58,.94));
-      color:#72f1da;
-    }
-    .pts-card-market .pts-value{
-      color:#26f0cf;
-      font-size:26px;
-    }
-    .pts-card-power .pts-icon{
-      background:
-        radial-gradient(circle at 30% 30%, rgba(111,95,255,.26), rgba(34,29,73,.95));
-      color:#ffbf45;
-    }
-    .pts-power-row{
-      display:flex;
-      align-items:center;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-    .pts-power-score{
-      font-size:27px;
-      line-height:1;
-      font-weight:900;
-      letter-spacing:-.03em;
-      color:#ffffff;
-    }
-    .pts-stars{
-      font-size:24px;
-      line-height:1;
-      letter-spacing:.08em;
-      color:#ffc84d;
-      white-space:nowrap;
-    }
-    /* =========================================================
-       //#2.6) RESPONSIVE
-    ========================================================= */
-    @media (max-width: 1220px){
-      .pts-grid{
-        grid-template-columns:1fr 1fr;
+    @media (max-width: 860px) {
+      #pcsu-living-strategy {
+        padding: 12px;
+      }
+      #pcsu-living-strategy .ls-shell {
+        padding: 18px;
+        border-radius: 24px;
+      }
+      #pcsu-living-strategy .ls-chart {
+        min-height: 300px;
+      }
+      #pcsu-living-strategy .ls-stats {
+        grid-template-columns: 1fr;
+      }
+      #pcsu-living-strategy .ls-side {
+        grid-template-columns: 1fr;
+        grid-template-rows: none;
       }
     }
-    @media (max-width: 760px){
-      .pts-grid{
-        grid-template-columns:1fr;
+    @media (max-width: 560px) {
+      #pcsu-living-strategy .ls-tab {
+        min-height: 58px;
+        font-size: 16px;
+        padding: 12px 10px;
       }
-      .pts-card{
-        min-height:auto;
+      #pcsu-living-strategy .ls-chart {
+        min-height: 240px;
       }
-      .pts-top{
-        grid-template-columns:58px 1fr;
-        gap:12px;
-      }
-      .pts-icon{
-        width:52px;
-        height:52px;
-        flex-basis:52px;
-      }
-      .pts-value,
-      .pts-power-score{
-        font-size:24px;
-      }
-      .pts-stars{
-        font-size:20px;
+      #pcsu-living-strategy .ls-card,
+      #pcsu-living-strategy .ls-mini {
+        border-radius: 18px;
       }
     }
   </style>
-      <!--  //#3) SHELL  -->
-      <section class="pts-wrap">
-        <div class="pts-grid">
-          <!--  =====================================================
-           //#3.1) MONTHLY INCOME
-      ======================================================  -->
-          <article class="pts-card pts-card-income">
-            <div class="pts-top">
-              <div class="pts-icon" aria-hidden="true">
-                <svg viewbox="0 0 64 64" fill="none">
-                  <text x="14" y="42" font-size="28" font-weight="900" fill="currentColor" font-family="Georgia, serif">A</text>
-                  <text x="30" y="52" font-size="28" font-weight="900" fill="currentColor" font-family="Georgia, serif">F</text>
-                </svg>
-              </div>
-              <div class="pts-copy">
-                <p class="pts-kicker">Monthly Income</p>
-                <div class="pts-bigline">
-                  <p class="pts-value" id="pts-income-main">$8,259</p>
-                  <span class="pts-unit">/ month</span>
-                </div>
-              </div>
-            </div>
-            <div class="pts-body">
-              <p class="pts-income-breakdown" id="pts-income-breakdown">
-                Base Pay: $5,621, BAH $2,172,<br>BAS $466
-              </p>
-            </div>
-            <div class="pts-meta" id="pts-income-meta">
-              True disposable baseline before housing
-            </div>
-          </article>
-          <!--  =====================================================
-           //#3.2) BAH COMPARISON
-      ======================================================  -->
-          <article class="pts-card pts-card-bah">
-            <div class="pts-top">
-              <div class="pts-icon" aria-hidden="true">
-                <svg viewbox="0 0 24 24" fill="none">
-                  <path d="M8 4v16M8 4l-3 3M8 4l3 3" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M16 20V4M16 20l-3-3M16 20l3-3" stroke="currentColor" stroke-width="2.3" stroke-linecap="round" stroke-linejoin="round"></path>
-                  <path d="M3 12h18" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".35"></path>
-                  <path d="M4.5 9.5h7M12.5 14.5h7" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" opacity=".35"></path>
-                </svg>
-              </div>
-              <div class="pts-copy">
-                <p class="pts-kicker">BAH Comparison</p>
-                <div class="pts-bigline">
-                  <p class="pts-value" id="pts-bah-delta">+$350</p>
-                  <span class="pts-unit">/ month</span>
-                </div>
-              </div>
-            </div>
-            <div class="pts-body">
-              <p class="pts-body-copy" id="pts-bah-copy">
-                Compared with your previous duty station housing allowance.
-              </p>
-            </div>
-            <div class="pts-meta" id="pts-bah-meta">
-              vs. Previous Duty Station
-            </div>
-          </article>
-          <!--  =====================================================
-           //#3.3) MARKET SIGNAL
-      ======================================================  -->
-          <article class="pts-card pts-card-market">
-            <div class="pts-top">
-              <div class="pts-icon" aria-hidden="true">
-                <svg viewbox="0 0 24 24" fill="none">
-                  <path d="M4 10.5 12 5l8 5.5V19a1 1 0 0 1-1 1H5a1 1 0 0 1-1-1v-8.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
-                  <path d="M9 20v-5h6v5" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
-                  <path d="M8 11h.01M12 11h.01M16 11h.01" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"></path>
-                </svg>
-              </div>
-              <div class="pts-copy">
-                <p class="pts-kicker">Market Signal</p>
-                <div class="pts-bigline">
-                  <p class="pts-value" id="pts-market-signal">Buyer-Friendly</p>
-                </div>
-              </div>
-            </div>
-            <div class="pts-body">
-              <p class="pts-body-copy" id="pts-market-copy">
-                Inventory elevated • Softer prices • Better leverage
-              </p>
-            </div>
-            <div class="pts-meta" id="pts-market-meta">
-              Current market condition
-            </div>
-          </article>
-          <!--  =====================================================
-           //#3.4) PURCHASE POWER
-      ======================================================  -->
-          <article class="pts-card pts-card-power">
-            <div class="pts-top">
-              <div class="pts-icon" aria-hidden="true">
-                <svg viewbox="0 0 24 24" fill="none">
-                  <path d="M8.5 8.5a4.5 4.5 0 1 1 5.7 6.9L12 18l-2.2-2.1A4.5 4.5 0 0 1 8.5 8.5Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path>
-                  <path d="M15 6.5h3.5a2.5 2.5 0 0 1 0 5H17" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                  <path d="M5.5 17.5H4a2.5 2.5 0 0 1 0-5h1.5" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                  <path d="M9.7 11.6h4.6M12 9.3v4.6" stroke="currentColor" stroke-width="2" stroke-linecap="round"></path>
-                </svg>
-              </div>
-              <div class="pts-copy">
-                <p class="pts-kicker">Purchase Power</p>
-                <div class="pts-power-row">
-                  <span class="pts-power-score" id="pts-power-score">4.5</span>
-                  <span class="pts-stars" id="pts-power-stars">★★★★★</span>
-                </div>
-              </div>
-            </div>
-            <div class="pts-body">
-              <p class="pts-body-copy" id="pts-power-copy">
-                Based on total income &amp; housing market
-              </p>
-            </div>
-            <div class="pts-meta" id="pts-power-meta">
-              Overall affordability signal
-            </div>
-          </article>
+      <div class="ls-shell">
+        <h2 class="ls-title">Your Living Strategy</h2>
+        <div class="ls-tabs" role="tablist" aria-label="Living strategy options">
+          <button class="ls-tab is-active" id="ls-tab-buy" type="button" data-mode="buy" role="tab" aria-selected="true">BUY</button>
+          <button class="ls-tab" id="ls-tab-rent" type="button" data-mode="rent" role="tab" aria-selected="false">RENT</button>
+          <button class="ls-tab" id="ls-tab-base" type="button" data-mode="base" role="tab" aria-selected="false">BASE HOUSING</button>
         </div>
-      </section>
+        <div class="ls-status" id="ls-status-pill">
+          <span class="ls-status-dot" id="ls-status-dot"></span>
+          <span id="ls-status-text">WEALTH BUILDING · HIGHER COST</span>
+        </div>
+        <div class="ls-chart-wrap">
+          <div class="ls-chart">
+            <svg id="ls-chart-svg" viewbox="0 0 1000 440" preserveaspectratio="none" aria-label="Living strategy chart">
+              <g id="ls-grid-group"></g>
+              <g id="ls-axis-labels"></g>
+              <path id="ls-bah-line" class="ls-line-bah" d=""></path>
+              <path id="ls-main-line" class="ls-line-main" d=""></path>
+              <g id="ls-points-group"></g>
+              <line id="ls-final-guide" class="ls-final-guide" x1="0" y1="0" x2="0" y2="0"></line>
+              <text id="ls-final-label" class="ls-final-tag" x="0" y="0" font-size="22">$0</text>
+            </svg>
+          </div>
+        </div>
+        <div class="ls-stats">
+          <div class="ls-card">
+            <h3 class="ls-main-value" id="ls-main-value">$0</h3>
+            <div class="ls-main-sub" id="ls-main-sub">vs BAH</div>
+            <div class="ls-divider"></div>
+            <p class="ls-equity" id="ls-equity-line">$0 <span>in equity</span></p>
+            <div class="ls-bluf" id="ls-bluf-line">
+              Your strategy summary will appear here.
+            </div>
+          </div>
+          <div class="ls-side">
+            <div class="ls-mini">
+              <p class="ls-mini-label">12-Month Cost</p>
+              <p class="ls-mini-value accent" id="ls-mini-annual">$0</p>
+            </div>
+            <div class="ls-mini">
+              <p class="ls-mini-label">12-Month vs BAH</p>
+              <p class="ls-mini-value" id="ls-mini-vs-bah">$0</p>
+            </div>
+            <div class="ls-mini">
+              <p class="ls-mini-label">Monthly Gap</p>
+              <p class="ls-mini-value" id="ls-mini-gap">$0</p>
+            </div>
+          </div>
+        </div>
+        <div class="ls-footnote" id="ls-footnote">
+          Demo data is shown for testing. You can later wire these values to PCS Snapshot mortgage, rent, and BAH logic.
+        </div>
+      </div>
     </div>
   </div>
-  <div class="w-embed w-script">
-    <script>
-(() => {
-  "use strict";
-  // ============================================================
-  // PCS SNAPSHOT • TOP STRIP TEST RUNTIME
-  // CODE #2 = FULL JS
-  // v1.0.0
-  //
-  // PURPOSE:
-  // - Drives the standalone top strip test component
-  // - Calculates:
-  //   1) BAH Comparison
-  //   2) Purchase Power score + stars
-  //   3) Market Signal
-  //   4) Buy Position
-  //
-  // HOW TO USE:
-  // - Edit the MOCK_DATA object below to test different scenarios
-  // ============================================================
-  // ============================================================
-  // //#1) MOCK DATA FOR TESTING
-  // ============================================================
-  const MOCK_DATA = {
-    cityName: "San Antonio, TX",
-    pay: {
-      basePay: 5621,
-      bahCurrentDuty: 2172,
-      bahPreviousDuty: 1822,
-      bas: 466
+  <div class="w-embed">/* ============================================================
+    PCS SNAPSHOT — YOUR LIVING STRATEGY (STANDALONE TEST)
+    Code #2 = JS
+    ============================================================ */
+    (() => {
+    "use strict";
+    const root = document.getElementById("pcsu-living-strategy");
+    if (!root) return;
+    /* ============================================================
+    #1) DEMO DATA
+    Replace these later with your live PCS Snapshot values
+    ============================================================ */
+    const DATA = {
+    buy: {
+    mode: "buy",
+    title: "BUY",
+    statusText: "WEALTH BUILDING · HIGHER COST",
+    statusColor: "#8fd4ff",
+    monthlyNow: 3100,
+    bahMonthly: 2540,
+    annualCost: 38600,
+    annualVsBah: 6720,
+    monthlyGap: 560,
+    percentVsBah: 22,
+    equity12: 19400,
+    lineValues: [2650, 2750, 3000, 3100],
+    xLabels: ["Month 1", "Month 4", "Month 8", "Month 12"],
+    bluf: "Build <strong class="positive">$19.4K</strong> in equity while paying <strong class="negative">$560 more than your BAH</strong> each month.",
+    footnote: "Buy works best when the user can comfortably absorb the monthly gap and wants ownership upside."
     },
-    housing: {
-      medianHomePrice: 302500,
-      monthlyHousingStack: 2148, // typical mortgage + tax + insurance + hoa + utilities
-      yoyChangePct: -3.2,
-      avgDaysOnMarket: 83,
-      inventoryMode: "elevated" // low | normal | elevated
+    rent: {
+    mode: "rent",
+    title: "RENT",
+    statusText: "FLEXIBILITY · NO EQUITY",
+    statusColor: "#7f8dff",
+    monthlyNow: 2380,
+    bahMonthly: 2540,
+    annualCost: 28860,
+    annualVsBah: -1920,
+    monthlyGap: -160,
+    percentVsBah: -6,
+    equity12: 0,
+    lineValues: [2280, 2320, 2360, 2380],
+    xLabels: ["Month 1", "Month 4", "Month 8", "Month 12"],
+    bluf: "Stay <strong class="positive">$160 under your BAH</strong> each month, but build <strong class="negative">no ownership equity</strong> over the year.",
+    footnote: "Rent works best when the user values flexibility, lower friction, and short-term mobility."
+    },
+    base: {
+    mode: "base",
+    title: "BASE HOUSING",
+    statusText: "STABILITY · ZERO OUT-OF-POCKET",
+    statusColor: "#8ef3c5",
+    monthlyNow: 2540,
+    bahMonthly: 2540,
+    annualCost: 30480,
+    annualVsBah: 0,
+    monthlyGap: 0,
+    percentVsBah: 0,
+    equity12: 0,
+    lineValues: [2540, 2540, 2540, 2540],
+    xLabels: ["Month 1", "Month 4", "Month 8", "Month 12"],
+    bluf: "Match your full BAH with <strong>$0 out-of-pocket pressure</strong>, but build <strong class="negative">no equity</strong> and no ownership upside.",
+    footnote: "Base housing works best when the user wants simplicity, predictability, and maximum payment stability."
     }
-  };
-  // ============================================================
-  // //#2) HELPERS
-  // ============================================================
-  function $(selector){
-    return document.querySelector(selector);
-  }
-  function setText(selector, value){
-    const el = $(selector);
-    if (el) el.textContent = value;
-  }
-  function money(n){
-    const x = Number(n) || 0;
-    return "$" + Math.round(x).toLocaleString();
-  }
-  function moneySigned(n){
-    const x = Number(n) || 0;
-    const sign = x > 0 ? "+" : x < 0 ? "-" : "±";
-    return `${sign}${money(Math.abs(x)).replace("$", "$")}`;
-  }
-  function clamp(n, min, max){
-    return Math.max(min, Math.min(max, n));
-  }
-  function starsFrom5(score){
-    const rounded = Math.round(score);
-    let out = "";
-    for (let i = 1; i <= 5; i++) out += i <= rounded ? "★" : "☆";
-    return out;
-  }
-  // ============================================================
-  // //#3) CORE CALCULATIONS
-  // ============================================================
-  function calcTotalPay(data){
-    return (Number(data.pay.basePay) || 0)
-      + (Number(data.pay.bahCurrentDuty) || 0)
-      + (Number(data.pay.bas) || 0);
-  }
-  function calcBahDelta(data){
-    return (Number(data.pay.bahCurrentDuty) || 0) - (Number(data.pay.bahPreviousDuty) || 0);
-  }
-  function calcPurchasePowerScore(data){
-    const totalPay = calcTotalPay(data);
-    const stack = Number(data.housing.monthlyHousingStack) || 1;
-    // Ratio of total pay to housing stack, normalized into 1–5
-    // 2.0x or greater = excellent
-    const ratio = totalPay / stack;
-    let score = 1;
-    if (ratio >= 4.0) score = 5.0;
-    else if (ratio >= 3.3) score = 4.5;
-    else if (ratio >= 2.8) score = 4.0;
-    else if (ratio >= 2.4) score = 3.5;
-    else if (ratio >= 2.1) score = 3.0;
-    else if (ratio >= 1.8) score = 2.5;
-    else if (ratio >= 1.6) score = 2.0;
-    else if (ratio >= 1.4) score = 1.5;
-    else score = 1.0;
-    return Number(score.toFixed(1));
-  }
-  function calcMarketSignal(data){
-    const yoy = Number(data.housing.yoyChangePct) || 0;
-    const dom = Number(data.housing.avgDaysOnMarket) || 0;
-    const inventory = String(data.housing.inventoryMode || "").toLowerCase();
-    if ((yoy <= -2 && dom >= 55) || inventory === "elevated") {
-      return {
-        label: "Buyer-Friendly",
-        sub: "Inventory is elevated and price pressure is soft, giving buyers better negotiating leverage.",
-        className: "market-positive"
-      };
-    }
-    if ((yoy > -2 && yoy < 2) || inventory === "normal") {
-      return {
-        label: "Balanced",
-        sub: "Supply and pricing appear more balanced, so strategy and timing matter more than urgency.",
-        className: "market-neutral"
-      };
-    }
-    return {
-      label: "Seller-Leaning",
-      sub: "Tighter inventory and firmer prices reduce negotiating power and make entry more competitive.",
-      className: "market-negative"
     };
-  }
-  function calcBuyPosition(data){
-    const totalPay = calcTotalPay(data);
-    const stack = Number(data.housing.monthlyHousingStack) || 1;
-    const ratio = totalPay / stack;
-    if (ratio >= 3.0) {
-      return {
-        label: "Strong",
-        sub: "Your total pay appears to support entry into this housing market at the current baseline.",
-        className: "buy-strong"
-      };
-    }
-    if (ratio >= 2.1) {
-      return {
-        label: "Caution",
-        sub: "This market may still work, but affordability discipline and tighter targeting will matter.",
-        className: "buy-caution"
-      };
-    }
-    return {
-      label: "Weak",
-      sub: "This housing stack looks stretched relative to pay, so a lower target price may be smarter.",
-      className: "buy-weak"
+    /* ============================================================
+    #2) ELEMENTS
+    ============================================================ */
+    const tabs = Array.from(root.querySelectorAll(".ls-tab"));
+    const statusTextEl = root.querySelector("#ls-status-text");
+    const statusDotEl = root.querySelector("#ls-status-dot");
+    const gridGroup = root.querySelector("#ls-grid-group");
+    const axisGroup = root.querySelector("#ls-axis-labels");
+    const bahLine = root.querySelector("#ls-bah-line");
+    const mainLine = root.querySelector("#ls-main-line");
+    const pointsGroup = root.querySelector("#ls-points-group");
+    const finalGuide = root.querySelector("#ls-final-guide");
+    const finalLabel = root.querySelector("#ls-final-label");
+    const mainValueEl = root.querySelector("#ls-main-value");
+    const mainSubEl = root.querySelector("#ls-main-sub");
+    const equityEl = root.querySelector("#ls-equity-line");
+    const blufEl = root.querySelector("#ls-bluf-line");
+    const annualEl = root.querySelector("#ls-mini-annual");
+    const vsBahEl = root.querySelector("#ls-mini-vs-bah");
+    const gapEl = root.querySelector("#ls-mini-gap");
+    const footnoteEl = root.querySelector("#ls-footnote");
+    /* ============================================================
+    #3) HELPERS
+    ============================================================ */
+    const fmtMoney = (n, decimals = 0) => {
+    return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency: "USD",
+    maximumFractionDigits: decimals,
+    minimumFractionDigits: decimals
+    }).format(n);
     };
-  }
-  // ============================================================
-  // //#4) RENDER
-  // ============================================================
-  function renderTopStrip(data){
-    const totalPay = calcTotalPay(data);
-    const bahDelta = calcBahDelta(data);
-    const market = calcMarketSignal(data);
-    const buy = calcBuyPosition(data);
-    const purchasePower = calcPurchasePowerScore(data);
-    // Header
-    setText("#pts-city-name", data.cityName);
-    // Pay box
-    setText("#pts-total-pay", `${money(totalPay)} / month`);
-    setText(
-      "#pts-pay-breakdown",
-      `Base Pay: ${money(data.pay.basePay)}  •  BAH: ${money(data.pay.bahCurrentDuty)}  •  BAS: ${money(data.pay.bas)}`
-    );
-    // Market Signal
-    setText("#pts-market-signal", market.label);
-    setText("#pts-market-sub", market.sub);
-    const marketEl = $("#pts-market-signal");
-    if (marketEl) {
-      marketEl.classList.remove("market-positive", "market-neutral", "market-negative");
-      marketEl.classList.add(market.className);
-    }
-    // BAH comparison
-    setText("#pts-bah-value", moneySigned(bahDelta));
-    setText("#pts-bah-period", "/ month");
-    setText("#pts-bah-sub", "Compared with your previous duty station housing allowance.");
-    const bahEl = $("#pts-bah-value");
-    if (bahEl) {
-      bahEl.classList.remove("bah-positive", "bah-negative");
-      bahEl.classList.add(
-        bahDelta > 0 ? "bah-positive" : bahDelta < 0 ? "bah-negative" : "bah-neutral"
-      );
-    }
-    // Buy position
-    setText("#pts-buy-position", buy.label);
-    setText("#pts-buy-sub", buy.sub);
-    const buyEl = $("#pts-buy-position");
-    if (buyEl) {
-      buyEl.classList.remove("buy-strong", "buy-caution", "buy-weak");
-      buyEl.classList.add(buy.className);
-    }
-    // Purchase power
-    setText("#pts-power-number", purchasePower.toFixed(1));
-    setText("#pts-power-stars", starsFrom5(purchasePower));
-  }
-  // ============================================================
-  // //#5) BOOT
-  // ============================================================
-  function boot(){
-    renderTopStrip(MOCK_DATA);
-  }
-  if (document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-})();
-</script>
-  </div>
+    const fmtCompactMoney = (n) => {
+    const abs = Math.abs(n);
+    if (abs >= 1000000) return `${n < 0 ? "-" : "" }$${(abs / 1000000).toFixed(abs>= 10000000 ? 0 : 1)}M`;
+      if (abs >= 1000) return `${n < 0 ? "-" : "" }$${(abs / 1000).toFixed(abs>= 100000 ? 0 : 1)}K`;
+        return `${n < 0 ? "-" : "" }$${abs.toFixed(0)}`; }; const signWord=(n)=> {
+          if (n > 0) return "over";
+          if (n < 0) return "under" ; return "at" ; }; const signedPercent=(n)=> {
+            if (n > 0) return `+${n}%`;
+            if (n < 0) return `${n}%`; return `0%`; }; const signedCompact=(n)=> {
+              if (n > 0) return `+${fmtCompactMoney(n)}`;
+              if (n < 0) return `-${fmtCompactMoney(Math.abs(n))}`; return `$0`; }; const classForValue=(el, n, zeroIsGood=false)=> {
+                el.classList.remove("good", "bad", "accent");
+                if (n > 0) {
+                el.classList.add("bad");
+                return;
+                }
+                if (n < 0) { el.classList.add("good"); return; } el.classList.add(zeroIsGood ? "good" : "accent" ); }; const svgText=(x, y, text, className, fontSize, anchor="start" )=> {
+                  const t = document.createElementNS("http://www.w3.org/2000/svg", "text");
+                  t.setAttribute("x", x);
+                  t.setAttribute("y", y);
+                  t.setAttribute("class", className);
+                  t.setAttribute("font-size", fontSize);
+                  t.setAttribute("text-anchor", anchor);
+                  t.textContent = text;
+                  return t;
+                  };
+                  const svgLine = (x1, y1, x2, y2, cls) => {
+                  const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                  line.setAttribute("x1", x1);
+                  line.setAttribute("y1", y1);
+                  line.setAttribute("x2", x2);
+                  line.setAttribute("y2", y2);
+                  line.setAttribute("class", cls);
+                  return line;
+                  };
+                  const svgCircle = (cx, cy, r, cls) => {
+                  const c = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                  c.setAttribute("cx", cx);
+                  c.setAttribute("cy", cy);
+                  c.setAttribute("r", r);
+                  c.setAttribute("class", cls);
+                  return c;
+                  };
+                  const pathFromPoints = (pts) => {
+                  if (!pts.length) return "";
+                  return pts.map((p, i) => `${i === 0 ? "M" : "L"} ${p.x} ${p.y}`).join(" ");
+                  };
+                  /* ============================================================
+                  #4) CHART RENDER
+                  ============================================================ */
+                  function renderChart(cfg) {
+                  gridGroup.innerHTML = "";
+                  axisGroup.innerHTML = "";
+                  pointsGroup.innerHTML = "";
+                  const width = 1000;
+                  const height = 440;
+                  const pad = { top: 24, right: 130, bottom: 74, left: 92 };
+                  const plotW = width - pad.left - pad.right;
+                  const plotH = height - pad.top - pad.bottom;
+                  const allVals = [...cfg.lineValues, cfg.bahMonthly];
+                  const minVal = Math.min(...allVals);
+                  const maxVal = Math.max(...allVals);
+                  const rangePadLow = 250;
+                  const rangePadHigh = 250;
+                  const yMin = Math.max(0, Math.floor((minVal - rangePadLow) / 100) * 100);
+                  const yMax = Math.ceil((maxVal + rangePadHigh) / 100) * 100;
+                  const yScale = (val) => {
+                  const pct = (val - yMin) / (yMax - yMin || 1);
+                  return pad.top + plotH - pct * plotH;
+                  };
+                  const xScale = (idx) => {
+                  if (cfg.lineValues.length === 1) return pad.left + plotW / 2;
+                  return pad.left + (idx * plotW) / (cfg.lineValues.length - 1);
+                  };
+                  const yTicks = 4;
+                  for (let i = 0; i <= yticks;="" i++)="" {="" const="" ratio="i" value="yMax" -="" (ymax="" ymin)="" *="" ratio;="" y="pad.top" +="" ploth="" gridgroup.appendchild(svgline(pad.left,="" y,="" width="" pad.right,="" i="==yTicks" ?="" "ls-grid-soft"="" :="" "ls-grid"="" ));="" axisgroup.appendchild(svgtext(="" pad.left="" 18,="" 6,="" fmtmoney(value,="" 0),="" "ls-y-label"="" ,="" "15"="" "end"="" }="" cfg.xlabels.foreach((label,="" idx)=""> {
+                    const x = xScale(idx);
+                    axisGroup.appendChild(svgText(
+                    x,
+                    height - 24,
+                    label,
+                    "ls-x-label",
+                    "16",
+                    "middle"
+                    ));
+                    });
+                    const mainPts = cfg.lineValues.map((v, i) => ({ x: xScale(i), y: yScale(v), value: v }));
+                    mainLine.setAttribute("d", pathFromPoints(mainPts));
+                    const bahY = yScale(cfg.bahMonthly);
+                    bahLine.setAttribute("d", `M ${pad.left} ${bahY} L ${width - pad.right} ${bahY}`);
+                    mainPts.forEach((pt) => {
+                    pointsGroup.appendChild(svgCircle(pt.x, pt.y, 8.5, "ls-point"));
+                    });
+                    const last = mainPts[mainPts.length - 1];
+                    finalGuide.setAttribute("x1", last.x);
+                    finalGuide.setAttribute("y1", last.y);
+                    finalGuide.setAttribute("x2", last.x);
+                    finalGuide.setAttribute("y2", pad.top + plotH);
+                    finalLabel.setAttribute("x", Math.min(width - 40, last.x + 14));
+                    finalLabel.setAttribute("y", Math.max(28, last.y - 14));
+                    finalLabel.setAttribute("text-anchor", "start");
+                    finalLabel.textContent = fmtMoney(cfg.monthlyNow, 0);
+                    }
+                    /* ============================================================
+                    #5) CARD RENDER
+                    ============================================================ */
+                    function renderCards(cfg) {
+                    const gapAbs = Math.abs(cfg.monthlyGap);
+                    const gapDirection = signWord(cfg.monthlyGap);
+                    mainValueEl.textContent = fmtMoney(cfg.monthlyNow, 0);
+                    mainSubEl.innerHTML = `
+                    <span 0="" class="${cfg.monthlyGap > 0 ? " negative"="" :="" cfg.monthlygap="" <="" ?="" "positive"="" ""="" }"="">
+                      ${signedPercent(cfg.percentVsBah)}
+                    </span>
+                    ${gapDirection} BAH
+                    `;
+                    if (cfg.equity12 > 0) {
+                    equityEl.innerHTML = `${fmtCompactMoney(cfg.equity12)} <span>in equity</span>`;
+                    equityEl.style.color = "#8ef3c5";
+                    } else {
+                    equityEl.innerHTML = `$0 <span>in equity</span>`;
+                    equityEl.style.color = "#dbe8ff";
+                    }
+                    blufEl.innerHTML = cfg.bluf;
+                    annualEl.textContent = fmtCompactMoney(cfg.annualCost);
+                    vsBahEl.textContent = signedCompact(cfg.annualVsBah);
+                    classForValue(vsBahEl, cfg.annualVsBah, true);
+                    if (cfg.monthlyGap === 0) {
+                    gapEl.textContent = "$0";
+                    gapEl.classList.remove("good", "bad", "accent");
+                    gapEl.classList.add("accent");
+                    } else {
+                    gapEl.textContent = `${cfg.monthlyGap > 0 ? "+" : "-"}${fmtCompactMoney(gapAbs)}`;
+                    classForValue(gapEl, cfg.monthlyGap, true);
+                    }
+                    footnoteEl.textContent = cfg.footnote;
+                    }
+                    /* ============================================================
+                    #6) STATUS / THEME
+                    ============================================================ */
+                    function renderStatus(cfg) {
+                    statusTextEl.textContent = cfg.statusText;
+                    statusDotEl.style.background = cfg.statusColor;
+                    root.style.setProperty("--accent", cfg.mode === "buy" ? "#8fd4ff" : cfg.mode === "rent" ? "#7f8dff" : "#8ef3c5");
+                    }
+                    /* ============================================================
+                    #7) TAB STATE
+                    ============================================================ */
+                    function setActiveTab(mode) {
+                    tabs.forEach((tab) => {
+                    const active = tab.dataset.mode === mode;
+                    tab.classList.toggle("is-active", active);
+                    tab.setAttribute("aria-selected", active ? "true" : "false");
+                    });
+                    }
+                    /* ============================================================
+                    #8) MAIN RENDER
+                    ============================================================ */
+                    function render(mode) {
+                    const cfg = DATA[mode];
+                    if (!cfg) return;
+                    setActiveTab(mode);
+                    renderStatus(cfg);
+                    renderChart(cfg);
+                    renderCards(cfg);
+                    }
+                    /* ============================================================
+                    #9) EVENTS
+                    ============================================================ */
+                    tabs.forEach((tab) => {
+                    tab.addEventListener("click", () => {
+                    render(tab.dataset.mode);
+                    });
+                    });
+                    /* ============================================================
+                    #10) INIT
+                    ============================================================ */
+                    render("buy");
+                    })();</=></div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69b6b526f23748df9f189b16" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>
 </body>

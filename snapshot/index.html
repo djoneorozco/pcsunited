@@ -31,7 +31,7 @@ UPDATED FOR INDEX.HTML:
       margin:0;
       background:#050712;
     }
- /* =========================================================
+   /* =========================================================
        //#3.1) SCOPE RESET + TOKENS
     ========================================================= */
     #pcs-snapshot-shell,
@@ -1057,15 +1057,20 @@ UPDATED FOR INDEX.HTML:
       text-transform:uppercase;
     }
 
-    #pcs-ls-chart{
-      width:100% !important;
-      min-height:180px;
+    .pcs-ls-chart-wrap{
+      height:220px;
       margin-top:2px;
       border-radius:18px;
       background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
       border:1px solid var(--pcs-border-06);
-      padding:6px 8px 0;
+      padding:8px 10px 6px;
       overflow:hidden;
+      position:relative;
+    }
+
+    #pcs-ls-chart{
+      width:100% !important;
+      height:100% !important;
       display:block;
     }
 
@@ -1219,6 +1224,7 @@ UPDATED FOR INDEX.HTML:
       }
 
       .pcs-donut::before{ inset:48px; }
+      .pcs-ls-chart-wrap{ height:200px; }
     }
 
     @media (max-width:760px){
@@ -1598,7 +1604,9 @@ UPDATED FOR INDEX.HTML:
 
           <div id="pcs-ls-status" class="pcs-ls-status">Wealth Building · Higher Cost</div>
 
-          <canvas id="pcs-ls-chart" height="180"></canvas>
+          <div class="pcs-ls-chart-wrap">
+            <canvas id="pcs-ls-chart"></canvas>
+          </div>
 
           <div class="pcs-ls-stats">
             <div class="pcs-ls-main">
@@ -1683,30 +1691,11 @@ UPDATED FOR INDEX.HTML:
     </div>
 
   </div>
-
-  <!-- =====================================================
-       //#5) EXTERNAL LIVING STRATEGY RUNTIME
-  ====================================================== -->
-  <script src="https://pcsunited.netlify.app/js/living-strategy.js"></script>
-
-</div>
-</body>
-</html>
+</div> 
 <script>
 (function () {
   "use strict";
 
-  // ============================================================
-  // PCS SNAPSHOT v4.2.2 RUNTIME
-  // INDEX.HTML SAFE VERSION
-  // UPDATED:
-  // - Ready to paste directly under Code #1
-  // - No structural wrapper changes needed
-  // - Keeps current 4-card header logic
-  // ============================================================
-// ============================================================
-  // //#1) CONFIG
-  // ============================================================
   const API_BASE = "https://pcsunited.netlify.app/api";
   const DIRECT_FN_BASE = "https://pcsunited.netlify.app/.netlify/functions";
   const MILPAY_JSON_URL = "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/militaryPayTables.json";
@@ -1716,7 +1705,6 @@ UPDATED FOR INDEX.HTML:
   const DEFAULT_BASE = "Lackland AFB";
   const DEFAULT_FILE_KEY = "Lackland";
   const DEFAULT_ZIP = "78236";
-
   const DONUT_ROTATION_DEG = -8;
   const CONIC_TO_CARTESIAN_OFFSET_DEG = -90;
 
@@ -1724,151 +1712,84 @@ UPDATED FOR INDEX.HTML:
   let LOADED_PRIMARY_CITY = null;
   let LOADED_PAY = null;
   let LOADED_QUERY = null;
-  let LIVING_STRATEGY_STATE = null;
-
-  // ============================================================
-  // //#2) BASE INDEX (REPLACES REGISTRY)
-  // ============================================================
   let BASE_INDEX = { bases: {}, aliases: {} };
+  let livingChart = null;
+  let trendChart = null;
+  let LIVING_STATE = null;
+  let livingBound = false;
+
+  const $ = s => document.querySelector(s);
+  const setText = (s, v) => { const e = $(s); if (e) e.textContent = v; };
+  const setHTML = (s, v) => { const e = $(s); if (e) e.innerHTML = v; };
+  const safe = (o, p, f) => { try { const v = p.split(".").reduce((a, k) => a && a[k], o); return v == null ? f : v; } catch { return f; } };
+  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
+  const money = n => { const x = Number(n); return Number.isFinite(x) ? "$" + Math.round(x).toLocaleString() : "$0"; };
+  const pct = (n, d) => { const x = Number(n); return Number.isFinite(x) ? x.toFixed(d == null ? 0 : d) + "%" : "0%"; };
+  const compactPop = n => {
+    const x = Number(n || 0);
+    if (!Number.isFinite(x) || x <= 0) return "—";
+    if (x >= 1e6) return (x / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+    if (x >= 1e3) return Math.round(x / 1e3) + "K";
+    return String(Math.round(x));
+  };
+  const compactMoney = n => {
+    const x = Number(n || 0);
+    if (!Number.isFinite(x) || x <= 0) return "$0";
+    if (x >= 1e6) return "$" + (x / 1e6).toFixed(1).replace(/\.0$/, "") + "M";
+    if (x >= 1e3) return "$" + Math.round(x / 1e3) + "K";
+    return "$" + Math.round(x);
+  };
+  const esc = s => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#39;");
+  const destroy = c => { if (c) try { c.destroy(); } catch {} };
+
+  async function load(url) {
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error("load fail " + url + " (" + r.status + ")");
+    const ct = (r.headers.get("content-type") || "").toLowerCase();
+    if (ct.includes("text/html")) throw new Error("non-json response " + url + " (html)");
+    return r.json();
+  }
 
   async function loadBaseIndex() {
-    if (BASE_INDEX && Object.keys(BASE_INDEX.bases || {}).length) return BASE_INDEX;
-
-    BASE_INDEX = await fetch(BASE_INDEX_URL, { cache: "no-store" })
-      .then(r => r.json())
-      .catch(() => ({ bases: {}, aliases: {} }));
-
+    if (Object.keys(BASE_INDEX.bases || {}).length) return BASE_INDEX;
+    BASE_INDEX = await fetch(BASE_INDEX_URL, { cache: "no-store" }).then(r => r.json()).catch(() => ({ bases: {}, aliases: {} }));
     return BASE_INDEX;
   }
 
-  function getBaseIndex() {
-    return BASE_INDEX || { bases: {}, aliases: {} };
-  }
-
-  async function resolveBase(baseInput) {
-    await loadBaseIndex();
-
-    const index = getBaseIndex();
-    const bases = index.bases || {};
-    const aliases = index.aliases || {};
-
-    const clean = String(baseInput || "").trim();
-
-    const canonical = bases[clean]
-      ? clean
-      : aliases[clean] || clean;
-
-    const record = bases[canonical] || null;
-
-    return {
-      canonical,
-      fileKey: record?.file || DEFAULT_FILE_KEY,
-      zip: record?.zip || DEFAULT_ZIP,
-      cityKey: record?.cityKey || DEFAULT_FILE_KEY
-    };
-  }
-
-  // ============================================================
-  // //#3) DOM HELPERS
-  // ============================================================
-  function $(q){ return document.querySelector(q); }
-  function setText(selector, value){ const el = $(selector); if (el) el.textContent = value; }
-  function setHTML(selector, value){ const el = $(selector); if (el) el.innerHTML = value; }
-
-  function money(n){
-    const x = Number(n);
-    if (!Number.isFinite(x)) return "$0";
-    return "$" + Math.round(x).toLocaleString();
-  }
-
-  function pct(n, digits){
-    const x = Number(n);
-    if (!Number.isFinite(x)) return "0%";
-    return x.toFixed(digits == null ? 0 : digits) + "%";
-  }
-
-  function safe(obj, path, fallback){
-    try {
-      const val = path.split(".").reduce((a,k)=>a && a[k], obj);
-      return val == null ? fallback : val;
-    } catch {
-      return fallback;
-    }
-  }
-
-  function clamp(n, min, max){
-    return Math.max(min, Math.min(max, n));
-  }
-
-  function compactPop(n){
-    const x = Number(n || 0);
-    if (!Number.isFinite(x) || x <= 0) return "—";
-    if (x >= 1000000) return (x / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-    if (x >= 1000) return Math.round(x / 1000) + "K";
-    return String(Math.round(x));
-  }
-
-  function compactMoney(n){
-    const x = Number(n || 0);
-    if (!Number.isFinite(x) || x <= 0) return "$0";
-    if (x >= 1000000) return "$" + (x / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-    if (x >= 1000) return "$" + Math.round(x / 1000) + "K";
-    return "$" + Math.round(x);
-  }
-
-  function escapeHtml(str){
-    return String(str == null ? "" : str)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
-  }
-
-  // ============================================================
-  // //#4) BASE HELPERS
-  // ============================================================
-  function pcsCanonicalBaseName(raw) {
+  function idx(){ return BASE_INDEX || { bases: {}, aliases: {} }; }
+  function baseName(raw) {
     const s = String(raw || "").trim();
     if (!s) return "";
-    const index = getBaseIndex();
-    const bases = index.bases || {};
-    const aliases = index.aliases || {};
-    return bases[s] ? s : (aliases[s] || s);
+    const i = idx(), b = i.bases || {}, a = i.aliases || {};
+    return b[s] ? s : (a[s] || s);
   }
-
-  function pcsFileKeyFromBase(raw) {
-    const base = pcsCanonicalBaseName(raw);
-    const index = getBaseIndex();
-    const rec = (index.bases || {})[base];
+  function fileKeyFromBase(raw) {
+    const rec = (idx().bases || {})[baseName(raw)];
     return (rec && rec.file) || "";
   }
-
-  function pcsZipFromBase(raw) {
-    const base = pcsCanonicalBaseName(raw);
-    const index = getBaseIndex();
-    const rec = (index.bases || {})[base];
+  function zipFromBase(raw) {
+    const rec = (idx().bases || {})[baseName(raw)];
     return (rec && rec.zip) || "";
   }
+  const fallbackBase = raw => baseName(raw) || DEFAULT_BASE;
+  const fallbackFileKey = raw => fileKeyFromBase(raw) || DEFAULT_FILE_KEY;
+  const fallbackZip = raw => zipFromBase(raw) || DEFAULT_ZIP;
 
-  function fallbackBase(raw) { return pcsCanonicalBaseName(raw) || DEFAULT_BASE; }
-  function fallbackFileKey(raw) { return pcsFileKeyFromBase(raw) || DEFAULT_FILE_KEY; }
-  function fallbackZip(raw) { return pcsZipFromBase(raw) || DEFAULT_ZIP; }
+  async function loadCityExact(fileKey){
+    const k = String(fileKey || "").trim() || DEFAULT_FILE_KEY;
+    try { return await load(`${API_BASE}/city?cityKey=${encodeURIComponent(k)}`); } catch(e){}
+    try { return await load(`${DIRECT_FN_BASE}/city?cityKey=${encodeURIComponent(k)}`); } catch(e){}
+    return load(`${CITY_GITHUB_RAW_BASE}${encodeURIComponent(k)}.json`);
+  }
 
-  // ============================================================
-  // //#5) PAY HELPERS
-  // ============================================================
   function normRank(r) {
     const s = String(r || "").toUpperCase().trim();
     const m = s.match(/^([EO])\s*-\s*(\d+)$/) || s.match(/^([EO])(\d+)$/) || s.match(/^(W)\s*-\s*(\d+)$/) || s.match(/^(W)(\d+)$/);
-    if (m) return m[1] + "-" + m[2];
-    return s.replace(/\s+/g,"");
+    return m ? m[1] + "-" + m[2] : s.replace(/\s+/g, "");
   }
-
-  function isE(rankKey) { return String(rankKey || "").startsWith("E-"); }
-
+  const isE = r => String(r || "").startsWith("E-");
   function pickYOS(y, table) {
-    const ks = Object.keys(table || {}).map(k => parseInt(k,10)).filter(n => !isNaN(n)).sort((a,b)=>a-b);
+    const ks = Object.keys(table || {}).map(k => parseInt(k, 10)).filter(n => !isNaN(n)).sort((a, b) => a - b);
     if (!ks.length) return String(y || 2);
     let chosen = ks[0];
     for (const k of ks) if (k <= y) chosen = k;
@@ -1876,73 +1797,27 @@ UPDATED FOR INDEX.HTML:
   }
 
   async function calcBahFromPay(pay, opts){
-    const rankKey = normRank(opts.rank);
-    const table = (pay.BASEPAY && pay.BASEPAY[rankKey]) ? pay.BASEPAY[rankKey] : {};
-    const yKey = pickYOS(parseInt(opts.yos,10), table);
+    const rankKey = normRank(opts.rank), table = (pay.BASEPAY && pay.BASEPAY[rankKey]) ? pay.BASEPAY[rankKey] : {};
+    const yKey = pickYOS(parseInt(opts.yos, 10), table);
     const basePay = Number(table[yKey] || 0) || 0;
     const bas = isE(rankKey) ? Number(safe(pay, "BAS.enlisted", 0) || 0) : Number(safe(pay, "BAS.officer", 0) || 0);
-
     const zip = String(opts.zip || fallbackZip(opts.baseLoc) || DEFAULT_ZIP).trim();
-    const byZip = safe(pay, "BAH.by_zip", {}) || {};
-    const rec = byZip[zip] || null;
-    const grp = (parseInt(opts.family,10) > 1) ? safe(rec, "with", null) : safe(rec, "without", null);
-
+    const rec = (safe(pay, "BAH.by_zip", {}) || {})[zip] || null;
+    const grp = (parseInt(opts.family, 10) > 1) ? safe(rec, "with", null) : safe(rec, "without", null);
     let bah = 0;
     if (grp && grp[rankKey] != null) bah = Number(grp[rankKey]) || 0;
-
     return { bah, basePay, bas, zip };
   }
 
-  // ============================================================
-  // //#6) FETCH HELPERS
-  // ============================================================
-  async function load(url){
-    const r = await fetch(url, { cache: "no-store" });
-    if(!r.ok) throw new Error("load fail " + url + " (" + r.status + ")");
-    const ct = (r.headers.get("content-type") || "").toLowerCase();
-    if (ct.includes("text/html")) throw new Error("non-json response " + url + " (html)");
-    return await r.json();
-  }
-
-  async function loadCityExact(fileKey){
-    const clean = String(fileKey || "").trim() || DEFAULT_FILE_KEY;
-    try { return await load(`${API_BASE}/city?cityKey=${encodeURIComponent(clean)}`); } catch(e){}
-    try { return await load(`${DIRECT_FN_BASE}/city?cityKey=${encodeURIComponent(clean)}`); } catch(e){}
-    return await load(`${CITY_GITHUB_RAW_BASE}${encodeURIComponent(clean)}.json`);
-  }
-
-  function normalizeTrendDate(dt){
-    const s = String(dt || "").trim();
-    if (!s) return null;
-    const m = s.match(/^(\d{4})-(\d{2})-W(\d{1,2})$/);
-    if (m){
-      const y = Number(m[1]), mo = Number(m[2]), w = Number(m[3]);
-      const day = Math.min(28, 1 + (w - 1) * 7);
-      const iso = `${y}-${String(mo).padStart(2,"0")}-${String(day).padStart(2,"0")}`;
-      const d = new Date(iso);
-      return isNaN(d.getTime()) ? null : d;
-    }
-    const d = new Date(s);
-    return isNaN(d.getTime()) ? null : d;
-  }
-
-  // ============================================================
-  // //#7) QUERY INPUTS
-  // ============================================================
   async function getQuery() {
     await loadBaseIndex();
-
     const u = new URL(window.location.href);
-
     const curBase = fallbackBase(u.searchParams.get("curBase") || sessionStorage.getItem("pcs_current_base") || DEFAULT_BASE);
     const newBase = fallbackBase(u.searchParams.get("newBase") || sessionStorage.getItem("pcs_new_base") || u.searchParams.get("base") || DEFAULT_BASE);
-
-    const curFileKey = u.searchParams.get("curFileKey") || sessionStorage.getItem("pcs_current_fileKey") || pcsFileKeyFromBase(curBase) || DEFAULT_FILE_KEY;
-    const newFileKey = u.searchParams.get("newFileKey") || sessionStorage.getItem("pcs_new_fileKey") || u.searchParams.get("cityKey") || sessionStorage.getItem("pcs_new_cityKey") || pcsFileKeyFromBase(newBase) || DEFAULT_FILE_KEY;
-
-    const curZip = u.searchParams.get("curZip") || sessionStorage.getItem("pcs_current_zip") || pcsZipFromBase(curBase) || DEFAULT_ZIP;
-    const newZip = u.searchParams.get("newZip") || sessionStorage.getItem("pcs_new_zip") || pcsZipFromBase(newBase) || DEFAULT_ZIP;
-
+    const curFileKey = u.searchParams.get("curFileKey") || sessionStorage.getItem("pcs_current_fileKey") || fileKeyFromBase(curBase) || DEFAULT_FILE_KEY;
+    const newFileKey = u.searchParams.get("newFileKey") || sessionStorage.getItem("pcs_new_fileKey") || u.searchParams.get("cityKey") || sessionStorage.getItem("pcs_new_cityKey") || fileKeyFromBase(newBase) || DEFAULT_FILE_KEY;
+    const curZip = u.searchParams.get("curZip") || sessionStorage.getItem("pcs_current_zip") || zipFromBase(curBase) || DEFAULT_ZIP;
+    const newZip = u.searchParams.get("newZip") || sessionStorage.getItem("pcs_new_zip") || zipFromBase(newBase) || DEFAULT_ZIP;
     return {
       type: (u.searchParams.get("type") || "ad").toLowerCase(),
       rank: u.searchParams.get("rank") || sessionStorage.getItem("pcs_rank") || "E-7",
@@ -1955,37 +1830,29 @@ UPDATED FOR INDEX.HTML:
     };
   }
 
-  // ============================================================
-  // //#8) GENERAL CITY HELPERS
-  // ============================================================
-  function pickMedianPrice(city){
-    return safe(city,"housing.market.median_listing_price_realtor", null)
-      ?? safe(city,"housing.market.median_listing_price", null)
-      ?? safe(city,"housing.market.median_list_price", null)
-      ?? safe(city,"avg_home_value", null)
-      ?? safe(city,"average_home_value", null)
-      ?? safe(city,"housing.median_value_owner_occupied", null)
-      ?? 0;
-  }
+  const pickMedianPrice = city =>
+    safe(city,"housing.market.median_listing_price_realtor",null) ??
+    safe(city,"housing.market.median_listing_price",null) ??
+    safe(city,"housing.market.median_list_price",null) ??
+    safe(city,"avg_home_value",null) ??
+    safe(city,"average_home_value",null) ??
+    safe(city,"housing.median_value_owner_occupied",null) ?? 0;
 
-  function pickYoY(city){
-    return safe(city,"housing.market.zillow_one_year_change_percent", null)
-      ?? safe(city,"housing.market.one_year_change_percent", null)
-      ?? safe(city,"yoy_change_percent", null);
-  }
+  const pickYoY = city =>
+    safe(city,"housing.market.zillow_one_year_change_percent",null) ??
+    safe(city,"housing.market.one_year_change_percent",null) ??
+    safe(city,"yoy_change_percent",null);
 
-  function pickDOM(city){
-    return safe(city,"housing.market.average_days_on_market", null)
-      ?? safe(city,"housing.market.average_days_on_market_range.low", null)
-      ?? null;
-  }
+  const pickDOM = city =>
+    safe(city,"housing.market.average_days_on_market",null) ??
+    safe(city,"housing.market.average_days_on_market_range.low",null) ?? null;
 
-  function locationName(city, baseLoc){ return city.place || city.city || city.name || baseLoc || "—"; }
+  const locationName = (city, baseLoc) => city.place || city.city || city.name || baseLoc || "—";
 
   function setImgFromCity(imgEl, city){
-    if(!imgEl) return;
+    if (!imgEl) return;
     const url = safe(city, "image_url", "") || safe(city, "imageUrl", "") || "";
-    if (url && String(url).startsWith("http")){
+    if (url && String(url).startsWith("http")) {
       imgEl.src = String(url);
       imgEl.style.opacity = "1";
     } else {
@@ -1994,47 +1861,29 @@ UPDATED FOR INDEX.HTML:
     }
   }
 
-  function renderFacts(containerId, bullets){
-    const el = $(containerId);
-    if(!el) return;
-    el.innerHTML = bullets.map(t => `
-      <div class="pcs-fact">
-        <span class="pcs-fact-bullet"></span>
-        <span>${String(t)}</span>
-      </div>
-    `).join("");
-  }
-
   function renderQuickFacts(city, fallbackPrice){
-    const medInc = safe(city,"snapshot.median_household_income", null)
-      ?? safe(city,"income.median_household_income", null)
-      ?? safe(city,"demographics.income.median_household_income", null)
-      ?? safe(city,"median_household_income", 60000);
-
-    const popEst = safe(city,"snapshot.population_city", null)
-      ?? safe(city,"population.estimate", safe(city,"population",0))
-      ?? 0;
-
-    const days = safe(city,"housing.market.average_days_on_market", null)
-      ?? safe(city,"housing.market.average_days_on_market_range.low", null);
-
+    const medInc =
+      safe(city,"snapshot.median_household_income",null) ??
+      safe(city,"income.median_household_income",null) ??
+      safe(city,"demographics.income.median_household_income",null) ??
+      safe(city,"median_household_income",60000);
+    const popEst =
+      safe(city,"snapshot.population_city",null) ??
+      safe(city,"population.estimate",safe(city,"population",0)) ?? 0;
+    const days =
+      safe(city,"housing.market.average_days_on_market",null) ??
+      safe(city,"housing.market.average_days_on_market_range.low",null);
     const facts = [
       { label:"Population", value:Number(popEst).toLocaleString() },
-      { label:"Median Age", value:safe(city,"population.median_age", safe(city,"median_age", 0)) },
+      { label:"Median Age", value:safe(city,"population.median_age",safe(city,"median_age",0)) },
       { label:"Median Household Income", value:money(medInc) },
-      { label:"Poverty Rate", value:(safe(city,"income.poverty_rate_percent", safe(city,"poverty_rate_percent",0)) || 0) + "%" },
-      { label:"Median Home Value", value:money(safe(city,"housing.median_value_owner_occupied", fallbackPrice)) },
+      { label:"Poverty Rate", value:(safe(city,"income.poverty_rate_percent",safe(city,"poverty_rate_percent",0)) || 0) + "%" },
+      { label:"Median Home Value", value:money(safe(city,"housing.median_value_owner_occupied",fallbackPrice)) },
       { label:"Avg Days on Market", value:(days != null ? String(days) : "—") }
     ];
-
-    setHTML("#pcs-quickfacts", facts.map(f =>
-      `<div class="pcs-fact"><div class="pcs-fact-label">${f.label}</div><div class="pcs-fact-value">${f.value}</div></div>`
-    ).join(""));
+    setHTML("#pcs-quickfacts", facts.map(f => `<div class="pcs-fact"><div class="pcs-fact-label">${f.label}</div><div class="pcs-fact-value">${f.value}</div></div>`).join(""));
   }
 
-  // ============================================================
-  // //#9) BEDROOM + HOUSING HELPERS
-  // ============================================================
   function familyToBedrooms(family){
     const n = Number(family) || 1;
     if (n <= 3) return 2;
@@ -2054,126 +1903,73 @@ UPDATED FOR INDEX.HTML:
     };
   }
 
-  function pickHOA(city, beds){
-    return Number(safe(city, `by_bedroom.${beds}.hoa_monthly.avg`, 0) || 0)
-      || Number(safe(city, "housing.costs.hoa_monthly.avg", 0) || 0)
-      || Number(safe(city, "hoa_monthly", 0) || 0)
-      || Number(safe(city, "avg_hoa_monthly", 0) || 0)
-      || 0;
-  }
+  const pickHOA = (city, beds) =>
+    Number(safe(city, `by_bedroom.${beds}.hoa_monthly.avg`, 0) || 0) ||
+    Number(safe(city, "housing.costs.hoa_monthly.avg", 0) || 0) ||
+    Number(safe(city, "hoa_monthly", 0) || 0) ||
+    Number(safe(city, "avg_hoa_monthly", 0) || 0) || 0;
 
-  function pickTaxRatePercent(city){
-    return Number(safe(city, "property_tax_rate", 0) || 0)
-      || Number(safe(city, "property_tax_rate_percent", 0) || 0)
-      || Number(safe(city, "mortgage_assumptions.property_tax_percent", 0) || 0)
-      || Number(safe(city, "mortgage_assumptions.tax_rate_percent", 0) || 0)
-      || Number(safe(city, "mortgage_assumptions.tax_percent", 0) || 0)
-      || 0;
-  }
+  const pickTaxRatePercent = city =>
+    Number(safe(city, "property_tax_rate", 0) || 0) ||
+    Number(safe(city, "property_tax_rate_percent", 0) || 0) ||
+    Number(safe(city, "mortgage_assumptions.property_tax_percent", 0) || 0) ||
+    Number(safe(city, "mortgage_assumptions.tax_rate_percent", 0) || 0) ||
+    Number(safe(city, "mortgage_assumptions.tax_percent", 0) || 0) || 0;
 
   function pickInsuranceAnnual(city, price){
-    const rate = Number(safe(city, "insurance_rate", 0) || 0)
-      || Number(safe(city, "insurance_rate_percent", 0) || 0)
-      || Number(safe(city, "homeowners_insurance_rate_percent", 0) || 0)
-      || 0;
+    const rate =
+      Number(safe(city, "insurance_rate", 0) || 0) ||
+      Number(safe(city, "insurance_rate_percent", 0) || 0) ||
+      Number(safe(city, "homeowners_insurance_rate_percent", 0) || 0) || 0;
     if (rate > 0 && price > 0) return price * (rate / 100);
-    return Number(safe(city, "mortgage_assumptions.insurance_annual", 0) || 0)
-      || Number(safe(city, "mortgage_assumptions.homeowners_insurance_annual", 0) || 0)
-      || Number(safe(city, "avg_homeowners_insurance_annual", 0) || 0)
-      || 0;
+    return Number(safe(city, "mortgage_assumptions.insurance_annual", 0) || 0) ||
+      Number(safe(city, "mortgage_assumptions.homeowners_insurance_annual", 0) || 0) ||
+      Number(safe(city, "avg_homeowners_insurance_annual", 0) || 0) || 0;
   }
 
   function estimateTaxesMonthly(city, price){
     const taxPct = pickTaxRatePercent(city);
     if (taxPct > 0 && price > 0) return (price * (taxPct / 100)) / 12;
-    return (Number(safe(city, "mortgage_assumptions.property_tax_annual", 0) || 0) / 12)
-      || (Number(safe(city, "mortgage_assumptions.tax_annual", 0) || 0) / 12)
-      || 0;
+    return (Number(safe(city, "mortgage_assumptions.property_tax_annual", 0) || 0) / 12) ||
+      (Number(safe(city, "mortgage_assumptions.tax_annual", 0) || 0) / 12) || 0;
   }
 
-  function estimateInsuranceMonthly(city, price){
+  const estimateInsuranceMonthly = (city, price) => {
     const annual = pickInsuranceAnnual(city, price);
     return annual > 0 ? annual / 12 : 0;
-  }
-
-  function estimateBuyingPower(monthlyIncome){
-    const income = Number(monthlyIncome) || 0;
-    const housingBudget = income * 0.28;
-    const r = 0.0675 / 12, N = 360;
-    if (housingBudget <= 0) return 0;
-    const loan = housingBudget * ((Math.pow(1+r,N)-1)/(r*Math.pow(1+r,N)));
-    return Number.isFinite(loan) ? loan : 0;
-  }
+  };
 
   function monthlyMortgageEstimate(price, annualRate){
     const P = Number(price);
-    if(!Number.isFinite(P) || P <= 0) return 0;
-    const r = (Number(annualRate) || 0.0675) / 12;
-    const N = 360;
-    const M = P * (r * Math.pow(1+r,N)) / (Math.pow(1+r,N)-1);
+    if (!Number.isFinite(P) || P <= 0) return 0;
+    const r = (Number(annualRate) || 0.0675) / 12, N = 360;
+    const M = P * (r * Math.pow(1 + r, N)) / (Math.pow(1 + r, N) - 1);
     return Number.isFinite(M) ? M : 0;
   }
 
-  function affordabilityScore(monthlyIncome, medianPrice){
-    const annual = (Number(monthlyIncome) || 0) * 12;
-    const P = Number(medianPrice) || 0;
-    let score = 100 - (P / Math.max(annual,1)) * 35;
-    return Math.max(0, Math.min(100, score));
-  }
-
-  function starsFromScore(score){
-    const raw = 1 + (Number(score)||0) * 0.04;
-    const snapped = Math.round(raw * 2) / 2;
-    const full = Math.floor(snapped);
-    const half = (snapped - full) >= 0.5;
-    let s = "";
-    for(let i=0;i<5;i++) s += i < full ? "★" : (i === full && half ? "⯪" : "☆");
-    return { value: snapped.toFixed(1), stars: s };
-  }
-
-  // ============================================================
-  // //#10) TOP STRIP HELPERS
-  // ============================================================
   function marketSignalFromCity(city){
     const yoy = Number(
-      safe(city,"snapshot.market_trend_yoy", null)
-      ?? safe(city,"housing.market.zillow_one_year_change_percent", null)
-      ?? safe(city,"housing.market.one_year_change_percent", null)
-      ?? 0
+      safe(city,"snapshot.market_trend_yoy",null) ??
+      safe(city,"housing.market.zillow_one_year_change_percent",null) ??
+      safe(city,"housing.market.one_year_change_percent",null) ?? 0
     ) || 0;
-
     const dom = Number(
-      safe(city,"housing.market.average_days_on_market", null)
-      ?? safe(city,"housing.market.average_days_on_market_range.low", null)
-      ?? 0
+      safe(city,"housing.market.average_days_on_market",null) ??
+      safe(city,"housing.market.average_days_on_market_range.low",null) ?? 0
     ) || 0;
+    const marketSummary = safe(city,"market_bluf.bluf_summary","") || safe(city,"housing.market.market_type_summary","") || "";
+    const marketType = String(safe(city,"market_bluf.status","") || safe(city,"housing.market.market_type","") || "").toLowerCase();
 
-    const marketSummary = safe(city,"market_bluf.bluf_summary","")
-      || safe(city,"housing.market.market_type_summary","")
-      || "";
-
-    const marketType = String(
-      safe(city,"market_bluf.status","")
-      || safe(city,"housing.market.market_type","")
-      || ""
-    ).toLowerCase();
-
-    if (marketType.includes("buyer") || yoy <= -2 || dom >= 55) {
-      return {
-        label: "Buyer-Friendly",
-        sub: marketSummary || "Inventory elevated • Softer prices • Better leverage",
-        meta: "Current market condition"
-      };
-    }
-
-    if (marketType.includes("seller") || yoy >= 2 || dom <= 30) {
-      return {
-        label: "Seller-Leaning",
-        sub: marketSummary || "Tighter inventory • Firmer pricing • Less leverage",
-        meta: "Current market condition"
-      };
-    }
-
+    if (marketType.includes("buyer") || yoy <= -2 || dom >= 55) return {
+      label: "Buyer-Friendly",
+      sub: marketSummary || "Inventory elevated • Softer prices • Better leverage",
+      meta: "Current market condition"
+    };
+    if (marketType.includes("seller") || yoy >= 2 || dom <= 30) return {
+      label: "Seller-Leaning",
+      sub: marketSummary || "Tighter inventory • Firmer pricing • Less leverage",
+      meta: "Current market condition"
+    };
     return {
       label: "Balanced",
       sub: marketSummary || "Supply and pricing appear balanced for disciplined entry",
@@ -2195,12 +1991,12 @@ UPDATED FOR INDEX.HTML:
     return Number(score.toFixed(1));
   }
 
-  function starsFrom5(score){
+  const starsFrom5 = score => {
     const rounded = Math.round(Number(score) || 0);
     let out = "";
     for (let i = 1; i <= 5; i++) out += i <= rounded ? "★" : "☆";
     return out;
-  }
+  };
 
   function housingStackForTopCard(city, family){
     const beds = familyToBedrooms(family);
@@ -2215,159 +2011,100 @@ UPDATED FOR INDEX.HTML:
   }
 
   function updateTopStripCards(data){
-    const totalPay = Number(data.totalPay || 0);
-    const bahDelta = Number(data.bahDelta || 0);
+    const totalPay = Number(data.totalPay || 0), bahDelta = Number(data.bahDelta || 0);
     const market = data.market || { label:"Balanced", sub:"", meta:"Current market condition" };
     const powerScore = Number(data.powerScore || 0);
 
     setText("#pcs-income-main", money(totalPay));
     setHTML("#pcs-income-breakdown", `Base Pay: ${money(data.basePay)} <span class="pcs-dot"></span> BAH: ${money(data.bah)} <span class="pcs-dot"></span> BAS: ${money(data.bas)}`);
     setText("#pts-income-meta", "True disposable baseline before housing");
-
-    setText("#pts-bah-delta", `${bahDelta >= 0 ? "+" : "-"}${money(Math.abs(bahDelta)).replace("$","$")}`);
+    setText("#pts-bah-delta", `${bahDelta >= 0 ? "+" : "-"}${money(Math.abs(bahDelta)).replace("$", "$")}`);
     setText("#pts-bah-copy", "Compared with your previous duty station housing allowance.");
     setText("#pts-bah-meta", "vs. Previous Duty Station");
-
     setText("#pts-market-signal", market.label);
     setText("#pts-market-copy", market.sub);
     setText("#pts-market-meta", market.meta);
-
     setText("#pts-power-score", powerScore.toFixed(1));
     setText("#pts-power-stars", starsFrom5(powerScore));
     setText("#pts-power-copy", "Based on total income & housing market");
     setText("#pts-power-meta", "Overall affordability signal");
   }
 
-  // ============================================================
-  // //#11) CHART REFS
-  // ============================================================
-  let chartCurrent = null, chartUpcoming = null, headerIncomeChart = null, headerBahChart = null, affordChart = null, livingStrategyChart = null;
-
-  function destroyIfExists(chartRef){ if (chartRef) try { chartRef.destroy(); } catch(e) {} }
-
-  function renderHousingChart(canvasId, bah, mortgage){
-    const el = $(canvasId);
-    if(!el || typeof Chart === "undefined") return null;
-    const avg = Number(mortgage) || 0;
-    return new Chart(el, {
-      type:"bar",
-      data:{
-        labels:["Low","Avg","High","BAH"],
-        datasets:[{
-          data:[avg*0.85, avg, avg*1.15, Number(bah)||0],
-          backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#8ef3c5"],
-          borderWidth:0
-        }]
-      },
-      options:{
-        responsive:true,
-        maintainAspectRatio:false,
-        plugins:{ legend:{ display:false }, tooltip:{ enabled:false } },
-        scales:{
-          y:{ ticks:{ color:"#e9ecff", callback:(v)=>"$"+Math.round(v) }, grid:{ color:"rgba(255,255,255,.08)" } },
-          x:{ ticks:{ color:"#e9ecff" }, grid:{ display:false } }
-        }
-      }
-    });
+  function normalizeTrendDate(dt){
+    const s = String(dt || "").trim();
+    if (!s) return null;
+    const m = s.match(/^(\d{4})-(\d{2})-W(\d{1,2})$/);
+    if (m) {
+      const y = Number(m[1]), mo = Number(m[2]), w = Number(m[3]);
+      const day = Math.min(28, 1 + (w - 1) * 7);
+      const d = new Date(`${y}-${String(mo).padStart(2, "0")}-${String(day).padStart(2, "0")}`);
+      return isNaN(d.getTime()) ? null : d;
+    }
+    const d = new Date(s);
+    return isNaN(d.getTime()) ? null : d;
   }
 
   function renderTrendApex(fullData) {
     const chartEl = $("#pcs-trend-chart-apex");
     if (!chartEl || typeof ApexCharts === "undefined") return;
-    if (window.pcsTrendChart) try { window.pcsTrendChart.destroy(); } catch {}
+    if (trendChart) try { trendChart.destroy(); } catch {}
     const seriesData = (Array.isArray(fullData) ? fullData : []).map(d => {
       const x = normalizeTrendDate(d.month || d.date || d.period || d.timestamp || null);
       const y = Number(d.median_sale_price ?? d.medianSalePrice ?? d.median ?? d.value ?? null);
       return (x && Number.isFinite(y)) ? { x, y } : null;
     }).filter(Boolean);
 
-    window.pcsTrendChart = new ApexCharts(chartEl, {
-      chart:{ type:'line', height:200, foreColor:'#e9ecff', toolbar:{ show:false } },
-      stroke:{ width:3, curve:'smooth', colors:['#8ef3c5'] },
+    trendChart = new ApexCharts(chartEl, {
+      chart:{ type:"line", height:200, foreColor:"#e9ecff", toolbar:{ show:false } },
+      stroke:{ width:3, curve:"smooth", colors:["#8ef3c5"] },
       series:[{ name:"Median Sale Price", data:seriesData }],
-      xaxis:{ type:'datetime', labels:{ style:{ colors:'#e9ecff' } } },
-      yaxis:{ labels:{ style:{ colors:'#e9ecff' }, formatter: val => "$" + Math.round(val).toLocaleString() } },
-      tooltip:{ theme:'dark', x:{ format:"MMM yyyy" }, y:{ formatter:v => "$" + Math.round(v).toLocaleString() } },
+      xaxis:{ type:"datetime", labels:{ style:{ colors:"#e9ecff" } } },
+      yaxis:{ labels:{ style:{ colors:"#e9ecff" }, formatter:v => "$" + Math.round(v).toLocaleString() } },
+      tooltip:{ theme:"dark", x:{ format:"MMM yyyy" }, y:{ formatter:v => "$" + Math.round(v).toLocaleString() } },
       grid:{ borderColor:"rgba(255,255,255,0.08)" }
     });
-    window.pcsTrendChart.render();
+    trendChart.render();
   }
 
-  // ============================================================
-  // //#12) HEADER + TOP CHARTS
-  // ============================================================
   async function initHeaderAndCharts(pay, p, city){
     const isAD = p.type === "ad";
     let base = 0, bah = 0, bas = 0, prevBah = 0;
 
     if (isAD) {
-      const vals = await calcBahFromPay(pay, {
-        rank:p.rank, yos:p.yos, family:p.family,
-        baseLoc:p.newBase || p.base || DEFAULT_BASE,
-        zip:p.newZip || fallbackZip(p.newBase || p.base || DEFAULT_BASE)
-      });
-      const prevVals = await calcBahFromPay(pay, {
-        rank:p.rank, yos:p.yos, family:p.family,
-        baseLoc:p.curBase || DEFAULT_BASE,
-        zip:p.curZip || fallbackZip(p.curBase || DEFAULT_BASE)
-      });
-      base = vals.basePay || 0;
-      bah = vals.bah || 0;
-      bas = vals.bas || 0;
-      prevBah = prevVals.bah || 0;
+      const vals = await calcBahFromPay(pay, { rank:p.rank, yos:p.yos, family:p.family, baseLoc:p.newBase || p.base || DEFAULT_BASE, zip:p.newZip || fallbackZip(p.newBase || p.base || DEFAULT_BASE) });
+      const prevVals = await calcBahFromPay(pay, { rank:p.rank, yos:p.yos, family:p.family, baseLoc:p.curBase || DEFAULT_BASE, zip:p.curZip || fallbackZip(p.curBase || DEFAULT_BASE) });
+      base = vals.basePay || 0; bah = vals.bah || 0; bas = vals.bas || 0; prevBah = prevVals.bah || 0;
     } else {
       const full = pay.DISABILITY_FULL || {};
-      const keys = Object.keys(full).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
+      const keys = Object.keys(full).map(k => parseInt(k, 10)).filter(n => !isNaN(n)).sort((a, b) => a - b);
       let best = keys[0] ?? 0, diff = Math.abs(p.va - best);
-      keys.forEach(k => { const d = Math.abs(p.va - k); if (d < diff){ diff = d; best = k; } });
+      keys.forEach(k => { const d = Math.abs(p.va - k); if (d < diff) { diff = d; best = k; } });
       const row = full[String(best)];
       base = row ? row.veteran : 0;
-      prevBah = 0;
     }
 
     const total = base + bah + bas;
-
     setHTML("#pcs-city-line", `${locationName(city, p.newBase || p.base || DEFAULT_BASE)} <span class="pcs-dot"></span> Quick PCS Snapshot`);
-
-    setText("#pcs-qf-poverty", (safe(city,"income.poverty_rate_percent", safe(city,"poverty_rate_percent",0)) || 0) + "%");
-    setText("#pcs-qf-home", money(safe(city,"housing.median_value_owner_occupied", pickMedianPrice(city))));
+    setText("#pcs-qf-poverty", (safe(city,"income.poverty_rate_percent",safe(city,"poverty_rate_percent",0)) || 0) + "%");
+    setText("#pcs-qf-home", money(safe(city,"housing.median_value_owner_occupied",pickMedianPrice(city))));
     setText("#pcs-qf-dom", String(pickDOM(city) ?? "—"));
 
-    const medInc = safe(city,"snapshot.median_household_income", null)
-      ?? safe(city,"income.median_household_income", null)
-      ?? safe(city,"demographics.income.median_household_income", null)
-      ?? safe(city,"median_household_income", 60000);
-
-    const low = medInc * 0.6, avg = medInc, high = medInc * 1.35, userA = total * 12;
-
-    destroyIfExists(headerIncomeChart);
-    const incomeEl = $("#pcs-income-chart");
-    if (incomeEl && typeof Chart !== "undefined") {
-      headerIncomeChart = new Chart(incomeEl,{
-        type:"bar",
-        data:{ labels:["Low","Avg","High","You"], datasets:[{ data:[low,avg,high,userA], backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#8ef3c5"] }] },
-        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ticks:{color:"#e9ecff", callback:v=>"$"+(v/1000)+"k"}, grid:{color:"rgba(255,255,255,.06)"}}, x:{ticks:{color:"#e9ecff"}, grid:{display:false}} } }
-      });
-    }
-
-    setText("#pcs-income-summary", (((userA-avg)>=0?"+":"") + (((userA-avg)/Math.max(avg,1))*100).toFixed(1) + "% vs median household income"));
+    const medInc =
+      safe(city,"snapshot.median_household_income",null) ??
+      safe(city,"income.median_household_income",null) ??
+      safe(city,"demographics.income.median_household_income",null) ??
+      safe(city,"median_household_income",60000);
 
     const P = pickMedianPrice(city) || 295000;
     const M = monthlyMortgageEstimate(P, 0.0675);
 
-    destroyIfExists(headerBahChart);
-    const bahEl = $("#pcs-bah-chart");
-    if (bahEl && typeof Chart !== "undefined") {
-      headerBahChart = new Chart(bahEl,{
-        type:"bar",
-        data:{ labels:["Low","Avg","High","Your BAH"], datasets:[{ data:[M*0.85,M,M*1.15,bah], backgroundColor:["#1a2239","#4f86ff","#6aa7ff","#6aa7ff"] }] },
-        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ y:{ticks:{color:"#e9ecff", callback:v=>"$"+Math.round(v)}, grid:{color:"rgba(255,255,255,.06)"}}, x:{ticks:{color:"#e9ecff"},grid:{display:false}} } }
-      });
-    }
+    setText("#pcs-income-summary", (((total * 12 - medInc) >= 0 ? "+" : "") + ((((total * 12) - medInc) / Math.max(medInc, 1)) * 100).toFixed(1) + "% vs median household income"));
+    setText("#pcs-bah-summary", bah > 0 && M > 0 ? `Your BAH covers ~${((bah / M) * 100).toFixed(1)}% of estimated mortgage.` : "BAH not found for this rank/base yet — pay tables may be missing that row.");
 
-    setText("#pcs-bah-summary", bah > 0 && M > 0 ? `Your BAH covers ~${((bah/M)*100).toFixed(1)}% of estimated mortgage.` : "BAH not found for this rank/base yet — pay tables may be missing that row.");
-
-    const allMonths = safe(city,"housing.market.sale_history_36_months", null) ?? safe(city,"housing.sale_history_36_months", null) ?? safe(city,"market.sale_history_36_months", []) ?? [];
+    const allMonths =
+      safe(city,"housing.market.sale_history_36_months",null) ??
+      safe(city,"housing.sale_history_36_months",null) ??
+      safe(city,"market.sale_history_36_months",[]) ?? [];
     const last12 = Array.isArray(allMonths) ? allMonths.slice(-12) : [];
     const last36 = Array.isArray(allMonths) ? allMonths.slice(-36) : [];
     renderTrendApex(last12);
@@ -2376,31 +2113,14 @@ UPDATED FOR INDEX.HTML:
     if (btn1) btn1.onclick = () => { btn1.classList.add("active"); if (btn3) btn3.classList.remove("active"); renderTrendApex(last12); };
     if (btn3) btn3.onclick = () => { btn3.classList.add("active"); if (btn1) btn1.classList.remove("active"); renderTrendApex(last36); };
 
-    const yoy = safe(city,"snapshot.market_trend_yoy", null)
-      ?? safe(city,"housing.market.zillow_one_year_change_percent", null)
-      ?? safe(city,"housing.market.one_year_change_percent", null)
-      ?? safe(city,"yoy_change_percent", 0);
+    const yoy =
+      safe(city,"snapshot.market_trend_yoy",null) ??
+      safe(city,"housing.market.zillow_one_year_change_percent",null) ??
+      safe(city,"housing.market.one_year_change_percent",null) ??
+      safe(city,"yoy_change_percent",0);
 
-    const marketSummary = safe(city,"market_bluf.bluf_summary","")
-      || safe(city,"housing.market.market_type_summary","")
-      || "";
-
-    setText("#pcs-trend-summary", `12-month change: ${Number(yoy)||0}% • ${marketSummary}`);
-
-    let score = 100 - (Number(P)/Math.max(userA,1))*35;
-    score = Math.max(0,Math.min(100,score));
-
-    destroyIfExists(affordChart);
-    const affEl = $("#pcs-afford-chart");
-    if (affEl && typeof Chart !== "undefined") {
-      affordChart = new Chart(affEl,{
-        type:"doughnut",
-        data:{ labels:["Score","Remaining"], datasets:[{ data:[score,100-score], backgroundColor:["#6aa7ff","#1a2239"], borderWidth:0, cutout:"70%" }] },
-        options:{ responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false},tooltip:{enabled:false}} }
-      });
-    }
-
-    setText("#pcs-afford-summary", `Affordability Score: ${score.toFixed(0)}/100.`);
+    const marketSummary = safe(city,"market_bluf.bluf_summary","") || safe(city,"housing.market.market_type_summary","") || "";
+    setText("#pcs-trend-summary", `12-month change: ${Number(yoy) || 0}% • ${marketSummary}`);
     renderQuickFacts(city, P);
 
     const stack = housingStackForTopCard(city, p.family);
@@ -2415,67 +2135,36 @@ UPDATED FOR INDEX.HTML:
     });
   }
 
-  // ============================================================
-  // //#13) CURRENT / UPCOMING COMPARISON
-  // ============================================================
   async function initComparison(pay, p){
     const status = $("#pcsc-status");
     const newBase = fallbackBase(p.newBase || p.base || DEFAULT_BASE);
     const newFileKey = String(p.newFileKey || fallbackFileKey(newBase) || DEFAULT_FILE_KEY).trim();
-
     if (status) status.textContent = "Loading base comparison…";
 
     const cityNew = await loadCityExact(newFileKey);
 
-    // Visible main city panel = upcoming duty station
     setImgFromCity($("#img-current"), cityNew);
     setText("#pcs-current-city", locationName(cityNew, newBase));
 
     const buyLabel = marketSignalFromCity(cityNew).label;
-    const buySummary = safe(cityNew,"market_bluf.bluf_summary","")
-      || safe(cityNew,"housing.market.market_type_summary","")
-      || "Housing conditions are being evaluated for this market.";
+    const buySummary = safe(cityNew,"market_bluf.bluf_summary","") || safe(cityNew,"housing.market.market_type_summary","") || "Housing conditions are being evaluated for this market.";
     setText("#pcs-current-bluf-headline", buyLabel);
     setText("#pcs-current-bluf-summary", buySummary);
 
-    // FIX: WRITE ALL VISIBLE PCS CITY INTELLIGENCE BRIEF FIELDS
-    const popCity =
-      safe(cityNew, "snapshot.population_city", null)
-      ?? safe(cityNew, "population.estimate", null)
-      ?? 0;
-
-    const popMetro =
-      safe(cityNew, "snapshot.population_metro", null)
-      ?? safe(cityNew, "population.metro", null)
-      ?? null;
-
-    const medIncome =
-      safe(cityNew, "snapshot.median_household_income", null)
-      ?? safe(cityNew, "income.median_household_income", null)
-      ?? 0;
-
+    const popCity = safe(cityNew, "snapshot.population_city", null) ?? safe(cityNew, "population.estimate", null) ?? 0;
+    const popMetro = safe(cityNew, "snapshot.population_metro", null) ?? safe(cityNew, "population.metro", null) ?? null;
+    const medIncome = safe(cityNew, "snapshot.median_household_income", null) ?? safe(cityNew, "income.median_household_income", null) ?? 0;
     const medHome =
-      safe(cityNew, "snapshot.median_home_price", null)
-      ?? safe(cityNew, "housing.market.median_listing_price_realtor", null)
-      ?? safe(cityNew, "housing.market.median_sale_price_current", null)
-      ?? safe(cityNew, "avg_home_value", null)
-      ?? 0;
-
+      safe(cityNew, "snapshot.median_home_price", null) ??
+      safe(cityNew, "housing.market.median_listing_price_realtor", null) ??
+      safe(cityNew, "housing.market.median_sale_price_current", null) ??
+      safe(cityNew, "avg_home_value", null) ?? 0;
     const yoy =
-      safe(cityNew, "snapshot.market_trend_yoy", null)
-      ?? safe(cityNew, "housing.market.zillow_one_year_change_percent", null)
-      ?? safe(cityNew, "housing.market.one_year_change_percent", null)
-      ?? 0;
-
-    const traffic =
-      safe(cityNew, "snapshot.traffic_level", null)
-      ?? safe(cityNew, "traffic_level", null)
-      ?? "—";
-
-    const employment =
-      safe(cityNew, "snapshot.employment_status", null)
-      ?? safe(cityNew, "employment_status", null)
-      ?? "—";
+      safe(cityNew, "snapshot.market_trend_yoy", null) ??
+      safe(cityNew, "housing.market.zillow_one_year_change_percent", null) ??
+      safe(cityNew, "housing.market.one_year_change_percent", null) ?? 0;
+    const traffic = safe(cityNew, "snapshot.traffic_level", null) ?? safe(cityNew, "traffic_level", null) ?? "—";
+    const employment = safe(cityNew, "snapshot.employment_status", null) ?? safe(cityNew, "employment_status", null) ?? "—";
 
     setText("#pcs-cur-population-city", compactPop(popCity));
     setText("#pcs-cur-population-metro", popMetro ? `Metro: ${compactPop(popMetro)}` : "Metro: —");
@@ -2485,167 +2174,93 @@ UPDATED FOR INDEX.HTML:
     setText("#pcs-cur-traffic-level", String(traffic));
     setText("#pcs-cur-employment-status", String(employment));
 
-    const tagline =
-      safe(cityNew, "city_identity.display_tagline", "")
-      || safe(cityNew, "city_identity.nickname", "")
-      || safe(cityNew, "market_label", "")
-      || "";
-    if (tagline) {
-      setText("#pcs-current-tagline", `“${tagline}”`);
-    }
+    const tagline = safe(cityNew, "city_identity.display_tagline", "") || safe(cityNew, "city_identity.nickname", "") || safe(cityNew, "market_label", "") || "";
+    if (tagline) setText("#pcs-current-tagline", `“${tagline}”`);
 
-    const lifestyleBulletsRaw =
-      (Array.isArray(safe(cityNew, "lifestyle.outdoor_hubs", null)) ? safe(cityNew, "lifestyle.outdoor_hubs", []) : [])
-        .map(v => String(v || "").trim())
-        .filter(Boolean);
-
-    const watchoutsRaw =
-      (Array.isArray(safe(cityNew, "pcs_quality_of_life.watchouts", null)) ? safe(cityNew, "pcs_quality_of_life.watchouts", []) : [])
-        .map(v => String(v || "").trim())
-        .filter(Boolean);
-
+    const lifestyleBulletsRaw = (Array.isArray(safe(cityNew, "lifestyle.outdoor_hubs", null)) ? safe(cityNew, "lifestyle.outdoor_hubs", []) : []).map(v => String(v || "").trim()).filter(Boolean);
+    const watchoutsRaw = (Array.isArray(safe(cityNew, "pcs_quality_of_life.watchouts", null)) ? safe(cityNew, "pcs_quality_of_life.watchouts", []) : []).map(v => String(v || "").trim()).filter(Boolean);
     const lifestyleFallback = [
       safe(cityNew, "climate_weather.summer", ""),
       safe(cityNew, "military_lifestyle_fit.description", ""),
-      safe(cityNew, "snapshot.traffic_level", "")
-        ? `${safe(cityNew, "snapshot.traffic_level", "")} congestion with typical commute patterns`
-        : ""
+      safe(cityNew, "snapshot.traffic_level", "") ? `${safe(cityNew, "snapshot.traffic_level", "")} congestion with typical commute patterns` : ""
     ].filter(Boolean);
 
     const lifestyleFinal = []
-      .concat(
-        lifestyleBulletsRaw.length ? lifestyleBulletsRaw : [],
-        watchoutsRaw.length ? watchoutsRaw : [],
-        (!lifestyleBulletsRaw.length && !watchoutsRaw.length) ? lifestyleFallback : []
-      )
-      .filter(Boolean)
-      .slice(0, 3);
+      .concat(lifestyleBulletsRaw.length ? lifestyleBulletsRaw : [], watchoutsRaw.length ? watchoutsRaw : [], (!lifestyleBulletsRaw.length && !watchoutsRaw.length) ? lifestyleFallback : [])
+      .filter(Boolean).slice(0, 3);
 
     if (lifestyleFinal.length) {
-      setHTML(
-        "#pcs-cur-lifestyle-list",
-        lifestyleFinal.map(item => `
-          <li class="pcs-mini-item">
-            <span class="pcs-mini-dot"></span>
-            <span>${escapeHtml(item)}</span>
-          </li>
-        `).join("")
-      );
+      setHTML("#pcs-cur-lifestyle-list", lifestyleFinal.map(item => `<li class="pcs-mini-item"><span class="pcs-mini-dot"></span><span>${esc(item)}</span></li>`).join(""));
     }
 
-    setText(
-      "#pcs-cur-financial-headline",
-      safe(cityNew, "market_bluf.verdict", "")
-      || safe(cityNew, "market_bluf.bluf_headline", "")
-      || "Market Opportunity"
+    setText("#pcs-cur-financial-headline",
+      safe(cityNew, "market_bluf.verdict", "") ||
+      safe(cityNew, "market_bluf.bluf_headline", "") ||
+      "Market Opportunity"
     );
-
-    setText(
-      "#pcs-cur-financial-summary",
-      safe(cityNew, "financial_brief.buyer_opportunity", "")
-      || safe(cityNew, "financial_brief.affordability_summary", "")
-      || safe(cityNew, "market_bluf.bluf_summary", "")
-      || "Pricing and inventory conditions are being evaluated for this market."
+    setText("#pcs-cur-financial-summary",
+      safe(cityNew, "financial_brief.buyer_opportunity", "") ||
+      safe(cityNew, "financial_brief.affordability_summary", "") ||
+      safe(cityNew, "market_bluf.bluf_summary", "") ||
+      "Pricing and inventory conditions are being evaluated for this market."
     );
-
-    // Hidden legacy targets preserved
-    const priceNew = pickMedianPrice(cityNew);
-    const yoyNew = pickYoY(cityNew);
-    const domNew = pickDOM(cityNew);
 
     setText("#loc-upcoming", locationName(cityNew, newBase));
-    setText("#price-upcoming", money(priceNew));
+    setText("#price-upcoming", money(pickMedianPrice(cityNew)));
+    const yoyNew = pickYoY(cityNew), domNew = pickDOM(cityNew);
     setText("#yoy-upcoming", yoyNew == null ? "—" : String(yoyNew) + "%");
     setText("#dom-upcoming", domNew == null ? "—" : String(domNew));
-
     if (status) status.textContent = "Loaded.";
   }
 
-  // ============================================================
-  // //#14) HOUSING AFFORDABILITY BREAKDOWN
-  // ============================================================
   function setAffordDonutVisual(parts){
-    const values = [
-      Number(parts.mortgage || 0),
-      Number(parts.taxes || 0),
-      Number(parts.insurance || 0),
-      Number(parts.hoa || 0),
-      Number(parts.utilities || 0)
-    ];
-
+    const values = [Number(parts.mortgage || 0), Number(parts.taxes || 0), Number(parts.insurance || 0), Number(parts.hoa || 0), Number(parts.utilities || 0)];
     const total = Math.max(values.reduce((sum, v) => sum + v, 0), 1);
-    const mDeg = (values[0] / total) * 360;
-    const tDeg = (values[1] / total) * 360;
-    const iDeg = (values[2] / total) * 360;
-    const hDeg = (values[3] / total) * 360;
-    const uDeg = (values[4] / total) * 360;
-
-    const s1 = mDeg, s2 = s1 + tDeg, s3 = s2 + iDeg, s4 = s3 + hDeg, s5 = s4 + uDeg;
+    const degs = values.map(v => (v / total) * 360);
+    const s1 = degs[0], s2 = s1 + degs[1], s3 = s2 + degs[2], s4 = s3 + degs[3], s5 = s4 + degs[4];
     const donut = $("#pcs-afford-donut");
     if (!donut) return;
 
-    donut.style.background = `conic-gradient(
-      #4f7fff 0deg ${s1}deg,
-      #5774ff ${s1}deg ${s2}deg,
-      #203c8d ${s2}deg ${s3}deg,
-      #d3af58 ${s3}deg ${s4}deg,
-      #57b293 ${s4}deg ${s5}deg
-    )`;
+    donut.style.background = `conic-gradient(#4f7fff 0deg ${s1}deg,#5774ff ${s1}deg ${s2}deg,#203c8d ${s2}deg ${s3}deg,#d3af58 ${s3}deg ${s4}deg,#57b293 ${s4}deg ${s5}deg)`;
 
-    placeAffordDonutLabels([
+    const slices = [
       { selector: "#pcs-amt-mortgage", value: values[0] },
       { selector: "#pcs-amt-taxes", value: values[1] },
       { selector: "#pcs-amt-insurance", value: values[2] },
       { selector: "#pcs-amt-hoa", value: values[3] },
       { selector: "#pcs-amt-utilities", value: values[4] }
-    ], total);
-  }
+    ];
 
-  function placeAffordDonutLabels(slices, total){
     const wrap = $(".pcs-donut-wrap");
     if (!wrap) return;
-
-    const size = wrap.getBoundingClientRect().width;
-    const centerX = size / 2;
-    const centerY = size / 2;
-    const outerRadius = size / 2;
-    const innerRadius = size * (56 / 292);
-    const ringMidRadius = (outerRadius + innerRadius) / 2;
-
+    const size = wrap.getBoundingClientRect().width, centerX = size / 2, centerY = size / 2;
+    const outerRadius = size / 2, innerRadius = size * (56 / 292), ringMidRadius = (outerRadius + innerRadius) / 2;
     let startDeg = 0;
 
-    slices.forEach((slice) => {
+    slices.forEach(slice => {
       const el = $(slice.selector);
       if (!el) return;
-
       const value = Number(slice.value || 0);
       const sweepDeg = (value / total) * 360;
       const midDeg = startDeg + (sweepDeg / 2);
       const cartesianDeg = midDeg + DONUT_ROTATION_DEG + CONIC_TO_CARTESIAN_OFFSET_DEG;
-
       const radiusBoost = sweepDeg < 8 ? 26 : sweepDeg < 14 ? 18 : sweepDeg < 22 ? 10 : 0;
       const labelRadius = ringMidRadius + radiusBoost;
-
       const rad = cartesianDeg * Math.PI / 180;
-      const x = centerX + Math.cos(rad) * labelRadius;
-      const y = centerY + Math.sin(rad) * labelRadius;
-
-      el.style.left = `${x}px`;
-      el.style.top = `${y}px`;
+      el.style.left = `${centerX + Math.cos(rad) * labelRadius}px`;
+      el.style.top = `${centerY + Math.sin(rad) * labelRadius}px`;
       el.style.right = "auto";
       el.style.bottom = "auto";
       el.style.transform = "translate(-50%, -50%)";
-
       startDeg += sweepDeg;
     });
   }
 
   async function getPayPacketForPrimary(){
-    const p = LOADED_QUERY;
-    const pay = LOADED_PAY;
+    const p = LOADED_QUERY, pay = LOADED_PAY;
     if (!p || !pay) return { bah:0, basePay:0, bas:0 };
     if (p.type === "ad") {
-      return await calcBahFromPay(pay, {
+      return calcBahFromPay(pay, {
         rank: p.rank,
         yos: p.yos,
         family: p.family,
@@ -2654,9 +2269,9 @@ UPDATED FOR INDEX.HTML:
       });
     }
     const full = pay.DISABILITY_FULL || {};
-    const keys = Object.keys(full).map(k=>parseInt(k,10)).filter(n=>!isNaN(n)).sort((a,b)=>a-b);
-    let best = keys[0] ?? 0, diff=Math.abs(p.va-best);
-    keys.forEach(k=>{ const d=Math.abs(p.va-k); if(d<diff){ diff=d; best=k; } });
+    const keys = Object.keys(full).map(k => parseInt(k, 10)).filter(n => !isNaN(n)).sort((a, b) => a - b);
+    let best = keys[0] ?? 0, diff = Math.abs(p.va - best);
+    keys.forEach(k => { const d = Math.abs(p.va - k); if (d < diff) { diff = d; best = k; } });
     const row = full[String(best)];
     return { bah:0, basePay: row ? row.veteran : 0, bas:0 };
   }
@@ -2668,7 +2283,6 @@ UPDATED FOR INDEX.HTML:
 
     const payVals = await getPayPacketForPrimary();
     const bah = Number(payVals.bah || 0);
-
     const city = LOADED_PRIMARY_CITY;
     const bedroom = getBedroomProfile(city, CURRENT_BEDROOM);
 
@@ -2717,175 +2331,94 @@ UPDATED FOR INDEX.HTML:
     );
 
     setAffordDonutVisual({ mortgage, taxes, insurance, hoa, utilities });
-
     return { bedroom, bah, avgHomePrice, mortgage, taxes, insurance, hoa, utilities, stackTotal, gap, coveragePct };
   }
 
-  function bindBedroomControls(){
-    const up = $("#pcs-bedroom-up");
-    const down = $("#pcs-bedroom-down");
-    if (up) up.addEventListener("click", async () => {
-      const data = await renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM + 1);
-      if (data) renderLivingStrategyFromAffordData(data, LOADED_PRIMARY_CITY);
-    });
-    if (down) down.addEventListener("click", async () => {
-      const data = await renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM - 1);
-      if (data) renderLivingStrategyFromAffordData(data, LOADED_PRIMARY_CITY);
-    });
-  }
-
-  function bindAffordResize(){
-    window.addEventListener("resize", async () => {
-      if (!LOADED_PRIMARY_CITY) return;
-      const data = await renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM);
-      if (data) renderLivingStrategyFromAffordData(data, LOADED_PRIMARY_CITY, false);
-    });
-  }
-
-  // ============================================================
-  // //#15) LIVING STRATEGY (REPLACES OWNERSHIP BREAKDOWN)
-  // ============================================================
-  function buildLivingStrategyState(affordData, city){
+  function buildLivingState(affordData, city){
     const bah = Number(affordData.bah || 0);
-    const price = Number(affordData.avgHomePrice || 0) || Number(pickMedianPrice(city) || 0);
-
-    const buyMonthly =
-      Number(affordData.mortgage || 0) +
-      Number(affordData.taxes || 0) +
-      Number(affordData.insurance || 0) +
-      Number(affordData.hoa || 0) +
-      Number(affordData.utilities || 0);
-
-    const rentBase =
-      Number(affordData.bedroom?.rent || 0)
-      || Number(safe(city, `by_bedroom.${CURRENT_BEDROOM}.rent_monthly.avg`, 0) || 0);
-
-    const rentUtilities =
-      Number(affordData.utilities || 0)
-      || Number(safe(city, `by_bedroom.${CURRENT_BEDROOM}.utilities.total.avg`, 0) || 0);
-
-    const rentMonthly = rentBase + rentUtilities;
+    const rentMonthly = Number(affordData.bedroom?.rent || 0) + Number(affordData.utilities || 0);
+    const buyMonthly = Number(affordData.stackTotal || 0);
     const baseMonthly = bah;
-
-    const appreciationRate =
-      Number(safe(city, "housing.market.zillow_one_year_change_percent", 0))
-      || Number(safe(city, "housing.market.one_year_change_percent", 0))
-      || Number(safe(city, "snapshot.market_trend_yoy", 0))
-      || 0;
-
-    const safeAppRate = Math.max(-8, Math.min(8, appreciationRate));
-    const monthlyPrincipalApprox = Math.max(0, Number(affordData.mortgage || 0) * 0.18);
-    const equity12 = Math.max(0, (monthlyPrincipalApprox * 12) + (price * (safeAppRate / 100)));
-    const annualBuy = buyMonthly * 12;
-    const annualRent = rentMonthly * 12;
-    const annualBase = baseMonthly * 12;
     const annualBah = bah * 12;
+    const price = Number(affordData.avgHomePrice || 0);
+    const equity = Math.max(0, price * 0.02);
 
     return {
+      labels: ["M1", "M4", "M8", "M12"],
+      bah,
       buy: {
-        key: "buy",
         status: "WEALTH BUILDING · HIGHER COST",
         statusColor: "#8ef3c5",
         monthly: buyMonthly,
-        annual: annualBuy,
-        annualVsBah: annualBuy - annualBah,
+        annual: buyMonthly * 12,
+        annualVsBah: buyMonthly * 12 - annualBah,
         gap: bah - buyMonthly,
-        equity: equity12,
-        bluf:
-          bah >= buyMonthly
-            ? `Build equity while staying within BAH by about ${money(Math.abs(bah - buyMonthly))} per month.`
-            : `Build equity, but ownership would require about ${money(Math.abs(buyMonthly - bah))} beyond BAH each month.`,
-        points: [
-          Math.round(buyMonthly * 0.94),
-          Math.round(buyMonthly * 0.97),
-          Math.round(buyMonthly * 1.00),
-          Math.round(buyMonthly * 1.01)
-        ]
+        equity,
+        bluf: bah >= buyMonthly
+          ? `Build equity while staying within BAH by about ${money(Math.abs(bah - buyMonthly))} per month.`
+          : `Build equity, but ownership would require about ${money(Math.abs(buyMonthly - bah))} beyond BAH each month.`,
+        points: [buyMonthly * 0.94, buyMonthly * 0.97, buyMonthly, buyMonthly * 1.01].map(Math.round)
       },
       rent: {
-        key: "rent",
         status: "FLEXIBILITY · LOWER COMMITMENT",
         statusColor: "#8fd4ff",
         monthly: rentMonthly,
-        annual: annualRent,
-        annualVsBah: annualRent - annualBah,
+        annual: rentMonthly * 12,
+        annualVsBah: rentMonthly * 12 - annualBah,
         gap: bah - rentMonthly,
         equity: 0,
-        bluf:
-          bah >= rentMonthly
-            ? `Rent stays under BAH by about ${money(Math.abs(bah - rentMonthly))} per month, but builds no ownership equity.`
-            : `Rent would still require about ${money(Math.abs(rentMonthly - bah))} beyond BAH each month, with no equity upside.`,
-        points: [
-          Math.round(rentMonthly * 0.98),
-          Math.round(rentMonthly * 0.99),
-          Math.round(rentMonthly * 1.00),
-          Math.round(rentMonthly * 1.01)
-        ]
+        bluf: bah >= rentMonthly
+          ? `Rent stays under BAH by about ${money(Math.abs(bah - rentMonthly))} per month, but builds no ownership equity.`
+          : `Rent would still require about ${money(Math.abs(rentMonthly - bah))} beyond BAH each month, with no equity upside.`,
+        points: [rentMonthly * 0.98, rentMonthly * 0.99, rentMonthly, rentMonthly * 1.01].map(Math.round)
       },
       base: {
-        key: "base",
         status: "STABILITY · ZERO OUT-OF-POCKET",
         statusColor: "#8fd4ff",
         monthly: baseMonthly,
-        annual: annualBase,
+        annual: baseMonthly * 12,
         annualVsBah: 0,
         gap: 0,
         equity: 0,
-        bluf: `Base housing matches your full BAH with no monthly overage, but builds no ownership equity.`,
-        points: [
-          Math.round(baseMonthly),
-          Math.round(baseMonthly),
-          Math.round(baseMonthly),
-          Math.round(baseMonthly)
-        ]
-      },
-      bah,
-      labels: ["Month 1", "Month 4", "Month 8", "Month 12"]
+        bluf: "Base housing matches your full BAH with no monthly overage, but builds no ownership equity.",
+        points: [baseMonthly, baseMonthly, baseMonthly, baseMonthly].map(Math.round)
+      }
     };
   }
 
-  function setLivingStrategyTab(mode){
-    document.querySelectorAll(".pcs-ls-tab").forEach(btn => {
-      const active = btn.getAttribute("data-mode") === mode;
-      btn.classList.toggle("active", active);
-    });
+  function setLivingTab(mode){
+    document.querySelectorAll(".pcs-ls-tab").forEach(btn => btn.classList.toggle("active", btn.dataset.mode === mode));
   }
 
-  function renderLivingStrategyChart(mode, state){
+  function renderLivingChart(mode){
     const canvas = $("#pcs-ls-chart");
-    if (!canvas || typeof Chart === "undefined" || !state || !state[mode]) return;
+    if (!canvas || typeof Chart === "undefined" || !LIVING_STATE || !LIVING_STATE[mode]) return;
+    destroy(livingChart);
+    const cfg = LIVING_STATE[mode];
 
-    const cfg = state[mode];
-    destroyIfExists(livingStrategyChart);
-
-    livingStrategyChart = new Chart(canvas, {
+    livingChart = new Chart(canvas, {
       type: "line",
       data: {
-        labels: state.labels,
+        labels: LIVING_STATE.labels,
         datasets: [
           {
-            label: "Scenario",
             data: cfg.points,
             borderColor: "#8fd4ff",
-            backgroundColor: "rgba(143,212,255,0.12)",
             borderWidth: 3,
-            tension: 0.35,
             pointRadius: 4,
-            pointHoverRadius: 5,
             pointBackgroundColor: "#8fd4ff",
-            pointBorderColor: "#dff3ff",
+            pointBorderColor: "#ffffff",
             pointBorderWidth: 1.5,
+            tension: 0.35,
             fill: false
           },
           {
-            label: "BAH",
-            data: state.labels.map(() => state.bah),
+            data: LIVING_STATE.labels.map(() => LIVING_STATE.bah),
             borderColor: "#8ef3c5",
-            borderDash: [7,6],
+            borderDash: [7, 6],
             borderWidth: 2,
-            tension: 0,
             pointRadius: 0,
-            pointHoverRadius: 0,
+            tension: 0,
             fill: false
           }
         ]
@@ -2894,27 +2427,10 @@ UPDATED FOR INDEX.HTML:
         responsive: true,
         maintainAspectRatio: false,
         animation: false,
-        plugins: {
-          legend: { display: false },
-          tooltip: {
-            enabled: true,
-            backgroundColor: "#08111f",
-            titleColor: "#ffffff",
-            bodyColor: "#e9ecff",
-            displayColors: false,
-            callbacks: {
-              label: function(ctx){
-                return money(ctx.parsed.y);
-              }
-            }
-          }
-        },
+        plugins: { legend: { display: false } },
         scales: {
           y: {
-            ticks: {
-              color: "#e9ecff",
-              callback: function(v){ return money(v); }
-            },
+            ticks: { color: "#e9ecff", callback: v => money(v) },
             grid: { color: "rgba(255,255,255,.08)" },
             border: { display: false }
           },
@@ -2928,70 +2444,67 @@ UPDATED FOR INDEX.HTML:
     });
   }
 
-  function renderLivingStrategyMode(mode){
-    if (!LIVING_STRATEGY_STATE || !LIVING_STRATEGY_STATE[mode]) return;
+  function renderLivingMode(mode){
+    if (!LIVING_STATE || !LIVING_STATE[mode]) return;
+    const d = LIVING_STATE[mode];
+    const sub =
+      d.gap > 0 ? `${pct(Math.abs((d.gap / Math.max(d.monthly, 1)) * 100), 0)} under BAH` :
+      d.gap < 0 ? `${pct(Math.abs((d.gap / Math.max(d.monthly, 1)) * 100), 0)} over BAH` :
+      "0% at BAH";
 
-    const cfg = LIVING_STRATEGY_STATE[mode];
-    const gapPct = cfg.monthly > 0 ? ((cfg.gap / cfg.monthly) * 100) : 0;
-    const subText =
-      cfg.gap > 0
-        ? `${pct(Math.abs(gapPct), 0)} under BAH`
-        : cfg.gap < 0
-        ? `${pct(Math.abs(gapPct), 0)} over BAH`
-        : `0% at BAH`;
-
-    setLivingStrategyTab(mode);
-    setText("#pcs-ls-status", cfg.status);
-
-    const statusEl = $("#pcs-ls-status");
-    if (statusEl) statusEl.style.color = cfg.statusColor;
-
-    setText("#pcs-ls-main", money(cfg.monthly));
-    setText("#pcs-ls-sub", subText);
-    setText("#pcs-ls-equity", cfg.equity > 0 ? `${money(cfg.equity)} equity` : `$0 equity`);
-    setText("#pcs-ls-bluf", cfg.bluf);
-    setText("#pcs-ls-annual", money(cfg.annual));
-    setText("#pcs-ls-vs", `${cfg.annualVsBah >= 0 ? "+" : "-"}${money(Math.abs(cfg.annualVsBah))}`);
-    setText("#pcs-ls-gap", `${cfg.gap >= 0 ? "+" : "-"}${money(Math.abs(cfg.gap))}`);
-
-    const vsEl = $("#pcs-ls-vs");
-    const gapEl = $("#pcs-ls-gap");
-    if (vsEl) vsEl.style.color = cfg.annualVsBah <= 0 ? "#8ef3c5" : "#ffffff";
-    if (gapEl) gapEl.style.color = cfg.gap >= 0 ? "#8ef3c5" : "#ffffff";
-
-    renderLivingStrategyChart(mode, LIVING_STRATEGY_STATE);
+    setLivingTab(mode);
+    setText("#pcs-ls-status", d.status);
+    const st = $("#pcs-ls-status"); if (st) st.style.color = d.statusColor;
+    setText("#pcs-ls-main", money(d.monthly));
+    setText("#pcs-ls-sub", sub);
+    setText("#pcs-ls-equity", d.equity > 0 ? `${money(d.equity)} equity` : "$0 equity");
+    setText("#pcs-ls-bluf", d.bluf);
+    setText("#pcs-ls-annual", money(d.annual));
+    setText("#pcs-ls-vs", `${d.annualVsBah >= 0 ? "+" : "-"}${money(Math.abs(d.annualVsBah))}`);
+    setText("#pcs-ls-gap", `${d.gap >= 0 ? "+" : "-"}${money(Math.abs(d.gap))}`);
+    const vs = $("#pcs-ls-vs"), gap = $("#pcs-ls-gap");
+    if (vs) vs.style.color = d.annualVsBah <= 0 ? "#8ef3c5" : "#fff";
+    if (gap) gap.style.color = d.gap >= 0 ? "#8ef3c5" : "#fff";
+    renderLivingChart(mode);
   }
 
-  function renderLivingStrategyFromAffordData(affordData, city, forceModeReset){
-    if (!affordData || !city) return;
-
-    const currentActive = document.querySelector(".pcs-ls-tab.active");
-    const currentMode = currentActive ? currentActive.getAttribute("data-mode") : "buy";
-
-    LIVING_STRATEGY_STATE = buildLivingStrategyState(affordData, city);
-
-    let modeToRender = forceModeReset === false ? currentMode : currentMode;
-
-    if (!LIVING_STRATEGY_STATE[modeToRender]) modeToRender = "buy";
-    renderLivingStrategyMode(modeToRender);
+  function renderLivingFromAfford(affordData, city){
+    LIVING_STATE = buildLivingState(affordData, city);
+    const active = document.querySelector(".pcs-ls-tab.active");
+    renderLivingMode(active ? active.dataset.mode : "buy");
   }
 
-  function bindLivingStrategyTabs(){
+  function bindLivingTabs(){
+    if (livingBound) return;
+    livingBound = true;
     document.querySelectorAll(".pcs-ls-tab").forEach(btn => {
-      btn.addEventListener("click", () => {
-        const mode = btn.getAttribute("data-mode");
-        renderLivingStrategyMode(mode);
-      });
+      btn.addEventListener("click", () => renderLivingMode(btn.dataset.mode || "buy"));
     });
   }
 
-  // ============================================================
-  // //#16) MAIN INIT
-  // ============================================================
+  function bindBedroomControls(){
+    const up = $("#pcs-bedroom-up"), down = $("#pcs-bedroom-down");
+    if (up) up.addEventListener("click", async () => {
+      const data = await renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM + 1);
+      if (data) renderLivingFromAfford(data, LOADED_PRIMARY_CITY);
+    });
+    if (down) down.addEventListener("click", async () => {
+      const data = await renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM - 1);
+      if (data) renderLivingFromAfford(data, LOADED_PRIMARY_CITY);
+    });
+  }
+
+  function bindAffordResize(){
+    window.addEventListener("resize", async () => {
+      if (!LOADED_PRIMARY_CITY) return;
+      const data = await renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM);
+      if (data) renderLivingFromAfford(data, LOADED_PRIMARY_CITY);
+    });
+  }
+
   async function init(){
     const p = await getQuery();
     const pay = await load(MILPAY_JSON_URL);
-
     const primaryFileKey = String(p.newFileKey || p.cityKey || fallbackFileKey(p.newBase || p.base || DEFAULT_BASE) || DEFAULT_FILE_KEY).trim() || DEFAULT_FILE_KEY;
     const primaryCity = await loadCityExact(primaryFileKey);
 
@@ -3003,35 +2516,26 @@ UPDATED FOR INDEX.HTML:
     await initHeaderAndCharts(pay, p, primaryCity);
     await initComparison(pay, p);
 
-    bindLivingStrategyTabs();
+    bindLivingTabs();
     bindBedroomControls();
     bindAffordResize();
 
     const affordData = await renderAffordabilityBreakdownForBedroom(CURRENT_BEDROOM);
-    if (affordData) renderLivingStrategyFromAffordData(affordData, primaryCity);
+    if (affordData) renderLivingFromAfford(affordData, primaryCity);
   }
 
-  // ============================================================
-  // //#17) BOOT
-  // ============================================================
   function boot(){
-    init().catch(err=>{
+    init().catch(err => {
       console.error("PCS Snapshot error:", err);
       const wrap = document.getElementById("pcs-snapshot-wrap");
-      if (wrap) {
-        wrap.innerHTML = "<div style='color:#e9ecff;font-size:14px;padding:24px;'>PCS Snapshot is temporarily unavailable. Try again later.</div>";
-      }
+      if (wrap) wrap.innerHTML = "<div style='color:#e9ecff;font-size:14px;padding:24px;'>PCS Snapshot is temporarily unavailable. Try again later.</div>";
     });
   }
 
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", boot);
-  } else {
-    boot();
-  }
-
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", boot);
+  else boot();
 })();
 </script>
-</div>
+
 </body>
-</html>
+</html>  

@@ -1,185 +1,220 @@
 {
-  "city": "Dover AFB",
-  "place": "Dover, DE",
+  "city": "Dover, DE",
+  "place": "Dover AFB, DE",
   "state": "DE",
-  "geo_id": "1600000US1021200",
+  "geo_id": "1021200",
   "year": 2026,
   "last_updated_data_from_sources": "March 2026",
-  "image_url": "https://www.dover.af.mil",
-
+  "image_url": "https://cdn.prod.website-files.com",
   "zip": "19902",
-  "market_label": "Dover Metro",
+  "market_label": "Kent County Metro",
 
-  "avg_home_value": 333984,
-  "average_home_value": 333984,
-  "avgHome": 333984,
-  "city_avg_home": 333984,
+  "avg_home_value": 315000,
+  "average_home_value": 315000,
+  "avgHome": 315000,
+  "city_avg_home": 315000,
+
+  "snapshot": {
+    "population_city": 39450,
+    "population_metro": 185000,
+    "median_household_income": 56200,
+    "median_home_price": 312000,
+    "market_trend_yoy": 3.1,
+    "traffic_level": "Low",
+    "employment_status": "Stable"
+  },
 
   "mortgage_assumptions": {
-    "apr_percent": 6.55,
+    "apr_percent": 6.15,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Calculations based on March 2026 VA loan rates for Delaware. DAFB remains a major logistics hub with high demand for nearby housing."
+    "defaults_note": "Based on March 2026 Delaware VA loan rates."
   },
 
-  "property_tax_rate": 0.455,
-  "insurance_rate": 0.38,
-  "hoa_monthly": 20,
+  "property_tax_rate": 0.52,
+  "insurance_rate": 0.35,
+  "hoa_monthly": 30,
 
   "avg_home_mortgage_monthly": {
-    "avg": 2125,
+    "avg": 2150,
     "as_of": "2026-03",
-    "notes": "Reflects P&I for typical Dover home value using a VA loan (0% down) at 6.55% APR."
+    "notes": "VA loan estimate; Delaware has exceptionally low property taxes."
   },
 
   "population": {
-    "estimate": 40583,
-    "median_age": 34.7,
-    "persons_per_household": 2.45
+    "estimate": 3450,
+    "median_age": 22.8,
+    "persons_per_household": 3.2
   },
 
   "households": {
-    "total_households": 15842
+    "total_households": 15800
   },
 
   "income": {
-    "median_household_income": 60199,
-    "per_capita_income": 42474,
-    "poverty_rate_percent": 15.0
+    "median_household_income": 56200,
+    "per_capita_income": 29100,
+    "poverty_rate_percent": 16.5
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 89.4,
+    "high_school_grad_or_higher_percent": 91.8,
     "bachelors_degree_or_higher_percent": 24.5
   },
 
   "veterans": {
-    "veteran_population_percent": 11.8
+    "veteran_population_percent": 12.8
   },
 
   "immigration": {
-    "foreign_born_percent": 7.2
+    "foreign_born_percent": 5.4
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 22.4,
-    "unemployment_rate_percent": 4.8
+    "mean_travel_time_to_work_minutes": 21.4,
+    "unemployment_rate_percent": 4.3
+  },
+
+  "crime_status": {
+    "installation": "High security; gated AMC hub. Very safe.",
+    "metro_dover": "Property crime in certain downtown Dover corridors is above average; Caesar Rodney school district areas are preferred for safety."
+  },
+
+  "school_quality": {
+    "on_base": "Welch Elementary and Middle Schools (Caesar Rodney District) - High military satisfaction.",
+    "off_base": "Caesar Rodney School District is generally the top choice for off-base families."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 7.4,
+    "notes": "Moderate availability; competition increases for single-family homes near base."
+  },
+
+  "climate_weather": {
+    "spring": "Mild/Rainy; 50–70°F",
+    "summer": "Warm/Humid; 80–90°F",
+    "fall": "Cool/Crisp; 55–75°F",
+    "winter": "Cold/Damp; 30–45°F"
+  },
+
+  "special_events": [
+    "Dover Motor Speedway (NASCAR)",
+    "Firefly Music Festival",
+    "Thunder Over Dover Air Show",
+    "Delaware State Fair"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Strong",
+    "description": "Quiet, family-oriented community with a significant Air Mobility Command presence."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Favorable",
+    "bah_vs_rent_position": "Favorable",
+    "affordability_summary": "Zero sales tax and low property taxes stretch the military dollar further than in neighboring MD or NJ.",
+    "buyer_opportunity": "Solid value in Camden and Magnolia areas.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Tax-Friendly Atlantic Stability",
+    "bluf_summary": "Dover offers a predictable market with lower carry costs than almost any other Northeast base.",
+    "status": "Balanced",
+    "inventory_trend": "Stable",
+    "buyer_leverage": "Moderate",
+    "verdict": "BUY IN CAESAR RODNEY DISTRICT",
+    "verdict_color": "green",
+    "confidence_score": 85
+  },
+
+  "scorecard": {
+    "affordability_score": 88,
+    "growth_score": 72,
+    "stability_score": 90,
+    "military_fit_score": 92,
+    "overall_score": 86
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1250, "high": 1600, "avg": 1425, "as_of": "2026-03" },
-      "home_price": { "low": 215000, "high": 275000, "avg": 245000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1365,
-        "high": 1746,
-        "avg": 1555,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1350, "high": 1700, "avg": 1525, "as_of": "2026-03" },
+      "home_price": { "low": 210000, "high": 260000, "avg": 235000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1650, "high": 1950, "avg": 1800, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 145, "high": 195, "avg": 170 },
-        "water_sewer": { "low": 45, "high": 70, "avg": 58 },
-        "total": { "low": 190, "high": 265, "avg": 228 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 140, "high": 210, "avg": 175 },
+        "water_sewer": { "low": 40, "high": 70, "avg": 55 },
+        "total": { "low": 180, "high": 280, "avg": 230 },
+        "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1750, "high": 2300, "avg": 2025, "as_of": "2026-03" },
-      "home_price": { "low": 295000, "high": 385000, "avg": 340000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1873,
-        "high": 2444,
-        "avg": 2158,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1800, "high": 2300, "avg": 2050 },
+      "home_price": { "low": 280000, "high": 350000, "avg": 315000 },
+      "mortgage_monthly": { "low": 2050, "high": 2500, "avg": 2275 },
       "utilities": {
-        "electric_gas": { "low": 190, "high": 270, "avg": 230 },
-        "water_sewer": { "low": 60, "high": 90, "avg": 75 },
-        "total": { "low": 250, "high": 360, "avg": 305 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 170, "high": 260, "avg": 215 },
+        "water_sewer": { "low": 55, "high": 90, "avg": 72 },
+        "total": { "low": 225, "high": 350, "avg": 287 },
+        "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 2300, "high": 3100, "avg": 2700, "as_of": "2026-03" },
-      "home_price": { "low": 415000, "high": 525000, "avg": 470000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 2635,
-        "high": 3333,
-        "avg": 2984,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2300, "high": 2900, "avg": 2600 },
+      "home_price": { "low": 370000, "high": 460000, "avg": 415000 },
+      "mortgage_monthly": { "low": 2650, "high": 3300, "avg": 2975 },
       "utilities": {
-        "electric_gas": { "low": 240, "high": 350, "avg": 295 },
-        "water_sewer": { "low": 85, "high": 125, "avg": 105 },
-        "total": { "low": 325, "high": 475, "avg": 400 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 210, "high": 330, "avg": 270 },
+        "water_sewer": { "low": 75, "high": 115, "avg": 95 },
+        "total": { "low": 285, "high": 445, "avg": 365 },
+        "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2900, "high": 3900, "avg": 3400, "as_of": "2026-03" },
-      "home_price": { "low": 550000, "high": 750000, "avg": 650000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 3491,
-        "high": 4761,
-        "avg": 4126,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2800, "high": 3600, "avg": 3200 },
+      "home_price": { "low": 480000, "high": 600000, "avg": 540000 },
+      "mortgage_monthly": { "low": 3400, "high": 4300, "avg": 3850 },
       "utilities": {
-        "electric_gas": { "low": 320, "high": 480, "avg": 400 },
-        "water_sewer": { "low": 110, "high": 165, "avg": 138 },
-        "total": { "low": 430, "high": 645, "avg": 538 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 260, "high": 420, "avg": 340 },
+        "water_sewer": { "low": 100, "high": 150, "avg": 125 },
+        "total": { "low": 360, "high": 570, "avg": 465 },
+        "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 17429,
-    "median_value_owner_occupied": 333984,
-
+    "housing_units": 16800,
+    "median_value_owner_occupied": 315000,
     "market": {
-      "zillow_average_home_value": 333984,
-      "zillow_one_year_change_percent": 1.4,
-      "market_type_summary": "Seller's market with low inventory; median sale prices remained stable at ~$291,250 as of early 2026.",
-
-      "average_days_on_market": 42,
-
-      "median_sale_price_current": 291250,
-      "median_listing_price_realtor": 326633,
-      "median_listing_price_per_sqft": 178,
-      "active_listings_total": 173,
-
-      "q1_2026": {
-        "median_sale_price": 275000
-      },
-
+      "zillow_average_home_value": 315000,
+      "zillow_one_year_change_percent": 3.1,
+      "market_type_summary": "Stable Mid-Atlantic market",
+      "average_days_on_market": 45,
+      "median_sale_price_current": 312000,
+      "median_listing_price_realtor": 325000,
+      "median_listing_price_per_sqft": 168,
+      "active_listings_total": 480,
+      "q1_2026": { "median_sale_price": 312000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 245000 },
-        { "month": "2024-12", "median_sale_price": 285000 },
-        { "month": "2025-06", "median_sale_price": 315000 },
-        { "month": "2025-12", "median_sale_price": 291250 },
-        { "month": "2026-01", "median_sale_price": 275000 }
+        { "month": "2023-01", "median_sale_price": 285000 },
+        { "month": "2024-12", "median_sale_price": 305000 },
+        { "month": "2025-06", "median_sale_price": 318000 },
+        { "month": "2026-01", "median_sale_price": 312000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "Census Bureau / World Population Review", "as_of": "2026-02" },
-    "rent": { "provider": "Zillow Observed Rent Index (ZORI) / Apartments.com", "as_of": "2026-03" },
-    "home_price": { "provider": "Zillow / Redfin / Kent County MLS", "as_of": "2026-01" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I)", "as_of": "2026-03", "notes": "6.55% APR for Dover market" },
-    "utilities": { "provider": "City of Dover / Delmarva Power", "as_of": "2026-01" },
-    "market": { "provider": "Redfin / Zillow / Realtor.com", "as_of": "2026-02" },
-
-    "mortgage_city_defaults": {
-      "provider": "City of Dover Tax Office",
-      "as_of": "2026-01",
-      "notes": "Effective rate ~0.455% per $100 of assessed fair market value."
-    }
+    "demographics": { "provider": "US Census Bureau / Kent County Economic Development", "as_of": "2026-03" },
+    "rent": { "provider": "Rent.com / Zillow", "as_of": "2026-03" },
+    "home_price": { "provider": "Kent County Association of Realtors", "as_of": "2026-03" }
   }
 }

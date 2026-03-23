@@ -1,185 +1,220 @@
 {
-  "city": "Joint Base Charleston",
-  "place": "North Charleston, SC",
+  "city": "North Charleston, SC",
+  "place": "Joint Base Charleston, SC",
   "state": "SC",
   "geo_id": "1600000US4550875",
-  "year": 2025,
+  "year": 2026,
   "last_updated_data_from_sources": "March 2026",
-  "image_url": "https://www.jbcharleston.jb.mil",
-
+  "image_url": "https://cdn.prod.website-files.com",
   "zip": "29404",
   "market_label": "Charleston-North Charleston Metro",
 
-  "avg_home_value": 346495,
-  "average_home_value": 346495,
-  "avgHome": 346495,
-  "city_avg_home": 346495,
+  "avg_home_value": 415000,
+  "average_home_value": 415000,
+  "avgHome": 415000,
+  "city_avg_home": 415000,
+
+  "snapshot": {
+    "population_city": 118400,
+    "population_metro": 845000,
+    "median_household_income": 62800,
+    "median_home_price": 408500,
+    "market_trend_yoy": 4.5,
+    "traffic_level": "High",
+    "employment_status": "Strong / Growing"
+  },
 
   "mortgage_assumptions": {
-    "apr_percent": 5.98,
+    "apr_percent": 6.2,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Calculations based on March 2026 VA loan rates for the Lowcountry. Rates broke below 6% in February 2026 for the first time in 3.5 years."
+    "defaults_note": "Based on March 2026 South Carolina VA loan rates."
   },
 
-  "property_tax_rate": 0.45,
-  "insurance_rate": 0.55,
-  "hoa_monthly": 45,
+  "property_tax_rate": 0.55,
+  "insurance_rate": 0.95,
+  "hoa_monthly": 55,
 
   "avg_home_mortgage_monthly": {
-    "avg": 2072,
+    "avg": 2750,
     "as_of": "2026-03",
-    "notes": "Reflects P&I for typical North Charleston home value using a VA loan (0% down) at 5.98% APR."
+    "notes": "Includes P&I, SC primary residence tax rate, and flood/hurricane insurance."
   },
 
   "population": {
-    "estimate": 131201,
-    "median_age": 34.6,
+    "estimate": 118400,
+    "median_age": 32.4,
     "persons_per_household": 2.58
   },
 
   "households": {
-    "total_households": 51500
+    "total_households": 46500
   },
 
   "income": {
-    "median_household_income": 62956,
-    "per_capita_income": 31540,
-    "poverty_rate_percent": 14.4
+    "median_household_income": 62800,
+    "per_capita_income": 32500,
+    "poverty_rate_percent": 14.8
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 88.5,
-    "bachelors_degree_or_higher_percent": 24.8
+    "high_school_grad_or_higher_percent": 89.2,
+    "bachelors_degree_or_higher_percent": 28.5
   },
 
   "veterans": {
-    "veteran_population_percent": 10.5
+    "veteran_population_percent": 9.8
   },
 
   "immigration": {
-    "foreign_born_percent": 9.2
+    "foreign_born_percent": 6.2
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 23.5,
-    "unemployment_rate_percent": 4.2
+    "mean_travel_time_to_work_minutes": 24.8,
+    "unemployment_rate_percent": 3.8
+  },
+
+  "crime_status": {
+    "installation": "High security; gated Navy and Air Force facilities. Very safe.",
+    "metro_north_charleston": "Property crime in North Charleston is above national averages; Summerville and Hanahan are preferred for family safety."
+  },
+
+  "school_quality": {
+    "on_base": "Lambs Elementary (Charleston County) serves base residents.",
+    "off_base": "Dorchester District 2 (Summerville) is the highest-rated local district for military families."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 6.2,
+    "notes": "Tight rental market due to rapid influx of tech and manufacturing workers (Boeing/Volvo)."
+  },
+
+  "climate_weather": {
+    "spring": "Pleasant/Breezy; 65–80°F",
+    "summer": "Very Hot/Humid; 88–98°F",
+    "fall": "Warm/Mild; 60–80°F",
+    "winter": "Mild/Cool; 45–60°F"
+  },
+
+  "special_events": [
+    "Charleston Air Expo",
+    "Spoleto Festival USA",
+    "Cooper River Bridge Run",
+    "Charleston Wine + Food"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Exceptional",
+    "description": "Premier coastal assignment with a massive military and veteran presence."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Neutral",
+    "bah_vs_rent_position": "Challenging",
+    "affordability_summary": "Summerville offers better square footage for the price, but flood insurance is a critical cost factor.",
+    "buyer_opportunity": "High equity growth potential due to explosive regional population growth.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "The Lowcountry Equity Engine",
+    "bluf_summary": "Charleston is no longer a 'cheap' market, but its growth makes it a premier investment for VA buyers.",
+    "status": "Seller-leaning",
+    "inventory_trend": "Decreasing",
+    "buyer_leverage": "Low",
+    "verdict": "BUY IN SUMMERVILLE / HANAHAN",
+    "verdict_color": "green",
+    "confidence_score": 86
+  },
+
+  "scorecard": {
+    "affordability_score": 65,
+    "growth_score": 94,
+    "stability_score": 88,
+    "military_fit_score": 95,
+    "overall_score": 85
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1450, "high": 1750, "avg": 1600, "as_of": "2026-03" },
-      "home_price": { "low": 245000, "high": 295000, "avg": 270000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 1466,
-        "high": 1765,
-        "avg": 1615,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1650, "high": 2000, "avg": 1825, "as_of": "2026-03" },
+      "home_price": { "low": 280000, "high": 340000, "avg": 310000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2100, "high": 2500, "avg": 2300, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 145, "high": 195, "avg": 170 },
-        "water_sewer": { "low": 50, "high": 75, "avg": 62 },
-        "total": { "low": 195, "high": 270, "avg": 232 },
+        "electric_gas": { "low": 150, "high": 230, "avg": 190 },
+        "water_sewer": { "low": 50, "high": 80, "avg": 65 },
+        "total": { "low": 200, "high": 310, "avg": 255 },
         "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1900, "high": 2400, "avg": 2150, "as_of": "2026-03" },
-      "home_price": { "low": 325000, "high": 425000, "avg": 375000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 1944,
-        "high": 2542,
-        "avg": 2243,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2100, "high": 2700, "avg": 2400 },
+      "home_price": { "low": 360000, "high": 450000, "avg": 415000 },
+      "mortgage_monthly": { "low": 2650, "high": 3200, "avg": 2950 },
       "utilities": {
-        "electric_gas": { "low": 190, "high": 260, "avg": 225 },
-        "water_sewer": { "low": 65, "high": 95, "avg": 80 },
-        "total": { "low": 255, "high": 355, "avg": 305 },
+        "electric_gas": { "low": 190, "high": 290, "avg": 240 },
+        "water_sewer": { "low": 65, "high": 100, "avg": 82 },
+        "total": { "low": 255, "high": 390, "avg": 322 },
         "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 2500, "high": 3200, "avg": 2850, "as_of": "2026-03" },
-      "home_price": { "low": 450000, "high": 580000, "avg": 515000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 2692,
-        "high": 3469,
-        "avg": 3081,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2700, "high": 3600, "avg": 3150 },
+      "home_price": { "low": 480000, "high": 590000, "avg": 545000 },
+      "mortgage_monthly": { "low": 3400, "high": 4300, "avg": 3850 },
       "utilities": {
-        "electric_gas": { "low": 245, "high": 350, "avg": 298 },
-        "water_sewer": { "low": 85, "high": 125, "avg": 105 },
-        "total": { "low": 330, "high": 475, "avg": 403 },
+        "electric_gas": { "low": 230, "high": 360, "avg": 295 },
+        "water_sewer": { "low": 85, "high": 130, "avg": 108 },
+        "total": { "low": 315, "high": 490, "avg": 403 },
         "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 3100, "high": 4200, "avg": 3650, "as_of": "2026-03" },
-      "home_price": { "low": 575000, "high": 795000, "avg": 685000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 3439,
-        "high": 4756,
-        "avg": 4098,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 3400, "high": 4500, "avg": 3950 },
+      "home_price": { "low": 620000, "high": 780000, "avg": 700000 },
+      "mortgage_monthly": { "low": 4500, "high": 5600, "avg": 5050 },
       "utilities": {
-        "electric_gas": { "low": 315, "high": 480, "avg": 398 },
-        "water_sewer": { "low": 110, "high": 165, "avg": 138 },
-        "total": { "low": 425, "high": 645, "avg": 536 },
+        "electric_gas": { "low": 290, "high": 450, "avg": 370 },
+        "water_sewer": { "low": 110, "high": 170, "avg": 140 },
+        "total": { "low": 400, "high": 620, "avg": 510 },
         "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 55800,
-    "median_value_owner_occupied": 346495,
-
+    "housing_units": 49800,
+    "median_value_owner_occupied": 415000,
     "market": {
-      "zillow_average_home_value": 346495,
-      "zillow_one_year_change_percent": -1.2,
-      "market_type_summary": "Selection market tilting toward buyers with inventory at highest level since 2019. Resilient demand from work relocators.",
-
-      "average_days_on_market": 84,
-
-      "median_sale_price_current": 331450,
-      "median_listing_price_realtor": 332633,
-      "median_listing_price_per_sqft": 182,
-      "active_listings_total": 519,
-
-      "q1_2026": {
-        "median_sale_price": 331450
-      },
-
+      "zillow_average_home_value": 415000,
+      "zillow_one_year_change_percent": 4.5,
+      "market_type_summary": "High-growth coastal market",
+      "average_days_on_market": 41,
+      "median_sale_price_current": 408500,
+      "median_listing_price_realtor": 425000,
+      "median_listing_price_per_sqft": 232,
+      "active_listings_total": 2450,
+      "q1_2026": { "median_sale_price": 408500 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 325000 },
-        { "month": "2024-12", "median_sale_price": 345000 },
-        { "month": "2025-10", "median_sale_price": 299333 },
-        { "month": "2025-12", "median_sale_price": 308500 },
-        { "month": "2026-01", "median_sale_price": 331450 }
+        { "month": "2023-01", "median_sale_price": 360000 },
+        { "month": "2024-12", "median_sale_price": 395000 },
+        { "month": "2025-06", "median_sale_price": 412000 },
+        { "month": "2026-01", "median_sale_price": 408500 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "World Population Review / Census Bureau", "as_of": "2026-02" },
-    "rent": { "provider": "Zillow Observed Rent Index (ZORI)", "as_of": "2026-01" },
-    "home_price": { "provider": "Redfin / Zillow / CTAR", "as_of": "2026-03" },
-    "mortgage": { "provider": "Freddie Mac PMMS", "as_of": "2026-02", "notes": "5.98% 30-year fixed rate reached Feb 2026." },
-    "utilities": { "provider": "Dominion Energy / Charleston Water System", "as_of": "2026-01" },
-    "market": { "provider": "CTAR / NAR Housing Hot Spots", "as_of": "2026-03" },
-
-    "mortgage_city_defaults": {
-      "provider": "Charleston County Auditor / SmartAsset",
-      "as_of": "2026-01",
-      "notes": "Effective rate ~0.45% for primary residences due to 4% assessment ratio and Property Tax Relief."
-    }
+    "demographics": { "provider": "US Census Bureau / Charleston County Planning", "as_of": "2026-03" },
+    "rent": { "provider": "RentHop / Zillow", "as_of": "2026-03" },
+    "home_price": { "provider": "Charleston Trident Association of Realtors", "as_of": "2026-03" }
   }
 }

@@ -1,191 +1,219 @@
 {
   "city": "Knob Noster, MO",
-  "place": "Knob Noster, MO",
+  "place": "Whiteman Air Force Base",
   "state": "MO",
   "geo_id": "1600000US2939332",
-  "year": 2025,
-  "last_updated_data_from_sources": "January 2026",
+  "year": 2026,
+  "last_updated_data_from_sources": "March 2026",
   "image_url": "https://cdn.prod.website-files.com",
-
   "zip": "65305",
   "market_label": "Warrensburg Metro",
 
-  "avg_home_value": 242800,
-  "average_home_value": 242800,
-  "avgHome": 242800,
-  "city_avg_home": 242800,
+  "avg_home_value": 210000,
+  "average_home_value": 210000,
+  "avgHome": 210000,
+  "city_avg_home": 210000,
 
-  "mortgage_assumptions": {
-    "apr_percent": 7.0,
-    "term_years": 30,
-    "down_payment_percent": 5,
-    "includes": "all_in",
-    "defaults_note": "City defaults apply to taxes/insurance/HOA only. APR varies by credit score and/or user override."
+  "snapshot": {
+    "population_city": 2850,
+    "population_metro": 54000,
+    "median_household_income": 58900,
+    "median_home_price": 205000,
+    "market_trend_yoy": 2.3,
+    "traffic_level": "Low",
+    "employment_status": "Stable"
   },
 
-  "property_tax_rate": 1.12,
-  "insurance_rate": 0.68,
-  "hoa_monthly": 0,
+  "mortgage_assumptions": {
+    "apr_percent": 6.25,
+    "term_years": 30,
+    "down_payment_percent": 0,
+    "includes": "va_loan_all_in",
+    "defaults_note": "Based on March 2026 Missouri VA loan rates."
+  },
+
+  "property_tax_rate": 0.85,
+  "insurance_rate": 0.72,
+  "hoa_monthly": 5,
 
   "avg_home_mortgage_monthly": {
-    "avg": 1585,
-    "as_of": "2026-01",
-    "notes": "Historical reference only; do not use for calculation. brain.js computes itemized mortgage from inputs + city rates."
+    "avg": 1540,
+    "as_of": "2026-03",
+    "notes": "VA loan estimate; extremely affordable rural market."
   },
 
   "population": {
-    "estimate": 2780,
-    "median_age": 28.4,
-    "persons_per_household": 2.42
+    "estimate": 2850,
+    "median_age": 28.5,
+    "persons_per_household": 2.8
   },
 
   "households": {
-    "total_households": 1150
+    "total_households": 950
   },
 
   "income": {
-    "median_household_income": 54800,
-    "per_capita_income": 26400,
-    "poverty_rate_percent": 14.8
+    "median_household_income": 58900,
+    "per_capita_income": 24200,
+    "poverty_rate_percent": 14.5
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 91.2,
-    "bachelors_degree_or_higher_percent": 24.5
+    "high_school_grad_or_higher_percent": 93.1,
+    "bachelors_degree_or_higher_percent": 22.8
   },
 
   "veterans": {
-    "veteran_population_percent": 15.4
+    "veteran_population_percent": 12.8
   },
 
   "immigration": {
-    "foreign_born_percent": 4.1
+    "foreign_born_percent": 2.5
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 18.2,
-    "unemployment_rate_percent": 4.2
+    "mean_travel_time_to_work_minutes": 15.8,
+    "unemployment_rate_percent": 4.1
+  },
+
+  "crime_status": {
+    "installation": "Extremely safe; remote gated community.",
+    "metro_shreveport_bossier": "Knob Noster and Warrensburg are very safe rural communities with low crime rates."
+  },
+
+  "school_quality": {
+    "on_base": "Knob Noster Elementary serves base residents.",
+    "off_base": "Knob Noster and Warrensburg School Districts are highly rated and preferred."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 8.8,
+    "notes": "Healthy supply of rural rental homes in Johnson County."
+  },
+
+  "climate_weather": {
+    "spring": "Stormy/Rainy; 48–68°F",
+    "summer": "Hot/Humid; 85–95°F",
+    "fall": "Pleasant; 45–72°F",
+    "winter": "Cold/Snowy; 22–40°F"
+  },
+
+  "special_events": [
+    "Wings Over Whiteman Air Show",
+    "Warrensburg Dickens Christmas",
+    "Johnson County Fair"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Exceptional",
+    "description": "Quiet rural military town; community life is centered around the installation."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Strongly Favorable",
+    "bah_vs_rent_position": "Favorable",
+    "affordability_summary": "Low entry costs make this one of the easiest markets to build equity.",
+    "buyer_opportunity": "Strongest in the growing areas of South Warrensburg.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Stable Rural Anchor",
+    "bluf_summary": "Knob Noster offers immense value and safety for military families on a budget.",
+    "status": "Buyer-leaning",
+    "inventory_trend": "Stable",
+    "buyer_leverage": "High",
+    "verdict": "STRONG BUY",
+    "verdict_color": "green",
+    "confidence_score": 95
+  },
+
+  "scorecard": {
+    "affordability_score": 98,
+    "growth_score": 62,
+    "stability_score": 94,
+    "military_fit_score": 96,
+    "overall_score": 88
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 950, "high": 1250, "avg": 1100, "as_of": "2026-01" },
-      "home_price": { "low": 135000, "high": 175000, "avg": 155000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 853,
-        "high": 1106,
-        "avg": 980,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 900, "high": 1200, "avg": 1050, "as_of": "2026-03" },
+      "home_price": { "low": 125000, "high": 165000, "avg": 145000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1000, "high": 1300, "avg": 1150, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 130, "high": 185, "avg": 158 },
-        "water_sewer": { "low": 45, "high": 75, "avg": 60 },
-        "total": { "low": 175, "high": 260, "avg": 218 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 140, "high": 210, "avg": 175 },
+        "water_sewer": { "low": 35, "high": 55, "avg": 45 },
+        "total": { "low": 175, "high": 265, "avg": 220 },
+        "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1300, "high": 1750, "avg": 1525, "as_of": "2026-01" },
-      "home_price": { "low": 215000, "high": 275000, "avg": 245000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1359,
-        "high": 1738,
-        "avg": 1548,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1250, "high": 1750, "avg": 1500, "as_of": "2026-03" },
+      "home_price": { "low": 180000, "high": 240000, "avg": 210000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1350, "high": 1800, "avg": 1540, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 180, "high": 260, "avg": 220 },
-        "water_sewer": { "low": 65, "high": 105, "avg": 85 },
-        "total": { "low": 245, "high": 365, "avg": 305 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 170, "high": 260, "avg": 215 },
+        "water_sewer": { "low": 45, "high": 75, "avg": 60 },
+        "total": { "low": 215, "high": 335, "avg": 275 },
+        "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 1750, "high": 2450, "avg": 2100, "as_of": "2026-01" },
-      "home_price": { "low": 295000, "high": 385000, "avg": 340000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1864,
-        "high": 2433,
-        "avg": 2148,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1650, "high": 2200, "avg": 1925, "as_of": "2026-03" },
+      "home_price": { "low": 260000, "high": 340000, "avg": 300000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1900, "high": 2500, "avg": 2200, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 240, "high": 350, "avg": 295 },
-        "water_sewer": { "low": 90, "high": 140, "avg": 115 },
-        "total": { "low": 330, "high": 490, "avg": 410 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 200, "high": 320, "avg": 260 },
+        "water_sewer": { "low": 55, "high": 90, "avg": 75 },
+        "total": { "low": 255, "high": 410, "avg": 335 },
+        "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2200, "high": 3100, "avg": 2650, "as_of": "2026-01" },
-      "home_price": { "low": 395000, "high": 525000, "avg": 460000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 2496,
-        "high": 3318,
-        "avg": 2907,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 2100, "high": 2900, "avg": 2500, "as_of": "2026-03" },
+      "home_price": { "low": 350000, "high": 450000, "avg": 400000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2600, "high": 3300, "avg": 2950, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 300, "high": 450, "avg": 375 },
-        "water_sewer": { "low": 120, "high": 185, "avg": 152 },
-        "total": { "low": 420, "high": 635, "avg": 527 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 250, "high": 390, "avg": 320 },
+        "water_sewer": { "low": 75, "high": 115, "avg": 95 },
+        "total": { "low": 325, "high": 505, "avg": 415 },
+        "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 1280,
-    "median_value_owner_occupied": 242800,
-
+    "housing_units": 2400,
+    "median_value_owner_occupied": 210000,
     "market": {
-      "zillow_average_home_value": 242800,
-      "zillow_one_year_change_percent": +1.2,
-      "market_type_summary": "Rural-Military focused market; Warrensburg remains the primary residential hub for personnel seeking off-base amenities.",
-
-      "average_days_on_market": 46,
-
-      "median_sale_price_current": 255000,
-      "median_listing_price_realtor": 249900,
-      "median_listing_price_per_sqft": 142,
-      "active_listings_total": 124,
-
-      "q1_2025": {
-        "median_sale_price": 240000
-      },
-
+      "zillow_average_home_value": 210000,
+      "zillow_one_year_change_percent": 2.3,
+      "market_type_summary": "Rural market with steady military demand",
+      "average_days_on_market": 52,
+      "median_sale_price_current": 205000,
+      "median_listing_price_realtor": 218000,
+      "median_listing_price_per_sqft": 128,
+      "active_listings_total": 120,
+      "q1_2026": { "median_sale_price": 205000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 215000 },
-        { "month": "2023-06", "median_sale_price": 228000 },
-        { "month": "2023-12", "median_sale_price": 232000 },
-        { "month": "2024-06", "median_sale_price": 244000 },
-        { "month": "2024-10", "median_sale_price": 252000 },
-        { "month": "2024-12", "median_sale_price": 250000 },
-        { "month": "2025-01", "median_sale_price": 251500 },
-        { "month": "2025-06", "median_sale_price": 258000 },
-        { "month": "2025-10", "median_sale_price": 262000 },
-        { "month": "2025-11", "median_sale_price": 263200 },
-        { "month": "2025-12", "median_sale_price": 255000 }
+        { "month": "2023-01", "median_sale_price": 185000 },
+        { "month": "2024-12", "median_sale_price": 198000 },
+        { "month": "2025-06", "median_sale_price": 208000 },
+        { "month": "2026-01", "median_sale_price": 205000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "ACS / Johnson County Profile", "as_of": "2026-01" },
-    "rent": { "provider": "Zillow / Warrensburg Rental Estimates", "as_of": "2026-01", "notes": "Knob Noster/Warrensburg bedroom rent ranges" },
-    "home_price": { "provider": "Midwest Missouri Association of Realtors / Zillow", "as_of": "2026-01", "notes": "Stable inventory driven by military turnover and university influence" },
-    "mortgage": { "provider": "Computed (P&I)", "as_of": "2026-01", "notes": "30yr fixed @ 7.0% APR, 5% down; excludes taxes/insurance/HOA" },
-    "utilities": { "provider": "Utility estimator (Local Averages)", "as_of": "2026-01", "notes": "Reflects Evergy and local municipal water rates" },
-    "market": { "provider": "Redfin / Realtor / Zillow", "as_of": "2026-01", "notes": "Market is balanced; Warrensburg provides higher inventory than Knob Noster" },
-
-    "mortgage_city_defaults": {
-      "provider": "Johnson County Collector",
-      "as_of": "2026-01",
-      "notes": "Effective rate ~1.12% based on Knob Noster city and school district levies."
-    }
+    "demographics": { "provider": "US Census Bureau / Johnson County EDC", "as_of": "2026-03" },
+    "rent": { "provider": "Zumper", "as_of": "2026-03" },
+    "home_price": { "provider": "Mid-America Regional Association of Realtors", "as_of": "2026-03" }
   }
 }

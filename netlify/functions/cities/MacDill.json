@@ -1,185 +1,218 @@
 {
-  "city": "MacDill AFB",
+  "city": "Tampa, FL",
   "place": "Tampa, FL",
   "state": "FL",
-  "geo_id": "1243000",
+  "geo_id": "1600000US1271000",
   "year": 2026,
   "last_updated_data_from_sources": "March 2026",
-  "image_url": "https://www.macdill.af.mil/Portals/26/FY23%20EIS.pdf",
-
+  "image_url": "https://www.macdill.af.mil",
   "zip": "33621",
-  "market_label": "Tampa Bay Metro",
+  "market_label": "Tampa Metro - Hillsborough County",
 
-  "avg_home_value": 477500,
-  "average_home_value": 477500,
-  "avgHome": 477500,
-  "city_avg_home": 477500,
+  "avg_home_value": 425000,
+  "average_home_value": 425000,
+  "avgHome": 425000,
+  "city_avg_home": 425000,
+
+  "snapshot": {
+    "population_city": 395000,
+    "population_metro": 3250000,
+    "median_household_income": 65500,
+    "median_home_price": 420000,
+    "market_trend_yoy": 4.2,
+    "traffic_level": "Extreme",
+    "employment_status": "Very Stable"
+  },
 
   "mortgage_assumptions": {
-    "apr_percent": 6.6,
+    "apr_percent": 6.31,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Calculations based on March 2026 VA loan rates for Tampa. Inventory has increased by 14.8% YoY, transitioning the area toward a balanced market."
+    "defaults_note": "Based on March 2026 Florida VA loan rates."
   },
 
-  "property_tax_rate": 1.10,
-  "insurance_rate": 0.85,
-  "hoa_monthly": 150,
+  "property_tax_rate": 1.05,
+  "insurance_rate": 1.15,
+  "hoa_monthly": 125,
 
   "avg_home_mortgage_monthly": {
-    "avg": 3450,
+    "avg": 3250,
     "as_of": "2026-03",
-    "notes": "Reflects P&I for typical South Tampa home value using a VA loan (0% down) at 6.6% APR. High insurance premiums reflect coastal proximity."
+    "notes": "VA loan estimate including P&I and high Florida homeowners insurance"
   },
 
   "population": {
-    "estimate": 19900,
-    "median_age": 28.5,
-    "persons_per_household": 3.0
+    "estimate": 395000,
+    "median_age": 35.6,
+    "persons_per_household": 2.5
   },
 
   "households": {
-    "total_households": 2044
+    "total_households": 165000
   },
 
   "income": {
-    "median_household_income": 78500,
-    "per_capita_income": 45300,
-    "poverty_rate_percent": 5.3
+    "median_household_income": 65500,
+    "per_capita_income": 36400,
+    "poverty_rate_percent": 13.5
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 94.8,
-    "bachelors_degree_or_higher_percent": 42.1
+    "high_school_grad_or_higher_percent": 89.2,
+    "bachelors_degree_or_higher_percent": 36.8
   },
 
   "veterans": {
-    "veteran_population_percent": 18.2
+    "veteran_population_percent": 11.8
   },
 
   "immigration": {
-    "foreign_born_percent": 13.2
+    "foreign_born_percent": 16.2
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 24.5,
-    "unemployment_rate_percent": 3.2
+    "mean_travel_time_to_work_minutes": 26.8,
+    "unemployment_rate_percent": 3.4
+  },
+
+  "crime_status": {
+    "installation": "High security; restricted access. Extremely safe gated military community.",
+    "metro_tampa_bay": "South Tampa is very safe; older city pockets have higher property crime. FishHawk (Lithia) is a premier safe alternative."
+  },
+
+  "school_quality": {
+    "on_base": "Tinker Elementary (Hillsborough County Public Schools).",
+    "off_base": "Plant High School and FishHawk area schools are among the best in Florida."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 5.4,
+    "notes": "Very tight; high competition from young professionals and military families."
+  },
+
+  "climate_weather": {
+    "spring": "Warm/Sunny; 70–85°F",
+    "summer": "Hot/Humid/Stormy; 90–95°F",
+    "fall": "Pleasant; 70–85°F",
+    "winter": "Mild/Dry; 55–75°F"
+  },
+
+  "special_events": [
+    "Gasparilla Pirate Festival",
+    "MacDill Air Fest",
+    "Tampa Bay Lightning/Buccaneers Games"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Exceptional",
+    "description": "Home of CENTCOM and SOCOM; elite community standing with top-tier Florida amenities."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Neutral",
+    "bah_vs_rent_position": "Challenging",
+    "affordability_summary": "High insurance and HOA costs are significant factors in the Tampa market.",
+    "buyer_opportunity": "Brandon and Riverview offer better price-per-square-foot for larger families.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Premier Coastal Hub",
+    "bluf_summary": "Inventory remains tight; South Tampa demand stays at historic highs.",
+    "status": "Seller-leaning",
+    "inventory_trend": "Stable",
+    "buyer_leverage": "Low",
+    "verdict": "BUY FOR LONG TERM EQUITY",
+    "verdict_color": "yellow",
+    "confidence_score": 90
+  },
+
+  "scorecard": {
+    "affordability_score": 58,
+    "growth_score": 88,
+    "stability_score": 96,
+    "military_fit_score": 98,
+    "overall_score": 85
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1750, "high": 2200, "avg": 1975, "as_of": "2026-03" },
-      "home_price": { "low": 315000, "high": 395000, "avg": 355000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 2013,
-        "high": 2524,
-        "avg": 2268,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1800, "high": 2400, "avg": 2100, "as_of": "2026-03" },
+      "home_price": { "low": 320000, "high": 395000, "avg": 355000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2450, "high": 3000, "avg": 2725, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 165, "high": 215, "avg": 190 },
-        "water_sewer": { "low": 55, "high": 80, "avg": 67 },
-        "total": { "low": 220, "high": 295, "avg": 257 },
+        "electric_gas": { "low": 170, "high": 280, "avg": 225 },
+        "water_sewer": { "low": 60, "high": 95, "avg": 75 },
+        "total": { "low": 230, "high": 375, "avg": 300 },
         "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 2500, "high": 3200, "avg": 2875, "as_of": "2026-03" },
-      "home_price": { "low": 425000, "high": 550000, "avg": 487500, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 2715,
-        "high": 3514,
-        "avg": 3115,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2400, "high": 3400, "avg": 2900 },
+      "home_price": { "low": 410000, "high": 520000, "avg": 465000 },
+      "mortgage_monthly": { "low": 3100, "high": 3900, "avg": 3500 },
       "utilities": {
-        "electric_gas": { "low": 215, "high": 295, "avg": 255 },
-        "water_sewer": { "low": 70, "high": 105, "avg": 87 },
-        "total": { "low": 285, "high": 400, "avg": 342 },
+        "electric_gas": { "low": 220, "high": 380, "avg": 300 },
+        "water_sewer": { "low": 75, "high": 120, "avg": 95 },
+        "total": { "low": 295, "high": 500, "avg": 395 },
         "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 3400, "high": 4500, "avg": 3905, "as_of": "2026-03" },
-      "home_price": { "low": 575000, "high": 750000, "avg": 662500, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 3674,
-        "high": 4792,
-        "avg": 4233,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 3000, "high": 4200, "avg": 3600 },
+      "home_price": { "low": 530000, "high": 680000, "avg": 605000 },
+      "mortgage_monthly": { "low": 4000, "high": 5100, "avg": 4550 },
       "utilities": {
-        "electric_gas": { "low": 275, "high": 385, "avg": 330 },
-        "water_sewer": { "low": 90, "high": 135, "avg": 112 },
-        "total": { "low": 365, "high": 520, "avg": 442 },
+        "electric_gas": { "low": 280, "high": 460, "avg": 370 },
+        "water_sewer": { "low": 90, "high": 140, "avg": 115 },
+        "total": { "low": 370, "high": 600, "avg": 485 },
         "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 4200, "high": 6000, "avg": 5100, "as_of": "2026-03" },
-      "home_price": { "low": 850000, "high": 1250000, "avg": 1050000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 5431,
-        "high": 7987,
-        "avg": 6709,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 3800, "high": 5500, "avg": 4650 },
+      "home_price": { "low": 700000, "high": 950000, "avg": 825000 },
+      "mortgage_monthly": { "low": 5300, "high": 7100, "avg": 6200 },
       "utilities": {
-        "electric_gas": { "low": 355, "high": 525, "avg": 440 },
-        "water_sewer": { "low": 125, "high": 185, "avg": 155 },
-        "total": { "low": 480, "high": 710, "avg": 595 },
+        "electric_gas": { "low": 350, "high": 600, "avg": 475 },
+        "water_sewer": { "low": 120, "high": 180, "avg": 150 },
+        "total": { "low": 470, "high": 780, "avg": 625 },
         "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 26923,
-    "median_value_owner_occupied": 477500,
-
+    "housing_units": 165000,
+    "median_value_owner_occupied": 420000,
     "market": {
-      "zillow_average_home_value": 366612,
-      "zillow_one_year_change_percent": -4.2,
-      "market_type_summary": "Neutral market with increasing inventory and slowing sales velocity; high supply of 5.4 months.",
-
-      "average_days_on_market": 67,
-
-      "median_sale_price_current": 477500,
-      "median_listing_price_realtor": 428333,
-      "median_listing_price_per_sqft": 265,
-      "active_listings_total": 2794,
-
-      "q1_2026": {
-        "median_sale_price": 478000
-      },
-
+      "zillow_average_home_value": 425000,
+      "zillow_one_year_change_percent": 4.2,
+      "market_type_summary": "High demand; South Tampa remains a premium sub-market.",
+      "average_days_on_market": 32,
+      "median_sale_price_current": 420000,
+      "median_listing_price_per_sqft": 245,
+      "active_listings_total": 1850,
+      "q1_2026": { "median_sale_price": 420000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 385000 },
-        { "month": "2024-12", "median_sale_price": 465000 },
-        { "month": "2025-06", "median_sale_price": 495000 },
-        { "month": "2025-12", "median_sale_price": 480000 },
-        { "month": "2026-02", "median_sale_price": 477500 }
+        { "month": "2023-01", "median_sale_price": 365000 },
+        { "month": "2024-12", "median_sale_price": 405000 },
+        { "month": "2025-06", "median_sale_price": 412000 },
+        { "month": "2026-01", "median_sale_price": 420000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "MilitaryINSTALLATIONS / Census Bureau", "as_of": "2026-03" },
-    "rent": { "provider": "RentCafe / Zumper / Zillow Observed Rent Index", "as_of": "2026-03" },
-    "home_price": { "provider": "Redfin / Zillow / Tampa RE Group", "as_of": "2026-03" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I) / 3avesgroup Market Update", "as_of": "2026-03", "notes": "6.6% APR for Tampa market." },
-    "utilities": { "provider": "TECO / Tampa Water Dept / RentCafe", "as_of": "2026-02" },
-    "market": { "provider": "Zillow / Redfin / BlufftonToday Analysis", "as_of": "2026-03" },
-
-    "mortgage_city_defaults": {
-      "provider": "Hillsborough County Tax Collector",
-      "as_of": "2026-01",
-      "notes": "Effective rate approx 1.10% after Florida Homestead Exemption."
-    }
+    "demographics": { "provider": "US Census Bureau / Hillsborough Planning", "as_of": "2026-03" },
+    "rent": { "provider": "RentCafe / Zumper", "as_of": "2026-03" },
+    "home_price": { "provider": "Greater Tampa Realtors", "as_of": "2026-03" }
   }
 }

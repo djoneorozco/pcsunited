@@ -1,191 +1,219 @@
 {
-  "city": "Sumter, SC",
-  "place": "Sumter, SC",
-  "state": "SC",
-  "geo_id": "1600000US4570405",
-  "year": 2025,
-  "last_updated_data_from_sources": "January 2026",
+  "city": "Goldsboro, NC",
+  "place": "Seymour Johnson AFB",
+  "state": "NC",
+  "geo_id": "1600000US3726880",
+  "year": 2026,
+  "last_updated_data_from_sources": "March 2026",
   "image_url": "https://cdn.prod.website-files.com",
+  "zip": "27531",
+  "market_label": "Goldsboro Metro",
 
-  "zip": "29152",
-  "market_label": "Sumter Metro",
+  "avg_home_value": 205000,
+  "average_home_value": 205000,
+  "avgHome": 205000,
+  "city_avg_home": 205000,
 
-  "avg_home_value": 212500,
-  "average_home_value": 212500,
-  "avgHome": 212500,
-  "city_avg_home": 212500,
-
-  "mortgage_assumptions": {
-    "apr_percent": 7.0,
-    "term_years": 30,
-    "down_payment_percent": 5,
-    "includes": "all_in",
-    "defaults_note": "City defaults apply to taxes/insurance/HOA only. APR varies by credit score and/or user override."
+  "snapshot": {
+    "population_city": 34000,
+    "population_metro": 123000,
+    "median_household_income": 54500,
+    "median_home_price": 202000,
+    "market_trend_yoy": 2.8,
+    "traffic_level": "Low",
+    "employment_status": "Stable"
   },
 
-  "property_tax_rate": 0.68,
-  "insurance_rate": 0.52,
-  "hoa_monthly": 0,
+  "mortgage_assumptions": {
+    "apr_percent": 6.25,
+    "term_years": 30,
+    "down_payment_percent": 0,
+    "includes": "va_loan_all_in",
+    "defaults_note": "Based on March 2026 North Carolina VA loan rates."
+  },
+
+  "property_tax_rate": 0.88,
+  "insurance_rate": 0.62,
+  "hoa_monthly": 10,
 
   "avg_home_mortgage_monthly": {
-    "avg": 1340,
-    "as_of": "2026-01",
-    "notes": "Historical reference only; do not use for calculation. brain.js computes itemized mortgage from inputs + city rates."
+    "avg": 1480,
+    "as_of": "2026-03",
+    "notes": "VA loan estimate; very affordable market compared to Raleigh-Durham."
   },
 
   "population": {
-    "estimate": 43120,
-    "median_age": 34.5,
-    "persons_per_household": 2.58
+    "estimate": 34000,
+    "median_age": 31.8,
+    "persons_per_household": 2.5
   },
 
   "households": {
-    "total_households": 16450
+    "total_households": 13800
   },
 
   "income": {
-    "median_household_income": 49200,
-    "per_capita_income": 26800,
-    "poverty_rate_percent": 18.5
+    "median_household_income": 54500,
+    "per_capita_income": 26100,
+    "poverty_rate_percent": 18.2
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 88.2,
-    "bachelors_degree_or_higher_percent": 22.4
+    "high_school_grad_or_higher_percent": 89.4,
+    "bachelors_degree_or_higher_percent": 21.8
   },
 
   "veterans": {
-    "veteran_population_percent": 13.8
+    "veteran_population_percent": 14.8
   },
 
   "immigration": {
-    "foreign_born_percent": 3.2
+    "foreign_born_percent": 4.5
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 19.5,
+    "mean_travel_time_to_work_minutes": 18.5,
     "unemployment_rate_percent": 4.6
+  },
+
+  "crime_status": {
+    "installation": "Extremely safe; gated military community.",
+    "metro_shreveport_bossier": "Goldsboro has specific neighborhoods to avoid; suburban Wayne County is preferred for safety."
+  },
+
+  "school_quality": {
+    "on_base": "Meadow Lane Elementary (Wayne County Public Schools) serves the base.",
+    "off_base": "Wayne County Schools in the Pikeville and Rosewood areas are highly rated."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 7.8,
+    "notes": "Steady supply of rentals in the Goldsboro/Pikeville corridor."
+  },
+
+  "climate_weather": {
+    "spring": "Humid/Warm; 55–75°F",
+    "summer": "Hot/Humid; 88–98°F",
+    "fall": "Pleasant; 50–75°F",
+    "winter": "Mild; 35–55°F"
+  },
+
+  "special_events": [
+    "Wings Over Wayne Air Show",
+    "NC Pickle Festival",
+    "Goldsboro Christmas Parade"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Exceptional",
+    "description": "True Air Force town; the community is extremely supportive of SJAFB personnel."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Strongly Favorable",
+    "bah_vs_rent_position": "Favorable",
+    "affordability_summary": "One of the most affordable markets in NC for VA loan holders.",
+    "buyer_opportunity": "Strongest in Pikeville and the western Rosewood area.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Affordable Carolina Hub",
+    "bluf_summary": "Steady value and low cost of living for military families.",
+    "status": "Buyer-leaning",
+    "inventory_trend": "Increasing",
+    "buyer_leverage": "High",
+    "verdict": "STRONG BUY",
+    "verdict_color": "green",
+    "confidence_score": 93
+  },
+
+  "scorecard": {
+    "affordability_score": 97,
+    "growth_score": 64,
+    "stability_score": 86,
+    "military_fit_score": 96,
+    "overall_score": 88
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1050, "high": 1350, "avg": 1200, "as_of": "2026-01" },
-      "home_price": { "low": 135000, "high": 165000, "avg": 150000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 853,
-        "high": 1043,
-        "avg": 948,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1050, "high": 1350, "avg": 1200, "as_of": "2026-03" },
+      "home_price": { "low": 130000, "high": 170000, "avg": 150000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1100, "high": 1400, "avg": 1250, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 135, "high": 185, "avg": 160 },
-        "water_sewer": { "low": 50, "high": 75, "avg": 62 },
-        "total": { "low": 185, "high": 260, "avg": 222 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 130, "high": 190, "avg": 160 },
+        "water_sewer": { "low": 30, "high": 50, "avg": 40 },
+        "total": { "low": 160, "high": 240, "avg": 200 },
+        "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1450, "high": 1950, "avg": 1700, "as_of": "2026-01" },
-      "home_price": { "low": 205000, "high": 265000, "avg": 235000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1296,
-        "high": 1675,
-        "avg": 1485,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1400, "high": 1850, "avg": 1625, "as_of": "2026-03" },
+      "home_price": { "low": 175000, "high": 235000, "avg": 205000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1350, "high": 1800, "avg": 1480, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 185, "high": 265, "avg": 225 },
-        "water_sewer": { "low": 70, "high": 105, "avg": 87 },
-        "total": { "low": 255, "high": 370, "avg": 312 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 160, "high": 250, "avg": 205 },
+        "water_sewer": { "low": 40, "high": 70, "avg": 55 },
+        "total": { "low": 200, "high": 320, "avg": 260 },
+        "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 1900, "high": 2600, "avg": 2250, "as_of": "2026-01" },
-      "home_price": { "low": 285000, "high": 375000, "avg": 330000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1801,
-        "high": 2369,
-        "avg": 2085,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1800, "high": 2400, "avg": 2100, "as_of": "2026-03" },
+      "home_price": { "low": 250000, "high": 330000, "avg": 290000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1900, "high": 2500, "avg": 2200, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 245, "high": 355, "avg": 300 },
-        "water_sewer": { "low": 95, "high": 140, "avg": 117 },
-        "total": { "low": 340, "high": 495, "avg": 417 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 190, "high": 310, "avg": 250 },
+        "water_sewer": { "low": 50, "high": 85, "avg": 68 },
+        "total": { "low": 240, "high": 395, "avg": 318 },
+        "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2450, "high": 3400, "avg": 2925, "as_of": "2026-01" },
-      "home_price": { "low": 395000, "high": 525000, "avg": 460000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 2496,
-        "high": 3318,
-        "avg": 2907,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 2300, "high": 3100, "avg": 2700, "as_of": "2026-03" },
+      "home_price": { "low": 340000, "high": 450000, "avg": 395000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2600, "high": 3500, "avg": 3050, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 315, "high": 475, "avg": 395 },
-        "water_sewer": { "low": 125, "high": 180, "avg": 152 },
-        "total": { "low": 440, "high": 655, "avg": 547 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 240, "high": 380, "avg": 310 },
+        "water_sewer": { "low": 70, "high": 110, "avg": 90 },
+        "total": { "low": 310, "high": 490, "avg": 400 },
+        "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 18450,
-    "median_value_owner_occupied": 212500,
-
+    "housing_units": 15200,
+    "median_value_owner_occupied": 205000,
     "market": {
-      "zillow_average_home_value": 212500,
-      "zillow_one_year_change_percent": +1.4,
-      "market_type_summary": "Stable South Carolina Midlands market; Sumter remains an affordable military community with consistent rental demand from Shaw personnel.",
-
-      "average_days_on_market": 47,
-
-      "median_sale_price_current": 224000,
-      "median_listing_price_realtor": 219900,
-      "median_listing_price_per_sqft": 132,
-      "active_listings_total": 315,
-
-      "q1_2025": {
-        "median_sale_price": 212000
-      },
-
+      "zillow_average_home_value": 205000,
+      "zillow_one_year_change_percent": 2.8,
+      "market_type_summary": "High affordability with consistent demand",
+      "average_days_on_market": 48,
+      "median_sale_price_current": 202000,
+      "median_listing_price_realtor": 215000,
+      "median_listing_price_per_sqft": 128,
+      "active_listings_total": 380,
+      "q1_2026": { "median_sale_price": 202000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 188000 },
-        { "month": "2023-06", "median_sale_price": 195000 },
-        { "month": "2023-12", "median_sale_price": 202000 },
-        { "month": "2024-06", "median_sale_price": 215000 },
-        { "month": "2024-10", "median_sale_price": 222000 },
-        { "month": "2024-12", "median_sale_price": 220000 },
-        { "month": "2025-01", "median_sale_price": 221500 },
-        { "month": "2025-06", "median_sale_price": 228000 },
-        { "month": "2025-10", "median_sale_price": 231000 },
-        { "month": "2025-11", "median_sale_price": 232200 },
-        { "month": "2025-12", "median_sale_price": 224000 }
+        { "month": "2023-01", "median_sale_price": 182000 },
+        { "month": "2024-12", "median_sale_price": 195000 },
+        { "month": "2025-06", "median_sale_price": 204000 },
+        { "month": "2026-01", "median_sale_price": 202000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "ACS / Sumter County Profile", "as_of": "2026-01" },
-    "rent": { "provider": "RentCafe / Zillow Observed Rent Index", "as_of": "2026-01", "notes": "Sumter bedroom rent ranges" },
-    "home_price": { "provider": "Sumter Board of Realtors / Zillow", "as_of": "2026-01", "notes": "Reflects low cost of living and base-driven market stability" },
-    "mortgage": { "provider": "Computed (P&I)", "as_of": "2026-01", "notes": "30yr fixed @ 7.0% APR, 5% down; excludes taxes/insurance/HOA" },
-    "utilities": { "provider": "Utility estimator (Local Averages)", "as_of": "2026-01", "notes": "Reflects Duke Energy and City of Sumter water rates; high summer cooling loads" },
-    "market": { "provider": "Redfin / Realtor / Zillow", "as_of": "2026-01", "notes": "Market is balanced; areas north of the city remain popular for newer construction" },
-
-    "mortgage_city_defaults": {
-      "provider": "Sumter County Tax Assessor",
-      "as_of": "2026-01",
-      "notes": "Effective rate ~0.68% for owner-occupied residential with standard SC 4% assessment."
-    }
+    "demographics": { "provider": "US Census Bureau / Wayne County Economic Development", "as_of": "2026-03" },
+    "rent": { "provider": "RentCafe", "as_of": "2026-03" },
+    "home_price": { "provider": "North Carolina Association of Realtors", "as_of": "2026-03" }
   }
 }

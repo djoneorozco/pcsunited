@@ -1,185 +1,219 @@
 {
-  "city": "Tinker AFB",
-  "place": "Oklahoma City, OK",
+  "city": "Oklahoma City, OK",
+  "place": "Tinker Air Force Base",
   "state": "OK",
   "geo_id": "1600000US4055000",
   "year": 2026,
   "last_updated_data_from_sources": "March 2026",
-  "image_url": "https://www.tinker.af.mil",
-
+  "image_url": "https://cdn.prod.website-files.com",
   "zip": "73145",
   "market_label": "Oklahoma City Metro",
 
-  "avg_home_value": 215667,
-  "average_home_value": 215667,
-  "avgHome": 215667,
-  "city_avg_home": 215667,
+  "avg_home_value": 235000,
+  "average_home_value": 235000,
+  "avgHome": 235000,
+  "city_avg_home": 235000,
+
+  "snapshot": {
+    "population_city": 695000,
+    "population_metro": 1450000,
+    "median_household_income": 65400,
+    "median_home_price": 232000,
+    "market_trend_yoy": 4.1,
+    "traffic_level": "Moderate",
+    "employment_status": "Robust"
+  },
 
   "mortgage_assumptions": {
-    "apr_percent": 6.00,
+    "apr_percent": 6.25,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Calculations based on March 2026 [Freddie Mac](https://www.freddiemac.com/pmms) average rates. Oklahoma City is described as a [balanced and healthy market](https://wyattpoindexter.com/blog/oklahoma-real-estate-and-luxury-home-market-update-march-2026-wyatt-poindexter-the-agency) as of early 2026."
+    "defaults_note": "Based on March 2026 Oklahoma VA loan rates."
   },
 
-  "property_tax_rate": 1.12,
-  "insurance_rate": 0.65,
-  "hoa_monthly": 20,
+  "property_tax_rate": 1.15,
+  "insurance_rate": 1.25,
+  "hoa_monthly": 25,
 
   "avg_home_mortgage_monthly": {
-    "avg": 1612,
+    "avg": 1920,
     "as_of": "2026-03",
-    "notes": "Reflects P&I for typical Oklahoma City home value using a VA loan (0% down) at 6.00% APR. Oklahoma's insurance rates are higher due to storm risk."
+    "notes": "VA loan estimate; higher insurance rates due to tornado/storm risks in central Oklahoma."
   },
 
   "population": {
-    "estimate": 30000,
-    "median_age": 32.0,
-    "persons_per_household": 2.85
+    "estimate": 695000,
+    "median_age": 34.8,
+    "persons_per_household": 2.6
   },
 
   "households": {
-    "total_households": 2261
+    "total_households": 268000
   },
 
   "income": {
-    "median_household_income": 81944,
-    "per_capita_income": 38450,
-    "poverty_rate_percent": 11.8
+    "median_household_income": 65400,
+    "per_capita_income": 32800,
+    "poverty_rate_percent": 14.2
   },
 
   "education": {
     "high_school_grad_or_higher_percent": 91.2,
-    "bachelors_degree_or_higher_percent": 31.4
+    "bachelors_degree_or_higher_percent": 31.8
   },
 
   "veterans": {
-    "veteran_population_percent": 14.2
+    "veteran_population_percent": 10.5
   },
 
   "immigration": {
-    "foreign_born_percent": 5.4
+    "foreign_born_percent": 12.1
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 21.5,
+    "mean_travel_time_to_work_minutes": 22.1,
     "unemployment_rate_percent": 3.6
+  },
+
+  "crime_status": {
+    "installation": "Extremely safe; strictly controlled access.",
+    "metro_shreveport_bossier": "Midwest City and Moore are generally safe; standard urban property crime concerns in OKC proper."
+  },
+
+  "school_quality": {
+    "on_base": "Mid-Del Schools serve the immediate base area.",
+    "off_base": "Moore Public Schools and Choctaw-Nicoma Park Schools are top-tier and highly preferred."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 7.4,
+    "notes": "Balanced rental market with significant new multi-family inventory."
+  },
+
+  "climate_weather": {
+    "spring": "Severe Storms/Tornadoes; 55–75°F",
+    "summer": "Hot/Humid; 90–100°F",
+    "fall": "Pleasant; 50–78°F",
+    "winter": "Cold/Windy; 28–48°F"
+  },
+
+  "special_events": [
+    "Star Spangled Salute Air Show",
+    "Oklahoma State Fair",
+    "Norman Music Festival"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Exceptional",
+    "description": "OKC is consistently ranked as a top military-friendly city with massive retail and medical support."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Strongly Favorable",
+    "bah_vs_rent_position": "Favorable",
+    "affordability_summary": "High equity potential due to strong appreciation in the OKC suburbs.",
+    "buyer_opportunity": "Strongest in Moore, Choctaw, and the growing eastern suburbs.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Dynamic Heartland Hub",
+    "bluf_summary": "Midwest City and Moore offer excellent schools and stable value for military families.",
+    "status": "Balanced",
+    "inventory_trend": "Stable",
+    "buyer_leverage": "Medium",
+    "verdict": "STRONG BUY",
+    "verdict_color": "green",
+    "confidence_score": 92
+  },
+
+  "scorecard": {
+    "affordability_score": 92,
+    "growth_score": 82,
+    "stability_score": 90,
+    "military_fit_score": 96,
+    "overall_score": 90
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 950, "high": 1250, "avg": 1100, "as_of": "2026-03" },
-      "home_price": { "low": 145000, "high": 185000, "avg": 165000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 869,
-        "high": 1109,
-        "avg": 989,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1150, "high": 1450, "avg": 1300, "as_of": "2026-03" },
+      "home_price": { "low": 165000, "high": 205000, "avg": 185000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1350, "high": 1700, "avg": 1525, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 135, "high": 185, "avg": 160 },
-        "water_sewer": { "low": 45, "high": 70, "avg": 58 },
-        "total": { "low": 180, "high": 255, "avg": 218 },
+        "electric_gas": { "low": 160, "high": 240, "avg": 200 },
+        "water_sewer": { "low": 40, "high": 65, "avg": 52 },
+        "total": { "low": 200, "high": 305, "avg": 252 },
         "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1350, "high": 1850, "avg": 1600, "as_of": "2026-03" },
-      "home_price": { "low": 215000, "high": 285000, "avg": 250000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 1289,
-        "high": 1708,
-        "avg": 1498,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1550, "high": 2100, "avg": 1825, "as_of": "2026-03" },
+      "home_price": { "low": 210000, "high": 285000, "avg": 235000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1750, "high": 2350, "avg": 1920, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 175, "high": 255, "avg": 215 },
-        "water_sewer": { "low": 60, "high": 90, "avg": 75 },
-        "total": { "low": 235, "high": 345, "avg": 290 },
+        "electric_gas": { "low": 190, "high": 310, "avg": 250 },
+        "water_sewer": { "low": 50, "high": 85, "avg": 68 },
+        "total": { "low": 240, "high": 395, "avg": 318 },
         "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 1850, "high": 2600, "avg": 2225, "as_of": "2026-03" },
-      "home_price": { "low": 315000, "high": 425000, "avg": 370000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 1888,
-        "high": 2548,
-        "avg": 2218,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2000, "high": 2800, "avg": 2400, "as_of": "2026-03" },
+      "home_price": { "low": 290000, "high": 390000, "avg": 345000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2400, "high": 3200, "avg": 2850, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 230, "high": 335, "avg": 282 },
-        "water_sewer": { "low": 80, "high": 120, "avg": 100 },
-        "total": { "low": 310, "high": 455, "avg": 382 },
+        "electric_gas": { "low": 230, "high": 380, "avg": 305 },
+        "water_sewer": { "low": 65, "high": 105, "avg": 85 },
+        "total": { "low": 295, "high": 485, "avg": 390 },
         "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2400, "high": 3500, "avg": 2950, "as_of": "2026-03" },
-      "home_price": { "low": 450000, "high": 750000, "avg": 600000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 2698,
-        "high": 4496,
-        "avg": 3597,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2600, "high": 3600, "avg": 3100, "as_of": "2026-03" },
+      "home_price": { "low": 410000, "high": 550000, "avg": 485000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 3400, "high": 4500, "avg": 3950, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 315, "high": 475, "avg": 395 },
-        "water_sewer": { "low": 105, "high": 165, "avg": 135 },
-        "total": { "low": 420, "high": 640, "avg": 530 },
+        "electric_gas": { "low": 280, "high": 460, "avg": 370 },
+        "water_sewer": { "low": 85, "high": 140, "avg": 112 },
+        "total": { "low": 365, "high": 600, "avg": 482 },
         "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 2261,
-    "median_value_owner_occupied": 215667,
-
+    "housing_units": 275000,
+    "median_value_owner_occupied": 235000,
     "market": {
-      "zillow_average_home_value": 215667,
-      "zillow_one_year_change_percent": 2.7,
-      "market_type_summary": "Balanced market with healthy growth; median sale prices stabilized at ~$215k as of early 2026 with inventory levels at 2,261 units [Zillow](https://www.zillow.com/home-values/33225/oklahoma-city-ok/).",
-
-      "average_days_on_market": 40,
-
-      "median_sale_price_current": 215667,
-      "median_listing_price_realtor": 261661,
-      "median_listing_price_per_sqft": 142,
-      "active_listings_total": 2261,
-
-      "q1_2026": {
-        "median_sale_price": 215667
-      },
-
+      "zillow_average_home_value": 235000,
+      "zillow_one_year_change_percent": 4.1,
+      "market_type_summary": "Strong growth with high investor and military demand",
+      "average_days_on_market": 38,
+      "median_sale_price_current": 232000,
+      "median_listing_price_realtor": 245000,
+      "median_listing_price_per_sqft": 148,
+      "active_listings_total": 1250,
+      "q1_2026": { "median_sale_price": 232000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 185000 },
-        { "month": "2024-12", "median_sale_price": 208000 },
-        { "month": "2025-06", "median_sale_price": 218000 },
-        { "month": "2025-12", "median_sale_price": 215667 },
-        { "month": "2026-02", "median_sale_price": 215000 }
+        { "month": "2023-01", "median_sale_price": 195000 },
+        { "month": "2024-12", "median_sale_price": 218000 },
+        { "month": "2025-06", "median_sale_price": 228000 },
+        { "month": "2026-01", "median_sale_price": 232000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "Census Bureau / Point2 Demographics", "as_of": "2026-02" },
-    "rent": { "provider": "Zillow Observed Rent Index (ZORI) / Apartments.com", "as_of": "2026-03" },
-    "home_price": { "provider": "Zillow / Redfin / OK MLS", "as_of": "2026-03" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I) / Freddie Mac PMMS", "as_of": "2026-03", "notes": "6.00% APR for OKC market." },
-    "utilities": { "provider": "OG&E / Oklahoma Natural Gas / City of OKC", "as_of": "2026-02" },
-    "market": { "provider": "Redfin / Zillow / Realtor.com", "as_of": "2026-03" },
-
-    "mortgage_city_defaults": {
-      "provider": "Oklahoma County Assessor",
-      "as_of": "2026-01",
-      "notes": "Effective rate approx 1.12% after standard homestead exemptions."
-    }
+    "demographics": { "provider": "US Census Bureau / OKC Chamber of Commerce", "as_of": "2026-03" },
+    "rent": { "provider": "Zillow / Zumper", "as_of": "2026-03" },
+    "home_price": { "provider": "MLSOK", "as_of": "2026-03" }
   }
 }

@@ -1,118 +1,219 @@
 {
-  "city": "Marysville",
-  "place": "Marysville, California",
+  "city": "Marysville, CA",
+  "place": "Beale Air Force Base",
   "state": "CA",
   "geo_id": "1600000US0646170",
   "year": 2026,
   "last_updated_data_from_sources": "March 2026",
-  "image_url": "https://www.beale.af.mil",
+  "image_url": "https://cdn.prod.website-files.com",
   "zip": "95903",
-  "market_label": "Yuba-Sutter Metro",
+  "market_label": "Yuba City-Marysville Metro",
 
-  "avg_home_value": 415000,
-  "average_home_value": 415000,
-  "avgHome": 415000,
-  "city_avg_home": 415000,
+  "avg_home_value": 465000,
+  "average_home_value": 465000,
+  "avgHome": 465000,
+  "city_avg_home": 465000,
 
   "snapshot": {
     "population_city": 12500,
-    "population_metro": 175000,
-    "median_household_income": 62450,
-    "median_home_price": 410000,
-    "market_trend_yoy": 2.1,
-    "traffic_level": "Low",
+    "population_metro": 182000,
+    "median_household_income": 61800,
+    "median_home_price": 458000,
+    "market_trend_yoy": 1.4,
+    "traffic_level": "Low to Moderate",
     "employment_status": "Stable"
   },
 
   "mortgage_assumptions": {
-    "apr_percent": 6.31,
+    "apr_percent": 6.25,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
     "defaults_note": "Based on March 2026 California VA loan rates."
   },
 
-  "property_tax_rate": 1.12,
-  "insurance_rate": 0.65,
-  "hoa_monthly": 0,
+  "property_tax_rate": 1.15,
+  "insurance_rate": 0.48,
+  "hoa_monthly": 15,
 
   "avg_home_mortgage_monthly": {
-    "avg": 2850,
+    "avg": 3280,
     "as_of": "2026-03",
-    "notes": "VA loan estimate; insurance rates vary by fire risk zone."
+    "notes": "VA loan estimate; Plumas Lake and Wheatland are primary growth markets."
   },
 
   "population": {
     "estimate": 12500,
-    "median_age": 22.8,
-    "persons_per_household": 3.1
+    "median_age": 31.4,
+    "persons_per_household": 2.7
+  },
+
+  "households": {
+    "total_households": 4600
   },
 
   "income": {
-    "median_household_income": 62450,
-    "per_capita_income": 28900,
-    "poverty_rate_percent": 14.5
+    "median_household_income": 61800,
+    "per_capita_income": 28400,
+    "poverty_rate_percent": 16.2
+  },
+
+  "education": {
+    "high_school_grad_or_higher_percent": 86.5,
+    "bachelors_degree_or_higher_percent": 18.4
+  },
+
+  "veterans": {
+    "veteran_population_percent": 12.1
+  },
+
+  "immigration": {
+    "foreign_born_percent": 13.5
+  },
+
+  "labor": {
+    "mean_travel_time_to_work_minutes": 26.4,
+    "unemployment_rate_percent": 5.2
   },
 
   "crime_status": {
-    "installation": "High security; gated military community. Extremely safe.",
-    "metro_yuba_sutter": "Marysville and Yuba City are generally safe; property crime in older downtown districts is the main concern."
+    "installation": "Extremely safe; gated military community.",
+    "metro_shreveport_bossier": "Marysville has higher crime rates in older districts; Wheatland and Plumas Lake are preferred for safety."
   },
 
   "school_quality": {
-    "on_base": "Lone Tree School (Wheatland School District).",
-    "off_base": "Wheatland School District is highly rated; many families prefer living in Plumas Lake for school quality."
+    "on_base": "Lone Tree Elementary (Wheatland SD) serves base residents.",
+    "off_base": "Wheatland and Plumas Lake districts are highly rated and preferred."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 6.8,
+    "notes": "Steady supply of single-family rentals in newer developments."
+  },
+
+  "climate_weather": {
+    "spring": "Mild/Green; 52–75°F",
+    "summer": "Hot/Dry; 92–104°F",
+    "fall": "Dry/Pleasant; 55–82°F",
+    "winter": "Cool/Wet; 38–54°F"
+  },
+
+  "special_events": [
+    "Beale Air Expo",
+    "Bok Kai Festival",
+    "Yuba-Sutter Fair"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Exceptional",
+    "description": "Quiet rural feel with high community support; major economic driver for the Yuba-Sutter region."
   },
 
   "financial_brief": {
-    "bah_vs_buy_position": "Neutral",
+    "bah_vs_buy_position": "Favorable",
     "bah_vs_rent_position": "Favorable",
-    "affordability_summary": "California's high cost of living is tempered by the base's location in a more affordable region of the state.",
-    "buyer_opportunity": "Plumas Lake and Wheatland offer the best resale value for military families.",
-    "renter_advantage": true
+    "affordability_summary": "Lower entry cost compared to other CA bases like Travis or Andrews.",
+    "buyer_opportunity": "Strongest in Plumas Lake and the northern Wheatland corridor.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Affordable California Anchor",
+    "bluf_summary": "Beale offers a high quality of life and stable equity growth in the Central Valley.",
+    "status": "Buyer-leaning",
+    "inventory_trend": "Stable",
+    "buyer_leverage": "High",
+    "verdict": "STRONG BUY",
+    "verdict_color": "green",
+    "confidence_score": 89
+  },
+
+  "scorecard": {
+    "affordability_score": 72,
+    "growth_score": 68,
+    "stability_score": 90,
+    "military_fit_score": 94,
+    "overall_score": 81
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1600, "high": 1950, "avg": 1775 },
-      "home_price": { "low": 290000, "high": 340000, "avg": 315000 },
-      "mortgage_monthly": { "low": 2100, "high": 2450, "avg": 2275 },
-      "utilities": { "total": { "low": 180, "high": 280, "avg": 230 } }
+      "rent_monthly": { "low": 1600, "high": 2100, "avg": 1850, "as_of": "2026-03" },
+      "home_price": { "low": 280000, "high": 350000, "avg": 320000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2100, "high": 2600, "avg": 2350, "as_of": "2026-03" },
+      "utilities": {
+        "electric_gas": { "low": 160, "high": 240, "avg": 200 },
+        "water_sewer": { "low": 60, "high": 100, "avg": 80 },
+        "total": { "low": 220, "high": 340, "avg": 280 },
+        "as_of": "2026-03"
+      }
     },
     "3": {
-      "rent_monthly": { "low": 2100, "high": 2700, "avg": 2400 },
-      "home_price": { "low": 380000, "high": 450000, "avg": 415000 },
-      "mortgage_monthly": { "low": 2600, "high": 3100, "avg": 2850 },
-      "utilities": { "total": { "low": 240, "high": 360, "avg": 300 } }
+      "rent_monthly": { "low": 2100, "high": 2700, "avg": 2400, "as_of": "2026-03" },
+      "home_price": { "low": 390000, "high": 510000, "avg": 465000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2900, "high": 3600, "avg": 3280, "as_of": "2026-03" },
+      "utilities": {
+        "electric_gas": { "low": 190, "high": 290, "avg": 240 },
+        "water_sewer": { "low": 75, "high": 120, "avg": 98 },
+        "total": { "low": 265, "high": 410, "avg": 338 },
+        "as_of": "2026-03"
+      }
     },
     "4": {
-      "rent_monthly": { "low": 2600, "high": 3300, "avg": 2950 },
-      "home_price": { "low": 460000, "high": 550000, "avg": 505000 },
-      "mortgage_monthly": { "low": 3200, "high": 3800, "avg": 3500 },
-      "utilities": { "total": { "low": 290, "high": 440, "avg": 365 } }
+      "rent_monthly": { "low": 2600, "high": 3400, "avg": 3000, "as_of": "2026-03" },
+      "home_price": { "low": 520000, "high": 680000, "avg": 615000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 3800, "high": 4900, "avg": 4350, "as_of": "2026-03" },
+      "utilities": {
+        "electric_gas": { "low": 230, "high": 350, "avg": 290 },
+        "water_sewer": { "low": 90, "high": 150, "avg": 120 },
+        "total": { "low": 320, "high": 500, "avg": 410 },
+        "as_of": "2026-03"
+      }
     },
     "5": {
-      "rent_monthly": { "low": 3100, "high": 4000, "avg": 3550 },
-      "home_price": { "low": 560000, "high": 680000, "avg": 620000 },
-      "mortgage_monthly": { "low": 3900, "high": 4700, "avg": 4300 },
-      "utilities": { "total": { "low": 340, "high": 520, "avg": 430 } }
+      "rent_monthly": { "low": 3300, "high": 4400, "avg": 3850, "as_of": "2026-03" },
+      "home_price": { "low": 690000, "high": 880000, "avg": 785000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 4800, "high": 6300, "avg": 5550, "as_of": "2026-03" },
+      "utilities": {
+        "electric_gas": { "low": 300, "high": 480, "avg": 390 },
+        "water_sewer": { "low": 110, "high": 180, "avg": 145 },
+        "total": { "low": 410, "high": 660, "avg": 535 },
+        "as_of": "2026-03"
+      }
     }
   },
 
   "housing": {
+    "housing_units": 5200,
+    "median_value_owner_occupied": 465000,
     "market": {
-      "zillow_average_home_value": 415000,
-      "zillow_one_year_change_percent": 2.1,
+      "zillow_average_home_value": 465000,
+      "zillow_one_year_change_percent": 1.4,
+      "market_type_summary": "Steady demand in growth corridors",
+      "average_days_on_market": 48,
+      "median_sale_price_current": 458000,
+      "median_listing_price_realtor": 475000,
+      "median_listing_price_per_sqft": 232,
+      "active_listings_total": 185,
+      "q1_2026": { "median_sale_price": 458000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 385000 },
-        { "month": "2024-12", "median_sale_price": 402000 },
-        { "month": "2025-06", "median_sale_price": 408000 },
-        { "month": "2026-01", "median_sale_price": 410000 }
+        { "month": "2023-01", "median_sale_price": 425000 },
+        { "month": "2024-12", "median_sale_price": 442000 },
+        { "month": "2025-06", "median_sale_price": 452000 },
+        { "month": "2026-01", "median_sale_price": 458000 }
       ]
     }
   },
 
   "sources": {
+    "demographics": { "provider": "US Census Bureau / Yuba County EDC", "as_of": "2026-03" },
+    "rent": { "provider": "RentCafe / Zumper", "as_of": "2026-03" },
     "home_price": { "provider": "Sutter-Yuba Association of Realtors", "as_of": "2026-03" }
   }
 }

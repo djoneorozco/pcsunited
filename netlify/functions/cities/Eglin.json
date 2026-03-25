@@ -1,61 +1,70 @@
 {
-  "city": "Eglin AFB",
-  "place": "Valparaiso / Fort Walton Beach, FL",
+  "city": "Eglin Air Force Base",
+  "place": "Eglin AFB",
   "state": "FL",
   "geo_id": "1600000US1220050",
   "year": 2026,
   "last_updated_data_from_sources": "March 2026",
   "image_url": "https://www.eglin.af.mil",
-
   "zip": "32542",
-  "market_label": "Fort Walton Beach-Destin-Niceville Metro",
+  "market_label": "Emerald Coast - Okaloosa County",
 
-  "avg_home_value": 314718,
-  "average_home_value": 314718,
-  "avgHome": 314718,
-  "city_avg_home": 314718,
+  "avg_home_value": 442500,
+  "average_home_value": 442500,
+  "avgHome": 442500,
+  "city_avg_home": 442500,
+
+  "snapshot": {
+    "population_city": 3137,
+    "population_metro": 215000,
+    "median_household_income": 84167,
+    "median_home_price": 435000,
+    "market_trend_yoy": 2.2,
+    "traffic_level": "Moderate to High",
+    "employment_status": "Very Stable"
+  },
 
   "mortgage_assumptions": {
-    "apr_percent": 5.827,
+    "apr_percent": 6.31,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Calculations based on March 2026 VA loan rates for the Emerald Coast. Mortgage rates have trended down from late 2025 peaks."
+    "defaults_note": "Based on March 2026 Florida VA loan rates."
   },
 
-  "property_tax_rate": 1.05,
-  "insurance_rate": 0.65,
-  "hoa_monthly": 45,
+  "property_tax_rate": 0.95,
+  "insurance_rate": 0.85,
+  "hoa_monthly": 150,
 
   "avg_home_mortgage_monthly": {
-    "avg": 2185,
+    "avg": 3150,
     "as_of": "2026-03",
-    "notes": "Reflects P&I for typical Fort Walton Beach home value using a VA loan (0% down) at ~5.8% APR."
+    "notes": "VA loan estimate including P&I, taxes, and high Florida wind/flood insurance"
   },
 
   "population": {
     "estimate": 3137,
     "median_age": 25.0,
-    "persons_per_household": 3.1
+    "persons_per_household": 3.4
   },
 
   "households": {
-    "total_households": 1050
+    "total_households": 1150
   },
 
   "income": {
     "median_household_income": 84167,
-    "per_capita_income": 44778,
+    "per_capita_income": 41200,
     "poverty_rate_percent": 2.66
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 94.0,
-    "bachelors_degree_or_higher_percent": 44.0
+    "high_school_grad_or_higher_percent": 94.5,
+    "bachelors_degree_or_higher_percent": 32.1
   },
 
   "veterans": {
-    "veteran_population_percent": 15.5
+    "veteran_population_percent": 15.8
   },
 
   "immigration": {
@@ -63,123 +72,127 @@
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 18.5,
-    "unemployment_rate_percent": 3.4
+    "mean_travel_time_to_work_minutes": 13.1,
+    "unemployment_rate_percent": 3.2
+  },
+
+  "crime_status": {
+    "installation": "High security; restricted access. Extremely safe.",
+    "metro_dc_pg_county": "Valparaiso and Niceville are exceptionally safe; parts of Fort Walton Beach see higher property crime."
+  },
+
+  "school_quality": {
+    "on_base": "Eglin Elementary (Highly rated; Okaloosa County School District).",
+    "off_base": "Niceville and Valparaiso schools are among the top-rated in Florida."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 5.2,
+    "notes": "Highly competitive due to seasonal tourism and military demand."
+  },
+
+  "climate_weather": {
+    "spring": "Warm/Sunny; 65–80°F",
+    "summer": "Hot/Humid; 85–95°F (Hurricane Season)",
+    "fall": "Pleasant; 60–80°F",
+    "winter": "Cool/Mild; 45–65°F"
+  },
+
+  "special_events": [
+    "Emerald Coast Boat Week",
+    "Mullet Festival (Niceville)",
+    "Billy Bowlegs Pirate Festival",
+    "Eglin Gate-to-Gate Run"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Exceptional",
+    "description": "Premier testing and training hub; world-class beaches and strong community support."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Neutral to Favorable",
+    "bah_vs_rent_position": "Challenging",
+    "affordability_summary": "High insurance and HOA costs in coastal Florida can offset lower property taxes.",
+    "buyer_opportunity": "Better value found in Crestview; Niceville offers premium stability.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Stable Emerald Coast Demand",
+    "bluf_summary": "Coastal inventory remains tight; prices are buoyed by military and retiree demand.",
+    "status": "Seller-leaning",
+    "inventory_trend": "Decreasing",
+    "buyer_leverage": "Low",
+    "verdict": "BUY FOR LIFESTYLE AND APPRECIATION",
+    "verdict_color": "yellow",
+    "confidence_score": 87
+  },
+
+  "scorecard": {
+    "affordability_score": 62,
+    "growth_score": 78,
+    "stability_score": 96,
+    "military_fit_score": 98,
+    "overall_score": 84
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1550, "high": 1850, "avg": 1675, "as_of": "2026-03" },
-      "home_price": { "low": 245000, "high": 295000, "avg": 270000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 1412,
-        "high": 1701,
-        "avg": 1556,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1750, "high": 2200, "avg": 1950, "as_of": "2026-03" },
+      "home_price": { "low": 310000, "high": 375000, "avg": 345000, "as_of": "2026-03" },
+      "mortgage_monthly": { "low": 2200, "high": 2700, "avg": 2450, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 160, "high": 220, "avg": 190 },
-        "water_sewer": { "low": 55, "high": 80, "avg": 68 },
-        "total": { "low": 215, "high": 300, "avg": 258 },
+        "electric_gas": { "low": 180, "high": 280, "avg": 230 },
+        "water_sewer": { "low": 60, "high": 95, "avg": 75 },
+        "total": { "low": 240, "high": 375, "avg": 305 },
         "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1950, "high": 2500, "avg": 2225, "as_of": "2026-03" },
-      "home_price": { "low": 315000, "high": 425000, "avg": 370000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 1816,
-        "high": 2451,
-        "avg": 2133,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2100, "high": 3100, "avg": 2600 },
+      "home_price": { "low": 415000, "high": 520000, "avg": 465000 },
+      "mortgage_monthly": { "low": 2900, "high": 3800, "avg": 3350 },
       "utilities": {
-        "electric_gas": { "low": 210, "high": 300, "avg": 255 },
-        "water_sewer": { "low": 70, "high": 105, "avg": 88 },
-        "total": { "low": 280, "high": 405, "avg": 343 },
-        "as_of": "2026-03"
-      }
-    },
-    "4": {
-      "rent_monthly": { "low": 2600, "high": 3500, "avg": 3050, "as_of": "2026-03" },
-      "home_price": { "low": 450000, "high": 650000, "avg": 550000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 2594,
-        "high": 3747,
-        "avg": 3171,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
-      "utilities": {
-        "electric_gas": { "low": 275, "high": 410, "avg": 342 },
-        "water_sewer": { "low": 95, "high": 145, "avg": 120 },
-        "total": { "low": 370, "high": 555, "avg": 462 },
-        "as_of": "2026-03"
-      }
-    },
-    "5": {
-      "rent_monthly": { "low": 3400, "high": 4800, "avg": 4100, "as_of": "2026-03" },
-      "home_price": { "low": 650000, "high": 950000, "avg": 800000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 3747,
-        "high": 5477,
-        "avg": 4612,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
-      "utilities": {
-        "electric_gas": { "low": 360, "high": 550, "avg": 455 },
-        "water_sewer": { "low": 130, "high": 195, "avg": 162 },
-        "total": { "low": 490, "high": 745, "avg": 617 },
+        "electric_gas": { "low": 220, "high": 380, "avg": 300 },
+        "water_sewer": { "low": 75, "high": 120, "avg": 95 },
+        "total": { "low": 295, "high": 500, "avg": 395 },
         "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 2359,
-    "median_value_owner_occupied": 314718,
-
+    "housing_units": 1250,
+    "median_value_owner_occupied": 435000,
     "market": {
-      "zillow_average_home_value": 314718,
-      "zillow_one_year_change_percent": -2.2,
-      "market_type_summary": "Balanced market with stabilizing prices; typical Fort Walton Beach values are down ~2.2% YoY while inventory sits at roughly 433 units.",
-
-      "average_days_on_market": 57,
-
-      "median_sale_price_current": 324167,
-      "median_listing_price_realtor": 399400,
-      "median_listing_price_per_sqft": 188,
-      "active_listings_total": 433,
-
-      "q1_2026": {
-        "median_sale_price": 324167
-      },
-
+      "zillow_average_home_value": 442500,
+      "zillow_one_year_change_percent": 2.2,
+      "market_type_summary": "Tight inventory; premium pricing for Niceville/Valparaiso proximity.",
+      "average_days_on_market": 38,
+      "median_sale_price_current": 435000,
+      "median_listing_price_realtor": 449000,
+      "median_listing_price_per_sqft": 242,
+      "active_listings_total": 420,
+      "q1_2026": { "median_sale_price": 435000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 285000 },
-        { "month": "2024-12", "median_sale_price": 335000 },
-        { "month": "2025-06", "median_sale_price": 355000 },
-        { "month": "2025-12", "median_sale_price": 324167 },
-        { "month": "2026-02", "median_sale_price": 320000 }
+        { "month": "2023-01", "median_sale_price": 395000 },
+        { "month": "2024-12", "median_sale_price": 418000 },
+        { "month": "2025-06", "median_sale_price": 428000 },
+        { "month": "2026-01", "median_sale_price": 435000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "Census Bureau / [World Population Review](https://worldpopulationreview.com/us-cities/florida/eglin-afb)", "as_of": "2026-03" },
-    "rent": { "provider": "Realtor.com Research / Zillow", "as_of": "2026-01" },
-    "home_price": { "provider": "Zillow / [Redfin](https://www.redfin.com/city/6298/FL/Fort-Walton-Beach/housing-market)", "as_of": "2026-03" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I) / [Veterans United](https://www.veteransunited.com/va-loans/va-mortgage-rates/)", "as_of": "2026-03", "notes": "5.827% APR for 30-year fixed VA purchase as of March 11, 2026." },
-    "utilities": { "provider": "Gulf Power / Local Averages", "as_of": "2026-01" },
-    "market": { "provider": "Zillow / Redfin / Realtor.com", "as_of": "2026-03" },
-
-    "mortgage_city_defaults": {
-      "provider": "Okaloosa County Tax Collector",
-      "as_of": "2026-01",
-      "notes": "Effective rate approx 1.05% for primary residents with Homestead Exemption."
-    }
+    "demographics": { "provider": "World Population Review / US Census 2026", "as_of": "2026-03" },
+    "rent": { "provider": "Trulia / Zumper (32542 Data)", "as_of": "2026-03" },
+    "home_price": { "provider": "Zillow / Bright MLS (Okaloosa)", "as_of": "2026-03" }
   }
 }

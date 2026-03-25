@@ -1,178 +1,218 @@
-",
+{
+  "city": "Del Rio, TX",
+  "place": "Del Rio, TX",
+  "state": "TX",
+  "geo_id": "1600000US4819792",
+  "year": 2026,
+  "last_updated_data_from_sources": "March 2026",
+  "image_url": "https://www.laughlin.af.mil",
+  "zip": "78840",
+  "market_label": "Val Verde County Metro",
 
-  "zip": "78843",
-  "market_label": "Del Rio Micro Area",
+  "avg_home_value": 185000,
+  "average_home_value": 185000,
+  "avgHome": 185000,
+  "city_avg_home": 185000,
 
-  "avg_home_value": 204730,
-  "average_home_value": 204730,
-  "avgHome": 204730,
-  "city_avg_home": 204730,
+  "snapshot": {
+    "population_city": 35000,
+    "population_metro": 48000,
+    "median_household_income": 49500,
+    "median_home_price": 182000,
+    "market_trend_yoy": 1.2,
+    "traffic_level": "Very Low",
+    "employment_status": "Stable"
+  },
 
   "mortgage_assumptions": {
-    "apr_percent": 6.4,
+    "apr_percent": 6.35,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Calculations based on 2026 VA loan rates for Del Rio. Texas has no state income tax, making it a high-demand area for military retirees."
+    "defaults_note": "Based on March 2026 Texas VA loan rates."
   },
 
-  "property_tax_rate": 1.45,
-  "insurance_rate": 0.68,
-  "hoa_monthly": 0,
+  "property_tax_rate": 2.18,
+  "insurance_rate": 0.55,
+  "hoa_monthly": 10,
 
   "avg_home_mortgage_monthly": {
-    "avg": 1585,
-    "as_of": "2026-01",
-    "notes": "Reflects P&I for typical Del Rio home value using a VA loan (0% down)."
+    "avg": 1450,
+    "as_of": "2026-03",
+    "notes": "VA loan estimate; low entry cost offset by Texas property taxes"
   },
 
   "population": {
-    "estimate": 1888,
-    "median_age": 24.0,
-    "persons_per_household": 2.95
+    "estimate": 35000,
+    "median_age": 32.4,
+    "persons_per_household": 2.9
   },
 
   "households": {
-    "total_households": 640
+    "total_households": 12500
   },
 
   "income": {
-    "median_household_income": 32491,
-    "per_capita_income": 28450,
-    "poverty_rate_percent": 11.8
+    "median_household_income": 49500,
+    "per_capita_income": 22400,
+    "poverty_rate_percent": 18.5
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 92.1,
-    "bachelors_degree_or_higher_percent": 24.5
+    "high_school_grad_or_higher_percent": 82.5,
+    "bachelors_degree_or_higher_percent": 18.2
   },
 
   "veterans": {
-    "veteran_population_percent": 12.4
+    "veteran_population_percent": 11.8
   },
 
   "immigration": {
-    "foreign_born_percent": 3.39
+    "foreign_born_percent": 16.5
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 12.5,
-    "unemployment_rate_percent": 4.1
+    "mean_travel_time_to_work_minutes": 16.5,
+    "unemployment_rate_percent": 4.8
+  },
+
+  "crime_status": {
+    "installation": "High security; gated military community. Extremely safe.",
+    "metro_del_rio": "Del Rio is a small border community; property crime is the primary concern, but overall violent crime is low."
+  },
+
+  "school_quality": {
+    "on_base": "None; students attend San Felipe Del Rio CISD.",
+    "off_base": "San Felipe Del Rio CISD is the primary district; families often prefer schools in the north Del Rio neighborhoods."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 8.5,
+    "notes": "High availability; market is heavily influenced by the pilot training student turnover."
+  },
+
+  "climate_weather": {
+    "spring": "Warm/Dry; 65–85°F",
+    "summer": "Hot/Dry; 95–105°F+",
+    "fall": "Warm/Pleasant; 65–85°F",
+    "winter": "Cool/Clear; 40–60°F"
+  },
+
+  "special_events": [
+    "Laughlin AFB Open House",
+    "Fiesta de la Amistad",
+    "George Paul Memorial Bull Riding"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Strong",
+    "description": "Small, tight-knit community; perfect for pilot training focus with low off-base distractions."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Strongly Favorable",
+    "bah_vs_rent_position": "Favorable",
+    "affordability_summary": "Very low housing prices make buying highly accessible for junior personnel.",
+    "buyer_opportunity": "Ceniza Hills and newer developments in North Del Rio are the primary targets.",
+    "renter_advantage": true
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Most Affordable Texas Base",
+    "bluf_summary": "Laughlin remains one of the least expensive assignments for housing in the Air Force.",
+    "status": "Buyer-leaning",
+    "inventory_trend": "Stable",
+    "buyer_leverage": "High",
+    "verdict": "STRONG BUY",
+    "verdict_color": "green",
+    "confidence_score": 93
+  },
+
+  "scorecard": {
+    "affordability_score": 98,
+    "growth_score": 62,
+    "stability_score": 88,
+    "military_fit_score": 92,
+    "overall_score": 85
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 950, "high": 1250, "avg": 1100, "as_of": "2026-01" },
-      "home_price": { "low": 140000, "high": 180000, "avg": 160000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 875,
-        "high": 1125,
-        "avg": 1000,
-        "as_of": "2026-01",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 900, "high": 1200, "avg": 1050, "as_of": "2026-03" },
+      "home_price": { "low": 120000, "high": 155000, "avg": 135000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1100, "high": 1350, "avg": 1225, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 125, "high": 175, "avg": 150 },
-        "water_sewer": { "low": 40, "high": 65, "avg": 52 },
-        "total": { "low": 165, "high": 240, "avg": 202 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 140, "high": 220, "avg": 180 },
+        "water_sewer": { "low": 40, "high": 60, "avg": 50 },
+        "total": { "low": 180, "high": 280, "avg": 230 },
+        "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1400, "high": 1800, "avg": 1600, "as_of": "2026-01" },
-      "home_price": { "low": 210000, "high": 270000, "avg": 240000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1312,
-        "high": 1687,
-        "avg": 1500,
-        "as_of": "2026-01",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1250, "high": 1700, "avg": 1475 },
+      "home_price": { "low": 165000, "high": 210000, "avg": 185000 },
+      "mortgage_monthly": { "low": 1400, "high": 1750, "avg": 1575 },
       "utilities": {
-        "electric_gas": { "low": 175, "high": 245, "avg": 210 },
-        "water_sewer": { "low": 55, "high": 85, "avg": 70 },
-        "total": { "low": 230, "high": 330, "avg": 280 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 180, "high": 280, "avg": 230 },
+        "water_sewer": { "low": 50, "high": 80, "avg": 65 },
+        "total": { "low": 230, "high": 360, "avg": 295 },
+        "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 1900, "high": 2500, "avg": 2200, "as_of": "2026-01" },
-      "home_price": { "low": 290000, "high": 370000, "avg": 330000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1812,
-        "high": 2312,
-        "avg": 2062,
-        "as_of": "2026-01",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1650, "high": 2200, "avg": 1925 },
+      "home_price": { "low": 230000, "high": 310000, "avg": 270000 },
+      "mortgage_monthly": { "low": 1900, "high": 2500, "avg": 2200 },
       "utilities": {
-        "electric_gas": { "low": 240, "high": 330, "avg": 285 },
-        "water_sewer": { "low": 75, "high": 115, "avg": 95 },
-        "total": { "low": 315, "high": 445, "avg": 380 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 240, "high": 380, "avg": 310 },
+        "water_sewer": { "low": 70, "high": 110, "avg": 90 },
+        "total": { "low": 310, "high": 490, "avg": 400 },
+        "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2400, "high": 3300, "avg": 2850, "as_of": "2026-01" },
-      "home_price": { "low": 410000, "high": 550000, "avg": 480000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 2562,
-        "high": 3437,
-        "avg": 3000,
-        "as_of": "2026-01",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2100, "high": 2800, "avg": 2450 },
+      "home_price": { "low": 320000, "high": 420000, "avg": 370000 },
+      "mortgage_monthly": { "low": 2600, "high": 3400, "avg": 3000 },
       "utilities": {
-        "electric_gas": { "low": 315, "high": 460, "avg": 387 },
-        "water_sewer": { "low": 100, "high": 150, "avg": 125 },
-        "total": { "low": 415, "high": 610, "avg": 512 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 300, "high": 480, "avg": 390 },
+        "water_sewer": { "low": 90, "high": 140, "avg": 115 },
+        "total": { "low": 390, "high": 620, "avg": 505 },
+        "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 1550,
-    "median_value_owner_occupied": 204730,
-
+    "housing_units": 12500,
+    "median_value_owner_occupied": 182000,
     "market": {
-      "zillow_average_home_value": 204730,
-      "zillow_one_year_change_percent": -3.2,
-      "market_type_summary": "Balanced market with steady inventory and a moderate decrease in median sale prices year-over-year",
-
-      "average_days_on_market": 30,
-
-      "median_sale_price_current": 240000,
-      "median_listing_price_realtor": 274900,
-      "median_listing_price_per_sqft": 157,
-      "active_listings_total": 218,
-
-      "q1_2025": {
-        "median_sale_price": 235000
-      },
-
+      "zillow_average_home_value": 185000,
+      "zillow_one_year_change_percent": 1.2,
+      "market_type_summary": "High affordability with stable inventory.",
+      "average_days_on_market": 45,
+      "median_sale_price_current": 182000,
+      "median_listing_price_per_sqft": 125,
+      "active_listings_total": 450,
+      "q1_2026": { "median_sale_price": 182000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 215000 },
-        { "month": "2024-12", "median_sale_price": 287000 },
-        { "month": "2025-06", "median_sale_price": 187600 },
-        { "month": "2025-12", "median_sale_price": 250000 },
-        { "month": "2026-01", "median_sale_price": 240000 }
+        { "month": "2023-01", "median_sale_price": 165000 },
+        { "month": "2024-12", "median_sale_price": 178000 },
+        { "month": "2025-06", "median_sale_price": 181000 },
+        { "month": "2026-01", "median_sale_price": 182000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "Census Bureau (Del Rio/Val Verde Co)", "as_of": "2026-01" },
-    "rent": { "provider": "Zillow/Realtor.com", "as_of": "2026-01" },
-    "home_price": { "provider": "Redfin / Zillow", "as_of": "2026-01" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I)", "as_of": "2026-01", "notes": "6.4% APR for Del Rio market" },
-    "utilities": { "provider": "Local utility averages", "as_of": "2026-01" },
-    "market": { "provider": "Redfin / Zillow / Realtor.com", "as_of": "2026-01" },
-
-    "mortgage_city_defaults": {
-      "provider": "Val Verde County Tax Office",
-      "as_of": "2026-01",
-      "notes": "Effective rate approx 1.45% including local district levies."
-    }
+    "demographics": { "provider": "US Census Bureau / Val Verde Planning", "as_of": "2026-03" },
+    "rent": { "provider": "RentCafe / Zumper", "as_of": "2026-03" },
+    "home_price": { "provider": "Del Rio Board of Realtors", "as_of": "2026-03" }
   }
 }

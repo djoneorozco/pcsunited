@@ -15,7 +15,7 @@
   "city_avg_home": 461000,
 
   "snapshot": {
-    "population_city": 3071,
+    "population_city": 10500,
     "population_metro": 550000,
     "median_household_income": 69917,
     "median_home_price": 461000,
@@ -29,7 +29,7 @@
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Based on March 2026 Washington VA loan rates (5.625% base rate)."
+    "defaults_note": "Based on March 2026 Washington VA loan rates."
   },
 
   "property_tax_rate": 1.04,
@@ -77,13 +77,13 @@
   },
 
   "crime_status": {
-    "installation": "High security; restricted access. Extremely safe.",
-    "metro_dc_pg_county": "Airway Heights is generally safe; Spokane has higher property crime in downtown pockets."
+    "installation": "High security; restricted access. Extremely safe gated military community.",
+    "metro_spokane": "Airway Heights is generally safe; Spokane city center has higher property crime rates, but suburban Medical Lake and Cheney are very safe."
   },
 
   "school_quality": {
     "on_base": "Michael Anderson Elementary (Medical Lake School District).",
-    "off_base": "Medical Lake Middle and High Schools; highly rated for military-connected students."
+    "off_base": "Medical Lake School District is highly rated; Cheney School District is also a top choice for military families."
   },
 
   "rental_vacancy": {
@@ -107,20 +107,20 @@
 
   "military_lifestyle_fit": {
     "rating": "Very Strong",
-    "description": "Outdoor-centric mission with a strong connection to the local Inland Northwest community."
+    "description": "Outdoor-centric mission with a strong connection to the local Inland Northwest community; high quality of life."
   },
 
   "financial_brief": {
     "bah_vs_buy_position": "Neutral",
     "bah_vs_rent_position": "Favorable",
-    "affordability_summary": "Washington has no state income tax, but home prices have outpaced local wages in the last 36 months.",
+    "affordability_summary": "Washington has no state income tax, which helps offset home prices that have risen significantly since 2023.",
     "buyer_opportunity": "Medical Lake and Cheney offer the best mix of school quality and resale value.",
     "renter_advantage": true
   },
 
   "market_bluf": {
     "bluf_headline": "Balanced Inland Northwest Market",
-    "bluf_summary": "Price growth has normalized to 1.1% YOY; inventory is increasing, giving buyers more time to negotiate.",
+    "bluf_summary": "Price growth has normalized to 1.1% YOY; inventory is increasing, giving buyers more room to negotiate.",
     "status": "Balanced",
     "inventory_trend": "Increasing",
     "buyer_leverage": "Moderate",
@@ -146,7 +146,7 @@
   "by_bedroom": {
     "2": {
       "rent_monthly": { "low": 1350, "high": 1700, "avg": 1525, "as_of": "2026-03" },
-      "home_price": { "low": 285000, "high": 340000, "avg": 312500, "as_of": "2026-03" },
+      "home_price": { "low": 285000, "high": 340000, "avg": 312500, "as_of": "2026-01" },
       "mortgage_monthly": { "low": 1950, "high": 2350, "avg": 2150, "as_of": "2026-03" },
       "utilities": {
         "electric_gas": { "low": 120, "high": 210, "avg": 165 },
@@ -156,20 +156,42 @@
       }
     },
     "3": {
-      "rent_monthly": { "low": 1850, "high": 2400, "avg": 2125 },
-      "home_price": { "low": 395000, "high": 485000, "avg": 461000 },
-      "mortgage_monthly": { "low": 2600, "high": 3200, "avg": 2950 },
+      "rent_monthly": { "low": 1850, "high": 2400, "avg": 2125, "as_of": "2026-03" },
+      "home_price": { "low": 395000, "high": 485000, "avg": 461000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2600, "high": 3200, "avg": 2950, "as_of": "2026-03" },
       "utilities": {
         "electric_gas": { "low": 170, "high": 290, "avg": 230 },
         "water_sewer": { "low": 75, "high": 115, "avg": 95 },
         "total": { "low": 245, "high": 405, "avg": 325 },
         "as_of": "2026-03"
       }
+    },
+    "4": {
+      "rent_monthly": { "low": 2400, "high": 3100, "avg": 2750, "as_of": "2026-03" },
+      "home_price": { "low": 480000, "high": 580000, "avg": 530000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 3100, "high": 3800, "avg": 3450, "as_of": "2026-03" },
+      "utilities": {
+        "electric_gas": { "low": 210, "high": 350, "avg": 280 },
+        "water_sewer": { "low": 90, "high": 130, "avg": 110 },
+        "total": { "low": 300, "high": 480, "avg": 390 },
+        "as_of": "2026-03"
+      }
+    },
+    "5": {
+      "rent_monthly": { "low": 2900, "high": 3800, "avg": 3350, "as_of": "2026-03" },
+      "home_price": { "low": 590000, "high": 750000, "avg": 670000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 3800, "high": 4900, "avg": 4350, "as_of": "2026-03" },
+      "utilities": {
+        "electric_gas": { "low": 260, "high": 420, "avg": 340 },
+        "water_sewer": { "low": 110, "high": 160, "avg": 135 },
+        "total": { "low": 370, "high": 580, "avg": 475 },
+        "as_of": "2026-03"
+      }
     }
   },
 
   "housing": {
-    "housing_units": 1150,
+    "housing_units": 4200,
     "median_value_owner_occupied": 461000,
     "market": {
       "zillow_average_home_value": 461000,
@@ -191,7 +213,7 @@
   },
 
   "sources": {
-    "demographics": { "provider": "US Census Bureau / World Population Review", "as_of": "2026-03" },
+    "demographics": { "provider": "US Census Bureau / Spokane County Economic Development", "as_of": "2026-03" },
     "rent": { "provider": "Zillow / Apartments.com (Airway Heights)", "as_of": "2026-03" },
     "home_price": { "provider": "Bright MLS / Zillow (Spokane County)", "as_of": "2026-03" }
   }

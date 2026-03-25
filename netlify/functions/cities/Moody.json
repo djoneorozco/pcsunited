@@ -3,189 +3,217 @@
   "place": "Valdosta, GA",
   "state": "GA",
   "geo_id": "1600000US1378800",
-  "year": 2025,
-  "last_updated_data_from_sources": "January 2026",
-  "image_url": "https://cdn.prod.website-files.com",
+  "year": 2026,
+  "last_updated_data_from_sources": "March 2026",
+  "image_url": "https://www.moody.af.mil",
+  "zip": "31699",
+  "market_label": "Valdosta Metro - Lowndes County",
 
-  "zip": "31601",
-  "market_label": "Valdosta Metro",
+  "avg_home_value": 225000,
+  "average_home_value": 225000,
+  "avgHome": 225000,
+  "city_avg_home": 225000,
 
-  "avg_home_value": 218400,
-  "average_home_value": 218400,
-  "avgHome": 218400,
-  "city_avg_home": 218400,
-
-  "mortgage_assumptions": {
-    "apr_percent": 7.0,
-    "term_years": 30,
-    "down_payment_percent": 5,
-    "includes": "all_in",
-    "defaults_note": "City defaults apply to taxes/insurance/HOA only. APR varies by credit score and/or user override."
+  "snapshot": {
+    "population_city": 55800,
+    "population_metro": 148000,
+    "median_household_income": 52400,
+    "median_home_price": 222000,
+    "market_trend_yoy": 1.2,
+    "traffic_level": "Low",
+    "employment_status": "Stable"
   },
 
-  "property_tax_rate": 0.98,
-  "insurance_rate": 0.58,
-  "hoa_monthly": 0,
+  "mortgage_assumptions": {
+    "apr_percent": 6.35,
+    "term_years": 30,
+    "down_payment_percent": 0,
+    "includes": "va_loan_all_in",
+    "defaults_note": "Based on March 2026 Georgia VA loan rates."
+  },
+
+  "property_tax_rate": 0.92,
+  "insurance_rate": 0.52,
+  "hoa_monthly": 15,
 
   "avg_home_mortgage_monthly": {
-    "avg": 1378,
-    "as_of": "2026-01",
-    "notes": "Historical reference only; do not use for calculation. brain.js computes itemized mortgage from inputs + city rates."
+    "avg": 1650,
+    "as_of": "2026-03",
+    "notes": "VA loan estimate; very high affordability compared to national average"
   },
 
   "population": {
-    "estimate": 55420,
-    "median_age": 28.5,
-    "persons_per_household": 2.52
+    "estimate": 55800,
+    "median_age": 29.4,
+    "persons_per_household": 2.7
   },
 
   "households": {
-    "total_households": 21850
+    "total_households": 21500
   },
 
   "income": {
-    "median_household_income": 48200,
-    "per_capita_income": 25150,
-    "poverty_rate_percent": 24.8
+    "median_household_income": 52400,
+    "per_capita_income": 26500,
+    "poverty_rate_percent": 18.4
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 86.2,
+    "high_school_grad_or_higher_percent": 89.2,
     "bachelors_degree_or_higher_percent": 24.5
   },
 
   "veterans": {
-    "veteran_population_percent": 11.2
+    "veteran_population_percent": 11.8
   },
 
   "immigration": {
-    "foreign_born_percent": 3.8
+    "foreign_born_percent": 3.2
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 18.2,
-    "unemployment_rate_percent": 4.5
+    "mean_travel_time_to_work_minutes": 18.5,
+    "unemployment_rate_percent": 4.1
+  },
+
+  "crime_status": {
+    "installation": "High security; gated military community. Extremely safe.",
+    "metro_valdosta": "Valdosta has localized property crime in central city areas; suburban North Lowndes and Hahira are exceptionally safe."
+  },
+
+  "school_quality": {
+    "on_base": "None; students attend Lowndes County or Valdosta City Schools.",
+    "off_base": "Lowndes County Schools (specifically Hahira) are highly rated and preferred by military families."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 7.8,
+    "notes": "Healthy supply; many affordable single-family rentals in North Valdosta."
+  },
+
+  "climate_weather": {
+    "spring": "Warm/Sunny; 65–80°F",
+    "summer": "Hot/Very Humid; 90–98°F",
+    "fall": "Pleasant; 60–80°F",
+    "winter": "Cool/Damp; 40–60°F"
+  },
+
+  "special_events": [
+    "Thunder Over South Georgia Air Show",
+    "Azalea Festival",
+    "Wild Adventures Theme Park Events"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Very Strong",
+    "description": "True Southern hospitality; Valdosta is a classic military town with deep ties to the A-10 mission."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Strongly Favorable",
+    "bah_vs_rent_position": "Favorable",
+    "affordability_summary": "Low entry costs and steady demand make this an ideal market for first-time buyers.",
+    "buyer_opportunity": "Hahira and Northern Lowndes County offer the best long-term resale stability.",
+    "renter_advantage": true
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Affordable Deep South Hub",
+    "bluf_summary": "Steady demand and low inventory in prime school districts keep values stable.",
+    "status": "Balanced",
+    "inventory_trend": "Increasing",
+    "buyer_leverage": "Moderate",
+    "verdict": "STRONG BUY",
+    "verdict_color": "green",
+    "confidence_score": 92
+  },
+
+  "scorecard": {
+    "affordability_score": 95,
+    "growth_score": 65,
+    "stability_score": 90,
+    "military_fit_score": 94,
+    "overall_score": 86
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 950, "high": 1250, "avg": 1100, "as_of": "2026-01" },
-      "home_price": { "low": 125000, "high": 165000, "avg": 145000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 790,
-        "high": 1043,
-        "avg": 917,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1000, "high": 1300, "avg": 1150, "as_of": "2026-03" },
+      "home_price": { "low": 135000, "high": 175000, "avg": 155000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1150, "high": 1400, "avg": 1275, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 135, "high": 185, "avg": 160 },
-        "water_sewer": { "low": 50, "high": 75, "avg": 62 },
-        "total": { "low": 185, "high": 260, "avg": 222 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 140, "high": 210, "avg": 175 },
+        "water_sewer": { "low": 35, "high": 55, "avg": 45 },
+        "total": { "low": 175, "high": 265, "avg": 220 },
+        "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1350, "high": 1850, "avg": 1600, "as_of": "2026-01" },
-      "home_price": { "low": 195000, "high": 255000, "avg": 225000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1233,
-        "high": 1611,
-        "avg": 1422,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1400, "high": 1900, "avg": 1650 },
+      "home_price": { "low": 195000, "high": 265000, "avg": 225000 },
+      "mortgage_monthly": { "low": 1600, "high": 2000, "avg": 1800 },
       "utilities": {
-        "electric_gas": { "low": 185, "high": 265, "avg": 225 },
-        "water_sewer": { "low": 70, "high": 105, "avg": 87 },
-        "total": { "low": 255, "high": 370, "avg": 312 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 180, "high": 280, "avg": 230 },
+        "water_sewer": { "low": 45, "high": 75, "avg": 60 },
+        "total": { "low": 225, "high": 355, "avg": 290 },
+        "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 1850, "high": 2550, "avg": 2200, "as_of": "2026-01" },
-      "home_price": { "low": 285000, "high": 365000, "avg": 325000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1801,
-        "high": 2306,
-        "avg": 2054,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1800, "high": 2500, "avg": 2150 },
+      "home_price": { "low": 260000, "high": 360000, "avg": 310000 },
+      "mortgage_monthly": { "low": 2100, "high": 2700, "avg": 2400 },
       "utilities": {
-        "electric_gas": { "low": 245, "high": 355, "avg": 300 },
-        "water_sewer": { "low": 95, "high": 140, "avg": 117 },
-        "total": { "low": 340, "high": 495, "avg": 417 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 220, "high": 350, "avg": 285 },
+        "water_sewer": { "low": 60, "high": 100, "avg": 80 },
+        "total": { "low": 280, "high": 450, "avg": 365 },
+        "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2400, "high": 3300, "avg": 2850, "as_of": "2026-01" },
-      "home_price": { "low": 395000, "high": 525000, "avg": 460000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 2496,
-        "high": 3318,
-        "avg": 2907,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 2300, "high": 3200, "avg": 2750 },
+      "home_price": { "low": 350000, "high": 480000, "avg": 420000 },
+      "mortgage_monthly": { "low": 2800, "high": 3600, "avg": 3200 },
       "utilities": {
-        "electric_gas": { "low": 315, "high": 475, "avg": 395 },
-        "water_sewer": { "low": 125, "high": 180, "avg": 152 },
-        "total": { "low": 440, "high": 655, "avg": 547 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 280, "high": 450, "avg": 365 },
+        "water_sewer": { "low": 80, "high": 130, "avg": 105 },
+        "total": { "low": 360, "high": 580, "avg": 470 },
+        "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 24150,
-    "median_value_owner_occupied": 218400,
-
+    "housing_units": 21500,
+    "median_value_owner_occupied": 222000,
     "market": {
-      "zillow_average_home_value": 218400,
-      "zillow_one_year_change_percent": +1.8,
-      "market_type_summary": "Stable South Georgia market; constant rotation at Moody keeps the rental market tight and values appreciating moderately.",
-
-      "average_days_on_market": 49,
-
-      "median_sale_price_current": 232000,
-      "median_listing_price_realtor": 224900,
-      "median_listing_price_per_sqft": 134,
-      "active_listings_total": 485,
-
-      "q1_2025": {
-        "median_sale_price": 222000
-      },
-
+      "zillow_average_home_value": 225000,
+      "zillow_one_year_change_percent": 1.2,
+      "market_type_summary": "Steady demand with high affordability.",
+      "average_days_on_market": 42,
+      "median_sale_price_current": 222000,
+      "median_listing_price_realtor": 235000,
+      "median_listing_price_per_sqft": 135,
+      "active_listings_total": 415,
+      "q1_2026": { "median_sale_price": 222000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 198000 },
-        { "month": "2023-06", "median_sale_price": 208000 },
-        { "month": "2023-12", "median_sale_price": 215000 },
-        { "month": "2024-06", "median_sale_price": 225000 },
-        { "month": "2024-10", "median_sale_price": 230000 },
-        { "month": "2024-12", "median_sale_price": 228000 },
-        { "month": "2025-01", "median_sale_price": 229500 },
-        { "month": "2025-06", "median_sale_price": 236000 },
-        { "month": "2025-10", "median_sale_price": 239000 },
-        { "month": "2025-11", "median_sale_price": 240500 },
-        { "month": "2025-12", "median_sale_price": 232000 }
+        { "month": "2023-01", "median_sale_price": 195000 },
+        { "month": "2024-12", "median_sale_price": 215000 },
+        { "month": "2025-06", "median_sale_price": 218000 },
+        { "month": "2026-01", "median_sale_price": 222000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "ACS / Lowndes County Profile", "as_of": "2026-01" },
-    "rent": { "provider": "RentCafe / Zillow Observed Rent Index", "as_of": "2026-01", "notes": "Valdosta/Lowndes County bedroom rent ranges" },
-    "home_price": { "provider": "Valdosta Board of Realtors / Zillow", "as_of": "2026-01", "notes": "Reflects low cost of living and strong base-driven demand" },
-    "mortgage": { "provider": "Computed (P&I)", "as_of": "2026-01", "notes": "30yr fixed @ 7.0% APR, 5% down; excludes taxes/insurance/HOA" },
-    "utilities": { "provider": "Utility estimator (Local Averages)", "as_of": "2026-01", "notes": "Reflects Georgia Power and local gas rates; high humidity cooling loads" },
-    "market": { "provider": "Redfin / Realtor / Zillow", "as_of": "2026-01", "notes": "Market remains resilient with steady equity growth in Northern Valdosta suburbs" },
-
-    "mortgage_city_defaults": {
-      "provider": "Lowndes County Tax Commissioner",
-      "as_of": "2026-01",
-      "notes": "Effective rate ~0.98% based on current county and school board millage rates."
-    }
+    "demographics": { "provider": "US Census Bureau / Valdosta Economic Dev", "as_of": "2026-03" },
+    "rent": { "provider": "RentCafe / Zumper", "as_of": "2026-03" },
+    "home_price": { "provider": "South Georgia Board of Realtors", "as_of": "2026-03" }
   }
 }

@@ -1,185 +1,219 @@
 {
-  "city": "Wright-Patterson AFB",
-  "place": "Dayton, OH",
+  "city": "Dayton, OH",
+  "place": "Wright-Patterson Air Force Base",
   "state": "OH",
-  "geo_id": "1600000US3986660",
+  "geo_id": "1600000US3921000",
   "year": 2026,
   "last_updated_data_from_sources": "March 2026",
-  "image_url": "https://www.wpafb.af.mil",
-
+  "image_url": "https://cdn.prod.website-files.com",
   "zip": "45433",
-  "market_label": "Dayton-Kettering-Beavercreek Metro",
+  "market_label": "Dayton Metro",
 
-  "avg_home_value": 249950,
-  "average_home_value": 249950,
-  "avgHome": 249950,
-  "city_avg_home": 249950,
+  "avg_home_value": 238000,
+  "average_home_value": 238000,
+  "avgHome": 238000,
+  "city_avg_home": 238000,
+
+  "snapshot": {
+    "population_city": 137000,
+    "population_metro": 815000,
+    "median_household_income": 61200,
+    "median_home_price": 235000,
+    "market_trend_yoy": 3.1,
+    "traffic_level": "Moderate",
+    "employment_status": "Robust"
+  },
 
   "mortgage_assumptions": {
-    "apr_percent": 6.35,
+    "apr_percent": 6.25,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Based on March 2026 VA loan rates. The Dayton market remains one of the most affordable major military hubs in the U.S."
+    "defaults_note": "Based on March 2026 Ohio VA loan rates."
   },
 
-  "property_tax_rate": 2.15,
-  "insurance_rate": 0.42,
-  "hoa_monthly": 30,
+  "property_tax_rate": 1.58,
+  "insurance_rate": 0.65,
+  "hoa_monthly": 25,
 
   "avg_home_mortgage_monthly": {
-    "avg": 1685,
+    "avg": 1780,
     "as_of": "2026-03",
-    "notes": "Reflects P&I for typical Dayton home value using a VA loan (0% down) at 6.35% APR."
+    "notes": "VA loan estimate; Beavercreek and Fairborn are the primary markets for base personnel."
   },
 
   "population": {
-    "estimate": 1500,
-    "median_age": 25.4,
-    "persons_per_household": 2.80
+    "estimate": 137000,
+    "median_age": 34.2,
+    "persons_per_household": 2.4
   },
 
   "households": {
-    "total_households": 540
+    "total_households": 58000
   },
 
   "income": {
-    "median_household_income": 89615,
-    "per_capita_income": 34200,
-    "poverty_rate_percent": 7.04
+    "median_household_income": 61200,
+    "per_capita_income": 31800,
+    "poverty_rate_percent": 16.8
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 92.1,
-    "bachelors_degree_or_higher_percent": 43.0
+    "high_school_grad_or_higher_percent": 90.2,
+    "bachelors_degree_or_higher_percent": 27.5
   },
 
   "veterans": {
-    "veteran_population_percent": 14.5
+    "veteran_population_percent": 11.2
   },
 
   "immigration": {
-    "foreign_born_percent": 5.3
+    "foreign_born_percent": 5.4
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 18.5,
-    "unemployment_rate_percent": 4.4
+    "mean_travel_time_to_work_minutes": 21.5,
+    "unemployment_rate_percent": 4.2
+  },
+
+  "crime_status": {
+    "installation": "Extremely safe; gated military community.",
+    "metro_shreveport_bossier": "Beavercreek and Fairborn are considered very safe; Dayton urban core has standard metro crime concerns."
+  },
+
+  "school_quality": {
+    "on_base": "No on-base schools; students attend local districts.",
+    "off_base": "Beavercreek and Oakwood School Districts are exceptionally rated."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 7.1,
+    "notes": "Good selection of multi-family and single-family rentals in Fairborn."
+  },
+
+  "climate_weather": {
+    "spring": "Rainy/Mild; 42–65°F",
+    "summer": "Warm/Humid; 80–90°F",
+    "fall": "Crisp/Clear; 45–68°F",
+    "winter": "Cold/Snowy; 20–38°F"
+  },
+
+  "special_events": [
+    "Vectren Dayton Air Show",
+    "Air Force Marathon",
+    "Ohio Celtic Festival"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Exceptional",
+    "description": "Massive military and defense contractor presence; high local support for Wright-Patt."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Favorable",
+    "bah_vs_rent_position": "Favorable",
+    "affordability_summary": "Strongest value is found in the Fairborn and Riverside areas.",
+    "buyer_opportunity": "Strongest in the growing Beavercreek corridors.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Defense Growth Hub",
+    "bluf_summary": "Beavercreek and Fairborn offer stable value and elite schools for military families.",
+    "status": "Balanced",
+    "inventory_trend": "Increasing",
+    "buyer_leverage": "Medium",
+    "verdict": "STRONG BUY",
+    "verdict_color": "green",
+    "confidence_score": 91
+  },
+
+  "scorecard": {
+    "affordability_score": 88,
+    "growth_score": 75,
+    "stability_score": 92,
+    "military_fit_score": 98,
+    "overall_score": 88
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 925, "high": 1320, "avg": 1122, "as_of": "2026-03" },
-      "home_price": { "low": 145000, "high": 195000, "avg": 170000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 903,
-        "high": 1215,
-        "avg": 1059,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1200, "high": 1550, "avg": 1375, "as_of": "2026-03" },
+      "home_price": { "low": 155000, "high": 195000, "avg": 175000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1300, "high": 1600, "avg": 1450, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 135, "high": 185, "avg": 160 },
-        "water_sewer": { "low": 45, "high": 65, "avg": 55 },
-        "total": { "low": 180, "high": 250, "avg": 215 },
+        "electric_gas": { "low": 140, "high": 220, "avg": 180 },
+        "water_sewer": { "low": 40, "high": 65, "avg": 52 },
+        "total": { "low": 180, "high": 285, "avg": 232 },
         "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1200, "high": 1650, "avg": 1425, "as_of": "2026-03" },
-      "home_price": { "low": 215000, "high": 285000, "avg": 250000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 1339,
-        "high": 1775,
-        "avg": 1557,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1650, "high": 2100, "avg": 1875, "as_of": "2026-03" },
+      "home_price": { "low": 210000, "high": 275000, "avg": 238000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1600, "high": 2000, "avg": 1780, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 175, "high": 245, "avg": 210 },
-        "water_sewer": { "low": 55, "high": 85, "avg": 70 },
-        "total": { "low": 230, "high": 330, "avg": 280 },
+        "electric_gas": { "low": 180, "high": 290, "avg": 235 },
+        "water_sewer": { "low": 50, "high": 80, "avg": 65 },
+        "total": { "low": 230, "high": 370, "avg": 300 },
         "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 1650, "high": 2200, "avg": 1925, "as_of": "2026-03" },
-      "home_price": { "low": 315000, "high": 425000, "avg": 370000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 1962,
-        "high": 2647,
-        "avg": 2305,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2100, "high": 2800, "avg": 2450, "as_of": "2026-03" },
+      "home_price": { "low": 280000, "high": 375000, "avg": 325000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2200, "high": 2900, "avg": 2550, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 225, "high": 330, "avg": 278 },
-        "water_sewer": { "low": 75, "high": 115, "avg": 95 },
-        "total": { "low": 300, "high": 445, "avg": 373 },
+        "electric_gas": { "low": 230, "high": 360, "avg": 295 },
+        "water_sewer": { "low": 60, "high": 100, "avg": 80 },
+        "total": { "low": 290, "high": 460, "avg": 375 },
         "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2100, "high": 3100, "avg": 2600, "as_of": "2026-03" },
-      "home_price": { "low": 450000, "high": 650000, "avg": 550000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 2803,
-        "high": 4048,
-        "avg": 3426,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2700, "high": 3800, "avg": 3250, "as_of": "2026-03" },
+      "home_price": { "low": 395000, "high": 525000, "avg": 460000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 3100, "high": 4200, "avg": 3650, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 290, "high": 440, "avg": 365 },
-        "water_sewer": { "low": 100, "high": 155, "avg": 128 },
-        "total": { "low": 390, "high": 595, "avg": 493 },
+        "electric_gas": { "low": 280, "high": 440, "avg": 360 },
+        "water_sewer": { "low": 85, "high": 130, "avg": 107 },
+        "total": { "low": 365, "high": 570, "avg": 467 },
         "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 560,
-    "median_value_owner_occupied": 249950,
-
+    "housing_units": 62000,
+    "median_value_owner_occupied": 238000,
     "market": {
-      "zillow_average_home_value": 249950,
-      "zillow_one_year_change_percent": 4.15,
-      "market_type_summary": "Active market with steady growth; median sales price rose 4.15% to $249,950 as of early 2026.",
-
-      "average_days_on_market": 41,
-
-      "median_sale_price_current": 249950,
-      "median_listing_price_realtor": 160133,
-      "median_listing_price_per_sqft": 185,
-      "active_listings_total": 2015,
-
-      "q1_2026": {
-        "median_sale_price": 249950
-      },
-
+      "zillow_average_home_value": 238000,
+      "zillow_one_year_change_percent": 3.1,
+      "market_type_summary": "Steady demand with strong school district pull",
+      "average_days_on_market": 45,
+      "median_sale_price_current": 235000,
+      "median_listing_price_realtor": 248000,
+      "median_listing_price_per_sqft": 142,
+      "active_listings_total": 780,
+      "q1_2026": { "median_sale_price": 235000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 215000 },
-        { "month": "2024-12", "median_sale_price": 240000 },
-        { "month": "2025-06", "median_sale_price": 245000 },
-        { "month": "2026-01", "median_sale_price": 249950 },
-        { "month": "2026-03", "median_sale_price": 247000 }
+        { "month": "2023-01", "median_sale_price": 208000 },
+        { "month": "2024-12", "median_sale_price": 222000 },
+        { "month": "2025-06", "median_sale_price": 232000 },
+        { "month": "2026-01", "median_sale_price": 235000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "World Population Review / Census Bureau / Data USA", "as_of": "2026-02" },
-    "rent": { "provider": "Apartments.com / Rent.com / Zillow", "as_of": "2026-03" },
-    "home_price": { "provider": "Dayton MLS / Zillow / NeighborhoodScout", "as_of": "2026-03" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I) / 2026 BAH Rates", "as_of": "2026-03", "notes": "6.35% APR for Dayton market; 2026 BAH rates rose 6% from 2025." },
-    "utilities": { "provider": "AES Ohio / EnergySage / RentCafe", "as_of": "2026-02" },
-    "market": { "provider": "Dayton MLS / Redfin / Zillow", "as_of": "2026-03" },
-
-    "mortgage_city_defaults": {
-      "provider": "Montgomery County Auditor",
-      "as_of": "2026-01",
-      "notes": "Effective rate approx 2.15% after 2026 reappraisal adjustments."
-    }
+    "demographics": { "provider": "US Census Bureau / Dayton Development Coalition", "as_of": "2026-03" },
+    "rent": { "provider": "RentCafe", "as_of": "2026-03" },
+    "home_price": { "provider": "Dayton REALTORS", "as_of": "2026-03" }
   }
 }

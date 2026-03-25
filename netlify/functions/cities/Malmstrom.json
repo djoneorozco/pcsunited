@@ -2,60 +2,69 @@
   "city": "Great Falls, MT",
   "place": "Great Falls, MT",
   "state": "MT",
-  "geo_id": "3032800",
-  "year": 2025,
-  "last_updated_data_from_sources": "January 2026",
-  "image_url": "https://cdn.prod.website-files.com",
-
+  "geo_id": "1600000US3032800",
+  "year": 2026,
+  "last_updated_data_from_sources": "March 2026",
+  "image_url": "https://www.malmstrom.af.mil",
   "zip": "59405",
-  "market_label": "Great Falls Metro",
+  "market_label": "Great Falls Metro - Cascade County",
 
-  "avg_home_value": 312400,
-  "average_home_value": 312400,
-  "avgHome": 312400,
-  "city_avg_home": 312400,
+  "avg_home_value": 298000,
+  "average_home_value": 298000,
+  "avgHome": 298000,
+  "city_avg_home": 298000,
 
-  "mortgage_assumptions": {
-    "apr_percent": 7.0,
-    "term_years": 30,
-    "down_payment_percent": 5,
-    "includes": "all_in",
-    "defaults_note": "City defaults apply to taxes/insurance/HOA only. APR varies by credit score and/or user override."
+  "snapshot": {
+    "population_city": 60500,
+    "population_metro": 82000,
+    "median_household_income": 56500,
+    "median_home_price": 295000,
+    "market_trend_yoy": 1.2,
+    "traffic_level": "Low",
+    "employment_status": "Stable"
   },
 
-  "property_tax_rate": 1.08,
-  "insurance_rate": 0.48,
-  "hoa_monthly": 0,
+  "mortgage_assumptions": {
+    "apr_percent": 6.31,
+    "term_years": 30,
+    "down_payment_percent": 0,
+    "includes": "va_loan_all_in",
+    "defaults_note": "Based on March 2026 Montana VA loan rates."
+  },
+
+  "property_tax_rate": 0.88,
+  "insurance_rate": 0.45,
+  "hoa_monthly": 15,
 
   "avg_home_mortgage_monthly": {
-    "avg": 1968,
-    "as_of": "2026-01",
-    "notes": "Historical reference only; do not use for calculation. brain.js computes itemized mortgage from inputs + city rates."
+    "avg": 2050,
+    "as_of": "2026-03",
+    "notes": "VA loan estimate including P&I and moderate Montana property taxes"
   },
 
   "population": {
-    "estimate": 60442,
-    "median_age": 36.4,
-    "persons_per_household": 2.32
+    "estimate": 60500,
+    "median_age": 36.8,
+    "persons_per_household": 2.3
   },
 
   "households": {
-    "total_households": 26050
+    "total_households": 26000
   },
 
   "income": {
-    "median_household_income": 54250,
-    "per_capita_income": 31800,
+    "median_household_income": 56500,
+    "per_capita_income": 30200,
     "poverty_rate_percent": 13.8
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 93.1,
-    "bachelors_degree_or_higher_percent": 26.4
+    "high_school_grad_or_higher_percent": 93.5,
+    "bachelors_degree_or_higher_percent": 24.8
   },
 
   "veterans": {
-    "veteran_population_percent": 11.5
+    "veteran_population_percent": 15.2
   },
 
   "immigration": {
@@ -63,129 +72,147 @@
   },
 
   "labor": {
-    "mean_travel_time_to_work_minutes": 15.2,
-    "unemployment_rate_percent": 3.4
+    "mean_travel_time_to_work_minutes": 15.4,
+    "unemployment_rate_percent": 3.2
+  },
+
+  "crime_status": {
+    "installation": "High security; restricted access. Extremely safe gated military community.",
+    "metro_great_falls": "Great Falls is generally safe; property crime is the primary concern in the city center. Upper North Side is preferred."
+  },
+
+  "school_quality": {
+    "on_base": "Loy Elementary (Great Falls Public Schools).",
+    "off_base": "Great Falls Public Schools; families often prefer schools on the North Side near the base."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 4.8,
+    "notes": "Very low; high demand for quality off-base rentals."
+  },
+
+  "climate_weather": {
+    "spring": "Variable/Cool; 35–55°F",
+    "summer": "Pleasant/Dry; 75–85°F",
+    "fall": "Crisp/Sunny; 40–60°F",
+    "winter": "Cold/Windy; 10–30°F (Chinook winds provide brief warmups)"
+  },
+
+  "special_events": [
+    "Malmstrom Open House",
+    "Montana State Fair",
+    "Western Art Week"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Very Strong",
+    "description": "Critical ICBM mission; tight-knit 'Big Sky' community with unmatched outdoor recreation."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Strong Buy",
+    "bah_vs_rent_position": "Favorable",
+    "affordability_summary": "Stable prices and no state sales tax help maintain high purchasing power.",
+    "buyer_opportunity": "North Great Falls offers the best combination of safety and proximity to the gate.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Stable Big Sky Market",
+    "bluf_summary": "Steady demand with limited inventory ensures long-term market resilience.",
+    "status": "Balanced",
+    "inventory_trend": "Stable",
+    "buyer_leverage": "Moderate",
+    "verdict": "BUY FOR LONG TERM STABILITY",
+    "verdict_color": "green",
+    "confidence_score": 89
+  },
+
+  "scorecard": {
+    "affordability_score": 88,
+    "growth_score": 68,
+    "stability_score": 92,
+    "military_fit_score": 95,
+    "overall_score": 86
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1100, "high": 1400, "avg": 1250, "as_of": "2026-01" },
-      "home_price": { "low": 210000, "high": 255000, "avg": 232500, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1327,
-        "high": 1611,
-        "avg": 1469,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1100, "high": 1500, "avg": 1300, "as_of": "2026-03" },
+      "home_price": { "low": 185000, "high": 235000, "avg": 210000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1400, "high": 1750, "avg": 1575, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 130, "high": 180, "avg": 155 },
-        "water_sewer": { "low": 45, "high": 70, "avg": 57 },
-        "total": { "low": 175, "high": 250, "avg": 212 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 150, "high": 260, "avg": 205 },
+        "water_sewer": { "low": 45, "high": 75, "avg": 60 },
+        "total": { "low": 195, "high": 335, "avg": 265 },
+        "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1550, "high": 1950, "avg": 1750, "as_of": "2026-01" },
-      "home_price": { "low": 285000, "high": 345000, "avg": 315000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 1801,
-        "high": 2180,
-        "avg": 1990,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 1550, "high": 2100, "avg": 1825 },
+      "home_price": { "low": 255000, "high": 335000, "avg": 295000 },
+      "mortgage_monthly": { "low": 1850, "high": 2300, "avg": 2075 },
       "utilities": {
-        "electric_gas": { "low": 170, "high": 250, "avg": 210 },
-        "water_sewer": { "low": 55, "high": 85, "avg": 70 },
-        "total": { "low": 225, "high": 335, "avg": 280 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 190, "high": 340, "avg": 265 },
+        "water_sewer": { "low": 60, "high": 95, "avg": 75 },
+        "total": { "low": 250, "high": 435, "avg": 340 },
+        "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 1900, "high": 2500, "avg": 2200, "as_of": "2026-01" },
-      "home_price": { "low": 375000, "high": 465000, "avg": 420000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 2369,
-        "high": 2938,
-        "avg": 2654,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 2000, "high": 2800, "avg": 2400 },
+      "home_price": { "low": 340000, "high": 420000, "avg": 380000 },
+      "mortgage_monthly": { "low": 2400, "high": 2950, "avg": 2675 },
       "utilities": {
-        "electric_gas": { "low": 220, "high": 330, "avg": 275 },
-        "water_sewer": { "low": 75, "high": 115, "avg": 95 },
-        "total": { "low": 295, "high": 445, "avg": 370 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 240, "high": 430, "avg": 335 },
+        "water_sewer": { "low": 85, "high": 125, "avg": 105 },
+        "total": { "low": 325, "high": 555, "avg": 440 },
+        "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2400, "high": 3200, "avg": 2800, "as_of": "2026-01" },
-      "home_price": { "low": 485000, "high": 615000, "avg": 550000, "as_of": "2026-01" },
-      "mortgage_monthly": {
-        "low": 3065,
-        "high": 3887,
-        "avg": 3476,
-        "as_of": "2026-01",
-        "assumptions": "P&I only; excludes taxes/insurance/HOA/PMI"
-      },
+      "rent_monthly": { "low": 2600, "high": 3500, "avg": 3050 },
+      "home_price": { "low": 430000, "high": 550000, "avg": 490000 },
+      "mortgage_monthly": { "low": 3000, "high": 3850, "avg": 3425 },
       "utilities": {
-        "electric_gas": { "low": 280, "high": 420, "avg": 350 },
-        "water_sewer": { "low": 95, "high": 150, "avg": 122 },
-        "total": { "low": 375, "high": 570, "avg": 472 },
-        "as_of": "2026-01"
+        "electric_gas": { "low": 300, "high": 550, "avg": 425 },
+        "water_sewer": { "low": 110, "high": 160, "avg": 135 },
+        "total": { "low": 410, "high": 710, "avg": 560 },
+        "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 28140,
-    "median_value_owner_occupied": 312400,
-
+    "housing_units": 26000,
+    "median_value_owner_occupied": 295000,
     "market": {
-      "zillow_average_home_value": 312400,
-      "zillow_one_year_change_percent": +2.1,
-      "market_type_summary": "Stable, slow-growth market; Great Falls remains one of the most affordable metro areas in Montana.",
-
-      "average_days_on_market": 45,
-
-      "median_sale_price_current": 320000,
-      "median_listing_price_realtor": 315000,
-      "median_listing_price_per_sqft": 178,
-      "active_listings_total": 284,
-
-      "q1_2025": {
-        "median_sale_price": 310000
-      },
-
+      "zillow_average_home_value": 298000,
+      "zillow_one_year_change_percent": 1.2,
+      "market_type_summary": "Steady demand with limited local inventory.",
+      "average_days_on_market": 48,
+      "median_sale_price_current": 295000,
+      "median_listing_price_per_sqft": 158,
+      "active_listings_total": 312,
+      "q1_2026": { "median_sale_price": 295000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 285000 },
-        { "month": "2023-06", "median_sale_price": 298000 },
-        { "month": "2023-12", "median_sale_price": 302000 },
-        { "month": "2024-06", "median_sale_price": 312000 },
-        { "month": "2024-10", "median_sale_price": 318000 },
-        { "month": "2024-12", "median_sale_price": 315000 },
-        { "month": "2025-01", "median_sale_price": 316500 },
-        { "month": "2025-06", "median_sale_price": 322000 },
-        { "month": "2025-10", "median_sale_price": 325000 },
-        { "month": "2025-11", "median_sale_price": 325800 },
-        { "month": "2025-12", "median_sale_price": 320000 }
+        { "month": "2023-01", "median_sale_price": 265000 },
+        { "month": "2024-12", "median_sale_price": 288000 },
+        { "month": "2025-06", "median_sale_price": 292000 },
+        { "month": "2026-01", "median_sale_price": 295000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "ACS / Cascade County Profile", "as_of": "2026-01" },
-    "rent": { "provider": "Zillow/Realtor.com Estimates", "as_of": "2026-01", "notes": "Great Falls bedroom rent ranges" },
-    "home_price": { "provider": "Great Falls Association of Realtors / Zillow", "as_of": "2026-01", "notes": "Stable market with low volatility" },
-    "mortgage": { "provider": "Computed (P&I)", "as_of": "2026-01", "notes": "30yr fixed @ 7.0% APR, 5% down; excludes taxes/insurance/HOA" },
-    "utilities": { "provider": "Utility estimator (Local Averages)", "as_of": "2026-01", "notes": "Reflects Northwestern Energy rates" },
-    "market": { "provider": "Redfin / Zillow / local MLS", "as_of": "2026-01", "notes": "Market is balanced with steady inventory levels" },
-
-    "mortgage_city_defaults": {
-      "provider": "Cascade County Treasurer",
-      "as_of": "2026-01",
-      "notes": "Effective rate ~1.08% for city residential property."
-    }
+    "demographics": { "provider": "US Census Bureau / Cascade County Planning", "as_of": "2026-03" },
+    "rent": { "provider": "RentCafe / Zillow", "as_of": "2026-03" },
+    "home_price": { "provider": "Great Falls Association of Realtors", "as_of": "2026-03" }
   }
 }

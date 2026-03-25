@@ -1,185 +1,219 @@
 {
-  "city": "Scott AFB",
-  "place": "O'Fallon, IL",
+  "city": "Belleville, IL",
+  "place": "Scott Air Force Base",
   "state": "IL",
-  "geo_id": "1600000US1755249",
+  "geo_id": "1600000US1704845",
   "year": 2026,
   "last_updated_data_from_sources": "March 2026",
-  "image_url": "https://www.scott.af.mil",
-
+  "image_url": "https://cdn.prod.website-files.com",
   "zip": "62225",
-  "market_label": "St. Louis Metro East",
+  "market_label": "St. Louis Metro",
 
-  "avg_home_value": 242850,
-  "average_home_value": 242850,
-  "avgHome": 242850,
-  "city_avg_home": 242850,
+  "avg_home_value": 215000,
+  "average_home_value": 215000,
+  "avgHome": 215000,
+  "city_avg_home": 215000,
+
+  "snapshot": {
+    "population_city": 42000,
+    "population_metro": 2810000,
+    "median_household_income": 66800,
+    "median_home_price": 212000,
+    "market_trend_yoy": 1.2,
+    "traffic_level": "Moderate",
+    "employment_status": "Stable"
+  },
 
   "mortgage_assumptions": {
-    "apr_percent": 6.30,
+    "apr_percent": 6.25,
     "term_years": 30,
     "down_payment_percent": 0,
     "includes": "va_loan_all_in",
-    "defaults_note": "Calculations based on March 2026 VA loan rates for Southern Illinois. Higher property tax rates in IL are a significant factor in monthly overhead."
+    "defaults_note": "Based on March 2026 Illinois VA loan rates."
   },
 
   "property_tax_rate": 2.25,
-  "insurance_rate": 0.44,
-  "hoa_monthly": 25,
+  "insurance_rate": 0.55,
+  "hoa_monthly": 15,
 
   "avg_home_mortgage_monthly": {
-    "avg": 1955,
+    "avg": 1820,
     "as_of": "2026-03",
-    "notes": "Reflects P&I + IL property taxes for typical O'Fallon home value using a VA loan (0% down) at 6.3% APR."
+    "notes": "VA loan estimate; Illinois property taxes are higher than national average."
   },
 
   "population": {
-    "estimate": 32840,
-    "median_age": 35.8,
-    "persons_per_household": 2.65
+    "estimate": 42000,
+    "median_age": 34.5,
+    "persons_per_household": 2.4
   },
 
   "households": {
-    "total_households": 12450
+    "total_households": 17500
   },
 
   "income": {
-    "median_household_income": 92450,
-    "per_capita_income": 44820,
-    "poverty_rate_percent": 5.4
+    "median_household_income": 66800,
+    "per_capita_income": 31400,
+    "poverty_rate_percent": 12.4
   },
 
   "education": {
-    "high_school_grad_or_higher_percent": 96.2,
-    "bachelors_degree_or_higher_percent": 48.5
+    "high_school_grad_or_higher_percent": 92.8,
+    "bachelors_degree_or_higher_percent": 27.5
   },
 
   "veterans": {
-    "veteran_population_percent": 15.8
+    "veteran_population_percent": 12.1
   },
 
   "immigration": {
-    "foreign_born_percent": 4.2
+    "foreign_born_percent": 3.8
   },
 
   "labor": {
     "mean_travel_time_to_work_minutes": 22.4,
-    "unemployment_rate_percent": 3.9
+    "unemployment_rate_percent": 4.2
+  },
+
+  "crime_status": {
+    "installation": "Extremely safe; gated military community.",
+    "metro_shreveport_bossier": "Belleville is generally stable; caution advised in specific North St. Louis metro pockets."
+  },
+
+  "school_quality": {
+    "on_base": "Mascoutah School District 19 serves on-base residents.",
+    "off_base": "Mascoutah and O'Fallon schools are highly rated and preferred."
+  },
+
+  "rental_vacancy": {
+    "rate_percent": 6.4,
+    "notes": "Tight supply in O'Fallon; more availability in Belleville."
+  },
+
+  "climate_weather": {
+    "spring": "Mild/Rainy; 45–68°F",
+    "summer": "Hot/Humid; 85–95°F",
+    "fall": "Crisp; 50–72°F",
+    "winter": "Cold/Light Snow; 25–42°F"
+  },
+
+  "special_events": [
+    "Scott AFB Air Show",
+    "Belleville Art on the Square",
+    "St. Louis Fair"
+  ],
+
+  "military_lifestyle_fit": {
+    "rating": "Exceptional",
+    "description": "Deep historical ties; the region is very accommodating to Scott personnel."
+  },
+
+  "financial_brief": {
+    "bah_vs_buy_position": "Favorable",
+    "bah_vs_rent_position": "Favorable",
+    "affordability_summary": "High property taxes are offset by relatively low entry price points.",
+    "buyer_opportunity": "Strongest in the growing O'Fallon and Shiloh areas.",
+    "renter_advantage": false
+  },
+
+  "market_bluf": {
+    "bluf_headline": "Stable Midwestern Anchor",
+    "bluf_summary": "Steady value and top-tier local schools for military families.",
+    "status": "Balanced",
+    "inventory_trend": "Stable",
+    "buyer_leverage": "Medium",
+    "verdict": "BUY",
+    "verdict_color": "green",
+    "confidence_score": 88
+  },
+
+  "scorecard": {
+    "affordability_score": 85,
+    "growth_score": 58,
+    "stability_score": 92,
+    "military_fit_score": 95,
+    "overall_score": 83
+  },
+
+  "rules": {
+    "max_safe_housing_ratio": 0.30,
+    "warning_ratio": 0.35,
+    "danger_ratio": 0.40
   },
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1050, "high": 1400, "avg": 1225, "as_of": "2026-03" },
-      "home_price": { "low": 155000, "high": 205000, "avg": 180000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 959,
-        "high": 1269,
-        "avg": 1114,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1200, "high": 1550, "avg": 1375, "as_of": "2026-03" },
+      "home_price": { "low": 140000, "high": 175000, "avg": 158000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1250, "high": 1550, "avg": 1400, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 140, "high": 195, "avg": 168 },
-        "water_sewer": { "low": 50, "high": 75, "avg": 62 },
-        "total": { "low": 190, "high": 270, "avg": 230 },
+        "electric_gas": { "low": 130, "high": 190, "avg": 160 },
+        "water_sewer": { "low": 45, "high": 65, "avg": 55 },
+        "total": { "low": 175, "high": 255, "avg": 215 },
         "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 1550, "high": 2200, "avg": 1875, "as_of": "2026-03" },
-      "home_price": { "low": 225000, "high": 315000, "avg": 270000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 1393,
-        "high": 1950,
-        "avg": 1671,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 1600, "high": 2100, "avg": 1850, "as_of": "2026-03" },
+      "home_price": { "low": 190000, "high": 245000, "avg": 215000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 1650, "high": 2050, "avg": 1850, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 190, "high": 270, "avg": 230 },
-        "water_sewer": { "low": 65, "high": 105, "avg": 85 },
-        "total": { "low": 255, "high": 375, "avg": 315 },
+        "electric_gas": { "low": 160, "high": 240, "avg": 200 },
+        "water_sewer": { "low": 55, "high": 85, "avg": 70 },
+        "total": { "low": 215, "high": 325, "avg": 270 },
         "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 2100, "high": 2900, "avg": 2500, "as_of": "2026-03" },
-      "home_price": { "low": 325000, "high": 450000, "avg": 387500, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 2012,
-        "high": 2786,
-        "avg": 2399,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2100, "high": 2800, "avg": 2450, "as_of": "2026-03" },
+      "home_price": { "low": 260000, "high": 340000, "avg": 300000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 2200, "high": 2900, "avg": 2550, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 245, "high": 355, "avg": 300 },
-        "water_sewer": { "low": 90, "high": 140, "avg": 115 },
-        "total": { "low": 335, "high": 495, "avg": 415 },
+        "electric_gas": { "low": 190, "high": 300, "avg": 245 },
+        "water_sewer": { "low": 65, "high": 100, "avg": 82 },
+        "total": { "low": 255, "high": 400, "avg": 327 },
         "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 2700, "high": 3800, "avg": 3250, "as_of": "2026-03" },
-      "home_price": { "low": 475000, "high": 675000, "avg": 575000, "as_of": "2026-03" },
-      "mortgage_monthly": {
-        "low": 2940,
-        "high": 4179,
-        "avg": 3560,
-        "as_of": "2026-03",
-        "assumptions": "VA Loan P&I only"
-      },
+      "rent_monthly": { "low": 2700, "high": 3600, "avg": 3150, "as_of": "2026-03" },
+      "home_price": { "low": 360000, "high": 480000, "avg": 420000, "as_of": "2026-01" },
+      "mortgage_monthly": { "low": 3100, "high": 4100, "avg": 3600, "as_of": "2026-03" },
       "utilities": {
-        "electric_gas": { "low": 320, "high": 490, "avg": 405 },
-        "water_sewer": { "low": 120, "high": 185, "avg": 152 },
-        "total": { "low": 440, "high": 675, "avg": 557 },
+        "electric_gas": { "low": 240, "high": 370, "avg": 305 },
+        "water_sewer": { "low": 85, "high": 130, "avg": 107 },
+        "total": { "low": 325, "high": 500, "avg": 412 },
         "as_of": "2026-03"
       }
     }
   },
 
   "housing": {
-    "housing_units": 13100,
-    "median_value_owner_occupied": 242850,
-
+    "housing_units": 18200,
+    "median_value_owner_occupied": 215000,
     "market": {
-      "zillow_average_home_value": 242850,
-      "zillow_one_year_change_percent": 4.2,
-      "market_type_summary": "Firm seller's market with consistent military and professional demand; typical sales remain stable at ~$243k.",
-
-      "average_days_on_market": 28,
-
-      "median_sale_price_current": 258000,
-      "median_listing_price_realtor": 279900,
-      "median_listing_price_per_sqft": 155,
-      "active_listings_total": 245,
-
-      "q1_2026": {
-        "median_sale_price": 252000
-      },
-
+      "zillow_average_home_value": 215000,
+      "zillow_one_year_change_percent": 1.2,
+      "market_type_summary": "Steady demand from base personnel",
+      "average_days_on_market": 42,
+      "median_sale_price_current": 212000,
+      "median_listing_price_realtor": 225000,
+      "median_listing_price_per_sqft": 132,
+      "active_listings_total": 450,
+      "q1_2026": { "median_sale_price": 212000 },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 215000 },
-        { "month": "2024-12", "median_sale_price": 245000 },
-        { "month": "2025-06", "median_sale_price": 265000 },
-        { "month": "2025-12", "median_sale_price": 255000 },
-        { "month": "2026-02", "median_sale_price": 258000 }
+        { "month": "2023-01", "median_sale_price": 198000 },
+        { "month": "2024-12", "median_sale_price": 208000 },
+        { "month": "2025-06", "median_sale_price": 214000 },
+        { "month": "2026-01", "median_sale_price": 212000 }
       ]
     }
   },
 
   "sources": {
-    "demographics": { "provider": "Census Bureau / St. Clair County Economic Development", "as_of": "2026-02" },
-    "rent": { "provider": "Zillow Observed Rent Index (ZORI) / HotPads", "as_of": "2026-03" },
-    "home_price": { "provider": "Zillow / Redfin / MARIS MLS", "as_of": "2026-03" },
-    "mortgage": { "provider": "VA Loan Estimate (P&I) / 2026 BAH Rates", "as_of": "2026-03", "notes": "6.3% APR for Metro East market; 2026 BAH rates rose 5.8%." },
-    "utilities": { "provider": "Ameren Illinois / Illinois American Water", "as_of": "2026-02" },
-    "market": { "provider": "Redfin / Zillow / Realtor.com", "as_of": "2026-03" },
-
-    "mortgage_city_defaults": {
-      "provider": "St. Clair County Assessor",
-      "as_of": "2026-01",
-      "notes": "Effective rate approx 2.25% based on O'Fallon and Belleville township rates."
-    }
+    "demographics": { "provider": "US Census / St. Clair County Economic Development", "as_of": "2026-03" },
+    "rent": { "provider": "RentCafe", "as_of": "2026-03" },
+    "home_price": { "provider": "REALTOR Association of Southwestern Illinois", "as_of": "2026-03" }
   }
 }

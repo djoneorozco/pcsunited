@@ -97,7 +97,7 @@ exports.handler = async function (event) {
     yos,
     family,
     base,
-    notes
+    notes,
     projected_home_price,
     downpayment,
     credit_score

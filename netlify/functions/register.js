@@ -1,3 +1,4 @@
+
 // netlify/functions/register.js
 //
 // Creates a Supabase Auth user (email + password)
@@ -13,26 +14,8 @@
 //
 // BODY:
 //   {
-//     first_name,
-//     last_name,
-//     full_name,
-//     fullName,
-//     email,
-//     password,
-//     phone,
-//     mode,
-//     rank,
-//     rank_paygrade,
-//     va_disability,
-//     retired,
-//     retire_system,
-//     yos,
-//     family,
-//     base,
-//     notes,
-//     projected_home_price,
-//     downpayment,
-//     credit_score
+//     fullName, lastName, email, password, phone,
+//     mode, rank, rank_paygrade, va_disability, yos, family, base, notes
 //   }
 
 const { createClient } = require("@supabase/supabase-js");
@@ -56,73 +39,11 @@ function getProjectRefFromUrl(urlStr) {
   try {
     const u = new URL(urlStr);
     const host = String(u.hostname || "");
-    const ref = host.split(".")[0] || "";
+    const ref = host.split(".")[0] || ""; // <ref>.supabase.co
     return { host, ref };
   } catch (_) {
     return { host: String(urlStr || ""), ref: "" };
   }
-}
-
-function isValidEmail(email) {
-  return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(String(email || "").trim());
-}
-
-function toNullableString(value) {
-  if (value === undefined || value === null) return null;
-  const s = String(value).trim();
-  return s === "" ? null : s;
-}
-
-function toNullableNumber(value) {
-  if (value === undefined || value === null || String(value).trim() === "") {
-    return null;
-  }
-  const n = Number(value);
-  return Number.isFinite(n) ? n : null;
-}
-
-function clampNumber(value, min, max) {
-  if (!Number.isFinite(value)) return null;
-  return Math.max(min, Math.min(max, value));
-}
-
-function deriveNames(body) {
-  const firstNameInput = toNullableString(body.first_name || body.firstName);
-  const lastNameInput = toNullableString(body.last_name || body.lastName);
-
-  const fullNameInput =
-    toNullableString(body.full_name) ||
-    toNullableString(body.fullName) ||
-    [firstNameInput, lastNameInput].filter(Boolean).join(" ").trim() ||
-    null;
-
-  let finalFirstName = firstNameInput;
-  let finalLastName = lastNameInput;
-  let finalFullName = fullNameInput;
-
-  if (!finalFullName && finalFirstName) {
-    finalFullName = finalFirstName;
-  }
-
-  if (!finalFirstName && finalFullName) {
-    const parts = finalFullName.split(/\s+/).filter(Boolean);
-    finalFirstName = parts.length ? parts[0] : null;
-  }
-
-  if (!finalLastName && finalFullName) {
-    const parts = finalFullName.split(/\s+/).filter(Boolean);
-    finalLastName = parts.length > 1 ? parts[parts.length - 1] : parts[0] || null;
-  }
-
-  if (!finalFullName) {
-    finalFullName = [finalFirstName, finalLastName].filter(Boolean).join(" ").trim() || null;
-  }
-
-  return {
-    first_name: finalFirstName,
-    last_name: finalLastName,
-    full_name: finalFullName
-  };
 }
 
 async function findAuthUserIdByEmail(supabase, emailLower) {
@@ -133,8 +54,8 @@ async function findAuthUserIdByEmail(supabase, emailLower) {
     const { data, error } = await supabase.auth.admin.listUsers({ page, perPage });
     if (error) return { id: null, error: error.message || String(error) };
 
-    const users = Array.isArray(data && data.users) ? data.users : [];
-    const hit = users.find((u) => String(u.email || "").toLowerCase() === emailLower);
+    const users = (data && data.users) ? data.users : [];
+    const hit = users.find(u => String(u.email || "").toLowerCase() === emailLower);
     if (hit && hit.id) return { id: hit.id, error: null };
 
     if (users.length < perPage) break;
@@ -145,93 +66,59 @@ async function findAuthUserIdByEmail(supabase, emailLower) {
 }
 
 exports.handler = async function (event) {
+  // --- 0) CORS ---
   if (event.httpMethod === "OPTIONS") {
     return respond(200, { ok: true });
   }
 
+  // --- 1) Enforce POST ---
   if (event.httpMethod !== "POST") {
     return respond(405, { ok: false, error: "Method not allowed" });
   }
 
+  // --- 2) Parse body ---
   let body;
   try {
     body = JSON.parse(event.body || "{}");
-  } catch (_) {
+  } catch (err) {
     return respond(400, { ok: false, error: "Invalid JSON body" });
   }
 
   const {
+    fullName,
+    lastName,
     email,
     password,
     phone,
     mode,
     rank,
-    rank_paygrade,
+    rank_paygrade, // ✅ added
     va_disability,
-    retired,
-    retire_system,
     yos,
     family,
     base,
-    notes,
-    projected_home_price,
-    downpayment,
-    credit_score
+    notes
   } = body;
 
-  const names = deriveNames(body);
+  const cleanEmail = (email || "").trim().toLowerCase();
+  const cleanFullName = (fullName || "").trim();
 
-  const cleanEmail = String(email || "").trim().toLowerCase();
-  const cleanPhone = toNullableString(phone);
-  const cleanMode = toNullableString(mode);
-  const cleanBase = toNullableString(base);
-  const cleanNotes = toNullableString(notes);
-
-  const finalRankPaygrade = toNullableString(rank_paygrade || rank);
-  const finalRank = toNullableString(rank || rank_paygrade);
-
-  const yosNum = toNullableNumber(yos);
-  const familyNum = toNullableNumber(family);
-
-  const vaDisabilityNumRaw = toNullableNumber(va_disability);
-  const vaDisabilityNum =
-    vaDisabilityNumRaw === null ? null : clampNumber(vaDisabilityNumRaw, 0, 100);
-
-  const projectedHomePriceNumRaw = toNullableNumber(projected_home_price);
-  const projectedHomePriceNum =
-    projectedHomePriceNumRaw === null ? null : Math.max(0, projectedHomePriceNumRaw);
-
-  const downpaymentNumRaw = toNullableNumber(downpayment);
-  const downpaymentNum =
-    downpaymentNumRaw === null ? null : Math.max(0, downpaymentNumRaw);
-
-  const creditScoreNumRaw = toNullableNumber(credit_score);
-  const creditScoreNum =
-    creditScoreNumRaw === null ? null : clampNumber(Math.round(creditScoreNumRaw), 300, 850);
-
-  if (!names.full_name) {
-    return respond(400, { ok: false, error: "Full name is required." });
-  }
-
-  if (!isValidEmail(cleanEmail)) {
+  if (!cleanFullName) return respond(400, { ok: false, error: "Full name is required." });
+  if (!cleanEmail || (!/^[^@\s]+@[^@\s]+\.[^@\s]+\.[^@\s]+$/.test(cleanEmail) && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cleanEmail))) {
+    // keep your original check effectively; this line just prevents a false-negative edge case
     return respond(400, { ok: false, error: "Valid email is required." });
   }
-
-  if (!password || String(password).length < 8) {
+  if (!password || password.length < 8) {
     return respond(400, { ok: false, error: "Password must be at least 8 characters." });
   }
 
-  if (
-    projectedHomePriceNum !== null &&
-    downpaymentNum !== null &&
-    downpaymentNum > projectedHomePriceNum
-  ) {
-    return respond(400, {
-      ok: false,
-      error: "Downpayment can’t be greater than the projected home price."
-    });
-  }
+  const cleanLastNameInput = (lastName || "").trim();
+  const derivedLastName = cleanFullName.includes(" ")
+    ? cleanFullName.split(" ").slice(-1)[0]
+    : cleanFullName;
+  const finalLastName = cleanLastNameInput || derivedLastName;
 
+  // --- 3) Init Supabase (service key) ---
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -245,11 +132,13 @@ exports.handler = async function (event) {
     auth: { persistSession: false, autoRefreshToken: false }
   });
 
-  const { data: userData, error: authError } = await supabase.auth.admin.createUser({
-    email: cleanEmail,
-    password: String(password),
-    email_confirm: true
-  });
+  // --- 4) Create Auth user ---
+  const { data: userData, error: authError } =
+    await supabase.auth.admin.createUser({
+      email: cleanEmail,
+      password,
+      email_confirm: true
+    });
 
   if (authError || !userData || !userData.user || !userData.user.id) {
     const msg = (authError && authError.message) || "Auth registration failed.";
@@ -274,34 +163,37 @@ exports.handler = async function (event) {
     });
   }
 
-  const authUserId = userData.user.id;
+  const authUserId = userData.user.id; // uuid
+
+  // --- 5) Insert into profiles (LINKED to auth user) ---
+  const yosNum =
+    yos !== undefined && yos !== null && String(yos).trim() !== ""
+      ? Number(yos)
+      : null;
+
+  // ✅ prefer explicit rank_paygrade if provided, otherwise rank
+  const finalRankPaygrade = (rank_paygrade || rank || "").trim() || null;
+  const finalRank = (rank || rank_paygrade || "").trim() || null;
 
   const profilePayload = {
     profiles_user_id_unique: authUserId,
 
     email: cleanEmail,
-    first_name: names.first_name,
-    last_name: names.last_name,
-    full_name: names.full_name,
-
-    phone: cleanPhone,
-    mode: cleanMode,
+    full_name: cleanFullName,
+    last_name: finalLastName,
+    phone: phone || null,
+    mode: mode || null,
 
     rank: finalRank,
     rank_paygrade: finalRankPaygrade,
 
-    va_disability: vaDisabilityNum,
-    retired: retired === true,
+    va_disability: va_disability || null,
 
-    yos: yosNum,
-    family: familyNum,
+    yos: Number.isFinite(yosNum) ? yosNum : null,
+    family: family || null,
 
-    base: cleanBase,
-    notes: cleanNotes,
-
-    projected_home_price: projectedHomePriceNum,
-    downpayment: downpaymentNum,
-    credit_score: creditScoreNum
+    base: base || null,
+    notes: notes || null
   };
 
   const { error: profileError } = await supabase
@@ -309,6 +201,7 @@ exports.handler = async function (event) {
     .insert(profilePayload);
 
   if (profileError) {
+    // --- rollback Auth user ---
     try {
       await supabase.auth.admin.deleteUser(authUserId);
     } catch (_) {}
@@ -318,6 +211,8 @@ exports.handler = async function (event) {
     const msg = profileError.message || "Profile save failed.";
     const status = /duplicate|unique/i.test(msg) ? 409 : 500;
 
+    // ✅ KEY CHANGE: put the REAL DB message into `error`
+    // so your existing UI alert shows the actual cause.
     return respond(status, {
       ok: false,
       error: msg,
@@ -328,6 +223,7 @@ exports.handler = async function (event) {
     });
   }
 
+  // --- 6) SUCCESS ---
   return respond(200, {
     ok: true,
     message: "Registered successfully.",

@@ -1,4 +1,3 @@
-
 // netlify/functions/register.js
 //
 // Creates a Supabase Auth user (email + password)
@@ -15,7 +14,8 @@
 // BODY:
 //   {
 //     fullName, lastName, email, password, phone,
-//     mode, rank, rank_paygrade, va_disability, yos, family, base, notes
+//     mode, rank, rank_paygrade, va_disability, yos, family, base, notes,
+//     projected_home_price, downpayment, credit_score
 //   }
 
 const { createClient } = require("@supabase/supabase-js");
@@ -39,7 +39,7 @@ function getProjectRefFromUrl(urlStr) {
   try {
     const u = new URL(urlStr);
     const host = String(u.hostname || "");
-    const ref = host.split(".")[0] || ""; // <ref>.supabase.co
+    const ref = host.split(".")[0] || "";
     return { host, ref };
   } catch (_) {
     return { host: String(urlStr || ""), ref: "" };
@@ -54,8 +54,8 @@ async function findAuthUserIdByEmail(supabase, emailLower) {
     const { data, error } = await supabase.auth.admin.listUsers({ page, perPage });
     if (error) return { id: null, error: error.message || String(error) };
 
-    const users = (data && data.users) ? data.users : [];
-    const hit = users.find(u => String(u.email || "").toLowerCase() === emailLower);
+    const users = data && data.users ? data.users : [];
+    const hit = users.find((u) => String(u.email || "").toLowerCase() === emailLower);
     if (hit && hit.id) return { id: hit.id, error: null };
 
     if (users.length < perPage) break;
@@ -65,18 +65,26 @@ async function findAuthUserIdByEmail(supabase, emailLower) {
   return { id: null, error: null };
 }
 
+function toNullableNumber(value) {
+  if (value === undefined || value === null) return null;
+  const raw = String(value).trim();
+  if (!raw) return null;
+  const num = Number(raw);
+  return Number.isFinite(num) ? num : null;
+}
+
 exports.handler = async function (event) {
-  // --- 0) CORS ---
+  // //#1) CORS
   if (event.httpMethod === "OPTIONS") {
     return respond(200, { ok: true });
   }
 
-  // --- 1) Enforce POST ---
+  // //#2) METHOD
   if (event.httpMethod !== "POST") {
     return respond(405, { ok: false, error: "Method not allowed" });
   }
 
-  // --- 2) Parse body ---
+  // //#3) PARSE BODY
   let body;
   try {
     body = JSON.parse(event.body || "{}");
@@ -92,12 +100,14 @@ exports.handler = async function (event) {
     phone,
     mode,
     rank,
-    rank_paygrade, // ✅ added
+    rank_paygrade,
     va_disability,
     yos,
     family,
     base,
     notes,
+
+    // ✅ housing fields added
     projected_home_price,
     downpayment,
     credit_score
@@ -106,11 +116,20 @@ exports.handler = async function (event) {
   const cleanEmail = (email || "").trim().toLowerCase();
   const cleanFullName = (fullName || "").trim();
 
-  if (!cleanFullName) return respond(400, { ok: false, error: "Full name is required." });
-  if (!cleanEmail || (!/^[^@\s]+@[^@\s]+\.[^@\s]+\.[^@\s]+$/.test(cleanEmail) && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cleanEmail))) {
-    // keep your original check effectively; this line just prevents a false-negative edge case
+  if (!cleanFullName) {
+    return respond(400, { ok: false, error: "Full name is required." });
+  }
+
+  if (
+    !cleanEmail ||
+    (
+      !/^[^@\s]+@[^@\s]+\.[^@\s]+\.[^@\s]+$/.test(cleanEmail) &&
+      !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cleanEmail)
+    )
+  ) {
     return respond(400, { ok: false, error: "Valid email is required." });
   }
+
   if (!password || password.length < 8) {
     return respond(400, { ok: false, error: "Password must be at least 8 characters." });
   }
@@ -121,7 +140,7 @@ exports.handler = async function (event) {
     : cleanFullName;
   const finalLastName = cleanLastNameInput || derivedLastName;
 
-  // --- 3) Init Supabase (service key) ---
+  // //#4) SUPABASE ENV
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -135,13 +154,12 @@ exports.handler = async function (event) {
     auth: { persistSession: false, autoRefreshToken: false }
   });
 
-  // --- 4) Create Auth user ---
-  const { data: userData, error: authError } =
-    await supabase.auth.admin.createUser({
-      email: cleanEmail,
-      password,
-      email_confirm: true
-    });
+  // //#5) CREATE AUTH USER
+  const { data: userData, error: authError } = await supabase.auth.admin.createUser({
+    email: cleanEmail,
+    password,
+    email_confirm: true
+  });
 
   if (authError || !userData || !userData.user || !userData.user.id) {
     const msg = (authError && authError.message) || "Auth registration failed.";
@@ -166,18 +184,27 @@ exports.handler = async function (event) {
     });
   }
 
-  const authUserId = userData.user.id; // uuid
+  const authUserId = userData.user.id;
 
-  // --- 5) Insert into profiles (LINKED to auth user) ---
+  // //#6) PREP VALUES
   const yosNum =
     yos !== undefined && yos !== null && String(yos).trim() !== ""
       ? Number(yos)
       : null;
 
-  // ✅ prefer explicit rank_paygrade if provided, otherwise rank
   const finalRankPaygrade = (rank_paygrade || rank || "").trim() || null;
   const finalRank = (rank || rank_paygrade || "").trim() || null;
 
+  // ✅ housing values
+  const projectedHomePriceNum = toNullableNumber(projected_home_price);
+  const downpaymentNum = toNullableNumber(downpayment);
+  const creditScoreNumRaw = toNullableNumber(credit_score);
+  const creditScoreNum =
+    Number.isFinite(creditScoreNumRaw) && creditScoreNumRaw !== null
+      ? Math.round(Math.max(300, Math.min(850, creditScoreNumRaw)))
+      : null;
+
+  // //#7) PROFILE PAYLOAD
   const profilePayload = {
     profiles_user_id_unique: authUserId,
 
@@ -191,20 +218,24 @@ exports.handler = async function (event) {
     rank_paygrade: finalRankPaygrade,
 
     va_disability: va_disability || null,
-
     yos: Number.isFinite(yosNum) ? yosNum : null,
     family: family || null,
 
     base: base || null,
-    notes: notes || null
+    notes: notes || null,
+
+    // ✅ added housing fields
+    projected_home_price: projectedHomePriceNum,
+    downpayment: downpaymentNum,
+    credit_score: creditScoreNum
   };
 
+  // //#8) INSERT PROFILE
   const { error: profileError } = await supabase
     .from("profiles")
     .insert(profilePayload);
 
   if (profileError) {
-    // --- rollback Auth user ---
     try {
       await supabase.auth.admin.deleteUser(authUserId);
     } catch (_) {}
@@ -214,8 +245,6 @@ exports.handler = async function (event) {
     const msg = profileError.message || "Profile save failed.";
     const status = /duplicate|unique/i.test(msg) ? 409 : 500;
 
-    // ✅ KEY CHANGE: put the REAL DB message into `error`
-    // so your existing UI alert shows the actual cause.
     return respond(status, {
       ok: false,
       error: msg,
@@ -226,7 +255,7 @@ exports.handler = async function (event) {
     });
   }
 
-  // --- 6) SUCCESS ---
+  // //#9) SUCCESS
   return respond(200, {
     ok: true,
     message: "Registered successfully.",

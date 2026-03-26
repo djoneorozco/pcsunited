@@ -98,6 +98,9 @@ exports.handler = async function (event) {
     family,
     base,
     notes
+    projected_home_price,
+    downpayment,
+    credit_score
   } = body;
 
   const cleanEmail = (email || "").trim().toLowerCase();

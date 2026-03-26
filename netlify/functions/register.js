@@ -186,7 +186,6 @@ exports.handler = async function (event) {
   const cleanMode = toNullableString(mode);
   const cleanBase = toNullableString(base);
   const cleanNotes = toNullableString(notes);
-  const cleanRetireSystem = toNullableString(retire_system);
 
   const finalRankPaygrade = toNullableString(rank_paygrade || rank);
   const finalRank = toNullableString(rank || rank_paygrade);
@@ -293,7 +292,6 @@ exports.handler = async function (event) {
 
     va_disability: vaDisabilityNum,
     retired: retired === true,
-    retire_system: cleanRetireSystem,
 
     yos: yosNum,
     family: familyNum,

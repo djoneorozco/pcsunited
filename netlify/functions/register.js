@@ -23,7 +23,6 @@
 //     mode,
 //     rank,
 //     rank_paygrade,
-//     rank_title,
 //     va_disability,
 //     retired,
 //     retire_system,
@@ -146,17 +145,14 @@ async function findAuthUserIdByEmail(supabase, emailLower) {
 }
 
 exports.handler = async function (event) {
-  // 0) CORS
   if (event.httpMethod === "OPTIONS") {
     return respond(200, { ok: true });
   }
 
-  // 1) Enforce POST
   if (event.httpMethod !== "POST") {
     return respond(405, { ok: false, error: "Method not allowed" });
   }
 
-  // 2) Parse body
   let body;
   try {
     body = JSON.parse(event.body || "{}");
@@ -171,7 +167,6 @@ exports.handler = async function (event) {
     mode,
     rank,
     rank_paygrade,
-    rank_title,
     va_disability,
     retired,
     retire_system,
@@ -191,7 +186,6 @@ exports.handler = async function (event) {
   const cleanMode = toNullableString(mode);
   const cleanBase = toNullableString(base);
   const cleanNotes = toNullableString(notes);
-  const cleanRankTitle = toNullableString(rank_title);
   const cleanRetireSystem = toNullableString(retire_system);
 
   const finalRankPaygrade = toNullableString(rank_paygrade || rank);
@@ -239,7 +233,6 @@ exports.handler = async function (event) {
     });
   }
 
-  // 3) Init Supabase
   const SUPABASE_URL = process.env.SUPABASE_URL;
   const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 
@@ -253,7 +246,6 @@ exports.handler = async function (event) {
     auth: { persistSession: false, autoRefreshToken: false }
   });
 
-  // 4) Create Auth user
   const { data: userData, error: authError } = await supabase.auth.admin.createUser({
     email: cleanEmail,
     password: String(password),
@@ -285,7 +277,6 @@ exports.handler = async function (event) {
 
   const authUserId = userData.user.id;
 
-  // 5) Insert into profiles
   const profilePayload = {
     profiles_user_id_unique: authUserId,
 
@@ -299,7 +290,6 @@ exports.handler = async function (event) {
 
     rank: finalRank,
     rank_paygrade: finalRankPaygrade,
-    rank_title: cleanRankTitle,
 
     va_disability: vaDisabilityNum,
     retired: retired === true,
@@ -340,7 +330,6 @@ exports.handler = async function (event) {
     });
   }
 
-  // 6) Success
   return respond(200, {
     ok: true,
     message: "Registered successfully.",

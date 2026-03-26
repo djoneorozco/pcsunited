@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Mar 24 2026 07:03:42 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Mar 26 2026 16:02:23 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69b6b528f23748df9f189c2a" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
@@ -22,49 +22,49 @@
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "WebPage",
-  "name": "PCS United",
-  "url": "/",
-  "inLanguage": "en",
-  "description": "Military Relocation Intelligence platform providing PCS planning, financial planning, and market insight for military families",
-  "about": {
-    "@type": "Organization",
-    "name": "PCS United",
-    "alternateName": "PCSUnited",
-    "description": "An A.I Driven Financial solutions platform built for the Military Community. We provide data analytics and insight for homebuyers.",
-    "url": "/",
-    "telephone": "+123 456789",
-    "email": "hello@estateemail.com",
-    "logo": {
-      "@type": "ImageObject",
-      "url": "https://cdn.prod.website-files.com/69b6b526f23748df9f189b16/69ba33e79168b92c0774ec66_PCSU.jpg"
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://pcsu.design.webflow.com/#organization",
+      "name": "PCS United",
+      "alternateName": "PCSUnited",
+      "url": "https://pcsu.design.webflow.com/",
+      "logo": {
+        "@type": "ImageObject",
+        "url": "https://cdn.prod.website-files.com/69b6b526f23748df9f189b16/69ba33e79168b92c0774ec66_PCSU.jpg"
+      },
+      "sameAs": [
+        "https://www.linkedin.com/company/pcsunited",
+        "https://www.instagram.com/pcsunited",
+        "https://twitter.com/pcsunited"
+      ],
+      "description": "PCS United is a military relocation intelligence platform that helps service members and military families with PCS planning, financial readiness, and housing market insight."
     },
-    "sameAs": [
-      "https://www.linkedin.com/company/pcsunited",
-      "https://www.instagram.com/pcsunited",
-      "https://twitter.com/pcsunited"
-    ]
-  },
-  "mainEntity": {
-    "@type": "SoftwareApplication",
-    "name": "PCS Snapshot",
-    "applicationCategory": "FinanceApplication",
-    "description": "Provides rapid insight into new PCS locations by providing clear and accurate analysis based on specific military situations, including estimated home price range, financial readiness, and buy vs rent guidance",
-    "offers": {
-      "@type": "Offer",
-      "price": "0",
-      "priceCurrency": "USD",
-      "description": "Free for Active Duty, Veterans and military families"
+    {
+      "@type": "WebSite",
+      "@id": "https://pcsu.design.webflow.com/#website",
+      "url": "https://pcsu.design.webflow.com/",
+      "name": "PCS United",
+      "publisher": {
+        "@id": "https://pcsu.design.webflow.com/#organization"
+      },
+      "inLanguage": "en"
     },
-    "featureList": [
-      "PCS Financial Readiness - Analyzes military income, BAH, and estimated expenses to determine realistic home price range",
-      "True Home Price Range - Evaluates local home prices and market trends",
-      "Buy vs Rent Decision - Generates structured relocation timeline for mortgage pre-approval, home search, and closing",
-      "A.I Intelligence",
-      "Financial Forecasting",
-      "Data Driven Analysis"
-    ]
-  }
+    {
+      "@type": "WebPage",
+      "@id": "https://pcsu.design.webflow.com/#webpage",
+      "url": "https://pcsu.design.webflow.com/",
+      "name": "PCS United | Military Relocation Intelligence",
+      "isPartOf": {
+        "@id": "https://pcsu.design.webflow.com/#website"
+      },
+      "about": {
+        "@id": "https://pcsu.design.webflow.com/#organization"
+      },
+      "description": "Military relocation intelligence platform providing PCS planning, financial planning, and market insight for military families.",
+      "inLanguage": "en"
+    }
+  ]
 }
 </script>
 </head>
@@ -230,7 +230,7 @@ margin: 0rem !important;
         <div class="nav-background"></div>
         <div class="container w-container">
           <div class="nav-wrapper">
-            <a id="w-node-_2570e665-cf5d-8a22-a751-69d80fe8b425-0fe8b420" href="#" class="nav-brand w-nav-brand"><img width="Auto" height="60" alt="" src="images/PCSU.jpg" loading="lazy" srcset="images/PCSU-p-500.jpg 500w, images/PCSU-p-800.jpg 800w, images/PCSU-p-1080.jpg 1080w, images/PCSU.jpg 1400w" sizes="105px" class="nav-logo"></a>
+            <a id="w-node-_2570e665-cf5d-8a22-a751-69d80fe8b425-0fe8b420" href="#" class="nav-brand w-nav-brand"><img width="Auto" height="60" alt="" src="images/PCSU.jpg" loading="lazy" srcset="images/PCSU-p-500.jpg 500w, images/PCSU-p-800.jpg 800w, images/PCSU-p-1080.jpg 1080w, images/PCSU.jpg 1400w" sizes="100vw" class="nav-logo"></a>
             <div class="nav-menu-wrapper">
               <nav role="navigation" class="nav-menu w-nav-menu">
                 <a href="index.html" aria-current="page" class="nav-link w-nav-link w--current">Home</a>
@@ -272,7 +272,7 @@ margin: 0rem !important;
                     </div>
                   </nav>
                 </div>
-                <a href="create-account.html" target="_blank" class="button is-secondary w-button">Create Account</a>
+                <a href="accounts/create-account.html" target="_blank" class="button is-secondary w-button">Create Account</a>
                 <a href="https://webflow.com/templates/html/pathwise-website-template" target="_blank" class="button w-button">Log In</a>
               </div>
               <div class="nav-menu-button w-nav-button"><img loading="lazy" src="images/Hamburger-menu.svg" alt="Menu " class="nav-menu-icon"></div>
@@ -944,12 +944,12 @@ margin: 0rem !important;
                 </div>
               </div>
               <div id="w-node-_0544a62b-c50f-bc8a-a998-c60828cffec5-9f189c2a" class="home1_about_media">
-                <div class="home1_about_metric"><img src="images/lifestyle8_1lifestyle8.avif" loading="lazy" sizes="(max-width: 1919px) 100vw, 1600px, 100vw" srcset="images/lifestyle8_1lifestyle8.avif 500w, images/lifestyle8_1lifestyle8.avif 800w, images/lifestyle8_1lifestyle8.avif 1747w" alt="Schools Coaching Webflow template " class="home1_about_metric-image">
+                <div class="home1_about_metric"><img src="images/lifestyle8_1lifestyle8.avif" loading="lazy" sizes="(max-width: 1919px) 100vw, 1600px" srcset="images/lifestyle8_1lifestyle8.avif 500w, images/lifestyle8_1lifestyle8.avif 800w, images/lifestyle8_1lifestyle8.avif 1747w" alt="Schools Coaching Webflow template " class="home1_about_metric-image">
                   <div class="home1_about_metric-info">
                     <div class="va">Veteran Owned</div>
                     <div class="text-block-5">Commited to Service</div>
                   </div>
-                </div><img src="images/us.jpg" loading="lazy" id="w-node-_1b27d66e-2c6a-2478-ef49-8e6812c4935e-9f189c2a" sizes="(max-width: 2475px) 100vw, 2475px, 100vw" alt="" srcset="images/us-p-500.jpg 500w, images/us-p-800.jpg 800w, images/us-p-1080.jpg 1080w, images/us-p-1600.jpg 1600w, images/us-p-2000.jpg 2000w, images/us.jpg 2475w" class="home1_about_image">
+                </div><img src="images/us.jpg" loading="lazy" id="w-node-_1b27d66e-2c6a-2478-ef49-8e6812c4935e-9f189c2a" sizes="(max-width: 2475px) 100vw, 2475px" alt="" srcset="images/us-p-500.jpg 500w, images/us-p-800.jpg 800w, images/us-p-1080.jpg 1080w, images/us-p-1600.jpg 1600w, images/us-p-2000.jpg 2000w, images/us.jpg 2475w" class="home1_about_image">
               </div>
             </div>
           </div>
@@ -967,7 +967,7 @@ margin: 0rem !important;
                   <h4 class="heading-5">Create your free PCSUnited Account, and access advance Financial Analysis, PCS Planning Tools and A.I. Guidance.</h4>
                 </div>
                 <div class="home1_links_grid-2">
-                  <a href="#" class="home1_links_card-2 w-inline-block"><img sizes="(max-width: 846px) 100vw, 846px, 100vw" srcset="images/Tab-Change-image-2-p-500.webp 500w, images/Tab-Change-image-2-p-800.webp 800w, images/Tab-Change-image-2.webp 846w" alt="" src="images/Tab-Change-image-2.webp" loading="lazy" class="image-10"></a>
+                  <a href="#" class="home1_links_card-2 w-inline-block"><img sizes="(max-width: 846px) 100vw, 846px" srcset="images/Tab-Change-image-2-p-500.webp 500w, images/Tab-Change-image-2-p-800.webp 800w, images/Tab-Change-image-2.webp 846w" alt="" src="images/Tab-Change-image-2.webp" loading="lazy" class="image-10"></a>
                   <a href="https://www.youtube.com/watch?v=-yXdPqm7zC0&amp;feature=youtu.be" class="home1_links_card-2 w-inline-block">
                     <div data-poster-url="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_poster.0000000.jpg" data-video-urls="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_mp4.mp4,https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="amy-image w-background-video w-background-video-atom"><video id="2f1857cf-d4a8-da98-12b0-01ccdfbba1f4-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
                         <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_mp4.mp4" data-wf-ignore="true">

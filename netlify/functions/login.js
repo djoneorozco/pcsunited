@@ -1,32 +1,47 @@
-// netlify/functions/profile-by-email.js
+// netlify/functions/login.js
 // ============================================================
-// PCSUnited • profile-by-email
-// - POST { email }
+// PCSUnited • login
+// - POST { email, password }
+// - Authenticates with Supabase Auth (email/password)
 // - Returns a MERGED profile object from:
 //    1) public.profiles
 //    2) public.user_financial_inputs   (latest by updated_at)
 //    3) public.financial_intakes       (first matching row fallback)
 //    4) public.user_aiou_inputs        (latest by updated_at)
 // - CORS + OPTIONS support
+//
+// REQUIRED ENV VARS
+// - SUPABASE_URL (or SUPABASE_PROJECT_URL)
+// - SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY)
+// - SUPABASE_ANON_KEY (or PUBLIC_SUPABASE_ANON_KEY / NEXT_PUBLIC_SUPABASE_ANON_KEY)
 // ============================================================
 
 const { createClient } = require("@supabase/supabase-js");
 
+//#1) ALLOWED ORIGINS
 const ALLOWED_ORIGINS = new Set([
   "https://pcsunited.com",
   "https://www.pcsunited.com",
+  "https://pcsunited.netlify.app",
   "https://pcs-united.webflow.io",
+  "https://pcsu.webflow.io",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://localhost:8888",
   "http://127.0.0.1:8888"
 ]);
 
-function getCorsHeaders(event) {
-  const origin =
+//#2) CORS HELPERS
+function getRequestOrigin(event) {
+  return (
     event?.headers?.origin ||
     event?.headers?.Origin ||
-    "";
+    ""
+  ).trim();
+}
+
+function getCorsHeaders(event) {
+  const origin = getRequestOrigin(event);
 
   const allowOrigin = ALLOWED_ORIGINS.has(origin)
     ? origin
@@ -51,6 +66,7 @@ function respond(event, statusCode, payload) {
   };
 }
 
+//#3) SMALL UTILS
 function firstRow(data) {
   return Array.isArray(data) && data.length ? data[0] : null;
 }
@@ -60,10 +76,16 @@ function cleanString(v) {
 }
 
 function toNumberOrNull(v) {
+  if (v === "" || v === null || v === undefined) return null;
   const n = Number(v);
   return Number.isFinite(n) ? n : null;
 }
 
+function safeLower(v) {
+  return cleanString(v).toLowerCase();
+}
+
+//#4) PROFILE MERGE
 function mergeProfile({
   profileRow,
   userFinancialRow,
@@ -195,6 +217,114 @@ function mergeProfile({
   return merged;
 }
 
+//#5) ENV HELPERS
+function getSupabaseUrl() {
+  return (
+    process.env.SUPABASE_URL ||
+    process.env.SUPABASE_PROJECT_URL ||
+    ""
+  ).trim();
+}
+
+function getServiceKey() {
+  return (
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY ||
+    ""
+  ).trim();
+}
+
+function getAnonKey() {
+  return (
+    process.env.SUPABASE_ANON_KEY ||
+    process.env.PUBLIC_SUPABASE_ANON_KEY ||
+    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ||
+    ""
+  ).trim();
+}
+
+//#6) CLIENT FACTORIES
+function makeAdminClient(url, serviceKey) {
+  return createClient(url, serviceKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false
+    }
+  });
+}
+
+function makeAuthClient(url, anonKey) {
+  return createClient(url, anonKey, {
+    auth: {
+      persistSession: false,
+      autoRefreshToken: false,
+      detectSessionInUrl: false
+    }
+  });
+}
+
+//#7) PROFILE FETCH
+async function fetchMergedProfileByEmail(admin, email) {
+  const [
+    profileRes,
+    userFinancialRes,
+    financialIntakeRes,
+    aiouRes
+  ] = await Promise.all([
+    admin
+      .from("profiles")
+      .select("*")
+      .eq("email", email)
+      .maybeSingle(),
+
+    admin
+      .from("user_financial_inputs")
+      .select("*")
+      .eq("email", email)
+      .order("updated_at", { ascending: false })
+      .limit(1),
+
+    admin
+      .from("financial_intakes")
+      .select("*")
+      .eq("email", email)
+      .limit(1),
+
+    admin
+      .from("user_aiou_inputs")
+      .select("*")
+      .eq("email", email)
+      .order("updated_at", { ascending: false })
+      .limit(1)
+  ]);
+
+  if (profileRes.error) throw new Error(profileRes.error.message);
+  if (userFinancialRes.error) throw new Error(userFinancialRes.error.message);
+  if (financialIntakeRes.error) throw new Error(financialIntakeRes.error.message);
+  if (aiouRes.error) throw new Error(aiouRes.error.message);
+
+  const profileRow = profileRes.data || null;
+  const userFinancialRow = firstRow(userFinancialRes.data);
+  const financialIntakeRow = firstRow(financialIntakeRes.data);
+  const aiouRow = firstRow(aiouRes.data);
+
+  return {
+    mergedProfile: mergeProfile({
+      profileRow,
+      userFinancialRow,
+      financialIntakeRow,
+      aiouRow
+    }),
+    debug: {
+      has_profile: !!profileRow,
+      has_user_financial_inputs: !!userFinancialRow,
+      has_financial_intakes: !!financialIntakeRow,
+      has_user_aiou_inputs: !!aiouRow
+    }
+  };
+}
+
+//#8) MAIN HANDLER
 exports.handler = async function (event) {
   if (event.httpMethod === "OPTIONS") {
     return {
@@ -205,119 +335,96 @@ exports.handler = async function (event) {
   }
 
   if (event.httpMethod !== "POST") {
-    return respond(event, 405, { ok: false, error: "Method not allowed" });
+    return respond(event, 405, {
+      ok: false,
+      error: "Method not allowed"
+    });
   }
 
   let body = {};
   try {
     body = JSON.parse(event.body || "{}");
   } catch (_) {
-    return respond(event, 400, { ok: false, error: "Invalid JSON body" });
+    return respond(event, 400, {
+      ok: false,
+      error: "Invalid JSON body"
+    });
   }
 
-  const email = String(body.email || "").trim().toLowerCase();
-  if (!email) {
-    return respond(event, 400, { ok: false, error: "Email is required" });
+  const email = safeLower(body.email || "");
+  const password = cleanString(body.password || "");
+
+  if (!email || !password) {
+    return respond(event, 400, {
+      ok: false,
+      error: "Email and password are required"
+    });
   }
 
-  const SUPABASE_URL =
-    process.env.SUPABASE_URL ||
-    process.env.SUPABASE_PROJECT_URL ||
-    "";
+  const SUPABASE_URL = getSupabaseUrl();
+  const SERVICE_KEY = getServiceKey();
+  const ANON_KEY = getAnonKey();
 
-  const SUPABASE_SERVICE_KEY =
-    process.env.SUPABASE_SERVICE_ROLE_KEY ||
-    process.env.SUPABASE_SERVICE_KEY ||
-    "";
-
-  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+  if (!SUPABASE_URL || !SERVICE_KEY || !ANON_KEY) {
     return respond(event, 500, {
       ok: false,
-      error: "Missing Supabase env vars (need SUPABASE_URL and a service key).",
+      error: "Missing Supabase env vars",
       missing: {
         SUPABASE_URL: !SUPABASE_URL,
-        SUPABASE_SERVICE_ROLE_KEY_or_SERVICE_KEY: !SUPABASE_SERVICE_KEY
+        SUPABASE_SERVICE_ROLE_KEY_or_SERVICE_KEY: !SERVICE_KEY,
+        SUPABASE_ANON_KEY_or_PUBLIC_SUPABASE_ANON_KEY: !ANON_KEY
       }
     });
   }
 
   try {
-    const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY, {
-      auth: { persistSession: false, autoRefreshToken: false }
-    });
+    const admin = makeAdminClient(SUPABASE_URL, SERVICE_KEY);
+    const authClient = makeAuthClient(SUPABASE_URL, ANON_KEY);
 
-    const [
-      profileRes,
-      userFinancialRes,
-      financialIntakeRes,
-      aiouRes
-    ] = await Promise.all([
-      supabase
-        .from("profiles")
-        .select("*")
-        .eq("email", email)
-        .maybeSingle(),
+    const { data: authData, error: authError } =
+      await authClient.auth.signInWithPassword({
+        email,
+        password
+      });
 
-      supabase
-        .from("user_financial_inputs")
-        .select("*")
-        .eq("email", email)
-        .order("updated_at", { ascending: false })
-        .limit(1),
-
-      supabase
-        .from("financial_intakes")
-        .select("*")
-        .eq("email", email)
-        .limit(1),
-
-      supabase
-        .from("user_aiou_inputs")
-        .select("*")
-        .eq("email", email)
-        .order("updated_at", { ascending: false })
-        .limit(1)
-    ]);
-
-    if (profileRes.error) {
-      return respond(event, 500, { ok: false, error: profileRes.error.message });
-    }
-    if (userFinancialRes.error) {
-      return respond(event, 500, { ok: false, error: userFinancialRes.error.message });
-    }
-    if (financialIntakeRes.error) {
-      return respond(event, 500, { ok: false, error: financialIntakeRes.error.message });
-    }
-    if (aiouRes.error) {
-      return respond(event, 500, { ok: false, error: aiouRes.error.message });
+    if (authError || !authData?.user) {
+      return respond(event, 401, {
+        ok: false,
+        error: "Invalid email or password"
+      });
     }
 
-    const profileRow = profileRes.data || null;
-    const userFinancialRow = firstRow(userFinancialRes.data);
-    const financialIntakeRow = firstRow(financialIntakeRes.data);
-    const aiouRow = firstRow(aiouRes.data);
+    const authUser = authData.user;
+    const session = authData.session || null;
 
-    const mergedProfile = mergeProfile({
-      profileRow,
-      userFinancialRow,
-      financialIntakeRow,
-      aiouRow
-    });
+    const { mergedProfile, debug } = await fetchMergedProfileByEmail(admin, email);
 
     return respond(event, 200, {
       ok: true,
       email,
+      user: {
+        id: authUser.id,
+        email: authUser.email || email
+      },
       profile: mergedProfile,
+      session: {
+        access_token: session?.access_token || "",
+        refresh_token: session?.refresh_token || "",
+        expires_at: session?.expires_at || null,
+        expires_in: session?.expires_in || null,
+        token_type: session?.token_type || "bearer"
+      },
       debug: {
-        has_profile: !!profileRow,
-        has_user_financial_inputs: !!userFinancialRow,
-        has_financial_intakes: !!financialIntakeRow,
-        has_user_aiou_inputs: !!aiouRow,
+        ...debug,
+        auth_user_found: !!authUser,
         income_found: mergedProfile.income != null,
         debt_found: mergedProfile.debt != null
       }
     });
   } catch (e) {
-    return respond(event, 500, { ok: false, error: e?.message || "Server error" });
+    return respond(event, 500, {
+      ok: false,
+      error: e?.message || "Server error"
+    });
   }
 };

@@ -10,10 +10,19 @@
 //    4) public.user_aiou_inputs        (latest by updated_at)
 // - CORS + OPTIONS support
 //
-// REQUIRED ENV VARS
+// ENV VARS
+// REQUIRED:
 // - SUPABASE_URL (or SUPABASE_PROJECT_URL)
 // - SUPABASE_SERVICE_ROLE_KEY (or SUPABASE_SERVICE_KEY)
-// - SUPABASE_ANON_KEY (or PUBLIC_SUPABASE_ANON_KEY / NEXT_PUBLIC_SUPABASE_ANON_KEY)
+//
+// OPTIONAL:
+// - SUPABASE_ANON_KEY
+// - PUBLIC_SUPABASE_ANON_KEY
+// - NEXT_PUBLIC_SUPABASE_ANON_KEY
+//
+// NOTE:
+// - If anon key is missing, auth falls back to service key so older
+//   PCSUnited deployments do not break.
 // ============================================================
 
 const { createClient } = require("@supabase/supabase-js");
@@ -243,6 +252,12 @@ function getAnonKey() {
   ).trim();
 }
 
+function getAuthKey() {
+  const anon = getAnonKey();
+  const service = getServiceKey();
+  return anon || service || "";
+}
+
 //#6) CLIENT FACTORIES
 function makeAdminClient(url, serviceKey) {
   return createClient(url, serviceKey, {
@@ -253,8 +268,8 @@ function makeAdminClient(url, serviceKey) {
   });
 }
 
-function makeAuthClient(url, anonKey) {
-  return createClient(url, anonKey, {
+function makeAuthClient(url, authKey) {
+  return createClient(url, authKey, {
     auth: {
       persistSession: false,
       autoRefreshToken: false,
@@ -363,23 +378,22 @@ exports.handler = async function (event) {
 
   const SUPABASE_URL = getSupabaseUrl();
   const SERVICE_KEY = getServiceKey();
-  const ANON_KEY = getAnonKey();
+  const AUTH_KEY = getAuthKey();
 
-  if (!SUPABASE_URL || !SERVICE_KEY || !ANON_KEY) {
+  if (!SUPABASE_URL || !SERVICE_KEY) {
     return respond(event, 500, {
       ok: false,
       error: "Missing Supabase env vars",
       missing: {
         SUPABASE_URL: !SUPABASE_URL,
-        SUPABASE_SERVICE_ROLE_KEY_or_SERVICE_KEY: !SERVICE_KEY,
-        SUPABASE_ANON_KEY_or_PUBLIC_SUPABASE_ANON_KEY: !ANON_KEY
+        SUPABASE_SERVICE_ROLE_KEY_or_SERVICE_KEY: !SERVICE_KEY
       }
     });
   }
 
   try {
     const admin = makeAdminClient(SUPABASE_URL, SERVICE_KEY);
-    const authClient = makeAuthClient(SUPABASE_URL, ANON_KEY);
+    const authClient = makeAuthClient(SUPABASE_URL, AUTH_KEY);
 
     const { data: authData, error: authError } =
       await authClient.auth.signInWithPassword({
@@ -390,7 +404,7 @@ exports.handler = async function (event) {
     if (authError || !authData?.user) {
       return respond(event, 401, {
         ok: false,
-        error: "Invalid email or password"
+        error: authError?.message || "Invalid email or password"
       });
     }
 
@@ -417,6 +431,7 @@ exports.handler = async function (event) {
       debug: {
         ...debug,
         auth_user_found: !!authUser,
+        used_auth_key: getAnonKey() ? "anon" : "service_fallback",
         income_found: mergedProfile.income != null,
         debt_found: mergedProfile.debt != null
       }

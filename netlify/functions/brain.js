@@ -1,33 +1,11 @@
 // netlify/functions/brain.js
 // ============================================================
-// CENTRAL BRAIN (v2.1.0-cjs) — Pay + City + FULL Mortgage Breakdown
+// CENTRAL BRAIN (v2.1.1-cjs) — Pay + City + FULL Mortgage Breakdown
 //
-// ✅ CANONICAL BASE ROUTING:
-// - Uses /netlify/functions/cities/index.byBase.json as the routing authority
-// - Resolves aliases -> canonical 44-base AFB names
-// - No more SanAntonio special-case routing
-//
-// ✅ MORTGAGE:
-// - No mortgage math in brain.js
-// - Calls mortgage.js as single source of truth
-//
-// ✅ PAY / BAH:
-// - Uses militaryPayTables.json for pay tables
-// - Uses BAH.by_zip as canonical source
-// - ZIP derivation priority:
-//    1) explicit profile/body zip
-//    2) index.byBase.json
-//    3) militaryPayTables.json BAH.base_to_zip
-//
-// ✅ NETLIFY STABILITY:
-// - CommonJS only
-// - No top-level ESM import/export
-//
-// ✅ CORS:
-// - Supports pcsunited.com + pcs-united.webflow.io + pcsu.webflow.io + localhost
-//
-// ENDPOINT:
-//   POST /api/brain
+// UPDATE
+// - Added safer JSON parsing with file-specific error messages
+// - Easier debugging for malformed JSON files
+// - Keeps CommonJS / Netlify-safe structure
 // ============================================================
 
 "use strict";
@@ -37,7 +15,7 @@ const path = require("node:path");
 const { createClient } = require("@supabase/supabase-js");
 const { handler: mortgageHandler } = require("./mortgage.js");
 
-const SCHEMA_VERSION = "2.1.0";
+const SCHEMA_VERSION = "2.1.1";
 
 // -----------------------------
 // //#0 Paths (Netlify-safe)
@@ -156,6 +134,15 @@ function pickFirst(obj, keys) {
   return null;
 }
 
+function parseJsonFile(filePath, label) {
+  try {
+    const raw = fs.readFileSync(filePath, "utf8");
+    return JSON.parse(raw);
+  } catch (e) {
+    throw new Error(`${label} JSON parse failed at ${filePath}: ${String(e?.message || e)}`);
+  }
+}
+
 // -----------------------------
 // //#2.5 Pay model + overrides
 // -----------------------------
@@ -244,7 +231,6 @@ function applyOverridesToProfile(profile, overrides) {
     "vaRating",
     "retirement_system",
     "retirementSystem",
-
     "price",
     "home_price",
     "projected_home_price",
@@ -263,7 +249,6 @@ function applyOverridesToProfile(profile, overrides) {
     "loan_type",
     "termYears",
     "term_years",
-
     "mode",
   ]);
 
@@ -308,12 +293,11 @@ function loadPayTables() {
   if (!found) {
     throw new Error(
       `militaryPayTables.json not found. Tried:\n- ${(__PAY_TABLES_PATHS || []).join("\n- ")}\n` +
-        `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
+      `Fix: ensure it's bundled via netlify.toml [functions].included_files.`
     );
   }
 
-  const raw = fs.readFileSync(found, "utf8");
-  __PAY_TABLES_CACHE__ = JSON.parse(raw);
+  __PAY_TABLES_CACHE__ = parseJsonFile(found, "militaryPayTables");
   __PAY_TABLES_PATH_USED__ = found;
   return __PAY_TABLES_CACHE__;
 }
@@ -332,12 +316,11 @@ function loadBaseIndex() {
   if (!found) {
     throw new Error(
       `index.byBase.json not found. Tried:\n- ${(__BASE_INDEX_PATHS || []).join("\n- ")}\n` +
-        `Fix: ensure the file exists at netlify/functions/cities/index.byBase.json and is bundled.`
+      `Fix: ensure the file exists at netlify/functions/cities/index.byBase.json and is bundled.`
     );
   }
 
-  const raw = fs.readFileSync(found, "utf8");
-  __BASE_INDEX_CACHE__ = JSON.parse(raw);
+  __BASE_INDEX_CACHE__ = parseJsonFile(found, "index.byBase");
   __BASE_INDEX_PATH_USED__ = found;
   __BASE_INDEX_NORMALIZED__ = normalizeBaseIndex(__BASE_INDEX_CACHE__);
   return __BASE_INDEX_CACHE__;
@@ -383,7 +366,7 @@ function listCityFiles() {
       .map((f) => f.replace(/\.json$/i, ""));
     __CITY_FILE_INDEX__ = new Set(files);
     return __CITY_FILE_INDEX__;
-  } catch (e) {
+  } catch (_) {
     __CITY_FILE_INDEX__ = new Set();
     return __CITY_FILE_INDEX__;
   }
@@ -570,8 +553,7 @@ function loadCity(cityKeyCanonical, profileForFilePick) {
     throw new Error(`City JSON not found at ${filePath}`);
   }
 
-  const raw = fs.readFileSync(filePath, "utf8");
-  const data = JSON.parse(raw);
+  const data = parseJsonFile(filePath, `city:${fileKey}`);
 
   const marketRaw = data.market || data?.housing?.market || data?.realEstate?.market || {};
   const targets = data.targets || data?.housing?.targets || data?.realEstate?.targets || {};
@@ -1063,7 +1045,7 @@ async function callMortgageEngine(payload) {
   try {
     out = res?.body ? JSON.parse(res.body) : null;
   } catch (e) {
-    out = null;
+    throw new Error(`mortgage.js response JSON parse failed: ${String(e?.message || e)}`);
   }
 
   return { res, out };

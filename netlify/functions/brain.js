@@ -24,7 +24,7 @@
 // - No top-level ESM import/export
 //
 // ✅ CORS:
-// - Supports pcsunited.com + pcs-united.webflow.io + localhost
+// - Supports pcsunited.com + pcs-united.webflow.io + pcsu.webflow.io + localhost
 //
 // ENDPOINT:
 //   POST /api/brain
@@ -62,6 +62,7 @@ const ALLOWED_ORIGINS = new Set([
   "https://pcsunited.com",
   "https://www.pcsunited.com",
   "https://pcs-united.webflow.io",
+  "https://pcsu.webflow.io",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://localhost:8888",
@@ -1297,8 +1298,14 @@ async function computeMortgageEstimate({ body, profile, city, bedrooms }) {
 // -----------------------------
 function getSupabase() {
   const url = process.env.SUPABASE_URL;
-  const key = process.env.SUPABASE_SERVICE_KEY;
-  if (!url || !key) throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_KEY env vars.");
+  const key =
+    process.env.SUPABASE_SERVICE_ROLE_KEY ||
+    process.env.SUPABASE_SERVICE_KEY;
+
+  if (!url || !key) {
+    throw new Error("Missing SUPABASE_URL or SUPABASE_SERVICE_ROLE_KEY/SUPABASE_SERVICE_KEY env vars.");
+  }
+
   return createClient(url, key, { auth: { persistSession: false } });
 }
 

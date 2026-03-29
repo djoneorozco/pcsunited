@@ -8,6 +8,9 @@
 //    3) public.financial_intakes       (first matching row fallback)
 //    4) public.user_aiou_inputs        (latest by updated_at)
 // - Dynamic CORS + OPTIONS support
+//
+// UPDATE
+// - Added https://pcsu.webflow.io to allowed origins
 // ============================================================
 
 const { createClient } = require("@supabase/supabase-js");
@@ -16,6 +19,7 @@ const ALLOWED_ORIGINS = new Set([
   "https://pcsunited.com",
   "https://www.pcsunited.com",
   "https://pcs-united.webflow.io",
+  "https://pcsu.webflow.io",
   "http://localhost:3000",
   "http://127.0.0.1:3000",
   "http://localhost:8888",

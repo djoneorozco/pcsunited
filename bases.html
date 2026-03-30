@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Mar 26 2026 16:02:23 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Mar 30 2026 14:41:08 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69ba230a1012f5bf3affafa4" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
@@ -21,7 +21,7 @@
     <head>
       <meta charset="utf-8">
       <meta name="viewport" content="width=device-width,initial-scale=1">
-      <title>PCS City Overview</title>
+      <title>Bases • Base Intelligence Dashboard</title>
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
@@ -35,9 +35,12 @@
       --muted:#a8b0d6;
       --mint:#8ef3c5;
       --blue:#6aa7ff;
+      --gold:#f6d06d;
       --line:rgba(255,255,255,.10);
       --soft:rgba(255,255,255,.06);
       --danger:#ff8aa6;
+      --warn:#ffd27a;
+      --ok:#8ef3c5;
       --shadow:0 24px 48px rgba(0,0,0,.55);
       --radius:20px;
     }
@@ -124,7 +127,7 @@
     }
     .hero{
       display:grid;
-      grid-template-columns: 1.1fr .9fr;
+      grid-template-columns: 1.15fr .85fr;
       gap:18px;
       margin-bottom:18px;
     }
@@ -138,8 +141,8 @@
     }
     .hero-copy h1{
       margin:0 0 8px;
-      font-size:28px;
-      line-height:1.1;
+      font-size:30px;
+      line-height:1.08;
       font-weight:900;
       letter-spacing:.01em;
     }
@@ -165,6 +168,9 @@
       font-size:12px;
       font-weight:800;
     }
+    .chip.ok{border-color:rgba(142,243,197,.35)}
+    .chip.warn{border-color:rgba(255,210,122,.35)}
+    .chip.bad{border-color:rgba(255,138,166,.35)}
     .hero-grid{
       display:grid;
       grid-template-columns:repeat(2,minmax(0,1fr));
@@ -213,6 +219,7 @@
       padding:18px;
       display:grid;
       gap:14px;
+      align-content:start;
     }
     .section-title{
       margin:0 0 4px;
@@ -244,6 +251,58 @@
       color:var(--muted);
       font-size:12px;
       font-weight:700;
+      line-height:1.45;
+    }
+    .mini-score-grid{
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:10px;
+      margin-top:12px;
+    }
+    .mini-score{
+      padding:12px;
+      border-radius:14px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.025);
+    }
+    .mini-score .k{
+      font-size:10px;
+      text-transform:uppercase;
+      letter-spacing:.10em;
+      color:var(--muted);
+      margin-bottom:6px;
+      font-weight:800;
+    }
+    .mini-score .v{
+      font-size:22px;
+      font-weight:900;
+      line-height:1;
+    }
+    .bluf-head{
+      font-size:18px;
+      font-weight:900;
+      line-height:1.2;
+      margin-bottom:6px;
+    }
+    .bluf-status{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      border-radius:999px;
+      padding:8px 12px;
+      border:1px solid var(--line);
+      background:rgba(255,255,255,.04);
+      font-size:12px;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+      margin-bottom:12px;
+    }
+    .bluf-summary{
+      color:var(--ink);
+      line-height:1.55;
+      font-size:14px;
+      font-weight:600;
     }
     .two-col{
       display:grid;
@@ -336,6 +395,7 @@
       line-height:1.5;
       font-size:14px;
       font-weight:600;
+      min-height:108px;
     }
     .list-grid{
       display:grid;
@@ -394,6 +454,21 @@
       opacity:.75;
       font-style:italic;
     }
+    .banner{
+      display:grid;
+      grid-template-columns:1.15fr .85fr;
+      gap:18px;
+      margin-bottom:18px;
+    }
+    .banner-card{
+      padding:18px;
+    }
+    .mode-note{
+      color:var(--muted);
+      font-size:12px;
+      font-weight:700;
+      margin-top:8px;
+    }
     canvas{
       width:100% !important;
       max-height:280px !important;
@@ -401,6 +476,7 @@
     @media (max-width: 1180px){
       .hero{grid-template-columns:1fr}
       .hero-main{grid-template-columns:1fr}
+      .banner{grid-template-columns:1fr}
       .two-col{grid-template-columns:1fr}
       .stats-grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
     }
@@ -408,7 +484,7 @@
       .app{padding:14px}
       .toolbar{grid-template-columns:1fr 1fr;align-items:stretch}
       .btn{width:100%}
-      .stats-grid,.stats-grid-3,.source-list,.list-grid{grid-template-columns:1fr}
+      .stats-grid,.stats-grid-3,.source-list,.list-grid,.mini-score-grid{grid-template-columns:1fr}
       .hero-grid{grid-template-columns:1fr}
     }
   </style>
@@ -438,15 +514,15 @@
             </select>
           </div>
           <div>
-            <button class="btn" id="loadBtn" type="button">Load City Intel</button>
+            <button class="btn" id="loadBtn" type="button">Load Base Intel</button>
             <div class="status" id="loadStatus">Ready.</div>
           </div>
         </div>
         <div class="hero">
           <div class="hero-main glass">
             <div class="hero-copy">
-              <h1 id="heroTitle">Loading city overview…</h1>
-              <div class="hero-sub" id="heroSub">Choose a base to view the city intelligence dashboard.</div>
+              <h1 id="heroTitle">Loading base overview…</h1>
+              <div class="hero-sub" id="heroSub">Choose a base to view the detailed intelligence dashboard.</div>
               <div class="chip-row" id="heroChips"></div>
               <div class="hero-grid">
                 <div class="metric">
@@ -476,12 +552,45 @@
               <div class="section-title">Military Lifestyle Fit</div>
               <div class="score-big" id="fitRating">—</div>
               <div class="score-note" id="fitDescription">—</div>
+              <div class="mini-score-grid">
+                <div class="mini-score">
+                  <div class="k">Overall Score</div>
+                  <div class="v" id="overallScore">—</div>
+                </div>
+                <div class="mini-score">
+                  <div class="k">Military Fit Score</div>
+                  <div class="v" id="fitScore">—</div>
+                </div>
+                <div class="mini-score">
+                  <div class="k">Growth Score</div>
+                  <div class="v" id="growthScore">—</div>
+                </div>
+                <div class="mini-score">
+                  <div class="k">Stability Score</div>
+                  <div class="v" id="stabilityScore">—</div>
+                </div>
+              </div>
             </div>
             <div class="score-card">
               <div class="section-title">Quick Reality Check</div>
-              <div class="section-sub">Fast take on affordability, stability, and family-readiness.</div>
+              <div class="section-sub">Fast take on affordability, stability, and military-friendliness.</div>
               <div class="quote-block" id="quickTake">Loading…</div>
             </div>
+          </div>
+        </div>
+        <div class="banner">
+          <div class="banner-card glass">
+            <div class="section-title">Market BLUF</div>
+            <div class="section-sub">Executive-grade read on what this base market is telling you right now.</div>
+            <div class="bluf-status" id="blufStatus">Loading…</div>
+            <div class="bluf-head" id="blufHeadline">—</div>
+            <div class="bluf-summary" id="blufSummary">—</div>
+            <div class="mode-note" id="modeSummary">Mode: Overview</div>
+          </div>
+          <div class="banner-card glass">
+            <div class="section-title">Financial Positioning</div>
+            <div class="section-sub">How this market looks for buy vs rent pressure and near-term decision-making.</div>
+            <div class="stats-grid" id="financialBriefStats"></div>
           </div>
         </div>
         <div class="two-col">
@@ -499,7 +608,7 @@
           </div>
           <div class="panel glass">
             <h2>Market Snapshot</h2>
-            <p class="panel-sub">Current market pricing, pace, and recent trend direction.</p>
+            <p class="panel-sub">Current market pricing, pace, trend direction, and recent history.</p>
             <div class="stats-grid" id="marketStats"></div>
             <div style="margin-top:14px;">
               <canvas id="marketChart"></canvas>
@@ -521,6 +630,18 @@
               <div class="quote-block" id="vacancyBlock">—</div>
               <div class="quote-block" id="communityBlock">—</div>
             </div>
+          </div>
+        </div>
+        <div class="two-col">
+          <div class="panel glass">
+            <h2>Snapshot & Military Signals</h2>
+            <p class="panel-sub">Higher-level operating picture using quick-read fields already in the JSON.</p>
+            <div class="stats-grid-3" id="snapshotStats"></div>
+          </div>
+          <div class="panel glass">
+            <h2>Mortgage Assumptions & Rules</h2>
+            <p class="panel-sub">The assumptions your model is using for payment logic and affordability boundaries.</p>
+            <div class="stats-grid" id="assumptionStats"></div>
           </div>
         </div>
         <div class="two-col">
@@ -610,21 +731,33 @@
         if (!Number.isFinite(x)) return "—";
         return `${x.toFixed(digits)}%`;
       }
-      function num(n){
+      function num(n, digits = 0){
         const x = Number(n);
         if (!Number.isFinite(x)) return "—";
-        return x.toLocaleString();
+        return x.toLocaleString(undefined, {
+          minimumFractionDigits: digits,
+          maximumFractionDigits: digits
+        });
       }
       function safe(obj, path, fallback = null){
         try {
-          return path.split(".").reduce((acc, key) => acc && acc[key], obj) ?? fallback;
+          const out = path.split(".").reduce((acc, key) => acc && acc[key], obj);
+          return out ?? fallback;
         } catch {
           return fallback;
         }
       }
+      function first(...values){
+        for (const value of values){
+          if (value === 0) return value;
+          if (value === false) return value;
+          if (value !== undefined && value !== null && String(value).trim() !== "") return value;
+        }
+        return null;
+      }
       function nonEmpty(value, fallback = "—"){
-        const s = String(value ?? "").trim();
-        return s ? s : fallback;
+        const v = first(value);
+        return v == null ? fallback : String(v);
       }
       function setText(id, value){
         const el = qs(id);
@@ -633,18 +766,11 @@
       function card(k, v, s = ""){
         return `
           <div class="info-card">
-            <div class="k">${k}</div>
-            <div class="v">${v}</div>
-            ${s ? `<div class="s">${s}</div>` : ""}
+            <div class="k">${escapeHtml(k)}</div>
+            <div class="v">${escapeHtml(String(v ?? "—"))}</div>
+            ${s ? `<div class="s">${escapeHtml(String(s))}</div>` : ""}
           </div>
         `;
-      }
-      function populateBases(){
-        baseSelect.innerHTML = BASES.map(b => `<option value="${escapeHtml(b.value)}">${escapeHtml(b.value)}</option>`).join("");
-        const url = new URL(window.location.href);
-        const baseFromUrl = url.searchParams.get("base");
-        const found = BASES.find(b => b.value === baseFromUrl);
-        baseSelect.value = found ? found.value : "Davis-Monthan AFB";
       }
       function escapeHtml(str){
         return String(str)
@@ -653,6 +779,45 @@
           .replace(/>/g, "&gt;")
           .replace(/"/g, "&quot;")
           .replace(/'/g, "&#039;");
+      }
+      function slugKey(s){
+        return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
+      }
+      function detectMetroCrime(city){
+        const crime = safe(city, "crime_status", {}) || {};
+        const keys = Object.keys(crime);
+        const dynamicMetroKey = keys.find(k => /^metro_/i.test(k));
+        return first(
+          crime[dynamicMetroKey],
+          crime.metro,
+          crime.off_base,
+          crime.citywide,
+          crime.metro_area
+        );
+      }
+      function getQuarterSale(market){
+        return first(
+          safe(market, "q1_2026.median_sale_price"),
+          safe(market, "q1_2025.median_sale_price"),
+          safe(market, "q1_current.median_sale_price"),
+          safe(market, "quarter_current.median_sale_price")
+        );
+      }
+      function scoreLabel(score){
+        const x = Number(score);
+        if (!Number.isFinite(x)) return "—";
+        if (x >= 85) return "Excellent";
+        if (x >= 75) return "Strong";
+        if (x >= 65) return "Solid";
+        if (x >= 55) return "Mixed";
+        return "Challenging";
+      }
+      function verdictTone(value){
+        const s = String(value || "").toLowerCase();
+        if (s.includes("buy") || s.includes("strong") || s.includes("green") || s.includes("favorable")) return "ok";
+        if (s.includes("selective") || s.includes("balanced") || s.includes("moderate") || s.includes("yellow")) return "warn";
+        if (s.includes("tight") || s.includes("challenging") || s.includes("red")) return "bad";
+        return "";
       }
       async function fetchJson(url){
         const res = await fetch(url, { cache: "no-store" });
@@ -678,33 +843,103 @@
         } catch {}
         return await fetchJson(`${GITHUB_RAW_BASE}${encodeURIComponent(baseMeta.fileKey)}.json`);
       }
-      function renderHero(city){
-        const title = `${nonEmpty(city.place || city.city || city.name)} • ${nonEmpty(city.market_label)}`;
+      function populateBases(){
+        baseSelect.innerHTML = BASES.map(b => `<option value="${escapeHtml(b.value)}">${escapeHtml(b.value)}</option>`).join("");
+        const url = new URL(window.location.href);
+        const baseFromUrl = url.searchParams.get("base");
+        const found = BASES.find(b => b.value === baseFromUrl);
+        baseSelect.value = found ? found.value : "Nellis AFB";
+      }
+      function buildQuickTake(city, mode){
+        const income = Number(first(
+          safe(city, "income.median_household_income"),
+          safe(city, "snapshot.median_household_income")
+        )) || 0;
+        const home = Number(first(
+          city.avg_home_value,
+          city.average_home_value,
+          safe(city, "housing.median_value_owner_occupied"),
+          safe(city, "snapshot.median_home_price")
+        )) || 0;
+        const ratio = income > 0 ? home / income : 0;
+        const dom = Number(safe(city, "housing.market.average_days_on_market")) || 0;
+        const vacancy = Number(safe(city, "rental_vacancy.rate_percent")) || 0;
+        const fit = first(
+          safe(city, "military_lifestyle_fit.rating"),
+          safe(city, "market_bluf.status")
+        );
+        let affordability = "mixed";
+        if (ratio > 0 && ratio <= 4.0) affordability = "strong";
+        else if (ratio > 4.0 && ratio <= 5.5) affordability = "moderate";
+        else if (ratio > 5.5) affordability = "tight";
+        if (mode === "family") {
+          const schoolOn = safe(city, "school_quality.on_base");
+          const schoolOff = safe(city, "school_quality.off_base");
+          const crime = first(safe(city, "crime_status.installation"), detectMetroCrime(city));
+          return [
+            `Family view: affordability looks ${affordability}, with military fit reading ${nonEmpty(fit, "mixed")}.`,
+            schoolOn ? `On-base school note: ${schoolOn}` : "",
+            schoolOff ? `Off-base school note: ${schoolOff}` : "",
+            crime ? `Safety lens: ${crime}` : ""
+          ].filter(Boolean).join(" ");
+        }
+        if (mode === "investor") {
+          const rentPos = safe(city, "financial_brief.bah_vs_rent_position");
+          const buyPos = safe(city, "financial_brief.bah_vs_buy_position");
+          const leverage = safe(city, "market_bluf.buyer_leverage");
+          return [
+            `Investor view: affordability reads ${affordability} and turnover pace is about ${dom || "—"} days on market.`,
+            buyPos ? `Buy positioning: ${buyPos}.` : "",
+            rentPos ? `Rent positioning: ${rentPos}.` : "",
+            leverage ? `Current buyer leverage: ${leverage}.` : "",
+            vacancy ? `Rental vacancy is around ${vacancy.toFixed(1)}%.` : ""
+          ].filter(Boolean).join(" ");
+        }
+        return [
+          `This market looks ${affordability} for owner-occupants relative to local income.`,
+          fit ? `Military fit reads ${fit}.` : "",
+          dom ? `Homes are averaging about ${dom} days on market.` : "",
+          vacancy ? `Rental vacancy is around ${vacancy.toFixed(1)}%.` : ""
+        ].filter(Boolean).join(" ");
+      }
+      function renderHero(city, mode){
+        const titleLeft = nonEmpty(first(city.place, city.city, city.name), "Unknown City");
+        const titleRight = nonEmpty(first(city.market_label, safe(city, "housing.market.market_type_summary")), "Market Overview");
+        setText("heroTitle", `${titleLeft} • ${titleRight}`);
         const sub = [
-          city.last_updated_data_from_sources ? `Updated ${city.last_updated_data_from_sources}` : "",
-          city.zip ? `ZIP ${city.zip}` : "",
-          city.state ? city.state : ""
+          first(city.last_updated_data_from_sources) ? `Updated ${city.last_updated_data_from_sources}` : "",
+          first(city.zip) ? `ZIP ${city.zip}` : "",
+          first(city.state) ? city.state : "",
+          first(safe(city, "snapshot.population_metro")) ? `Metro ${num(safe(city, "snapshot.population_metro"))}` : ""
         ].filter(Boolean).join(" • ");
-        setText("heroTitle", title);
-        setText("heroSub", sub || "City overview loaded.");
+        setText("heroSub", sub || "Base overview loaded.");
+        const verdict = safe(city, "market_bluf.verdict");
+        const verdictClass = verdictTone(verdict);
         const chips = [
-          safe(city, "housing.market.market_type_summary", ""),
-          city.market_label || "",
-          safe(city, "military_lifestyle_fit.rating", "")
-        ].filter(Boolean).slice(0, 3);
-        qs("heroChips").innerHTML = chips.map(c => `<div class="chip">${escapeHtml(c)}</div>`).join("");
-        setText("mAvgHome", money(city.avg_home_value || city.average_home_value || safe(city, "housing.median_value_owner_occupied")));
-        setText("mIncome", money(safe(city, "income.median_household_income")));
-        setText("mPopulation", num(safe(city, "population.estimate")));
-        setText("mMarketType", nonEmpty(safe(city, "housing.market.market_type_summary")));
+          first(safe(city, "housing.market.market_type_summary")),
+          first(city.market_label),
+          first(safe(city, "military_lifestyle_fit.rating")),
+          first(verdict)
+        ].filter(Boolean).slice(0, 4);
+        qs("heroChips").innerHTML = chips.map((c, i) => {
+          const cls = i === chips.length - 1 && verdictClass ? `chip ${verdictClass}` : "chip";
+          return `<div class="${cls}">${escapeHtml(c)}</div>`;
+        }).join("");
+        setText("mAvgHome", money(first(city.avg_home_value, city.average_home_value, safe(city, "housing.median_value_owner_occupied"), safe(city, "snapshot.median_home_price"))));
+        setText("mIncome", money(first(safe(city, "income.median_household_income"), safe(city, "snapshot.median_household_income"))));
+        setText("mPopulation", num(first(safe(city, "population.estimate"), safe(city, "snapshot.population_city"))));
+        setText("mMarketType", nonEmpty(first(safe(city, "housing.market.market_type_summary"), city.market_label)));
         const fit = safe(city, "military_lifestyle_fit.rating", "—");
         const fitDesc = safe(city, "military_lifestyle_fit.description", "No military lifestyle fit summary yet.");
         setText("fitRating", fit);
         setText("fitDescription", fitDesc);
-        const quickTake = buildQuickTake(city);
-        setText("quickTake", quickTake);
+        setText("overallScore", num(safe(city, "scorecard.overall_score")));
+        setText("fitScore", num(safe(city, "scorecard.military_fit_score")));
+        setText("growthScore", num(safe(city, "scorecard.growth_score")));
+        setText("stabilityScore", num(safe(city, "scorecard.stability_score")));
+        setText("quickTake", buildQuickTake(city, mode));
         const img = qs("heroImage");
-        const imageUrl = city.image_url || city.imageUrl || "";
+        const imageUrl = first(city.image_url, city.imageUrl);
         if (imageUrl && /^https?:\/\//i.test(imageUrl)) {
           img.src = imageUrl;
           img.style.display = "block";
@@ -713,46 +948,120 @@
           img.style.display = "none";
         }
       }
-      function buildQuickTake(city){
-        const market = safe(city, "housing.market.market_type_summary", "");
-        const income = Number(safe(city, "income.median_household_income", 0)) || 0;
-        const home = Number(city.avg_home_value || city.average_home_value || safe(city, "housing.median_value_owner_occupied", 0)) || 0;
-        const dom = safe(city, "housing.market.average_days_on_market", null);
-        const ratio = income > 0 ? home / income : 0;
-        let affordability = "mixed";
-        if (ratio > 0 && ratio <= 4.0) affordability = "strong";
-        else if (ratio > 4.0 && ratio <= 5.5) affordability = "moderate";
-        else if (ratio > 5.5) affordability = "tight";
-        const parts = [];
-        parts.push(`This market looks ${affordability} for owner-occupants relative to local income.`);
-        if (market) parts.push(market);
-        if (dom != null) parts.push(`Homes are averaging about ${dom} days on market.`);
-        return parts.join(" ");
+      function renderBluf(city, mode){
+        const verdict = nonEmpty(first(safe(city, "market_bluf.verdict"), safe(city, "market_bluf.status"), safe(city, "military_lifestyle_fit.rating")), "No verdict");
+        const tone = verdictTone(verdict);
+        const confidence = safe(city, "market_bluf.confidence_score");
+        const statusText = [
+          nonEmpty(first(safe(city, "market_bluf.status"), verdict)),
+          confidence != null ? `Confidence ${num(confidence)}` : ""
+        ].filter(Boolean).join(" • ");
+        const statusEl = qs("blufStatus");
+        statusEl.className = `bluf-status${tone ? " " + tone : ""}`;
+        statusEl.textContent = statusText || "No BLUF status";
+        let headline = first(
+          safe(city, "market_bluf.bluf_headline"),
+          safe(city, "financial_brief.affordability_summary"),
+          safe(city, "military_lifestyle_fit.rating")
+        );
+        let summary = first(
+          safe(city, "market_bluf.bluf_summary"),
+          safe(city, "financial_brief.affordability_summary"),
+          safe(city, "military_lifestyle_fit.description"),
+          "No executive summary available yet."
+        );
+        if (mode === "family") {
+          headline = first(headline, "Family Readiness View");
+          summary = [
+            first(safe(city, "school_quality.on_base")) ? `On-base: ${safe(city, "school_quality.on_base")}` : "",
+            first(safe(city, "school_quality.off_base")) ? `Off-base: ${safe(city, "school_quality.off_base")}` : "",
+            first(safe(city, "military_lifestyle_fit.description")) ? `Community fit: ${safe(city, "military_lifestyle_fit.description")}` : "",
+            first(detectMetroCrime(city)) ? `Metro safety: ${detectMetroCrime(city)}` : ""
+          ].filter(Boolean).join(" ");
+        } else if (mode === "investor") {
+          headline = first(headline, "Investor Positioning View");
+          summary = [
+            first(safe(city, "financial_brief.affordability_summary")) ? safe(city, "financial_brief.affordability_summary") : "",
+            first(safe(city, "financial_brief.buyer_opportunity")) ? `Opportunity: ${safe(city, "financial_brief.buyer_opportunity")}` : "",
+            first(safe(city, "market_bluf.inventory_trend")) ? `Inventory trend: ${safe(city, "market_bluf.inventory_trend")}.` : "",
+            first(safe(city, "market_bluf.buyer_leverage")) ? `Buyer leverage: ${safe(city, "market_bluf.buyer_leverage")}.` : ""
+          ].filter(Boolean).join(" ");
+        }
+        setText("blufHeadline", headline || "No BLUF headline");
+        setText("blufSummary", summary || "No BLUF summary");
+        setText("modeSummary", `Mode: ${mode.charAt(0).toUpperCase() + mode.slice(1)}`);
       }
-      function renderHousing(city, bed){
+      function renderFinancialBrief(city, mode){
+        const stats = [];
+        const fin = safe(city, "financial_brief", {}) || {};
+        const bluf = safe(city, "market_bluf", {}) || {};
+        const score = safe(city, "scorecard", {}) || {};
+        if (mode === "family") {
+          stats.push(card("Affordability Summary", nonEmpty(fin.affordability_summary), "Family lens"));
+          stats.push(card("Community Fit", nonEmpty(safe(city, "military_lifestyle_fit.rating")), nonEmpty(safe(city, "military_lifestyle_fit.description"))));
+          stats.push(card("Affordability Score", num(score.affordability_score), scoreLabel(score.affordability_score)));
+          stats.push(card("School Outlook", first(safe(city, "school_quality.off_base"), safe(city, "school_quality.on_base"), "—")));
+        } else if (mode === "investor") {
+          stats.push(card("Buy Position", nonEmpty(fin.bah_vs_buy_position), "Investor lens"));
+          stats.push(card("Rent Position", nonEmpty(fin.bah_vs_rent_position), "Cash-flow pressure"));
+          stats.push(card("Buyer Opportunity", nonEmpty(fin.buyer_opportunity), "Where edge may exist"));
+          stats.push(card("Buyer Leverage", nonEmpty(bluf.buyer_leverage), nonEmpty(bluf.inventory_trend, "Inventory trend")));
+        } else {
+          stats.push(card("Buy Position", nonEmpty(fin.bah_vs_buy_position), "Own-vs-buy reality"));
+          stats.push(card("Rent Position", nonEmpty(fin.bah_vs_rent_position), "Rent pressure"));
+          stats.push(card("Affordability Score", num(score.affordability_score), scoreLabel(score.affordability_score)));
+          stats.push(card("Verdict", nonEmpty(bluf.verdict), nonEmpty(bluf.bluf_summary)));
+        }
+        qs("financialBriefStats").innerHTML = stats.join("");
+      }
+      function renderHousing(city, bed, mode){
         const bedData = safe(city, `by_bedroom.${bed}`, {}) || {};
-        const rent = safe(bedData, "rent_monthly.avg", null);
-        const home = safe(bedData, "home_price.avg", null);
-        const mortgage = safe(bedData, "mortgage_monthly.avg", null);
-        const utilities = safe(bedData, "utilities.total.avg", null);
-        qs("housingStats").innerHTML = [
+        const rent = first(safe(bedData, "rent_monthly.avg"));
+        const home = first(safe(bedData, "home_price.avg"));
+        const mortgage = first(safe(bedData, "mortgage_monthly.avg"), safe(city, "avg_home_mortgage_monthly.avg"));
+        const utilities = first(safe(bedData, "utilities.total.avg"));
+        const hoaMonthly = first(city.hoa_monthly);
+        const propertyTaxRate = first(city.property_tax_rate);
+        const insuranceRate = first(city.insurance_rate);
+        let cards = [
           card("Avg Rent", money(rent), `${bed} bedroom focus`),
           card("Avg Home Price", money(home), "Bedroom-based estimate"),
           card("Avg Mortgage", money(mortgage), "Monthly estimate"),
           card("Avg Utilities", money(utilities), "Electric/gas + water/sewer"),
-          card("Property Tax Rate", pct(city.property_tax_rate), "Annual rate"),
-          card("Insurance Rate", pct(city.insurance_rate), "Annual default")
-        ].join("");
+          card("Property Tax Rate", pct(propertyTaxRate), "Annual rate"),
+          card("Insurance Rate", pct(insuranceRate), "Annual default")
+        ];
+        if (mode === "family") {
+          cards = [
+            card("Avg Rent", money(rent), `${bed} bedroom focus`),
+            card("Avg Home Price", money(home), "Target family housing"),
+            card("Avg Mortgage", money(mortgage), "Monthly carry"),
+            card("Avg Utilities", money(utilities), "Household monthly"),
+            card("Avg HOA", hoaMonthly != null ? money(hoaMonthly) : "—", "Monthly"),
+            card("Median Home Price", money(first(safe(city, "snapshot.median_home_price"), safe(city, "housing.market.median_sale_price_current"))), "Market center")
+          ];
+        }
+        if (mode === "investor") {
+          const grossYield = (rent && home) ? ((Number(rent) * 12 / Number(home)) * 100) : null;
+          cards = [
+            card("Avg Rent", money(rent), `${bed} bedroom focus`),
+            card("Avg Home Price", money(home), "Acquisition marker"),
+            card("Gross Yield", grossYield != null ? pct(grossYield, 2) : "—", "Rent * 12 / price"),
+            card("Avg Mortgage", money(mortgage), "Debt service marker"),
+            card("Rental Vacancy", pct(safe(city, "rental_vacancy.rate_percent")), "Market slack"),
+            card("Avg HOA", hoaMonthly != null ? money(hoaMonthly) : "—", "Monthly")
+          ];
+        }
+        qs("housingStats").innerHTML = cards.join("");
         const labels = ["Rent", "Home Price", "Mortgage", "Utilities"];
-        const data = [rent || 0, home || 0, mortgage || 0, utilities || 0];
+        const data = [Number(rent) || 0, Number(home) || 0, Number(mortgage) || 0, Number(utilities) || 0];
         if (bedroomChart) bedroomChart.destroy();
         bedroomChart = new Chart(document.getElementById("bedroomChart"), {
           type: "bar",
           data: {
             labels,
             datasets: [{
-              data,
-              backgroundColor: ["#8ef3c5", "#6aa7ff", "#4f86ff", "#a8b0d6"]
+              data
             }]
           },
           options: {
@@ -775,33 +1084,72 @@
           }
         });
       }
-      function renderMarket(city){
+      function renderMarket(city, mode){
         const market = safe(city, "housing.market", {}) || {};
-        qs("marketStats").innerHTML = [
+        const q1Sale = getQuarterSale(market);
+        const yoy = first(market.zillow_one_year_change_percent, safe(city, "snapshot.market_trend_yoy"));
+        const saleHistory = Array.isArray(market.sale_history_36_months) ? market.sale_history_36_months : [];
+        let marketCards = [
           card("Zillow Avg Value", money(market.zillow_average_home_value)),
-          card("1Y Change", pct(market.zillow_one_year_change_percent)),
+          card("1Y Change", pct(yoy)),
           card("Median Sale", money(market.median_sale_price_current)),
           card("Median Listing", money(market.median_listing_price_realtor)),
-          card("Median $ / Sq Ft", market.median_listing_price_per_sqft ? `$${market.median_listing_price_per_sqft}` : "—"),
+          card("Median $ / Sq Ft", market.median_listing_price_per_sqft ? `$${num(market.median_listing_price_per_sqft)}` : "—"),
           card("Active Listings", num(market.active_listings_total)),
           card("Avg Days on Market", num(market.average_days_on_market)),
-          card("Q1 Median Sale", money(safe(market, "q1_2025.median_sale_price")))
-        ].join("");
-        const chartLabels = ["Sale", "Listing", "Q1 Sale", "Zillow Avg"];
-        const chartData = [
-          market.median_sale_price_current || 0,
-          market.median_listing_price_realtor || 0,
-          safe(market, "q1_2025.median_sale_price", 0) || 0,
-          market.zillow_average_home_value || 0
+          card("Quarter Median Sale", money(q1Sale))
         ];
+        if (mode === "investor") {
+          const spread = (Number(market.median_listing_price_realtor) || 0) - (Number(market.median_sale_price_current) || 0);
+          marketCards = [
+            card("Median Sale", money(market.median_sale_price_current)),
+            card("Median Listing", money(market.median_listing_price_realtor)),
+            card("Listing-Sale Spread", spread ? money(spread) : "—", "Negotiation room proxy"),
+            card("1Y Change", pct(yoy)),
+            card("Avg Days on Market", num(market.average_days_on_market)),
+            card("Active Listings", num(market.active_listings_total)),
+            card("Buyer Leverage", nonEmpty(safe(city, "market_bluf.buyer_leverage"))),
+            card("Inventory Trend", nonEmpty(safe(city, "market_bluf.inventory_trend")))
+          ];
+        }
+        if (mode === "family") {
+          marketCards = [
+            card("Median Sale", money(market.median_sale_price_current), "Family-market anchor"),
+            card("Median Listing", money(market.median_listing_price_realtor), "Ask pricing"),
+            card("Avg Days on Market", num(market.average_days_on_market), "How fast homes move"),
+            card("Active Listings", num(market.active_listings_total), "Choice set"),
+            card("1Y Change", pct(yoy), "Price trend"),
+            card("Quarter Median Sale", money(q1Sale), "Recent quarter"),
+            card("Market Type", nonEmpty(market.market_type_summary)),
+            card("Confidence", num(safe(city, "market_bluf.confidence_score")), "BLUF confidence")
+          ];
+        }
+        qs("marketStats").innerHTML = marketCards.join("");
+        let chartType = "line";
+        let chartLabels = [];
+        let chartData = [];
+        if (saleHistory.length) {
+          chartLabels = saleHistory.map(x => nonEmpty(x.month, "—"));
+          chartData = saleHistory.map(x => Number(x.median_sale_price) || 0);
+        } else {
+          chartType = "bar";
+          chartLabels = ["Sale", "Listing", "Quarter", "Zillow Avg"];
+          chartData = [
+            Number(market.median_sale_price_current) || 0,
+            Number(market.median_listing_price_realtor) || 0,
+            Number(q1Sale) || 0,
+            Number(market.zillow_average_home_value) || 0
+          ];
+        }
         if (marketChart) marketChart.destroy();
         marketChart = new Chart(document.getElementById("marketChart"), {
-          type: "bar",
+          type: chartType,
           data: {
             labels: chartLabels,
             datasets: [{
               data: chartData,
-              backgroundColor: ["#8ef3c5", "#6aa7ff", "#4f86ff", "#a8b0d6"]
+              tension: 0.28,
+              fill: false
             }]
           },
           options: {
@@ -818,35 +1166,146 @@
               },
               x: {
                 ticks: { color: "#e9ecff" },
-                grid: { display: false }
+                grid: { display: chartType !== "line" ? false : true, color: "rgba(255,255,255,.03)" }
               }
             }
           }
         });
       }
-      function renderDemographics(city){
-        qs("demoStats").innerHTML = [
-          card("Population", num(safe(city, "population.estimate"))),
-          card("Median Age", num(safe(city, "population.median_age"))),
-          card("Persons / Household", num(safe(city, "population.persons_per_household"))),
-          card("Median Household Income", money(safe(city, "income.median_household_income"))),
+      function renderDemographics(city, mode){
+        let cards = [
+          card("Population", num(first(safe(city, "population.estimate"), safe(city, "snapshot.population_city")))),
+          card("Metro Population", num(safe(city, "snapshot.population_metro"))),
+          card("Median Age", num(safe(city, "population.median_age"), 1)),
+          card("Persons / Household", num(safe(city, "population.persons_per_household"), 2)),
+          card("Households", num(safe(city, "households.total_households"))),
+          card("Median Household Income", money(first(safe(city, "income.median_household_income"), safe(city, "snapshot.median_household_income")))),
           card("Per Capita Income", money(safe(city, "income.per_capita_income"))),
           card("Poverty Rate", pct(safe(city, "income.poverty_rate_percent"))),
           card("Unemployment", pct(safe(city, "labor.unemployment_rate_percent"))),
-          card("Commute Time", safe(city, "labor.mean_travel_time_to_work_minutes") != null ? `${safe(city, "labor.mean_travel_time_to_work_minutes")} min` : "—"),
+          card("Commute Time", safe(city, "labor.mean_travel_time_to_work_minutes") != null ? `${num(safe(city, "labor.mean_travel_time_to_work_minutes"), 1)} min` : "—"),
           card("HS Graduate+", pct(safe(city, "education.high_school_grad_or_higher_percent"))),
-          card("Bachelor's+", pct(safe(city, "education.bachelors_degree_or_higher_percent"))),
-          card("Veteran Population", pct(safe(city, "veterans.veteran_population_percent"))),
-          card("Foreign-Born", pct(safe(city, "immigration.foreign_born_percent")))
-        ].join("");
+          card("Bachelor's+", pct(safe(city, "education.bachelors_degree_or_higher_percent")))
+        ];
+        if (mode === "family") {
+          cards = [
+            card("Population", num(first(safe(city, "population.estimate"), safe(city, "snapshot.population_city")))),
+            card("Persons / Household", num(safe(city, "population.persons_per_household"), 2)),
+            card("Median Age", num(safe(city, "population.median_age"), 1)),
+            card("Households", num(safe(city, "households.total_households"))),
+            card("Median Household Income", money(first(safe(city, "income.median_household_income"), safe(city, "snapshot.median_household_income")))),
+            card("Commute Time", safe(city, "labor.mean_travel_time_to_work_minutes") != null ? `${num(safe(city, "labor.mean_travel_time_to_work_minutes"), 1)} min` : "—"),
+            card("Veteran Population", pct(safe(city, "veterans.veteran_population_percent"))),
+            card("Foreign-Born", pct(safe(city, "immigration.foreign_born_percent"))),
+            card("HS Graduate+", pct(safe(city, "education.high_school_grad_or_higher_percent"))),
+            card("Bachelor's+", pct(safe(city, "education.bachelors_degree_or_higher_percent"))),
+            card("Employment Status", nonEmpty(safe(city, "snapshot.employment_status"))),
+            card("Traffic Level", nonEmpty(safe(city, "snapshot.traffic_level")))
+          ];
+        }
+        if (mode === "investor") {
+          cards = [
+            card("Median Household Income", money(first(safe(city, "income.median_household_income"), safe(city, "snapshot.median_household_income")))),
+            card("Per Capita Income", money(safe(city, "income.per_capita_income"))),
+            card("Poverty Rate", pct(safe(city, "income.poverty_rate_percent"))),
+            card("Unemployment", pct(safe(city, "labor.unemployment_rate_percent"))),
+            card("Commute Time", safe(city, "labor.mean_travel_time_to_work_minutes") != null ? `${num(safe(city, "labor.mean_travel_time_to_work_minutes"), 1)} min` : "—"),
+            card("Veteran Population", pct(safe(city, "veterans.veteran_population_percent"))),
+            card("Metro Population", num(safe(city, "snapshot.population_metro"))),
+            card("Traffic Level", nonEmpty(safe(city, "snapshot.traffic_level"))),
+            card("Employment Status", nonEmpty(safe(city, "snapshot.employment_status"))),
+            card("Bachelor's+", pct(safe(city, "education.bachelors_degree_or_higher_percent"))),
+            card("Population", num(first(safe(city, "population.estimate"), safe(city, "snapshot.population_city")))),
+            card("Households", num(safe(city, "households.total_households")))
+          ];
+        }
+        qs("demoStats").innerHTML = cards.join("");
       }
-      function renderCommunity(city){
-        setText("schoolsBlock", safe(city, "school_quality.on_base", "No school summary yet."));
-        setText("crimeBlock", safe(city, "crime_status.metro_tucson", safe(city, "crime_status.installation", "No safety summary yet.")));
+      function renderCommunity(city, mode){
+        const schoolOn = safe(city, "school_quality.on_base", "");
+        const schoolOff = safe(city, "school_quality.off_base", "");
+        const installCrime = safe(city, "crime_status.installation", "");
+        const metroCrime = detectMetroCrime(city);
         const vacancyRate = safe(city, "rental_vacancy.rate_percent", null);
         const vacancyNotes = safe(city, "rental_vacancy.notes", "");
-        setText("vacancyBlock", vacancyRate != null ? `Rental vacancy: ${vacancyRate}% • ${vacancyNotes}` : "No rental vacancy summary yet.");
-        setText("communityBlock", safe(city, "military_lifestyle_fit.description", "No community fit summary yet."));
+        const communityFit = safe(city, "military_lifestyle_fit.description", "No community fit summary yet.");
+        if (mode === "family") {
+          setText("schoolsBlock",
+            [
+              schoolOn ? `On-base school environment: ${schoolOn}` : "",
+              schoolOff ? `Off-base school environment: ${schoolOff}` : ""
+            ].filter(Boolean).join(" ")
+            || "No school summary yet."
+          );
+          setText("crimeBlock",
+            [
+              installCrime ? `Installation safety: ${installCrime}` : "",
+              metroCrime ? `Metro safety: ${metroCrime}` : ""
+            ].filter(Boolean).join(" ")
+            || "No safety summary yet."
+          );
+        } else if (mode === "investor") {
+          setText("schoolsBlock",
+            schoolOff ? `Family-demand proxy: ${schoolOff}` : (schoolOn || "No school summary yet.")
+          );
+          setText("crimeBlock",
+            metroCrime ? `Neighborhood risk lens: ${metroCrime}` : (installCrime || "No safety summary yet.")
+          );
+        } else {
+          setText("schoolsBlock",
+            [
+              schoolOn ? `On-base: ${schoolOn}` : "",
+              schoolOff ? `Off-base: ${schoolOff}` : ""
+            ].filter(Boolean).join(" ")
+            || "No school summary yet."
+          );
+          setText("crimeBlock",
+            [
+              installCrime ? `Installation: ${installCrime}` : "",
+              metroCrime ? `Metro: ${metroCrime}` : ""
+            ].filter(Boolean).join(" ")
+            || "No safety summary yet."
+          );
+        }
+        setText(
+          "vacancyBlock",
+          vacancyRate != null
+            ? `Rental vacancy: ${num(vacancyRate, 1)}% • ${nonEmpty(vacancyNotes, "No extra notes.")}`
+            : "No rental vacancy summary yet."
+        );
+        setText("communityBlock", communityFit);
+      }
+      function renderSnapshotSignals(city, mode){
+        const snapshotCards = [
+          card("Traffic Level", nonEmpty(safe(city, "snapshot.traffic_level"))),
+          card("Employment Status", nonEmpty(safe(city, "snapshot.employment_status"))),
+          card("Median Home Price", money(first(safe(city, "snapshot.median_home_price"), safe(city, "housing.market.median_sale_price_current")))),
+          card("Market Trend YoY", pct(first(safe(city, "snapshot.market_trend_yoy"), safe(city, "housing.market.zillow_one_year_change_percent")))),
+          card("Veteran Population", pct(safe(city, "veterans.veteran_population_percent"))),
+          card("Housing Units", num(safe(city, "housing.housing_units"))),
+          card("Military Fit Score", num(safe(city, "scorecard.military_fit_score")), scoreLabel(safe(city, "scorecard.military_fit_score"))),
+          card("Affordability Score", num(safe(city, "scorecard.affordability_score")), scoreLabel(safe(city, "scorecard.affordability_score"))),
+          card("Growth Score", num(safe(city, "scorecard.growth_score")), scoreLabel(safe(city, "scorecard.growth_score"))),
+          card("Stability Score", num(safe(city, "scorecard.stability_score")), scoreLabel(safe(city, "scorecard.stability_score"))),
+          card("Overall Score", num(safe(city, "scorecard.overall_score")), scoreLabel(safe(city, "scorecard.overall_score"))),
+          card("Confidence", num(safe(city, "market_bluf.confidence_score")), "Market BLUF")
+        ];
+        qs("snapshotStats").innerHTML = snapshotCards.join("");
+        const assumptionCards = [
+          card("APR", pct(safe(city, "mortgage_assumptions.apr_percent"), 2), "Default financing assumption"),
+          card("Term", safe(city, "mortgage_assumptions.term_years") != null ? `${num(safe(city, "mortgage_assumptions.term_years"))} years` : "—"),
+          card("Down Payment", pct(safe(city, "mortgage_assumptions.down_payment_percent"), 1), "Default"),
+          card("Includes", nonEmpty(safe(city, "mortgage_assumptions.includes"))),
+          card("Avg Mortgage", money(safe(city, "avg_home_mortgage_monthly.avg")), nonEmpty(safe(city, "avg_home_mortgage_monthly.notes"))),
+          card("HOA", city.hoa_monthly != null ? money(city.hoa_monthly) : "—", "Monthly"),
+          card("Max Safe Housing Ratio", pct((Number(safe(city, "rules.max_safe_housing_ratio")) || 0) * 100, 0), "Guardrail"),
+          card("Warning Ratio", pct((Number(safe(city, "rules.warning_ratio")) || 0) * 100, 0), "Caution lane"),
+          card("Danger Ratio", pct((Number(safe(city, "rules.danger_ratio")) || 0) * 100, 0), "High-risk lane"),
+          card("Tax Rate", pct(city.property_tax_rate), "Annual"),
+          card("Insurance Rate", pct(city.insurance_rate), "Annual"),
+          card("Defaults Note", nonEmpty(safe(city, "mortgage_assumptions.defaults_note")))
+        ];
+        qs("assumptionStats").innerHTML = assumptionCards.join("");
       }
       function renderClimate(city){
         qs("climateStats").innerHTML = [
@@ -888,16 +1347,20 @@
       async function render(){
         const base = baseSelect.value;
         const bed = String(bedroomSelect.value || "4");
-        loadStatus.textContent = "Loading city JSON…";
+        const mode = String(modeSelect.value || "overview");
+        loadStatus.textContent = "Loading base JSON…";
         const city = await loadCity(base);
-        renderHero(city);
-        renderHousing(city, bed);
-        renderMarket(city);
-        renderDemographics(city);
-        renderCommunity(city);
+        renderHero(city, mode);
+        renderBluf(city, mode);
+        renderFinancialBrief(city, mode);
+        renderHousing(city, bed, mode);
+        renderMarket(city, mode);
+        renderDemographics(city, mode);
+        renderCommunity(city, mode);
+        renderSnapshotSignals(city, mode);
         renderClimate(city);
         renderSources(city);
-        loadStatus.textContent = `Loaded ${base}.`;
+        loadStatus.textContent = `Loaded ${base} • ${mode}.`;
       }
       loadBtn.addEventListener("click", () => {
         render().catch(err => {
@@ -905,8 +1368,20 @@
           loadStatus.textContent = "Load failed. Check city JSON / endpoint.";
         });
       });
+      baseSelect.addEventListener("change", () => {
+        render().catch(err => {
+          console.error(err);
+          loadStatus.textContent = "Reload failed.";
+        });
+      });
       bedroomSelect.addEventListener("change", () => {
         syncBedroomButtons();
+        render().catch(err => {
+          console.error(err);
+          loadStatus.textContent = "Reload failed.";
+        });
+      });
+      modeSelect.addEventListener("change", () => {
         render().catch(err => {
           console.error(err);
           loadStatus.textContent = "Reload failed.";

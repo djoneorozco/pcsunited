@@ -1,5 +1,5 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Mar 30 2026 14:41:08 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="69b8ee46ae4fd436889d48e0" data-wf-site="69b6b526f23748df9f189b16" lang="en">
+<html data-wf-page="69ca87b14547f11b32bc5263" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
   <title>Dashboard</title>
@@ -473,8 +473,14 @@
       <div class="code-embed-33 w-embed w-script"><!--  ============================================================
 PCSUnited • USER STRATEGY WORKSPACE — SHELL ONLY
 House of SaSS Theme
-v1.3.0
+v1.4.0
 UPDATE
+- 2H shell updated to support embedded Ask-Elena panel
+- Keeps title text "Action Summary" so 2H runtime can still target the card
+- Adds:
+    .pcsu-card-ask-elena
+    .pcsu-card-inner-ask-elena
+    .pcsu-rail-list-ask-elena
 - Affordability shell aligned to latest panel runtime
 - Added:
     #pcsuFiduciarySummaryBtn
@@ -1443,6 +1449,26 @@ UPDATE
       letter-spacing:-.02em;
       text-align:right;
     }
+    /* ============================================================
+       2H / ASK ELENA SUPPORT
+    ============================================================ */
+    .pcsu-card-ask-elena{
+      min-height:640px;
+    }
+    .pcsu-card-inner-ask-elena{
+      min-height:640px;
+      display:flex;
+      flex-direction:column;
+    }
+    .pcsu-rail-list-ask-elena{
+      flex:1 1 auto;
+      min-height:560px;
+      display:block;
+      overflow:visible;
+    }
+    .pcsu-card-ask-elena .pcsu-task{
+      min-height:64px;
+    }
     @media (max-width:1180px){
       .pcsu-grid{ grid-template-columns:1fr; }
       .pcsu-middle{ grid-template-columns:1fr; }
@@ -1468,6 +1494,13 @@ UPDATE
       .pcsu-debt-tool-note{
         max-width:none;
       }
+      .pcsu-card-ask-elena,
+      .pcsu-card-inner-ask-elena{
+        min-height:560px;
+      }
+      .pcsu-rail-list-ask-elena{
+        min-height:500px;
+      }
     }
     @media (max-width:640px){
       #pcsu-user-shell{ padding:20px 12px 28px; }
@@ -1479,6 +1512,13 @@ UPDATE
       .pcsu-aff-head-title{ font-size:18px; }
       .pcsu-pay-value{ font-size:38px; }
       .pcsu-live-big{ font-size:36px; }
+      .pcsu-card-ask-elena,
+      .pcsu-card-inner-ask-elena{
+        min-height:520px;
+      }
+      .pcsu-rail-list-ask-elena{
+        min-height:460px;
+      }
     }
   </style>
           <div class="pcsu-wrap">
@@ -1789,24 +1829,24 @@ UPDATE
                     </div>
                   </div>
                 </section>
-                <section class="pcsu-card">
-                  <div class="pcsu-card-inner">
+                <section class="pcsu-card pcsu-card-ask-elena">
+                  <div class="pcsu-card-inner pcsu-card-inner-ask-elena">
                     <h2 class="pcsu-card-title">
                       <span>Action Summary</span>
-                      <small>Timeline</small>
+                      <small>Ask Elena</small>
                     </h2>
-                    <ul class="pcsu-rail-list">
+                    <ul class="pcsu-rail-list pcsu-rail-list-ask-elena">
                       <li class="pcsu-task">
                         <div class="pcsu-task-icon">1</div>
-                        <div>Increase liquid reserves to strengthen buffer before closing.</div>
+                        <div>Ask Elena to break down your affordability, BAH fit, mortgage estimate, or next best action for this PCS scenario.</div>
                       </li>
                       <li class="pcsu-task">
                         <div class="pcsu-task-icon">2</div>
-                        <div>Compare conservative target homes before testing the top of your range.</div>
+                        <div>Use this panel to get fast answers grounded in your stored PCSUnited profile, housing assumptions, and current scenario inputs.</div>
                       </li>
                       <li class="pcsu-task">
                         <div class="pcsu-task-icon">3</div>
-                        <div>Lock financing assumptions before finalizing strategy.</div>
+                        <div>Once the 2H runtime loads, this entire area becomes the embedded Ask-Elena concierge panel.</div>
                       </li>
                     </ul>
                   </div>
@@ -7931,13 +7971,13 @@ UPDATE
       <div class="w-embed w-script">
         <script>
 /* ============================================================
-  PCSUnited • 2H Action Summary
-  v1.0.0
+  PCSUnited • 2H Action Summary → Ask Elena Panel
+  v2.0.0
   PURPOSE
-  - Paints the Action Summary / Timeline card
-  - Builds 3 prioritized next-step actions
-  - Uses readiness, strategy, housing calculator, and profile data
-  - Replaces the placeholder timeline copy with personalized actions
+  - Replaces the 2H Action Summary list with an embedded Ask-Elena panel
+  - Uses the ORIGINAL Ask-Elena logic / endpoints / receipts flow
+  - Converts the original floating HUD into a panel-contained experience
+  - Keeps 2H persistence so the dashboard still knows this module is mounted
   EXPECTED SHELL STRUCTURE
   - The Action Summary card contains:
       .pcsu-rail-list
@@ -7955,18 +7995,22 @@ UPDATE
   - pcsunited.bridge
   - pcsunited.bridge.v1
   - realtysass.bridge
+  - pcsunited.identity
+  - realtysass.kpi_overrides.v1
+  - pcsunited.kpi_overrides.v1
+  - realtysass.brain_cache.v1
   STORAGE WRITES
   - pcsunited.action_summary.v1
   - realtysass.action_summary.v1 (mirror)
   NOTES
-  - No API required
-  - Keeps the shell styling intact
-  - Rebuilds only the list content inside the Action Summary card
+  - No shell changes required
+  - Rebuilds the Action Summary card content into an Ask-Elena panel
+  - Original Ask-Elena logic preserved, but layout converted to panel-contained
 ============================================================ */
 (() => {
   "use strict";
   //#1) SINGLETON GUARD
-  if (window.PCSU_2H_ACTION_SUMMARY && window.PCSU_2H_ACTION_SUMMARY.__mounted) return;
+  if (window.PCSU_2H_ACTION_SUMMARY && window.PCSU_2H_ACTION_SUMMARY.__mounted_v200) return;
   //#2) CONSTANTS
   const KEYS = {
     pcsBridge: "pcsunited.bridge",
@@ -7980,8 +8024,12 @@ UPDATE
     housingCalc: "pcsunited.housing_calc.v1",
     housingCalcLegacy: "realtysass.housing_calc.v1",
     actionSummary: "pcsunited.action_summary.v1",
-    actionSummaryLegacy: "realtysass.action_summary.v1"
+    actionSummaryLegacy: "realtysass.action_summary.v1",
+    identity: "pcsunited.identity"
   };
+  const ASK_ELENA_ENDPOINT = "https://pcsunited.netlify.app/api/ask-elena";
+  const URL_ELENA_DASH = "https://pcs-united.webflow.io/user";
+  const URL_FAD = "https://pcs-united.webflow.io/military-calculator-rent-vs-buy";
   //#3) HELPERS
   function readJSON(key, fallback = null){
     try{
@@ -8020,6 +8068,21 @@ UPDATE
     }
     return null;
   }
+  function safeJSON(str){
+    try { return JSON.parse(str); } catch(_) { return null; }
+  }
+  function prefersReduced(){
+    return !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  }
+  function formatCurrency(n){
+    const x = Number(n);
+    if (!Number.isFinite(x) || x <= 0) return "—";
+    return "$" + Math.round(x).toLocaleString();
+  }
+  function hasFinitePositive(n){
+    const x = Number(n);
+    return Number.isFinite(x) && x > 0;
+  }
   //#4) LOADERS
   function getBridge(){
     const a = readJSON(KEYS.pcsBridge, null);
@@ -8055,6 +8118,97 @@ UPDATE
     if (b && typeof b === "object") return b;
     return {};
   }
+  function getOverrides(){
+    const o1 = readJSON("realtysass.kpi_overrides.v1", null);
+    if (o1 && typeof o1 === "object") return o1;
+    const o2 = readJSON("pcsunited.kpi_overrides.v1", null);
+    if (o2 && typeof o2 === "object") return o2;
+    return null;
+  }
+  function getIdentityEmail(){
+    const raw = localStorage.getItem(KEYS.identity);
+    if (!raw) return "";
+    const obj = safeJSON(raw);
+    if (obj && obj.email) return String(obj.email).trim().toLowerCase();
+    if (raw.includes("@")) return raw.trim().toLowerCase();
+    return "";
+  }
+  function tryProfileEmailFromLocalStorage(){
+    const keys = [
+      "pcsunited.profile",
+      "pcsunited.profile.v1",
+      "pcsunited.profile_lookup",
+      "realtysass.profile_lookup",
+      "pcsunited.profile_by_email",
+      "pcsunited.profileByEmail"
+    ];
+    for (const k of keys){
+      const obj = safeJSON(localStorage.getItem(k) || "");
+      if (obj && typeof obj === "object"){
+        const em = (obj.email || (obj.profile && obj.profile.email) || "").toString().trim().toLowerCase();
+        if (em.includes("@")) return em;
+      }
+    }
+    return "";
+  }
+  function getPCSUEmaiL(){
+    const idEmail = getIdentityEmail();
+    if (idEmail) return idEmail;
+    try{
+      const qs = new URLSearchParams(window.location.search);
+      const q = (qs.get("email") || "").trim();
+      if (q) return q.toLowerCase();
+    }catch(_){}
+    const s1 = (sessionStorage.getItem("pcsunited.sessionEmail") || "").trim();
+    if (s1) return s1.toLowerCase();
+    const l1 = (localStorage.getItem("pcsunited.loginEmail") || "").trim();
+    if (l1) return l1.toLowerCase();
+    const p = tryProfileEmailFromLocalStorage();
+    if (p) return p;
+    const l2 = (localStorage.getItem("realtysass.loginEmail") || "").trim();
+    if (l2) return l2.toLowerCase();
+    return "";
+  }
+  function getLightProfileHint(){
+    const p = safeJSON(localStorage.getItem("pcsunited.profile") || "")
+           || safeJSON(localStorage.getItem("pcsunited.profile.v1") || "")
+           || safeJSON(localStorage.getItem("realtysass.profile_lookup") || "")
+           || null;
+    if (p && typeof p === "object"){
+      return {
+        email: p.email || null,
+        full_name: p.full_name || p.fullName || null,
+        first_name: p.first_name || p.firstName || null,
+        last_name: p.last_name || p.lastName || null,
+        rank_paygrade: p.rank_paygrade || p.rank || null,
+        yos: (p.yos != null ? Number(p.yos) : null),
+        base: p.base || null,
+        family: (p.family != null ? p.family : null),
+        mode: p.mode || null
+      };
+    }
+    const bridge = getBridge();
+    if (!bridge || typeof bridge !== "object") return null;
+    return {
+      email: bridge.email || null,
+      full_name: bridge.full_name || bridge.fullName || null,
+      first_name: bridge.first_name || bridge.firstName || null,
+      last_name: bridge.last_name || bridge.lastName || null,
+      rank_paygrade: bridge.rank_paygrade || bridge.rank || null,
+      yos: (bridge.yos != null ? Number(bridge.yos) : null),
+      base: bridge.base || null,
+      family: (bridge.family != null ? bridge.family : null),
+      mode: bridge.mode || null
+    };
+  }
+  function getIdentityObject(){
+    const obj = safeJSON(localStorage.getItem(KEYS.identity) || "");
+    if (!obj || typeof obj !== "object") return null;
+    return {
+      email: obj.email ? String(obj.email).trim().toLowerCase() : null,
+      ts: obj.ts != null ? Number(obj.ts) : null
+    };
+  }
   //#5) FIND THE ACTION SUMMARY CARD
   function findActionSummaryCard(){
     const cards = Array.from(document.querySelectorAll(".pcsu-card"));
@@ -8065,7 +8219,7 @@ UPDATE
     }
     return null;
   }
-  //#6) BUILD ACTIONS
+  //#6) ORIGINAL ACTION SUMMARY LOGIC (kept for persistence / fallback context)
   function buildActions(){
     const bridge = getBridge();
     const profile = getProfile();
@@ -8085,7 +8239,6 @@ UPDATE
     const timeToBuy = str(pick(profile, ["time_to_buy", "timeToBuy"]) || pick(bridge, ["time_to_buy", "timeToBuy"]));
     const base = str(pick(profile, ["base", "pcs_base", "pcsBase"]) || pick(bridge, ["base", "pcs_base", "pcsBase"]) || "your PCS base");
     const actions = [];
-    //#6.1) Price correction / budget discipline
     if (currentPrice > 0 && targetPrice > 0 && currentPrice > targetPrice * 1.05){
       actions.push(`Reduce your home search target closer to ${money(targetPrice)} so your payment stays aligned with the safer part of your affordability range.`);
     } else if (targetPrice > 0){
@@ -8093,7 +8246,6 @@ UPDATE
     } else {
       actions.push(`Set a clear target purchase budget before shopping so every next step is anchored to a realistic affordability number.`);
     }
-    //#6.2) Savings / reserves
     if (savings < 15000){
       actions.push(`Build a stronger cash buffer before purchase. Increasing reserves now will improve flexibility for closing costs, repairs, and move-related surprises.`);
     } else if (savings < 30000){
@@ -8101,7 +8253,6 @@ UPDATE
     } else {
       actions.push(`Protect your current reserves and avoid letting the down payment drain your entire cash position before closing.`);
     }
-    //#6.3) Credit / financing
     if (creditScore > 0 && creditScore < 680){
       actions.push(`Improve your credit profile before locking financing. Even a modest score increase could materially improve affordability and loan terms.`);
     } else if (creditScore >= 680 && creditScore < 720){
@@ -8109,7 +8260,6 @@ UPDATE
     } else {
       actions.push(`Lock your financing assumptions early with a lender so your strategy for ${base} is based on confirmed numbers, not estimates.`);
     }
-    //#6.4) Timing-aware adjustment
     if (timeToBuy){
       const t = timeToBuy.toLowerCase();
       if (t.includes("soon") || t.includes("now") || t.includes("0") || t.includes("1 month") || t.includes("30")){
@@ -8118,11 +8268,9 @@ UPDATE
         actions[1] = `Use the next ${timeToBuy} to strengthen savings, tighten spending, and improve your purchase leverage before you move forward.`;
       }
     }
-    //#6.5) Risk-aware refinement
     if (risk.toLowerCase() === "elevated" || score < 70 || grade === "C" || grade === "C-" || grade === "D" || grade === "F"){
       actions[0] = `Delay stretching on price and keep the target conservative until your financial profile improves. Right now, stability matters more than pushing the top end of the market.`;
     }
-    //#6.6) Buffer-aware refinement
     if (calcPayment > 0 && safePayment > 0 && calcPayment > safePayment){
       actions[0] = `Reduce the modeled payment toward ${money(safePayment)} or less so the scenario stays inside the safer part of your monthly budget.`;
     }
@@ -8131,51 +8279,854 @@ UPDATE
     }
     return actions.slice(0, 3);
   }
-  //#7) PAINT
-  function paintActions(actions){
-    const card = findActionSummaryCard();
-    if (!card) return;
-    const list = card.querySelector(".pcsu-rail-list");
-    if (!list) return;
-    list.innerHTML = "";
-    actions.forEach((text, idx) => {
-      const li = document.createElement("li");
-      li.className = "pcsu-task";
-      const icon = document.createElement("div");
-      icon.className = "pcsu-task-icon";
-      icon.textContent = String(idx + 1);
-      const body = document.createElement("div");
-      body.textContent = text;
-      li.appendChild(icon);
-      li.appendChild(body);
-      list.appendChild(li);
-    });
+  //#7) EMBEDDED ASK ELENA TEMPLATE
+  function ensureStyles(){
+    if (document.getElementById("pcsu-2h-ask-elena-styles")) return;
+    const style = document.createElement("style");
+    style.id = "pcsu-2h-ask-elena-styles";
+    style.textContent = `
+      #pcsu-2h-ask-elena, #pcsu-2h-ask-elena *{
+        box-sizing:border-box;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      }
+      #pcsu-2h-ask-elena{
+        --ink:#e9ecff;
+        --muted:#a8b0d6;
+        --danger:#ff8aa6;
+        --mint:#8ef3c5;
+        --sapphire:#6aa7ff;
+        --panel: rgba(12,14,25,.38);
+        --border: rgba(255,255,255,.10);
+        --shadow: 0 22px 48px rgba(0,0,0,.52);
+        --shadowSoft: 0 14px 30px rgba(0,0,0,.22);
+        --blur: 18px;
+        --sat: 165%;
+        width: 100%;
+        min-height: 560px;
+        border-radius: 18px;
+        overflow: hidden;
+        border: 1px solid rgba(255,255,255,.10);
+        background:
+          radial-gradient(1200px 700px at 12% 0%, rgba(106,167,255,.14), transparent 58%),
+          radial-gradient(900px 520px at 92% 120%, rgba(142,243,197,.10), transparent 55%),
+          rgba(12,14,25,.30);
+        -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--sat));
+        backdrop-filter: blur(var(--blur)) saturate(var(--sat));
+        box-shadow:
+          var(--shadow),
+          inset 0 0 0 1px rgba(255,255,255,.05),
+          inset 0 0 26px rgba(106,167,255,.08),
+          inset 0 0 22px rgba(142,243,197,.05);
+        position: relative;
+      }
+      #pcsu-2h-ask-elena::before{
+        content:"";
+        position:absolute;
+        inset:0;
+        pointer-events:none;
+        background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,0));
+        opacity:1;
+      }
+      #pcsu-2h-ask-elena::after{
+        content:"";
+        position:absolute;
+        inset:0;
+        pointer-events:none;
+        background:
+          linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
+          linear-gradient(0deg, rgba(255,255,255,.035) 1px, transparent 1px),
+          linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,0) 45%, rgba(0,0,0,0) 70%, rgba(255,255,255,.025));
+        background-size: 34px 34px, 34px 34px, 100% 100%;
+        opacity: .10;
+        mix-blend-mode: overlay;
+      }
+      #pcsu-2h-ask-elena > *{ position: relative; z-index: 2; }
+      .pcsu-2h-ae-wrap{
+        display:grid;
+        grid-template-rows:auto auto 1fr auto;
+        height: 100%;
+        min-height: 560px;
+        background: rgba(0,0,0,.06);
+      }
+      .pcsu-2h-ae-header{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+        padding: 12px 14px;
+        border-bottom: 1px solid rgba(255,255,255,.07);
+        background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,0));
+      }
+      .pcsu-2h-ae-titleWrap{
+        display:flex;
+        align-items:center;
+        gap:12px;
+        min-width:0;
+      }
+      .pcsu-2h-ae-avatar{
+        width:34px;
+        height:34px;
+        border-radius:999px;
+        flex:0 0 auto;
+        background-image:url("https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6965838af59da527c04bd03b_34deddc0ea637cb5627a4b008f89aa8c_people2.png");
+        background-size:cover;
+        background-position:center;
+        border:2px solid rgba(255,255,255,.20);
+        box-shadow: 0 0 16px rgba(106,167,255,.14), 0 0 18px rgba(142,243,197,.10);
+      }
+      .pcsu-2h-ae-title{
+        font-weight:900;
+        font-size:12px;
+        letter-spacing:.14em;
+        text-transform:uppercase;
+        color:rgba(233,236,255,.92);
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+        line-height:1.05;
+      }
+      .pcsu-2h-ae-sub{
+        font-size:11px;
+        color:rgba(168,176,214,.88);
+        font-weight:800;
+        margin-top:4px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+      }
+      .pcsu-2h-ae-links{
+        display:flex;
+        flex-wrap:wrap;
+        gap:8px;
+        padding: 10px 14px;
+        border-bottom: 1px solid rgba(255,255,255,.06);
+        background: rgba(0,0,0,.08);
+      }
+      .pcsu-2h-ae-link{
+        font-size:11px;
+        letter-spacing:.06em;
+        text-transform:uppercase;
+        border:1px solid rgba(255,255,255,.12);
+        color: rgba(233,236,255,.90);
+        padding:6px 10px;
+        border-radius:999px;
+        text-decoration:none;
+        background: rgba(0,0,0,.12);
+        transition: background .14s ease, border-color .14s ease, filter .14s ease, transform .14s ease;
+        font-weight:900;
+      }
+      .pcsu-2h-ae-link:hover{
+        background: rgba(255,255,255,.06);
+        border-color: rgba(142,243,197,.26);
+        filter: brightness(1.02);
+        transform: translateY(-1px);
+      }
+      .pcsu-2h-ae-chat{
+        padding: 14px 14px 10px;
+        overflow:auto;
+        display:flex;
+        flex-direction:column;
+        gap:12px;
+        min-height: 320px;
+        background:
+          radial-gradient(900px 520px at 30% -20%, rgba(106,167,255,.10), transparent 60%),
+          radial-gradient(800px 520px at 80% 120%, rgba(142,243,197,.08), transparent 60%),
+          linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.10));
+        scroll-behavior:smooth;
+      }
+      .pcsu-2h-ae-msg{
+        max-width:86%;
+        padding:10px 12px;
+        border-radius:12px;
+        line-height:1.45;
+        font-size:13px;
+        white-space:pre-wrap;
+        color: rgba(233,236,255,.94);
+        border:1px solid rgba(255,255,255,.11);
+        background: rgba(0,0,0,.12);
+        -webkit-backdrop-filter: blur(12px) saturate(150%);
+        backdrop-filter: blur(12px) saturate(150%);
+        box-shadow: var(--shadowSoft);
+      }
+      .pcsu-2h-ae-user{
+        align-self:flex-end;
+        background: rgba(142,243,197,.07);
+        border-color: rgba(142,243,197,.24);
+        box-shadow: 0 0 18px rgba(142,243,197,.07);
+      }
+      .pcsu-2h-ae-bot{
+        align-self:flex-start;
+      }
+      .pcsu-2h-ae-typing{
+        font-size:12px;
+        opacity:.85;
+        color: rgba(233,236,255,.92);
+      }
+      .pcsu-2h-ae-msg small{
+        display:block;
+        margin-top:8px;
+        color: rgba(168,176,214,.90);
+        font-weight:900;
+        font-size:10.5px;
+        letter-spacing:.10em;
+        text-transform:uppercase;
+      }
+      .pcsu-2h-ae-footer{
+        border-top: 1px solid rgba(255,255,255,.07);
+        padding: 12px 14px;
+        display:grid;
+        grid-template-columns: 1fr auto;
+        gap:10px;
+        background: rgba(0,0,0,.08);
+      }
+      .pcsu-2h-ae-input{
+        width:100%;
+        outline:none;
+        border:1px solid rgba(255,255,255,.11);
+        background: rgba(12,14,25,.40);
+        color: rgba(233,236,255,.94);
+        padding:12px 12px;
+        border-radius:12px;
+        font-size:13px;
+        font-weight:800;
+      }
+      .pcsu-2h-ae-input::placeholder{
+        color: rgba(233,236,255,.42);
+      }
+      .pcsu-2h-ae-send{
+        height:44px;
+        padding:0 14px;
+        border:0;
+        border-radius:12px;
+        cursor:pointer;
+        font-weight:900;
+        font-size:12px;
+        letter-spacing:.12em;
+        text-transform:uppercase;
+        background: linear-gradient(180deg, rgba(142,243,197,1), rgba(106,167,255,.95));
+        color:#06112b;
+        box-shadow: 0 14px 28px rgba(0,0,0,.50);
+        transition: transform .14s ease, filter .14s ease, box-shadow .14s ease;
+        user-select:none;
+      }
+      .pcsu-2h-ae-send:hover{
+        transform: translateY(-1px);
+        filter: brightness(1.03);
+        box-shadow: 0 18px 34px rgba(0,0,0,.58);
+      }
+      .pcsu-2h-ae-send:active{
+        transform: translateY(0);
+        filter: brightness(.99);
+      }
+      .pcsu-2h-ae-send:disabled{
+        opacity:.6;
+        cursor:not-allowed;
+        transform:none;
+        box-shadow:none;
+      }
+      .pcsu-2h-ae-tw-caret{
+        display:inline-block;
+        width:1px;
+        height:1.2em;
+        margin-left:2px;
+        background: currentColor;
+        animation: pcsu-2h-ae-blink 1s steps(1,end) infinite;
+      }
+      @keyframes pcsu-2h-ae-blink {
+        50% { opacity: 0; }
+      }
+      @media (max-width: 767px){
+        #pcsu-2h-ask-elena{
+          min-height: 500px;
+        }
+        .pcsu-2h-ae-wrap{
+          min-height: 500px;
+        }
+        .pcsu-2h-ae-footer{
+          grid-template-columns: 1fr;
+        }
+        .pcsu-2h-ae-send{
+          width:100%;
+        }
+      }
+      @media (prefers-reduced-motion: reduce){
+        .pcsu-2h-ae-tw-caret{
+          animation:none;
+        }
+      }
+    `;
+    document.head.appendChild(style);
   }
-  //#8) SAVE
+  function buildAskElenaHTML(){
+    return `
+      <div id="pcsu-2h-ask-elena">
+        <div class="pcsu-2h-ae-wrap" aria-label="Ask Elena embedded panel">
+          <div class="pcsu-2h-ae-header">
+            <div class="pcsu-2h-ae-titleWrap">
+              <div class="pcsu-2h-ae-avatar" aria-hidden="true"></div>
+              <div style="min-width:0;">
+                <div class="pcsu-2h-ae-title">Elena • Virtual Concierge</div>
+                <div class="pcsu-2h-ae-sub">PCS United • Military Pay • Housing Rails</div>
+              </div>
+            </div>
+          </div>
+          <div class="pcsu-2h-ae-links">
+            <a class="pcsu-2h-ae-link" href="https://pcs-united.webflow.io/user" target="_blank" rel="noopener">My Dashboard</a>
+            <a class="pcsu-2h-ae-link" href="https://pcs-united.webflow.io/military-calculator-rent-vs-buy" target="_blank" rel="noopener">Rent vs Buy</a>
+            <a class="pcsu-2h-ae-link" href="https://new-real-estate-purchase.webflow.io/blog-page/va-loan-process" target="_blank" rel="noopener">VA Loan Process</a>
+            <a class="pcsu-2h-ae-link" href="https://new-real-estate-purchase.webflow.io/blog-page/home-buying-steps" target="_blank" rel="noopener">Benefits & Risks</a>
+            <a class="pcsu-2h-ae-link" href="https://new-real-estate-purchase.webflow.io/blog-page/do-i-need-a-realtor" target="_blank" rel="noopener">Do I Need A Realtor</a>
+          </div>
+          <div class="pcsu-2h-ae-chat" id="pcsu-2h-ae-chat"></div>
+          <div class="pcsu-2h-ae-footer">
+            <input id="pcsu-2h-ae-input" class="pcsu-2h-ae-input" type="text" placeholder="Type here… (Enter to send)" autocomplete="off" />
+            <button id="pcsu-2h-ae-send" class="pcsu-2h-ae-send" type="button">Send</button>
+          </div>
+        </div>
+      </div>
+    `;
+  }
+  //#8) ORIGINAL ASK ELENA LOGIC (layout adapted for panel)
+  function parseDesiredCreditScore(userText){
+    const t = String(userText || "").toLowerCase();
+    const looksHypo =
+      /\bif\b|\bwent\s*up\b|\braise\b|\bbump\b|\bincrease\b|\bimprove\b|\bup\s*to\b|\bto\s*\d{3}\b/.test(t);
+    if (!looksHypo) return null;
+    const m = t.match(/(?:score|credit)\s*(?:to|at|is|=|:)?\s*(\d{3})\b/) || t.match(/\bto\s*(\d{3})\b/);
+    if (!m) return null;
+    const s = Number(m[1]);
+    if (!Number.isFinite(s)) return null;
+    if (s < 300 || s > 850) return null;
+    return s;
+  }
+  function guessIntent(userText){
+    const t = String(userText || "").toLowerCase();
+    const asksCurrentCredit =
+      /\bwhat('s| is)\s*my\s*(current\s*)?(credit\s*score|fico)\b/.test(t) ||
+      /\bmy\s*(current\s*)?(credit\s*score|fico)\b.*\b(on\s*file)\b/.test(t);
+    const isMortgage = /mortgage|payment|estimate|all-?in|principal|interest|pmi|tax|insurance|hoa/.test(t);
+    const isCredit = asksCurrentCredit || /credit\s*score|fico/.test(t);
+    const isIncome = /income|pay|bah|bas|base\s*pay|total\s*pay/.test(t);
+    const isRentBuy = /rent\s*vs\s*buy|rent|buy|own|brrr|va\s*loan/.test(t);
+    const desiredScore = parseDesiredCreditScore(t);
+    return { isCredit, isMortgage, isIncome, isRentBuy, desiredScore };
+  }
+  function aprFromScore(score){
+    const s = Number(score);
+    if (!Number.isFinite(s)) return 7.25;
+    if (s >= 780) return 6.25;
+    if (s >= 740) return 6.50;
+    if (s >= 700) return 6.85;
+    if (s >= 660) return 7.25;
+    if (s >= 620) return 7.75;
+    return 8.50;
+  }
+  function pmt(loanAmount, aprPct, years){
+    const L = Number(loanAmount);
+    const apr = Number(aprPct);
+    const y = Number(years);
+    if (!Number.isFinite(L) || L <= 0) return 0;
+    if (!Number.isFinite(apr) || apr <= 0) return 0;
+    if (!Number.isFinite(y) || y <= 0) return 0;
+    const n = Math.round(y * 12);
+    const r = (apr / 100) / 12;
+    const pow = Math.pow(1 + r, n);
+    if (!Number.isFinite(pow) || pow <= 1) return 0;
+    return L * (r * pow) / (pow - 1);
+  }
+  function getCityRatesFromBrainCache(){
+    const brain = safeJSON(localStorage.getItem("realtysass.brain_cache.v1") || "");
+    if (!brain || typeof brain !== "object") return null;
+    const city = brain.city || (brain.brain && brain.brain.city) || null;
+    if (!city || typeof city !== "object") return null;
+    const taxRate = (city.taxRate != null ? Number(city.taxRate) : null);
+    const taxAnnual = (city.taxAnnual != null ? Number(city.taxAnnual) : null);
+    const insuranceAnnual = (city.insuranceAnnual != null ? Number(city.insuranceAnnual) : null);
+    const hoaMonthly = (city.hoaMonthly != null ? Number(city.hoaMonthly) : null);
+    return { taxRate, taxAnnual, insuranceAnnual, hoaMonthly };
+  }
+  function computeLocalMortgageAllIn(inputs){
+    const price = Number(inputs.price);
+    const down = Number(inputs.downpayment);
+    const creditScore = Number(inputs.creditScore);
+    const termYears = Number(inputs.termYears || 30);
+    if (!Number.isFinite(price) || price <= 0) return null;
+    const dp = (Number.isFinite(down) && down > 0) ? Math.min(down, price) : 0;
+    const loan = Math.max(0, price - dp);
+    if (!Number.isFinite(loan) || loan <= 0) return null;
+    const apr = aprFromScore(creditScore);
+    const pi = pmt(loan, apr, termYears);
+    let taxM = 0;
+    const taxAnnual = Number(inputs.taxAnnual);
+    const taxRate = Number(inputs.taxRate);
+    if (Number.isFinite(taxAnnual) && taxAnnual > 0) taxM = taxAnnual / 12;
+    else if (Number.isFinite(taxRate) && taxRate > 0) taxM = (price * taxRate) / 12;
+    let insM = 0;
+    const insAnnual = Number(inputs.insuranceAnnual);
+    if (Number.isFinite(insAnnual) && insAnnual > 0) insM = insAnnual / 12;
+    let hoaM = 0;
+    const hoaMonthly = Number(inputs.hoaMonthly);
+    if (Number.isFinite(hoaMonthly) && hoaMonthly > 0) hoaM = hoaMonthly;
+    const dpPct = dp / price;
+    let pmiM = 0;
+    if (dpPct < 0.20){
+      pmiM = (loan * 0.0035) / 12;
+    }
+    const allIn = pi + taxM + insM + hoaM + pmiM;
+    if (!hasFinitePositive(allIn)) return null;
+    return {
+      allInMonthly: allIn,
+      aprUsed: apr,
+      termYears: termYears,
+      breakdown: {
+        principalInterest: pi,
+        taxes: taxM,
+        insurance: insM,
+        hoa: hoaM,
+        pmi: pmiM
+      }
+    };
+  }
+  function buildReceiptsReply(agent, userText){
+    if (!agent || agent.ok !== true) {
+      return [
+        "I’m here — but I couldn’t pull a verified scenario yet.",
+        "",
+        "Quick fix:",
+        "• Open your Dashboard (login), then come back and ask again.",
+        "• Dashboard: " + URL_ELENA_DASH
+      ].join("\n");
+    }
+    const iu = agent.inputs_used || {};
+    const v  = agent.verdict || {};
+    const m  = agent.mortgage || {};
+    const na = agent.next_action || {};
+    const q  = agent.quick || {};
+    const status = (v.status || "INSUFFICIENT");
+    const grade = (v.grade || "N/A");
+    const intent = guessIntent(userText);
+    const desiredScore = intent.desiredScore;
+    if (intent.isMortgage){
+      const baseAllIn = (m && (m.all_in_monthly != null ? m.all_in_monthly : (m.allInMonthly != null ? m.allInMonthly : null)));
+      const baseOk = hasFinitePositive(baseAllIn);
+      const scoreForCalc =
+        (desiredScore != null ? desiredScore : (iu.creditScore != null ? Number(iu.creditScore) : null));
+      let shownAllIn = baseOk ? Number(baseAllIn) : null;
+      let shownSource = baseOk ? (m.source || "api/mortgage") : (m.source || "api/mortgage");
+      let fallback = null;
+      const needFallback = (!baseOk) || (desiredScore != null);
+      if (needFallback){
+        const cityRates = getCityRatesFromBrainCache() || {};
+        fallback = computeLocalMortgageAllIn({
+          price: iu.price,
+          downpayment: iu.downpayment,
+          creditScore: scoreForCalc,
+          termYears: (iu.termYears || 30),
+          taxRate: cityRates.taxRate,
+          taxAnnual: cityRates.taxAnnual,
+          insuranceAnnual: cityRates.insuranceAnnual,
+          hoaMonthly: cityRates.hoaMonthly
+        });
+        if (fallback){
+          shownAllIn = fallback.allInMonthly;
+          shownSource = "local fallback (deterministic)";
+        }
+      }
+      const lines = [];
+      if (desiredScore != null){
+        lines.push(\`Mortgage estimate if your credit score was \${desiredScore}: \${hasFinitePositive(shownAllIn) ? (formatCurrency(shownAllIn) + " / month") : "—"}.\`);
+      } else {
+        lines.push(\`Your current estimated mortgage payment (all-in) is: \${hasFinitePositive(shownAllIn) ? (formatCurrency(shownAllIn) + " / month") : "—"}.\`);
+      }
+      lines.push(\`Source: \${shownSource}.\`);
+      if (!baseOk){
+        lines.push("");
+        lines.push("For the authoritative calculator + cache refresh, open Rent vs Buy and hit Analyze:");
+        lines.push("• " + URL_FAD);
+      }
+      if (desiredScore != null && fallback){
+        lines.push("");
+        lines.push(\`Assumptions used for the what-if: APR \${fallback.aprUsed.toFixed(2)}% • Term \${fallback.termYears}y\`);
+      }
+      lines.push("");
+      lines.push("Inputs used:");
+      lines.push(\`• Home price: \${formatCurrency(iu.price)}\`);
+      lines.push(\`• Down payment: \${formatCurrency(iu.downpayment)}\`);
+      lines.push(\`• Credit score: \${desiredScore != null ? (desiredScore + " (what-if)") : (iu.creditScore || "—")}\`);
+      lines.push("");
+      if (status === "GREEN") lines.push(\`Verdict: GREEN (Grade \${grade}).\`);
+      else if (status === "CAUTION") lines.push(\`Verdict: CAUTION (Grade \${grade}).\`);
+      else if (status === "NO-GO") lines.push(\`Verdict: NO-GO (Grade \${grade}).\`);
+      else lines.push(\`Verdict: INSUFFICIENT (Grade \${grade}).\`);
+      if (q && hasFinitePositive(q.housing_cap_monthly)){
+        lines.push("");
+        lines.push("Quick rail:");
+        lines.push(\`• 30% housing cap: \${formatCurrency(q.housing_cap_monthly)} / mo\`);
+      }
+      return lines.join("\n");
+    }
+    if (intent.isCredit && desiredScore == null){
+      if (iu.creditScore){
+        const lines = [];
+        lines.push(\`Your current credit score on file is: \${iu.creditScore}.\`);
+        lines.push(\`Source: \${((iu.sources||{}).creditScore)||"scenario/overrides"}.\`);
+        lines.push("");
+        lines.push("If that doesn’t look right, update it in your intake/profile and I’ll recompute your mortgage rails.");
+        return lines.join("\n");
+      }
+    }
+    const lines = [];
+    if (status === "GREEN") lines.push(\`BLUF: You’re in a stable range (Grade \${grade}).\`);
+    else if (status === "CAUTION") lines.push(\`BLUF: You’re close, but the buffer is thin (Grade \${grade}).\`);
+    else if (status === "NO-GO") lines.push(\`BLUF: Right now it’s a NO-GO at this scenario (Grade \${grade}).\`);
+    else lines.push("BLUF: I need one or two missing inputs to give a defensible verdict.");
+    lines.push("");
+    lines.push("RECEIPTS (inputs used):");
+    lines.push(\`• Income: \${formatCurrency(iu.income)} (\${((iu.sources||{}).income)||"unknown source"})\`);
+    lines.push(\`• Expenses: \${formatCurrency(iu.expenses)} (\${((iu.sources||{}).expenses)||"unknown source"})\`);
+    lines.push(\`• Home price: \${formatCurrency(iu.price)}\`);
+    lines.push(\`• Down payment: \${formatCurrency(iu.downpayment)}\`);
+    lines.push(\`• Credit score: \${iu.creditScore || "—"}\`);
+    const allIn = (m && (m.all_in_monthly != null ? m.all_in_monthly : (m.allInMonthly != null ? m.allInMonthly : null)));
+    lines.push(\`• Mortgage (all-in): \${hasFinitePositive(allIn) ? formatCurrency(allIn) : "—"} (\${m.source || "unknown source"})\`);
+    if (na && na.type) {
+      lines.push("");
+      lines.push("NEXT BEST ACTION:");
+      if (na.type === "lower_price" && na.target && na.target.target_price) {
+        lines.push(\`• Lower price target: ~\${formatCurrency(na.target.target_price)} to fit your cap.\`);
+      } else if (na.type === "reduce_expenses" && na.target && na.target.suggested_cut) {
+        lines.push(\`• Reduce monthly expenses by ~\${formatCurrency(na.target.suggested_cut)} for a buffer.\`);
+      } else if (na.type === "increase_buffer" && na.target && na.target.suggested_monthly_improvement) {
+        lines.push(\`• Improve monthly buffer by ~\${formatCurrency(na.target.suggested_monthly_improvement)}.\`);
+      } else {
+        lines.push(\`• \${na.why || "Small adjustments can improve the outcome."}\`);
+      }
+    }
+    return lines.join("\n");
+  }
+  function getPageContext(){
+    const path = (location && location.pathname) ? String(location.pathname) : "";
+    const isUser = (path === "/user" || path.startsWith("/user/"));
+    const isFad  = (path === "/military-calculator-rent-vs-buy" || path.startsWith("/military-calculator-rent-vs-buy/"));
+    return {
+      href: (location && location.href) ? String(location.href) : "",
+      origin: (location && location.origin) ? String(location.origin) : "",
+      path,
+      isUser,
+      isFad
+    };
+  }
+  function buildAgentEndpointList(){
+    return [
+      "https://pcsunited.netlify.app/api/elena-agent",
+      "https://pcsunited.netlify.app/.netlify/functions/elena-agent"
+    ];
+  }
+  function buildAskElenaEndpointList(){
+    return [
+      ASK_ELENA_ENDPOINT,
+      "https://pcsunited.netlify.app/.netlify/functions/ask-elena"
+    ];
+  }
+  async function postJSON(url, body){
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body || {})
+    });
+    const txt = await r.text();
+    let j = {};
+    try{ j = JSON.parse(txt || "{}"); }catch(_){ j = { raw: txt }; }
+    if (!r.ok || j.ok === false){
+      const msg = j.error || j.message || ("HTTP " + r.status);
+      const e = new Error(msg);
+      e.__status = r.status;
+      e.__raw = j;
+      throw e;
+    }
+    return j;
+  }
+  //#9) PAINT ASK ELENA
+  function paintAskElenaPanel(){
+    const card = findActionSummaryCard();
+    if (!card) return false;
+    const list = card.querySelector(".pcsu-rail-list");
+    if (!list) return false;
+    ensureStyles();
+    const existing = card.querySelector("#pcsu-2h-ask-elena");
+    if (existing) return true;
+    list.innerHTML = "";
+    list.style.listStyle = "none";
+    list.style.margin = "0";
+    list.style.padding = "0";
+    list.innerHTML = buildAskElenaHTML();
+    mountAskElena(card);
+    return true;
+  }
+  function mountAskElena(card){
+    const widget = card.querySelector("#pcsu-2h-ask-elena");
+    if (!widget || widget.__mountedAskElenaV200) return;
+    widget.__mountedAskElenaV200 = true;
+    const chatEl  = widget.querySelector("#pcsu-2h-ae-chat");
+    const inputEl = widget.querySelector("#pcsu-2h-ae-input");
+    const sendBtn = widget.querySelector("#pcsu-2h-ae-send");
+    const AE_DEBUG = (() => {
+      try{
+        const qs = new URLSearchParams(location.search);
+        return (qs.get("ae_debug") === "1");
+      }catch(_){ return false; }
+    })();
+    function dbg(...args){
+      if (AE_DEBUG) console.log("[AskElena2H]", ...args);
+    }
+    function scrollToBottom(){
+      chatEl.scrollTop = chatEl.scrollHeight;
+    }
+    function showTyping(){
+      const t = document.createElement("div");
+      t.className = "pcsu-2h-ae-msg pcsu-2h-ae-bot pcsu-2h-ae-typing";
+      t.id = "pcsu-2h-ae-typing";
+      t.textContent = "Elena is thinking…";
+      chatEl.appendChild(t);
+      scrollToBottom();
+    }
+    function hideTyping(){
+      const t = widget.querySelector("#pcsu-2h-ae-typing");
+      if (t) t.remove();
+    }
+    function typewriterInto(el, text, speed = 22, startDelay = 150){
+      return new Promise((resolve) => {
+        el.textContent = "";
+        const caret = document.createElement("span");
+        caret.className = "pcsu-2h-ae-tw-caret";
+        el.appendChild(caret);
+        let i = 0;
+        const tick = () => {
+          if (i < text.length) {
+            caret.insertAdjacentText("beforebegin", text.charAt(i++));
+            scrollToBottom();
+            setTimeout(tick, speed);
+          } else {
+            caret.remove();
+            resolve();
+          }
+        };
+        setTimeout(tick, startDelay);
+      });
+    }
+    async function pushMsg(role, content, opts = {}){
+      const { typewriter = false, speed = 22, delay = 150 } = opts;
+      const msg = document.createElement("div");
+      msg.className = "pcsu-2h-ae-msg " + (role === "user" ? "pcsu-2h-ae-user" : "pcsu-2h-ae-bot");
+      msg.setAttribute("data-role", role);
+      const textNode = document.createElement("span");
+      msg.appendChild(textNode);
+      const stamp = document.createElement("small");
+      const d = new Date();
+      const hh = String(d.getHours()).padStart(2,"0");
+      const mm = String(d.getMinutes()).padStart(2,"0");
+      stamp.textContent = (role === "user" ? "You" : "Elena") + " • " + hh + ":" + mm;
+      chatEl.appendChild(msg);
+      msg.appendChild(stamp);
+      scrollToBottom();
+      if (!typewriter || prefersReduced() || role === "user"){
+        textNode.textContent = content;
+        scrollToBottom();
+        return;
+      }
+      await typewriterInto(textNode, content, speed, delay);
+      scrollToBottom();
+    }
+    async function callElena(userText){
+      sendBtn.disabled = true;
+      showTyping();
+      const page = getPageContext();
+      const email = getPCSUEmaiL();
+      const profileHint = getLightProfileHint();
+      const identityObj = getIdentityObject();
+      const bridge = getBridge();
+      const overrides = getOverrides();
+      dbg("page:", page);
+      dbg("email:", email || "(none)");
+      dbg("identity:", identityObj);
+      dbg("bridge:", bridge);
+      dbg("overrides:", overrides);
+      if (!email || !email.includes("@")){
+        hideTyping();
+        await pushMsg(
+          "assistant",
+          [
+            "I don’t see your login email yet — so I can’t safely pull your PCSUnited profile.",
+            "",
+            "Do this quick:",
+            "• Open your Dashboard, log in, then come back and ask again.",
+            "• Dashboard: " + URL_ELENA_DASH,
+            "",
+            "If you’re trying to compute mortgage numbers, run the Rent vs Buy calculator too:",
+            "• " + URL_FAD
+          ].join("\n"),
+          { typewriter:true, speed:22, delay:120 }
+        );
+        sendBtn.disabled = false;
+        return;
+      }
+      const intent = guessIntent(userText);
+      let agentData = null;
+      let agentErr = null;
+      try{
+        for (const ep of buildAgentEndpointList()){
+          try{
+            dbg("POST → (agent)", ep);
+            agentData = await postJSON(ep, {
+              email: email,
+              question: userText,
+              scenario: bridge || undefined,
+              overrides: overrides || undefined,
+              context: {
+                page: page,
+                profile_hint: profileHint || undefined
+              }
+            });
+            dbg("OK ← (agent)", ep, agentData);
+            break;
+          }catch(e){
+            agentErr = e;
+            dbg("FAIL ← (agent)", ep, e && e.message ? e.message : e);
+          }
+        }
+      }catch(e){
+        agentErr = e;
+      }
+      if (agentData && agentData.ok === true && (intent.isMortgage || intent.isCredit)){
+        hideTyping();
+        const reply = buildReceiptsReply(agentData, userText);
+        await pushMsg("assistant", reply, { typewriter:true, speed:22, delay:120 });
+        sendBtn.disabled = false;
+        return;
+      }
+      const payload = {
+        message: userText,
+        email: email,
+        identity: (identityObj && identityObj.email) ? identityObj : { email: email, ts: Date.now() },
+        context: {
+          source: "webflow",
+          widget: "ask-elena-2h-panel",
+          product: "pcsunited",
+          version: "pcsunited-2h-ask-elena-v2.0.0",
+          page: page,
+          profile: profileHint || undefined,
+          agent: agentData || undefined,
+          agent_meta: {
+            ok: !!(agentData && agentData.ok === true),
+            had_error: !!agentErr,
+            scenario_id: agentData && agentData.scenario_id ? agentData.scenario_id : null
+          }
+        }
+      };
+      try{
+        let data = null;
+        let lastErr = null;
+        for (const ep of buildAskElenaEndpointList()){
+          try{
+            dbg("POST → (ask-elena)", ep);
+            data = await postJSON(ep, payload);
+            dbg("OK ← (ask-elena)", ep, data);
+            break;
+          }catch(e){
+            lastErr = e;
+            dbg("FAIL ← (ask-elena)", ep, e && e.message ? e.message : e);
+          }
+        }
+        hideTyping();
+        if (data){
+          const reply = data.reply || "I’m here. What would you like to explore?";
+          const ui = data.ui || {};
+          const speed = Number(ui.speed || 22);
+          const delay = Number(ui.startDelay || 150);
+          const replyLow = String(reply || "").toLowerCase();
+          const looksLikeCreditOnly = /\byour\s+current\s+credit\s+score\s+on\s+file\b/.test(replyLow);
+          const looksLikeZeroMortgage = /\$0\b|\b0\s*\/\s*month\b|\b0\s*per\s*month\b/.test(replyLow);
+          if (
+            (intent.isMortgage && (looksLikeZeroMortgage || looksLikeCreditOnly)) ||
+            (intent.isCredit && /can('|’)t\s*access|cannot\s*access|don('|’)t\s*have\s*your\s*credit/.test(replyLow))
+          ){
+            const fallback = buildReceiptsReply(agentData, userText);
+            await pushMsg("assistant", fallback, { typewriter:true, speed:22, delay:120 });
+            return;
+          }
+          await pushMsg("assistant", reply, { typewriter:true, speed, delay });
+          return;
+        }
+        if (agentData && agentData.ok === true){
+          const fallback = buildReceiptsReply(agentData, userText);
+          await pushMsg("assistant", fallback, { typewriter:true, speed:22, delay:120 });
+          return;
+        }
+        throw lastErr || agentErr || new Error("All endpoints failed");
+      } catch(err){
+        hideTyping();
+        if (agentData && agentData.ok === true){
+          const fallback = buildReceiptsReply(agentData, userText);
+          await pushMsg("assistant", fallback, { typewriter:true, speed:22, delay:120 });
+        } else {
+          const msg =
+            AE_DEBUG
+              ? ("Connection snag: " + (err && err.message ? err.message : "Unknown error") + "\\n\\nOpen DevTools Console for [AskElena2H] logs.")
+              : "Hmm… I hit a connection snag. Try again?";
+          await pushMsg("assistant", msg, { typewriter:true });
+        }
+      } finally {
+        sendBtn.disabled = false;
+      }
+    }
+    function sendFromPanel(){
+      const text = (inputEl.value || "").trim();
+      if (!text) return;
+      pushMsg("user", text);
+      inputEl.value = "";
+      callElena(text);
+    }
+    sendBtn.addEventListener("click", sendFromPanel);
+    inputEl.addEventListener("keydown", (e) => {
+      if (e.key === "Enter"){
+        e.preventDefault();
+        sendFromPanel();
+      }
+    });
+    const greeting =
+      "Hi — I’m Elena. I can read your PCSUnited profile and help with pay, BAH, affordability, and city targets. What are we solving today?";
+    pushMsg("assistant", greeting, { typewriter:true, speed:22, delay:300 });
+    setTimeout(() => {
+      try{ inputEl.focus(); }catch(_){}
+    }, 180);
+  }
+  //#10) SAVE
   function persistActions(actions){
     const payload = {
       ok: true,
       module: "2H Action Summary",
       ts: Date.now(),
+      mode: "ask-elena-panel",
       actions: actions.slice(0, 3)
     };
     writeJSON(KEYS.actionSummary, payload);
     writeJSON(KEYS.actionSummaryLegacy, payload);
   }
-  //#9) MAIN
+  //#11) MAIN
   function repaint(){
     const actions = buildActions();
-    paintActions(actions);
+    paintAskElenaPanel();
     persistActions(actions);
     return actions;
   }
-  //#10) PUBLIC API
+  //#12) PUBLIC API
   window.PCSU_2H_ACTION_SUMMARY = {
     __mounted: true,
+    __mounted_v200: true,
     repaint,
     buildActions
   };
-  //#11) EVENTS
+  //#13) EVENTS
   function safeRepaint(){
     try{
       repaint();

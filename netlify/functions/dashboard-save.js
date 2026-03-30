@@ -1,0 +1,318 @@
+// netlify/functions/dashboard-save.js
+// ============================================================
+// PCSUnited • Dashboard Save API
+// v1.0.0
+//
+// PURPOSE
+// - One shared save endpoint for dashboard modules
+// - Supports modules like:
+//    * 2C-1 Affordability Zone
+//    * 2D Housing Calculator
+//    * Housing Options
+//    * future dashboard panels
+//
+// REQUEST
+// POST /api/dashboard-save
+// {
+//   "email": "user@example.com",
+//   "module": "2C-1",
+//   "patch": {
+//     "additional_monthly_income": 1200,
+//     "savings": 45000,
+//     "monthly_expenses": 2300
+//   }
+// }
+//
+// RESPONSE
+// {
+//   ok: true,
+//   module: "2C-1",
+//   email: "user@example.com",
+//   saved: { ...normalizedSavedFields },
+//   profile: { ...freshProfileRow }
+// }
+//
+// NOTES
+// - Updates only allowed fields for the specified module
+// - Writes into public.profiles
+// - Requires env:
+//    SUPABASE_URL
+//    SUPABASE_SERVICE_KEY
+// ============================================================
+
+import { createClient } from "@supabase/supabase-js";
+
+const SUPABASE_URL = process.env.SUPABASE_URL;
+const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
+
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Headers": "Content-Type, Authorization",
+  "Access-Control-Allow-Methods": "POST, OPTIONS"
+};
+
+function json(statusCode, body) {
+  return {
+    statusCode,
+    headers: {
+      ...corsHeaders,
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(body)
+  };
+}
+
+function normEmail(v) {
+  return String(v || "").trim().toLowerCase();
+}
+
+function nOrNull(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? n : null;
+}
+
+function iOrNull(v) {
+  const n = Number(v);
+  return Number.isFinite(n) ? Math.round(n) : null;
+}
+
+function clamp(n, min, max) {
+  return Math.max(min, Math.min(max, n));
+}
+
+function textOrNull(v) {
+  const s = String(v ?? "").trim();
+  return s ? s : null;
+}
+
+// ============================================================
+// MODULE FIELD MAP
+// Add more modules here over time.
+// ============================================================
+const MODULES = {
+  "2C-1": {
+    allowedPatchKeys: [
+      "additional_monthly_income",
+      "savings",
+      "monthly_expenses"
+    ],
+    buildProfileUpdate(patch) {
+      const out = {};
+
+      if ("additional_monthly_income" in patch) {
+        out.additional_monthly_income = Math.max(0, iOrNull(patch.additional_monthly_income) ?? 0);
+      }
+
+      if ("savings" in patch) {
+        const savings = Math.max(0, iOrNull(patch.savings) ?? 0);
+        out.savings = savings;
+        out.downpayment = savings;
+      }
+
+      if ("monthly_expenses" in patch) {
+        out.monthly_expenses = Math.max(0, iOrNull(patch.monthly_expenses) ?? 0);
+      }
+
+      return out;
+    }
+  },
+
+  "2D": {
+    allowedPatchKeys: [
+      "projected_home_price",
+      "downpayment",
+      "credit_score",
+      "term_years",
+      "property_tax_annual",
+      "insurance_annual",
+      "hoa_monthly",
+      "pmi_monthly"
+    ],
+    buildProfileUpdate(patch) {
+      const out = {};
+
+      if ("projected_home_price" in patch) {
+        out.projected_home_price = Math.max(0, iOrNull(patch.projected_home_price) ?? 0);
+      }
+
+      if ("downpayment" in patch) {
+        out.downpayment = Math.max(0, iOrNull(patch.downpayment) ?? 0);
+      }
+
+      if ("credit_score" in patch) {
+        out.credit_score = clamp(iOrNull(patch.credit_score) ?? 720, 300, 850);
+      }
+
+      if ("term_years" in patch) {
+        out.term_years = clamp(iOrNull(patch.term_years) ?? 30, 1, 40);
+      }
+
+      if ("property_tax_annual" in patch) {
+        out.property_tax_annual = Math.max(0, iOrNull(patch.property_tax_annual) ?? 0);
+      }
+
+      if ("insurance_annual" in patch) {
+        out.insurance_annual = Math.max(0, iOrNull(patch.insurance_annual) ?? 0);
+      }
+
+      if ("hoa_monthly" in patch) {
+        out.hoa_monthly = Math.max(0, iOrNull(patch.hoa_monthly) ?? 0);
+      }
+
+      if ("pmi_monthly" in patch) {
+        out.pmi_monthly = Math.max(0, iOrNull(patch.pmi_monthly) ?? 0);
+      }
+
+      return out;
+    }
+  },
+
+  "housing-options": {
+    allowedPatchKeys: [
+      "bedrooms",
+      "bathrooms",
+      "sqft",
+      "property_type",
+      "home_condition",
+      "amenities"
+    ],
+    buildProfileUpdate(patch) {
+      const out = {};
+
+      if ("bedrooms" in patch) out.bedrooms = Math.max(0, iOrNull(patch.bedrooms) ?? 0);
+      if ("bathrooms" in patch) out.bathrooms = Math.max(0, nOrNull(patch.bathrooms) ?? 0);
+      if ("sqft" in patch) out.sqft = Math.max(0, iOrNull(patch.sqft) ?? 0);
+      if ("property_type" in patch) out.property_type = textOrNull(patch.property_type);
+      if ("home_condition" in patch) out.home_condition = textOrNull(patch.home_condition);
+      if ("amenities" in patch) {
+        out.amenities = Array.isArray(patch.amenities)
+          ? patch.amenities.join(", ")
+          : textOrNull(patch.amenities);
+      }
+
+      return out;
+    }
+  }
+};
+
+function sanitizePatchForModule(moduleName, patch) {
+  const spec = MODULES[moduleName];
+  if (!spec) return { safePatch: {}, profileUpdate: {} };
+
+  const safePatch = {};
+  for (const key of spec.allowedPatchKeys) {
+    if (Object.prototype.hasOwnProperty.call(patch, key)) {
+      safePatch[key] = patch[key];
+    }
+  }
+
+  const profileUpdate = spec.buildProfileUpdate(safePatch);
+  return { safePatch, profileUpdate };
+}
+
+export async function handler(event) {
+  if (event.httpMethod === "OPTIONS") {
+    return {
+      statusCode: 204,
+      headers: corsHeaders,
+      body: ""
+    };
+  }
+
+  if (event.httpMethod !== "POST") {
+    return json(405, { ok: false, error: "Method not allowed" });
+  }
+
+  if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
+    return json(500, {
+      ok: false,
+      error: "Missing Supabase environment variables"
+    });
+  }
+
+  let body;
+  try {
+    body = JSON.parse(event.body || "{}");
+  } catch {
+    return json(400, { ok: false, error: "Invalid JSON body" });
+  }
+
+  const email = normEmail(body.email);
+  const moduleName = String(body.module || "").trim();
+  const patch = body.patch && typeof body.patch === "object" ? body.patch : {};
+
+  if (!email) {
+    return json(400, { ok: false, error: "Missing email" });
+  }
+
+  if (!moduleName) {
+    return json(400, { ok: false, error: "Missing module" });
+  }
+
+  if (!MODULES[moduleName]) {
+    return json(400, {
+      ok: false,
+      error: `Unsupported module: ${moduleName}`
+    });
+  }
+
+  const { safePatch, profileUpdate } = sanitizePatchForModule(moduleName, patch);
+
+  if (!Object.keys(profileUpdate).length) {
+    return json(400, {
+      ok: false,
+      error: "No allowed fields to save for this module"
+    });
+  }
+
+  const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
+
+  try {
+    const { data: existing, error: existingErr } = await supabase
+      .from("profiles")
+      .select("*")
+      .eq("email", email)
+      .maybeSingle();
+
+    if (existingErr) {
+      return json(500, {
+        ok: false,
+        error: existingErr.message || "Failed to load profile"
+      });
+    }
+
+    if (!existing) {
+      return json(404, {
+        ok: false,
+        error: `No profile found for ${email}`
+      });
+    }
+
+    const { data: updated, error: updateErr } = await supabase
+      .from("profiles")
+      .update(profileUpdate)
+      .eq("email", email)
+      .select("*")
+      .single();
+
+    if (updateErr) {
+      return json(500, {
+        ok: false,
+        error: updateErr.message || "Failed to update profile"
+      });
+    }
+
+    return json(200, {
+      ok: true,
+      module: moduleName,
+      email,
+      saved: profileUpdate,
+      profile: updated
+    });
+  } catch (err) {
+    return json(500, {
+      ok: false,
+      error: err?.message || "Unexpected server error"
+    });
+  }
+}

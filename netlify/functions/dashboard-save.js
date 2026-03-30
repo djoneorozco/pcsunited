@@ -1,45 +1,4 @@
 // netlify/functions/dashboard-save.js
-// ============================================================
-// PCSUnited • Dashboard Save API
-// v1.0.0
-//
-// PURPOSE
-// - One shared save endpoint for dashboard modules
-// - Supports modules like:
-//    * 2C-1 Affordability Zone
-//    * 2D Housing Calculator
-//    * Housing Options
-//    * future dashboard panels
-//
-// REQUEST
-// POST /api/dashboard-save
-// {
-//   "email": "user@example.com",
-//   "module": "2C-1",
-//   "patch": {
-//     "additional_monthly_income": 1200,
-//     "savings": 45000,
-//     "monthly_expenses": 2300
-//   }
-// }
-//
-// RESPONSE
-// {
-//   ok: true,
-//   module: "2C-1",
-//   email: "user@example.com",
-//   saved: { ...normalizedSavedFields },
-//   profile: { ...freshProfileRow }
-// }
-//
-// NOTES
-// - Updates only allowed fields for the specified module
-// - Writes into public.profiles
-// - Requires env:
-//    SUPABASE_URL
-//    SUPABASE_SERVICE_KEY
-// ============================================================
-
 import { createClient } from "@supabase/supabase-js";
 
 const SUPABASE_URL = process.env.SUPABASE_URL;
@@ -48,16 +7,15 @@ const SUPABASE_SERVICE_KEY = process.env.SUPABASE_SERVICE_KEY;
 const corsHeaders = {
   "Access-Control-Allow-Origin": "*",
   "Access-Control-Allow-Headers": "Content-Type, Authorization",
-  "Access-Control-Allow-Methods": "POST, OPTIONS"
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Max-Age": "86400",
+  "Content-Type": "application/json"
 };
 
 function json(statusCode, body) {
   return {
     statusCode,
-    headers: {
-      ...corsHeaders,
-      "Content-Type": "application/json"
-    },
+    headers: corsHeaders,
     body: JSON.stringify(body)
   };
 }
@@ -85,10 +43,6 @@ function textOrNull(v) {
   return s ? s : null;
 }
 
-// ============================================================
-// MODULE FIELD MAP
-// Add more modules here over time.
-// ============================================================
 const MODULES = {
   "2C-1": {
     allowedPatchKeys: [
@@ -131,37 +85,14 @@ const MODULES = {
     buildProfileUpdate(patch) {
       const out = {};
 
-      if ("projected_home_price" in patch) {
-        out.projected_home_price = Math.max(0, iOrNull(patch.projected_home_price) ?? 0);
-      }
-
-      if ("downpayment" in patch) {
-        out.downpayment = Math.max(0, iOrNull(patch.downpayment) ?? 0);
-      }
-
-      if ("credit_score" in patch) {
-        out.credit_score = clamp(iOrNull(patch.credit_score) ?? 720, 300, 850);
-      }
-
-      if ("term_years" in patch) {
-        out.term_years = clamp(iOrNull(patch.term_years) ?? 30, 1, 40);
-      }
-
-      if ("property_tax_annual" in patch) {
-        out.property_tax_annual = Math.max(0, iOrNull(patch.property_tax_annual) ?? 0);
-      }
-
-      if ("insurance_annual" in patch) {
-        out.insurance_annual = Math.max(0, iOrNull(patch.insurance_annual) ?? 0);
-      }
-
-      if ("hoa_monthly" in patch) {
-        out.hoa_monthly = Math.max(0, iOrNull(patch.hoa_monthly) ?? 0);
-      }
-
-      if ("pmi_monthly" in patch) {
-        out.pmi_monthly = Math.max(0, iOrNull(patch.pmi_monthly) ?? 0);
-      }
+      if ("projected_home_price" in patch) out.projected_home_price = Math.max(0, iOrNull(patch.projected_home_price) ?? 0);
+      if ("downpayment" in patch) out.downpayment = Math.max(0, iOrNull(patch.downpayment) ?? 0);
+      if ("credit_score" in patch) out.credit_score = clamp(iOrNull(patch.credit_score) ?? 720, 300, 850);
+      if ("term_years" in patch) out.term_years = clamp(iOrNull(patch.term_years) ?? 30, 1, 40);
+      if ("property_tax_annual" in patch) out.property_tax_annual = Math.max(0, iOrNull(patch.property_tax_annual) ?? 0);
+      if ("insurance_annual" in patch) out.insurance_annual = Math.max(0, iOrNull(patch.insurance_annual) ?? 0);
+      if ("hoa_monthly" in patch) out.hoa_monthly = Math.max(0, iOrNull(patch.hoa_monthly) ?? 0);
+      if ("pmi_monthly" in patch) out.pmi_monthly = Math.max(0, iOrNull(patch.pmi_monthly) ?? 0);
 
       return out;
     }
@@ -224,10 +155,7 @@ export async function handler(event) {
   }
 
   if (!SUPABASE_URL || !SUPABASE_SERVICE_KEY) {
-    return json(500, {
-      ok: false,
-      error: "Missing Supabase environment variables"
-    });
+    return json(500, { ok: false, error: "Missing Supabase environment variables" });
   }
 
   let body;
@@ -241,28 +169,14 @@ export async function handler(event) {
   const moduleName = String(body.module || "").trim();
   const patch = body.patch && typeof body.patch === "object" ? body.patch : {};
 
-  if (!email) {
-    return json(400, { ok: false, error: "Missing email" });
-  }
+  if (!email) return json(400, { ok: false, error: "Missing email" });
+  if (!moduleName) return json(400, { ok: false, error: "Missing module" });
+  if (!MODULES[moduleName]) return json(400, { ok: false, error: `Unsupported module: ${moduleName}` });
 
-  if (!moduleName) {
-    return json(400, { ok: false, error: "Missing module" });
-  }
-
-  if (!MODULES[moduleName]) {
-    return json(400, {
-      ok: false,
-      error: `Unsupported module: ${moduleName}`
-    });
-  }
-
-  const { safePatch, profileUpdate } = sanitizePatchForModule(moduleName, patch);
+  const { profileUpdate } = sanitizePatchForModule(moduleName, patch);
 
   if (!Object.keys(profileUpdate).length) {
-    return json(400, {
-      ok: false,
-      error: "No allowed fields to save for this module"
-    });
+    return json(400, { ok: false, error: "No allowed fields to save for this module" });
   }
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_SERVICE_KEY);
@@ -275,17 +189,11 @@ export async function handler(event) {
       .maybeSingle();
 
     if (existingErr) {
-      return json(500, {
-        ok: false,
-        error: existingErr.message || "Failed to load profile"
-      });
+      return json(500, { ok: false, error: existingErr.message || "Failed to load profile" });
     }
 
     if (!existing) {
-      return json(404, {
-        ok: false,
-        error: `No profile found for ${email}`
-      });
+      return json(404, { ok: false, error: `No profile found for ${email}` });
     }
 
     const { data: updated, error: updateErr } = await supabase
@@ -296,10 +204,7 @@ export async function handler(event) {
       .single();
 
     if (updateErr) {
-      return json(500, {
-        ok: false,
-        error: updateErr.message || "Failed to update profile"
-      });
+      return json(500, { ok: false, error: updateErr.message || "Failed to update profile" });
     }
 
     return json(200, {
@@ -310,9 +215,6 @@ export async function handler(event) {
       profile: updated
     });
   } catch (err) {
-    return json(500, {
-      ok: false,
-      error: err?.message || "Unexpected server error"
-    });
+    return json(500, { ok: false, error: err?.message || "Unexpected server error" });
   }
 }

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Mar 31 2026 14:41:28 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Mar 31 2026 15:06:35 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69cbcdf7df604399de63eb2d" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
@@ -3435,19 +3435,22 @@ UPDATE
         <script>
 (() => {
   "use strict";
-  if (window.PCSU_2C_FULL && window.PCSU_2C_FULL.__mounted_v532) return;
-  window.PCSU_2C_FULL = { __mounted_v532: true };
+  if (window.PCSU_2C_FULL && window.PCSU_2C_FULL.__mounted_v533) return;
+  window.PCSU_2C_FULL = { __mounted_v533: true };
   // ============================================================
   // PCSUnited • 2C Affordability Zone & Strategy
-  // v5.3.2
+  // v5.3.3
   //
   // UPDATE
-  // - Fiduciary Summary payload now uses:
+  // - Fixed editable behavior for:
+  //   • Savings
+  //   • Monthly Expenses
+  // - Prevents repaint from wiping value while field is being edited
+  // - Fiduciary Summary payload still uses:
   //   • additional_income
   //   • savings
   //   • monthly_expenses
   // - 2C-1 remains the sole save owner
-  // - Nothing else changed
   // ============================================================
   // ------------------------------------------------------------
   // #1 CONFIG
@@ -3562,6 +3565,13 @@ UPDATE
       if (Number.isFinite(n) && n >= 0) return n;
     }
     return 0;
+  }
+  function getEditableRawText(el){
+    if (!el) return "";
+    return String(el.innerText || el.textContent || "").trim();
+  }
+  function isEditing(el){
+    return !!(el && el.dataset && el.dataset.pcsuEditing === "1");
   }
   async function postJSON(url, body){
     const r = await fetch(url, {
@@ -3734,9 +3744,9 @@ UPDATE
   // #6 STYLE INJECTION
   // ------------------------------------------------------------
   function injectStyles(){
-    if (byId("pcsu-2c-runtime-styles-v532")) return;
+    if (byId("pcsu-2c-runtime-styles-v533")) return;
     const style = document.createElement("style");
-    style.id = "pcsu-2c-runtime-styles-v532";
+    style.id = "pcsu-2c-runtime-styles-v533";
     style.textContent = `
       .pcsu-edit-value.locked{
         cursor:default !important;
@@ -4222,10 +4232,14 @@ UPDATE
     state.totalIncome = totalMonthlyIncome;
     const metrics = scoreState.metrics || {};
     const scoring = scoreState.scoring || {};
-    if (byId("pcsuIncome")) byId("pcsuIncome").textContent = money(totalMonthlyIncome);
-    if (byId("pcsuAdditionalIncome")) byId("pcsuAdditionalIncome").textContent = money(state.additionalIncome);
-    if (byId("pcsuSavings")) byId("pcsuSavings").textContent = money(state.savings);
-    if (byId("pcsuExpenses")) byId("pcsuExpenses").textContent = money(state.expenses);
+    const incomeEl = byId("pcsuIncome");
+    const addIncomeEl = byId("pcsuAdditionalIncome");
+    const savingsEl = byId("pcsuSavings");
+    const expensesEl = byId("pcsuExpenses");
+    if (incomeEl) incomeEl.textContent = money(totalMonthlyIncome);
+    if (addIncomeEl && !isEditing(addIncomeEl)) addIncomeEl.textContent = money(state.additionalIncome);
+    if (savingsEl && !isEditing(savingsEl)) savingsEl.textContent = money(state.savings);
+    if (expensesEl && !isEditing(expensesEl)) expensesEl.textContent = money(state.expenses);
     if (byId("pcsuProjectedMortgage")) byId("pcsuProjectedMortgage").textContent = money(readProjectedMortgageAmount());
     if (byId("pcsuTotalMonthlyExpenses")) byId("pcsuTotalMonthlyExpenses").textContent = money(metrics.total_monthly_expenses);
     if (byId("pcsuResidualIncome")) byId("pcsuResidualIncome").textContent = money(metrics.residual_monthly_income);
@@ -4257,11 +4271,14 @@ UPDATE
       return Math.round(state[key] || 0);
     }
     async function commit(){
-      state[key] = parseMoneyText(el.textContent);
+      const raw = getEditableRawText(el);
+      state[key] = parseMoneyText(raw);
       if (state[key] < 0) state[key] = 0;
+      el.dataset.pcsuEditing = "0";
       await repaintWithScore();
     }
     el.addEventListener("focus", () => {
+      el.dataset.pcsuEditing = "1";
       el.textContent = String(stateValue());
       try{
         const sel = window.getSelection();

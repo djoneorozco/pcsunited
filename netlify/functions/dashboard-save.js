@@ -46,21 +46,23 @@ function textOrNull(v) {
 const MODULES = {
   "2C-1": {
     allowedPatchKeys: [
-      "additional_monthly_income",
+      "additional_income",
       "savings",
-      "monthly_expenses"
+      "total_monthly_expenses"
     ],
     buildProfileUpdate(patch) {
       const out = {};
 
-      // IMPORTANT:
-      // Your current profiles table does NOT have:
-      // - additional_monthly_income
-      // - savings
-      //
-      // So for now, only write monthly_expenses to profiles.
-      if ("monthly_expenses" in patch) {
-        out.monthly_expenses = Math.max(0, iOrNull(patch.monthly_expenses) ?? 0);
+      if ("additional_income" in patch) {
+        out.additional_income = Math.max(0, nOrNull(patch.additional_income) ?? 0);
+      }
+
+      if ("savings" in patch) {
+        out.savings = Math.max(0, nOrNull(patch.savings) ?? 0);
+      }
+
+      if ("total_monthly_expenses" in patch) {
+        out.total_monthly_expenses = Math.max(0, nOrNull(patch.total_monthly_expenses) ?? 0);
       }
 
       return out;

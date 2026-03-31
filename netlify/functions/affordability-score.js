@@ -1,7 +1,13 @@
 // netlify/functions/affordability-score.js
 // ============================================================
 // PCSUnited • Affordability Score Engine
-// v1.0.0
+// v1.1.0
+//
+// UPDATE
+// - Stops over-crediting Additional Monthly Income
+// - Adds explicit cap on usable additional income in grade math
+// - Uses raw total income for display math only
+// - Uses capped/discounted additional income for grading + price range
 //
 // PURPOSE
 // - Central scoring engine for 2C / Affordability Zone & Strategy
@@ -11,51 +17,6 @@
 //   3) Financial Health score + grade
 //   4) Recommended price range
 //   5) Explanation flags / reasons
-//
-// USE
-// - POST JSON to this endpoint
-// - Safe for Netlify Functions
-//
-// INPUT EXAMPLE
-// {
-//   "total_monthly_income": 7213,
-//   "additional_monthly_income": 4500,
-//   "monthly_expenses": 3000,
-//   "monthly_debt": 0,
-//   "projected_mortgage_amount": 3511,
-//   "savings": 20000
-// }
-//
-// OUTPUT
-// {
-//   ok: true,
-//   inputs: {...},
-//   metrics: {
-//     total_income: 11713,
-//     total_monthly_expenses: 6511,
-//     monthly_load_ratio: 0.556,
-//     monthly_load_pct: 56,
-//     housing_ratio: 0.300,
-//     debt_only_ratio: 0.000,
-//     reserves_months: 3.07,
-//     residual_monthly_income: 5202
-//   },
-//   scoring: {
-//     score: 84,
-//     grade: "B",
-//     caps_applied: [...],
-//     category_scores: {...}
-//   },
-//   recommendation: {
-//     tier: "strong",
-//     price_range: {
-//       low: 380000,
-//       high: 420000,
-//       label: "$380K - $420K"
-//     }
-//   },
-//   reasons: [...]
-// }
 // ============================================================
 
 const corsHeaders = {
@@ -87,18 +48,8 @@ function round0(v) {
   return Math.round(n0(v));
 }
 
-function moneyLabel(v) {
-  const n = round0(v);
-  return `$${n.toLocaleString("en-US")}`;
-}
-
 function pct(v) {
   return Math.round((Number(v) || 0) * 100);
-}
-
-function textOrNull(v) {
-  const s = String(v ?? "").trim();
-  return s ? s : null;
 }
 
 function normalizeInput(body) {
@@ -173,23 +124,26 @@ function normalizeInput(body) {
   };
 }
 
-function getStableAdditionalIncome(additionalIncome, stability) {
+function getStableAdditionalIncome(additionalIncome, baseIncome, stability) {
   const s = String(stability || "").toLowerCase();
+  const addl = Math.max(0, n0(additionalIncome));
+  const base = Math.max(0, n0(baseIncome));
 
-  if (s === "stable" || s === "verified" || s === "recurring") {
-    return additionalIncome;
-  }
+  let multiplier = 0.8;
+  if (s === "stable" || s === "verified" || s === "recurring") multiplier = 1.0;
+  else if (s === "likely" || s === "mostly_stable") multiplier = 0.85;
+  else if (s === "variable" || s === "side" || s === "uncertain") multiplier = 0.7;
 
-  if (s === "likely" || s === "mostly_stable") {
-    return additionalIncome * 0.85;
-  }
+  const discounted = addl * multiplier;
 
-  if (s === "variable" || s === "side" || s === "uncertain") {
-    return additionalIncome * 0.7;
-  }
+  // Hard cap: only count up to 50% of base income toward scoring.
+  // This keeps a huge side-income number from overpowering the model.
+  const capByBaseIncome = base * 0.5;
 
-  // unknown gets discounted but not ignored
-  return additionalIncome * 0.8;
+  // Absolute monthly cap for now. Easy to tune later.
+  const hardMonthlyCap = 5000;
+
+  return Math.max(0, Math.min(discounted, capByBaseIncome, hardMonthlyCap));
 }
 
 function scoreBand(value, bands) {
@@ -270,14 +224,14 @@ function priceRangeFromLoad(loadRatio) {
 function buildReasons(metrics, scoring) {
   const reasons = [];
 
-  if (metrics.monthly_load_ratio <= 0.35) {
+  if (metrics.monthly_load_ratio_for_grade <= 0.35) {
     reasons.push("Monthly load is comfortably inside a healthy range.");
-  } else if (metrics.monthly_load_ratio <= 0.45) {
+  } else if (metrics.monthly_load_ratio_for_grade <= 0.45) {
     reasons.push("Monthly load is manageable, but should still be monitored.");
-  } else if (metrics.monthly_load_ratio <= 0.55) {
+  } else if (metrics.monthly_load_ratio_for_grade <= 0.55) {
     reasons.push("Monthly load is elevated and leaves less room for surprises.");
   } else {
-    reasons.push("Monthly load is heavy relative to income and creates pressure on flexibility.");
+    reasons.push("Monthly load is heavy relative to usable income and creates pressure on flexibility.");
   }
 
   if (metrics.housing_ratio <= 0.30) {
@@ -285,7 +239,7 @@ function buildReasons(metrics, scoring) {
   } else if (metrics.housing_ratio <= 0.38) {
     reasons.push("Projected housing cost is workable, but is beginning to pressure the budget.");
   } else {
-    reasons.push("Projected housing cost is high relative to income.");
+    reasons.push("Projected housing cost is high relative to usable income.");
   }
 
   if (metrics.reserves_months >= 6) {
@@ -308,6 +262,10 @@ function buildReasons(metrics, scoring) {
     reasons.push("Residual monthly income is negative, which signals affordability stress.");
   }
 
+  if (metrics.additional_income_credit_ratio < 1) {
+    reasons.push("Additional income was discounted for scoring so the grade does not over-credit variable or unusually large side income.");
+  }
+
   if (scoring.caps_applied.length) {
     for (const cap of scoring.caps_applied) {
       reasons.push(cap.reason);
@@ -320,6 +278,7 @@ function buildReasons(metrics, scoring) {
 function runScoring(input) {
   const stableAdditionalIncome = getStableAdditionalIncome(
     input.additional_monthly_income,
+    input.total_monthly_income,
     input.additional_income_stability
   );
 
@@ -331,17 +290,20 @@ function runScoring(input) {
     input.monthly_debt +
     input.projected_mortgage_amount;
 
+  // Display ratio uses actual entered total income
   const monthlyLoadRatio = totalIncomeRaw > 0 ? totalMonthlyExpenses / totalIncomeRaw : 0;
+
+  // Grading ratio uses usable/capped income
   const monthlyLoadRatioForGrade = totalIncomeForGrade > 0 ? totalMonthlyExpenses / totalIncomeForGrade : 0;
 
   const housingRatio = totalIncomeForGrade > 0 ? input.projected_mortgage_amount / totalIncomeForGrade : 0;
   const debtOnlyRatio = totalIncomeForGrade > 0 ? input.monthly_debt / totalIncomeForGrade : 0;
   const residualMonthlyIncome = totalIncomeRaw - totalMonthlyExpenses;
   const reservesMonths = totalMonthlyExpenses > 0 ? input.savings / totalMonthlyExpenses : 0;
+  const additionalIncomeCreditRatio = input.additional_monthly_income > 0
+    ? stableAdditionalIncome / input.additional_monthly_income
+    : 1;
 
-  // ------------------------------------------------------------
-  // Weighted category scoring
-  // ------------------------------------------------------------
   const housingScore = scoreBand(housingRatio, [
     { max: 0.28, score: 100 },
     { max: 0.32, score: 90 },
@@ -394,9 +356,6 @@ function runScoring(input) {
   let finalScore = round0(weightedScore);
   const capsApplied = [];
 
-  // ------------------------------------------------------------
-  // Hard caps for realism
-  // ------------------------------------------------------------
   if (residualMonthlyIncome < 0) {
     finalScore = applyGradeCap(
       finalScore,
@@ -418,21 +377,21 @@ function runScoring(input) {
       finalScore,
       "F",
       capsApplied,
-      "Monthly load above 80% of income caps the grade at F."
+      "Monthly load above 80% of usable income caps the grade at F."
     );
   } else if (monthlyLoadRatioForGrade > 0.65) {
     finalScore = applyGradeCap(
       finalScore,
       "D",
       capsApplied,
-      "Monthly load above 65% of income caps the grade at D."
+      "Monthly load above 65% of usable income caps the grade at D."
     );
   } else if (monthlyLoadRatioForGrade > 0.55) {
     finalScore = applyGradeCap(
       finalScore,
       "C+",
       capsApplied,
-      "Monthly load above 55% of income caps the grade at C+."
+      "Monthly load above 55% of usable income caps the grade at C+."
     );
   }
 
@@ -450,13 +409,14 @@ function runScoring(input) {
       finalScore,
       "C",
       capsApplied,
-      "Housing cost above 40% of income caps the grade at C."
+      "Housing cost above 40% of usable income caps the grade at C."
     );
   }
 
   finalScore = clamp(finalScore, 0, 99);
   const finalGrade = gradeFromScore(finalScore);
 
+  // Recommendation should also follow usable income, not raw side-income spikes
   const priceRange = priceRangeFromLoad(monthlyLoadRatioForGrade);
 
   return {
@@ -465,9 +425,12 @@ function runScoring(input) {
       total_income: round0(totalIncomeRaw),
       total_income_for_grade: round0(totalIncomeForGrade),
       stable_additional_income_used: round0(stableAdditionalIncome),
+      additional_income_credit_ratio: Number(additionalIncomeCreditRatio.toFixed(4)),
       total_monthly_expenses: round0(totalMonthlyExpenses),
       monthly_load_ratio: Number(monthlyLoadRatio.toFixed(4)),
       monthly_load_pct: pct(monthlyLoadRatio),
+      monthly_load_ratio_for_grade: Number(monthlyLoadRatioForGrade.toFixed(4)),
+      monthly_load_pct_for_grade: pct(monthlyLoadRatioForGrade),
       housing_ratio: Number(housingRatio.toFixed(4)),
       housing_pct: pct(housingRatio),
       debt_only_ratio: Number(debtOnlyRatio.toFixed(4)),
@@ -492,12 +455,7 @@ function runScoring(input) {
       price_range: {
         low: priceRange.low,
         high: priceRange.high,
-        label: `${moneyLabel(priceRange.low).replace(",000", "K").replace("$", "$").replace(".00","")} - ${moneyLabel(priceRange.high).replace(",000", "K").replace("$", "$").replace(".00","")}`
-          .replace("$420K", "$420K")
-          .replace("$460K", "$460K")
-          .replace("$380K", "$380K")
-          .replace("$340K", "$340K")
-          .replace("$280K", "$280K")
+        label: ""
       }
     }
   };

@@ -1,10 +1,10 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Mar 31 2026 14:41:28 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="69b8ee46ae4fd436889d48e0" data-wf-site="69b6b526f23748df9f189b16" lang="en">
+<html data-wf-page="69cbcdf7df604399de63eb2d" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Dashboard</title>
-  <meta content="Dashboard" property="og:title">
-  <meta content="Dashboard" property="twitter:title">
+  <title>Dashboard 2.0</title>
+  <meta content="Dashboard 2.0" property="og:title">
+  <meta content="Dashboard 2.0" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
@@ -17,20 +17,32 @@
 <body>
   <section>
     <div class="w-embed w-script"><!--  =========================================================
-  PCSUnited • Login Lock
-  v2.3.0 — RESILIENT API FALLBACK
-  FIXES
-  - Works on Webflow preview/pages and live pcsunited.com
-  - Tries same-origin /api first on live/custom domains
-  - Automatically falls back to Netlify absolute API if same-origin fails
-  - Public/shared device no longer leaves behind sticky identity
-  - Logout clears bridge/profile/auth caches too
-  - Auto-unlock only trusts auth_ok + matching email
-  - New login clears stale bridge/profile before hydrating
-  - Broadcasts pcsunited:unlocked only after identity is set cleanly
-  KEEPS
-  - window.PCSU_LOGOUT()
-  - pcsunited:logout listener
+  PCSUnited • Login Lock + 1A + 1B
+  v3.0.0 — COMBINED AUTH + PROFILE + BRAIN HYDRATION
+  INCLUDES
+  - Login Lock
+  - 1A Profile Hydration (/api/profile-by-email)
+  - 1B Brain Income Loader (/api/brain)
+  GOAL
+  - Single startup pipeline
+  - Fewer race conditions
+  - Hydrate profile first, then brain-derived income
+  - Broadcast unlocked only after hydration is complete
+  FLOW
+  - Login
+  - Fetch profile
+  - Normalize bridge
+  - Call brain
+  - Write income aliases into profile + bridge
+  - Broadcast:
+      pcsunited:unlocked
+      pcsunited:bridge-ready
+      pcsunited:profile-refreshed
+  NOTES
+  - Keeps same UI / lock behavior
+  - Keeps window.PCSU_LOGOUT()
+  - Uses same-origin /api on live/custom domains
+  - Uses Netlify absolute API on *.webflow.io
 =========================================================  -->
       <div id="rs-lock-root" style="all: initial;">
         <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
@@ -211,7 +223,7 @@
         ACTIVE_API_BASE = sameOriginOk ? SAME_ORIGIN_API_BASE : NETLIFY_API_BASE;
         return ACTIVE_API_BASE;
       }
-      async function postJSONSmart(path, body){
+      async function postJSONSmart(path, body, opts = {}){
         const tried = [];
         const preferredBase = ACTIVE_API_BASE || NETLIFY_API_BASE;
         const fallbackBase = preferredBase === SAME_ORIGIN_API_BASE ? NETLIFY_API_BASE : SAME_ORIGIN_API_BASE;
@@ -224,7 +236,8 @@
             const r = await fetch(base + path, {
               method: "POST",
               headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(body || {})
+              body: JSON.stringify(body || {}),
+              signal: opts.signal
             });
             const text = await r.text();
             let j = {};
@@ -252,18 +265,25 @@
         }
         throw lastErr || new Error("Request failed.");
       }
-      //#2) ENDPOINTS
+      //#2) KEYS / ENDPOINTS
       const KEY_EMAIL   = "pcsunited.loginEmail";
       const KEY_SESS    = "pcsunited.sessionEmail";
       const KEY_PUBLIC  = "pcsunited.publicDevice.v1";
       const KEY_PROFILE = "pcsunited.profile.v1";
       const KEY_AUTHOK  = "pcsunited.auth_ok.v1";
       const KEY_PENDING = "pcsunited.pending_intake.v1";
+      const KEY_IDENTITY = "pcsunited.identity";
+      const KEY_BRAIN_CACHE = "pcsunited.user_brain_cache.v1";
+      const KEY_BRIDGE = "pcsunited.bridge";
+      const KEY_BRIDGE_V1 = "pcsunited.bridge.v1";
+      const KEY_LEGACY_BRIDGE = "realtysass.bridge";
+      const KEY_LEGACY_LOGIN = "realtysass.loginEmail";
+      const KEY_LEGACY_IDENTITY = "realtysass.identity";
       const EXTRA_CLEAR_KEYS = [
-        "pcsunited.bridge",
-        "pcsunited.bridge.v1",
-        "realtysass.bridge",
-        "pcsunited.user_brain_cache.v1",
+        KEY_BRIDGE,
+        KEY_BRIDGE_V1,
+        KEY_LEGACY_BRIDGE,
+        KEY_BRAIN_CACHE,
         "pcsunited.brain_schema_x.v1",
         "realtysass.brain_schema_x.v1",
         "pcsunited.orchestrator_debug.v1"
@@ -276,6 +296,9 @@
       const pubEl    = document.getElementById("rs-public-device");
       const hiddenLogoutBtn = document.getElementById("rs-session-logout");
       if(!overlay || !emailEl || !passEl || !btnEl) return;
+      let HYDRATE_SEQ = 0;
+      let BRAIN_RUN_IN_FLIGHT = false;
+      //#3) BASIC HELPERS
       function showOverlay(){
         overlay.setAttribute("aria-hidden","false");
         overlay.style.display = "flex";
@@ -293,6 +316,9 @@
       function setError(msg){
         if(errEl) errEl.textContent = msg || "";
       }
+      function safeParseJSON(raw, fallback = null){
+        try{ return JSON.parse(raw || "null") ?? fallback; }catch(_){ return fallback; }
+      }
       function readJSON(key, fallback){
         try{ return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
         catch(_){ return fallback; }
@@ -303,6 +329,42 @@
       function safeRemove(key){
         try{ localStorage.removeItem(key); }catch(_){}
       }
+      function str(v){
+        return String(v == null ? "" : v).trim();
+      }
+      function lowerEmail(v){
+        return str(v).toLowerCase();
+      }
+      function numOrNull(v){
+        const n = Number(v);
+        return Number.isFinite(n) ? n : null;
+      }
+      function n0(v){
+        const n = Number(v);
+        return Number.isFinite(n) ? n : 0;
+      }
+      function pick(obj, keys){
+        if (!obj || typeof obj !== "object") return null;
+        for (const key of keys){
+          const v = obj[key];
+          if (v !== undefined && v !== null && v !== "") return v;
+        }
+        return null;
+      }
+      function firstNonEmpty(...vals){
+        for (const v of vals){
+          if (v !== undefined && v !== null && String(v).trim() !== "") return v;
+        }
+        return null;
+      }
+      function firstPositive(...vals){
+        for (const v of vals){
+          const n = Number(v);
+          if (Number.isFinite(n) && n > 0) return n;
+        }
+        return 0;
+      }
+      //#4) SESSION / AUTH HELPERS
       function getSavedEmail(){
         try{ return (localStorage.getItem(KEY_EMAIL) || "").trim().toLowerCase(); }catch(_){ return ""; }
       }
@@ -344,11 +406,63 @@
         clearSavedEmail();
         clearSessionEmail();
         safeRemove(KEY_AUTHOK);
+        safeRemove(KEY_IDENTITY);
       }
       function clearEverythingForLogout(){
         clearIdentity();
         clearHydrationCaches();
       }
+      function resolveEmailEverywhere(){
+        try{
+          const sess = lowerEmail(sessionStorage.getItem(KEY_SESS) || "");
+          if (sess) return sess;
+        }catch(_){}
+        try{
+          const saved = lowerEmail(localStorage.getItem(KEY_EMAIL) || "");
+          if (saved) return saved;
+        }catch(_){}
+        try{
+          const ident = safeParseJSON(localStorage.getItem(KEY_IDENTITY) || "null");
+          const email = lowerEmail(
+            ident?.email ||
+            ident?.profile?.email ||
+            ident?.user?.email ||
+            ""
+          );
+          if (email) return email;
+        }catch(_){}
+        try{
+          const profile = readJSON(KEY_PROFILE, {}) || {};
+          const email = lowerEmail(profile?.email || profile?.user_email || "");
+          if (email) return email;
+        }catch(_){}
+        try{
+          const bridge = readJSON(KEY_BRIDGE, {}) || {};
+          const email = lowerEmail(bridge?.email || bridge?.user_email || bridge?.profile?.email || "");
+          if (email) return email;
+        }catch(_){}
+        try{
+          const bridgeV1 = readJSON(KEY_BRIDGE_V1, {}) || {};
+          const email = lowerEmail(bridgeV1?.email || bridgeV1?.user_email || bridgeV1?.profile?.email || "");
+          if (email) return email;
+        }catch(_){}
+        try{
+          const legacy = lowerEmail(localStorage.getItem(KEY_LEGACY_LOGIN) || "");
+          if (legacy) return legacy;
+        }catch(_){}
+        try{
+          const ident = safeParseJSON(localStorage.getItem(KEY_LEGACY_IDENTITY) || "null");
+          const email = lowerEmail(
+            ident?.email ||
+            ident?.profile?.email ||
+            ident?.user?.email ||
+            ""
+          );
+          if (email) return email;
+        }catch(_){}
+        return "";
+      }
+      //#5) EVENTS
       function broadcastUnlocked(email){
         try{
           window.dispatchEvent(new CustomEvent("pcsunited:unlocked", {
@@ -361,6 +475,19 @@
           window.dispatchEvent(new CustomEvent("pcsunited:loggedout", { detail: {} }));
         }catch(_){}
       }
+      function broadcastBridge(bridge){
+        try{ window.postMessage({ type: "pcsunited-bridge", payload: bridge }, "*"); }catch(_){}
+        try{ window.postMessage({ type: "realtysass-bridge", payload: bridge }, "*"); }catch(_){}
+        try{ window.dispatchEvent(new CustomEvent("pcsunited:bridge-ready", { detail: { bridge } })); }catch(_){}
+      }
+      function broadcastProfile(profile){
+        try{
+          window.dispatchEvent(new CustomEvent("pcsunited:profile-refreshed", {
+            detail: { profile }
+          }));
+        }catch(_){}
+      }
+      //#6) LOGIN HELPERS
       async function commitPendingIfAny(email){
         const auth = getAuthOk();
         const activeEmail = String(email || "").trim().toLowerCase();
@@ -371,7 +498,7 @@
           const res = await postJSONSmart("/commit-intake", { email: activeEmail, pending });
           safeRemove(KEY_PENDING);
           if (res.profile){
-            try{ localStorage.setItem(KEY_PROFILE, JSON.stringify(res.profile)); }catch(_){}
+            writeJSON(KEY_PROFILE, res.profile);
           }
         }catch(e){
           console.error("commit-intake failed:", e);
@@ -450,6 +577,341 @@
       bindKnownLogoutIds();
       const mo = new MutationObserver(()=> bindKnownLogoutIds());
       mo.observe(document.documentElement, { childList:true, subtree:true });
+      //#7) 1A PROFILE HYDRATION
+      function normalizeBridgeFromProfile(p){
+        const b = {};
+        b.id = p.id ?? null;
+        b.created_at = p.created_at ?? null;
+        b.email = lowerEmail(p.email || "");
+        b.first_name = str(p.first_name || "");
+        b.last_name = str(p.last_name || "");
+        b.phone = str(p.phone || "");
+        const fullName =
+          str(p.full_name || "") ||
+          str(p.fullName || "") ||
+          str(p.name || "") ||
+          str([p.first_name, p.last_name].filter(Boolean).join(" "));
+        b.full_name = fullName;
+        b.mode = str(p.mode || p.user_type || "");
+        b.rank = str(p.rank || p.rank_paygrade || "");
+        b.rank_paygrade = str(p.rank_paygrade || p.rank || "");
+        b.va_disability = numOrNull(p.va_disability) ?? numOrNull(p.va) ?? null;
+        b.yos = numOrNull(p.yos) ?? numOrNull(p.years_of_service) ?? null;
+        b.family = numOrNull(p.family) ?? null;
+        b.base = str(p.base || "");
+        b.role = str(p.role || "");
+        b.profiles_user_id_unique = str(p.profiles_user_id_unique || p.profilesUserIdUnique || "");
+        b.notes = str(p.notes || "");
+        b.monthly_expenses =
+          numOrNull(p.monthly_expenses) ??
+          numOrNull(p.monthlyExpenses) ??
+          numOrNull(p.expenses) ??
+          null;
+        b.projected_home_price =
+          numOrNull(p.projected_home_price) ??
+          numOrNull(p.projectedHomePrice) ??
+          numOrNull(p.price) ??
+          numOrNull(p.homePrice) ??
+          null;
+        b.downpayment =
+          numOrNull(p.downpayment) ??
+          numOrNull(p.downPayment) ??
+          numOrNull(p.dpAmt) ??
+          null;
+        b.savings =
+          numOrNull(p.savings) ??
+          null;
+        b.credit_score =
+          numOrNull(p.credit_score) ??
+          numOrNull(p.creditScore) ??
+          null;
+        b.time_to_buy =
+          str(p.time_to_buy || p.timeToBuy || "");
+        b.income =
+          numOrNull(p.total_monthly_income) ??
+          numOrNull(p.totalMonthlyIncome) ??
+          numOrNull(p.income) ??
+          numOrNull(p.monthly_income) ??
+          numOrNull(p.monthlyIncome) ??
+          numOrNull(p.pay_total) ??
+          numOrNull(p.totalPay) ??
+          null;
+        b.monthly_income = b.income;
+        b.monthlyIncome = b.income;
+        b.total_monthly_income = b.income;
+        b.totalMonthlyIncome = b.income;
+        b.pay_total = b.income;
+        b.totalPay = b.income;
+        b.debt =
+          numOrNull(p.debt) ??
+          numOrNull(p.monthly_debt) ??
+          numOrNull(p.monthlyDebt) ??
+          numOrNull(p.debt_monthly) ??
+          numOrNull(p.liabilities) ??
+          numOrNull(p.debtPayments) ??
+          null;
+        b.monthly_debt = b.debt;
+        b.monthlyDebt = b.debt;
+        b.debt_monthly = b.debt;
+        b.debtPayments = b.debt;
+        b.bedrooms = numOrNull(p.bedrooms) ?? null;
+        b.bathrooms = numOrNull(p.bathrooms) ?? null;
+        b.sqft = numOrNull(p.sqft) ?? null;
+        b.property_type = str(p.property_type || p.propertyType || "");
+        b.amenities = Array.isArray(p.amenities) ? p.amenities.join(", ") : str(p.amenities || "");
+        b.home_condition = str(p.home_condition || p.homeCondition || "");
+        if (b.projected_home_price != null) b.price = b.projected_home_price;
+        if (b.projected_home_price != null) b.homePrice = b.projected_home_price;
+        if (b.monthly_expenses != null) b.expenses = b.monthly_expenses;
+        if (b.monthly_expenses != null) b.monthlyExpenses = b.monthly_expenses;
+        if (b.downpayment != null) b.dpAmt = b.downpayment;
+        if (b.downpayment != null) b.downPayment = b.downpayment;
+        if (b.credit_score != null) b.creditScore = b.credit_score;
+        b.propertyType = b.property_type;
+        b.homeCondition = b.home_condition;
+        b.pcs_base = b.base;
+        b.pcsBase = b.base;
+        b.user_type = b.mode;
+        return b;
+      }
+      async function loadProfileByEmail(email){
+        const res = await postJSONSmart("/profile-by-email", { email });
+        const profile = res.profile || res.data || res || null;
+        if (!profile || typeof profile !== "object") {
+          throw new Error("Profile response was empty.");
+        }
+        const returnedEmail = lowerEmail(profile.email || "");
+        if (!returnedEmail || returnedEmail !== lowerEmail(email)) {
+          throw new Error("Profile email mismatch.");
+        }
+        writeJSON(KEY_PROFILE, profile);
+        const bridge = normalizeBridgeFromProfile(profile);
+        writeJSON(KEY_BRIDGE, bridge);
+        writeJSON(KEY_BRIDGE_V1, bridge);
+        writeJSON(KEY_LEGACY_BRIDGE, bridge);
+        return { profile, bridge };
+      }
+      //#8) 1B BRAIN HYDRATION
+      function getProfile(){
+        return readJSON(KEY_PROFILE, {}) || {};
+      }
+      function getBridge(){
+        return (
+          readJSON(KEY_BRIDGE, null) ||
+          readJSON(KEY_BRIDGE_V1, null) ||
+          readJSON(KEY_LEGACY_BRIDGE, null) ||
+          {}
+        );
+      }
+      function buildBrainPayload(email){
+        const profile = getProfile();
+        const bridge = getBridge();
+        const rank = firstNonEmpty(
+          pick(profile, ["rank", "rank_paygrade", "rankPaygrade"]),
+          pick(bridge, ["rank", "rank_paygrade", "rankPaygrade"])
+        );
+        const yos = firstPositive(
+          pick(profile, ["yos", "years_of_service", "yearsOfService"]),
+          pick(bridge, ["yos", "years_of_service", "yearsOfService"])
+        ) || undefined;
+        const base = firstNonEmpty(
+          pick(profile, ["base", "pcs_base", "pcsBase"]),
+          pick(bridge, ["base", "pcs_base", "pcsBase"])
+        );
+        const family = firstPositive(
+          pick(profile, ["family", "family_size", "familySize"]),
+          pick(bridge, ["family", "family_size", "familySize"])
+        ) || undefined;
+        const mode = firstNonEmpty(
+          pick(profile, ["mode"]),
+          pick(bridge, ["mode"])
+        );
+        const va_disability = firstPositive(
+          pick(profile, ["va_disability", "vaDisability"]),
+          pick(bridge, ["va_disability", "vaDisability"])
+        ) || 0;
+        const cityKey = firstNonEmpty(
+          pick(bridge, ["cityKey", "city", "base_city_key"]),
+          "SanAntonio"
+        );
+        const bedrooms = firstPositive(
+          pick(bridge, ["bedrooms", "beds"]),
+          4
+        ) || 4;
+        const price = firstPositive(
+          pick(bridge, ["projected_home_price", "projectedHomePrice", "price", "homePrice", "housing"])
+        ) || undefined;
+        const downpayment = firstPositive(
+          pick(bridge, ["downpayment", "downPayment", "dpAmt"])
+        ) || 0;
+        const dpPct = price && downpayment ? ((downpayment / price) * 100) : undefined;
+        const creditScore = firstPositive(
+          pick(bridge, ["credit_score", "creditScore", "score", "fico"])
+        ) || undefined;
+        return {
+          email,
+          rank,
+          yos,
+          base,
+          family,
+          mode,
+          va_disability,
+          cityKey,
+          bedrooms,
+          price,
+          dpPct,
+          termYears: 30,
+          creditScore
+        };
+      }
+      function extractPay(brain){
+        const pay = brain?.pay || {};
+        const total =
+          n0(pay.total) ||
+          n0(pay.totalPay) ||
+          n0(pay.total_pay) ||
+          0;
+        const base =
+          n0(pay.basePay) ||
+          n0(pay.base_pay) ||
+          n0(pay.base) ||
+          0;
+        const bah =
+          n0(pay.bah) ||
+          n0(pay.BAH) ||
+          n0(pay.bahMonthly) ||
+          0;
+        const bas =
+          n0(pay.bas) ||
+          n0(pay.BAS) ||
+          n0(pay.basMonthly) ||
+          0;
+        const disability =
+          n0(pay.disability) ||
+          n0(pay.vaDisabilityPay) ||
+          n0(pay.vaDisabilityMonthly) ||
+          0;
+        const computed = base + bah + bas + disability;
+        const finalTotal = total > 0 ? total : computed;
+        return {
+          total: finalTotal,
+          base,
+          bah,
+          bas,
+          disability
+        };
+      }
+      function writeIncomeIntoLocalState(pay){
+        const total = n0(pay.total);
+        if (total <= 0) return false;
+        const base = n0(pay.base);
+        const bah = n0(pay.bah);
+        const bas = n0(pay.bas);
+        const disability = n0(pay.disability);
+        const profile = getProfile();
+        const bridge = getBridge();
+        const nextProfile = {
+          ...profile,
+          income: total,
+          monthly_income: total,
+          monthlyIncome: total,
+          total_monthly_income: total,
+          totalMonthlyIncome: total,
+          total_monthly_intake: total,
+          totalMonthlyIntake: total,
+          pay_total: total,
+          totalPay: total,
+          pay_base: base,
+          payBase: base,
+          base_pay: base,
+          basePay: base,
+          pay_bah: bah,
+          payBah: bah,
+          bah,
+          BAH: bah,
+          pay_bas: bas,
+          payBas: bas,
+          bas,
+          BAS: bas,
+          pay_disability: disability,
+          payDisability: disability,
+          disability_pay: disability,
+          disabilityPay: disability,
+          va_disability_pay: disability,
+          vaDisabilityPay: disability
+        };
+        const nextBridge = {
+          ...bridge,
+          income: total,
+          monthly_income: total,
+          monthlyIncome: total,
+          total_monthly_income: total,
+          totalMonthlyIncome: total,
+          total_monthly_intake: total,
+          totalMonthlyIntake: total,
+          pay_total: total,
+          totalPay: total,
+          pay_base: base,
+          payBase: base,
+          base_pay: base,
+          basePay: base,
+          pay_bah: bah,
+          payBah: bah,
+          bah,
+          BAH: bah,
+          pay_bas: bas,
+          payBas: bas,
+          bas,
+          BAS: bas,
+          pay_disability: disability,
+          payDisability: disability,
+          disability_pay: disability,
+          disabilityPay: disability,
+          va_disability_pay: disability,
+          vaDisabilityPay: disability
+        };
+        writeJSON(KEY_PROFILE, nextProfile);
+        writeJSON(KEY_BRIDGE, nextBridge);
+        writeJSON(KEY_BRIDGE_V1, nextBridge);
+        writeJSON(KEY_LEGACY_BRIDGE, nextBridge);
+        return true;
+      }
+      async function loadBrainIncome(email){
+        if (BRAIN_RUN_IN_FLIGHT) return;
+        BRAIN_RUN_IN_FLIGHT = true;
+        try{
+          const payload = buildBrainPayload(email);
+          const brain = await postJSONSmart("/brain", payload);
+          writeJSON(KEY_BRAIN_CACHE, {
+            ts: Date.now(),
+            email,
+            payload,
+            brain
+          });
+          const pay = extractPay(brain);
+          writeIncomeIntoLocalState(pay);
+          return { brain, pay };
+        } finally {
+          BRAIN_RUN_IN_FLIGHT = false;
+        }
+      }
+      //#9) FULL HYDRATION PIPELINE
+      async function hydrateUser(email){
+        const seq = ++HYDRATE_SEQ;
+        const activeEmail = lowerEmail(email || resolveEmailEverywhere() || "");
+        if (!activeEmail) throw new Error("No email resolved for hydration.");
+        const { profile } = await loadProfileByEmail(activeEmail);
+        if (seq !== HYDRATE_SEQ) return;
+        await loadBrainIncome(activeEmail);
+        if (seq !== HYDRATE_SEQ) return;
+        const finalProfile = getProfile();
+        const finalBridge = getBridge();
+        broadcastProfile(finalProfile);
+        broadcastBridge(finalBridge);
+        broadcastUnlocked(activeEmail);
+        return { profile: finalProfile, bridge: finalBridge };
+      }
+      //#10) BOOT / AUTO-UNLOCK
       const savedEmail = getSavedEmail();
       const sessEmail  = getSessionEmail();
       const authOk     = getAuthOk();
@@ -469,15 +931,23 @@
         await resolveApiBase();
         if (canAutoUnlock){
           const activeEmail = sessEmail || savedEmail || authOk.email;
-          hideOverlayHard();
           setSessionEmail(activeEmail);
-          broadcastUnlocked(activeEmail);
-          commitPendingIfAny(activeEmail);
+          hideOverlayHard();
+          try{
+            await commitPendingIfAny(activeEmail);
+            await hydrateUser(activeEmail);
+          }catch(e){
+            console.error("Auto hydration failed:", e);
+            setError("We couldn’t load your dashboard. Please log in again.");
+            clearEverythingForLogout();
+            showOverlay();
+          }
         } else {
           clearEverythingForLogout();
           showOverlay();
         }
       }
+      //#11) LOGIN ACTION
       window.addEventListener("beforeunload", ()=>{
         try{
           if (getPublicFlag()){
@@ -499,19 +969,23 @@
           clearHydrationCaches();
           const data = await postJSONSmart("/login", { email, password });
           writeJSON(KEY_AUTHOK, { email, ts: Date.now() });
+          writeJSON(KEY_IDENTITY, { email, ts: Date.now() });
           setSessionEmail(email);
           const isPublicDevice = !!(pubEl && pubEl.checked);
           setPublicFlag(isPublicDevice);
           if (!isPublicDevice) setSavedEmail(email);
           else clearSavedEmail();
           if (data.profile){
-            try{ localStorage.setItem(KEY_PROFILE, JSON.stringify(data.profile)); }catch(_){}
+            writeJSON(KEY_PROFILE, data.profile);
           }
           hideOverlayHard();
-          broadcastUnlocked(email);
           await commitPendingIfAny(email);
+          await hydrateUser(email);
+          try{ passEl.value = ""; }catch(_){}
         }catch(e){
+          console.error("Login/hydration failed:", e);
           setError(e.message || "Login failed.");
+          showOverlay();
         }finally{
           btnEl.disabled = false;
           btnEl.textContent = "Log In";
@@ -520,6 +994,16 @@
       btnEl.addEventListener("click", doLogin);
       passEl.addEventListener("keydown", (e)=>{ if(e.key === "Enter") doLogin(); });
       emailEl.addEventListener("keydown", (e)=>{ if(e.key === "Enter") doLogin(); });
+      //#12) MANUAL EVENTS
+      window.addEventListener("pcsunited:unlocked:refresh", async (e) => {
+        const email = lowerEmail(e?.detail?.email || resolveEmailEverywhere() || "");
+        if (!email) return;
+        try{
+          await hydrateUser(email);
+        }catch(err){
+          console.error("Manual hydration refresh failed:", err);
+        }
+      });
       boot();
     })();
   </script>
@@ -1933,759 +2417,6 @@ UPDATE
     })();
   </script>
         </div>
-      </div>
-      <div class="w-embed w-script">
-        <script>
-(() => {
-  "use strict";
-  // ============================================================
-  // PCSUnited • 1A BRIDGE LOADER
-  // v2.2.0 — SAVINGS / DOWNPAYMENT SEPARATED
-  //
-  // FIXES
-  // - NEVER writes pcsunited.loginEmail on its own
-  // - Uses session email first, then saved email, then auth_ok
-  // - Uses same-origin /api on live domain, Netlify absolute in preview
-  // - Rejects mismatched profile response email
-  // - Protects against race conditions with request tokens
-  // - Clears stale bridge/profile on explicit logout event
-  // - FIXED: savings no longer inherits from downpayment
-  // - FIXED: downpayment no longer inherits from savings
-  // ============================================================
-  if (window.PCS_1A && window.PCS_1A.__mounted_v220) return;
-  const ONEA = (window.PCS_1A = window.PCS_1A || {});
-  ONEA.__mounted = true;
-  ONEA.__mounted_v220 = true;
-  const IS_WEBFLOW_PREVIEW = location.hostname.includes("webflow.io");
-  const API_BASE = IS_WEBFLOW_PREVIEW
-    ? "https://pcsunited.netlify.app/api"
-    : "/api";
-  const PROFILE_ENDPOINT = API_BASE + "/profile-by-email";
-  const TIMEOUT_MS = 10000;
-  const KEYS = {
-    email_saved:   "pcsunited.loginEmail",
-    email_sess:    "pcsunited.sessionEmail",
-    auth_ok:       "pcsunited.auth_ok.v1",
-    profile:       "pcsunited.profile.v1",
-    bridge_new:    "pcsunited.bridge",
-    bridge_v1:     "pcsunited.bridge.v1",
-    bridge_legacy: "realtysass.bridge",
-    legacy_email:  "realtysass.loginEmail",
-    legacy_ident:  "realtysass.identity"
-  };
-  const LS = window.localStorage;
-  const SS = window.sessionStorage;
-  let inFlight = false;
-  let requestSeq = 0;
-  function safeParseJSON(s){
-    try { return JSON.parse(s); } catch (_) { return null; }
-  }
-  function readJSON(key, fallback = null){
-    try{
-      const raw = LS.getItem(key);
-      if (!raw) return fallback;
-      return JSON.parse(raw);
-    }catch(_){
-      return fallback;
-    }
-  }
-  function writeJSON(key, val){
-    try { LS.setItem(key, JSON.stringify(val)); } catch (_) {}
-  }
-  function safeRemove(key){
-    try { LS.removeItem(key); } catch (_) {}
-  }
-  function normStr(v){
-    if (v === undefined || v === null) return "";
-    return String(v).trim();
-  }
-  function lowerEmail(v){
-    return normStr(v).toLowerCase();
-  }
-  function numOrNull(v){
-    const n = Number(v);
-    return Number.isFinite(n) ? n : null;
-  }
-  function getAuthEmail(){
-    try{
-      const raw = safeParseJSON(LS.getItem(KEYS.auth_ok) || "null");
-      return lowerEmail(raw?.email || "");
-    }catch(_){
-      return "";
-    }
-  }
-  function getEmail(){
-    try{
-      const qp = new URLSearchParams(location.search);
-      const q = lowerEmail(qp.get("email") || "");
-      if (q) return q;
-      const sess = lowerEmail(SS.getItem(KEYS.email_sess) || "");
-      if (sess) return sess;
-      const saved = lowerEmail(LS.getItem(KEYS.email_saved) || "");
-      if (saved) return saved;
-      const authEmail = getAuthEmail();
-      if (authEmail) return authEmail;
-      const legacy = lowerEmail(LS.getItem(KEYS.legacy_email) || "");
-      if (legacy) return legacy;
-      const ident = safeParseJSON(LS.getItem(KEYS.legacy_ident) || "null");
-      const identEmail = lowerEmail(ident?.email || ident?.profile?.email || "");
-      if (identEmail) return identEmail;
-    }catch(_){}
-    return "";
-  }
-  async function postJSON(url, body){
-    const ctrl = new AbortController();
-    const t = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-    try{
-      const r = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body || {}),
-        signal: ctrl.signal
-      });
-      const text = await r.text();
-      let j = {};
-      try { j = text ? JSON.parse(text) : {}; } catch (_) { j = {}; }
-      if (!r.ok || j.ok === false){
-        throw new Error(j.error || j.message || ("HTTP " + r.status));
-      }
-      return j;
-    } finally {
-      clearTimeout(t);
-    }
-  }
-  function broadcastBridge(bridge){
-    try { window.postMessage({ type: "pcsunited-bridge", payload: bridge }, "*"); } catch (_) {}
-    try { window.postMessage({ type: "realtysass-bridge", payload: bridge }, "*"); } catch (_) {}
-    try {
-      window.dispatchEvent(new CustomEvent("pcsunited:bridge-ready", { detail: { bridge } }));
-    } catch (_) {}
-  }
-  function clearHydratedState(){
-    safeRemove(KEYS.profile);
-    safeRemove(KEYS.bridge_new);
-    safeRemove(KEYS.bridge_v1);
-    safeRemove(KEYS.bridge_legacy);
-  }
-  function normalizeBridgeFromProfile(p){
-    const b = {};
-    b.id = p.id ?? null;
-    b.created_at = p.created_at ?? null;
-    b.email = lowerEmail(p.email || "");
-    b.first_name = normStr(p.first_name || "");
-    b.last_name = normStr(p.last_name || "");
-    b.phone = normStr(p.phone || "");
-    const fullName =
-      normStr(p.full_name || "") ||
-      normStr(p.fullName || "") ||
-      normStr(p.name || "") ||
-      normStr([p.first_name, p.last_name].filter(Boolean).join(" "));
-    b.full_name = fullName;
-    b.mode = normStr(p.mode || p.user_type || "");
-    b.rank = normStr(p.rank || p.rank_paygrade || "");
-    b.rank_paygrade = normStr(p.rank_paygrade || p.rank || "");
-    b.va_disability = numOrNull(p.va_disability) ?? numOrNull(p.va) ?? null;
-    b.yos = numOrNull(p.yos) ?? numOrNull(p.years_of_service) ?? null;
-    b.family = numOrNull(p.family) ?? null;
-    b.base = normStr(p.base || "");
-    b.role = normStr(p.role || "");
-    b.profiles_user_id_unique = normStr(p.profiles_user_id_unique || p.profilesUserIdUnique || "");
-    b.notes = normStr(p.notes || "");
-    b.monthly_expenses =
-      numOrNull(p.monthly_expenses) ??
-      numOrNull(p.monthlyExpenses) ??
-      numOrNull(p.expenses) ??
-      null;
-    b.projected_home_price =
-      numOrNull(p.projected_home_price) ??
-      numOrNull(p.projectedHomePrice) ??
-      numOrNull(p.price) ??
-      numOrNull(p.homePrice) ??
-      null;
-    // FIXED: downpayment only comes from downpayment fields
-    b.downpayment =
-      numOrNull(p.downpayment) ??
-      numOrNull(p.downPayment) ??
-      numOrNull(p.dpAmt) ??
-      null;
-    // FIXED: savings only comes from savings field
-    b.savings =
-      numOrNull(p.savings) ??
-      null;
-    b.credit_score =
-      numOrNull(p.credit_score) ??
-      numOrNull(p.creditScore) ??
-      null;
-    b.time_to_buy =
-      normStr(p.time_to_buy || p.timeToBuy || "");
-    b.income =
-      numOrNull(p.income) ??
-      numOrNull(p.monthly_income) ??
-      numOrNull(p.monthlyIncome) ??
-      numOrNull(p.total_monthly_income) ??
-      numOrNull(p.totalMonthlyIncome) ??
-      numOrNull(p.pay_total) ??
-      numOrNull(p.totalPay) ??
-      null;
-    b.monthly_income = b.income;
-    b.monthlyIncome = b.income;
-    b.total_monthly_income = b.income;
-    b.totalMonthlyIncome = b.income;
-    b.pay_total = b.income;
-    b.totalPay = b.income;
-    b.debt =
-      numOrNull(p.debt) ??
-      numOrNull(p.monthly_debt) ??
-      numOrNull(p.monthlyDebt) ??
-      numOrNull(p.debt_monthly) ??
-      numOrNull(p.liabilities) ??
-      numOrNull(p.debtPayments) ??
-      null;
-    b.monthly_debt = b.debt;
-    b.monthlyDebt = b.debt;
-    b.debt_monthly = b.debt;
-    b.debtPayments = b.debt;
-    b.bedrooms = numOrNull(p.bedrooms) ?? null;
-    b.bathrooms = numOrNull(p.bathrooms) ?? null;
-    b.sqft = numOrNull(p.sqft) ?? null;
-    b.property_type = normStr(p.property_type || p.propertyType || "");
-    b.amenities = Array.isArray(p.amenities) ? p.amenities.join(", ") : normStr(p.amenities || "");
-    b.home_condition = normStr(p.home_condition || p.homeCondition || "");
-    if (b.projected_home_price != null) b.price = b.projected_home_price;
-    if (b.projected_home_price != null) b.homePrice = b.projected_home_price;
-    if (b.monthly_expenses != null) b.expenses = b.monthly_expenses;
-    if (b.monthly_expenses != null) b.monthlyExpenses = b.monthly_expenses;
-    if (b.downpayment != null) b.dpAmt = b.downpayment;
-    if (b.downpayment != null) b.downPayment = b.downpayment;
-    if (b.credit_score != null) b.creditScore = b.credit_score;
-    b.propertyType = b.property_type;
-    b.homeCondition = b.home_condition;
-    b.pcs_base = b.base;
-    b.pcsBase = b.base;
-    b.user_type = b.mode;
-    return b;
-  }
-  async function run(emailOverride){
-    const email = lowerEmail(emailOverride || getEmail() || "");
-    if (!email) return;
-    if (inFlight) return;
-    inFlight = true;
-    const mySeq = ++requestSeq;
-    const cachedProfile = safeParseJSON(LS.getItem(KEYS.profile) || "null");
-    if (cachedProfile && lowerEmail(cachedProfile.email || "") === email){
-      const cachedBridge = normalizeBridgeFromProfile(cachedProfile);
-      writeJSON(KEYS.bridge_new, cachedBridge);
-      writeJSON(KEYS.bridge_v1, cachedBridge);
-      writeJSON(KEYS.bridge_legacy, cachedBridge);
-      broadcastBridge(cachedBridge);
-    }
-    try{
-      const res = await postJSON(PROFILE_ENDPOINT, { email });
-      if (mySeq !== requestSeq) return;
-      const profile = res.profile || res.data || res || null;
-      if (!profile || typeof profile !== "object") return;
-      const returnedEmail = lowerEmail(profile.email || "");
-      if (!returnedEmail || returnedEmail !== email){
-        throw new Error(`profile-by-email mismatch. requested=${email} returned=${returnedEmail || "blank"}`);
-      }
-      writeJSON(KEYS.profile, profile);
-      const bridge = normalizeBridgeFromProfile(profile);
-      writeJSON(KEYS.bridge_new, bridge);
-      writeJSON(KEYS.bridge_v1, bridge);
-      writeJSON(KEYS.bridge_legacy, bridge);
-      broadcastBridge(bridge);
-    }catch(e){
-      console.warn("[PCS 1A] profile-by-email failed:", e);
-      try{
-        window.dispatchEvent(new CustomEvent("pcsunited:bridge-failed", {
-          detail: { email, error: String(e.message || e) }
-        }));
-      }catch(_){}
-    } finally {
-      inFlight = false;
-    }
-  }
-  function retryForEmail(maxTries = 20, delayMs = 250){
-    let tries = 0;
-    const tick = () => {
-      tries++;
-      const email = getEmail();
-      if (email) {
-        run(email);
-        return;
-      }
-      if (tries < maxTries) setTimeout(tick, delayMs);
-    };
-    tick();
-  }
-  if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", () => {
-      run();
-      retryForEmail();
-    });
-  } else {
-    run();
-    retryForEmail();
-  }
-  window.addEventListener("pcsunited:unlocked", (e) => {
-    const email = lowerEmail(e?.detail?.email || "");
-    if (email) {
-      try { SS.setItem(KEYS.email_sess, email); } catch (_) {}
-    }
-    run(email);
-  });
-  window.addEventListener("realtysass:unlocked", (e) => {
-    const email = lowerEmail(e?.detail?.email || "");
-    run(email);
-  });
-  window.addEventListener("pcsunited:loggedout", () => {
-    clearHydratedState();
-  });
-})();
-</script>
-      </div>
-      <div class="w-embed w-script">
-        <script>
-/* ============================================================
-  PCSUnited • USER DASHBOARD BRAIN INCOME LOADER
-  v1.3.0 — FULL REPLACEMENT
-  PURPOSE
-  - Hydrate Total Monthly Income for User Dashboard / 2C panel
-  - Calls /api/brain with stronger military pay context
-  - Writes pay + income aliases into profile + bridge
-  UPDATE
-  - Stronger email resolution:
-      pcsunited.sessionEmail
-      pcsunited.loginEmail
-      pcsunited.identity
-      pcsunited.profile.v1.email
-      pcsunited.bridge.email
-      pcsunited.bridge.v1.email
-      realtysass.loginEmail
-      realtysass.identity
-  - Webflow-safe API base:
-      uses relative /api on pcsunited.com
-      uses https://pcsunited.netlify.app/api on *.webflow.io
-  - Keeps existing bridge/profile values and enriches income fields only
-============================================================ */
-(() => {
-  "use strict";
-  //#1) SINGLETON
-  if (window.PCSU_BRAIN_INCOME_LOADER && window.PCSU_BRAIN_INCOME_LOADER.__mounted_v130) return;
-  window.PCSU_BRAIN_INCOME_LOADER = window.PCSU_BRAIN_INCOME_LOADER || {};
-  window.PCSU_BRAIN_INCOME_LOADER.__mounted = true;
-  window.PCSU_BRAIN_INCOME_LOADER.__mounted_v130 = true;
-  //#2) CONFIG
-  const TIMEOUT_MS = 12000;
-  const KEYS = {
-    pcsLoginEmail: "pcsunited.loginEmail",
-    pcsSessionEmail: "pcsunited.sessionEmail",
-    pcsIdentity: "pcsunited.identity",
-    legacyLoginEmail: "realtysass.loginEmail",
-    legacyIdentity: "realtysass.identity",
-    profile: "pcsunited.profile.v1",
-    bridge: "pcsunited.bridge",
-    bridgeV1: "pcsunited.bridge.v1",
-    legacyBridge: "realtysass.bridge",
-    brainCache: "pcsunited.user_brain_cache.v1"
-  };
-  function getApiBase(){
-    try{
-      const host = String(window.location.hostname || "").toLowerCase();
-      if (host.endsWith(".webflow.io")) return "https://pcsunited.netlify.app/api";
-    }catch(_){}
-    return "/api";
-  }
-  function getBrainEndpoint(){
-    return getApiBase() + "/brain";
-  }
-  //#3) HELPERS
-  function safeParseJSON(s){
-    try { return JSON.parse(s); } catch(_) { return null; }
-  }
-  function readJSON(key, fallback = null){
-    try{
-      const raw = localStorage.getItem(key);
-      if (!raw) return fallback;
-      return JSON.parse(raw);
-    }catch(_){
-      return fallback;
-    }
-  }
-  function writeJSON(key, value){
-    try{
-      localStorage.setItem(key, JSON.stringify(value));
-    }catch(_){}
-  }
-  function str(v){
-    return String(v == null ? "" : v).trim();
-  }
-  function lowerEmail(v){
-    return str(v).toLowerCase();
-  }
-  function n0(v){
-    const n = Number(v);
-    return Number.isFinite(n) ? n : 0;
-  }
-  function pick(obj, keys){
-    if (!obj || typeof obj !== "object") return null;
-    for (const key of keys){
-      const v = obj[key];
-      if (v !== undefined && v !== null && v !== "") return v;
-    }
-    return null;
-  }
-  function firstNonEmpty(...vals){
-    for (const v of vals){
-      if (v !== undefined && v !== null && String(v).trim() !== "") return v;
-    }
-    return null;
-  }
-  function firstPositive(...vals){
-    for (const v of vals){
-      const n = Number(v);
-      if (Number.isFinite(n) && n > 0) return n;
-    }
-    return 0;
-  }
-  function getProfile(){
-    return readJSON(KEYS.profile, {}) || {};
-  }
-  function getBridge(){
-    return (
-      readJSON(KEYS.bridge, null) ||
-      readJSON(KEYS.bridgeV1, null) ||
-      readJSON(KEYS.legacyBridge, null) ||
-      {}
-    );
-  }
-  function resolveEmail(){
-    try{
-      const sess = lowerEmail(sessionStorage.getItem(KEYS.pcsSessionEmail) || "");
-      if (sess) return sess;
-    }catch(_){}
-    try{
-      const saved = lowerEmail(localStorage.getItem(KEYS.pcsLoginEmail) || "");
-      if (saved) return saved;
-    }catch(_){}
-    try{
-      const ident = safeParseJSON(localStorage.getItem(KEYS.pcsIdentity) || "null");
-      const email = lowerEmail(
-        ident?.email ||
-        ident?.profile?.email ||
-        ident?.user?.email ||
-        ""
-      );
-      if (email) return email;
-    }catch(_){}
-    try{
-      const profile = getProfile();
-      const email = lowerEmail(
-        profile?.email ||
-        profile?.user_email ||
-        ""
-      );
-      if (email) return email;
-    }catch(_){}
-    try{
-      const bridge = readJSON(KEYS.bridge, {}) || {};
-      const email = lowerEmail(
-        bridge?.email ||
-        bridge?.user_email ||
-        bridge?.profile?.email ||
-        ""
-      );
-      if (email) return email;
-    }catch(_){}
-    try{
-      const bridgeV1 = readJSON(KEYS.bridgeV1, {}) || {};
-      const email = lowerEmail(
-        bridgeV1?.email ||
-        bridgeV1?.user_email ||
-        bridgeV1?.profile?.email ||
-        ""
-      );
-      if (email) return email;
-    }catch(_){}
-    try{
-      const legacy = lowerEmail(localStorage.getItem(KEYS.legacyLoginEmail) || "");
-      if (legacy) return legacy;
-    }catch(_){}
-    try{
-      const ident = safeParseJSON(localStorage.getItem(KEYS.legacyIdentity) || "null");
-      const email = lowerEmail(
-        ident?.email ||
-        ident?.profile?.email ||
-        ident?.user?.email ||
-        ""
-      );
-      if (email) return email;
-    }catch(_){}
-    return "";
-  }
-  async function postJSON(url, body){
-    const ctrl = new AbortController();
-    const timer = setTimeout(() => ctrl.abort(), TIMEOUT_MS);
-    try{
-      const res = await fetch(url, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(body || {}),
-        signal: ctrl.signal
-      });
-      const json = await res.json().catch(() => ({}));
-      if (!res.ok || json.ok === false){
-        throw new Error(json.error || json.message || `HTTP ${res.status}`);
-      }
-      return json;
-    } finally {
-      clearTimeout(timer);
-    }
-  }
-  //#4) PAYLOAD BUILDER
-  function buildBrainPayload(email){
-    const profile = getProfile();
-    const bridge = getBridge();
-    const rank = firstNonEmpty(
-      pick(profile, ["rank", "rank_paygrade", "rankPaygrade"]),
-      pick(bridge, ["rank", "rank_paygrade", "rankPaygrade"])
-    );
-    const yos = firstPositive(
-      pick(profile, ["yos", "years_of_service", "yearsOfService"]),
-      pick(bridge, ["yos", "years_of_service", "yearsOfService"])
-    ) || undefined;
-    const base = firstNonEmpty(
-      pick(profile, ["base", "pcs_base", "pcsBase"]),
-      pick(bridge, ["base", "pcs_base", "pcsBase"])
-    );
-    const family = firstPositive(
-      pick(profile, ["family", "family_size", "familySize"]),
-      pick(bridge, ["family", "family_size", "familySize"])
-    ) || undefined;
-    const mode = firstNonEmpty(
-      pick(profile, ["mode"]),
-      pick(bridge, ["mode"])
-    );
-    const va_disability = firstPositive(
-      pick(profile, ["va_disability", "vaDisability"]),
-      pick(bridge, ["va_disability", "vaDisability"])
-    ) || 0;
-    const cityKey = firstNonEmpty(
-      pick(bridge, ["cityKey", "city", "base_city_key"]),
-      "SanAntonio"
-    );
-    const bedrooms = firstPositive(
-      pick(bridge, ["bedrooms", "beds"]),
-      4
-    ) || 4;
-    const price = firstPositive(
-      pick(bridge, ["projected_home_price", "projectedHomePrice", "price", "homePrice", "housing"])
-    ) || undefined;
-    const downpayment = firstPositive(
-      pick(bridge, ["downpayment", "downPayment", "dpAmt", "savings"])
-    ) || 0;
-    const dpPct = price && downpayment ? ((downpayment / price) * 100) : undefined;
-    const creditScore = firstPositive(
-      pick(bridge, ["credit_score", "creditScore", "score", "fico"])
-    ) || undefined;
-    return {
-      email,
-      rank,
-      yos,
-      base,
-      family,
-      mode,
-      va_disability,
-      cityKey,
-      bedrooms,
-      price,
-      dpPct,
-      termYears: 30,
-      creditScore
-    };
-  }
-  //#5) PAY EXTRACTOR
-  function extractPay(brain){
-    const pay = brain?.pay || {};
-    const total =
-      n0(pay.total) ||
-      n0(pay.totalPay) ||
-      n0(pay.total_pay) ||
-      0;
-    const base =
-      n0(pay.basePay) ||
-      n0(pay.base_pay) ||
-      n0(pay.base) ||
-      0;
-    const bah =
-      n0(pay.bah) ||
-      n0(pay.BAH) ||
-      n0(pay.bahMonthly) ||
-      0;
-    const bas =
-      n0(pay.bas) ||
-      n0(pay.BAS) ||
-      n0(pay.basMonthly) ||
-      0;
-    const disability =
-      n0(pay.disability) ||
-      n0(pay.vaDisabilityPay) ||
-      n0(pay.vaDisabilityMonthly) ||
-      0;
-    const computed = base + bah + bas + disability;
-    const finalTotal = total > 0 ? total : computed;
-    return {
-      total: finalTotal,
-      base,
-      bah,
-      bas,
-      disability
-    };
-  }
-  //#6) STATE WRITER
-  function writeIncomeIntoState(pay){
-    const total = n0(pay.total);
-    if (total <= 0) return false;
-    const base = n0(pay.base);
-    const bah = n0(pay.bah);
-    const bas = n0(pay.bas);
-    const disability = n0(pay.disability);
-    const profile = getProfile();
-    const bridge = getBridge();
-    const nextProfile = {
-      ...profile,
-      income: total,
-      monthly_income: total,
-      monthlyIncome: total,
-      total_monthly_income: total,
-      totalMonthlyIncome: total,
-      total_monthly_intake: total,
-      totalMonthlyIntake: total,
-      pay_total: total,
-      totalPay: total,
-      pay_base: base,
-      payBase: base,
-      base_pay: base,
-      basePay: base,
-      pay_bah: bah,
-      payBah: bah,
-      bah,
-      BAH: bah,
-      pay_bas: bas,
-      payBas: bas,
-      bas,
-      BAS: bas,
-      pay_disability: disability,
-      payDisability: disability,
-      disability_pay: disability,
-      disabilityPay: disability,
-      va_disability_pay: disability,
-      vaDisabilityPay: disability
-    };
-    const nextBridge = {
-      ...bridge,
-      income: total,
-      monthly_income: total,
-      monthlyIncome: total,
-      total_monthly_income: total,
-      totalMonthlyIncome: total,
-      total_monthly_intake: total,
-      totalMonthlyIntake: total,
-      pay_total: total,
-      totalPay: total,
-      pay_base: base,
-      payBase: base,
-      base_pay: base,
-      basePay: base,
-      pay_bah: bah,
-      payBah: bah,
-      bah,
-      BAH: bah,
-      pay_bas: bas,
-      payBas: bas,
-      bas,
-      BAS: bas,
-      pay_disability: disability,
-      payDisability: disability,
-      disability_pay: disability,
-      disabilityPay: disability,
-      va_disability_pay: disability,
-      vaDisabilityPay: disability
-    };
-    writeJSON(KEYS.profile, nextProfile);
-    writeJSON(KEYS.bridge, nextBridge);
-    writeJSON(KEYS.bridgeV1, nextBridge);
-    writeJSON(KEYS.legacyBridge, nextBridge);
-    try{
-      window.postMessage({ type: "pcsunited-bridge", payload: nextBridge }, "*");
-    }catch(_){}
-    try{
-      window.postMessage({ type: "realtysass-bridge", payload: nextBridge }, "*");
-    }catch(_){}
-    try{
-      window.dispatchEvent(new CustomEvent("pcsunited:bridge-ready", { detail: { bridge: nextBridge } }));
-    }catch(_){}
-    return true;
-  }
-  //#7) RUNNER
-  async function run(){
-    const email = resolveEmail();
-    if (!email) {
-      console.warn("PCSU 1B: no email resolved.");
-      return;
-    }
-    const endpoint = getBrainEndpoint();
-    const payload = buildBrainPayload(email);
-    try{
-      const brain = await postJSON(endpoint, payload);
-      writeJSON(KEYS.brainCache, {
-        ts: Date.now(),
-        email,
-        payload,
-        brain
-      });
-      const pay = extractPay(brain);
-      const ok = writeIncomeIntoState(pay);
-      console.group("PCSU USER DASHBOARD BRAIN INCOME LOADER");
-      console.log("endpoint:", endpoint);
-      console.log("email:", email);
-      console.log("payload:", payload);
-      console.log("brain:", brain);
-      console.log("pay extracted:", pay);
-      console.log("income written:", ok);
-      console.groupEnd();
-    }catch(err){
-      console.error("PCSU USER DASHBOARD BRAIN INCOME LOADER failed:", err);
-    }
-  }
-  //#8) SCHEDULER
-  function schedule(){
-    run();
-    setTimeout(run, 300);
-    setTimeout(run, 1200);
-  }
-  //#9) EVENTS
-  window.addEventListener("pcsunited:unlocked", schedule);
-  window.addEventListener("pcsunited:bridge-ready", () => {
-    const bridge = getBridge();
-    const income = n0(
-      bridge.income ||
-      bridge.monthly_income ||
-      bridge.monthlyIncome ||
-      bridge.total_monthly_income ||
-      bridge.totalMonthlyIncome ||
-      bridge.total_monthly_intake ||
-      bridge.totalMonthlyIntake
-    );
-    if (!income) setTimeout(run, 150);
-  });
-  if (document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", schedule, { once: true });
-  } else {
-    schedule();
-  }
-})();
-</script>
       </div>
       <div class="w-embed w-script">
         <script>
@@ -5169,24 +4900,27 @@ UPDATE
         <script>
 /* ============================================================
   PCSUnited • 2D Housing Calculator
-  v3.5.2 — FULL REPLACEMENT
-  FIXES
-  - Real downpayment amount now wins over stale bridge downPct=0
-  - Hydrates down payment correctly from profile/bridge amount
-  - Writes downPct aliases back into bridge after hydrate/edit
-  - Prevents stale zero percent from overriding valid profile data
+  v3.6.0 — MORTGAGE API SOURCE OF TRUTH
+  UPDATES
+  - Uses /api/mortgage-calculator as source of truth
+  - Writes canonical mortgage result into bridge + local cache
+  - 2C can reuse returned projected_mortgage_amount
+  - Keeps local fallback math if API fails
   - Keeps Detailed Mortgage full takeover behavior
 ============================================================ */
 (() => {
   "use strict";
   //#1) SINGLETON GUARD
-  if (window.PCSU_2D_HOUSING && window.PCSU_2D_HOUSING.__mounted_v352) return;
+  if (window.PCSU_2D_HOUSING && window.PCSU_2D_HOUSING.__mounted_v360) return;
   window.PCSU_2D_HOUSING = window.PCSU_2D_HOUSING || {};
-  window.PCSU_2D_HOUSING.__mounted_v352 = true;
+  window.PCSU_2D_HOUSING.__mounted_v360 = true;
   //#2) STORAGE
   const STORE_KEY_BASE = "pcsunited.housing_calculator.v7";
   const LEGACY_STORE_KEY = "pcsunited.housing_calculator.v6";
   const PROFILE_KEY = "pcsunited.profile.v1";
+  const BRAIN_CACHE_KEY = "pcsunited.user_brain_cache.v1";
+  const DERIVED_HOUSING_KEY = "realtysass.derived.housing_monthly.v1";
+  const MORTGAGE_CACHE_KEY = "realtysass.mortgage_cache.v1";
   const BRIDGE_KEYS = [
     "pcsunited.bridge",
     "pcsunited.bridge.v1",
@@ -5198,7 +4932,17 @@ UPDATE
     legacySaved: "realtysass.loginEmail",
     legacyIdentity: "realtysass.identity"
   };
-  //#3) HELPERS
+  //#3) API
+  function getApiBase(){
+    try{
+      const host = String(window.location.hostname || "").toLowerCase();
+      if (host.endsWith(".webflow.io")) return "https://pcsunited.netlify.app/api";
+    }catch(_){}
+    return "/api";
+  }
+  const API_BASE = getApiBase();
+  const MORTGAGE_ENDPOINT = API_BASE + "/mortgage-calculator";
+  //#4) HELPERS
   const $ = (sel, root = document) => root.querySelector(sel);
   const $$ = (sel, root = document) => Array.from(root.querySelectorAll(sel));
   function readJSON(key, fallback = null){
@@ -5263,6 +5007,24 @@ UPDATE
       if (Number.isFinite(n)) return n;
     }
     return null;
+  }
+  async function postJSON(url, body){
+    const r = await fetch(url, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(body || {})
+    });
+    const text = await r.text();
+    let j = {};
+    try{
+      j = text ? JSON.parse(text) : {};
+    }catch(_){
+      j = {};
+    }
+    if (!r.ok || j.ok === false){
+      throw new Error(j.error || j.message || ("HTTP " + r.status));
+    }
+    return j;
   }
   function getDownPaymentAmount(price, downPct){
     const p = Math.max(0, n0(price));
@@ -5342,7 +5104,10 @@ UPDATE
     const bridges = getAllBridges();
     return bridges.length ? bridges[0] : {};
   }
-  //#4) FINANCE HELPERS
+  function getBrainCache(){
+    return readJSON(BRAIN_CACHE_KEY, null) || {};
+  }
+  //#5) LOCAL FALLBACK FINANCE HELPERS
   function aprFromScore(score){
     const s = Number(score) || 720;
     if (s >= 780) return 6.10;
@@ -5401,7 +5166,18 @@ UPDATE
       totalInterest
     };
   }
-  function buildMortgageScenario(price, downPct, creditScore, termYears, taxAnnual, insAnnual, hoaMonthly, pmiMonthly){
+  function localPmiEstimate(price, loan, downPct, credit){
+    if (downPct >= 20) return 0;
+    let annualRate = 0.0;
+    if (downPct >= 15) annualRate = 0.0035;
+    else if (downPct >= 10) annualRate = 0.0050;
+    else if (downPct >= 5) annualRate = 0.0070;
+    else annualRate = 0.0090;
+    if (credit < 680) annualRate += 0.0010;
+    if (credit < 640) annualRate += 0.0015;
+    return (loan * annualRate) / 12;
+  }
+  function buildMortgageScenarioLocal(price, downPct, creditScore, termYears, taxAnnual, insAnnual, hoaMonthly, pmiMonthly){
     const homePrice = Math.max(0, Number(price) || 0);
     const dpPct = clamp(Number(downPct) || 0, 0, 100);
     const downAmt = Math.round(homePrice * (dpPct / 100));
@@ -5412,29 +5188,47 @@ UPDATE
     const taxes = Math.max(0, Number(taxAnnual) || 0) / 12;
     const ins = Math.max(0, Number(insAnnual) || 0) / 12;
     const hoa = Math.max(0, Number(hoaMonthly) || 0);
-    const pmi = Math.max(0, Number(pmiMonthly) || 0);
+    const pmi = Math.max(0, Number(pmiMonthly) || 0) || localPmiEstimate(homePrice, loan, dpPct, Number(creditScore) || 720);
     const allIn = pi + taxes + ins + hoa + pmi;
     const amort = amortTotals(loan, apr, years);
     return {
-      price: homePrice,
-      downPct: dpPct,
-      down: downAmt,
-      loan,
-      apr,
-      termYears: years,
-      pi,
-      taxes,
-      ins,
-      hoa,
-      pmi,
-      allIn,
-      n: amort.n,
-      totalPI: amort.totalPayments,
-      totalInterest: amort.totalInterest,
-      payoffDate: payoffDateFromNow(amort.n)
+      ok: true,
+      mortgage: {
+        price: homePrice,
+        downpayment: downAmt,
+        downpayment_pct: dpPct,
+        loan_amount: loan,
+        credit_score: Math.round(Number(creditScore) || 720),
+        loan_type: "conventional",
+        apr,
+        term_years: years
+      },
+      monthly: {
+        principal_interest: pi,
+        property_tax: taxes,
+        insurance: ins,
+        hoa,
+        pmi,
+        total_payment: allIn
+      },
+      totals: {
+        months: amort.n,
+        principal_interest_total: amort.totalPayments,
+        total_interest: amort.totalInterest,
+        property_tax_total: taxes * amort.n,
+        insurance_total: ins * amort.n,
+        hoa_total: hoa * amort.n,
+        pmi_total: pmi * amort.n,
+        out_of_pocket_total: amort.totalPayments + (taxes * amort.n) + (ins * amort.n) + (hoa * amort.n) + (pmi * amort.n)
+      },
+      summary: {
+        payment_label: "$" + Math.round(allIn).toLocaleString("en-US"),
+        apr_label: formatApr(apr)
+      },
+      __fallback: true
     };
   }
-  //#5) STATE
+  //#6) STATE
   const state = {
     price: 395000,
     downPct: 10,
@@ -5446,6 +5240,8 @@ UPDATE
     pmi: 0,
     taxManual: false,
     insManual: false,
+    hoaManual: false,
+    pmiManual: false,
     detailsOpen: false
   };
   const dirty = {
@@ -5458,14 +5254,18 @@ UPDATE
     hoa: false,
     pmi: false
   };
-  function syncDerivedDefaults(){
-    if (!state.taxManual) state.taxAnnual = Math.round(state.price * 0.012);
-    if (!state.insManual) state.insAnnual = Math.round(state.price * 0.0035);
-  }
+  const calcState = {
+    loading: false,
+    requestId: 0,
+    result: null
+  };
   function getAuthoritativeDefaults(){
     const saved = readScopedSaved() || {};
     const profile = getProfile();
     const bridge = getPrimaryBridge();
+    const brainCache = getBrainCache();
+    const brain = brainCache?.brain || brainCache || {};
+    const city = brain?.city || {};
     const livePrice = firstPositiveNumber(
       pick(profile, ["projected_home_price", "projectedHomePrice", "price", "homePrice"]),
       pick(bridge, ["projected_home_price", "projectedHomePrice", "price", "homePrice", "housing", "purchasePrice"])
@@ -5494,29 +5294,33 @@ UPDATE
     if (downPct == null && Number.isFinite(explicitPctCandidate) && Number(explicitPctCandidate) > 0) {
       downPct = clamp(Number(explicitPctCandidate), 0, 20);
     }
-    if (downPct == null) {
-      downPct = 10;
-    }
+    if (downPct == null) downPct = 10;
     const liveCredit = firstPositiveNumber(
       pick(profile, ["credit_score", "creditScore", "score", "fico"]),
       pick(bridge, ["credit_score", "creditScore", "score", "fico"])
     );
-    const credit = clamp(
-      Math.round(liveCredit || n0(saved.credit) || 720),
-      580,
-      850
+    const cityTaxAnnual = firstPositiveNumber(
+      pick(city, ["property_tax_annual", "taxAnnual", "tax_annual"])
+    );
+    const cityInsAnnual = firstPositiveNumber(
+      pick(city, ["insurance_annual", "insAnnual"])
+    );
+    const cityHoaMonthly = firstPositiveNumber(
+      pick(city, ["hoa_monthly", "hoaMonthly", "hoa"])
     );
     return {
       price,
       downPct,
-      credit,
+      credit: clamp(Math.round(liveCredit || n0(saved.credit) || 720), 580, 850),
       termYears: clamp(n0(saved.termYears) || 30, 5, 40),
-      taxAnnual: Math.max(0, n0(saved.taxAnnual)),
-      insAnnual: Math.max(0, n0(saved.insAnnual)),
-      hoa: Math.max(0, n0(saved.hoa)),
-      pmi: Math.max(0, n0(saved.pmi)),
+      taxAnnual: Math.max(0, n0(saved.taxAnnual) || cityTaxAnnual || 0),
+      insAnnual: Math.max(0, n0(saved.insAnnual) || cityInsAnnual || 0),
+      hoa: Math.max(0, n0(saved.hoa) || cityHoaMonthly || 0),
+      pmi: Math.max(0, n0(saved.pmi) || 0),
       taxManual: !!saved.taxManual,
       insManual: !!saved.insManual,
+      hoaManual: !!saved.hoaManual,
+      pmiManual: !!saved.pmiManual,
       detailsOpen: !!saved.detailsOpen
     };
   }
@@ -5532,29 +5336,16 @@ UPDATE
       pmi: Math.round(state.pmi),
       taxManual: !!state.taxManual,
       insManual: !!state.insManual,
+      hoaManual: !!state.hoaManual,
+      pmiManual: !!state.pmiManual,
       detailsOpen: !!state.detailsOpen,
       email: getResolvedEmail(),
       ts: Date.now()
     });
   }
-  function syncBridgeMirror(){
-    const downAmt = getDownPaymentAmount(state.price, state.downPct);
-    BRIDGE_KEYS.forEach((key) => {
-      const bridge = readJSON(key, {}) || {};
-      bridge.projected_home_price = Math.round(state.price);
-      bridge.projectedHomePrice = Math.round(state.price);
-      bridge.price = Math.round(state.price);
-      bridge.homePrice = Math.round(state.price);
-      bridge.downpayment = Math.round(downAmt);
-      bridge.downPayment = Math.round(downAmt);
-      bridge.dpAmt = Math.round(downAmt);
-      bridge.downPct = Number(state.downPct);
-      bridge.down_pct = Number(state.downPct);
-      bridge.down_payment_pct = Number(state.downPct);
-      bridge.credit_score = Math.round(state.credit);
-      bridge.creditScore = Math.round(state.credit);
-      writeJSON(key, bridge);
-    });
+  function syncDerivedDefaults(){
+    if (!state.taxManual) state.taxAnnual = Math.round(state.price * 0.012);
+    if (!state.insManual) state.insAnnual = Math.round(state.price * 0.0035);
   }
   function hydrateFromAuthoritative(forceAll = false){
     const next = getAuthoritativeDefaults();
@@ -5569,17 +5360,152 @@ UPDATE
     if (forceAll) {
       state.taxManual = !!next.taxManual;
       state.insManual = !!next.insManual;
+      state.hoaManual = !!next.hoaManual;
+      state.pmiManual = !!next.pmiManual;
     }
     state.detailsOpen = !!next.detailsOpen;
     syncDerivedDefaults();
     persist();
-    syncBridgeMirror();
   }
-  //#6) STYLE INJECTION
+  function getCityDefaultsForApi(){
+    const brainCache = getBrainCache();
+    const brain = brainCache?.brain || brainCache || {};
+    const city = brain?.city || {};
+    const out = {};
+    const taxAnnual = firstPositiveNumber(
+      pick(city, ["property_tax_annual", "taxAnnual", "tax_annual"])
+    );
+    const insuranceAnnual = firstPositiveNumber(
+      pick(city, ["insurance_annual", "insAnnual"])
+    );
+    const hoaMonthly = firstPositiveNumber(
+      pick(city, ["hoa_monthly", "hoaMonthly", "hoa"])
+    );
+    if (taxAnnual > 0) out.property_tax_annual = Math.round(taxAnnual);
+    if (insuranceAnnual > 0) out.insurance_annual = Math.round(insuranceAnnual);
+    if (hoaMonthly > 0) out.hoa_monthly = Math.round(hoaMonthly);
+    return out;
+  }
+  function buildMortgageApiPayload(){
+    const downAmt = getDownPaymentAmount(state.price, state.downPct);
+    return {
+      price: Math.round(state.price),
+      downpayment: Math.round(downAmt),
+      downPct: Number(state.downPct),
+      credit_score: Math.round(state.credit),
+      term_years: Math.round(state.termYears),
+      property_tax_annual: Math.round(state.taxAnnual),
+      insurance_annual: Math.round(state.insAnnual),
+      hoa_monthly: Math.round(state.hoa),
+      pmi_monthly: Math.round(state.pmi),
+      loan_type: "conventional",
+      city_defaults: getCityDefaultsForApi()
+    };
+  }
+  function syncBridgeMortgageResult(result){
+    if (!result || !result.monthly || !result.mortgage) return;
+    const totalPayment = Math.round(n0(result.monthly.total_payment));
+    const pi = Math.round(n0(result.monthly.principal_interest));
+    const tax = Math.round(n0(result.monthly.property_tax));
+    const ins = Math.round(n0(result.monthly.insurance));
+    const hoa = Math.round(n0(result.monthly.hoa));
+    const pmi = Math.round(n0(result.monthly.pmi));
+    const apr = n0(result.mortgage.apr);
+    const downAmt = Math.round(n0(result.mortgage.downpayment));
+    writeJSON(DERIVED_HOUSING_KEY, totalPayment);
+    writeJSON(MORTGAGE_CACHE_KEY, {
+      ts: Date.now(),
+      email: getResolvedEmail(),
+      monthly: totalPayment,
+      monthlyPayment: totalPayment,
+      payment: totalPayment,
+      allIn: totalPayment,
+      principal_interest: pi,
+      property_tax: tax,
+      insurance: ins,
+      hoa,
+      pmi,
+      apr,
+      result
+    });
+    BRIDGE_KEYS.forEach((key) => {
+      const bridge = readJSON(key, {}) || {};
+      bridge.projected_home_price = Math.round(state.price);
+      bridge.projectedHomePrice = Math.round(state.price);
+      bridge.price = Math.round(state.price);
+      bridge.homePrice = Math.round(state.price);
+      bridge.downpayment = downAmt;
+      bridge.downPayment = downAmt;
+      bridge.dpAmt = downAmt;
+      bridge.downPct = Number(state.downPct);
+      bridge.down_pct = Number(state.downPct);
+      bridge.down_payment_pct = Number(state.downPct);
+      bridge.credit_score = Math.round(state.credit);
+      bridge.creditScore = Math.round(state.credit);
+      bridge.projected_mortgage_amount = totalPayment;
+      bridge.projectedMortgageAmount = totalPayment;
+      bridge.housing_monthly = totalPayment;
+      bridge.housingMonthly = totalPayment;
+      bridge.term_years = Math.round(state.termYears);
+      bridge.termYears = Math.round(state.termYears);
+      bridge.property_tax_annual = Math.round(state.taxAnnual);
+      bridge.insurance_annual = Math.round(state.insAnnual);
+      bridge.hoa_monthly = Math.round(state.hoa);
+      bridge.pmi_monthly = Math.round(state.pmi);
+      bridge.apr = apr;
+      bridge.principal_interest = pi;
+      bridge.monthly_property_tax = tax;
+      bridge.monthly_insurance = ins;
+      bridge.monthly_hoa = hoa;
+      bridge.monthly_pmi = pmi;
+      writeJSON(key, bridge);
+      try{
+        window.postMessage({ type: "pcsunited-bridge", payload: bridge }, "*");
+      }catch(_){}
+      try{
+        window.postMessage({ type: "realtysass-bridge", payload: bridge }, "*");
+      }catch(_){}
+    });
+    try{
+      const bridge = readJSON("pcsunited.bridge", {}) || {};
+      window.dispatchEvent(new CustomEvent("pcsunited:bridge-ready", { detail: { bridge } }));
+    }catch(_){}
+  }
+  async function calculateMortgageAuthoritative(){
+    const requestId = ++calcState.requestId;
+    calcState.loading = true;
+    const payload = buildMortgageApiPayload();
+    try{
+      const res = await postJSON(MORTGAGE_ENDPOINT, payload);
+      if (requestId !== calcState.requestId) return calcState.result;
+      calcState.result = res;
+      calcState.loading = false;
+      syncBridgeMortgageResult(res);
+      return res;
+    }catch(err){
+      if (requestId !== calcState.requestId) return calcState.result;
+      console.warn("PCSU 2D mortgage-calculator failed, using local fallback:", err);
+      const fallback = buildMortgageScenarioLocal(
+        state.price,
+        state.downPct,
+        state.credit,
+        state.termYears,
+        state.taxAnnual,
+        state.insAnnual,
+        state.hoa,
+        state.pmi
+      );
+      calcState.result = fallback;
+      calcState.loading = false;
+      syncBridgeMortgageResult(fallback);
+      return fallback;
+    }
+  }
+  //#7) STYLE INJECTION
   function injectStyles(){
-    if (document.getElementById("pcsu-2d-housing-styles-v352")) return;
+    if (document.getElementById("pcsu-2d-housing-styles-v360")) return;
     const style = document.createElement("style");
-    style.id = "pcsu-2d-housing-styles-v352";
+    style.id = "pcsu-2d-housing-styles-v360";
     style.textContent = `
       .pcsu-input-box.pcsu-hcalc-box{
         min-height:60px !important;
@@ -5805,7 +5731,7 @@ UPDATE
     `;
     document.head.appendChild(style);
   }
-  //#7) FIND CARD
+  //#8) FIND CARD
   function findHousingCard(){
     const cards = $$(".pcsu-card");
     for (const card of cards){
@@ -5816,7 +5742,7 @@ UPDATE
     }
     return null;
   }
-  //#8) BUILD UI
+  //#9) BUILD UI
   function setupEditableControls(card){
     const titleSpan = $(".pcsu-card-title span", card);
     const titleSmall = $(".pcsu-card-title small", card);
@@ -5989,7 +5915,7 @@ UPDATE
     refs.tableBody = $("#pcsuMortgageTableBody", card);
     return refs;
   }
-  //#9) CHART UPDATE
+  //#10) CHART UPDATE
   function updateChart(card, monthlyPayment){
     const svg = $(".pcsu-chart svg", card);
     if (!svg) return;
@@ -6028,65 +5954,53 @@ UPDATE
       c.setAttribute("cy", String(points[i][1]));
     });
   }
-  //#10) VERDICT
+  //#11) VERDICT
   function getComfortState(payment){
     const p = Math.max(0, Number(payment) || 0);
     if (p <= 2400) return { label: "Comfortable", cls: "is-good" };
     if (p <= 3100) return { label: "Tight", cls: "is-mid" };
     return { label: "High Risk", cls: "is-bad" };
   }
-  //#11) DETAILED MORTGAGE RENDER
-  function renderDetailedMortgage(refs){
-    if (!refs?.tableBody) return;
-    const m = buildMortgageScenario(
-      state.price,
-      state.downPct,
-      state.credit,
-      state.termYears,
-      state.taxAnnual,
-      state.insAnnual,
-      state.hoa,
-      state.pmi
-    );
-    const taxTot = m.taxes * m.n;
-    const insTot = m.ins * m.n;
-    const hoaTot = m.hoa * m.n;
-    const pmiTot = m.pmi * m.n;
-    const outTot = m.totalPI + taxTot + insTot + hoaTot + pmiTot;
+  //#12) DETAILED MORTGAGE RENDER
+  function renderDetailedMortgage(refs, result){
+    if (!refs?.tableBody || !result) return;
+    const m = result.mortgage || {};
+    const monthly = result.monthly || {};
+    const totals = result.totals || {};
     refs.tableBody.innerHTML = `
       <tr>
-        <td class="muted">Mortgage Payment (P&I)</td>
-        <td class="right">${money(m.pi)}</td>
-        <td class="right">${money(m.totalPI)}</td>
+        <td class="muted">Mortgage Payment (P&amp;I)</td>
+        <td class="right">${money(monthly.principal_interest)}</td>
+        <td class="right">${money(totals.principal_interest_total)}</td>
       </tr>
       <tr>
         <td class="muted">Property Tax</td>
-        <td class="right">${money(m.taxes)}</td>
-        <td class="right">${money(taxTot)}</td>
+        <td class="right">${money(monthly.property_tax)}</td>
+        <td class="right">${money(totals.property_tax_total)}</td>
       </tr>
       <tr>
         <td class="muted">Home Insurance</td>
-        <td class="right">${money(m.ins)}</td>
-        <td class="right">${money(insTot)}</td>
+        <td class="right">${money(monthly.insurance)}</td>
+        <td class="right">${money(totals.insurance_total)}</td>
       </tr>
       <tr>
         <td class="muted">HOA</td>
-        <td class="right">${money(m.hoa)}</td>
-        <td class="right">${money(hoaTot)}</td>
+        <td class="right">${money(monthly.hoa)}</td>
+        <td class="right">${money(totals.hoa_total)}</td>
       </tr>
       <tr>
         <td class="muted">PMI</td>
-        <td class="right">${money(m.pmi)}</td>
-        <td class="right">${money(pmiTot)}</td>
+        <td class="right">${money(monthly.pmi)}</td>
+        <td class="right">${money(totals.pmi_total)}</td>
       </tr>
       <tr>
         <td><b>Total Out-of-Pocket</b></td>
-        <td class="right"><b>${money(m.allIn)}</b></td>
-        <td class="right"><b>${money(outTot)}</b></td>
+        <td class="right"><b>${money(monthly.total_payment)}</b></td>
+        <td class="right"><b>${money(totals.out_of_pocket_total)}</b></td>
       </tr>
     `;
   }
-  //#12) TOGGLE DETAILED VIEW
+  //#13) TOGGLE DETAILED VIEW
   function setDetailedView(refs, open){
     state.detailsOpen = !!open;
     if (refs.detailBtn){
@@ -6102,11 +6016,11 @@ UPDATE
     }
     persist();
   }
-  //#13) RENDER
+  //#14) RENDER
   function render(refs, card){
     if (!refs) return;
     syncDerivedDefaults();
-    const mortgage = buildMortgageScenario(
+    const result = calcState.result || buildMortgageScenarioLocal(
       state.price,
       state.downPct,
       state.credit,
@@ -6116,8 +6030,11 @@ UPDATE
       state.hoa,
       state.pmi
     );
-    const downAmt = getDownPaymentAmount(state.price, state.downPct);
-    const liveApr = aprFromScore(state.credit);
+    const mortgage = result.mortgage || {};
+    const monthly = result.monthly || {};
+    const summary = result.summary || {};
+    const downAmt = Math.round(n0(mortgage.downpayment || getDownPaymentAmount(state.price, state.downPct)));
+    const liveApr = n0(mortgage.apr || aprFromScore(state.credit));
     const livePaymentEl = $("#pcsuLivePayment", card);
     const liveStateEl = $("#pcsuLiveState", card);
     if (refs.price?.input) refs.price.input.value = moneyNoDollar(state.price);
@@ -6130,7 +6047,7 @@ UPDATE
     if (refs.taxAnnualInput) refs.taxAnnualInput.value = moneyNoDollar(state.taxAnnual);
     if (refs.insAnnualInput) refs.insAnnualInput.value = moneyNoDollar(state.insAnnual);
     if (refs.hoaInput) refs.hoaInput.value = moneyNoDollar(state.hoa);
-    if (refs.pmiInput) refs.pmiInput.value = moneyNoDollar(state.pmi);
+    if (refs.pmiInput) refs.pmiInput.value = moneyNoDollar(state.pmi || monthly.pmi || 0);
     [refs.price, refs.downPct, refs.credit].forEach(ref => {
       if (!ref) return;
       let value = 0;
@@ -6144,25 +6061,29 @@ UPDATE
       if (ref.sliderKnob) ref.sliderKnob.style.left = `${pct}%`;
     });
     if (livePaymentEl){
-      livePaymentEl.innerHTML = `$${Math.round(mortgage.allIn).toLocaleString("en-US")} <span>/ mo</span>`;
+      const payment = Math.round(n0(monthly.total_payment));
+      livePaymentEl.innerHTML = `$${payment.toLocaleString("en-US")} <span>/ mo</span>`;
     }
     if (liveStateEl){
-      const verdict = getComfortState(mortgage.allIn);
+      const verdict = getComfortState(monthly.total_payment);
       liveStateEl.textContent = verdict.label;
       liveStateEl.classList.remove("is-good", "is-mid", "is-bad");
       liveStateEl.classList.add(verdict.cls);
     }
-    updateChart(card, mortgage.allIn);
-    renderDetailedMortgage(refs);
+    updateChart(card, monthly.total_payment);
+    renderDetailedMortgage(refs, result);
     setDetailedView(refs, state.detailsOpen);
   }
-  //#14) STATE WRITE HELPERS
+  //#15) STATE WRITE HELPERS
   function commitAfterUserEdit(){
     syncDerivedDefaults();
     persist();
-    syncBridgeMirror();
   }
-  function setFromInput(key, raw, refs, card){
+  async function recalcAndRender(refs, card){
+    await calculateMortgageAuthoritative();
+    render(refs, card);
+  }
+  function setFromInput(key, raw){
     const clean = digitsOnly(raw);
     const value = Number(clean || 0);
     if (key === "price"){
@@ -6188,26 +6109,33 @@ UPDATE
       dirty.insAnnual = true;
     } else if (key === "hoa"){
       state.hoa = Math.max(0, Math.round(value || 0));
+      state.hoaManual = true;
       dirty.hoa = true;
     } else if (key === "pmi"){
       state.pmi = Math.max(0, Math.round(value || 0));
+      state.pmiManual = true;
       dirty.pmi = true;
     }
     commitAfterUserEdit();
-    render(refs, card);
   }
-  //#15) WIRING
+  //#16) WIRING
   function bind(refs, card){
     if (!refs || refs.__wired) return;
     refs.__wired = true;
     Object.values(refs).forEach(ref => {
       if (!ref || !ref.cfg) return;
       if (ref.input && !ref.cfg.readOnly){
-        ref.input.addEventListener("input", () => setFromInput(ref.cfg.key, ref.input.value, refs, card));
-        ref.input.addEventListener("blur", () => setFromInput(ref.cfg.key, ref.input.value, refs, card));
+        ref.input.addEventListener("input", async () => {
+          setFromInput(ref.cfg.key, ref.input.value);
+          await recalcAndRender(refs, card);
+        });
+        ref.input.addEventListener("blur", async () => {
+          setFromInput(ref.cfg.key, ref.input.value);
+          await recalcAndRender(refs, card);
+        });
       }
       if (ref.rangeInput){
-        ref.rangeInput.addEventListener("input", () => {
+        ref.rangeInput.addEventListener("input", async () => {
           const val = Number(ref.rangeInput.value || 0);
           if (ref.cfg.key === "price"){
             state.price = clamp(Math.round(val), 100000, 750000);
@@ -6220,9 +6148,9 @@ UPDATE
             dirty.credit = true;
           }
           commitAfterUserEdit();
-          render(refs, card);
+          await recalcAndRender(refs, card);
         });
-        ref.rangeInput.addEventListener("change", () => {
+        ref.rangeInput.addEventListener("change", async () => {
           const val = Number(ref.rangeInput.value || 0);
           if (ref.cfg.key === "price"){
             state.price = clamp(Math.round(val), 100000, 750000);
@@ -6235,29 +6163,59 @@ UPDATE
             dirty.credit = true;
           }
           commitAfterUserEdit();
-          render(refs, card);
+          await recalcAndRender(refs, card);
         });
       }
     });
     if (refs.termYearsInput){
-      refs.termYearsInput.addEventListener("input", () => setFromInput("termYears", refs.termYearsInput.value, refs, card));
-      refs.termYearsInput.addEventListener("blur", () => setFromInput("termYears", refs.termYearsInput.value, refs, card));
+      refs.termYearsInput.addEventListener("input", async () => {
+        setFromInput("termYears", refs.termYearsInput.value);
+        await recalcAndRender(refs, card);
+      });
+      refs.termYearsInput.addEventListener("blur", async () => {
+        setFromInput("termYears", refs.termYearsInput.value);
+        await recalcAndRender(refs, card);
+      });
     }
     if (refs.taxAnnualInput){
-      refs.taxAnnualInput.addEventListener("input", () => setFromInput("taxAnnual", refs.taxAnnualInput.value, refs, card));
-      refs.taxAnnualInput.addEventListener("blur", () => setFromInput("taxAnnual", refs.taxAnnualInput.value, refs, card));
+      refs.taxAnnualInput.addEventListener("input", async () => {
+        setFromInput("taxAnnual", refs.taxAnnualInput.value);
+        await recalcAndRender(refs, card);
+      });
+      refs.taxAnnualInput.addEventListener("blur", async () => {
+        setFromInput("taxAnnual", refs.taxAnnualInput.value);
+        await recalcAndRender(refs, card);
+      });
     }
     if (refs.insAnnualInput){
-      refs.insAnnualInput.addEventListener("input", () => setFromInput("insAnnual", refs.insAnnualInput.value, refs, card));
-      refs.insAnnualInput.addEventListener("blur", () => setFromInput("insAnnual", refs.insAnnualInput.value, refs, card));
+      refs.insAnnualInput.addEventListener("input", async () => {
+        setFromInput("insAnnual", refs.insAnnualInput.value);
+        await recalcAndRender(refs, card);
+      });
+      refs.insAnnualInput.addEventListener("blur", async () => {
+        setFromInput("insAnnual", refs.insAnnualInput.value);
+        await recalcAndRender(refs, card);
+      });
     }
     if (refs.hoaInput){
-      refs.hoaInput.addEventListener("input", () => setFromInput("hoa", refs.hoaInput.value, refs, card));
-      refs.hoaInput.addEventListener("blur", () => setFromInput("hoa", refs.hoaInput.value, refs, card));
+      refs.hoaInput.addEventListener("input", async () => {
+        setFromInput("hoa", refs.hoaInput.value);
+        await recalcAndRender(refs, card);
+      });
+      refs.hoaInput.addEventListener("blur", async () => {
+        setFromInput("hoa", refs.hoaInput.value);
+        await recalcAndRender(refs, card);
+      });
     }
     if (refs.pmiInput){
-      refs.pmiInput.addEventListener("input", () => setFromInput("pmi", refs.pmiInput.value, refs, card));
-      refs.pmiInput.addEventListener("blur", () => setFromInput("pmi", refs.pmiInput.value, refs, card));
+      refs.pmiInput.addEventListener("input", async () => {
+        setFromInput("pmi", refs.pmiInput.value);
+        await recalcAndRender(refs, card);
+      });
+      refs.pmiInput.addEventListener("blur", async () => {
+        setFromInput("pmi", refs.pmiInput.value);
+        await recalcAndRender(refs, card);
+      });
     }
     if (refs.detailBtn){
       refs.detailBtn.addEventListener("click", (e) => {
@@ -6267,17 +6225,17 @@ UPDATE
     }
     const btn = $("#pcsuTestAffordabilityBtn", card);
     if (btn){
-      btn.addEventListener("click", (e) => {
+      btn.addEventListener("click", async (e) => {
         e.preventDefault();
-        render(refs, card);
+        await recalcAndRender(refs, card);
       });
     }
   }
-  //#16) BOOT
+  //#17) BOOT
   let __booted = false;
   let __refs = null;
   let __card = null;
-  function boot(){
+  async function boot(){
     injectStyles();
     const card = findHousingCard();
     if (!card) return;
@@ -6287,35 +6245,40 @@ UPDATE
     __refs = refs;
     bind(refs, card);
     hydrateFromAuthoritative(true);
+    await calculateMortgageAuthoritative();
     render(refs, card);
     window.PCSU_2D_HOUSING = Object.assign(window.PCSU_2D_HOUSING || {}, {
       __mounted: true,
-      __mounted_v352: true,
+      __mounted_v360: true,
       render: () => render(refs, card),
-      hydrate: () => {
+      hydrate: async () => {
         hydrateFromAuthoritative(true);
+        await calculateMortgageAuthoritative();
         render(refs, card);
       },
-      getState: () => ({ ...state })
+      getState: () => ({ ...state }),
+      getMortgageResult: () => calcState.result
     });
     __booted = true;
   }
   if (document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", boot, { once: true });
+    document.addEventListener("DOMContentLoaded", () => { boot(); }, { once: true });
   } else {
     boot();
   }
   window.addEventListener("pcsunited:bridge-ready", () => {
-    setTimeout(() => {
+    setTimeout(async () => {
       if (!__booted) return boot();
       hydrateFromAuthoritative(true);
+      await calculateMortgageAuthoritative();
       render(__refs, __card);
     }, 80);
   });
   window.addEventListener("pcsunited:unlocked", () => {
-    setTimeout(() => {
+    setTimeout(async () => {
       if (!__booted) return boot();
       hydrateFromAuthoritative(true);
+      await calculateMortgageAuthoritative();
       render(__refs, __card);
     }, 120);
   });

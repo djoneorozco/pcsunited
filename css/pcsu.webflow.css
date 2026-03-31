@@ -12819,7 +12819,10 @@ figcaption {
 
   .text-size-small.text-style-muted60 {
     width: 100%;
+    margin-top: 9px;
     margin-bottom: 60px;
+    margin-left: 0;
+    padding-left: 0;
   }
 
   .text-size-small.text-style-muted60-copy {
@@ -12877,6 +12880,10 @@ figcaption {
     align-items: stretch;
   }
 
+  .spacer-small {
+    margin-left: -20px;
+  }
+
   .overview_features_figma {
     justify-content: space-between;
     align-items: stretch;
@@ -12898,7 +12905,7 @@ figcaption {
   }
 
   .footer {
-    margin-top: -45px;
+    margin-top: -48px;
     margin-bottom: -200px;
     margin-left: 0;
   }
@@ -12961,7 +12968,7 @@ figcaption {
     text-align: center;
     width: 100%;
     margin-bottom: 10px;
-    margin-left: -26px;
+    margin-left: 0;
   }
 
   .nav-dropdown-grid {
@@ -13013,9 +13020,8 @@ figcaption {
   }
 
   .section_heading {
-    margin-top: -21px;
+    margin-top: -33px;
     margin-bottom: 116px;
-    margin-left: 0;
   }
 
   .section_heading.is-centered {
@@ -13070,7 +13076,7 @@ figcaption {
 
   .home1_about_image {
     width: 100%;
-    margin-left: -56px;
+    margin-left: -65px;
     padding-bottom: 0;
   }
 
@@ -13115,7 +13121,7 @@ figcaption {
   }
 
   .post_featured_content {
-    margin-left: 2px;
+    margin-left: -2px;
     padding-left: 1rem;
     padding-right: 1rem;
   }
@@ -13127,7 +13133,7 @@ figcaption {
   }
 
   .about_hero_image {
-    margin-left: -2px;
+    margin-left: 23px;
     padding-left: 2px;
     padding-right: 2px;
   }
@@ -13234,7 +13240,7 @@ figcaption {
   .home1_hero_info {
     width: 120%;
     max-width: 110%;
-    margin-left: -32px;
+    margin-left: -23px;
     padding-left: 10px;
     padding-right: 10px;
   }
@@ -13249,7 +13255,7 @@ figcaption {
     grid-row-gap: 19px;
     text-align: center;
     grid-template-columns: 1fr;
-    margin-left: 14px;
+    margin-left: 0;
   }
 
   .home1_about_metric {
@@ -13260,7 +13266,7 @@ figcaption {
     aspect-ratio: 3 / 2;
     width: 780%;
     height: auto;
-    margin-left: -107px;
+    margin-left: -128px;
   }
 
   .home1_about_metric-info {
@@ -13403,7 +13409,7 @@ figcaption {
     grid-column-gap: 19px;
     grid-row-gap: 19px;
     grid-template-columns: 1fr;
-    margin-left: 20px;
+    margin-left: -5px;
     padding-right: 20px;
   }
 
@@ -13466,7 +13472,7 @@ figcaption {
     grid-row-gap: 0px;
     grid-template-columns: 1fr;
     margin-top: 0;
-    margin-left: -65px;
+    margin-left: -44px;
   }
 
   .about_mision_image {
@@ -13547,7 +13553,7 @@ figcaption {
   .home1_links_grid-2 {
     flex-flow: column;
     margin-bottom: 92px;
-    margin-left: -56px;
+    margin-left: -29px;
   }
 
   .home1_links_card-2 {
@@ -13569,7 +13575,7 @@ figcaption {
   .code-for-create-account {
     width: 100%;
     margin-top: -84px;
-    margin-left: 41px;
+    margin-left: 59px;
   }
 
   .link-block-2, .home3_hero_watch-copy-copy {
@@ -13676,8 +13682,8 @@ figcaption {
   }
 
   .heading-7 {
-    width: 121%;
-    margin-left: -65px;
+    width: 100%;
+    margin-left: 0;
     padding-left: 0;
     font-size: 2.4rem;
   }
@@ -13701,7 +13707,7 @@ figcaption {
 
   .italic-text-2 {
     width: 200%;
-    margin-left: -122px;
+    margin-left: -98px;
     font-size: 1.3rem;
   }
 
@@ -13783,13 +13789,16 @@ figcaption {
   .heading-71 {
     color: var(--color-neutral--shade-800);
     text-align: center;
+    width: 100%;
     margin-top: -8.4rem;
-    margin-left: -2px;
+    margin-left: 8px;
   }
 
   .heading-68 {
     width: 100%;
-    margin-left: 0;
+    margin-left: 11px;
+    padding-left: 3px;
+    padding-right: 2px;
   }
 
   .text-style-badge-2 {
@@ -13797,8 +13806,9 @@ figcaption {
     width: 100%;
     margin-top: -48px;
     margin-bottom: 135px;
-    margin-left: 0;
+    margin-left: 11px;
     padding-left: 5px;
+    padding-right: 5px;
   }
 
   .heading-72 {
@@ -14055,7 +14065,7 @@ figcaption {
     width: 110%;
     margin-top: -3.7rem;
     margin-bottom: 1rem;
-    margin-left: -23px;
+    margin-left: -11px;
     font-size: 3.8rem;
   }
 
@@ -14393,6 +14403,7 @@ figcaption {
 
   .fad-cabinet {
     width: 97%;
+    margin-top: 0;
   }
 
   .padding-global-copy.blogss {
@@ -14612,11 +14623,18 @@ figcaption {
     padding-bottom: 6rem;
   }
 
-  .blogseries.threewrongthigns, .blogseries.padding-section-medium-copy, .blogseries.blogs-series {
+  .blogseries.threewrongthigns, .blogseries.padding-section-medium-copy {
     text-align: center;
     width: 100%;
     padding-top: 6rem;
     padding-bottom: 6rem;
+  }
+
+  .blogseries.blogs-series {
+    text-align: center;
+    width: 100%;
+    padding-top: 6rem;
+    padding-bottom: 9.2rem;
   }
 
   .tabs-3 {
@@ -14709,7 +14727,7 @@ figcaption {
 
   .italic-text-9 {
     width: 95%;
-    margin-left: 0;
+    margin-left: -14px;
     padding-left: 10px;
     padding-right: 10px;
   }
@@ -14783,6 +14801,15 @@ figcaption {
     width: 100%;
     padding-top: 6rem;
     padding-bottom: 6rem;
+  }
+
+  .italic-text-11 {
+    width: 100%;
+    margin-left: -8px;
+  }
+
+  .bold-text {
+    margin-left: 5px;
   }
 }
 

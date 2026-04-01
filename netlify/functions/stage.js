@@ -1,0 +1,641 @@
+// netlify/functions/stage.js
+// PCSUnited • RE-Defined Stage Proxy
+// v2.0.0
+// CommonJS • Node 18+
+//
+// GOALS
+// - Safe CORS for PCSUnited + Webflow preview + localhost
+// - Accepts either data:image/* base64 or http/https image URLs
+// - Validates payload by feature type
+// - Supports upstream proxy with timeout protection
+// - Returns one normalized response shape for the frontend
+// - Keeps a controlled dev fallback for local / preview use
+//
+// OPTIONAL ENV VARS
+// - STAGE_API_URL
+// - STAGE_API_KEY
+// - DECOR8_API_KEY
+// - OPENAI_API_KEY
+// - STAGE_ALLOWED_ORIGINS   (comma-separated)
+// - STAGE_TIMEOUT_MS        (default 25000)
+// - STAGE_ALLOW_DEV_FALLBACK ("true" / "false")
+
+const crypto = require("crypto");
+
+// ============================================================
+// #1) CONFIG
+// ============================================================
+const DEFAULT_ALLOWED_ORIGINS = [
+  "https://pcsunited.com",
+  "https://www.pcsunited.com",
+  "https://pcsunited.netlify.app",
+  "https://pcs-united.webflow.io",
+  "https://new-real-estate-purchase.webflow.io",
+  "https://theorozcorealty.netlify.app",
+  "http://localhost:8888",
+  "http://localhost:3000",
+  "http://127.0.0.1:8888",
+  "http://127.0.0.1:3000",
+];
+
+const EXTRA_ALLOWED_ORIGINS = String(process.env.STAGE_ALLOWED_ORIGINS || "")
+  .split(",")
+  .map(s => s.trim())
+  .filter(Boolean);
+
+const ALLOWED_ORIGINS = Array.from(new Set([
+  ...DEFAULT_ALLOWED_ORIGINS,
+  ...EXTRA_ALLOWED_ORIGINS,
+]));
+
+const ALLOWED_ROOM_TYPES = new Set([
+  "livingroom",
+  "bedroom",
+  "kitchen",
+  "bathroom",
+  "office",
+  "diningroom",
+  "outdoor",
+  "exterior",
+  "entryway",
+  "hallway",
+  "nursery",
+]);
+
+const ALLOWED_STYLES = new Set([
+  "modern",
+  "minimalist",
+  "coastal",
+  "contemporary",
+  "scandinavian",
+  "industrial",
+  "farmhouse",
+  "traditional",
+  "luxury",
+  "transitional",
+  "bohemian",
+]);
+
+const ALLOWED_FEATURES = new Set([
+  "staging",
+  "landscape",
+  "paint",
+]);
+
+const MAX_BODY_BYTES = 6 * 1024 * 1024; // allows modest base64 image payloads
+const MAX_TEXT_LEN = 300;
+const TIMEOUT_MS = Math.max(5000, Number(process.env.STAGE_TIMEOUT_MS || 25000));
+const STAGE_ALLOW_DEV_FALLBACK = String(process.env.STAGE_ALLOW_DEV_FALLBACK || "true").toLowerCase() === "true";
+
+// ============================================================
+// #2) HELPERS
+// ============================================================
+function mkRequestId() {
+  return `stg_${crypto.randomBytes(8).toString("hex")}`;
+}
+
+function getHeader(event, name) {
+  return (
+    event?.headers?.[name] ||
+    event?.headers?.[name.toLowerCase()] ||
+    event?.headers?.[name.toUpperCase()] ||
+    ""
+  );
+}
+
+function getOrigin(event) {
+  return (
+    getHeader(event, "origin") ||
+    event?.multiValueHeaders?.origin?.[0] ||
+    ""
+  ).trim();
+}
+
+function isAllowedOrigin(origin) {
+  return !!origin && ALLOWED_ORIGINS.includes(origin);
+}
+
+function buildCorsHeaders(origin, acrh = "") {
+  const allowOrigin = isAllowedOrigin(origin) ? origin : "https://pcsunited.com";
+  const requested = String(acrh || "")
+    .split(",")
+    .map(h => h.trim())
+    .filter(Boolean);
+
+  const allowHeaders = Array.from(new Set([
+    "Content-Type",
+    "Authorization",
+    "X-Requested-With",
+    "X-Stage-Debug",
+    ...requested,
+  ])).join(", ");
+
+  return {
+    "Access-Control-Allow-Origin": allowOrigin,
+    "Access-Control-Allow-Headers": allowHeaders,
+    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
+    "Access-Control-Max-Age": "86400",
+    "Content-Type": "application/json; charset=utf-8",
+    "Vary": "Origin",
+  };
+}
+
+function json(statusCode, headers, obj) {
+  return {
+    statusCode,
+    headers,
+    body: JSON.stringify(obj),
+  };
+}
+
+function cleanString(value, maxLen = MAX_TEXT_LEN) {
+  if (value == null) return "";
+  return String(value).trim().slice(0, maxLen);
+}
+
+function isHttpUrl(str) {
+  try {
+    const u = new URL(String(str));
+    return u.protocol === "http:" || u.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function isDataImageUrl(str) {
+  return /^data:image\/(png|jpeg|jpg|webp);base64,[a-z0-9+/=\s]+$/i.test(String(str || ""));
+}
+
+function isHexColor(str) {
+  return /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(String(str || "").trim());
+}
+
+function byteLengthUtf8(str) {
+  return Buffer.byteLength(String(str || ""), "utf8");
+}
+
+function allowDevFallback(event, origin) {
+  const host = getHeader(event, "host");
+  const isLocal =
+    origin.startsWith("http://localhost") ||
+    origin.startsWith("http://127.0.0.1") ||
+    String(host).includes("localhost") ||
+    String(host).includes("127.0.0.1");
+
+  const isPreview =
+    origin.includes(".webflow.io") ||
+    origin.includes("netlify.app");
+
+  return STAGE_ALLOW_DEV_FALLBACK && (isLocal || isPreview);
+}
+
+function normalizeStyle(style) {
+  const s = cleanString(style).toLowerCase();
+  return ALLOWED_STYLES.has(s) ? s : "";
+}
+
+function normalizeRoom(room) {
+  const r = cleanString(room).toLowerCase();
+  return ALLOWED_ROOM_TYPES.has(r) ? r : "";
+}
+
+function normalizeFeature(feature) {
+  const f = cleanString(feature).toLowerCase();
+  return ALLOWED_FEATURES.has(f) ? f : "";
+}
+
+function extractFirstImageUrl(data) {
+  return (
+    data?.image_url ||
+    data?.images?.[0]?.url ||
+    data?.info?.images?.[0]?.url ||
+    data?.result?.images?.[0]?.url ||
+    data?.output?.images?.[0]?.url ||
+    data?.data?.images?.[0]?.url ||
+    data?.data?.image_url ||
+    data?.result?.image_url ||
+    data?.output?.image_url ||
+    ""
+  );
+}
+
+function extractImagesArray(data) {
+  const raw =
+    data?.images ||
+    data?.info?.images ||
+    data?.result?.images ||
+    data?.output?.images ||
+    data?.data?.images ||
+    [];
+
+  if (!Array.isArray(raw)) return [];
+  return raw
+    .map(img => {
+      if (typeof img === "string") return { url: img };
+      if (img && typeof img === "object" && img.url) {
+        return {
+          url: img.url,
+          width: Number(img.width) || undefined,
+          height: Number(img.height) || undefined,
+        };
+      }
+      return null;
+    })
+    .filter(Boolean);
+}
+
+function toErrorPayload(requestId, code, message, extra = {}) {
+  return {
+    ok: false,
+    request_id: requestId,
+    code,
+    error: message,
+    ...extra,
+  };
+}
+
+function validatePayload(payload) {
+  const feature = normalizeFeature(payload.feature);
+  const inputImage = cleanString(payload.input_image_url, 8_000_000);
+  const roomType = normalizeRoom(payload.room_type);
+  const designStyle = normalizeStyle(payload.design_style);
+  const paintColorHex = cleanString(payload.paint_color_hex, 20);
+  const source = cleanString(payload.source || "pcsunited-redefined", 80);
+  const email = cleanString(payload.email, 200);
+  const propertyId = cleanString(payload.property_id, 100);
+  const listingAddress = cleanString(payload.listing_address, 250);
+  const city = cleanString(payload.city, 120);
+  const projectTag = cleanString(payload.project_tag, 80);
+  const promptOverride = cleanString(payload.prompt_override, 500);
+
+  if (!feature) {
+    return { ok: false, message: "feature is required and must be staging, landscape, or paint" };
+  }
+
+  if (!inputImage) {
+    return { ok: false, message: "input_image_url is required" };
+  }
+
+  if (!(isHttpUrl(inputImage) || isDataImageUrl(inputImage))) {
+    return { ok: false, message: "input_image_url must be an http/https URL or a data:image base64 URL" };
+  }
+
+  if (isDataImageUrl(inputImage) && byteLengthUtf8(inputImage) > MAX_BODY_BYTES) {
+    return { ok: false, message: "input_image_url is too large" };
+  }
+
+  if (feature === "staging") {
+    if (!roomType) return { ok: false, message: "room_type is required for staging" };
+    if (!designStyle) return { ok: false, message: "design_style is required for staging" };
+  }
+
+  if (feature === "landscape") {
+    // style optional, but if present it must be valid
+    if (payload.design_style && !designStyle) {
+      return { ok: false, message: "design_style is invalid for landscape" };
+    }
+  }
+
+  if (feature === "paint") {
+    if (!roomType) return { ok: false, message: "room_type is required for paint" };
+    if (!paintColorHex || !isHexColor(paintColorHex)) {
+      return { ok: false, message: "paint_color_hex is required for paint and must be a valid hex color" };
+    }
+  }
+
+  return {
+    ok: true,
+    normalized: {
+      feature,
+      input_image_url: inputImage,
+      room_type: roomType || undefined,
+      design_style: designStyle || undefined,
+      paint_color_hex: paintColorHex || undefined,
+      source,
+      email: email || undefined,
+      property_id: propertyId || undefined,
+      listing_address: listingAddress || undefined,
+      city: city || undefined,
+      project_tag: projectTag || undefined,
+      prompt_override: promptOverride || undefined,
+    },
+  };
+}
+
+function buildUpstreamPayload(normalized) {
+  // Keeps the provider-facing payload simple and stable.
+  // If you later need provider-specific remapping, do it here.
+  const out = {
+    feature: normalized.feature,
+    input_image_url: normalized.input_image_url,
+  };
+
+  if (normalized.room_type) out.room_type = normalized.room_type;
+  if (normalized.design_style) out.design_style = normalized.design_style;
+  if (normalized.paint_color_hex) out.paint_color_hex = normalized.paint_color_hex;
+  if (normalized.prompt_override) out.prompt_override = normalized.prompt_override;
+
+  return out;
+}
+
+async function fetchWithTimeout(url, options, timeoutMs) {
+  const controller = new AbortController();
+  const timer = setTimeout(() => controller.abort(), timeoutMs);
+
+  try {
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+    });
+    return response;
+  } finally {
+    clearTimeout(timer);
+  }
+}
+
+function normalizeSuccessResponse({
+  requestId,
+  provider,
+  mode,
+  normalized,
+  upstreamData,
+}) {
+  const images = extractImagesArray(upstreamData);
+  const imageUrl = extractFirstImageUrl(upstreamData) || images[0]?.url || "";
+
+  return {
+    ok: true,
+    request_id: requestId,
+    provider,
+    mode,
+    image_url: imageUrl || null,
+    images: imageUrl && images.length === 0 ? [{ url: imageUrl }] : images,
+    meta: {
+      feature: normalized.feature,
+      room_type: normalized.room_type || null,
+      design_style: normalized.design_style || null,
+      paint_color_hex: normalized.paint_color_hex || null,
+      source: normalized.source || "pcsunited-redefined",
+      property_id: normalized.property_id || null,
+      city: normalized.city || null,
+      listing_address: normalized.listing_address || null,
+      project_tag: normalized.project_tag || null,
+    },
+    raw: upstreamData?.raw ? upstreamData.raw : undefined,
+  };
+}
+
+function makeDevFallback(normalized) {
+  const original = normalized.input_image_url;
+  const demo =
+    isHttpUrl(original) || isDataImageUrl(original)
+      ? original
+      : "https://images.unsplash.com/photo-1505693416388-ac5ce068fe85?w=1600&q=80";
+
+  return {
+    image_url: demo,
+    images: [
+      { url: demo, width: 1600, height: 1067 }
+    ],
+    info: {
+      images: [
+        { url: demo, width: 1600, height: 1067 }
+      ]
+    },
+    note: "Dev fallback active. Configure STAGE_API_URL to use the live image staging provider.",
+  };
+}
+
+// ============================================================
+// #3) HANDLER
+// ============================================================
+module.exports.handler = async (event) => {
+  const requestId = mkRequestId();
+  const origin = getOrigin(event);
+  const acrh = getHeader(event, "access-control-request-headers");
+  const headers = buildCorsHeaders(origin, acrh);
+
+  try {
+    // ----------------------------------------------------------
+    // 3.1) OPTIONS
+    // ----------------------------------------------------------
+    if (event.httpMethod === "OPTIONS") {
+      return { statusCode: 204, headers, body: "" };
+    }
+
+    // ----------------------------------------------------------
+    // 3.2) BASIC ORIGIN CHECK FOR NON-LOCAL REQUESTS
+    // ----------------------------------------------------------
+    const host = getHeader(event, "host");
+    const isLocalHost = String(host).includes("localhost") || String(host).includes("127.0.0.1");
+
+    if (origin && !isAllowedOrigin(origin) && !isLocalHost) {
+      return json(
+        403,
+        headers,
+        toErrorPayload(requestId, "FORBIDDEN_ORIGIN", "Origin not allowed")
+      );
+    }
+
+    // ----------------------------------------------------------
+    // 3.3) HEALTH CHECK
+    // ----------------------------------------------------------
+    if (event.httpMethod === "GET") {
+      return json(200, headers, {
+        ok: true,
+        service: "stage",
+        version: "2.0.0",
+        request_id: requestId,
+      });
+    }
+
+    if (event.httpMethod !== "POST") {
+      return json(
+        405,
+        headers,
+        toErrorPayload(requestId, "METHOD_NOT_ALLOWED", "Method Not Allowed")
+      );
+    }
+
+    // ----------------------------------------------------------
+    // 3.4) BODY GUARD
+    // ----------------------------------------------------------
+    const rawBody = String(event.body || "");
+    if (!rawBody) {
+      return json(
+        400,
+        headers,
+        toErrorPayload(requestId, "BAD_REQUEST", "Missing JSON body")
+      );
+    }
+
+    if (byteLengthUtf8(rawBody) > MAX_BODY_BYTES) {
+      return json(
+        413,
+        headers,
+        toErrorPayload(requestId, "PAYLOAD_TOO_LARGE", "Request body is too large")
+      );
+    }
+
+    let payload = {};
+    try {
+      payload = JSON.parse(rawBody);
+    } catch {
+      return json(
+        400,
+        headers,
+        toErrorPayload(requestId, "BAD_JSON", "Invalid JSON body")
+      );
+    }
+
+    // ----------------------------------------------------------
+    // 3.5) VALIDATE + NORMALIZE INPUT
+    // ----------------------------------------------------------
+    const valid = validatePayload(payload);
+    if (!valid.ok) {
+      return json(
+        400,
+        headers,
+        toErrorPayload(requestId, "BAD_REQUEST", valid.message)
+      );
+    }
+
+    const normalized = valid.normalized;
+    const upstreamPayload = buildUpstreamPayload(normalized);
+
+    // ----------------------------------------------------------
+    // 3.6) UPSTREAM CONFIG
+    // ----------------------------------------------------------
+    const upstreamUrl = cleanString(process.env.STAGE_API_URL, 1000);
+    const apiKey =
+      cleanString(process.env.STAGE_API_KEY, 500) ||
+      cleanString(process.env.DECOR8_API_KEY, 500) ||
+      cleanString(process.env.OPENAI_API_KEY, 500);
+
+    const canUseDevFallback = allowDevFallback(event, origin);
+    const useDevFallback = !upstreamUrl && canUseDevFallback;
+
+    // ----------------------------------------------------------
+    // 3.7) DEV FALLBACK
+    // ----------------------------------------------------------
+    if (useDevFallback) {
+      const mock = makeDevFallback(normalized);
+      return json(200, headers, normalizeSuccessResponse({
+        requestId,
+        provider: "mock",
+        mode: "dev-fallback",
+        normalized,
+        upstreamData: mock,
+      }));
+    }
+
+    if (!upstreamUrl) {
+      return json(
+        503,
+        headers,
+        toErrorPayload(
+          requestId,
+          "UPSTREAM_NOT_CONFIGURED",
+          "Image staging service is not configured"
+        )
+      );
+    }
+
+    // ----------------------------------------------------------
+    // 3.8) CALL UPSTREAM
+    // ----------------------------------------------------------
+    const upstreamHeaders = {
+      "Content-Type": "application/json",
+      "X-Request-Id": requestId,
+    };
+
+    if (apiKey) {
+      upstreamHeaders.Authorization = `Bearer ${apiKey}`;
+    }
+
+    let upstreamResp;
+    try {
+      upstreamResp = await fetchWithTimeout(
+        upstreamUrl,
+        {
+          method: "POST",
+          headers: upstreamHeaders,
+          body: JSON.stringify(upstreamPayload),
+        },
+        TIMEOUT_MS
+      );
+    } catch (err) {
+      const isAbort = err?.name === "AbortError";
+      return json(
+        isAbort ? 504 : 502,
+        headers,
+        toErrorPayload(
+          requestId,
+          isAbort ? "UPSTREAM_TIMEOUT" : "UPSTREAM_FETCH_ERROR",
+          isAbort ? "Upstream image service timed out" : "Failed to reach upstream image service"
+        )
+      );
+    }
+
+    const upstreamText = await upstreamResp.text();
+    let upstreamData;
+    try {
+      upstreamData = upstreamText ? JSON.parse(upstreamText) : {};
+    } catch {
+      upstreamData = { raw: upstreamText };
+    }
+
+    if (!upstreamResp.ok) {
+      return json(
+        upstreamResp.status || 502,
+        headers,
+        toErrorPayload(
+          requestId,
+          "UPSTREAM_ERROR",
+          "Upstream image staging failed",
+          {
+            status: upstreamResp.status || 502,
+            detail: typeof upstreamData === "object" ? upstreamData : { raw: String(upstreamData) },
+          }
+        )
+      );
+    }
+
+    const normalizedResponse = normalizeSuccessResponse({
+      requestId,
+      provider: "upstream",
+      mode: "live",
+      normalized,
+      upstreamData,
+    });
+
+    if (!normalizedResponse.image_url && (!normalizedResponse.images || normalizedResponse.images.length === 0)) {
+      return json(
+        502,
+        headers,
+        toErrorPayload(
+          requestId,
+          "BAD_UPSTREAM_RESPONSE",
+          "Upstream did not return a usable image"
+        )
+      );
+    }
+
+    return json(200, headers, normalizedResponse);
+  } catch (err) {
+    console.error("[stage.js] unhandled", {
+      request_id: requestId,
+      error: String(err?.message || err),
+    });
+
+    return json(
+      500,
+      headers,
+      toErrorPayload(
+        requestId,
+        "SERVER_EXCEPTION",
+        "Server exception"
+      )
+    );
+  }
+};

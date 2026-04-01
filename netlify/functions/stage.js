@@ -1,24 +1,7 @@
 // netlify/functions/stage.js
 // PCSUnited • RE-Defined Stage Proxy
-// v2.0.0
+// v2.0.1
 // CommonJS • Node 18+
-//
-// GOALS
-// - Safe CORS for PCSUnited + Webflow preview + localhost
-// - Accepts either data:image/* base64 or http/https image URLs
-// - Validates payload by feature type
-// - Supports upstream proxy with timeout protection
-// - Returns one normalized response shape for the frontend
-// - Keeps a controlled dev fallback for local / preview use
-//
-// OPTIONAL ENV VARS
-// - STAGE_API_URL
-// - STAGE_API_KEY
-// - DECOR8_API_KEY
-// - OPENAI_API_KEY
-// - STAGE_ALLOWED_ORIGINS   (comma-separated)
-// - STAGE_TIMEOUT_MS        (default 25000)
-// - STAGE_ALLOW_DEV_FALLBACK ("true" / "false")
 
 const crypto = require("crypto");
 
@@ -29,9 +12,16 @@ const DEFAULT_ALLOWED_ORIGINS = [
   "https://pcsunited.com",
   "https://www.pcsunited.com",
   "https://pcsunited.netlify.app",
+
+  // Webflow domains actually used
+  "https://pcsu.webflow.io",
   "https://pcs-united.webflow.io",
   "https://new-real-estate-purchase.webflow.io",
+
+  // Legacy / optional
   "https://theorozcorealty.netlify.app",
+
+  // Local
   "http://localhost:8888",
   "http://localhost:3000",
   "http://127.0.0.1:8888",
@@ -82,10 +72,11 @@ const ALLOWED_FEATURES = new Set([
   "paint",
 ]);
 
-const MAX_BODY_BYTES = 6 * 1024 * 1024; // allows modest base64 image payloads
+const MAX_BODY_BYTES = 6 * 1024 * 1024;
 const MAX_TEXT_LEN = 300;
 const TIMEOUT_MS = Math.max(5000, Number(process.env.STAGE_TIMEOUT_MS || 25000));
-const STAGE_ALLOW_DEV_FALLBACK = String(process.env.STAGE_ALLOW_DEV_FALLBACK || "true").toLowerCase() === "true";
+const STAGE_ALLOW_DEV_FALLBACK =
+  String(process.env.STAGE_ALLOW_DEV_FALLBACK || "true").toLowerCase() === "true";
 
 // ============================================================
 // #2) HELPERS
@@ -116,7 +107,6 @@ function isAllowedOrigin(origin) {
 }
 
 function buildCorsHeaders(origin, acrh = "") {
-  const allowOrigin = isAllowedOrigin(origin) ? origin : "https://pcsunited.com";
   const requested = String(acrh || "")
     .split(",")
     .map(h => h.trim())
@@ -129,6 +119,13 @@ function buildCorsHeaders(origin, acrh = "") {
     "X-Stage-Debug",
     ...requested,
   ])).join(", ");
+
+  // IMPORTANT:
+  // If origin is allowed, echo that exact origin.
+  // Otherwise fall back to the primary live domain.
+  const allowOrigin = isAllowedOrigin(origin)
+    ? origin
+    : "https://pcsunited.com";
 
   return {
     "Access-Control-Allow-Origin": allowOrigin,
@@ -262,11 +259,6 @@ function validatePayload(payload) {
   const paintColorHex = cleanString(payload.paint_color_hex, 20);
   const source = cleanString(payload.source || "pcsunited-redefined", 80);
   const email = cleanString(payload.email, 200);
-  const propertyId = cleanString(payload.property_id, 100);
-  const listingAddress = cleanString(payload.listing_address, 250);
-  const city = cleanString(payload.city, 120);
-  const projectTag = cleanString(payload.project_tag, 80);
-  const promptOverride = cleanString(payload.prompt_override, 500);
 
   if (!feature) {
     return { ok: false, message: "feature is required and must be staging, landscape, or paint" };
@@ -290,7 +282,6 @@ function validatePayload(payload) {
   }
 
   if (feature === "landscape") {
-    // style optional, but if present it must be valid
     if (payload.design_style && !designStyle) {
       return { ok: false, message: "design_style is invalid for landscape" };
     }
@@ -313,18 +304,11 @@ function validatePayload(payload) {
       paint_color_hex: paintColorHex || undefined,
       source,
       email: email || undefined,
-      property_id: propertyId || undefined,
-      listing_address: listingAddress || undefined,
-      city: city || undefined,
-      project_tag: projectTag || undefined,
-      prompt_override: promptOverride || undefined,
     },
   };
 }
 
 function buildUpstreamPayload(normalized) {
-  // Keeps the provider-facing payload simple and stable.
-  // If you later need provider-specific remapping, do it here.
   const out = {
     feature: normalized.feature,
     input_image_url: normalized.input_image_url,
@@ -333,7 +317,6 @@ function buildUpstreamPayload(normalized) {
   if (normalized.room_type) out.room_type = normalized.room_type;
   if (normalized.design_style) out.design_style = normalized.design_style;
   if (normalized.paint_color_hex) out.paint_color_hex = normalized.paint_color_hex;
-  if (normalized.prompt_override) out.prompt_override = normalized.prompt_override;
 
   return out;
 }
@@ -376,12 +359,7 @@ function normalizeSuccessResponse({
       design_style: normalized.design_style || null,
       paint_color_hex: normalized.paint_color_hex || null,
       source: normalized.source || "pcsunited-redefined",
-      property_id: normalized.property_id || null,
-      city: normalized.city || null,
-      listing_address: normalized.listing_address || null,
-      project_tag: normalized.project_tag || null,
     },
-    raw: upstreamData?.raw ? upstreamData.raw : undefined,
   };
 }
 
@@ -416,16 +394,10 @@ module.exports.handler = async (event) => {
   const headers = buildCorsHeaders(origin, acrh);
 
   try {
-    // ----------------------------------------------------------
-    // 3.1) OPTIONS
-    // ----------------------------------------------------------
     if (event.httpMethod === "OPTIONS") {
       return { statusCode: 204, headers, body: "" };
     }
 
-    // ----------------------------------------------------------
-    // 3.2) BASIC ORIGIN CHECK FOR NON-LOCAL REQUESTS
-    // ----------------------------------------------------------
     const host = getHeader(event, "host");
     const isLocalHost = String(host).includes("localhost") || String(host).includes("127.0.0.1");
 
@@ -433,18 +405,15 @@ module.exports.handler = async (event) => {
       return json(
         403,
         headers,
-        toErrorPayload(requestId, "FORBIDDEN_ORIGIN", "Origin not allowed")
+        toErrorPayload(requestId, "FORBIDDEN_ORIGIN", "Origin not allowed", { origin })
       );
     }
 
-    // ----------------------------------------------------------
-    // 3.3) HEALTH CHECK
-    // ----------------------------------------------------------
     if (event.httpMethod === "GET") {
       return json(200, headers, {
         ok: true,
         service: "stage",
-        version: "2.0.0",
+        version: "2.0.1",
         request_id: requestId,
       });
     }
@@ -457,9 +426,6 @@ module.exports.handler = async (event) => {
       );
     }
 
-    // ----------------------------------------------------------
-    // 3.4) BODY GUARD
-    // ----------------------------------------------------------
     const rawBody = String(event.body || "");
     if (!rawBody) {
       return json(
@@ -488,9 +454,6 @@ module.exports.handler = async (event) => {
       );
     }
 
-    // ----------------------------------------------------------
-    // 3.5) VALIDATE + NORMALIZE INPUT
-    // ----------------------------------------------------------
     const valid = validatePayload(payload);
     if (!valid.ok) {
       return json(
@@ -503,9 +466,6 @@ module.exports.handler = async (event) => {
     const normalized = valid.normalized;
     const upstreamPayload = buildUpstreamPayload(normalized);
 
-    // ----------------------------------------------------------
-    // 3.6) UPSTREAM CONFIG
-    // ----------------------------------------------------------
     const upstreamUrl = cleanString(process.env.STAGE_API_URL, 1000);
     const apiKey =
       cleanString(process.env.STAGE_API_KEY, 500) ||
@@ -515,9 +475,6 @@ module.exports.handler = async (event) => {
     const canUseDevFallback = allowDevFallback(event, origin);
     const useDevFallback = !upstreamUrl && canUseDevFallback;
 
-    // ----------------------------------------------------------
-    // 3.7) DEV FALLBACK
-    // ----------------------------------------------------------
     if (useDevFallback) {
       const mock = makeDevFallback(normalized);
       return json(200, headers, normalizeSuccessResponse({
@@ -541,9 +498,6 @@ module.exports.handler = async (event) => {
       );
     }
 
-    // ----------------------------------------------------------
-    // 3.8) CALL UPSTREAM
-    // ----------------------------------------------------------
     const upstreamHeaders = {
       "Content-Type": "application/json",
       "X-Request-Id": requestId,

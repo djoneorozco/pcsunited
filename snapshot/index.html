@@ -15,12 +15,12 @@
 
 <body>
 <!-- =========================================================
-PCS SNAPSHOT v4.2.2 • House of SaSS
-CODE #1 = FULL HTML + CSS ONLY
-UPDATED FOR INDEX.HTML:
-- Removed duplicate font/script tags from body
-- Kept pcs-snapshot-shell wrapper so CSS variables work
-- Added body reset so outer white margin disappears
+PCS SNAPSHOT v5.1.0 • AURORA THEME
+FULL INDEX.HTML
+UPDATED:
+- Full Aurora theme conversion
+- JS logic unchanged
+- Structure and runtime IDs preserved
 ========================================================= -->
 
 <div id="pcs-snapshot-shell">
@@ -29,9 +29,10 @@ UPDATED FOR INDEX.HTML:
   <style>
     body{
       margin:0;
-      background:#050712;
+      background:#091726;
     }
-   /* =========================================================
+
+    /* =========================================================
        //#3.1) SCOPE RESET + TOKENS
     ========================================================= */
     #pcs-snapshot-shell,
@@ -43,24 +44,43 @@ UPDATED FOR INDEX.HTML:
     #pcs-snapshot-shell{
       width:100%;
       display:block;
+
+      --pcs-ink:#f4f8ff;
+      --pcs-ink-2:#ffffff;
+      --pcs-muted:rgba(244,248,255,.78);
+      --pcs-muted-2:rgba(244,248,255,.56);
+
+      --pcs-accent:#66b9ff;
+      --pcs-accent-2:#9de8ff;
+      --pcs-accent-3:#8e88ff;
+      --pcs-ok:#50e5bf;
+      --pcs-warn:#ffb56b;
+      --pcs-bad:#ff7e94;
+      --pcs-coral:#ff9f68;
+
       --pcs-border-06:rgba(255,255,255,.06);
       --pcs-border-07:rgba(255,255,255,.07);
-      --pcs-border-08:rgba(255,255,255,.08);
-      --pcs-border-10:rgba(255,255,255,.10);
+      --pcs-border-08:rgba(255,255,255,.09);
+      --pcs-border-10:rgba(255,255,255,.12);
+
       --pcs-topline-03:rgba(255,255,255,.03);
       --pcs-topline-04:rgba(255,255,255,.04);
+
       --pcs-shadow-inset-soft:inset 0 1px 0 var(--pcs-topline-03);
       --pcs-shadow-inset:inset 0 1px 0 var(--pcs-topline-04);
-      --pcs-shadow-card:0 18px 42px rgba(0,0,0,.30);
-      --pcs-shadow-glass:0 22px 44px rgba(0,0,0,.34);
-      --pcs-shadow-wrap:0 30px 80px rgba(0,0,0,.46);
-      --pcs-grad-glass:linear-gradient(180deg, rgba(14,18,38,.74), rgba(8,12,27,.88));
-      --pcs-grad-card:linear-gradient(180deg, rgba(11,16,34,.76), rgba(7,11,24,.90));
-      --pcs-grad-subcard:linear-gradient(180deg, rgba(12,16,34,.88), rgba(7,10,22,.96));
-      --pcs-grad-panel:linear-gradient(180deg, rgba(10,14,30,.82), rgba(7,10,22,.96));
-      --pcs-grad-pill:linear-gradient(180deg, rgba(13,18,38,.92), rgba(8,11,24,.98));
-      --pcs-grad-deep:linear-gradient(180deg, rgba(12,16,34,.90), rgba(7,10,22,.97));
-      --pcs-grad-box:linear-gradient(180deg, rgba(9,14,34,.72), rgba(6,10,26,.88));
+      --pcs-shadow-card:0 18px 42px rgba(7,14,28,.16);
+      --pcs-shadow-glass:0 22px 44px rgba(7,14,28,.18);
+      --pcs-shadow-wrap:0 34px 100px rgba(6,12,24,.24);
+
+      --pcs-grad-glass:linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
+      --pcs-grad-card:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.045));
+      --pcs-grad-subcard:linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      --pcs-grad-panel:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.035));
+      --pcs-grad-pill:linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05));
+      --pcs-grad-deep:linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.03));
+      --pcs-grad-box:linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.025));
+      --pcs-grad-button:linear-gradient(135deg, rgba(157,232,255,.98), rgba(116,170,255,.94));
+      --pcs-grad-button-soft:linear-gradient(135deg, rgba(80,229,191,.98), rgba(102,185,255,.92));
     }
 
     #pcs-snapshot-shell svg{ display:block; }
@@ -72,15 +92,16 @@ UPDATED FOR INDEX.HTML:
       width:min(1480px,100%);
       margin:0 auto;
       padding:20px;
-      color:#e9ecff;
+      color:var(--pcs-ink);
       background:
-        radial-gradient(1200px 720px at 14% 8%, rgba(52,93,255,.18), transparent 52%),
-        radial-gradient(900px 520px at 86% 16%, rgba(126,239,210,.09), transparent 42%),
-        radial-gradient(900px 700px at 50% 100%, rgba(32,57,125,.18), transparent 58%),
-        linear-gradient(180deg,#060914 0%,#080d19 38%,#070b16 100%);
+        radial-gradient(1100px 640px at 10% 8%, rgba(72,216,255,.19), transparent 54%),
+        radial-gradient(840px 520px at 88% 10%, rgba(255,178,108,.15), transparent 42%),
+        radial-gradient(680px 420px at 96% 14%, rgba(255,130,130,.09), transparent 28%),
+        radial-gradient(860px 560px at 50% 100%, rgba(142,136,255,.14), transparent 52%),
+        linear-gradient(135deg, #0c6478 0%, #173459 34%, #273555 66%, #43344b 100%);
       border-radius:28px;
       border:1px solid var(--pcs-border-07);
-      box-shadow:var(--pcs-shadow-inset),var(--pcs-shadow-wrap);
+      box-shadow:var(--pcs-shadow-wrap);
       overflow:hidden;
       position:relative;
       isolation:isolate;
@@ -92,31 +113,45 @@ UPDATED FOR INDEX.HTML:
       inset:0;
       pointer-events:none;
       background:
-        linear-gradient(90deg, transparent 0%, rgba(95,125,255,.06) 50%, transparent 100%),
-        radial-gradient(circle at 25% 30%, rgba(255,255,255,.05), transparent 28%);
+        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0)),
+        radial-gradient(circle at 22% 18%, rgba(255,255,255,.08), transparent 22%),
+        radial-gradient(circle at 82% 10%, rgba(255,213,150,.07), transparent 16%);
       mix-blend-mode:screen;
-      opacity:.55;
+      opacity:.75;
     }
 
     .pcs-card{
       background:var(--pcs-grad-card);
       border:1px solid var(--pcs-border-08);
-      box-shadow:var(--pcs-shadow-inset),var(--pcs-shadow-card);
+      box-shadow:var(--pcs-shadow-card);
       border-radius:24px;
-      backdrop-filter:blur(14px) saturate(145%);
-      -webkit-backdrop-filter:blur(14px) saturate(145%);
+      backdrop-filter:blur(16px) saturate(135%);
+      -webkit-backdrop-filter:blur(16px) saturate(135%);
+      position:relative;
+      overflow:hidden;
+    }
+
+    .pcs-card::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,0));
+      opacity:.78;
     }
 
     .pcs-subcard{
       background:var(--pcs-grad-subcard);
       border:1px solid var(--pcs-border-07);
       border-radius:20px;
-      box-shadow:var(--pcs-shadow-inset);
+      box-shadow:var(--pcs-shadow-glass);
+      backdrop-filter:blur(12px) saturate(128%);
+      -webkit-backdrop-filter:blur(12px) saturate(128%);
     }
 
     .pcs-title{
       margin:0;
-      color:#f5f7ff;
+      color:var(--pcs-ink-2);
       text-transform:uppercase;
       letter-spacing:.02em;
       font-weight:900;
@@ -126,10 +161,11 @@ UPDATED FOR INDEX.HTML:
       width:5px;
       height:5px;
       border-radius:999px;
-      background:#8ea3df;
+      background:var(--pcs-accent-2);
       display:inline-block;
       margin:0 8px;
       transform:translateY(-1px);
+      box-shadow:0 0 12px rgba(157,232,255,.28);
     }
 
     /* =========================================================
@@ -152,8 +188,8 @@ UPDATED FOR INDEX.HTML:
 
     #pcs-city-line{
       font-size:14px;
-      font-weight:600;
-      color:#c9d3f6;
+      font-weight:700;
+      color:var(--pcs-muted);
       display:block;
     }
 
@@ -168,14 +204,19 @@ UPDATED FOR INDEX.HTML:
       min-height:178px;
       border-radius:24px;
       border:1px solid var(--pcs-border-08);
-      background:linear-gradient(180deg, rgba(10,15,32,.82), rgba(6,10,24,.94));
-      box-shadow:var(--pcs-shadow-inset),0 12px 28px rgba(0,0,0,.20);
+      background:
+        radial-gradient(500px 240px at 14% 0%, rgba(157,232,255,.13), transparent 58%),
+        radial-gradient(340px 160px at 96% 0%, rgba(255,173,108,.08), transparent 48%),
+        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04));
+      box-shadow:0 12px 28px rgba(7,14,28,.14);
       padding:20px 20px 18px;
       display:flex;
       flex-direction:column;
       justify-content:space-between;
       overflow:hidden;
       position:relative;
+      backdrop-filter:blur(14px) saturate(130%);
+      -webkit-backdrop-filter:blur(14px) saturate(130%);
     }
 
     .pts-card::after{
@@ -183,8 +224,8 @@ UPDATED FOR INDEX.HTML:
       position:absolute;
       inset:0;
       pointer-events:none;
-      background:radial-gradient(circle at 18% 18%, rgba(255,255,255,.03), transparent 22%);
-      opacity:.8;
+      background:radial-gradient(circle at 18% 18%, rgba(255,255,255,.04), transparent 22%);
+      opacity:.85;
     }
 
     .pts-card > *{
@@ -207,8 +248,11 @@ UPDATED FOR INDEX.HTML:
       align-items:center;
       justify-content:center;
       border:1px solid var(--pcs-border-10);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.10),0 0 24px rgba(77,121,255,.16);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.12),0 0 24px rgba(102,185,255,.10);
       flex:0 0 58px;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(157,232,255,.26), rgba(102,185,255,.12) 44%, rgba(12,28,46,.20) 100%);
+      color:var(--pcs-accent-2);
     }
 
     .pts-icon svg{
@@ -225,7 +269,7 @@ UPDATED FOR INDEX.HTML:
       font-weight:900;
       letter-spacing:.08em;
       text-transform:uppercase;
-      color:#9eabdd;
+      color:var(--pcs-muted);
     }
 
     .pts-bigline{
@@ -248,7 +292,7 @@ UPDATED FOR INDEX.HTML:
       font-size:14px;
       line-height:1;
       font-weight:700;
-      color:#d8def8;
+      color:var(--pcs-muted);
     }
 
     .pts-body{ margin-top:16px; }
@@ -259,7 +303,7 @@ UPDATED FOR INDEX.HTML:
       font-size:13px;
       line-height:1.45;
       font-weight:700;
-      color:#eef2ff;
+      color:#f2f7ff;
     }
 
     .pts-meta{
@@ -269,35 +313,41 @@ UPDATED FOR INDEX.HTML:
       font-size:12px;
       line-height:1.4;
       font-weight:700;
-      color:#cdd5f3;
+      color:var(--pcs-muted);
     }
 
     .pts-card-income .pts-icon{
-      background:radial-gradient(circle at 30% 30%, rgba(29,94,255,.40), rgba(20,35,88,.95));
-      color:#1f7dff;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(102,185,255,.28), rgba(157,232,255,.10) 42%, rgba(12,28,46,.20) 100%);
+      color:#dff5ff;
     }
 
     .pts-card-income .pts-value,
-    .pts-card-bah .pts-value,
-    .pts-card-market .pts-value{
-      color:#26f0cf;
+    .pts-card-bah .pts-value{
+      color:#eafbff;
     }
 
     .pts-card-bah .pts-icon{
-      background:radial-gradient(circle at 30% 30%, rgba(57,126,255,.42), rgba(20,35,88,.95));
-      color:#b9d7ff;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(157,232,255,.24), rgba(102,185,255,.10) 42%, rgba(12,28,46,.20) 100%);
+      color:#dff5ff;
     }
 
     .pts-card-market .pts-icon{
-      background:radial-gradient(circle at 30% 30%, rgba(31,235,185,.28), rgba(13,68,58,.94));
-      color:#72f1da;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(80,229,191,.18), rgba(255,159,104,.08) 42%, rgba(12,28,46,.20) 100%);
+      color:#f7fdff;
     }
 
-    .pts-card-market .pts-value{ font-size:26px; }
+    .pts-card-market .pts-value{
+      color:#f8fdff;
+      font-size:26px;
+    }
 
     .pts-card-power .pts-icon{
-      background:radial-gradient(circle at 30% 30%, rgba(111,95,255,.26), rgba(34,29,73,.95));
-      color:#ffbf45;
+      background:
+        radial-gradient(circle at 35% 30%, rgba(255,181,107,.20), rgba(233,140,255,.08) 42%, rgba(12,28,46,.20) 100%);
+      color:var(--pcs-warn);
     }
 
     .pts-power-row{
@@ -319,7 +369,7 @@ UPDATED FOR INDEX.HTML:
       font-size:24px;
       line-height:1;
       letter-spacing:.08em;
-      color:#ffc84d;
+      color:var(--pcs-warn);
       white-space:nowrap;
     }
 
@@ -352,7 +402,7 @@ UPDATED FOR INDEX.HTML:
       inset:0;
       pointer-events:none;
       background:
-        linear-gradient(90deg, transparent 0%, rgba(95,125,255,.05) 50%, transparent 100%),
+        linear-gradient(90deg, transparent 0%, rgba(255,255,255,.04) 50%, transparent 100%),
         radial-gradient(circle at 24% 22%, rgba(255,255,255,.04), transparent 24%);
       mix-blend-mode:screen;
       opacity:.55;
@@ -365,7 +415,7 @@ UPDATED FOR INDEX.HTML:
 
     .pcs-current-title{
       margin:0 0 10px;
-      color:#f5f7ff;
+      color:var(--pcs-ink-2);
       font-size:15px;
       line-height:1.15;
       text-transform:uppercase;
@@ -389,10 +439,11 @@ UPDATED FOR INDEX.HTML:
       position:relative;
       border-radius:20px;
       background:
-        radial-gradient(circle at 50% 20%, rgba(102,160,255,.18), transparent 30%),
-        linear-gradient(180deg, rgba(10,14,30,.76), rgba(4,8,20,.95));
+        radial-gradient(circle at 30% 20%, rgba(102,185,255,.20), transparent 55%),
+        radial-gradient(circle at 75% 75%, rgba(157,232,255,.10), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,0));
       border:1px solid var(--pcs-border-08);
-      box-shadow:var(--pcs-shadow-inset),0 12px 32px rgba(0,0,0,.22);
+      box-shadow:var(--pcs-shadow-glass);
     }
 
     .pcs-image-card img{
@@ -421,7 +472,7 @@ UPDATED FOR INDEX.HTML:
       text-transform:uppercase;
       letter-spacing:.14em;
       white-space:nowrap;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.03),0 8px 18px rgba(0,0,0,.18);
+      box-shadow:0 8px 18px rgba(7,14,28,.14);
     }
 
     .pcs-image-overlay{
@@ -429,7 +480,7 @@ UPDATED FOR INDEX.HTML:
       inset:auto 0 0 0;
       z-index:2;
       padding:12px 12px 10px;
-      background:linear-gradient(180deg, rgba(4,6,15,0) 0%, rgba(4,6,15,.18) 24%, rgba(4,6,15,.76) 100%);
+      background:linear-gradient(180deg, rgba(4,6,15,0) 0%, rgba(4,6,15,.14) 24%, rgba(11,18,31,.62) 100%);
       text-align:center;
     }
 
@@ -441,17 +492,17 @@ UPDATED FOR INDEX.HTML:
       letter-spacing:.04em;
       text-transform:uppercase;
       color:#fff;
-      text-shadow:0 8px 24px rgba(0,0,0,.55);
+      text-shadow:0 8px 24px rgba(0,0,0,.24);
     }
 
     .pcs-image-tagline{
       display:block;
       margin-top:4px;
-      color:#f3c98a;
+      color:var(--pcs-accent-2);
       font-size:10px;
       line-height:1.25;
       font-weight:700;
-      text-shadow:0 8px 22px rgba(0,0,0,.45);
+      text-shadow:0 8px 22px rgba(0,0,0,.18);
     }
 
     .pcs-info-card{
@@ -470,8 +521,8 @@ UPDATED FOR INDEX.HTML:
       padding:10px;
       border-radius:14px;
       border:1px solid var(--pcs-border-07);
-      background:var(--pcs-grad-card);
-      box-shadow:var(--pcs-shadow-inset-soft),0 8px 18px rgba(0,0,0,.16);
+      background:rgba(255,255,255,.08);
+      box-shadow:0 8px 18px rgba(7,14,28,.12);
     }
 
     .pcs-brief-banner-icon{
@@ -482,10 +533,10 @@ UPDATED FOR INDEX.HTML:
       display:flex;
       align-items:center;
       justify-content:center;
-      color:#eef7ff;
-      background:radial-gradient(circle at 30% 30%, #88d9ff, #426cff);
+      color:#0a1626;
+      background:var(--pcs-grad-button);
       border:1px solid rgba(255,255,255,.12);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 0 16px rgba(91,141,255,.28);
+      box-shadow:0 0 16px rgba(102,185,255,.10);
       flex:0 0 22px;
     }
 
@@ -511,7 +562,7 @@ UPDATED FOR INDEX.HTML:
       font-size:10px;
       line-height:1.35;
       font-weight:600;
-      color:#dce4ff;
+      color:#eef5ff;
     }
 
     .pcs-mini-section{
@@ -519,7 +570,7 @@ UPDATED FOR INDEX.HTML:
       border:1px solid var(--pcs-border-07);
       background:var(--pcs-grad-panel);
       padding:9px;
-      box-shadow:var(--pcs-shadow-inset-soft);
+      box-shadow:0 8px 16px rgba(7,14,28,.10);
     }
 
     .pcs-mini-head{
@@ -550,7 +601,7 @@ UPDATED FOR INDEX.HTML:
 
     .pcs-mini-head-title{
       margin:0;
-      color:#e9ecff;
+      color:#f2f7ff;
       font-size:10px;
       font-weight:900;
       text-transform:uppercase;
@@ -569,14 +620,14 @@ UPDATED FOR INDEX.HTML:
       padding:8px 8px 7px;
       border:1px solid var(--pcs-border-06);
       background:var(--pcs-grad-deep);
-      box-shadow:var(--pcs-shadow-inset-soft);
+      box-shadow:inset 0 14px 28px rgba(255,255,255,.01);
     }
 
     .pcs-mini-label{
       font-size:9px;
       line-height:1.1;
       font-weight:800;
-      color:#cfd8f5;
+      color:#edf4ff;
       margin-bottom:5px;
       display:flex;
       align-items:center;
@@ -602,7 +653,8 @@ UPDATED FOR INDEX.HTML:
       font-size:9px;
       line-height:1.1;
       font-weight:700;
-      color:#c7d0ee;
+      color:#edf4ff;
+      opacity:.86;
     }
 
     .pcs-mini-list{
@@ -620,7 +672,7 @@ UPDATED FOR INDEX.HTML:
       font-size:10px;
       line-height:1.3;
       font-weight:600;
-      color:#dbe3ff;
+      color:#f2f7ff;
     }
 
     .pcs-mini-dot{
@@ -629,8 +681,8 @@ UPDATED FOR INDEX.HTML:
       min-width:6px;
       border-radius:999px;
       margin-top:4px;
-      background:radial-gradient(circle at 30% 30%, #77c9ff, #4a66ff);
-      box-shadow:0 0 10px rgba(90,145,255,.28);
+      background:linear-gradient(135deg, var(--pcs-accent-2), var(--pcs-accent-3));
+      box-shadow:0 0 10px rgba(102,185,255,.14);
       flex:0 0 6px;
     }
 
@@ -639,7 +691,7 @@ UPDATED FOR INDEX.HTML:
       padding:9px 9px 8px;
       border:1px solid var(--pcs-border-06);
       background:var(--pcs-grad-deep);
-      box-shadow:var(--pcs-shadow-inset-soft);
+      box-shadow:inset 0 14px 28px rgba(255,255,255,.01);
       align-self:end;
     }
 
@@ -654,8 +706,8 @@ UPDATED FOR INDEX.HTML:
       width:10px;
       height:10px;
       border-radius:999px;
-      background:#77e59e;
-      box-shadow:0 0 14px rgba(119,229,158,.36);
+      background:var(--pcs-ok);
+      box-shadow:0 0 14px rgba(80,229,191,.22);
       flex:0 0 10px;
     }
 
@@ -664,7 +716,7 @@ UPDATED FOR INDEX.HTML:
       font-size:11px;
       line-height:1.15;
       font-weight:900;
-      color:#8ef3c5;
+      color:#d2fff3;
       text-transform:uppercase;
       letter-spacing:.05em;
     }
@@ -674,7 +726,7 @@ UPDATED FOR INDEX.HTML:
       font-size:10px;
       line-height:1.35;
       font-weight:600;
-      color:#e7eeff;
+      color:#f2f7ff;
     }
 
     /* =========================================================
@@ -699,7 +751,7 @@ UPDATED FOR INDEX.HTML:
       font-weight:900;
       text-transform:uppercase;
       letter-spacing:.03em;
-      color:#f5f7ff;
+      color:#fff;
       margin:0;
     }
 
@@ -711,7 +763,7 @@ UPDATED FOR INDEX.HTML:
       border-radius:14px;
       background:var(--pcs-grad-pill);
       border:1px solid var(--pcs-border-08);
-      box-shadow:var(--pcs-shadow-inset-soft);
+      box-shadow:0 8px 16px rgba(7,14,28,.10);
       white-space:nowrap;
     }
 
@@ -726,7 +778,7 @@ UPDATED FOR INDEX.HTML:
 
     #pcs-bedroom-value{
       font-size:30px;
-      color:#e9ecff;
+      color:#fff;
       font-weight:900;
       letter-spacing:-.04em;
       line-height:1;
@@ -735,7 +787,8 @@ UPDATED FOR INDEX.HTML:
     .pcs-bedroom-label{
       margin-top:3px;
       font-size:10px;
-      color:#c0c9eb;
+      color:#f2f7ff;
+      opacity:.82;
       font-weight:800;
       letter-spacing:.12em;
       text-transform:uppercase;
@@ -752,8 +805,8 @@ UPDATED FOR INDEX.HTML:
       height:16px;
       border-radius:6px;
       border:1px solid var(--pcs-border-10);
-      background:rgba(255,255,255,.06);
-      color:#f5f7ff;
+      background:rgba(255,255,255,.08);
+      color:#fff;
       font-size:9px;
       font-weight:900;
       line-height:1;
@@ -763,10 +816,10 @@ UPDATED FOR INDEX.HTML:
       cursor:pointer;
       padding:0;
       appearance:none;
-      box-shadow:var(--pcs-shadow-inset-soft);
+      box-shadow:0 4px 10px rgba(7,14,28,.08);
     }
 
-    .pcs-bedroom-btn:hover{ background:rgba(255,255,255,.10); }
+    .pcs-bedroom-btn:hover{ background:rgba(255,255,255,.12); }
     .pcs-bedroom-btn:active{ transform:translateY(1px); }
 
     .pcs-afford-grid{
@@ -784,20 +837,20 @@ UPDATED FOR INDEX.HTML:
     #pcs-afford-headline{
       font-size:28px;
       font-weight:900;
-      color:#8ef3c5;
+      color:var(--pcs-ok);
       line-height:1.08;
       letter-spacing:-.025em;
       margin-bottom:10px;
     }
 
     #pcs-afford-headline span{
-      color:#dff6ea;
+      color:#fff;
       font-weight:800;
     }
 
     #pcs-afford-subline{
       font-size:14px;
-      color:#d8e2ff;
+      color:#f2f7ff;
       font-weight:600;
       line-height:1.35;
       margin-bottom:14px;
@@ -812,7 +865,7 @@ UPDATED FOR INDEX.HTML:
       display:flex;
       align-items:flex-start;
       gap:10px;
-      color:#dfe6ff;
+      color:#f2f7ff;
       font-size:13px;
       line-height:1.45;
       font-weight:600;
@@ -829,8 +882,8 @@ UPDATED FOR INDEX.HTML:
       font-size:12px;
       margin-top:1px;
       color:#08111f;
-      background:radial-gradient(circle at 30% 30%, #9ef7d0, #68b3ff);
-      box-shadow:0 0 14px rgba(102,170,255,.28);
+      background:var(--pcs-grad-button);
+      box-shadow:0 0 14px rgba(102,170,255,.14);
     }
 
     .pcs-check strong{
@@ -863,8 +916,8 @@ UPDATED FOR INDEX.HTML:
       border-radius:50%;
       position:relative;
       transform:rotate(-8deg);
-      background:conic-gradient(#4f7fff 0deg 72deg,#5774ff 72deg 135deg,#203c8d 135deg 192deg,#d3af58 192deg 232deg,#4ba2b6 232deg 282deg,#57b293 282deg 360deg);
-      box-shadow:inset 0 10px 22px rgba(255,255,255,.08),inset 0 -18px 30px rgba(0,0,0,.28),0 22px 46px rgba(0,0,0,.34);
+      background:conic-gradient(#66b9ff 0deg 72deg,#8edbff 72deg 135deg,#50e5bf 135deg 192deg,#a186ff 192deg 232deg,#ff9f68 232deg 282deg,#7bc9ff 282deg 360deg);
+      box-shadow:inset 0 10px 22px rgba(255,255,255,.12),inset 0 -18px 30px rgba(0,0,0,.12),0 22px 46px rgba(7,14,28,.14);
     }
 
     .pcs-donut::before{
@@ -872,8 +925,8 @@ UPDATED FOR INDEX.HTML:
       position:absolute;
       inset:56px;
       border-radius:50%;
-      background:radial-gradient(circle at 50% 38%, rgba(33,44,78,.96), rgba(8,12,27,.98));
-      box-shadow:inset 0 2px 10px rgba(255,255,255,.04),0 0 0 8px rgba(255,255,255,.025);
+      background:radial-gradient(circle at 50% 38%, rgba(31,46,75,.84), rgba(14,22,36,.88));
+      box-shadow:inset 0 2px 10px rgba(255,255,255,.04),0 0 0 8px rgba(255,255,255,.03);
     }
 
     .pcs-donut-center{
@@ -895,7 +948,7 @@ UPDATED FOR INDEX.HTML:
     #pcs-donut-buffer{
       font-size:20px;
       font-weight:900;
-      color:#98e3ff;
+      color:#fff;
       line-height:1;
       letter-spacing:-.03em;
       margin-bottom:4px;
@@ -914,8 +967,8 @@ UPDATED FOR INDEX.HTML:
       position:absolute;
       font-size:16px;
       font-weight:900;
-      color:#f7f9ff;
-      text-shadow:0 5px 18px rgba(0,0,0,.48);
+      color:#fff;
+      text-shadow:0 5px 18px rgba(0,0,0,.18);
       z-index:4;
       letter-spacing:-.02em;
     }
@@ -924,7 +977,7 @@ UPDATED FOR INDEX.HTML:
       margin-top:14px;
       font-size:13px;
       font-weight:700;
-      color:#dfe6ff;
+      color:#f2f7ff;
       line-height:1.45;
       padding-top:12px;
       border-top:1px solid var(--pcs-border-08);
@@ -949,7 +1002,7 @@ UPDATED FOR INDEX.HTML:
 
     .pcs-trend-sub{
       font-size:13px;
-      color:#b9c5eb;
+      color:var(--pcs-muted);
       font-weight:600;
       margin-bottom:12px;
     }
@@ -965,28 +1018,28 @@ UPDATED FOR INDEX.HTML:
       border:none;
       padding:9px 16px;
       border-radius:999px;
-      background:rgba(255,255,255,.06);
+      background:rgba(255,255,255,.08);
       border:1px solid var(--pcs-border-08);
-      color:#dce4ff;
+      color:#f2f7ff;
       font-size:12px;
       font-weight:800;
       letter-spacing:.05em;
       text-transform:uppercase;
       cursor:pointer;
-      box-shadow:var(--pcs-shadow-inset-soft);
+      box-shadow:0 6px 12px rgba(7,14,28,.08);
     }
 
     .trend-btn.active{
       color:#08111e;
-      border-color:rgba(173,255,223,.30);
-      background:linear-gradient(180deg, rgba(166,246,218,.96), rgba(130,218,195,.92));
+      border-color:rgba(157,232,255,.40);
+      background:var(--pcs-grad-button);
     }
 
     #pcs-trend-chart-apex{
       min-height:232px;
       margin-top:2px;
       border-radius:18px;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
       border:1px solid var(--pcs-border-06);
       padding:6px 8px 0;
       overflow:hidden;
@@ -996,7 +1049,7 @@ UPDATED FOR INDEX.HTML:
       margin-top:12px;
       font-size:14px;
       font-weight:700;
-      color:#8ef3c5;
+      color:#fff;
       line-height:1.4;
     }
 
@@ -1029,28 +1082,28 @@ UPDATED FOR INDEX.HTML:
       border:none;
       padding:10px 8px;
       border-radius:12px;
-      background:rgba(255,255,255,.06);
+      background:rgba(255,255,255,.08);
       border:1px solid var(--pcs-border-08);
-      color:#dce4ff;
+      color:#f2f7ff;
       font-size:12px;
       font-weight:800;
       letter-spacing:.05em;
       text-transform:uppercase;
       cursor:pointer;
-      box-shadow:var(--pcs-shadow-inset-soft);
+      box-shadow:0 6px 12px rgba(7,14,28,.08);
     }
 
     .pcs-ls-tab.active{
       color:#08111e;
-      border-color:rgba(173,255,223,.30);
-      background:linear-gradient(180deg, rgba(166,246,218,.96), rgba(130,218,195,.92));
+      border-color:rgba(157,232,255,.40);
+      background:var(--pcs-grad-button);
     }
 
     .pcs-ls-status{
       min-height:18px;
       font-size:12px;
       font-weight:900;
-      color:#8ef3c5;
+      color:#d2fff3;
       line-height:1.3;
       letter-spacing:.04em;
       margin-bottom:10px;
@@ -1061,7 +1114,7 @@ UPDATED FOR INDEX.HTML:
       height:220px;
       margin-top:2px;
       border-radius:18px;
-      background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01));
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015));
       border:1px solid var(--pcs-border-06);
       padding:8px 10px 6px;
       overflow:hidden;
@@ -1086,7 +1139,7 @@ UPDATED FOR INDEX.HTML:
       padding:14px;
       background:var(--pcs-grad-pill);
       border:1px solid var(--pcs-border-08);
-      box-shadow:var(--pcs-shadow-inset-soft);
+      box-shadow:0 8px 16px rgba(7,14,28,.10);
     }
 
     #pcs-ls-main{
@@ -1102,7 +1155,7 @@ UPDATED FOR INDEX.HTML:
       font-size:13px;
       line-height:1.35;
       font-weight:700;
-      color:#d7e0ff;
+      color:#f2f7ff;
       margin:0 0 10px;
     }
 
@@ -1110,7 +1163,7 @@ UPDATED FOR INDEX.HTML:
       font-size:18px;
       line-height:1.1;
       font-weight:900;
-      color:#8ef3c5;
+      color:#d2fff3;
       margin:0 0 10px;
     }
 
@@ -1118,7 +1171,7 @@ UPDATED FOR INDEX.HTML:
       font-size:13px;
       line-height:1.45;
       font-weight:700;
-      color:#e9ecff;
+      color:#fff;
       margin:0;
     }
 
@@ -1133,7 +1186,7 @@ UPDATED FOR INDEX.HTML:
       padding:12px 14px;
       background:var(--pcs-grad-pill);
       border:1px solid var(--pcs-border-08);
-      box-shadow:var(--pcs-shadow-inset-soft);
+      box-shadow:0 8px 16px rgba(7,14,28,.10);
       display:flex;
       align-items:center;
       justify-content:space-between;
@@ -1144,7 +1197,8 @@ UPDATED FOR INDEX.HTML:
       font-size:11px;
       line-height:1.2;
       font-weight:800;
-      color:#cdd5f3;
+      color:#f2f7ff;
+      opacity:.84;
       text-transform:uppercase;
       letter-spacing:.08em;
     }
@@ -2055,11 +2109,11 @@ UPDATED FOR INDEX.HTML:
     }).filter(Boolean);
 
     trendChart = new ApexCharts(chartEl, {
-      chart:{ type:"line", height:200, foreColor:"#e9ecff", toolbar:{ show:false } },
-      stroke:{ width:3, curve:"smooth", colors:["#8ef3c5"] },
+      chart:{ type:"line", height:200, foreColor:"#f4f8ff", toolbar:{ show:false } },
+      stroke:{ width:3, curve:"smooth", colors:["#9de8ff"] },
       series:[{ name:"Median Sale Price", data:seriesData }],
-      xaxis:{ type:"datetime", labels:{ style:{ colors:"#e9ecff" } } },
-      yaxis:{ labels:{ style:{ colors:"#e9ecff" }, formatter:v => "$" + Math.round(v).toLocaleString() } },
+      xaxis:{ type:"datetime", labels:{ style:{ colors:"#f4f8ff" } } },
+      yaxis:{ labels:{ style:{ colors:"#f4f8ff" }, formatter:v => "$" + Math.round(v).toLocaleString() } },
       tooltip:{ theme:"dark", x:{ format:"MMM yyyy" }, y:{ formatter:v => "$" + Math.round(v).toLocaleString() } },
       grid:{ borderColor:"rgba(255,255,255,0.08)" }
     });
@@ -2221,7 +2275,7 @@ UPDATED FOR INDEX.HTML:
     const donut = $("#pcs-afford-donut");
     if (!donut) return;
 
-    donut.style.background = `conic-gradient(#4f7fff 0deg ${s1}deg,#5774ff ${s1}deg ${s2}deg,#203c8d ${s2}deg ${s3}deg,#d3af58 ${s3}deg ${s4}deg,#57b293 ${s4}deg ${s5}deg)`;
+    donut.style.background = `conic-gradient(#66b9ff 0deg ${s1}deg,#8edbff ${s1}deg ${s2}deg,#50e5bf ${s2}deg ${s3}deg,#a186ff ${s3}deg ${s4}deg,#ff9f68 ${s4}deg ${s5}deg)`;
 
     const slices = [
       { selector: "#pcs-amt-mortgage", value: values[0] },
@@ -2403,10 +2457,10 @@ UPDATED FOR INDEX.HTML:
         datasets: [
           {
             data: cfg.points,
-            borderColor: "#8fd4ff",
+            borderColor: "#9de8ff",
             borderWidth: 3,
             pointRadius: 4,
-            pointBackgroundColor: "#8fd4ff",
+            pointBackgroundColor: "#9de8ff",
             pointBorderColor: "#ffffff",
             pointBorderWidth: 1.5,
             tension: 0.35,
@@ -2430,12 +2484,12 @@ UPDATED FOR INDEX.HTML:
         plugins: { legend: { display: false } },
         scales: {
           y: {
-            ticks: { color: "#e9ecff", callback: v => money(v) },
+            ticks: { color: "#f4f8ff", callback: v => money(v) },
             grid: { color: "rgba(255,255,255,.08)" },
             border: { display: false }
           },
           x: {
-            ticks: { color: "#e9ecff" },
+            ticks: { color: "#f4f8ff" },
             grid: { display: false },
             border: { display: false }
           }
@@ -2528,7 +2582,7 @@ UPDATED FOR INDEX.HTML:
     init().catch(err => {
       console.error("PCS Snapshot error:", err);
       const wrap = document.getElementById("pcs-snapshot-wrap");
-      if (wrap) wrap.innerHTML = "<div style='color:#e9ecff;font-size:14px;padding:24px;'>PCS Snapshot is temporarily unavailable. Try again later.</div>";
+      if (wrap) wrap.innerHTML = "<div style='color:#f4f8ff;font-size:14px;padding:24px;'>PCS Snapshot is temporarily unavailable. Try again later.</div>";
     });
   }
 
@@ -2538,4 +2592,4 @@ UPDATED FOR INDEX.HTML:
 </script>
 
 </body>
-</html>  
+</html>

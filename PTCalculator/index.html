@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Air Force PT Calculator • PCSUnited</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./ptcalculator.css" />
+</head>
+<body>
+  <div id="af-pt-shell">
+    <div class="afpt-stage">
+      <div class="app">
+
+        <div class="topbar">
+          <div class="title-wrap">
+            <h1 class="title">Air Force PT Calculator</h1>
+            <div class="subtitle">Score your official fitness components</div>
+          </div>
+
+          <div class="gender-corner glass">
+            <div class="mini-label">Gender</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="gender">
+                  <option value="male" selected>Male</option>
+                  <option value="female">Female</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="height-inline">
+              <div class="height-head">
+                <div class="height-label">Height</div>
+                <div class="height-value" id="heightValue">72 in</div>
+              </div>
+              <input id="heightSlider" class="mini-slider" type="range" min="56" max="80" value="72" step="1">
+              <div class="mini-ticks">
+                <span>56</span>
+                <span>62</span>
+                <span>68</span>
+                <span>74</span>
+                <span>80</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="summary-grid">
+          <div class="mini-card glass">
+            <div class="mini-label">Age Group</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="ageGroup">
+                  <option>Under 25</option>
+                  <option>25–29</option>
+                  <option>30–34</option>
+                  <option>35–39</option>
+                  <option selected>40–44</option>
+                  <option>45–49</option>
+                  <option>50–54</option>
+                  <option>55–59</option>
+                  <option>60+</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">Cardio Event</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="cardioEvent">
+                  <option selected>2.0 Mile Run</option>
+                  <option>20m HAMR</option>
+                  <option>2 km Walk</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">Strength Event</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="strengthEvent">
+                  <option selected>Push-Ups</option>
+                  <option>Hand-Release Push-Ups</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">Endurance Event</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="enduranceEvent">
+                  <option selected>Sit-Ups</option>
+                  <option>Cross-Legged Reverse Crunch</option>
+                  <option>Forearm Plank</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="main-grid">
+          <section class="panel glass">
+            <h2 class="panel-title">Component Inputs</h2>
+            <div class="panel-rule"></div>
+
+            <div class="input-group">
+              <div class="row-head">
+                <div class="row-label">Waist</div>
+                <div class="row-value" id="waistValue">32 in</div>
+              </div>
+              <input id="waistSlider" class="slider mint-track" type="range" min="24" max="55" value="32" step="1">
+              <div class="ticks">
+                <span>24</span>
+                <span>29</span>
+                <span>34</span>
+                <span>39</span>
+                <span>44</span>
+                <span>49</span>
+                <span>55</span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="row-head">
+                <div>
+                  <div class="row-label">Strength</div>
+                  <div class="sub-value" id="strengthModeLabel">Push-Ups</div>
+                </div>
+                <div class="row-value" id="strengthValue">44 reps</div>
+              </div>
+              <input id="strengthSlider" class="slider peach-track" type="range" min="0" max="80" value="44" step="1">
+              <div class="ticks">
+                <span>0</span>
+                <span>15</span>
+                <span>30</span>
+                <span>45</span>
+                <span>60</span>
+                <span>80</span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="row-head">
+                <div>
+                  <div class="row-label">Core</div>
+                  <div class="sub-value" id="coreModeLabel">Sit-Ups</div>
+                </div>
+                <div class="row-value" id="coreValue">38 reps</div>
+              </div>
+              <input id="coreSlider" class="slider peach-track" type="range" min="0" max="80" value="38" step="1">
+              <div class="ticks">
+                <span>0</span>
+                <span>15</span>
+                <span>30</span>
+                <span>45</span>
+                <span>60</span>
+                <span>80</span>
+              </div>
+            </div>
+
+            <div class="input-group">
+              <div class="row-head">
+                <div>
+                  <div class="row-label">Cardio</div>
+                  <div class="sub-value" id="cardioModeLabel">2.0 Mile Run</div>
+                </div>
+                <div class="row-value" id="cardioValue">16:45</div>
+              </div>
+              <input id="cardioSlider" class="slider teal-track" type="range" min="750" max="1260" value="1005" step="1">
+              <div class="ticks">
+                <span>12:30</span>
+                <span>14:00</span>
+                <span>15:30</span>
+                <span>17:00</span>
+                <span>18:30</span>
+                <span>21:00</span>
+              </div>
+            </div>
+
+            <div class="input-divider"></div>
+
+            <h2 class="panel-title insight-title">Assessment Insight</h2>
+            <div class="panel-rule insight-rule"></div>
+
+            <ul class="insight-list" id="insightList">
+              <li><span class="dot mint"></span><span>Loading official scoring logic.</span></li>
+              <li><span class="dot peach"></span><span>Reviewing body composition and event minimums.</span></li>
+              <li><span class="dot lav"></span><span>Calculating total official readiness score.</span></li>
+            </ul>
+          </section>
+
+          <section class="panel glass">
+            <h2 class="panel-title">PT Score Overview</h2>
+            <div class="panel-rule"></div>
+
+            <div class="calc-card">
+              <div class="calc-left">
+                <div class="calc-title">Body Composition</div>
+                <div class="calc-sub">Auto-calculated from Waist-to-Height Ratio</div>
+              </div>
+              <div class="calc-right">
+                <div class="calc-main" id="ratioValue">0.44</div>
+                <div class="calc-mini" id="bodyCompScoreText">20.0 / 20</div>
+              </div>
+            </div>
+
+            <div class="chart-zone">
+              <div class="bars">
+                <div class="bar-col">
+                  <div class="bar-stack" style="height:200px;">
+                    <div id="barBody" class="bar-fill bar-aqua" style="height:100%;"></div>
+                  </div>
+                  <div class="bar-label">Body<br>Composition</div>
+                </div>
+
+                <div class="bar-col">
+                  <div class="bar-stack" style="height:200px;">
+                    <div id="barStrength" class="bar-fill bar-peach" style="height:0%;"></div>
+                  </div>
+                  <div class="bar-label">Strength</div>
+                </div>
+
+                <div class="bar-col">
+                  <div class="bar-stack" style="height:200px;">
+                    <div id="barCore" class="bar-fill bar-lav" style="height:0%;"></div>
+                  </div>
+                  <div class="bar-label">Core</div>
+                </div>
+
+                <div class="bar-col">
+                  <div class="bar-stack" style="height:200px;">
+                    <div id="barCardio" class="bar-fill bar-mint" style="height:0%;"></div>
+                  </div>
+                  <div class="bar-label">Cardio</div>
+                </div>
+              </div>
+
+              <div class="score-ring-wrap">
+                <div id="scoreRing" class="score-ring" style="--pct:0;">
+                  <div class="score-center">
+                    <div id="scoreNumber" class="score-number">0.0</div>
+                    <div id="scoreLabel" class="score-label">Unsatisfactory</div>
+                  </div>
+                </div>
+
+                <div id="nextAssessment" class="next-assessment">
+                  Next assessment<br>in 3 months
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="./ptcalculator.js"></script>
+</body>
+</html>

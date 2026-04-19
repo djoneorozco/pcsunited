@@ -328,6 +328,67 @@
     return { type: "run", min: top, max: passMin, top, passMin };
   }
 
+  function ensureMetaNode(anchorEl, metaId){
+    let meta = root.querySelector(`#${metaId}`);
+    if (meta) return meta;
+
+    meta = document.createElement("div");
+    meta.id = metaId;
+    meta.style.marginTop = "4px";
+    meta.style.marginBottom = "10px";
+    meta.style.fontSize = "12px";
+    meta.style.lineHeight = "1.35";
+    meta.style.fontWeight = "600";
+    meta.style.color = "rgba(233,241,255,.56)";
+    meta.style.letterSpacing = "-.01em";
+
+    if (anchorEl && anchorEl.parentNode) {
+      if (anchorEl.nextSibling) {
+        anchorEl.parentNode.insertBefore(meta, anchorEl.nextSibling);
+      } else {
+        anchorEl.parentNode.appendChild(meta);
+      }
+    }
+
+    return meta;
+  }
+
+  const waistMeta = ensureMetaNode(waistSlider, "waistMeta");
+  const strengthMeta = ensureMetaNode(strengthSlider, "strengthMeta");
+  const coreMeta = ensureMetaNode(coreSlider, "coreMeta");
+  const cardioMeta = ensureMetaNode(cardioSlider, "cardioMeta");
+
+  function formatInches(value){
+    return `${value.toFixed(1)} in`;
+  }
+
+  function updateRangeMeta(){
+    const height = Number(heightSlider.value);
+
+    const waistBest = 0.49 * height;
+    const waistMinPass = 0.59 * height;
+    waistMeta.textContent = `Best: ≤ ${formatInches(waistBest)} • Minimum Passing: ≤ ${formatInches(waistMinPass)}`;
+
+    const strengthBounds = getCurrentStrengthBounds();
+    strengthMeta.textContent = `Best: ${strengthBounds.top} reps • Minimum Passing: ${strengthBounds.passMin} reps`;
+
+    const coreBounds = getCurrentCoreBounds();
+    if (coreBounds.type === "time") {
+      coreMeta.textContent = `Best: ${formatTime(coreBounds.top)} • Minimum Passing: ${formatTime(coreBounds.passMin)}`;
+    } else {
+      coreMeta.textContent = `Best: ${coreBounds.top} reps • Minimum Passing: ${coreBounds.passMin} reps`;
+    }
+
+    const cardioBounds = getCurrentCardioBounds();
+    if (cardioBounds.type === "hamr") {
+      cardioMeta.textContent = `Best: ${cardioBounds.top} shuttles • Minimum Passing: ${cardioBounds.passMin} shuttles`;
+    } else if (cardioBounds.type === "walk") {
+      cardioMeta.textContent = `Official Max Time: ${formatTime(cardioBounds.passMin)} • Alternate Pass/Fail Event`;
+    } else {
+      cardioMeta.textContent = `Best: ${formatTime(cardioBounds.top)} • Minimum Passing: ${formatTime(cardioBounds.passMin)}`;
+    }
+  }
+
   function updateEventRanges(){
     const strengthBounds = getCurrentStrengthBounds();
     strengthSlider.min = strengthBounds.min;
@@ -519,6 +580,8 @@
     barStrength.style.height = `${(scores.strengthScore / 15) * 100}%`;
     barCore.style.height = `${(scores.coreScore / 15) * 100}%`;
     barCardio.style.height = `${(scores.cardioScore / 50) * 100}%`;
+
+    updateRangeMeta();
 
     const insights = buildInsights(scores);
     insightList.innerHTML = `

@@ -119,6 +119,7 @@
   --border-color--border-primary\<deleted\|variable-d4c54ba4-ee41-67ce-58a5-5216ca039f83\>: var(--base-color-neutral--neutral-lightest\<deleted\|variable-eede0174-1898-a99e-0c79-395339ec1911\>);
   --content-width--container: 1428px;
   --content-width--large: 896px;
+  --fonts--badge: "42 Dotsans", Arial, sans-serif;
   --content-width--x-large: 1138px;
   --color-neutral--shade-200: #eaeae9;
   --color-neutral--shade-600: #82807c;
@@ -129,7 +130,6 @@
   --background-color--background-warning\<deleted\|variable-0aa1a7ce-e851-b6b5-66db-1a1a96e8e04b\>: var(--base-color-system--warning-yellow\<deleted\|variable-b0ee00e7-091a-a3f5-1619-b09d07f4475a\>);
   --text-color--text-warning\<deleted\|variable-825aa1d8-b093-0b89-37c5-87d980df10f5\>: var(--base-color-system--warning-yellow-dark\<deleted\|variable-296491a7-483e-1229-36b5-e13808cc9004\>);
   --color-neutral--shade-300: #e5e5e2;
-  --fonts--badge: "42 Dotsans", Arial, sans-serif;
   --color-neutral--shade-50: #fbfbfb;
   --color-neutral--shade-400: #d5d5d3;
   --color-neutral--shade-800: #595651;
@@ -1803,7 +1803,11 @@ figcaption {
 }
 
 .text-size-small.text-weight-medium {
-  margin-top: 26px;
+  font-family: var(--fonts--badge);
+  color: var(--color-base--black);
+  background-color: #0000;
+  margin-top: 3px;
+  font-size: 1rem;
 }
 
 .text-size-small.text-style-muted60 {
@@ -2891,15 +2895,16 @@ figcaption {
 }
 
 .text-style-badge {
-  background-image: linear-gradient(to bottom, var(--color-base--black), var(--color-base--black));
+  background-image: linear-gradient(to bottom, var(--color-base--white), var(--color-base--white));
   width: 100%;
   font-family: var(--fonts--badge);
   color: var(--color-neutral--shade-50);
+  text-align: center;
   text-transform: uppercase;
   -webkit-text-fill-color: transparent;
   -webkit-background-clip: text;
   background-clip: text;
-  margin-top: -22px;
+  margin-top: 0;
   font-size: 1rem;
   line-height: 1.4;
 }
@@ -2960,8 +2965,11 @@ figcaption {
   grid-column-gap: 2.5rem;
   grid-row-gap: 2.5rem;
   border-radius: var(--radius--default);
-  background-color: var(--accent-secondary);
+  background-color: var(--color-neutral--shade-600);
+  opacity: .75;
+  outline-offset: 0px;
   color: var(--color-neutral--shade-600);
+  outline: .1px solid #9c9b9a;
   flex-flow: column;
   justify-content: center;
   align-items: center;
@@ -3016,6 +3024,8 @@ figcaption {
 .nav-info-dropdown-list {
   grid-column-gap: .75rem;
   grid-row-gap: .75rem;
+  background-color: #332b2b00;
+  border-radius: 0;
   flex-flow: column;
   display: flex;
 }
@@ -3125,7 +3135,7 @@ figcaption {
 
 .nav-info-dropdown-wrapper.w--open {
   border: .0625rem solid var(--color-neutral--shade-200);
-  background-color: var(--color-base--white);
+  background-color: var(--accent);
   border-radius: .375rem;
   width: 22.5rem;
   margin-left: 0;
@@ -6270,7 +6280,7 @@ figcaption {
 }
 
 .blogfirstpage.blogsfirst {
-  background-color: #6b6868;
+  background-color: #cecdcd;
   margin-top: 0;
   margin-bottom: 33px;
   padding-top: 4.2rem;
@@ -11031,6 +11041,7 @@ figcaption {
     --section-padding--small: 44px;
     --content-width--container: 1428px;
     --content-width--large: 896px;
+    --fonts--badge: "42 Dotsans", Arial, sans-serif;
     --content-width--x-large: 1138px;
     --color-neutral--shade-200: #eaeae9;
     --color-neutral--shade-600: #82807c;
@@ -11039,7 +11050,6 @@ figcaption {
     --section-padding--medium: 84px;
     --color-neutral--shade-100: #f5f4f4;
     --color-neutral--shade-300: #e5e5e2;
-    --fonts--badge: "42 Dotsans", Arial, sans-serif;
     --color-neutral--shade-50: #fbfbfb;
     --color-neutral--shade-400: #d5d5d3;
     --color-neutral--shade-800: #595651;
@@ -11950,6 +11960,7 @@ figcaption {
     --section-padding--small: 40px;
     --content-width--container: 1428px;
     --content-width--large: 896px;
+    --fonts--badge: "42 Dotsans", Arial, sans-serif;
     --content-width--x-large: 1138px;
     --color-neutral--shade-200: #eaeae9;
     --color-neutral--shade-600: #82807c;
@@ -11958,7 +11969,6 @@ figcaption {
     --section-padding--medium: 72px;
     --color-neutral--shade-100: #f5f4f4;
     --color-neutral--shade-300: #e5e5e2;
-    --fonts--badge: "42 Dotsans", Arial, sans-serif;
     --color-neutral--shade-50: #fbfbfb;
     --color-neutral--shade-400: #d5d5d3;
     --color-neutral--shade-800: #595651;
@@ -12845,6 +12855,7 @@ figcaption {
     --section-padding--small: 40px;
     --content-width--container: 1428px;
     --content-width--large: 896px;
+    --fonts--badge: "42 Dotsans", Arial, sans-serif;
     --content-width--x-large: 1138px;
     --color-neutral--shade-200: #eaeae9;
     --color-neutral--shade-600: #82807c;
@@ -12853,7 +12864,6 @@ figcaption {
     --section-padding--medium: 72px;
     --color-neutral--shade-100: #f5f4f4;
     --color-neutral--shade-300: #e5e5e2;
-    --fonts--badge: "42 Dotsans", Arial, sans-serif;
     --color-neutral--shade-50: #fbfbfb;
     --color-neutral--shade-400: #d5d5d3;
     --color-neutral--shade-800: #595651;

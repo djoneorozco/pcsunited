@@ -398,6 +398,15 @@ body::after{
   user-select:none;
 }
 
+#af-pt-shell .range-meta{
+  margin-top:6px;
+  font-size:12px;
+  line-height:1.35;
+  font-weight:600;
+  color:rgba(233,241,255,.58);
+  letter-spacing:-.01em;
+}
+
 #af-pt-shell .calc-card{
   margin-bottom:16px;
   padding:14px 16px;
@@ -678,25 +687,49 @@ body::after{
     width:min(100vw - 18px, 100%);
     margin:0 auto;
   }
+
   #af-pt-shell .topbar{
     flex-direction:column;
     align-items:stretch;
   }
+
   #af-pt-shell .gender-corner{
     width:100%;
     max-width:none;
   }
+
   #af-pt-shell .summary-grid{
     grid-template-columns:1fr;
     gap:14px;
   }
-  #af-pt-shell .main-grid{ gap:14px; }
-  #af-pt-shell .panel{ padding:18px 16px; }
+
+  #af-pt-shell .main-grid{
+    gap:14px;
+  }
+
+  #af-pt-shell .panel{
+    padding:18px 16px;
+  }
+
   #af-pt-shell .score-ring{
     width:210px;
     height:210px;
   }
-  #af-pt-shell .score-ring::before{ inset:20px; }
-  #af-pt-shell .score-number{ font-size:54px; }
-  #af-pt-shell .insight-list li{ font-size:16px; }
+
+  #af-pt-shell .score-ring::before{
+    inset:20px;
+  }
+
+  #af-pt-shell .score-number{
+    font-size:54px;
+  }
+
+  #af-pt-shell .insight-list li{
+    font-size:16px;
+  }
+
+  #af-pt-shell .range-meta{
+    font-size:11px;
+    line-height:1.4;
+  }
 }

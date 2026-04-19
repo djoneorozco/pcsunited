@@ -124,15 +124,6 @@
     return `${normalizeAgeKey(els.ageGroup.value)}_${els.gender.value}`;
   }
 
-  function walkAgeBucket(label){
-    const raw = normalizeAgeKey(label);
-    if (raw === "under25" || raw === "25-29") return "<30";
-    if (raw === "30-34" || raw === "35-39") return "30-39";
-    if (raw === "40-44" || raw === "45-49") return "40-49";
-    if (raw === "50-54" || raw === "55-59") return "50-59";
-    return "60+";
-  }
-
   function setTickLabels(container, labels){
     if (!container) return;
     const spans = container.querySelectorAll("span");
@@ -188,12 +179,7 @@
     if (DEBUG) console.log("[AF-PT]", ...args);
   }
 
-  //#4) OFFICIAL TABLES / CURRENT ENGINE TABLES
-  // NOTE:
-  // - Run and HAMR are table-driven.
-  // - Strength/Core still use min/max-driven scoring logic in this version.
-  // - This file is structured so exact row tables can replace those formulas later.
-
+  //#4) OFFICIAL TABLES
   const TABLES = {
     push: {
       max: buildMap([67,50,63,47,60,44,56,42,52,39,49,36,45,34,42,31,38,28]),
@@ -204,12 +190,12 @@
       min: buildMap([27,17,25,15,23,13,21,11,19,9,17,7,15,5,13,3,11,1])
     },
     situp: {
-      max: buildMap([58,54,56,50,54,45,52,43,50,41,48,35,46,34,44,32,42,31]),
+      max: buildMap([60,58,58,56,56,54,54,52,52,50,50,48,48,46,46,44,44,42]),
       min: buildMap([33,29,31,25,29,20,27,18,25,16,23,10,21,9,19,7,17,6])
     },
     crunch: {
-      max: buildMap([60,58,58,56,56,54,54,52,52,50,50,48,48,46,46,44,44,42]),
-      min: buildMap([35,33,33,31,31,29,29,27,27,25,25,23,23,21,21,19,19,17])
+      max: buildMap([58,54,56,50,54,45,52,43,50,41,48,35,46,34,44,32,42,31]),
+      min: buildMap([33,29,31,25,29,20,27,18,25,16,23,10,21,9,19,7,17,6])
     },
     plank: {
       max: buildMap([
@@ -231,8 +217,8 @@
         toSeconds("1:15"),toSeconds("1:10"),
         toSeconds("1:10"),toSeconds("1:05"),
         toSeconds("1:05"),toSeconds("1:00"),
-        toSeconds("1:00"),toSeconds(":55"),
-        toSeconds(":55"),toSeconds(":50")
+        toSeconds("1:00"),toSeconds("0:55"),
+        toSeconds("0:55"),toSeconds("0:50")
       ])
     },
     run: [
@@ -280,26 +266,24 @@
       [36.0, [46,24,45,23,41,22,39,21,36,20,34,19,32,17,30,15,28,13]],
       [35.5, [44,23,43,22,39,20,37,20,34,19,32,18,31,16,28,14,27,12]],
       [35.0, [42,21,42,20,38,19,36,18,32,17,31,16,30,14,27,13,26,11]]
-    ].map(([pts, vals]) => [pts, buildMap(vals)]),
-    walk: {
-      male: {
-        "<30": toSeconds("16:16"),
-        "30-39": toSeconds("16:18"),
-        "40-49": toSeconds("16:23"),
-        "50-59": toSeconds("16:40"),
-        "60+": toSeconds("16:58")
-      },
-      female: {
-        "<30": toSeconds("17:22"),
-        "30-39": toSeconds("17:28"),
-        "40-49": toSeconds("17:49"),
-        "50-59": toSeconds("18:11"),
-        "60+": toSeconds("18:53")
-      }
-    }
+    ].map(([pts, vals]) => [pts, buildMap(vals)])
   };
 
-  //#5) RULE HELPERS
+  //#5) PUBLIC-CALCULATOR GUARDRAILS
+  function disableWalkOptionForPublicCalculator(){
+    if (!els.cardioEvent) return;
+    [...els.cardioEvent.options].forEach((opt) => {
+      if (/2\s*km\s*walk/i.test(opt.textContent || "")) {
+        opt.disabled = true;
+        opt.hidden = true;
+        if (opt.selected) {
+          els.cardioEvent.value = "2.0 Mile Run";
+        }
+      }
+    });
+  }
+
+  //#6) RULE HELPERS
   function scoreCategory(total, minimumsMet){
     if (!minimumsMet) return "Unsatisfactory";
     if (total >= 90) return "Excellent";
@@ -328,9 +312,9 @@
     return 0.0;
   }
 
-  // NOTE:
-  // These two formula functions are intentionally preserved from your current engine.
-  // They are cleaner and isolated now, so exact lookup tables can replace them later.
+  // Exact for current chart structure:
+  // - reps: each row changes by 1 rep = 0.5 points
+  // - plank: each row changes by 5 sec = 0.5 points
   function scoreRepLinear(reps, topRep, minRep){
     if (reps >= topRep) return 15.0;
     if (reps < minRep) return 0.0;
@@ -359,15 +343,7 @@
     return 0.0;
   }
 
-  function componentMinimumsMet(scores, cardioMode){
-    if (cardioMode === "walk"){
-      return (
-        scores.strengthPassed &&
-        scores.corePassed &&
-        scores.walkPassed === true
-      );
-    }
-
+  function componentMinimumsMet(scores){
     return (
       scores.strengthPassed &&
       scores.corePassed &&
@@ -377,6 +353,7 @@
 
   function getCurrentStrengthBounds(){
     const key = pairKey();
+
     if (els.strengthEvent.value.includes("Hand-Release")){
       return {
         mode: "hrpu",
@@ -431,10 +408,6 @@
     };
   }
 
-  function getCurrentWalkMax(){
-    return TABLES.walk[els.gender.value][walkAgeBucket(els.ageGroup.value)];
-  }
-
   function getCurrentCardioBounds(){
     const key = pairKey();
 
@@ -448,18 +421,6 @@
         max: top,
         top,
         passMin
-      };
-    }
-
-    if (els.cardioEvent.value.includes("Walk")){
-      const passMax = getCurrentWalkMax();
-      return {
-        mode: "walk",
-        type: "walk",
-        min: 720,
-        max: Math.max(1260, passMax + 180),
-        top: 720,
-        passMin: passMax
       };
     }
 
@@ -494,14 +455,14 @@
     }
 
     const cardioBounds = getCurrentCardioBounds();
-    if (!Number.isFinite(cardioBounds.passMin)){
+    if (!Number.isFinite(cardioBounds.top) || !Number.isFinite(cardioBounds.passMin)){
       warnings.push("Missing cardio standard for selected demographic.");
     }
 
     return warnings;
   }
 
-  //#6) UI RANGE / TICKS
+  //#7) UI RANGE / TICKS
   function updateRangeMeta(){
     const height = Number(els.heightSlider.value);
 
@@ -522,8 +483,6 @@
     const cardioBounds = getCurrentCardioBounds();
     if (cardioBounds.type === "hamr") {
       safeText(els.cardioMeta, `Best: ${cardioBounds.top} shuttles • Minimum Passing: ${cardioBounds.passMin} shuttles`);
-    } else if (cardioBounds.type === "walk") {
-      safeText(els.cardioMeta, `Official Max Time: ${formatTime(cardioBounds.passMin)} • Alternate Pass/Fail Event`);
     } else {
       safeText(els.cardioMeta, `Best: ${formatTime(cardioBounds.top)} • Minimum Passing: ${formatTime(cardioBounds.passMin)}`);
     }
@@ -572,13 +531,13 @@
     const cardioBounds = getCurrentCardioBounds();
     els.cardioSlider.min = cardioBounds.min;
     els.cardioSlider.max = cardioBounds.max;
-    els.cardioSlider.step = cardioBounds.type === "hamr" ? 1 : 1;
+    els.cardioSlider.step = 1;
 
     normalizeCurrentValues();
     updateTickRows();
   }
 
-  //#7) SCORING ENGINE
+  //#8) SCORING ENGINE
   function computeScores(){
     const warnings = validateSelectionState();
     const key = pairKey();
@@ -614,17 +573,10 @@
 
     let cardioScore = 0.0;
     let cardioMode = "run";
-    let walkPassed = null;
-    let walkMax = null;
 
     if (cardioBounds.mode === "hamr"){
       cardioMode = "hamr";
       cardioScore = scoreCountHigherBetter(cardio, TABLES.hamr, key);
-    } else if (cardioBounds.mode === "walk"){
-      cardioMode = "walk";
-      walkMax = getCurrentWalkMax();
-      walkPassed = cardio <= walkMax;
-      cardioScore = walkPassed ? 50.0 : 0.0;
     } else {
       cardioMode = "run";
       cardioScore = scoreTimeLowerBetter(cardio, TABLES.run, key);
@@ -637,14 +589,11 @@
     const minimumsMet = componentMinimumsMet({
       strengthPassed,
       corePassed,
-      cardioPassed,
-      walkPassed
-    }, cardioMode);
+      cardioPassed
+    });
 
     const total = clamp(bodyScore + strengthScore + coreScore + cardioScore, 0, 100);
-    const category = cardioMode === "walk"
-      ? (minimumsMet ? "Pass" : "Fail")
-      : scoreCategory(total, minimumsMet);
+    const category = scoreCategory(total, minimumsMet);
 
     const result = {
       ratio,
@@ -656,8 +605,6 @@
       category,
       minimumsMet,
       cardioMode,
-      walkPassed,
-      walkMax,
       strengthPassed,
       corePassed,
       cardioPassed,
@@ -674,25 +621,13 @@
     return result;
   }
 
-  //#8) INSIGHTS
+  //#9) INSIGHTS
   function buildInsights(scores){
     if (scores.warnings.length){
       return {
         line1: scores.warnings[0],
         line2: scores.warnings[1] || "Review selected standards and supported event configuration.",
         line3: "Calculator output may be incomplete until all official values are available."
-      };
-    }
-
-    if (scores.cardioMode === "walk"){
-      return {
-        line1: scores.walkPassed
-          ? "The 2.0 km walk time is within the official maximum standard."
-          : "The 2.0 km walk time is outside the official maximum standard.",
-        line2: "Walk is an alternate cardio path with age- and gender-based maximum times.",
-        line3: scores.minimumsMet
-          ? "Strength, core, and walk standards currently support a passing alternate assessment."
-          : "One or more standards are below the current alternate assessment requirement."
       };
     }
 
@@ -731,7 +666,7 @@
     };
   }
 
-  //#9) UI RENDER
+  //#10) UI RENDER
   function updateUI(){
     setSliderFill(els.heightSlider);
     setSliderFill(els.waistSlider);
@@ -765,22 +700,10 @@
     safeText(els.ratioValue, scores.ratio.toFixed(2));
     safeText(els.bodyCompScoreText, `${scores.bodyScore.toFixed(1)} / 20`);
 
-    if (scores.cardioMode === "walk"){
-      els.scoreRing.style.setProperty("--pct", scores.walkPassed ? "100" : "0");
-      safeText(els.scoreNumber, scores.walkPassed ? "PASS" : "FAIL");
-      safeText(els.scoreLabel, "2.0 km Walk");
-      safeHtml(
-        els.nextAssessment,
-        scores.walkMax
-          ? `Official max time<br>${formatTime(scores.walkMax)}`
-          : "Alternate cardio<br>standard"
-      );
-    } else {
-      els.scoreRing.style.setProperty("--pct", scores.total.toFixed(1));
-      safeText(els.scoreNumber, scores.total.toFixed(1));
-      safeText(els.scoreLabel, scores.category);
-      safeHtml(els.nextAssessment, nextAssessmentText(scores.total, scores.minimumsMet));
-    }
+    if (els.scoreRing) els.scoreRing.style.setProperty("--pct", scores.total.toFixed(1));
+    safeText(els.scoreNumber, scores.total.toFixed(1));
+    safeText(els.scoreLabel, scores.category);
+    safeHtml(els.nextAssessment, nextAssessmentText(scores.total, scores.minimumsMet));
 
     if (els.barBody) els.barBody.style.height = `${(scores.breakdown.body / 20) * 100}%`;
     if (els.barStrength) els.barStrength.style.height = `${(scores.breakdown.strength / 15) * 100}%`;
@@ -797,7 +720,7 @@
     `);
   }
 
-  //#10) EVENTS
+  //#11) EVENTS
   [
     els.gender,
     els.heightSlider,
@@ -839,7 +762,8 @@
     });
   });
 
-  //#11) INIT
+  //#12) INIT
+  disableWalkOptionForPublicCalculator();
   updateEventRanges();
   updateUI();
 })();

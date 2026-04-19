@@ -40,6 +40,15 @@
 
   const insightList = root.querySelector("#insightList");
 
+  const waistMeta = root.querySelector("#waistMeta");
+  const strengthMeta = root.querySelector("#strengthMeta");
+  const coreMeta = root.querySelector("#coreMeta");
+  const cardioMeta = root.querySelector("#cardioMeta");
+
+  const strengthTicks = root.querySelector("#strengthTicks");
+  const coreTicks = root.querySelector("#coreTicks");
+  const cardioTicks = root.querySelector("#cardioTicks");
+
   const ORDER = [
     "under25_male","under25_female",
     "25-29_male","25-29_female",
@@ -134,7 +143,6 @@
     return 0.0;
   }
 
-  // Official chart values
   const PUSH_MAX = buildMap([67,50,63,47,60,44,56,42,52,39,49,36,45,34,42,31,38,28]);
   const PUSH_MIN = buildMap([30,15,28,14,26,12,23,11,21,10,19,8,17,7,14,5,12,3]);
 
@@ -328,38 +336,52 @@
     return { type: "run", min: top, max: passMin, top, passMin };
   }
 
-  function ensureMetaNode(anchorEl, metaId){
-    let meta = root.querySelector(`#${metaId}`);
-    if (meta) return meta;
-
-    meta = document.createElement("div");
-    meta.id = metaId;
-    meta.style.marginTop = "4px";
-    meta.style.marginBottom = "10px";
-    meta.style.fontSize = "12px";
-    meta.style.lineHeight = "1.35";
-    meta.style.fontWeight = "600";
-    meta.style.color = "rgba(233,241,255,.56)";
-    meta.style.letterSpacing = "-.01em";
-
-    if (anchorEl && anchorEl.parentNode) {
-      if (anchorEl.nextSibling) {
-        anchorEl.parentNode.insertBefore(meta, anchorEl.nextSibling);
-      } else {
-        anchorEl.parentNode.appendChild(meta);
-      }
-    }
-
-    return meta;
-  }
-
-  const waistMeta = ensureMetaNode(waistSlider, "waistMeta");
-  const strengthMeta = ensureMetaNode(strengthSlider, "strengthMeta");
-  const coreMeta = ensureMetaNode(coreSlider, "coreMeta");
-  const cardioMeta = ensureMetaNode(cardioSlider, "cardioMeta");
-
   function formatInches(value){
     return `${value.toFixed(1)} in`;
+  }
+
+  function setTickLabels(container, labels){
+    if (!container) return;
+    const spans = container.querySelectorAll("span");
+    labels.forEach((label, i) => {
+      if (spans[i]) spans[i].textContent = label;
+    });
+  }
+
+  function buildLinearNumberTicks(maxValue){
+    const values = [
+      0,
+      Math.round(maxValue * 0.2),
+      Math.round(maxValue * 0.4),
+      Math.round(maxValue * 0.6),
+      Math.round(maxValue * 0.8),
+      Math.round(maxValue)
+    ];
+
+    return values.map((v) => String(v));
+  }
+
+  function buildTimeTicks(minSec, maxSec){
+    const steps = 5;
+    const out = [];
+    for (let i = 0; i < steps; i += 1){
+      const ratio = i / (steps - 1);
+      const value = Math.round(minSec + ((maxSec - minSec) * ratio));
+      out.push(formatTime(value));
+    }
+    return out;
+  }
+
+  function buildHamrTicks(maxCount){
+    const values = [
+      0,
+      Math.round(maxCount * 0.2),
+      Math.round(maxCount * 0.4),
+      Math.round(maxCount * 0.6),
+      Math.round(maxCount * 0.8),
+      Math.round(maxCount)
+    ];
+    return values.map((v) => String(v));
   }
 
   function updateRangeMeta(){
@@ -367,26 +389,65 @@
 
     const waistBest = 0.49 * height;
     const waistMinPass = 0.59 * height;
-    waistMeta.textContent = `Best: ≤ ${formatInches(waistBest)} • Minimum Passing: ≤ ${formatInches(waistMinPass)}`;
+    if (waistMeta){
+      waistMeta.textContent = `Best: ≤ ${formatInches(waistBest)} • Minimum Passing: ≤ ${formatInches(waistMinPass)}`;
+    }
 
     const strengthBounds = getCurrentStrengthBounds();
-    strengthMeta.textContent = `Best: ${strengthBounds.top} reps • Minimum Passing: ${strengthBounds.passMin} reps`;
+    if (strengthMeta){
+      strengthMeta.textContent = `Best: ${strengthBounds.top} reps • Minimum Passing: ${strengthBounds.passMin} reps`;
+    }
+
+    const coreBounds = getCurrentCoreBounds();
+    if (coreMeta){
+      if (coreBounds.type === "time") {
+        coreMeta.textContent = `Best: ${formatTime(coreBounds.top)} • Minimum Passing: ${formatTime(coreBounds.passMin)}`;
+      } else {
+        coreMeta.textContent = `Best: ${coreBounds.top} reps • Minimum Passing: ${coreBounds.passMin} reps`;
+      }
+    }
+
+    const cardioBounds = getCurrentCardioBounds();
+    if (cardioMeta){
+      if (cardioBounds.type === "hamr") {
+        cardioMeta.textContent = `Best: ${cardioBounds.top} shuttles • Minimum Passing: ${cardioBounds.passMin} shuttles`;
+      } else if (cardioBounds.type === "walk") {
+        cardioMeta.textContent = `Official Max Time: ${formatTime(cardioBounds.passMin)} • Alternate Pass/Fail Event`;
+      } else {
+        cardioMeta.textContent = `Best: ${formatTime(cardioBounds.top)} • Minimum Passing: ${formatTime(cardioBounds.passMin)}`;
+      }
+    }
+  }
+
+  function updateTickRows(){
+    const strengthBounds = getCurrentStrengthBounds();
+    setTickLabels(strengthTicks, buildLinearNumberTicks(strengthBounds.top));
 
     const coreBounds = getCurrentCoreBounds();
     if (coreBounds.type === "time") {
-      coreMeta.textContent = `Best: ${formatTime(coreBounds.top)} • Minimum Passing: ${formatTime(coreBounds.passMin)}`;
+      setTickLabels(coreTicks, buildTimeTicks(coreBounds.min, coreBounds.top));
     } else {
-      coreMeta.textContent = `Best: ${coreBounds.top} reps • Minimum Passing: ${coreBounds.passMin} reps`;
+      setTickLabels(coreTicks, buildLinearNumberTicks(coreBounds.top));
     }
 
     const cardioBounds = getCurrentCardioBounds();
     if (cardioBounds.type === "hamr") {
-      cardioMeta.textContent = `Best: ${cardioBounds.top} shuttles • Minimum Passing: ${cardioBounds.passMin} shuttles`;
-    } else if (cardioBounds.type === "walk") {
-      cardioMeta.textContent = `Official Max Time: ${formatTime(cardioBounds.passMin)} • Alternate Pass/Fail Event`;
+      setTickLabels(cardioTicks, buildHamrTicks(cardioBounds.top));
     } else {
-      cardioMeta.textContent = `Best: ${formatTime(cardioBounds.top)} • Minimum Passing: ${formatTime(cardioBounds.passMin)}`;
+      setTickLabels(cardioTicks, buildTimeTicks(cardioBounds.min, cardioBounds.max));
     }
+  }
+
+  function normalizeCurrentValues(){
+    const strengthBounds = getCurrentStrengthBounds();
+    if (Number(strengthSlider.value) > strengthBounds.max) strengthSlider.value = strengthBounds.max;
+
+    const coreBounds = getCurrentCoreBounds();
+    if (Number(coreSlider.value) > coreBounds.max) coreSlider.value = coreBounds.max;
+
+    const cardioBounds = getCurrentCardioBounds();
+    if (Number(cardioSlider.value) < cardioBounds.min) cardioSlider.value = cardioBounds.min;
+    if (Number(cardioSlider.value) > cardioBounds.max) cardioSlider.value = cardioBounds.max;
   }
 
   function updateEventRanges(){
@@ -394,21 +455,19 @@
     strengthSlider.min = strengthBounds.min;
     strengthSlider.max = strengthBounds.max;
     strengthSlider.step = 1;
-    if (Number(strengthSlider.value) > strengthBounds.max) strengthSlider.value = strengthBounds.max;
 
     const coreBounds = getCurrentCoreBounds();
     coreSlider.min = coreBounds.min;
     coreSlider.max = coreBounds.max;
     coreSlider.step = coreBounds.type === "time" ? 5 : 1;
-    if (Number(coreSlider.value) > coreBounds.max) coreSlider.value = coreBounds.max;
 
     const cardioBounds = getCurrentCardioBounds();
     cardioSlider.min = cardioBounds.min;
     cardioSlider.max = cardioBounds.max;
     cardioSlider.step = cardioBounds.type === "hamr" ? 1 : 1;
 
-    if (Number(cardioSlider.value) < cardioBounds.min) cardioSlider.value = cardioBounds.min;
-    if (Number(cardioSlider.value) > cardioBounds.max) cardioSlider.value = cardioBounds.max;
+    normalizeCurrentValues();
+    updateTickRows();
   }
 
   function computeScores(){

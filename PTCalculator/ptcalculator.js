@@ -87,12 +87,23 @@
 
   function buildMap(arr){
     const out = {};
-    ORDER.forEach((key, i) => out[key] = arr[i]);
+    ORDER.forEach((key, i) => {
+      out[key] = arr[i];
+    });
     return out;
   }
 
   function pairKey(){
     return `${normalizeAgeKey(ageGroup.value)}_${gender.value}`;
+  }
+
+  function walkAgeBucket(label){
+    const raw = normalizeAgeKey(label);
+    if (raw === "under25" || raw === "25-29") return "<30";
+    if (raw === "30-34" || raw === "35-39") return "30-39";
+    if (raw === "40-44" || raw === "45-49") return "40-49";
+    if (raw === "50-54" || raw === "55-59") return "50-59";
+    return "60+";
   }
 
   function scoreCategory(total, minimumsMet){
@@ -123,14 +134,15 @@
     return 0.0;
   }
 
-  const PUSH_MAX = buildMap([52,42,50,40,48,38,46,36,44,34,42,32,40,30,38,28,36,26]);
-  const PUSH_MIN = buildMap([27,17,25,15,23,13,21,11,19,9,17,7,15,5,13,3,11,1]);
+  // Official chart values
+  const PUSH_MAX = buildMap([67,50,63,47,60,44,56,42,52,39,49,36,45,34,42,31,38,28]);
+  const PUSH_MIN = buildMap([30,15,28,14,26,12,23,11,21,10,19,8,17,7,14,5,12,3]);
 
-  const HRPU_MAX = buildMap([58,54,56,50,54,45,52,43,50,41,48,35,46,34,44,32,42,31]);
-  const HRPU_MIN = buildMap([33,29,31,25,29,20,27,18,25,16,23,10,21,9,19,7,17,6]);
+  const HRPU_MAX = buildMap([52,42,50,40,48,38,46,36,44,34,42,32,40,30,38,28,36,26]);
+  const HRPU_MIN = buildMap([27,17,25,15,23,13,21,11,19,9,17,7,15,5,13,3,11,1]);
 
-  const SITUP_MAX = buildMap([60,58,58,56,56,54,54,52,52,50,50,48,48,46,46,44,44,42]);
-  const SITUP_MIN = buildMap([35,33,33,31,31,29,29,27,27,25,25,23,23,21,21,19,19,17]);
+  const SITUP_MAX = buildMap([58,54,56,50,54,45,52,43,50,41,48,35,46,34,44,32,42,31]);
+  const SITUP_MIN = buildMap([33,29,31,25,29,20,27,18,25,16,23,10,21,9,19,7,17,6]);
 
   const CRUNCH_MAX = buildMap([60,58,58,56,56,54,54,52,52,50,50,48,48,46,46,44,44,42]);
   const CRUNCH_MIN = buildMap([35,33,33,31,31,29,29,27,27,25,25,23,23,21,21,19,19,17]);
@@ -207,6 +219,23 @@
     [35.0, [42,21,42,20,38,19,36,18,32,17,31,16,30,14,27,13,26,11]]
   ].map(([pts, vals]) => [pts, buildMap(vals)]);
 
+  const WALK_MAX = {
+    male: {
+      "<30": toSeconds("16:16"),
+      "30-39": toSeconds("16:18"),
+      "40-49": toSeconds("16:23"),
+      "50-59": toSeconds("16:40"),
+      "60+": toSeconds("16:58")
+    },
+    female: {
+      "<30": toSeconds("17:22"),
+      "30-39": toSeconds("17:28"),
+      "40-49": toSeconds("17:49"),
+      "50-59": toSeconds("18:11"),
+      "60+": toSeconds("18:53")
+    }
+  };
+
   function scoreRepLinear(reps, topRep, minRep){
     if (reps >= topRep) return 15.0;
     if (reps < minRep) return 0.0;
@@ -235,8 +264,15 @@
     return 0.0;
   }
 
-  function componentMinimumsMet(scores, unsupportedCardio){
-    if (unsupportedCardio) return false;
+  function componentMinimumsMet(scores, cardioMode){
+    if (cardioMode === "walk") {
+      return (
+        scores.strengthScore >= 2.5 &&
+        scores.coreScore >= 2.5 &&
+        scores.walkPassed === true
+      );
+    }
+
     return (
       scores.strengthScore >= 2.5 &&
       scores.coreScore >= 2.5 &&
@@ -263,6 +299,10 @@
     return { type: "reps", min: 0, max: SITUP_MAX[key], top: SITUP_MAX[key], passMin: SITUP_MIN[key] };
   }
 
+  function getCurrentWalkMax(){
+    return WALK_MAX[gender.value][walkAgeBucket(ageGroup.value)];
+  }
+
   function getCurrentCardioBounds(){
     const key = pairKey();
 
@@ -273,7 +313,14 @@
     }
 
     if (cardioEvent.value.includes("Walk")){
-      return { type: "walk", min: 0, max: 0, top: 0, passMin: 0 };
+      const passMax = getCurrentWalkMax();
+      return {
+        type: "walk",
+        min: 720,
+        max: Math.max(1260, passMax + 180),
+        top: 720,
+        passMin: passMax
+      };
     }
 
     const top = RUN_ROWS[0][1][key];
@@ -297,14 +344,10 @@
     const cardioBounds = getCurrentCardioBounds();
     cardioSlider.min = cardioBounds.min;
     cardioSlider.max = cardioBounds.max;
-    cardioSlider.step = 1;
+    cardioSlider.step = cardioBounds.type === "hamr" ? 1 : 1;
 
-    if (cardioBounds.type === "walk"){
-      cardioSlider.value = 0;
-    } else {
-      if (Number(cardioSlider.value) < cardioBounds.min) cardioSlider.value = cardioBounds.min;
-      if (Number(cardioSlider.value) > cardioBounds.max) cardioSlider.value = cardioBounds.max;
-    }
+    if (Number(cardioSlider.value) < cardioBounds.min) cardioSlider.value = cardioBounds.min;
+    if (Number(cardioSlider.value) > cardioBounds.max) cardioSlider.value = cardioBounds.max;
   }
 
   function computeScores(){
@@ -336,20 +379,31 @@
     }
 
     let cardioScore = 0.0;
-    let unsupportedCardio = false;
+    let cardioMode = "run";
+    let walkPassed = null;
+    let walkMax = null;
 
     if (cardioEvent.value.includes("HAMR")){
+      cardioMode = "hamr";
       cardioScore = scoreCountHigherBetter(cardio, HAMR_ROWS, key);
     } else if (cardioEvent.value.includes("Walk")){
-      unsupportedCardio = true;
-      cardioScore = 0.0;
+      cardioMode = "walk";
+      walkMax = getCurrentWalkMax();
+      walkPassed = cardio <= walkMax;
+      cardioScore = walkPassed ? 50.0 : 0.0;
     } else {
+      cardioMode = "run";
       cardioScore = scoreTimeLowerBetter(cardio, RUN_ROWS, key);
     }
 
     const total = clamp(bodyScore + strengthScore + coreScore + cardioScore, 0, 100);
-    const minimumsMet = componentMinimumsMet({ strengthScore, coreScore, cardioScore }, unsupportedCardio);
-    const category = scoreCategory(total, minimumsMet);
+    const minimumsMet = componentMinimumsMet(
+      { strengthScore, coreScore, cardioScore, walkPassed },
+      cardioMode
+    );
+    const category = cardioMode === "walk"
+      ? (minimumsMet ? "Pass" : "Fail")
+      : scoreCategory(total, minimumsMet);
 
     return {
       ratio,
@@ -360,16 +414,22 @@
       total,
       category,
       minimumsMet,
-      unsupportedCardio
+      cardioMode,
+      walkPassed,
+      walkMax
     };
   }
 
   function buildInsights(scores){
-    if (scores.unsupportedCardio){
+    if (scores.cardioMode === "walk"){
       return {
-        line1: "The 2 km walk is not scored in the current PFRA chart loaded into this runtime.",
-        line2: "Use 2.0 Mile Run or 20m HAMR for official point calculations.",
-        line3: "Keep the walk option only if you want it marked as unsupported."
+        line1: scores.walkPassed
+          ? "The 2.0 km walk time is within the official maximum standard."
+          : "The 2.0 km walk time is outside the official maximum standard.",
+        line2: "Walk is an alternate cardio path with age- and gender-based maximum times.",
+        line3: scores.minimumsMet
+          ? "Strength, core, and walk standards currently support a passing alternate assessment."
+          : "One or more standards are below the current alternate assessment requirement."
       };
     }
 
@@ -430,23 +490,30 @@
       coreValue.textContent = `${coreSlider.value} reps`;
     }
 
-    if (cardioEvent.value.includes("HAMR")){
+    const scores = computeScores();
+
+    if (scores.cardioMode === "hamr"){
       cardioValue.textContent = `${cardioSlider.value} shuttles`;
-    } else if (cardioEvent.value.includes("Walk")){
-      cardioValue.textContent = "Unsupported";
     } else {
       cardioValue.textContent = formatTime(Number(cardioSlider.value));
     }
 
-    const scores = computeScores();
-
     ratioValue.textContent = scores.ratio.toFixed(2);
     bodyCompScoreText.textContent = `${scores.bodyScore.toFixed(1)} / 20`;
 
-    scoreRing.style.setProperty("--pct", scores.total.toFixed(1));
-    scoreNumber.textContent = scores.total.toFixed(1);
-    scoreLabel.textContent = scores.category;
-    nextAssessment.innerHTML = nextAssessmentText(scores.total, scores.minimumsMet);
+    if (scores.cardioMode === "walk"){
+      scoreRing.style.setProperty("--pct", scores.walkPassed ? "100" : "0");
+      scoreNumber.textContent = scores.walkPassed ? "PASS" : "FAIL";
+      scoreLabel.textContent = "2.0 km Walk";
+      nextAssessment.innerHTML = scores.walkMax
+        ? `Official max time<br>${formatTime(scores.walkMax)}`
+        : "Alternate cardio<br>standard";
+    } else {
+      scoreRing.style.setProperty("--pct", scores.total.toFixed(1));
+      scoreNumber.textContent = scores.total.toFixed(1);
+      scoreLabel.textContent = scores.category;
+      nextAssessment.innerHTML = nextAssessmentText(scores.total, scores.minimumsMet);
+    }
 
     barBody.style.height = `${(scores.bodyScore / 20) * 100}%`;
     barStrength.style.height = `${(scores.strengthScore / 15) * 100}%`;
@@ -472,7 +539,7 @@
     strengthSlider,
     coreSlider,
     cardioSlider
-  ].forEach(el => {
+  ].forEach((el) => {
     el.addEventListener("input", () => {
       if (
         el === gender ||

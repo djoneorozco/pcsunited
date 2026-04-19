@@ -361,10 +361,11 @@
     return values.map((v) => String(v));
   }
 
-  function buildTimeTicks(minSec, maxSec, count = 6){
+  function buildTimeTicks(minSec, maxSec){
+    const steps = 6;
     const out = [];
-    for (let i = 0; i < count; i += 1){
-      const ratio = count === 1 ? 0 : i / (count - 1);
+    for (let i = 0; i < steps; i += 1){
+      const ratio = i / (steps - 1);
       const value = Math.round(minSec + ((maxSec - minSec) * ratio));
       out.push(formatTime(value));
     }
@@ -424,18 +425,16 @@
 
     const coreBounds = getCurrentCoreBounds();
     if (coreBounds.type === "time") {
-      setTickLabels(coreTicks, buildTimeTicks(coreBounds.min, coreBounds.top, 6));
+      setTickLabels(coreTicks, buildTimeTicks(coreBounds.min, coreBounds.top));
     } else {
       setTickLabels(coreTicks, buildLinearNumberTicks(coreBounds.top));
     }
 
     const cardioBounds = getCurrentCardioBounds();
-    const cardioSpanCount = cardioTicks ? cardioTicks.querySelectorAll("span").length : 6;
-
     if (cardioBounds.type === "hamr") {
       setTickLabels(cardioTicks, buildHamrTicks(cardioBounds.top));
     } else {
-      setTickLabels(cardioTicks, buildTimeTicks(cardioBounds.min, cardioBounds.max, cardioSpanCount));
+      setTickLabels(cardioTicks, buildTimeTicks(cardioBounds.min, cardioBounds.max));
     }
   }
 

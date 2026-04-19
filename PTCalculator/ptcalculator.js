@@ -343,8 +343,8 @@
   function setTickLabels(container, labels){
     if (!container) return;
     const spans = container.querySelectorAll("span");
-    labels.forEach((label, i) => {
-      if (spans[i]) spans[i].textContent = label;
+    spans.forEach((span, i) => {
+      span.textContent = labels[i] ?? "";
     });
   }
 
@@ -361,11 +361,10 @@
     return values.map((v) => String(v));
   }
 
-  function buildTimeTicks(minSec, maxSec){
-    const steps = 5;
+  function buildTimeTicks(minSec, maxSec, count = 6){
     const out = [];
-    for (let i = 0; i < steps; i += 1){
-      const ratio = i / (steps - 1);
+    for (let i = 0; i < count; i += 1){
+      const ratio = count === 1 ? 0 : i / (count - 1);
       const value = Math.round(minSec + ((maxSec - minSec) * ratio));
       out.push(formatTime(value));
     }
@@ -425,16 +424,18 @@
 
     const coreBounds = getCurrentCoreBounds();
     if (coreBounds.type === "time") {
-      setTickLabels(coreTicks, buildTimeTicks(coreBounds.min, coreBounds.top));
+      setTickLabels(coreTicks, buildTimeTicks(coreBounds.min, coreBounds.top, 6));
     } else {
       setTickLabels(coreTicks, buildLinearNumberTicks(coreBounds.top));
     }
 
     const cardioBounds = getCurrentCardioBounds();
+    const cardioSpanCount = cardioTicks ? cardioTicks.querySelectorAll("span").length : 6;
+
     if (cardioBounds.type === "hamr") {
       setTickLabels(cardioTicks, buildHamrTicks(cardioBounds.top));
     } else {
-      setTickLabels(cardioTicks, buildTimeTicks(cardioBounds.min, cardioBounds.max));
+      setTickLabels(cardioTicks, buildTimeTicks(cardioBounds.min, cardioBounds.max, cardioSpanCount));
     }
   }
 

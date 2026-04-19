@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Mar 31 2026 15:06:35 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Apr 19 2026 06:48:57 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69bebd9680489f6342663763" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
@@ -15,7 +15,7 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
-  <div class="code-embed-35 w-embed w-script"><!--  //#0 A.I.O.U • Timed Buyer Psychology Test (Full-Screen Wide Layout v3 - auto report + Financial Dashboard Prefill + PENDING COMMIT)  -->
+  <div class="code-embed-35 w-embed w-script"><!--  //#0 A.I.O.U • Timed Buyer Psychology Test (Executive Theme v4 - auto report + Financial Dashboard Prefill + PENDING COMMIT)  -->
     <div id="aiou-shell" data-endpoint="https://theorozcorealty.netlify.app/.netlify/functions/aiou-report" style="all: initial;">
       <!--  Google Font  -->
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -29,24 +29,40 @@
       font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
     :root {
-      --bg:#0b0e1a;
+      --stroke:rgba(180,210,255,.16);
+      --stroke2:rgba(180,210,255,.28);
+      --bg:#070B14;
       --panel:#101426;
       --panel-2:#0f1324;
-      --ink:#e9ecff;
-      --muted:#a8b0d6;
-      --border:rgba(255,255,255,.10);
-      --accent:#8ef3c5;
-      --accent2:#6aa7ff;
-      --danger:#ff8aa6;
-      --chip-bg-start:#6aa7ff;
-      --chip-bg-end:#4f86ff;
+      --ink:#F2F7FF;
+      --muted:rgba(242,247,255,.72);
+      --muted2:rgba(242,247,255,.52);
+      --border:rgba(180,210,255,.14);
+      --accent:#46E6B3;
+      --accent2:#66B2FF;
+      --accent3:#B9F3FF;
+      --danger:#FF5C7A;
+      --warn:#FFD166;
+      --chip-bg-start:#66B2FF;
+      --chip-bg-end:#4F86FF;
+      --r12:12px;
+      --r14:14px;
+      --r16:16px;
+      --r18:18px;
+      --r20:20px;
+      --shadow:0 18px 55px rgba(0,0,0,.60);
+      --shadow2:0 10px 26px rgba(0,0,0,.38);
     }
     /* Full-screen fixed overlay */
     #aiou-portal {
       position: fixed;
       inset: 0;
       z-index: 2147483647;
-      background: var(--bg);
+      background:
+        radial-gradient(1200px 700px at 12% 6%, rgba(102,178,255,.12), transparent 55%),
+        radial-gradient(900px 520px at 92% 12%, rgba(185,243,255,.08), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.005)),
+        #070B14;
       color: var(--ink);
       overflow-y: auto;
       isolation: isolate;
@@ -66,7 +82,7 @@
       display: grid;
       grid-template-columns: minmax(360px,1fr) minmax(360px,1fr);
       grid-auto-rows: min-content;
-      gap: 24px;
+      gap: 14px;
     }
     @media(max-width:1100px){
       .aiou-wrap {
@@ -80,50 +96,73 @@
        ========================================================= */
     .aiou-card {
       background:
-        radial-gradient(circle at 0% 0%, rgba(255,255,255,.07) 0%, rgba(0,0,0,0) 60%),
-        linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.015) 60%,rgba(0,0,0,0) 100%);
-      background-color: #101426;
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      box-shadow: 0 24px 48px rgba(0,0,0,.8);
+        radial-gradient(1200px 700px at 15% 10%, rgba(102,178,255,.18), transparent 55%),
+        radial-gradient(900px 520px at 92% 12%, rgba(185,243,255,.10), transparent 55%),
+        linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
+      border: 1px solid var(--stroke);
+      border-radius: var(--r20);
+      box-shadow: var(--shadow);
       color: var(--ink);
       position: relative;
-      padding: 20px 20px 16px;
+      padding: 16px;
+      overflow: hidden;
+    }
+    .aiou-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
+      opacity:.7;
     }
     /* timer HUD */
     .overallTimer {
       position: absolute !important;
-      top: 20px;
-      right: 20px;
+      top: 16px;
+      right: 16px;
       display: flex;
       flex-direction: row;
       align-items: center;
       gap: 10px;
       text-align: right;
+      z-index: 2;
     }
     .overallTimer .hint {
       font-size: 12px;
       color: var(--muted);
       line-height: 1.3;
+      font-weight: 800;
     }
     .overallTimer .badge {
       font-size: 11px;
       font-weight: 900;
       line-height: 1.2;
-      padding: 5px 8px 4px;
+      padding: 7px 10px 6px;
       border-radius: 999px;
-      background: linear-gradient(180deg,var(--chip-bg-start),var(--chip-bg-end));
-      color: #06112b;
-      border: none;
-      min-width: 44px;
+      background:
+        radial-gradient(140px 70px at 25% 30%, rgba(102,178,255,.38), transparent 70%),
+        linear-gradient(180deg, rgba(102,178,255,.22), rgba(0,0,0,.25));
+      color: var(--ink);
+      border: 1px solid rgba(102,178,255,.70);
+      min-width: 52px;
       text-align: center;
-      box-shadow: 0 8px 24px rgba(0,0,0,.8);
+      box-shadow: 0 10px 28px rgba(102,178,255,.12);
+    }
+    .aiou-title-block{
+      position:relative;
+      z-index:1;
+      border-radius: var(--r16);
+      border: 1px solid rgba(180,210,255,.14);
+      background: rgba(0,0,0,.26);
+      box-shadow: var(--shadow2);
+      padding: 14px;
+      overflow: hidden;
     }
     .aiou-title-block h1 {
       margin: 0 0 12px;
       font-size: 22px;
-      font-weight: 900;
-      line-height: 1.25;
+      font-weight: 950;
+      line-height: 1.15;
       letter-spacing: .2px;
       color: var(--ink);
       padding-right: 110px;
@@ -140,30 +179,43 @@
       font-size: 13px;
       line-height: 1.5;
       margin: 0 0 12px;
-      max-width: 480px;
+      max-width: 560px;
+      font-weight: 700;
     }
     .aiou-bar {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
       margin-top: 12px;
+      position: relative;
+      z-index: 1;
     }
     .aiou-btn {
-      border: 1px solid rgba(255,255,255,.14);
-      background: var(--panel-2);
-      color: var(--ink);
-      padding: 10px 14px;
-      border-radius: 12px;
+      appearance:none;
+      border: 1px solid rgba(180,210,255,.16);
+      background: rgba(0,0,0,.30);
+      color: rgba(242,247,255,.78);
+      padding: 11px 15px;
+      border-radius: 14px;
       cursor: pointer;
-      font-weight: 800;
+      font-weight: 900;
       font-size: 13px;
       line-height: 1.2;
+      transition: .15s ease;
+      box-shadow:none;
+    }
+    .aiou-btn:hover{
+      border-color: rgba(180,210,255,.28);
+      color: var(--ink);
+      transform: translateY(-1px);
     }
     .aiou-btn.primary {
-      background: linear-gradient(180deg,var(--chip-bg-start),var(--chip-bg-end));
-      border: none;
-      color: #06112b;
-      box-shadow: 0 16px 32px rgba(0,0,0,.8);
+      border: 1px solid rgba(102,178,255,.70);
+      background:
+        radial-gradient(220px 110px at 20% 25%, rgba(102,178,255,.40), transparent 65%),
+        linear-gradient(180deg, rgba(102,178,255,.22), rgba(0,0,0,.28));
+      color: var(--ink);
+      box-shadow: 0 14px 30px rgba(102,178,255,.12);
     }
     .aiou-btn.warn {
       background: transparent;
@@ -176,50 +228,67 @@
     .aiou-card h2 {
       margin: 0 0 6px;
       font-size: 14px;
-      font-weight: 800;
+      font-weight: 950;
       line-height: 1.3;
       letter-spacing: .2px;
       color: var(--ink);
       text-transform: uppercase;
+      position: relative;
+      z-index: 1;
     }
     .aiou-card .blurb {
       color: var(--muted);
       font-size: 12px;
-      line-height: 1.4;
+      line-height: 1.5;
       margin: 0 0 16px;
-      max-width: 520px;
+      max-width: 560px;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
     }
     .aiou-grid {
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 14px;
+      position: relative;
+      z-index: 1;
     }
     @media(max-width:600px){
       .aiou-grid { grid-template-columns: 1fr; }
     }
     label.aiou-label {
       font-size: 12px;
-      font-weight: 600;
+      font-weight: 900;
       color: var(--ink);
       display: block;
       margin-bottom: 6px;
       line-height: 1.3;
+      text-transform: uppercase;
+      letter-spacing: .04em;
     }
     .aiou-input,
     .aiou-select {
       width: 100%;
       appearance: none;
-      padding: 10px 12px;
-      font-size: 13px;
+      padding: 12px 12px;
+      font-size: 14px;
       line-height: 1.3;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 14px;
+      border: 1px solid rgba(180,210,255,.16);
       background: rgba(255,255,255,.06);
       color: var(--ink);
-      box-shadow: 0 16px 32px rgba(0,0,0,.6) inset;
+      box-shadow: inset 0 14px 28px rgba(0,0,0,.34);
+      font-weight: 800;
+      outline:none;
+      transition:.12s ease;
+    }
+    .aiou-input:focus,
+    .aiou-select:focus{
+      border-color: rgba(102,178,255,.70);
+      box-shadow: 0 0 0 4px rgba(102,178,255,.14);
     }
     .aiou-input::placeholder {
-      color: #c9d2ff88;
+      color: rgba(242,247,255,.38);
     }
     /* =========================================================
        //#5 FULL-WIDTH ROW CARDS
@@ -237,6 +306,7 @@
       background: rgba(255,255,255,.10);
       border-radius: 999px;
       overflow: hidden;
+      z-index: 2;
     }
     .qtopbar > i {
       display: block;
@@ -246,19 +316,24 @@
       transform-origin: left;
     }
     #qTitle {
-      margin: 24px 0 4px;
+      margin: 26px 0 4px;
       font-size: 15px;
-      font-weight: 800;
+      font-weight: 950;
       color: var(--ink);
       letter-spacing: .2px;
       text-transform: uppercase;
+      position: relative;
+      z-index: 1;
     }
     #qText {
       color: var(--muted);
       font-size: 13px;
       line-height: 1.5;
       margin: 0 0 12px;
-      max-width: 600px;
+      max-width: 700px;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
     }
     /* visual question block */
     .dualpref {
@@ -268,6 +343,8 @@
       gap: 12px;
       align-items: center;
       margin-top: 10px;
+      position: relative;
+      z-index: 1;
     }
     @media(max-width:800px){
       .dualpref { grid-template-columns: 1fr; }
@@ -276,12 +353,12 @@
     .dualpref img {
       width: 100%;
       max-height: 280px;
-      border-radius: 12px;
-      border: 1px solid var(--border);
+      border-radius: 14px;
+      border: 1px solid rgba(180,210,255,.14);
       object-fit: cover;
       object-position: center;
       background: #0b0e1a;
-      box-shadow: 0 24px 48px rgba(0,0,0,.8);
+      box-shadow: var(--shadow2);
       cursor: pointer;
     }
     .dualpref figcaption {
@@ -290,6 +367,7 @@
       color: var(--muted);
       line-height: 1.4;
       margin-top: 6px;
+      font-weight: 800;
     }
     .sliderRow {
       grid-column: 1 / -1;
@@ -300,8 +378,10 @@
     .sliderRow .end {
       flex: 0 0 auto;
       font-size: 12px;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .04em;
     }
     .rangeWrap {
       flex: 1 1 auto;
@@ -346,32 +426,43 @@
       grid-template-columns: repeat(11,1fr);
       gap: 8px;
       margin: 16px 0 0;
-      max-width: 600px;
+      max-width: 760px;
+      position: relative;
+      z-index: 1;
     }
     .pill {
       text-align: center;
       padding: 10px 0;
       border-radius: 10px;
       font-size: 12px;
-      border: 1px solid rgba(255,255,255,.16);
+      border: 1px solid rgba(180,210,255,.16);
       background: rgba(255,255,255,.06);
       cursor: pointer;
       line-height: 1.3;
-      box-shadow: 0 16px 32px rgba(0,0,0,.6) inset;
+      box-shadow: inset 0 14px 28px rgba(0,0,0,.34);
       color: var(--ink);
+      font-weight: 900;
+      transition:.12s ease;
+    }
+    .pill:hover{
+      border-color: rgba(180,210,255,.28);
+      transform: translateY(-1px);
     }
     .pill[data-sel="1"] {
-      outline: 2px solid var(--accent2);
-      color: #06112b;
-      background: linear-gradient(180deg,var(--chip-bg-start),var(--chip-bg-end));
-      border: none;
-      box-shadow: 0 16px 32px rgba(0,0,0,.8);
+      border: 1px solid rgba(102,178,255,.70);
+      color: var(--ink);
+      background:
+        radial-gradient(140px 70px at 25% 30%, rgba(102,178,255,.38), transparent 70%),
+        linear-gradient(180deg, rgba(102,178,255,.22), rgba(0,0,0,.25));
+      box-shadow: 0 10px 28px rgba(102,178,255,.12);
     }
     .quiz-controls {
       display: flex;
       gap: 10px;
       flex-wrap: wrap;
       margin-top: 16px;
+      position: relative;
+      z-index: 1;
     }
     .quiz-hint {
       font-size: 12px;
@@ -379,6 +470,9 @@
       line-height: 1.4;
       margin-top: 6px;
       max-width: 520px;
+      font-weight: 700;
+      position: relative;
+      z-index: 1;
     }
     /* =========================================================
        //#6 RESULTS CARD
@@ -388,27 +482,29 @@
       flex-wrap: wrap;
       gap: 10px;
       margin: 16px 0 12px;
+      position: relative;
+      z-index: 1;
     }
     .kpi-chip {
       background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 12px;
+      border: 1px solid rgba(180,210,255,.14);
+      border-radius: 14px;
       padding: 12px;
       min-width: 140px;
-      box-shadow: 0 24px 48px rgba(0,0,0,.8);
+      box-shadow: var(--shadow2);
     }
     .kpi-chip h3 {
       margin: 0 0 6px;
       font-size: 11px;
       line-height: 1.3;
-      font-weight: 700;
+      font-weight: 800;
       color: var(--muted);
       text-transform: uppercase;
       letter-spacing: .2px;
     }
     .kpi-chip div {
       font-size: 18px;
-      font-weight: 900;
+      font-weight: 950;
       color: var(--ink);
       line-height: 1.2;
     }
@@ -416,9 +512,11 @@
     .arch-block,
     .mbti-block {
       font-size: 12px;
-      line-height: 1.5;
+      line-height: 1.55;
       color: var(--muted);
       margin-bottom: 8px;
+      position: relative;
+      z-index: 1;
     }
     .arch-block,
     .mbti-block {
@@ -436,17 +534,19 @@
     /* report container */
     #jsonReportBox {
       background: rgba(255,255,255,.05);
-      border: 1px solid rgba(255,255,255,.12);
-      border-radius: 12px;
+      border: 1px solid rgba(180,210,255,.14);
+      border-radius: 14px;
       font-size: 12px;
-      line-height: 1.5;
+      line-height: 1.6;
       color: var(--ink);
       padding: 16px;
       min-height: 200px;
       box-shadow:
-        0 24px 48px rgba(0,0,0,.8) inset,
-        0 24px 48px rgba(0,0,0,.8);
+        inset 0 24px 48px rgba(0,0,0,.45),
+        var(--shadow2);
       white-space: normal;
+      position: relative;
+      z-index: 1;
     }
     .results-actions { display: none; }
     /* =========================================================
@@ -459,10 +559,10 @@
       if (window.__AIOU_MOUNTED__) return;
       window.__AIOU_MOUNTED__ = true;
       /* =========================================================
-         //#0A PCS UNITED • PENDING COMMIT KEYS (NEW)
+         //#0A PCS UNITED • PENDING COMMIT KEYS (UNCHANGED)
          ========================================================= */
       const PENDING_KEY = "pcsunited.pending_intake.v1";
-      const AIOU_LOCAL_KEY = "pcsunited.user_aiou_inputs.v1";   // local cache
+      const AIOU_LOCAL_KEY = "pcsunited.user_aiou_inputs.v1";
       const LOGIN_EMAIL_KEYS = [
         "pcsunited.loginEmail",
         "pcsunited.sessionEmail",
@@ -503,7 +603,6 @@
         const merged = {
           ...base,
           ...partial,
-          // keep original attempt_id if already present
           attempt_id: base.attempt_id || makeAttemptId(),
           created_at: base.created_at || new Date().toISOString(),
           updated_at: new Date().toISOString(),
@@ -528,7 +627,7 @@
               <span class="badge" id="overallClock">3:00</span>
             </div>
             <div class="aiou-title-block">
-              <h1>A.I.O.U • TIMED<br>BUYER<br>PSYCHOLOGY TEST</h1>
+              <h1>A.I.O.U • TIMED BUYER PSYCHOLOGY TEST</h1>
               <p class="aiou-desc">
                 Each question is timed (<b>10 seconds</b>). Choose from
                 <b>-5</b> to <b>+5</b>.
@@ -925,50 +1024,40 @@
         return { type, confidence };
       }
       /* =========================================================
-         //#16A AIOU → HOME CONDITION MAPPING (NEW)
+         //#16A AIOU → HOME CONDITION MAPPING (UNCHANGED)
          ========================================================= */
       function mapHomeConditionFromSlider(v){
         const x = Number(v || 0);
-        // Your screenshot/table wants something like home_condition
         if (x >= 3) return "new";
         if (x <= -3) return "value_add";
         return "light";
       }
       /* =========================================================
-         //#16B SAVE AIOU INTO PENDING (NEW) — FAI-style
+         //#16B SAVE AIOU INTO PENDING (UNCHANGED)
          ========================================================= */
       function queueAiouPending(brief){
         const email = getAnyEmail() || "";
         const home_condition = mapHomeConditionFromSlider(brief?.visual?.styleVsPriceSlider);
-        // Build payload aligned to your table columns
         const aiouRow = {
-          // If your commit-intake upserts profiles, email is the join key
           email: email || null,
-          // These align to what you showed in Supabase UI (user_aiou_inputs)
           bedrooms: Number(brief?.profile?.bedrooms || 0) || null,
           bathrooms: null,
           sqft: null,
           property_type: null,
           amenities: null,
           home_condition,
-          // Pull these if already captured by FAI (so AIOU also refreshes profile)
           downpayment: null,
           credit_score: null,
           time_to_buy: null,
-          // Store the psych summary too (server can ignore if not used)
           aiou_scores: brief?.scores || null,
           aiou_archetype: brief?.archetype || null,
           aiou_mbti: brief?.mbti || null,
           source: "pcsunited.aiou.quiz.v3",
           saved_at: new Date().toISOString()
         };
-        // If FAI already created pending_intake, MERGE into it.
-        // Also: if FAI local keys exist, pull them in (so one commit saves everything).
         const pending = readJSON(PENDING_KEY, null) || {};
-        // Try to read financial intake (if already completed)
         const fin = readJSON("pcsunited.financial_intake.v1", null) || null;
         const ov  = readJSON("pcsunited.kpi_overrides.v1", null) || null;
-        // hydrate aiouRow from financial if present
         if (fin){
           aiouRow.time_to_buy  = fin.mode || aiouRow.time_to_buy;
           aiouRow.credit_score = Number(fin.creditScore || 0) || aiouRow.credit_score;
@@ -980,13 +1069,11 @@
           if (!aiouRow.credit_score && sc) aiouRow.credit_score = sc;
           if (!aiouRow.downpayment && dp)  aiouRow.downpayment  = dp;
         }
-        // Write local AIOU cache for other UI modules
         writeJSON(AIOU_LOCAL_KEY, aiouRow);
-        // Merge into pending intake (commit-intake will pick it up)
         mergePending({
           email: pending.email || email || null,
           aiou: aiouRow,
-          aiou_brief: brief,   // optional full brief for history/debug
+          aiou_brief: brief,
           source: pending.source || "pcsunited.pending.v1"
         });
       }
@@ -1044,15 +1131,12 @@
             styleVsPriceSlider: Number(window.__STYLE_V_PRICE ?? 0)
           }
         };
-        // show results card
         $('#resultsCard').classList.remove('hidden');
-        // ✅ NEW: queue for cloud commit (FAI style)
         queueAiouPending(brief);
-        // auto report
         sendToLLM(brief);
       }
       /* =========================================================
-         //#17 CALL NETLIFY FUNCTION (AUTO REPORT IN BOX)
+         //#17 CALL NETLIFY FUNCTION (UNCHANGED)
          ========================================================= */
       async function sendToLLM(brief){
         const ENDPOINT = (

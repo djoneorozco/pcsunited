@@ -1,0 +1,2618 @@
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Apr 19 2026 06:48:57 GMT+0000 (Coordinated Universal Time)  -->
+<html data-wf-page="69cf175981c55447548ca322" data-wf-site="69b6b526f23748df9f189b16" lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Orders Translator</title>
+  <meta content="Orders Translator" property="og:title">
+  <meta content="Orders Translator" property="twitter:title">
+  <meta content="width=device-width, initial-scale=1" name="viewport">
+  <meta content="Webflow" name="generator">
+  <link href="css/normalize.css" rel="stylesheet" type="text/css">
+  <link href="css/webflow.css" rel="stylesheet" type="text/css">
+  <link href="css/pcsu.webflow.css" rel="stylesheet" type="text/css">
+  <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
+  <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
+  <link href="images/webclip.png" rel="apple-touch-icon">
+</head>
+<body>
+  <div class="w-embed w-script"><!--  ============================================================
+  PCS Orders Translator — SHELL + CORE Runtime (2A)
+  v2.1.0 — FIXES:
+  ✅ ID mismatch fixed (shell uses #pcsu-fileInput; runtime now matches)
+  ✅ Dropzone is clickable + drag/drop (without wrapping buttons inside <label>)
+  ✅ Upload status text updates (file name / states)
+  ✅ Redact toggle wired into API payload
+  ✅ Image uploads supported (sent as base64 to API) + PDF text via PDF.js
+  ✅ “Paint” results into the brief (safe fallbacks)
+===============================================================  -->
+    <div id="pcsu-orders" style="all: initial;">
+      <!--  #1 Fonts  -->
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+      <style>
+    /* ============================================================
+      #2 Reset + Tokens
+    ============================================================ */
+    #pcsu-orders, #pcsu-orders * { box-sizing: border-box; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    #pcsu-orders { width: 100%; }
+    :root{
+      --pcsu-bg: #eef2f7;
+      --pcsu-ink: #0b1220;
+      --pcsu-sub: #5c6b84;
+      --pcsu-line: rgba(20, 40, 70, 0.14);
+      --pcsu-blue0: #0a2d66;
+      --pcsu-blue1: #123f86;
+      --pcsu-blue2: #1b5dbf;
+      --pcsu-blue3: #2d78e8;
+      --pcsu-card: #ffffff;
+      --pcsu-soft: #f6f8fc;
+      --pcsu-ok: #1f7a4c;
+      --pcsu-warn: #c89200;
+      --pcsu-bad: #b42318;
+      --pcsu-radius-lg: 18px;
+      --pcsu-radius-md: 14px;
+      --pcsu-radius-sm: 10px;
+      --pcsu-shadow: 0 18px 44px rgba(7, 14, 28, 0.12);
+      --pcsu-shadow2: 0 10px 24px rgba(7, 14, 28, 0.10);
+    }
+    /* ============================================================
+      #3 Page Shell
+    ============================================================ */
+    .pcsu-wrap{
+      width: 100%;
+      min-height: 100vh;
+      background: var(--pcsu-bg);
+      padding: 26px 18px 40px;
+    }
+    .pcsu-frame{
+      width: min(1040px, 100%);
+      margin: 0 auto;
+      border-radius: var(--pcsu-radius-lg);
+      overflow: hidden;
+      box-shadow: var(--pcsu-shadow);
+      background: var(--pcsu-card);
+      border: 1px solid rgba(20, 40, 70, 0.10);
+    }
+    /* ============================================================
+      #4 Top Header (Blue Bar)
+    ============================================================ */
+    .pcsu-topbar{
+      position: relative;
+      padding: 26px 22px;
+      background: linear-gradient(180deg, #1a4c93 0%, #0b2f69 100%);
+      color: #fff;
+    }
+    .pcsu-topbar-inner{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+    .pcsu-title{
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .pcsu-title h1{
+      margin: 0;
+      font-size: 34px;
+      line-height: 1.05;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .pcsu-title p{
+      margin: 0;
+      opacity: 0.92;
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .pcsu-brand{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      opacity: 0.92;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      white-space: nowrap;
+    }
+    .pcsu-jet{
+      width: 38px;
+      height: 38px;
+      display: grid;
+      place-items: center;
+      border-radius: 12px;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+    }
+    /* ============================================================
+      #5 Upload Card
+    ============================================================ */
+    .pcsu-body{
+      padding: 18px 18px 22px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0.00) 100%);
+    }
+    .pcsu-upload-card{
+      background: var(--pcsu-card);
+      border: 1px solid rgba(20, 40, 70, 0.12);
+      border-radius: var(--pcsu-radius-lg);
+      padding: 16px;
+      box-shadow: 0 10px 22px rgba(7, 14, 28, 0.06);
+    }
+    /* ✅ Dropzone is now a plain div (no nested label/buttons issues) */
+    .pcsu-dropzone{
+      border: 2px dashed rgba(45, 120, 232, 0.28);
+      background: #fbfcff;
+      border-radius: 16px;
+      padding: 26px 18px;
+      display: grid;
+      place-items: center;
+      text-align: center;
+      position: relative;
+      cursor: pointer;
+      transition: border-color .12s ease, transform .12s ease, filter .12s ease;
+      outline: none;
+    }
+    .pcsu-dropzone:hover{
+      border-color: rgba(45, 120, 232, 0.45);
+      filter: brightness(1.01);
+      transform: translateY(-1px);
+    }
+    .pcsu-dropzone:active{ transform: translateY(0px); filter: brightness(0.99); }
+    .pcsu-dropzone.is-dragover{
+      border-color: rgba(45, 120, 232, 0.72);
+      box-shadow: 0 0 0 4px rgba(45, 120, 232, 0.10);
+    }
+    .pcsu-docicon{
+      width: 54px;
+      height: 54px;
+      border-radius: 16px;
+      background: rgba(45, 120, 232, 0.10);
+      border: 1px solid rgba(45, 120, 232, 0.18);
+      display: grid;
+      place-items: center;
+      margin-bottom: 14px;
+    }
+    .pcsu-dropzone h2{
+      margin: 0;
+      font-size: 18px;
+      font-weight: 800;
+      color: #102645;
+      letter-spacing: -0.01em;
+    }
+    .pcsu-dropzone .pcsu-subline{
+      margin: 8px 0 0;
+      font-size: 13px;
+      color: var(--pcsu-sub);
+      font-weight: 600;
+    }
+    .pcsu-controls{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 14px;
+      margin-top: 14px;
+    }
+    .pcsu-toggle{
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(16, 38, 69, 0.04);
+      border: 1px solid rgba(20, 40, 70, 0.12);
+      padding: 10px 12px;
+      border-radius: 12px;
+      color: #102645;
+      font-weight: 700;
+      font-size: 13px;
+      user-select: none;
+    }
+    .pcsu-toggle small{
+      font-weight: 800;
+      color: rgba(90, 110, 140, 0.95);
+    }
+    .pcsu-btn{
+      appearance: none;
+      border: 0;
+      cursor: pointer;
+      font-weight: 800;
+      letter-spacing: 0.01em;
+      padding: 14px 18px;
+      border-radius: 12px;
+      width: min(320px, 100%);
+      color: #fff;
+      background: linear-gradient(180deg, #2d78e8 0%, #1b5dbf 100%);
+      box-shadow: 0 16px 28px rgba(27, 93, 191, 0.22);
+      transition: transform .12s ease, filter .12s ease;
+    }
+    .pcsu-btn:hover{ transform: translateY(-1px); filter: brightness(1.02); }
+    .pcsu-btn:active{ transform: translateY(0px); filter: brightness(0.98); }
+    .pcsu-btn[disabled]{ opacity:.65; cursor:not-allowed; filter:saturate(.8); transform:none !important; }
+    /* Hidden file input (2A uses this) */
+    #pcsu-fileInput{ display:none; }
+    /* Optional status hook (tiny, no layout change) */
+    .pcsu-upload-status{
+      font-size: 12px;
+      color: var(--pcsu-sub);
+      font-weight: 800;
+    }
+    /* ============================================================
+      #6 Tabs Row
+    ============================================================ */
+    .pcsu-tabs{
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 10px;
+    }
+    .pcsu-tab{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 10px;
+      border-radius: 14px 14px 10px 10px;
+      background: rgba(255,255,255,0.85);
+      border: 1px solid rgba(20, 40, 70, 0.12);
+      color: #243a5c;
+      font-weight: 800;
+      font-size: 13px;
+      cursor: default;
+      position: relative;
+      overflow: hidden;
+    }
+    .pcsu-tab.is-active{
+      background: #ffffff;
+      border-bottom-color: rgba(255,255,255,0.0);
+      box-shadow: 0 10px 18px rgba(7, 14, 28, 0.08);
+    }
+    .pcsu-tab .pcsu-ico{
+      width: 22px; height: 22px;
+      display: grid; place-items: center;
+      border-radius: 8px;
+      background: rgba(16, 38, 69, 0.05);
+      border: 1px solid rgba(20, 40, 70, 0.10);
+      font-size: 12px;
+    }
+    .pcsu-tab.is-active:after{
+      content:"";
+      position:absolute;
+      left: 12px; right: 12px; bottom: -10px;
+      height: 12px;
+      background: #ffffff;
+      border-radius: 12px;
+    }
+    /* ============================================================
+      #7 Orders Brief Section
+    ============================================================ */
+    .pcsu-brief{
+      margin-top: 0;
+      background: #ffffff;
+      border: 1px solid rgba(20, 40, 70, 0.12);
+      border-top: 0;
+      border-radius: 0 0 var(--pcsu-radius-lg) var(--pcsu-radius-lg);
+      padding: 18px 18px 16px;
+    }
+    .pcsu-brief-title{
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 12px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid rgba(20, 40, 70, 0.10);
+      margin-bottom: 12px;
+    }
+    .pcsu-brief-title h3{
+      margin: 0;
+      font-size: 18px;
+      font-weight: 900;
+      color: #102645;
+      letter-spacing: -0.01em;
+    }
+    .pcsu-brief-title .pcsu-mini{
+      margin: 0;
+      font-size: 12px;
+      color: var(--pcsu-sub);
+      font-weight: 800;
+    }
+    .pcsu-bluf{
+      background: rgba(31, 122, 76, 0.12);
+      border: 1px solid rgba(31, 122, 76, 0.22);
+      border-left: 6px solid rgba(31, 122, 76, 0.85);
+      border-radius: 12px;
+      padding: 12px 12px;
+      font-weight: 900;
+      color: #0c3b24;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin: 12px 0 14px;
+    }
+    .pcsu-bluf span{ font-weight: 900; }
+    .pcsu-grid{
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+    }
+    .pcsu-box{
+      border-radius: 14px;
+      background: #ffffff;
+      border: 1px solid rgba(20, 40, 70, 0.12);
+      overflow: hidden;
+      box-shadow: 0 10px 18px rgba(7, 14, 28, 0.06);
+    }
+    .pcsu-box-h{
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 12px;
+      background: rgba(16, 38, 69, 0.03);
+      border-bottom: 1px solid rgba(20, 40, 70, 0.10);
+      font-weight: 900;
+      color: #102645;
+      font-size: 13px;
+    }
+    .pcsu-box-h .pcsu-ico2{
+      width: 26px;
+      height: 26px;
+      border-radius: 10px;
+      display: grid;
+      place-items: center;
+      background: rgba(45, 120, 232, 0.10);
+      border: 1px solid rgba(45, 120, 232, 0.18);
+      color: #184a99;
+      font-size: 13px;
+    }
+    .pcsu-box-b{
+      padding: 12px 12px 10px;
+    }
+    .pcsu-row{
+      display: grid;
+      grid-template-columns: 22px 1fr;
+      gap: 10px;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(20, 40, 70, 0.08);
+      align-items: start;
+    }
+    .pcsu-row:last-child{ border-bottom: 0; padding-bottom: 4px; }
+    .pcsu-dot{
+      width: 22px; height: 22px;
+      border-radius: 8px;
+      display: grid;
+      place-items: center;
+      background: rgba(16, 38, 69, 0.05);
+      border: 1px solid rgba(20, 40, 70, 0.10);
+      color: rgba(16, 38, 69, 0.85);
+      font-size: 12px;
+      margin-top: 1px;
+    }
+    .pcsu-row b{
+      display:block;
+      font-size: 12px;
+      color: #102645;
+      font-weight: 900;
+      margin-bottom: 2px;
+    }
+    .pcsu-row p{
+      margin: 0;
+      font-size: 12px;
+      color: var(--pcsu-sub);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .pcsu-warn .pcsu-ico2{
+      background: rgba(200, 146, 0, 0.10);
+      border-color: rgba(200, 146, 0, 0.20);
+      color: #7a5a00;
+    }
+    .pcsu-warn .pcsu-dot{
+      background: rgba(200, 146, 0, 0.10);
+      border-color: rgba(200, 146, 0, 0.20);
+      color: #7a5a00;
+    }
+    /* ============================================================
+      #8 Footer Actions
+    ============================================================ */
+    .pcsu-actions{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      padding-top: 14px;
+      margin-top: 14px;
+      border-top: 1px solid rgba(20, 40, 70, 0.10);
+      flex-wrap: wrap;
+    }
+    .pcsu-btn2{
+      appearance: none;
+      border: 1px solid rgba(20, 40, 70, 0.14);
+      background: #ffffff;
+      color: #102645;
+      font-weight: 900;
+      padding: 11px 14px;
+      border-radius: 12px;
+      cursor: default;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 10px 18px rgba(7, 14, 28, 0.05);
+    }
+    .pcsu-btn3{
+      appearance: none;
+      border: 0;
+      background: linear-gradient(180deg, rgba(31, 122, 76, 0.92) 0%, rgba(23, 92, 58, 1) 100%);
+      color: #fff;
+      font-weight: 900;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: default;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      box-shadow: 0 16px 26px rgba(23, 92, 58, 0.20);
+    }
+    .pcsu-note{
+      margin: 14px 0 0;
+      font-size: 11px;
+      color: rgba(92, 107, 132, 0.95);
+      font-weight: 700;
+      text-align: center;
+    }
+    /* ============================================================
+      #9 Responsive
+    ============================================================ */
+    @media (max-width: 900px){
+      .pcsu-title h1{ font-size: 28px; }
+      .pcsu-grid{ grid-template-columns: 1fr; }
+      .pcsu-tabs{ grid-template-columns: 1fr; }
+      .pcsu-tab{ border-radius: 14px; }
+      .pcsu-tab.is-active:after{ display:none; }
+    }
+  </style>
+      <!--  ============================================================
+    #10 Markup
+  ============================================================  -->
+      <section class="pcsu-wrap">
+        <div class="pcsu-frame" role="region" aria-label="PCS Orders Translator">
+          <!--  Top Header  -->
+          <header class="pcsu-topbar">
+            <div class="pcsu-topbar-inner">
+              <div class="pcsu-title">
+                <h1>PCS Orders Translator</h1>
+                <p>Upload &amp; Understand Your PCS Orders</p>
+              </div>
+              <div class="pcsu-brand" aria-label="Powered by PCS United">
+                <div class="pcsu-jet" aria-hidden="true">
+                  <svg width="22" height="22" viewbox="0 0 24 24" fill="none">
+                    <path d="M2 13l20-8-8 20-2-8-10-4z" fill="rgba(255,255,255,0.92)"></path>
+                  </svg>
+                </div>
+                <span>Powered by <b>PCS United</b></span>
+              </div>
+            </div>
+          </header>
+          <!--  Body  -->
+          <main class="pcsu-body">
+            <!--  Upload  -->
+            <section class="pcsu-upload-card" aria-label="Upload PCS Orders">
+              <!--  ✅ Clickable dropzone (2A triggers file picker)  -->
+              <div class="pcsu-dropzone" id="pcsu-dropzone" role="button" tabindex="0" aria-label="Upload PCS Orders">
+                <div class="pcsu-docicon" aria-hidden="true">
+                  <svg width="26" height="26" viewbox="0 0 24 24" fill="none">
+                    <path d="M6 2h8l4 4v16H6V2z" fill="rgba(45,120,232,0.18)"></path>
+                    <path d="M14 2v4h4" stroke="rgba(255,255,255,0.6)" stroke-width="1.5"></path>
+                    <path d="M12 16V9" stroke="#184a99" stroke-width="2" stroke-linecap="round"></path>
+                    <path d="M9.5 11.5L12 9l2.5 2.5" stroke="#184a99" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                  </svg>
+                </div>
+                <h2>Upload Your PCS Orders (PDF or Photo)</h2>
+                <p class="pcsu-subline">Drop a file here or click to select</p>
+              </div>
+              <div class="pcsu-controls">
+                <label class="pcsu-toggle" for="pcsu-redactToggle">
+                  <span aria-hidden="true">🔒</span>
+                  <span>Automatically redact sensitive info</span>
+                  <small>| Recommended</small>
+                  <input id="pcsu-redactToggle" type="checkbox" checked="" style="margin-left:10px; transform: scale(1.1);">
+                </label>
+                <button class="pcsu-btn" id="pcsu-explainBtn" type="button">
+                  Explain My Orders
+                </button>
+                <div id="pcsu-uploadStatus" class="pcsu-upload-status">No file selected</div>
+                <!--  ✅ Canonical shell input ID  -->
+                <input id="pcsu-fileInput" type="file" accept=".pdf,image/*">
+              </div>
+            </section>
+            <!--  Tabs  -->
+            <nav class="pcsu-tabs" aria-label="Orders Translator Tabs">
+              <div class="pcsu-tab is-active" id="pcsu-tab-meaning" role="button" aria-current="true">
+                <span class="pcsu-ico" aria-hidden="true">📄</span>
+                <span>What It Means</span>
+              </div>
+              <div class="pcsu-tab" id="pcsu-tab-checklist" role="button" aria-current="false">
+                <span class="pcsu-ico" aria-hidden="true">✅</span>
+                <span>Your Checklist</span>
+              </div>
+              <div class="pcsu-tab" id="pcsu-tab-questions" role="button" aria-current="false">
+                <span class="pcsu-ico" aria-hidden="true">⚠️</span>
+                <span>Questions to Ask</span>
+              </div>
+            </nav>
+            <!--  Orders Brief  -->
+            <section class="pcsu-brief" aria-label="Orders Brief">
+              <div class="pcsu-brief-title">
+                <h3>Orders Brief</h3>
+                <p class="pcsu-mini" id="pcsu-statusText">Ready for upload</p>
+              </div>
+              <div class="pcsu-bluf" id="pcsu-bluf">
+                <span aria-hidden="true">📌</span>
+                <span id="pcsu-blufText">Upload your orders to generate a clean, human-friendly brief.</span>
+              </div>
+              <div class="pcsu-grid">
+                <article class="pcsu-box" id="pcsu-card-details">
+                  <div class="pcsu-box-h">
+                    <span class="pcsu-ico2" aria-hidden="true">📋</span>
+                    <span>Key Details</span>
+                  </div>
+                  <div class="pcsu-box-b">
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">🗓️</div>
+                      <div>
+                        <b>Report No Later</b>
+                        <p id="pcsu-detail-rnltd">—</p>
+                      </div>
+                    </div>
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">🏢</div>
+                      <div>
+                        <b>New Unit</b>
+                        <p id="pcsu-detail-unit">—</p>
+                      </div>
+                    </div>
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">👨‍👩‍👧‍👦</div>
+                      <div>
+                        <b>Dependents</b>
+                        <p id="pcsu-detail-deps">—</p>
+                      </div>
+                    </div>
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">✈️</div>
+                      <div>
+                        <b>Travel Mode</b>
+                        <p id="pcsu-detail-travel">—</p>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                <article class="pcsu-box" id="pcsu-card-next">
+                  <div class="pcsu-box-h">
+                    <span class="pcsu-ico2" aria-hidden="true">🧭</span>
+                    <span>Next Steps</span>
+                  </div>
+                  <div class="pcsu-box-b">
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">📦</div>
+                      <div>
+                        <b>Schedule TMO Briefing</b>
+                        <p id="pcsu-next-1">—</p>
+                      </div>
+                    </div>
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">🏨</div>
+                      <div>
+                        <b>Arrange Temporary Lodging</b>
+                        <p id="pcsu-next-2">—</p>
+                      </div>
+                    </div>
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">💳</div>
+                      <div>
+                        <b>Contact Finance for DLA</b>
+                        <p id="pcsu-next-3">—</p>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+                <article class="pcsu-box pcsu-warn" id="pcsu-card-notes">
+                  <div class="pcsu-box-h">
+                    <span class="pcsu-ico2" aria-hidden="true">⚠️</span>
+                    <span>Important Notes</span>
+                  </div>
+                  <div class="pcsu-box-b">
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">🛂</div>
+                      <div>
+                        <b>Confirm Passport &amp; Visas</b>
+                        <p id="pcsu-note-1">—</p>
+                      </div>
+                    </div>
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">⚖️</div>
+                      <div>
+                        <b>HHG Weight Limit</b>
+                        <p id="pcsu-note-2">—</p>
+                      </div>
+                    </div>
+                    <div class="pcsu-row">
+                      <div class="pcsu-dot" aria-hidden="true">🩺</div>
+                      <div>
+                        <b>Check Medical Clearance</b>
+                        <p id="pcsu-note-3">—</p>
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              </div>
+              <div class="pcsu-actions" aria-label="Brief Actions">
+                <button class="pcsu-btn2" id="pcsu-downloadBtn" type="button">
+                  <span aria-hidden="true">⬇️</span>
+                  <span>Download Brief</span>
+                </button>
+                <button class="pcsu-btn3" id="pcsu-askElenaBtn" type="button">
+                  <span aria-hidden="true">💬</span>
+                  <span>Need Help? Ask Elena</span>
+                  <span aria-hidden="true">➜</span>
+                </button>
+              </div>
+              <p class="pcsu-note">
+                Note: This tool provides a simplified explanation of your PCS orders. Always verify details with MPF, TMO, or Finance.
+              </p>
+            </section>
+          </main>
+        </div>
+      </section>
+    </div>
+    <script>
+/* ============================================================
+  PCS Orders Translator — CORE Runtime (2A)
+  v2.1.0
+  ✅ FIX: binds to #pcsu-fileInput (shell ID)
+  ✅ Dropzone click + drag/drop
+  ✅ PDF -> text via PDF.js, Images -> base64 (API can OCR server-side)
+  ✅ Paint results into cards (safe fallbacks)
+=============================================================== */
+(() => {
+  if (window.PCSU_ORDERS && window.PCSU_ORDERS.__mounted) return;
+  const CORE = (window.PCSU_ORDERS = window.PCSU_ORDERS || {});
+  CORE.__mounted = true;
+  const $ = (q) => document.querySelector(q);
+  const STORAGE_KEY = "pcsunited.orders.v1";
+  // ✅ IMPORTANT: Webflow pages must call Netlify directly
+  const API_BASE = (
+    location.hostname.endsWith("webflow.io") ||
+    location.hostname.endsWith("webflow.com")
+  )
+    ? "https://pcsunited.netlify.app/api"
+    : "/api";
+  const els = {
+    dropzone: null,
+    fileInput: null,
+    explainBtn: null,
+    redactToggle: null,
+    uploadStatus: null,
+    statusText: null,
+    // brief fields
+    blufText: null,
+    rnltd: null,
+    unit: null,
+    deps: null,
+    travel: null,
+    next1: null,
+    next2: null,
+    next3: null,
+    note1: null,
+    note2: null,
+    note3: null,
+  };
+  function setStatus(msg){
+    if (els.statusText) els.statusText.textContent = msg;
+  }
+  function setUploadStatus(msg){
+    if (els.uploadStatus) els.uploadStatus.textContent = msg;
+  }
+  function saveState(data){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      // lightweight notify (some Webflow embeds like this pattern)
+      window.dispatchEvent(new StorageEvent("storage", { key: STORAGE_KEY }));
+    } catch(e){
+      // ignore storage failures
+    }
+  }
+  function safeGet(obj, path, fallback=""){
+    try{
+      return path.split(".").reduce((a,k)=> (a && a[k] != null ? a[k] : undefined), obj) ?? fallback;
+    } catch(e){
+      return fallback;
+    }
+  }
+  function paintBrief(data){
+    if (!data) return;
+    // BLUF: prefer blufText / bluf / summary / assignment
+    const bluf =
+      safeGet(data, "blufText") ||
+      safeGet(data, "bluf") ||
+      safeGet(data, "summary") ||
+      safeGet(data, "assignment") ||
+      safeGet(data, "brief.bluf") ||
+      "";
+    if (els.blufText) els.blufText.textContent = bluf || "Orders interpreted — review your brief below.";
+    // Details (best-effort)
+    const rnltd =
+      safeGet(data, "details.rnltd") ||
+      safeGet(data, "rnltd") ||
+      safeGet(data, "key_details.report_no_later") ||
+      "—";
+    const unit =
+      safeGet(data, "details.unit") ||
+      safeGet(data, "unit") ||
+      safeGet(data, "gaining_unit") ||
+      "—";
+    const deps =
+      safeGet(data, "details.dependents") ||
+      safeGet(data, "dependents") ||
+      safeGet(data, "details.deps") ||
+      "—";
+    const travel =
+      safeGet(data, "details.travel") ||
+      safeGet(data, "travel_mode") ||
+      safeGet(data, "travel") ||
+      "—";
+    if (els.rnltd) els.rnltd.textContent = rnltd;
+    if (els.unit) els.unit.textContent = unit;
+    if (els.deps) els.deps.textContent = deps;
+    if (els.travel) els.travel.textContent = travel;
+    // Next steps (array or fields)
+    const nextArr =
+      safeGet(data, "next_steps", null) ||
+      safeGet(data, "nextSteps", null) ||
+      safeGet(data, "brief.next_steps", null);
+    const n1 = (Array.isArray(nextArr) && nextArr[0]) ? String(nextArr[0]) : (safeGet(data, "next.1") || safeGet(data, "next1") || "—");
+    const n2 = (Array.isArray(nextArr) && nextArr[1]) ? String(nextArr[1]) : (safeGet(data, "next.2") || safeGet(data, "next2") || "—");
+    const n3 = (Array.isArray(nextArr) && nextArr[2]) ? String(nextArr[2]) : (safeGet(data, "next.3") || safeGet(data, "next3") || "—");
+    if (els.next1) els.next1.textContent = n1;
+    if (els.next2) els.next2.textContent = n2;
+    if (els.next3) els.next3.textContent = n3;
+    // Notes (array or fields)
+    const noteArr =
+      safeGet(data, "important_notes", null) ||
+      safeGet(data, "importantNotes", null) ||
+      safeGet(data, "brief.notes", null);
+    const m1 = (Array.isArray(noteArr) && noteArr[0]) ? String(noteArr[0]) : (safeGet(data, "notes.1") || safeGet(data, "note1") || "—");
+    const m2 = (Array.isArray(noteArr) && noteArr[1]) ? String(noteArr[1]) : (safeGet(data, "notes.2") || safeGet(data, "note2") || "—");
+    const m3 = (Array.isArray(noteArr) && noteArr[2]) ? String(noteArr[2]) : (safeGet(data, "notes.3") || safeGet(data, "note3") || "—");
+    if (els.note1) els.note1.textContent = m1;
+    if (els.note2) els.note2.textContent = m2;
+    if (els.note3) els.note3.textContent = m3;
+  }
+  function loadPDFJS(){
+    return new Promise((resolve, reject) => {
+      if (window.pdfjsLib) return resolve();
+      const s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+      s.onload = () => {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        resolve();
+      };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+  async function extractPDFText(file){
+    await loadPDFJS();
+    const buf = await file.arrayBuffer();
+    const pdf = await window.pdfjsLib.getDocument({ data: buf }).promise;
+    let fullText = "";
+    for (let i = 1; i <= pdf.numPages; i++){
+      const page = await pdf.getPage(i);
+      const txt = await page.getTextContent();
+      const pageText = txt.items.map(x => x.str).join(" ");
+      fullText += "\n" + pageText;
+    }
+    return fullText.trim();
+  }
+  function readAsDataURL(file){
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(String(r.result || ""));
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+  function normalizeDataUrl(dataUrl){
+    // "data:application/pdf;base64,AAAA" -> { mime, base64 }
+    const m = /^data:([^;]+);base64,(.+)$/i.exec(dataUrl || "");
+    if (!m) return { mime: "", base64: "" };
+    return { mime: m[1] || "", base64: m[2] || "" };
+  }
+  async function callOrdersExtract(payload){
+    const res = await fetch(`${API_BASE}/orders-extract`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      throw new Error(`API error: ${res.status} ${errText}`);
+    }
+    return res.json();
+  }
+  async function handleFile(file){
+    if (!file){
+      setStatus("Upload your PCS orders first");
+      return;
+    }
+    const redact = !!(els.redactToggle && els.redactToggle.checked);
+    // UX
+    $("#pcsu-explainBtn")?.setAttribute("disabled", "true");
+    setStatus("Reading orders…");
+    try {
+      const isPDF = /pdf$/i.test(file.name) || (file.type === "application/pdf");
+      const isImage = /^image\//i.test(file.type);
+      let payload = {
+        filename: file.name || "upload",
+        redact
+      };
+      if (isPDF){
+        const text = await extractPDFText(file);
+        if (!text || text.length < 50){
+          // fallback: send PDF as base64 so server can try
+          setStatus("PDF text was limited — sending file for processing…");
+          const dataUrl = await readAsDataURL(file);
+          const norm = normalizeDataUrl(dataUrl);
+          payload.pdf_base64 = norm.base64;
+          payload.mime = norm.mime || file.type || "application/pdf";
+        } else {
+          payload.text = text;
+        }
+      } else if (isImage){
+        setStatus("Preparing image…");
+        const dataUrl = await readAsDataURL(file);
+        const norm = normalizeDataUrl(dataUrl);
+        payload.image_base64 = norm.base64;
+        payload.mime = norm.mime || file.type || "image/*";
+      } else {
+        setStatus("Please upload a PDF or photo");
+        return;
+      }
+      setStatus("Interpreting orders…");
+      const data = await callOrdersExtract(payload);
+      saveState(data);
+      paintBrief(data);
+      setStatus("Orders interpreted successfully");
+      setUploadStatus(`✅ Ready: ${file.name}`);
+    } catch (err){
+      console.error(err);
+      setStatus("Unable to interpret orders — try another file");
+      setUploadStatus("⚠️ Upload failed — try again");
+    } finally {
+      $("#pcsu-explainBtn")?.removeAttribute("disabled");
+    }
+  }
+  function bindDropzone(){
+    if (!els.dropzone || !els.fileInput) return;
+    const openPicker = () => els.fileInput && els.fileInput.click();
+    els.dropzone.addEventListener("click", openPicker);
+    els.dropzone.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openPicker();
+      }
+    });
+    // drag/drop
+    const over = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.add("is-dragover");
+    };
+    const leave = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.remove("is-dragover");
+    };
+    const drop = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.remove("is-dragover");
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (!f) return;
+      // mirror selection into input (best-effort)
+      try{
+        const dt = new DataTransfer();
+        dt.items.add(f);
+        els.fileInput.files = dt.files;
+      } catch(e){}
+      setUploadStatus(`Selected: ${f.name}`);
+      setStatus("File selected — click “Explain My Orders”");
+    };
+    els.dropzone.addEventListener("dragenter", over);
+    els.dropzone.addEventListener("dragover", over);
+    els.dropzone.addEventListener("dragleave", leave);
+    els.dropzone.addEventListener("drop", drop);
+  }
+  function bindUI(){
+    els.dropzone = $("#pcsu-dropzone");
+    els.fileInput = $("#pcsu-fileInput");
+    els.explainBtn = $("#pcsu-explainBtn");
+    els.redactToggle = $("#pcsu-redactToggle");
+    els.uploadStatus = $("#pcsu-uploadStatus");
+    els.statusText = $("#pcsu-statusText");
+    // brief fields
+    els.blufText = $("#pcsu-blufText");
+    els.rnltd = $("#pcsu-detail-rnltd");
+    els.unit = $("#pcsu-detail-unit");
+    els.deps = $("#pcsu-detail-deps");
+    els.travel = $("#pcsu-detail-travel");
+    els.next1 = $("#pcsu-next-1");
+    els.next2 = $("#pcsu-next-2");
+    els.next3 = $("#pcsu-next-3");
+    els.note1 = $("#pcsu-note-1");
+    els.note2 = $("#pcsu-note-2");
+    els.note3 = $("#pcsu-note-3");
+    // file selection -> status
+    els.fileInput?.addEventListener("change", () => {
+      const f = els.fileInput && els.fileInput.files && els.fileInput.files[0];
+      if (!f){
+        setUploadStatus("No file selected");
+        setStatus("Ready for upload");
+        return;
+      }
+      setUploadStatus(`Selected: ${f.name}`);
+      setStatus("File selected — click “Explain My Orders”");
+    });
+    // explain button
+    els.explainBtn?.addEventListener("click", () => {
+      const f = els.fileInput && els.fileInput.files && els.fileInput.files[0];
+      if (!f){
+        setStatus("Upload your PCS orders first");
+        setUploadStatus("No file selected");
+        return;
+      }
+      handleFile(f);
+    });
+    bindDropzone();
+    // restore last state if exists
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw){
+        const parsed = JSON.parse(raw);
+        paintBrief(parsed);
+        setStatus("Loaded last brief (local)");
+      }
+    } catch(e){}
+  }
+  function init(){ bindUI(); }
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else init();
+})();
+</script>
+  </div>
+  <div class="w-embed w-script">
+    <script>
+/* ============================================================
+  PCS Orders Translator — CORE Runtime (2A)
+  v2.1.1 — FIXES / UPGRADES:
+  ✅ Silences noisy PDF.js TT warnings (does NOT affect parsing)
+  ✅ Binds to shell IDs: #pcsu-fileInput, #pcsu-dropzone, #pcsu-explainBtn
+  ✅ Dropzone click + drag/drop + keyboard
+  ✅ PDF -> text via PDF.js, Images -> base64 (server can OCR)
+  ✅ Redact toggle wired
+  ✅ Robust “normalize + paint” for API responses that wrap data (data.result/brief/extracted/etc)
+  ✅ Client-side fallback extraction (regex) if API returns partial fields
+=============================================================== */
+(() => {
+  if (window.PCSU_ORDERS && window.PCSU_ORDERS.__mounted) return;
+  // 🔇 Silence noisy PDF.js font warnings in console
+  // (These are common + harmless; this just keeps your console clean.)
+  try{
+    const _warn = console.warn;
+    console.warn = (...args) => {
+      const a0 = args && args.length ? args[0] : "";
+      if (typeof a0 === "string" && a0.includes("Warning: TT:")) return;
+      _warn.apply(console, args);
+    };
+  } catch(e){}
+  const CORE = (window.PCSU_ORDERS = window.PCSU_ORDERS || {});
+  CORE.__mounted = true;
+  const $ = (q) => document.querySelector(q);
+  const STORAGE_KEY = "pcsunited.orders.v1";
+  const DEBUG = (
+    new URLSearchParams(location.search).get("debug") === "1" ||
+    localStorage.getItem("pcsunited.orders.debug") === "1"
+  );
+  // ✅ IMPORTANT: Webflow pages must call Netlify directly
+  const API_BASE = (
+    location.hostname.endsWith("webflow.io") ||
+    location.hostname.endsWith("webflow.com")
+  )
+    ? "https://pcsunited.netlify.app/api"
+    : "/api";
+  const els = {
+    dropzone: null,
+    fileInput: null,
+    explainBtn: null,
+    redactToggle: null,
+    uploadStatus: null,
+    statusText: null,
+    // brief fields
+    blufText: null,
+    rnltd: null,
+    unit: null,
+    deps: null,
+    travel: null,
+    next1: null,
+    next2: null,
+    next3: null,
+    note1: null,
+    note2: null,
+    note3: null,
+  };
+  function dlog(...args){ if (DEBUG) console.log("[PCSU_ORDERS]", ...args); }
+  function setStatus(msg){
+    if (els.statusText) els.statusText.textContent = msg;
+  }
+  function setUploadStatus(msg){
+    if (els.uploadStatus) els.uploadStatus.textContent = msg;
+  }
+  function saveState(data){
+    try{
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+      window.dispatchEvent(new StorageEvent("storage", { key: STORAGE_KEY }));
+    } catch(e){}
+  }
+  function safeGet(obj, path, fallback=""){
+    try{
+      return path.split(".").reduce((a,k)=> (a && a[k] != null ? a[k] : undefined), obj) ?? fallback;
+    } catch(e){
+      return fallback;
+    }
+  }
+  function pickFirst(obj, paths, fallback=""){
+    for (const p of paths){
+      const v = safeGet(obj, p, "");
+      if (v !== "" && v != null) return v;
+    }
+    return fallback;
+  }
+  function normalizeResponse(apiData){
+    // Handles: {ok:true, brief:{...}}, {data:{...}}, {result:{...}}, {extracted:{...}}, etc.
+    if (!apiData || typeof apiData !== "object") return { raw: apiData, brief: null };
+    const candidates = [
+      apiData,
+      apiData.brief,
+      apiData.extracted,
+      apiData.result,
+      apiData.data,
+      apiData.payload,
+      apiData.output,
+      apiData.response,
+      safeGet(apiData, "data.brief", null),
+      safeGet(apiData, "result.brief", null),
+      safeGet(apiData, "extracted.brief", null),
+      safeGet(apiData, "brief.data", null),
+    ].filter(Boolean);
+    // Heuristic: pick object that contains any “brief-ish” keys
+    const score = (o) => {
+      if (!o || typeof o !== "object") return 0;
+      const keys = Object.keys(o);
+      const hits = [
+        "bluf","blufText","summary","assignment",
+        "details","key_details","keyDetails",
+        "next_steps","nextSteps","important_notes","importantNotes",
+        "rnltd","report_no_later","unit","dependents","travel"
+      ];
+      let s = 0;
+      for (const h of hits){
+        if (keys.includes(h)) s += 2;
+      }
+      if (o.details) s += 3;
+      if (o.next_steps || o.nextSteps) s += 2;
+      if (o.important_notes || o.importantNotes) s += 2;
+      return s;
+    };
+    let best = candidates[0] || null;
+    let bestScore = score(best);
+    for (const c of candidates){
+      const sc = score(c);
+      if (sc > bestScore){
+        best = c;
+        bestScore = sc;
+      }
+    }
+    // If the best is still wrapper-like, attempt one more unwrap
+    const maybeInner =
+      best && typeof best === "object"
+        ? (best.brief || best.data || best.result || best.extracted || best.payload || null)
+        : null;
+    if (maybeInner && score(maybeInner) >= bestScore) best = maybeInner;
+    return { raw: apiData, brief: best };
+  }
+  function extractFallbackFromText(text){
+    if (!text || typeof text !== "string") return {};
+    const t = text.replace(/\s+/g, " ").trim();
+    // Common date formats: 15 SEP 2024 / 15 Sep 2024 / 2024-09-15
+    const date1 = /(\d{1,2}\s+[A-Z]{3}\s+\d{4})/;
+    const date2 = /(\d{4}-\d{2}-\d{2})/;
+    const rnltd =
+      (/(RNLTD|REPORT\s+NO\s+LATER\s+THAN|REPORT\s+NO\s+LATER)\s*[:\-]?\s*([0-9]{1,2}\s+[A-Z]{3}\s+\d{4}|\d{4}-\d{2}-\d{2})/i.exec(t) || [])[2] ||
+      (/(ARRIVE\s+NLT|ARRIVE\s+NO\s+LATER\s+THAN)\s*[:\-]?\s*([0-9]{1,2}\s+[A-Z]{3}\s+\d{4}|\d{4}-\d{2}-\d{2})/i.exec(t) || [])[2] ||
+      (date1.exec(t) || date2.exec(t) || [])[1] ||
+      "";
+    const unit =
+      (/(GAINING\s+UNIT|UNIT|ORGANIZATION)\s*[:\-]?\s*([A-Z0-9&\-\.,\s]{6,60})/i.exec(t) || [])[2] ||
+      "";
+    const deps =
+      (/(DEPENDENTS)\s*[:\-]?\s*(AUTHORIZED|NOT\s+AUTHORIZED|YES|NO)/i.exec(t) || [])[2] ||
+      (/(DEPENDENT\s+TRAVEL)\s*[:\-]?\s*(AUTHORIZED|NOT\s+AUTHORIZED|YES|NO)/i.exec(t) || [])[2] ||
+      "";
+    const travel =
+      (/(MODE\s+OF\s+TRAVEL|TRAVEL\s+MODE)\s*[:\-]?\s*([A-Z0-9\/\-\s]{3,40})/i.exec(t) || [])[2] ||
+      "";
+    return {
+      details: {
+        rnltd: rnltd ? rnltd.toUpperCase() : "",
+        unit: unit ? unit.trim() : "",
+        dependents: deps ? deps.toUpperCase() : "",
+        travel: travel ? travel.trim() : ""
+      }
+    };
+  }
+  function paintBrief(apiData, sourceTextForFallback=""){
+    const norm = normalizeResponse(apiData);
+    const data = norm.brief || {};
+    dlog("API raw:", norm.raw);
+    dlog("Chosen brief object:", data);
+    // If we still got nothing useful, try fallback parsing from extracted PDF text
+    const hasAnyField =
+      !!pickFirst(data, ["blufText","bluf","summary","assignment","details.rnltd","rnltd","details.unit","unit"], "");
+    const merged = hasAnyField ? data : Object.assign({}, extractFallbackFromText(sourceTextForFallback), data);
+    // BLUF
+    const bluf =
+      pickFirst(merged, [
+        "blufText","bluf","summary","assignment",
+        "brief.blufText","brief.bluf","brief.summary","brief.assignment"
+      ], "");
+    if (els.blufText){
+      els.blufText.textContent = bluf || "Orders interpreted — review your brief below.";
+    }
+    // Details
+    const rnltd = pickFirst(merged, [
+      "details.rnltd","rnltd",
+      "key_details.report_no_later","keyDetails.reportNoLater",
+      "details.report_no_later","details.reportNoLater",
+      "report_no_later","reportNoLater"
+    ], "—");
+    const unit = pickFirst(merged, [
+      "details.unit","unit",
+      "details.gaining_unit","gaining_unit",
+      "details.gainingUnit","gainingUnit",
+      "key_details.new_unit","keyDetails.newUnit"
+    ], "—");
+    const deps = pickFirst(merged, [
+      "details.dependents","dependents",
+      "details.deps","deps",
+      "key_details.dependents","keyDetails.dependents"
+    ], "—");
+    const travel = pickFirst(merged, [
+      "details.travel","travel",
+      "travel_mode","travelMode",
+      "details.travel_mode","details.travelMode"
+    ], "—");
+    if (els.rnltd) els.rnltd.textContent = String(rnltd || "—");
+    if (els.unit) els.unit.textContent = String(unit || "—");
+    if (els.deps) els.deps.textContent = String(deps || "—");
+    if (els.travel) els.travel.textContent = String(travel || "—");
+    // Next steps (array or single fields)
+    const nextArr =
+      pickFirst(merged, ["next_steps","nextSteps","brief.next_steps","brief.nextSteps"], null);
+    const n1 = (Array.isArray(nextArr) && nextArr[0]) ? String(nextArr[0]) : pickFirst(merged, ["next.1","next1","brief.next1"], "—");
+    const n2 = (Array.isArray(nextArr) && nextArr[1]) ? String(nextArr[1]) : pickFirst(merged, ["next.2","next2","brief.next2"], "—");
+    const n3 = (Array.isArray(nextArr) && nextArr[2]) ? String(nextArr[2]) : pickFirst(merged, ["next.3","next3","brief.next3"], "—");
+    if (els.next1) els.next1.textContent = n1 || "—";
+    if (els.next2) els.next2.textContent = n2 || "—";
+    if (els.next3) els.next3.textContent = n3 || "—";
+    // Notes (array or single fields)
+    const noteArr =
+      pickFirst(merged, ["important_notes","importantNotes","brief.notes","brief.important_notes","brief.importantNotes"], null);
+    const m1 = (Array.isArray(noteArr) && noteArr[0]) ? String(noteArr[0]) : pickFirst(merged, ["notes.1","note1","brief.note1"], "—");
+    const m2 = (Array.isArray(noteArr) && noteArr[1]) ? String(noteArr[1]) : pickFirst(merged, ["notes.2","note2","brief.note2"], "—");
+    const m3 = (Array.isArray(noteArr) && noteArr[2]) ? String(noteArr[2]) : pickFirst(merged, ["notes.3","note3","brief.note3"], "—");
+    if (els.note1) els.note1.textContent = m1 || "—";
+    if (els.note2) els.note2.textContent = m2 || "—";
+    if (els.note3) els.note3.textContent = m3 || "—";
+  }
+  function loadPDFJS(){
+    return new Promise((resolve, reject) => {
+      if (window.pdfjsLib) return resolve();
+      const s = document.createElement("script");
+      s.src = "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js";
+      s.onload = () => {
+        window.pdfjsLib.GlobalWorkerOptions.workerSrc =
+          "https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js";
+        resolve();
+      };
+      s.onerror = reject;
+      document.head.appendChild(s);
+    });
+  }
+  async function extractPDFText(file){
+    await loadPDFJS();
+    const buf = await file.arrayBuffer();
+    // These options are safe; if any are unsupported, PDF.js ignores them.
+    const loadingTask = window.pdfjsLib.getDocument({
+      data: buf,
+      // Lower verbosity from PDF.js (worker still may warn; we filter above)
+      verbosity: 0,
+      // Helpful for some embedded fonts
+      useSystemFonts: true,
+      disableFontFace: true
+    });
+    const pdf = await loadingTask.promise;
+    let fullText = "";
+    for (let i = 1; i <= pdf.numPages; i++){
+      const page = await pdf.getPage(i);
+      const txt = await page.getTextContent();
+      const pageText = txt.items.map(x => x.str).join(" ");
+      fullText += "\n" + pageText;
+    }
+    return fullText.trim();
+  }
+  function readAsDataURL(file){
+    return new Promise((resolve, reject) => {
+      const r = new FileReader();
+      r.onload = () => resolve(String(r.result || ""));
+      r.onerror = reject;
+      r.readAsDataURL(file);
+    });
+  }
+  function normalizeDataUrl(dataUrl){
+    const m = /^data:([^;]+);base64,(.+)$/i.exec(dataUrl || "");
+    if (!m) return { mime: "", base64: "" };
+    return { mime: m[1] || "", base64: m[2] || "" };
+  }
+  async function callOrdersExtract(payload){
+    dlog("POST", `${API_BASE}/orders-extract`, payload);
+    const res = await fetch(`${API_BASE}/orders-extract`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload)
+    });
+    if (!res.ok) {
+      const errText = await res.text().catch(() => "");
+      throw new Error(`API error: ${res.status} ${errText}`);
+    }
+    return res.json();
+  }
+  async function handleFile(file){
+    if (!file){
+      setStatus("Upload your PCS orders first");
+      return;
+    }
+    const redact = !!(els.redactToggle && els.redactToggle.checked);
+    els.explainBtn?.setAttribute("disabled", "true");
+    setStatus("Reading orders…");
+    try {
+      const isPDF = /pdf$/i.test(file.name) || (file.type === "application/pdf");
+      const isImage = /^image\//i.test(file.type);
+      let payload = {
+        filename: file.name || "upload",
+        redact
+      };
+      let extractedTextForFallback = "";
+      if (isPDF){
+        extractedTextForFallback = await extractPDFText(file);
+        if (!extractedTextForFallback || extractedTextForFallback.length < 50){
+          // fallback: send PDF as base64 so server can try OCR or alternative parsing
+          setStatus("PDF text was limited — sending file for processing…");
+          const dataUrl = await readAsDataURL(file);
+          const norm = normalizeDataUrl(dataUrl);
+          payload.pdf_base64 = norm.base64;
+          payload.mime = norm.mime || file.type || "application/pdf";
+        } else {
+          payload.text = extractedTextForFallback;
+        }
+      } else if (isImage){
+        setStatus("Preparing image…");
+        const dataUrl = await readAsDataURL(file);
+        const norm = normalizeDataUrl(dataUrl);
+        payload.image_base64 = norm.base64;
+        payload.mime = norm.mime || file.type || "image/*";
+      } else {
+        setStatus("Please upload a PDF or photo");
+        return;
+      }
+      setStatus("Interpreting orders…");
+      const apiData = await callOrdersExtract(payload);
+      saveState(apiData);
+      paintBrief(apiData, extractedTextForFallback);
+      setStatus("Orders interpreted successfully");
+      setUploadStatus(`✅ Ready: ${file.name}`);
+    } catch (err){
+      console.error(err);
+      setStatus("Unable to interpret orders — try another file");
+      setUploadStatus("⚠️ Upload failed — try again");
+    } finally {
+      els.explainBtn?.removeAttribute("disabled");
+    }
+  }
+  function bindDropzone(){
+    if (!els.dropzone || !els.fileInput) return;
+    const openPicker = () => els.fileInput && els.fileInput.click();
+    els.dropzone.addEventListener("click", openPicker);
+    els.dropzone.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        openPicker();
+      }
+    });
+    const over = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.add("is-dragover");
+    };
+    const leave = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.remove("is-dragover");
+    };
+    const drop = (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      els.dropzone.classList.remove("is-dragover");
+      const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+      if (!f) return;
+      try{
+        const dt = new DataTransfer();
+        dt.items.add(f);
+        els.fileInput.files = dt.files;
+      } catch(e){}
+      setUploadStatus(`Selected: ${f.name}`);
+      setStatus("File selected — click “Explain My Orders”");
+    };
+    els.dropzone.addEventListener("dragenter", over);
+    els.dropzone.addEventListener("dragover", over);
+    els.dropzone.addEventListener("dragleave", leave);
+    els.dropzone.addEventListener("drop", drop);
+  }
+  function bindUI(){
+    els.dropzone = $("#pcsu-dropzone");
+    els.fileInput = $("#pcsu-fileInput");
+    els.explainBtn = $("#pcsu-explainBtn");
+    els.redactToggle = $("#pcsu-redactToggle");
+    els.uploadStatus = $("#pcsu-uploadStatus");
+    els.statusText = $("#pcsu-statusText");
+    // brief fields
+    els.blufText = $("#pcsu-blufText");
+    els.rnltd = $("#pcsu-detail-rnltd");
+    els.unit = $("#pcsu-detail-unit");
+    els.deps = $("#pcsu-detail-deps");
+    els.travel = $("#pcsu-detail-travel");
+    els.next1 = $("#pcsu-next-1");
+    els.next2 = $("#pcsu-next-2");
+    els.next3 = $("#pcsu-next-3");
+    els.note1 = $("#pcsu-note-1");
+    els.note2 = $("#pcsu-note-2");
+    els.note3 = $("#pcsu-note-3");
+    els.fileInput?.addEventListener("change", () => {
+      const f = els.fileInput && els.fileInput.files && els.fileInput.files[0];
+      if (!f){
+        setUploadStatus("No file selected");
+        setStatus("Ready for upload");
+        return;
+      }
+      setUploadStatus(`Selected: ${f.name}`);
+      setStatus("File selected — click “Explain My Orders”");
+    });
+    els.explainBtn?.addEventListener("click", () => {
+      const f = els.fileInput && els.fileInput.files && els.fileInput.files[0];
+      if (!f){
+        setStatus("Upload your PCS orders first");
+        setUploadStatus("No file selected");
+        return;
+      }
+      handleFile(f);
+    });
+    bindDropzone();
+    // restore last state if exists
+    try{
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (raw){
+        const parsed = JSON.parse(raw);
+        paintBrief(parsed, "");
+        setStatus("Loaded last brief (local)");
+      }
+    } catch(e){}
+  }
+  function init(){ bindUI(); }
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else init();
+})();
+</script>
+  </div>
+  <div class="w-embed w-script">
+    <script>
+/* ============================================================
+  PCS Orders Translator — Module (2B)
+  "What It Means" Renderer
+  v1.1.0 — UPDATED for orders-extract v1.1.x + 2A storage
+  ✅ Reads localStorage: pcsunited.orders.v1
+  ✅ Works with NEW payload shape:
+     - blufText
+     - details { rnltd, unit, dependents, travel, losing, gaining }
+     - next_steps[], important_notes[]
+     - brief{} (back-compat)
+  ✅ Also supports legacy shapes (data.extracted.*)
+  ✅ No network calls. No extra storage.
+  Purpose:
+  - Inject "What It Means" panel into the Shell
+  - Render plain-English decoding from extracted JSON
+  - Toggle visibility when the Meaning tab is active
+=============================================================== */
+(() => {
+  if (window.PCSU_ORDERS_2B && window.PCSU_ORDERS_2B.__mounted) return;
+  const MOD = (window.PCSU_ORDERS_2B = window.PCSU_ORDERS_2B || {});
+  MOD.__mounted = true;
+  const $ = (q) => document.querySelector(q);
+  const STORAGE_KEY = "pcsunited.orders.v1";
+  function safeJSONParse(s){
+    try { return JSON.parse(s); } catch { return null; }
+  }
+  function loadState(){
+    return safeJSONParse(localStorage.getItem(STORAGE_KEY));
+  }
+  function safeGet(obj, path, fallback=""){
+    try{
+      return path.split(".").reduce((a,k)=> (a && a[k] != null ? a[k] : undefined), obj) ?? fallback;
+    } catch {
+      return fallback;
+    }
+  }
+  function pickFirst(obj, paths, fallback=""){
+    for (const p of paths){
+      const v = safeGet(obj, p, "");
+      if (v !== "" && v != null) return v;
+    }
+    return fallback;
+  }
+  function normalizeData(data){
+    // Supports:
+    // - New: { details:{...}, next_steps:[], important_notes:[], meta:{} }
+    // - Old: { extracted:{...}, meta:{} }
+    // - Back-compat: { brief:{ assignment:{...}, keyDetails:{...}, ... } }
+    const d = data || {};
+    const details = d.details || {};
+    const brief = d.brief || {};
+    const extracted = d.extracted || {};
+    const rnltd =
+      pickFirst(d, [
+        "details.rnltd",
+        "brief.keyDetails.reportNoLater",
+        "brief.assignment.reportNoLater",
+        "extracted.rnltd",
+        "extracted.reportNoLater",
+        "extracted.report_no_later",
+      ], "");
+    const unit =
+      pickFirst(d, [
+        "details.unit",
+        "brief.keyDetails.unit",
+        "brief.keyDetails.gainingUnit",
+        "extracted.gainingUnit",
+        "extracted.unit",
+      ], "");
+    const dependents =
+      pickFirst(d, [
+        "details.dependents",
+        "brief.keyDetails.dependents",
+        "extracted.dependents",
+      ], "");
+    const travel =
+      pickFirst(d, [
+        "details.travel",
+        "brief.keyDetails.travel",
+        "extracted.travelMode",
+        "extracted.travel",
+      ], "");
+    const losing =
+      pickFirst(d, [
+        "details.losing",
+        "brief.assignment.from",
+        "brief.keyDetails.losing",
+        "extracted.losing",
+        "extracted.from",
+      ], "");
+    const gaining =
+      pickFirst(d, [
+        "details.gaining",
+        "brief.assignment.to",
+        "brief.keyDetails.gaining",
+        "extracted.installation",
+        "extracted.to",
+      ], "");
+    const blufText =
+      pickFirst(d, [
+        "blufText",
+        "brief.blufText",
+        "brief.summary",
+        "brief.assignmentSummary",
+      ], "");
+    const nextSteps =
+      (Array.isArray(d.next_steps) && d.next_steps.length ? d.next_steps :
+      (Array.isArray(brief.nextSteps) && brief.nextSteps.length ? brief.nextSteps :
+      (Array.isArray(d.nextSteps) && d.nextSteps.length ? d.nextSteps : [])));
+    const importantNotes =
+      (Array.isArray(d.important_notes) && d.important_notes.length ? d.important_notes :
+      (Array.isArray(brief.importantNotes) && brief.importantNotes.length ? brief.importantNotes :
+      (Array.isArray(d.importantNotes) && d.importantNotes.length ? d.importantNotes : [])));
+    const confidence =
+      String(pickFirst(d, ["meta.confidence","meta.confidenceLevel","meta.quality"], "medium")).toLowerCase();
+    // Derived “OCONUS” guess (very lightweight)
+    const oconus = /\b(JP|KOREA|KR|GERMANY|DE|UK|GB|ITALY|IT|SPAIN|ES|OCONUS)\b/i.test(String(gaining || ""));
+    return {
+      meta: d.meta || {},
+      confidence,
+      blufText,
+      rnltd,
+      unit,
+      dependents,
+      travel,
+      losing,
+      gaining,
+      nextSteps,
+      importantNotes,
+      oconus,
+      // legacy extracted passthrough (in case you want it later)
+      extracted
+    };
+  }
+  /* ============================================================
+    #1 Panel Injection (minimal layout impact)
+  ============================================================ */
+  function ensurePanel(){
+    const brief = $(".pcsu-brief");
+    if (!brief) return null;
+    let panel = $("#pcsu-meaningPanel");
+    if (panel) return panel;
+    panel = document.createElement("section");
+    panel.id = "pcsu-meaningPanel";
+    panel.setAttribute("aria-label", "What It Means Panel");
+    panel.style.marginTop = "14px";
+    panel.style.border = "1px solid rgba(20, 40, 70, 0.12)";
+    panel.style.borderRadius = "14px";
+    panel.style.overflow = "hidden";
+    panel.style.background = "#ffffff";
+    panel.style.boxShadow = "0 10px 18px rgba(7, 14, 28, 0.06)";
+    panel.innerHTML = `
+      <div id="pcsu-meaningHead" style="
+        display:flex; align-items:center; justify-content:space-between; gap:12px;
+        padding:12px 12px; background: rgba(16, 38, 69, 0.03);
+        border-bottom: 1px solid rgba(20, 40, 70, 0.10);
+      ">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="
+            width:28px; height:28px; border-radius:10px; display:grid; place-items:center;
+            background: rgba(45,120,232,0.10); border:1px solid rgba(45,120,232,0.18);
+            color:#184a99; font-weight:900;
+          ">📄</div>
+          <div>
+            <div style="font-weight:900; color:#102645; font-size:13px;">What It Means</div>
+            <div id="pcsu-meaningSub" style="font-weight:700; color:rgba(92,107,132,0.95); font-size:12px;">
+              Plain-English translation based on extracted fields
+            </div>
+          </div>
+        </div>
+        <div id="pcsu-meaningBadge" style="
+          font-weight:900; font-size:12px; color:#0c3b24;
+          background: rgba(31, 122, 76, 0.12);
+          border: 1px solid rgba(31, 122, 76, 0.22);
+          padding:8px 10px; border-radius:999px; white-space:nowrap;
+        ">Confidence: —</div>
+      </div>
+      <div style="padding:12px 12px 12px;">
+        <div id="pcsu-meaningSummary" style="
+          background: rgba(45,120,232,0.06);
+          border: 1px solid rgba(45,120,232,0.14);
+          border-left: 6px solid rgba(45,120,232,0.65);
+          border-radius: 12px;
+          padding: 12px 12px;
+          color:#102645;
+          font-weight:800;
+          line-height:1.25;
+        ">Upload orders to generate a plain-English summary.</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:12px; margin-top:12px;" id="pcsu-meaningGrid">
+          <div id="pcsu-meaningDecoded" style="
+            border:1px solid rgba(20,40,70,0.12); border-radius:12px; overflow:hidden;
+          ">
+            <div style="
+              padding:10px 10px; font-weight:900; font-size:12px; color:#102645;
+              background: rgba(16,38,69,0.03);
+              border-bottom:1px solid rgba(20,40,70,0.10);
+              display:flex; align-items:center; gap:8px;
+            "><span>🔎</span><span>Decoded From Your Orders</span></div>
+            <div id="pcsu-meaningDecodedBody" style="padding:10px 10px;">
+              <!-- rows injected -->
+            </div>
+          </div>
+          <div id="pcsu-meaningImplies" style="
+            border:1px solid rgba(20,40,70,0.12); border-radius:12px; overflow:hidden;
+          ">
+            <div style="
+              padding:10px 10px; font-weight:900; font-size:12px; color:#102645;
+              background: rgba(16,38,69,0.03);
+              border-bottom:1px solid rgba(20,40,70,0.10);
+              display:flex; align-items:center; gap:8px;
+            "><span>🧠</span><span>What This Usually Implies</span></div>
+            <div id="pcsu-meaningImpliesBody" style="padding:10px 10px;">
+              <!-- items injected -->
+            </div>
+          </div>
+        </div>
+        <div id="pcsu-meaningFooter" style="
+          margin-top:12px;
+          font-size:11px; font-weight:700;
+          color: rgba(92,107,132,0.95);
+          text-align:center;
+        ">
+          This is an educational translation. Confirm deadlines and entitlements with MPF, TMO, and Finance.
+        </div>
+      </div>
+    `;
+    const grid = $(".pcsu-grid");
+    const actions = $(".pcsu-actions");
+    if (grid && actions && actions.parentElement === brief){
+      brief.insertBefore(panel, actions);
+    } else {
+      brief.appendChild(panel);
+    }
+    const style = document.createElement("style");
+    style.textContent = `
+      @media (max-width: 900px){
+        #pcsu-meaningGrid{ grid-template-columns: 1fr !important; }
+      }
+    `;
+    panel.appendChild(style);
+    return panel;
+  }
+  /* ============================================================
+    #2 Rendering Logic
+  ============================================================ */
+  function confTag(level){
+    const map = {
+      high: { txt:"High", bg:"rgba(31, 122, 76, 0.12)", br:"rgba(31, 122, 76, 0.22)", fg:"#0c3b24" },
+      medium: { txt:"Medium", bg:"rgba(200, 146, 0, 0.12)", br:"rgba(200, 146, 0, 0.22)", fg:"#5a4200" },
+      low: { txt:"Low", bg:"rgba(180, 35, 24, 0.10)", br:"rgba(180, 35, 24, 0.20)", fg:"#5b1111" }
+    };
+    return map[level] || map.medium;
+  }
+  function row(label, value, confidence){
+    const c = confTag(confidence || "medium");
+    const ok = value && String(value).trim().length;
+    const safeVal = ok ? value : "Missing — confirm with MPF";
+    const dot = ok ? "✅" : "❓";
+    return `
+      <div style="
+        display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+        padding:9px 0; border-bottom:1px solid rgba(20,40,70,0.08);
+      ">
+        <div style="display:flex; gap:10px; align-items:flex-start;">
+          <div style="
+            width:22px; height:22px; border-radius:8px; display:grid; place-items:center;
+            background: rgba(16,38,69,0.05); border:1px solid rgba(20,40,70,0.10);
+            font-size:12px; margin-top:1px;
+          ">${dot}</div>
+          <div>
+            <div style="font-weight:900; color:#102645; font-size:12px; margin-bottom:2px;">${label}</div>
+            <div style="font-weight:700; color:rgba(92,107,132,0.95); font-size:12px; line-height:1.25;">
+              ${safeVal}
+            </div>
+          </div>
+        </div>
+        <div style="
+          font-weight:900; font-size:11px; color:${c.fg};
+          background:${c.bg}; border:1px solid ${c.br};
+          padding:6px 8px; border-radius:999px; white-space:nowrap;
+        ">${c.txt}</div>
+      </div>
+    `;
+  }
+  function bullet(text){
+    return `
+      <div style="
+        display:grid; grid-template-columns: 18px 1fr;
+        gap:10px; padding:9px 0; border-bottom:1px solid rgba(20,40,70,0.08);
+        align-items:start;
+      ">
+        <div style="
+          width:18px; height:18px; border-radius:7px; display:grid; place-items:center;
+          background: rgba(45,120,232,0.10); border:1px solid rgba(45,120,232,0.16);
+          color:#184a99; font-weight:900; font-size:11px; margin-top:1px;
+        ">➜</div>
+        <div style="font-weight:800; color:rgba(92,107,132,0.98); font-size:12px; line-height:1.25;">
+          ${text}
+        </div>
+      </div>
+    `;
+  }
+  function normalizeDateStr(s){
+    // Accepts: "15 SEP 2024" OR "2024-09-15"
+    if (!s) return "";
+    const v = String(s).trim();
+    if (/^\d{1,2}\s+[A-Z]{3}\s+\d{4}$/i.test(v)) return v.toUpperCase();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(v)) return formatISO(v);
+    return v;
+  }
+  function formatISO(iso){
+    try{
+      const d = new Date(iso + "T00:00:00");
+      const dd = String(d.getDate()).padStart(2,"0");
+      const months = ["JAN","FEB","MAR","APR","MAY","JUN","JUL","AUG","SEP","OCT","NOV","DEC"];
+      const mm = months[d.getMonth()];
+      const yy = d.getFullYear();
+      return `${dd} ${mm} ${yy}`;
+    } catch {
+      return iso;
+    }
+  }
+  function buildSummary(n){
+    // Prefer server-provided blufText if available
+    if (n.blufText && String(n.blufText).trim().length){
+      return String(n.blufText).trim();
+    }
+    const dest = n.gaining || "your next duty location";
+    const date = n.rnltd ? normalizeDateStr(n.rnltd) : "your RNLTD";
+    const deps = n.dependents || "Dependent status";
+    const tour = n.oconus ? "OCONUS tour" : "CONUS assignment";
+    return `This appears to be an <b>assignment</b> to <b>${dest}</b> (${tour}). Your <b>Report No Later</b> date is <b>${date}</b>. Dependents: <b>${deps}</b>.`;
+  }
+  function buildImplies(n){
+    const items = [];
+    if (n.oconus){
+      items.push("Because this looks like an OCONUS move, expect extra steps like passports, medical clearance, and travel/port-call instructions. Start early.");
+    }
+    if ((n.dependents || "").toLowerCase().includes("authorized")){
+      items.push("Dependent travel/housing planning becomes time-critical. Coordinate early with MPF and Housing.");
+    } else if ((n.dependents || "").toLowerCase().includes("not")){
+      items.push("If dependents are NOT authorized, confirm housing rules and entitlements with MPF/Finance.");
+    } else {
+      items.push("Confirm dependent authorization status with MPF — it affects travel, housing, and some entitlements.");
+    }
+    if (n.travel && n.travel !== "Unknown"){
+      items.push(`Travel mode is listed as "${n.travel}". This often affects how travel is booked and what you coordinate with TMO (HHG/POV).`);
+    } else {
+      items.push("Travel mode wasn’t clearly extracted. Confirm whether travel is arranged by CTO/Finance and how POV/HHG applies.");
+    }
+    if (n.rnltd){
+      items.push("Your RNLTD is the hard backstop. Your actual departure date may be flexible, but reporting late can create problems — confirm your window with MPF.");
+    } else {
+      items.push("Your RNLTD wasn’t extracted. Confirm the report-no-later date with MPF.");
+    }
+    if (n.nextSteps && n.nextSteps.length){
+      items.push("Your orders usually imply you should start outbound actions now (out-processing, TMO counseling, Finance planning).");
+    }
+    items.push("Orders authorize movement. Allowances and reimbursement depend on travel rules processed by Finance — verify anything that affects payment.");
+    return items;
+  }
+  function renderMeaning(){
+    const panel = ensurePanel();
+    if (!panel) return;
+    const raw = loadState();
+    const badge = $("#pcsu-meaningBadge");
+    const summary = $("#pcsu-meaningSummary");
+    const decodedBody = $("#pcsu-meaningDecodedBody");
+    const impliesBody = $("#pcsu-meaningImpliesBody");
+    if (!raw){
+      badge.textContent = "Confidence: —";
+      summary.textContent = "Upload orders to generate a plain-English summary.";
+      decodedBody.innerHTML = "";
+      impliesBody.innerHTML = "";
+      return;
+    }
+    const n = normalizeData(raw);
+    // Badge
+    const level = (n.confidence || "medium").toLowerCase();
+    const c = confTag(level);
+    badge.textContent = `Confidence: ${c.txt}`;
+    badge.style.background = c.bg;
+    badge.style.borderColor = c.br;
+    badge.style.color = c.fg;
+    // Summary
+    summary.innerHTML = buildSummary(n);
+    // Decoded rows (now based on NEW payload)
+    decodedBody.innerHTML = [
+      row("Losing Location", n.losing, n.losing ? "medium" : "low"),
+      row("Gaining Location", n.gaining, n.gaining ? "high" : "low"),
+      row("Gaining Unit", n.unit, n.unit ? "medium" : "low"),
+      row("RNLTD (Report No Later)", n.rnltd ? normalizeDateStr(n.rnltd) : "", n.rnltd ? "high" : "low"),
+      row("Dependents", n.dependents, n.dependents ? "medium" : "low"),
+      row("Travel Mode", n.travel, (n.travel && n.travel !== "Unknown") ? "medium" : "low"),
+    ].join("");
+    // Implies bullets
+    const implies = buildImplies(n);
+    impliesBody.innerHTML = implies.map(bullet).join("") + `
+      <div style="padding-top:8px; font-size:11px; font-weight:800; color:rgba(92,107,132,0.95);">
+        Tip: If anything looks missing or unclear, use the “Questions to Ask” tab to confirm with MPF/TMO/Finance.
+      </div>
+    `;
+    // Cosmetic: remove last border in decoded list
+    const decodedRows = decodedBody.querySelectorAll("div");
+    if (decodedRows.length) decodedRows[decodedRows.length - 1].style.borderBottom = "0";
+  }
+  /* ============================================================
+    #3 Visibility Control (only show when Meaning tab active)
+  ============================================================ */
+  function isMeaningActive(){
+    const t = $("#pcsu-tab-meaning");
+    return !!(t && t.classList.contains("is-active"));
+  }
+  function applyVisibility(){
+    const panel = ensurePanel();
+    if (!panel) return;
+    panel.style.display = isMeaningActive() ? "block" : "none";
+  }
+  function bindTabHooks(){
+    ["#pcsu-tab-meaning","#pcsu-tab-checklist","#pcsu-tab-questions"].forEach(sel=>{
+      const el = $(sel);
+      if (!el) return;
+      el.addEventListener("click", () => {
+        setTimeout(() => {
+          applyVisibility();
+          if (isMeaningActive()) renderMeaning();
+        }, 0);
+      });
+    });
+    // re-render after Explain button completes (storage event might already handle this)
+    const explainBtn = $("#pcsu-explainBtn");
+    if (explainBtn){
+      explainBtn.addEventListener("click", () => {
+        setTimeout(() => {
+          renderMeaning();
+          applyVisibility();
+        }, 200);
+      });
+    }
+  }
+  /* ============================================================
+    #4 Init
+  ============================================================ */
+  function init(){
+    ensurePanel();
+    renderMeaning();
+    applyVisibility();
+    bindTabHooks();
+    window.addEventListener("storage", (e) => {
+      if (e.key === STORAGE_KEY){
+        renderMeaning();
+        applyVisibility();
+      }
+    });
+  }
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+  </div>
+  <div class="w-embed w-script">
+    <script>
+/* ============================================================
+  PCS Orders Translator — Module (2C)
+  "Your Checklist" Renderer + Local Progress
+  v1.0.0 — LocalStorage Mode
+  Purpose:
+  - Render checklist buckets (72h / 14d / 30d)
+  - Persist checkmarks in localStorage
+  - Show progress bar + clear action
+  - Toggle visibility when Checklist tab is active
+=============================================================== */
+(() => {
+  if (window.PCSU_ORDERS_2C && window.PCSU_ORDERS_2C.__mounted) return;
+  const MOD = (window.PCSU_ORDERS_2C = window.PCSU_ORDERS_2C || {});
+  MOD.__mounted = true;
+  const $ = (q) => document.querySelector(q);
+  const ORDERS_KEY = "pcsunited.orders.v1";
+  const CHECK_KEY  = "pcsunited.orders_checklist.v1";
+  function safeJSONParse(s){ try { return JSON.parse(s); } catch { return null; } }
+  function loadOrders(){ return safeJSONParse(localStorage.getItem(ORDERS_KEY)); }
+  function loadChecks(){ return safeJSONParse(localStorage.getItem(CHECK_KEY)) || {}; }
+  function saveChecks(obj){ localStorage.setItem(CHECK_KEY, JSON.stringify(obj)); }
+  /* ============================================================
+    #1 Panel Injection
+  ============================================================ */
+  function ensurePanel(){
+    const brief = $(".pcsu-brief");
+    if (!brief) return null;
+    let panel = $("#pcsu-checklistPanel");
+    if (panel) return panel;
+    panel = document.createElement("section");
+    panel.id = "pcsu-checklistPanel";
+    panel.setAttribute("aria-label", "Your Checklist Panel");
+    panel.style.marginTop = "14px";
+    panel.style.border = "1px solid rgba(20, 40, 70, 0.12)";
+    panel.style.borderRadius = "14px";
+    panel.style.overflow = "hidden";
+    panel.style.background = "#ffffff";
+    panel.style.boxShadow = "0 10px 18px rgba(7, 14, 28, 0.06)";
+    panel.style.display = "none"; // checklist tab only
+    panel.innerHTML = `
+      <div style="
+        display:flex; align-items:center; justify-content:space-between; gap:12px;
+        padding:12px 12px; background: rgba(16, 38, 69, 0.03);
+        border-bottom: 1px solid rgba(20, 40, 70, 0.10);
+      ">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="
+            width:28px; height:28px; border-radius:10px; display:grid; place-items:center;
+            background: rgba(31,122,76,0.12); border:1px solid rgba(31,122,76,0.22);
+            color:#0c3b24; font-weight:900;
+          ">✅</div>
+          <div>
+            <div style="font-weight:900; color:#102645; font-size:13px;">Your Checklist</div>
+            <div id="pcsu-checklistSub" style="font-weight:700; color:rgba(92,107,132,0.95); font-size:12px;">
+              A simple timeline to keep you on track
+            </div>
+          </div>
+        </div>
+        <button id="pcsu-checklistClear" type="button" style="
+          appearance:none; border:1px solid rgba(20,40,70,0.14);
+          background:#fff; color:#102645; font-weight:900;
+          padding:9px 12px; border-radius:12px;
+          box-shadow: 0 10px 18px rgba(7, 14, 28, 0.05);
+          cursor:pointer;
+        ">Clear</button>
+      </div>
+      <div style="padding:12px 12px 14px;">
+        <!-- Progress -->
+        <div style="
+          display:flex; align-items:center; justify-content:space-between; gap:12px;
+          margin-bottom:10px;
+        ">
+          <div style="font-weight:900; color:#102645; font-size:12px;">
+            Progress: <span id="pcsu-checklistPct">0%</span>
+          </div>
+          <div style="font-weight:800; color:rgba(92,107,132,0.95); font-size:12px;">
+            <span id="pcsu-checklistDone">0</span>/<span id="pcsu-checklistTotal">0</span> complete
+          </div>
+        </div>
+        <div style="
+          width:100%; height:10px; border-radius:999px;
+          background: rgba(16,38,69,0.06);
+          border: 1px solid rgba(20,40,70,0.10);
+          overflow:hidden;
+          margin-bottom:12px;
+        ">
+          <div id="pcsu-checklistBar" style="
+            height:100%;
+            width:0%;
+            background: linear-gradient(90deg, rgba(31,122,76,0.85), rgba(45,120,232,0.85));
+          "></div>
+        </div>
+        <!-- Buckets -->
+        <div id="pcsu-checklistGrid" style="
+          display:grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap:12px;
+        ">
+          <div class="pcsu-cbox" id="pcsu-bucket-72"></div>
+          <div class="pcsu-cbox" id="pcsu-bucket-14"></div>
+          <div class="pcsu-cbox" id="pcsu-bucket-30"></div>
+        </div>
+        <div style="
+          margin-top:12px;
+          font-size:11px; font-weight:700;
+          color: rgba(92,107,132,0.95);
+          text-align:center;
+        ">
+          Tip: If you feel stuck, use the “Questions to Ask” tab before you call MPF/TMO/Finance.
+        </div>
+      </div>
+    `;
+    // Insert panel before bottom actions (same insertion pattern as 2B)
+    const actions = $(".pcsu-actions");
+    if (actions && actions.parentElement === brief){
+      brief.insertBefore(panel, actions);
+    } else {
+      brief.appendChild(panel);
+    }
+    // Minimal styles for bucket boxes and checklist rows
+    const style = document.createElement("style");
+    style.textContent = `
+      #pcsu-checklistGrid { }
+      #pcsu-checklistGrid .pcsu-cbox{
+        border:1px solid rgba(20,40,70,0.12);
+        border-radius:12px;
+        overflow:hidden;
+        background:#fff;
+      }
+      #pcsu-checklistGrid .pcsu-cbox .hd{
+        padding:10px 10px;
+        font-weight:900;
+        font-size:12px;
+        color:#102645;
+        background: rgba(16,38,69,0.03);
+        border-bottom:1px solid rgba(20,40,70,0.10);
+        display:flex; align-items:center; justify-content:space-between; gap:10px;
+      }
+      #pcsu-checklistGrid .pcsu-cbox .hd .pill{
+        font-weight:900; font-size:11px;
+        padding:6px 8px; border-radius:999px;
+        background: rgba(45,120,232,0.10);
+        border: 1px solid rgba(45,120,232,0.16);
+        color:#184a99;
+        white-space:nowrap;
+      }
+      #pcsu-checklistGrid .pcsu-cbox .bd{
+        padding:8px 10px 10px;
+      }
+      .pcsu-task{
+        display:flex; align-items:flex-start; justify-content:space-between; gap:10px;
+        padding:9px 0;
+        border-bottom:1px solid rgba(20,40,70,0.08);
+      }
+      .pcsu-task:last-child{ border-bottom:0; padding-bottom:4px; }
+      .pcsu-task label{
+        display:flex; gap:10px; align-items:flex-start;
+        cursor:pointer;
+        user-select:none;
+        flex:1;
+      }
+      .pcsu-task input[type="checkbox"]{
+        margin-top:2px;
+        width:18px; height:18px;
+        accent-color: #1f7a4c;
+      }
+      .pcsu-task .txt{
+        font-weight:800;
+        font-size:12px;
+        line-height:1.25;
+        color: rgba(92,107,132,0.98);
+      }
+      .pcsu-task.is-done .txt{
+        text-decoration: line-through;
+        color: rgba(92,107,132,0.65);
+      }
+      @media (max-width: 900px){
+        #pcsu-checklistGrid{ grid-template-columns: 1fr !important; }
+      }
+    `;
+    panel.appendChild(style);
+    return panel;
+  }
+  /* ============================================================
+    #2 Bucket Rendering
+  ============================================================ */
+  function bucketEl(id, title, pill){
+    const el = $("#" + id);
+    if (!el) return null;
+    el.innerHTML = `
+      <div class="hd">
+        <div style="display:flex; align-items:center; gap:8px;">
+          <span aria-hidden="true">📌</span>
+          <span>${title}</span>
+        </div>
+        <span class="pill">${pill}</span>
+      </div>
+      <div class="bd" data-bucket="${id}"></div>
+    `;
+    return el.querySelector(".bd");
+  }
+  function keyForTask(bucketKey, idx){
+    return `${bucketKey}:${idx}`;
+  }
+  function renderTasks(container, bucketKey, items, checks){
+    if (!container) return;
+    const safeItems = Array.isArray(items) ? items : [];
+    if (!safeItems.length){
+      container.innerHTML = `<div style="font-weight:800; font-size:12px; color:rgba(92,107,132,0.95); padding:4px 0;">
+        Upload orders to generate your checklist.
+      </div>`;
+      return;
+    }
+    container.innerHTML = safeItems.map((t, i) => {
+      const k = keyForTask(bucketKey, i);
+      const done = !!checks[k];
+      return `
+        <div class="pcsu-task ${done ? "is-done":""}" data-taskkey="${k}">
+          <label>
+            <input type="checkbox" ${done ? "checked":""} />
+            <div class="txt">${escapeHTML(String(t))}</div>
+          </label>
+        </div>
+      `;
+    }).join("");
+  }
+  function escapeHTML(s){
+    return s.replace(/[&<>"']/g, (c) => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[c]));
+  }
+  /* ============================================================
+    #3 Progress Calculation
+  ============================================================ */
+  function computeProgress(allKeys, checks){
+    const total = allKeys.length;
+    const done = allKeys.reduce((acc,k)=> acc + (checks[k] ? 1 : 0), 0);
+    const pct = total ? Math.round((done/total)*100) : 0;
+    return { total, done, pct };
+  }
+  function updateProgressUI(stats){
+    $("#pcsu-checklistTotal").textContent = String(stats.total);
+    $("#pcsu-checklistDone").textContent  = String(stats.done);
+    $("#pcsu-checklistPct").textContent   = `${stats.pct}%`;
+    $("#pcsu-checklistBar").style.width   = `${stats.pct}%`;
+  }
+  /* ============================================================
+    #4 Render Entire Panel
+  ============================================================ */
+  function renderChecklist(){
+    const panel = ensurePanel();
+    if (!panel) return;
+    const orders = loadOrders();
+    const checks = loadChecks();
+    const list72 = orders?.checklist?.now72 || [];
+    const list14 = orders?.checklist?.next14 || [];
+    const list30 = orders?.checklist?.next30 || [];
+    const c72 = bucketEl("pcsu-bucket-72", "Next 72 Hours", "Immediate");
+    const c14 = bucketEl("pcsu-bucket-14", "Next 14 Days", "Near-Term");
+    const c30 = bucketEl("pcsu-bucket-30", "Next 30 Days", "Build Momentum");
+    renderTasks(c72, "72", list72, checks);
+    renderTasks(c14, "14", list14, checks);
+    renderTasks(c30, "30", list30, checks);
+    // Gather task keys for progress
+    const allKeys = []
+      .concat(list72.map((_,i)=> keyForTask("72", i)))
+      .concat(list14.map((_,i)=> keyForTask("14", i)))
+      .concat(list30.map((_,i)=> keyForTask("30", i)));
+    updateProgressUI(computeProgress(allKeys, checks));
+    // Wire checkbox handlers
+    ["pcsu-bucket-72","pcsu-bucket-14","pcsu-bucket-30"].forEach(bid=>{
+      const box = $("#" + bid);
+      if (!box) return;
+      box.querySelectorAll(".pcsu-task").forEach(taskEl=>{
+        const key = taskEl.getAttribute("data-taskkey");
+        const cb = taskEl.querySelector('input[type="checkbox"]');
+        if (!cb) return;
+        cb.addEventListener("change", () => {
+          const next = loadChecks();
+          next[key] = !!cb.checked;
+          saveChecks(next);
+          taskEl.classList.toggle("is-done", !!cb.checked);
+          // refresh progress
+          const refreshed = loadOrders();
+          const l72 = refreshed?.checklist?.now72 || [];
+          const l14 = refreshed?.checklist?.next14 || [];
+          const l30 = refreshed?.checklist?.next30 || [];
+          const keys = []
+            .concat(l72.map((_,i)=> keyForTask("72", i)))
+            .concat(l14.map((_,i)=> keyForTask("14", i)))
+            .concat(l30.map((_,i)=> keyForTask("30", i)));
+          updateProgressUI(computeProgress(keys, next));
+        }, { passive: true });
+      });
+    });
+  }
+  /* ============================================================
+    #5 Visibility Control (Checklist tab only)
+  ============================================================ */
+  function isChecklistActive(){
+    const t = $("#pcsu-tab-checklist");
+    return !!(t && t.classList.contains("is-active"));
+  }
+  function applyVisibility(){
+    const panel = ensurePanel();
+    if (!panel) return;
+    panel.style.display = isChecklistActive() ? "block" : "none";
+  }
+  function bindHooks(){
+    // Tab clicks
+    ["#pcsu-tab-meaning","#pcsu-tab-checklist","#pcsu-tab-questions"].forEach(sel=>{
+      const el = $(sel);
+      if (!el) return;
+      el.addEventListener("click", () => {
+        setTimeout(() => {
+          applyVisibility();
+          if (isChecklistActive()) renderChecklist();
+        }, 0);
+      });
+    });
+    // Explain button (refresh checklist after 2A loads demo data)
+    const explainBtn = $("#pcsu-explainBtn");
+    if (explainBtn){
+      explainBtn.addEventListener("click", () => {
+        setTimeout(() => {
+          renderChecklist();
+          applyVisibility();
+        }, 0);
+      });
+    }
+    // Clear button
+    const clearBtn = $("#pcsu-checklistClear");
+    if (clearBtn){
+      clearBtn.addEventListener("click", () => {
+        localStorage.removeItem(CHECK_KEY);
+        renderChecklist();
+      });
+    }
+    // Storage sync (multi-tab)
+    window.addEventListener("storage", (e) => {
+      if (e.key === ORDERS_KEY || e.key === CHECK_KEY){
+        renderChecklist();
+        applyVisibility();
+      }
+    });
+  }
+  /* ============================================================
+    #6 Init
+  ============================================================ */
+  function init(){
+    ensurePanel();
+    renderChecklist();
+    applyVisibility();
+    bindHooks();
+  }
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+  </div>
+  <div class="w-embed w-script">
+    <script>
+/* ============================================================
+  PCS Orders Translator — Module (2D)
+  "Questions to Ask" Renderer + Copy Actions
+  v1.0.0 — LocalStorage Mode (reads pcsunited.orders.v1)
+  Purpose:
+  - Render MPF / TMO / Finance question lists
+  - Provide "Copy" buttons (per section + all)
+  - Toggle visibility when Questions tab is active
+=============================================================== */
+(() => {
+  if (window.PCSU_ORDERS_2D && window.PCSU_ORDERS_2D.__mounted) return;
+  const MOD = (window.PCSU_ORDERS_2D = window.PCSU_ORDERS_2D || {});
+  MOD.__mounted = true;
+  const $ = (q) => document.querySelector(q);
+  const ORDERS_KEY = "pcsunited.orders.v1";
+  function safeJSONParse(s){ try { return JSON.parse(s); } catch { return null; } }
+  function loadOrders(){ return safeJSONParse(localStorage.getItem(ORDERS_KEY)); }
+  /* ============================================================
+    #1 Clipboard Helper
+  ============================================================ */
+  async function copyText(text){
+    const t = String(text || "").trim();
+    if (!t) return false;
+    // Prefer navigator.clipboard when allowed
+    try{
+      await navigator.clipboard.writeText(t);
+      return true;
+    } catch(e){
+      // Fallback: hidden textarea
+      try{
+        const ta = document.createElement("textarea");
+        ta.value = t;
+        ta.setAttribute("readonly", "");
+        ta.style.position = "fixed";
+        ta.style.top = "-9999px";
+        ta.style.left = "-9999px";
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand("copy");
+        document.body.removeChild(ta);
+        return true;
+      } catch {
+        return false;
+      }
+    }
+  }
+  function flash(btn, ok){
+    if (!btn) return;
+    const original = btn.textContent;
+    btn.textContent = ok ? "Copied ✓" : "Copy failed";
+    btn.style.filter = ok ? "brightness(1.02)" : "brightness(0.98)";
+    btn.style.opacity = ok ? "1" : "0.85";
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.style.filter = "";
+      btn.style.opacity = "";
+    }, 900);
+  }
+  function escapeHTML(s){
+    return String(s).replace(/[&<>"']/g, (c) => ({
+      "&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"
+    }[c]));
+  }
+  /* ============================================================
+    #2 Panel Injection
+  ============================================================ */
+  function ensurePanel(){
+    const brief = $(".pcsu-brief");
+    if (!brief) return null;
+    let panel = $("#pcsu-questionsPanel");
+    if (panel) return panel;
+    panel = document.createElement("section");
+    panel.id = "pcsu-questionsPanel";
+    panel.setAttribute("aria-label", "Questions to Ask Panel");
+    panel.style.marginTop = "14px";
+    panel.style.border = "1px solid rgba(20, 40, 70, 0.12)";
+    panel.style.borderRadius = "14px";
+    panel.style.overflow = "hidden";
+    panel.style.background = "#ffffff";
+    panel.style.boxShadow = "0 10px 18px rgba(7, 14, 28, 0.06)";
+    panel.style.display = "none"; // questions tab only
+    panel.innerHTML = `
+      <div style="
+        display:flex; align-items:center; justify-content:space-between; gap:12px;
+        padding:12px 12px; background: rgba(16, 38, 69, 0.03);
+        border-bottom: 1px solid rgba(20, 40, 70, 0.10);
+      ">
+        <div style="display:flex; align-items:center; gap:10px;">
+          <div style="
+            width:28px; height:28px; border-radius:10px; display:grid; place-items:center;
+            background: rgba(200,146,0,0.12); border:1px solid rgba(200,146,0,0.22);
+            color:#5a4200; font-weight:900;
+          ">⚠️</div>
+          <div>
+            <div style="font-weight:900; color:#102645; font-size:13px;">Questions to Ask</div>
+            <div style="font-weight:700; color:rgba(92,107,132,0.95); font-size:12px;">
+              Use these to confirm details and avoid surprises
+            </div>
+          </div>
+        </div>
+        <button id="pcsu-q-copyAll" type="button" style="
+          appearance:none; border:0;
+          background: linear-gradient(180deg, #2d78e8 0%, #1b5dbf 100%);
+          color:#fff; font-weight:900;
+          padding:10px 12px; border-radius:12px;
+          box-shadow: 0 16px 28px rgba(27, 93, 191, 0.18);
+          cursor:pointer;
+          white-space:nowrap;
+        ">Copy All</button>
+      </div>
+      <div style="padding:12px 12px 14px;">
+        <div id="pcsu-q-grid" style="
+          display:grid;
+          grid-template-columns: 1fr 1fr 1fr;
+          gap:12px;
+        ">
+          <div class="pcsu-qbox" id="pcsu-q-mpf"></div>
+          <div class="pcsu-qbox" id="pcsu-q-tmo"></div>
+          <div class="pcsu-qbox" id="pcsu-q-fin"></div>
+        </div>
+        <div style="
+          margin-top:12px;
+          font-size:11px; font-weight:700;
+          color: rgba(92,107,132,0.95);
+          text-align:center;
+        ">
+          Tip: If a field is missing on your brief, ask about it directly — that’s the fastest way to reduce stress.
+        </div>
+      </div>
+    `;
+    // Insert before bottom actions
+    const actions = $(".pcsu-actions");
+    if (actions && actions.parentElement === brief){
+      brief.insertBefore(panel, actions);
+    } else {
+      brief.appendChild(panel);
+    }
+    // Minimal styles for question boxes
+    const style = document.createElement("style");
+    style.textContent = `
+      #pcsu-q-grid .pcsu-qbox{
+        border:1px solid rgba(20,40,70,0.12);
+        border-radius:12px;
+        overflow:hidden;
+        background:#fff;
+      }
+      #pcsu-q-grid .pcsu-qbox .hd{
+        padding:10px 10px;
+        font-weight:900;
+        font-size:12px;
+        color:#102645;
+        background: rgba(16,38,69,0.03);
+        border-bottom:1px solid rgba(20,40,70,0.10);
+        display:flex; align-items:center; justify-content:space-between; gap:10px;
+      }
+      #pcsu-q-grid .pcsu-qbox .hd .left{
+        display:flex; align-items:center; gap:8px;
+      }
+      #pcsu-q-grid .pcsu-qbox .hd .copy{
+        appearance:none;
+        border:1px solid rgba(20,40,70,0.14);
+        background:#fff;
+        color:#102645;
+        font-weight:900;
+        padding:7px 10px;
+        border-radius:12px;
+        cursor:pointer;
+        box-shadow: 0 10px 18px rgba(7, 14, 28, 0.05);
+        white-space:nowrap;
+      }
+      #pcsu-q-grid .pcsu-qbox .bd{
+        padding:8px 10px 10px;
+      }
+      .pcsu-qitem{
+        display:grid;
+        grid-template-columns: 18px 1fr;
+        gap:10px;
+        padding:9px 0;
+        border-bottom:1px solid rgba(20,40,70,0.08);
+        align-items:start;
+      }
+      .pcsu-qitem:last-child{ border-bottom:0; padding-bottom:4px; }
+      .pcsu-qitem .dot{
+        width:18px; height:18px; border-radius:7px; display:grid; place-items:center;
+        background: rgba(200,146,0,0.12); border:1px solid rgba(200,146,0,0.18);
+        color:#5a4200; font-weight:900; font-size:11px; margin-top:1px;
+      }
+      .pcsu-qitem .txt{
+        font-weight:800;
+        font-size:12px;
+        line-height:1.25;
+        color: rgba(92,107,132,0.98);
+      }
+      @media (max-width: 900px){
+        #pcsu-q-grid{ grid-template-columns: 1fr !important; }
+      }
+    `;
+    panel.appendChild(style);
+    return panel;
+  }
+  /* ============================================================
+    #3 Rendering
+  ============================================================ */
+  function box(elId, title, icon, questions){
+    const el = $("#" + elId);
+    if (!el) return;
+    const safeQs = Array.isArray(questions) ? questions : [];
+    const body = safeQs.length
+      ? safeQs.map(q => `
+          <div class="pcsu-qitem">
+            <div class="dot" aria-hidden="true">?</div>
+            <div class="txt">${escapeHTML(q)}</div>
+          </div>
+        `).join("")
+      : `<div style="font-weight:800; font-size:12px; color:rgba(92,107,132,0.95); padding:4px 0;">
+           Upload orders to generate questions for this section.
+         </div>`;
+    el.innerHTML = `
+      <div class="hd">
+        <div class="left"><span aria-hidden="true">${icon}</span><span>${title}</span></div>
+        <button class="copy" type="button" data-copy="${elId}">Copy</button>
+      </div>
+      <div class="bd" data-body="${elId}">
+        ${body}
+      </div>
+    `;
+  }
+  function renderQuestions(){
+    const panel = ensurePanel();
+    if (!panel) return;
+    const orders = loadOrders();
+    const q = orders?.questions || {};
+    box("pcsu-q-mpf", "MPF (Assignments)", "🏢", q.mpf || []);
+    box("pcsu-q-tmo", "TMO (HHG / DPS)", "📦", q.tmo || []);
+    box("pcsu-q-fin", "Finance", "💳", q.finance || []);
+    bindCopyButtons();
+  }
+  /* ============================================================
+    #4 Copy Actions
+  ============================================================ */
+  function joinBucket(title, arr){
+    const lines = (arr || []).map((s) => `- ${String(s).trim()}`).filter(Boolean);
+    if (!lines.length) return "";
+    return `${title}\n${lines.join("\n")}\n`;
+  }
+  function buildAllCopyText(){
+    const orders = loadOrders();
+    const q = orders?.questions || {};
+    const parts = [];
+    parts.push(joinBucket("MPF (Assignments):", q.mpf));
+    parts.push(joinBucket("TMO (HHG / DPS):", q.tmo));
+    parts.push(joinBucket("Finance:", q.finance));
+    const out = parts.join("\n").trim();
+    return out;
+  }
+  function buildBucketCopyText(bucketId){
+    const orders = loadOrders();
+    const q = orders?.questions || {};
+    if (bucketId === "pcsu-q-mpf") return joinBucket("MPF (Assignments):", q.mpf).trim();
+    if (bucketId === "pcsu-q-tmo") return joinBucket("TMO (HHG / DPS):", q.tmo).trim();
+    if (bucketId === "pcsu-q-fin") return joinBucket("Finance:", q.finance).trim();
+    return "";
+  }
+  function bindCopyButtons(){
+    // Per-box copy
+    ["pcsu-q-mpf","pcsu-q-tmo","pcsu-q-fin"].forEach(id=>{
+      const btn = document.querySelector(`#${id} .copy`);
+      if (!btn) return;
+      // avoid double-binding
+      if (btn.dataset.bound === "1") return;
+      btn.dataset.bound = "1";
+      btn.addEventListener("click", async () => {
+        const text = buildBucketCopyText(id);
+        const ok = await copyText(text);
+        flash(btn, ok);
+      });
+    });
+    // Copy all
+    const allBtn = $("#pcsu-q-copyAll");
+    if (allBtn && allBtn.dataset.bound !== "1"){
+      allBtn.dataset.bound = "1";
+      allBtn.addEventListener("click", async () => {
+        const text = buildAllCopyText();
+        const ok = await copyText(text);
+        flash(allBtn, ok);
+      });
+    }
+  }
+  /* ============================================================
+    #5 Visibility Control (Questions tab only)
+  ============================================================ */
+  function isQuestionsActive(){
+    const t = $("#pcsu-tab-questions");
+    return !!(t && t.classList.contains("is-active"));
+  }
+  function applyVisibility(){
+    const panel = ensurePanel();
+    if (!panel) return;
+    panel.style.display = isQuestionsActive() ? "block" : "none";
+  }
+  function bindHooks(){
+    // Tab clicks
+    ["#pcsu-tab-meaning","#pcsu-tab-checklist","#pcsu-tab-questions"].forEach(sel=>{
+      const el = $(sel);
+      if (!el) return;
+      el.addEventListener("click", () => {
+        setTimeout(() => {
+          applyVisibility();
+          if (isQuestionsActive()) renderQuestions();
+        }, 0);
+      });
+    });
+    // Explain button (refresh questions after 2A loads demo data)
+    const explainBtn = $("#pcsu-explainBtn");
+    if (explainBtn){
+      explainBtn.addEventListener("click", () => {
+        setTimeout(() => {
+          renderQuestions();
+          applyVisibility();
+        }, 0);
+      });
+    }
+    // Storage sync (multi-tab)
+    window.addEventListener("storage", (e) => {
+      if (e.key === ORDERS_KEY){
+        renderQuestions();
+        applyVisibility();
+      }
+    });
+  }
+  /* ============================================================
+    #6 Init
+  ============================================================ */
+  function init(){
+    ensurePanel();
+    renderQuestions();
+    applyVisibility();
+    bindHooks();
+  }
+  if (document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded", init);
+  } else {
+    init();
+  }
+})();
+</script>
+  </div>
+  <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69b6b526f23748df9f189b16" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
+  <script src="js/webflow.js" type="text/javascript"></script>
+</body>
+</html>

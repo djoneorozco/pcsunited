@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Mar 31 2026 15:06:35 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Apr 19 2026 06:48:57 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69ba230a1012f5bf3affafa4" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
@@ -15,1398 +15,368 @@
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
 <body>
-  <div class="w-embed w-script">
-    <!DOCTYPE html>
-    <html lang="en">
-    <head>
-      <meta charset="utf-8">
-      <meta name="viewport" content="width=device-width,initial-scale=1">
-      <title>Bases • Base Intelligence Dashboard</title>
+  <div class="w-embed w-script"><!--  =========================================================
+  OrozcoRealty • Cities Overview
+  HERO ONLY • COMBINED SHELL + JS
+  Executive-Muted Gold
+  HEADER REMOVED
+=========================================================  -->
+    <div id="or-city-overview" style="all:initial;">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-      <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+      <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
       <style>
-    :root{
-      --bg:#0b0e1a;
-      --panel:#101426;
-      --panel2:#0f1324;
-      --ink:#e9ecff;
-      --muted:#a8b0d6;
-      --mint:#8ef3c5;
-      --blue:#6aa7ff;
-      --gold:#f6d06d;
-      --line:rgba(255,255,255,.10);
-      --soft:rgba(255,255,255,.06);
-      --danger:#ff8aa6;
-      --warn:#ffd27a;
-      --ok:#8ef3c5;
-      --shadow:0 24px 48px rgba(0,0,0,.55);
-      --radius:20px;
+    #or-city-overview, #or-city-overview *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
     }
-    *{box-sizing:border-box}
-    html,body{margin:0;padding:0;background:var(--bg);color:var(--ink);font-family:Inter,system-ui,sans-serif}
-    body{
+    #or-city-overview{
+      --bg:#071018;
+      --bg2:#0b1621;
+      --panel:rgba(17,24,34,.78);
+      --stroke:rgba(216,184,122,.16);
+      --ink:#f3efe7;
+      --muted:#b8b0a4;
+      --gold:#d8b87a;
+      --blue:#6f8fb7;
+      --shadow:0 24px 70px rgba(0,0,0,.42);
+      --wrap:min(1380px, calc(100% - 32px));
+      display:block;
+      font-family:"Barlow",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);
       background:
-        radial-gradient(1200px 900px at 10% 10%, rgba(106,167,255,.18), transparent 50%),
-        radial-gradient(900px 700px at 85% 15%, rgba(142,243,197,.10), transparent 50%),
-        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0)),
-        var(--bg);
-      min-height:100vh;
+        radial-gradient(circle at top left, rgba(216,184,122,.10), transparent 26%),
+        radial-gradient(circle at top right, rgba(111,143,183,.10), transparent 26%),
+        linear-gradient(180deg, var(--bg), var(--bg2));
     }
-    .app{
-      max-width:1440px;
+    #or-city-overview .or-wrap{
+      width:var(--wrap);
       margin:0 auto;
-      padding:24px;
+      padding:24px 0 40px;
     }
-    .glass{
-      background:linear-gradient(180deg, rgba(16,20,38,.78), rgba(15,19,36,.92));
-      border:1px solid var(--line);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-      backdrop-filter:blur(18px) saturate(150%);
-      -webkit-backdrop-filter:blur(18px) saturate(150%);
+    #or-city-overview .or-hero{
       position:relative;
       overflow:hidden;
+      min-height:430px;
+      border-radius:32px;
+      border:1px solid rgba(216,184,122,.12);
+      box-shadow:var(--shadow);
+      background:#0c131c;
     }
-    .glass::before{
-      content:"";
+    #or-city-overview .or-hero-bg{
       position:absolute;
       inset:0;
-      pointer-events:none;
       background:
-        radial-gradient(700px 220px at 10% 0%, rgba(255,255,255,.08), transparent 60%),
-        radial-gradient(600px 220px at 90% 0%, rgba(255,255,255,.05), transparent 60%);
-      opacity:.9;
+        linear-gradient(90deg, rgba(5,8,13,.88) 0%, rgba(8,12,18,.82) 28%, rgba(8,12,18,.48) 63%, rgba(8,12,18,.28) 100%),
+        var(--hero-image, linear-gradient(135deg, #1a2430, #0b1218));
+      background-size:cover;
+      background-position:center;
+      transform:scale(1.02);
     }
-    .toolbar{
+    #or-city-overview .or-hero-inner{
+      position:relative;
+      z-index:1;
+      min-height:430px;
       display:grid;
-      grid-template-columns: 1.2fr .7fr .7fr auto;
-      gap:14px;
-      padding:18px;
-      margin-bottom:18px;
+      grid-template-columns:minmax(0,1.22fr) minmax(320px,.88fr);
+      gap:20px;
       align-items:end;
+      padding:30px;
     }
-    .field label{
-      display:block;
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      color:var(--muted);
-      margin-bottom:7px;
-      font-weight:800;
-    }
-    .field select,.field input{
-      width:100%;
-      border:1px solid var(--line);
-      background:rgba(8,12,22,.70);
-      color:var(--ink);
-      border-radius:12px;
-      padding:12px 14px;
-      font-size:14px;
-      outline:none;
-    }
-    .field select:focus,.field input:focus{
-      border-color:rgba(142,243,197,.55);
-      box-shadow:0 0 0 1px rgba(142,243,197,.18);
-    }
-    .btn{
-      appearance:none;
-      border:none;
-      border-radius:999px;
-      padding:12px 18px;
-      font-size:13px;
-      font-weight:900;
-      letter-spacing:.1em;
-      text-transform:uppercase;
-      background:radial-gradient(circle at top left, var(--mint), var(--blue));
-      color:#050712;
-      cursor:pointer;
-      min-width:160px;
-      box-shadow:0 14px 30px rgba(0,0,0,.45);
-    }
-    .hero{
-      display:grid;
-      grid-template-columns: 1.15fr .85fr;
-      gap:18px;
-      margin-bottom:18px;
-    }
-    .hero-main{
-      padding:22px;
-      min-height:320px;
-      display:grid;
-      grid-template-columns: 1fr 360px;
-      gap:18px;
-      align-items:stretch;
-    }
-    .hero-copy h1{
-      margin:0 0 8px;
-      font-size:30px;
-      line-height:1.08;
-      font-weight:900;
-      letter-spacing:.01em;
-    }
-    .hero-sub{
-      color:var(--muted);
-      font-size:14px;
-      line-height:1.45;
-      margin-bottom:18px;
-      font-weight:600;
-    }
-    .chip-row{
-      display:flex;
-      flex-wrap:wrap;
-      gap:10px;
-      margin-bottom:16px;
-    }
-    .chip{
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      color:var(--ink);
-      border-radius:999px;
-      padding:9px 12px;
-      font-size:12px;
-      font-weight:800;
-    }
-    .chip.ok{border-color:rgba(142,243,197,.35)}
-    .chip.warn{border-color:rgba(255,210,122,.35)}
-    .chip.bad{border-color:rgba(255,138,166,.35)}
-    .hero-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-      margin-top:14px;
-    }
-    .metric{
-      padding:14px;
-      border-radius:16px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-    }
-    .metric .k{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      color:var(--muted);
-      margin-bottom:6px;
-      font-weight:800;
-    }
-    .metric .v{
-      font-size:20px;
-      font-weight:900;
-      line-height:1.1;
-    }
-    .hero-image{
-      border-radius:18px;
-      overflow:hidden;
-      border:1px solid var(--line);
-      background:
-        radial-gradient(circle at 30% 20%, rgba(106,167,255,.18), transparent 55%),
-        radial-gradient(circle at 75% 75%, rgba(142,243,197,.12), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
-      min-height:280px;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-    }
-    .hero-image img{
-      width:100%;
-      height:100%;
-      object-fit:cover;
-      display:block;
-    }
-    .hero-side{
-      padding:18px;
-      display:grid;
-      gap:14px;
-      align-content:start;
-    }
-    .section-title{
-      margin:0 0 4px;
-      font-size:14px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-    }
-    .section-sub{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.4;
-      font-weight:600;
-      margin-bottom:10px;
-    }
-    .score-card{
-      padding:16px;
-      border-radius:18px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.03);
-    }
-    .score-big{
-      font-size:40px;
-      font-weight:900;
-      line-height:1;
-      margin-bottom:6px;
-    }
-    .score-note{
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-      line-height:1.45;
-    }
-    .mini-score-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:10px;
-      margin-top:12px;
-    }
-    .mini-score{
-      padding:12px;
-      border-radius:14px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.025);
-    }
-    .mini-score .k{
-      font-size:10px;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      color:var(--muted);
-      margin-bottom:6px;
-      font-weight:800;
-    }
-    .mini-score .v{
-      font-size:22px;
-      font-weight:900;
-      line-height:1;
-    }
-    .bluf-head{
-      font-size:18px;
-      font-weight:900;
-      line-height:1.2;
-      margin-bottom:6px;
-    }
-    .bluf-status{
+    #or-city-overview .or-eyebrow{
       display:inline-flex;
       align-items:center;
       gap:8px;
+      padding:9px 12px;
       border-radius:999px;
-      padding:8px 12px;
-      border:1px solid var(--line);
-      background:rgba(255,255,255,.04);
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.08em;
+      border:1px solid rgba(216,184,122,.18);
+      background:rgba(216,184,122,.07);
+      color:var(--gold);
       text-transform:uppercase;
+      letter-spacing:.14em;
+      font-size:.77rem;
+      margin-bottom:16px;
+    }
+    #or-city-overview .or-title{
+      font-family:"Gilda Display",serif;
+      font-size:clamp(2.2rem, 4vw, 4rem);
+      line-height:1.02;
+      color:#fbf4e7;
       margin-bottom:12px;
     }
-    .bluf-summary{
-      color:var(--ink);
-      line-height:1.55;
-      font-size:14px;
-      font-weight:600;
+    #or-city-overview .or-subtitle{
+      max-width:760px;
+      color:#ddd4c7;
+      font-size:1.02rem;
+      line-height:1.7;
+      margin-bottom:20px;
     }
-    .two-col{
+    #or-city-overview .or-kpis{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap:18px;
-      margin-bottom:18px;
+      grid-template-columns:repeat(4, minmax(0,1fr));
+      gap:14px;
     }
-    .panel{
-      padding:18px;
-    }
-    .panel h2{
-      margin:0 0 4px;
-      font-size:15px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-    }
-    .panel p.panel-sub{
-      margin:0 0 14px;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:600;
-      line-height:1.4;
-    }
-    .stats-grid{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-    }
-    .stats-grid-3{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:12px;
-    }
-    .info-card{
-      padding:14px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:rgba(255,255,255,.03);
-      min-height:88px;
-    }
-    .info-card .k{
-      font-size:11px;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      color:var(--muted);
-      margin-bottom:6px;
-      font-weight:800;
-    }
-    .info-card .v{
-      font-size:18px;
-      font-weight:900;
-      line-height:1.2;
-    }
-    .info-card .s{
-      margin-top:6px;
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.35;
-      font-weight:600;
-    }
-    .bedroom-toolbar{
-      display:flex;
-      gap:10px;
-      margin-bottom:14px;
-      flex-wrap:wrap;
-    }
-    .bed-btn{
-      border:none;
-      border-radius:999px;
-      padding:10px 14px;
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      background:rgba(255,255,255,.06);
-      color:var(--ink);
-      cursor:pointer;
-    }
-    .bed-btn.active{
-      background:radial-gradient(circle at top left, var(--mint), var(--blue));
-      color:#050712;
-    }
-    .quote-block{
+    #or-city-overview .or-kpi{
+      border-radius:18px;
       padding:16px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:rgba(255,255,255,.03);
-      color:var(--ink);
-      line-height:1.5;
-      font-size:14px;
-      font-weight:600;
-      min-height:108px;
+      background:rgba(10,16,24,.56);
+      border:1px solid rgba(255,255,255,.08);
+      backdrop-filter:blur(12px);
     }
-    .list-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:12px;
-    }
-    .bullet-list{
-      margin:0;
-      padding-left:18px;
-      color:var(--ink);
-    }
-    .bullet-list li{
-      margin:0 0 8px;
-      color:var(--ink);
-      line-height:1.45;
-      font-size:13px;
-      font-weight:600;
-    }
-    .source-list{
-      display:grid;
-      grid-template-columns:repeat(2,minmax(0,1fr));
-      gap:12px;
-    }
-    .source-card{
-      padding:14px;
-      border:1px solid var(--line);
-      border-radius:16px;
-      background:rgba(255,255,255,.03);
-    }
-    .source-card .name{
-      font-size:12px;
+    #or-city-overview .or-kpi-label{
+      color:var(--muted);
       text-transform:uppercase;
-      letter-spacing:.10em;
+      letter-spacing:.14em;
+      font-size:.74rem;
+      margin-bottom:8px;
+    }
+    #or-city-overview .or-kpi-value{
+      font-size:1.45rem;
+      font-weight:800;
+      color:#fff;
+    }
+    #or-city-overview .or-hero-side{
+      display:grid;
+      gap:14px;
+    }
+    #or-city-overview .or-card{
+      border-radius:24px;
+      padding:22px;
+      background:linear-gradient(180deg, rgba(18,24,34,.78), rgba(11,16,24,.84));
+      border:1px solid rgba(216,184,122,.10);
+      backdrop-filter:blur(16px);
+      box-shadow:var(--shadow);
+    }
+    #or-city-overview .or-status{
+      display:inline-flex;
+      align-items:center;
+      gap:8px;
+      padding:8px 12px;
+      border-radius:999px;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.78rem;
+      font-weight:800;
+      color:var(--gold);
+      background:rgba(216,184,122,.08);
+      border:1px solid rgba(216,184,122,.18);
+      margin-bottom:14px;
+    }
+    #or-city-overview .or-card-title{
+      font-family:"Gilda Display",serif;
+      font-size:1.7rem;
+      color:#fbf2e2;
+      margin-bottom:8px;
+    }
+    #or-city-overview .or-card-copy{
+      color:#d7cfbf;
+      line-height:1.7;
+    }
+    #or-city-overview .or-score-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:12px;
+      margin-top:12px;
+    }
+    #or-city-overview .or-score-mini{
+      border-radius:16px;
+      padding:14px;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.06);
+    }
+    #or-city-overview .or-score-mini span{
+      display:block;
+      font-size:.74rem;
+      text-transform:uppercase;
+      letter-spacing:.12em;
       color:var(--muted);
       margin-bottom:6px;
+    }
+    #or-city-overview .or-score-mini strong{
+      display:block;
+      font-size:1.5rem;
+      color:#fff;
       font-weight:800;
     }
-    .source-card .provider{
-      font-size:14px;
-      font-weight:800;
-      margin-bottom:4px;
+    @media (max-width:1180px){
+      #or-city-overview .or-hero-inner{
+        grid-template-columns:1fr;
+      }
     }
-    .source-card .meta{
-      color:var(--muted);
-      font-size:12px;
-      line-height:1.4;
-      font-weight:600;
-    }
-    .status{
-      margin-top:10px;
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-    }
-    .empty{
-      opacity:.75;
-      font-style:italic;
-    }
-    .banner{
-      display:grid;
-      grid-template-columns:1.15fr .85fr;
-      gap:18px;
-      margin-bottom:18px;
-    }
-    .banner-card{
-      padding:18px;
-    }
-    .mode-note{
-      color:var(--muted);
-      font-size:12px;
-      font-weight:700;
-      margin-top:8px;
-    }
-    canvas{
-      width:100% !important;
-      max-height:280px !important;
-    }
-    @media (max-width: 1180px){
-      .hero{grid-template-columns:1fr}
-      .hero-main{grid-template-columns:1fr}
-      .banner{grid-template-columns:1fr}
-      .two-col{grid-template-columns:1fr}
-      .stats-grid-3{grid-template-columns:repeat(2,minmax(0,1fr))}
-    }
-    @media (max-width: 780px){
-      .app{padding:14px}
-      .toolbar{grid-template-columns:1fr 1fr;align-items:stretch}
-      .btn{width:100%}
-      .stats-grid,.stats-grid-3,.source-list,.list-grid,.mini-score-grid{grid-template-columns:1fr}
-      .hero-grid{grid-template-columns:1fr}
+    @media (max-width:760px){
+      #or-city-overview{ --wrap:min(100% - 20px, 1380px); }
+      #or-city-overview .or-wrap{
+        padding:16px 0 28px;
+      }
+      #or-city-overview .or-hero-inner{
+        padding:20px;
+        min-height:auto;
+      }
+      #or-city-overview .or-kpis,
+      #or-city-overview .or-score-grid{
+        grid-template-columns:1fr;
+      }
     }
   </style>
-    </head>
-    <body>
-      <div class="app">
-        <div class="toolbar glass">
-          <div class="field">
-            <label for="baseSelect">Base</label>
-            <select id="baseSelect"></select>
-          </div>
-          <div class="field">
-            <label for="bedroomSelect">Bedroom Focus</label>
-            <select id="bedroomSelect">
-              <option value="2">2 Bedroom</option>
-              <option value="3">3 Bedroom</option>
-              <option value="4" selected="">4 Bedroom</option>
-              <option value="5">5 Bedroom</option>
-            </select>
-          </div>
-          <div class="field">
-            <label for="modeSelect">View</label>
-            <select id="modeSelect">
-              <option value="overview" selected="">Overview</option>
-              <option value="family">Family</option>
-              <option value="investor">Investor</option>
-            </select>
-          </div>
-          <div>
-            <button class="btn" id="loadBtn" type="button">Load Base Intel</button>
-            <div class="status" id="loadStatus">Ready.</div>
-          </div>
-        </div>
-        <div class="hero">
-          <div class="hero-main glass">
-            <div class="hero-copy">
-              <h1 id="heroTitle">Loading base overview…</h1>
-              <div class="hero-sub" id="heroSub">Choose a base to view the detailed intelligence dashboard.</div>
-              <div class="chip-row" id="heroChips"></div>
-              <div class="hero-grid">
-                <div class="metric">
-                  <div class="k">Average Home Value</div>
-                  <div class="v" id="mAvgHome">$0</div>
+      <div class="or-wrap">
+        <section class="or-hero">
+          <div class="or-hero-bg" id="orHeroBg"></div>
+          <div class="or-hero-inner">
+            <div>
+              <div class="or-eyebrow" id="orHeroEyebrow">City Intelligence</div>
+              <h1 class="or-title" id="orHeroTitle">Loading city...</h1>
+              <p class="or-subtitle" id="orHeroSubtitle">Preparing city intelligence.</p>
+              <div class="or-kpis">
+                <div class="or-kpi">
+                  <div class="or-kpi-label">Median Home Price</div>
+                  <div class="or-kpi-value" id="orKpiHomePrice">—</div>
                 </div>
-                <div class="metric">
-                  <div class="k">Median Household Income</div>
-                  <div class="v" id="mIncome">$0</div>
+                <div class="or-kpi">
+                  <div class="or-kpi-label">Median Rent</div>
+                  <div class="or-kpi-value" id="orKpiRent">—</div>
                 </div>
-                <div class="metric">
-                  <div class="k">Population</div>
-                  <div class="v" id="mPopulation">0</div>
+                <div class="or-kpi">
+                  <div class="or-kpi-label">All-In Mortgage</div>
+                  <div class="or-kpi-value" id="orKpiMortgage">—</div>
                 </div>
-                <div class="metric">
-                  <div class="k">Market Type</div>
-                  <div class="v" id="mMarketType">—</div>
+                <div class="or-kpi">
+                  <div class="or-kpi-label">Days On Market</div>
+                  <div class="or-kpi-value" id="orKpiDom">—</div>
                 </div>
               </div>
             </div>
-            <div class="hero-image">
-              <img id="heroImage" alt="City image">
-            </div>
-          </div>
-          <div class="hero-side glass">
-            <div class="score-card">
-              <div class="section-title">Military Lifestyle Fit</div>
-              <div class="score-big" id="fitRating">—</div>
-              <div class="score-note" id="fitDescription">—</div>
-              <div class="mini-score-grid">
-                <div class="mini-score">
-                  <div class="k">Overall Score</div>
-                  <div class="v" id="overallScore">—</div>
-                </div>
-                <div class="mini-score">
-                  <div class="k">Military Fit Score</div>
-                  <div class="v" id="fitScore">—</div>
-                </div>
-                <div class="mini-score">
-                  <div class="k">Growth Score</div>
-                  <div class="v" id="growthScore">—</div>
-                </div>
-                <div class="mini-score">
-                  <div class="k">Stability Score</div>
-                  <div class="v" id="stabilityScore">—</div>
+            <div class="or-hero-side">
+              <div class="or-card">
+                <div class="or-status" id="orVerdictStatus">Market Verdict</div>
+                <div class="or-card-title" id="orVerdictTitle">—</div>
+                <div class="or-card-copy" id="orVerdictCopy">—</div>
+              </div>
+              <div class="or-card">
+                <div class="or-kpi-label">Market Scorecard</div>
+                <div class="or-score-grid">
+                  <div class="or-score-mini">
+                    <span>Affordability</span>
+                    <strong id="orScoreAffordability">—</strong>
+                  </div>
+                  <div class="or-score-mini">
+                    <span>Growth</span>
+                    <strong id="orScoreGrowth">—</strong>
+                  </div>
+                  <div class="or-score-mini">
+                    <span>Stability</span>
+                    <strong id="orScoreStability">—</strong>
+                  </div>
+                  <div class="or-score-mini">
+                    <span>Overall</span>
+                    <strong id="orScoreOverall">—</strong>
+                  </div>
                 </div>
               </div>
             </div>
-            <div class="score-card">
-              <div class="section-title">Quick Reality Check</div>
-              <div class="section-sub">Fast take on affordability, stability, and military-friendliness.</div>
-              <div class="quote-block" id="quickTake">Loading…</div>
-            </div>
           </div>
-        </div>
-        <div class="banner">
-          <div class="banner-card glass">
-            <div class="section-title">Market BLUF</div>
-            <div class="section-sub">Executive-grade read on what this base market is telling you right now.</div>
-            <div class="bluf-status" id="blufStatus">Loading…</div>
-            <div class="bluf-head" id="blufHeadline">—</div>
-            <div class="bluf-summary" id="blufSummary">—</div>
-            <div class="mode-note" id="modeSummary">Mode: Overview</div>
-          </div>
-          <div class="banner-card glass">
-            <div class="section-title">Financial Positioning</div>
-            <div class="section-sub">How this market looks for buy vs rent pressure and near-term decision-making.</div>
-            <div class="stats-grid" id="financialBriefStats"></div>
-          </div>
-        </div>
-        <div class="two-col">
-          <div class="panel glass">
-            <h2>Housing & Affordability</h2>
-            <p class="panel-sub">Ownership, monthly carrying cost, and bedroom-level cost view.</p>
-            <div class="stats-grid-3" id="housingStats"></div>
-            <div class="bedroom-toolbar" id="bedroomButtons">
-              <button class="bed-btn" data-bed="2" type="button">2 BR</button>
-              <button class="bed-btn" data-bed="3" type="button">3 BR</button>
-              <button class="bed-btn active" data-bed="4" type="button">4 BR</button>
-              <button class="bed-btn" data-bed="5" type="button">5 BR</button>
-            </div>
-            <canvas id="bedroomChart"></canvas>
-          </div>
-          <div class="panel glass">
-            <h2>Market Snapshot</h2>
-            <p class="panel-sub">Current market pricing, pace, trend direction, and recent history.</p>
-            <div class="stats-grid" id="marketStats"></div>
-            <div style="margin-top:14px;">
-              <canvas id="marketChart"></canvas>
-            </div>
-          </div>
-        </div>
-        <div class="two-col">
-          <div class="panel glass">
-            <h2>Demographics & Economy</h2>
-            <p class="panel-sub">Population, income, labor, education, veteran concentration, and community profile.</p>
-            <div class="stats-grid-3" id="demoStats"></div>
-          </div>
-          <div class="panel glass">
-            <h2>Family & Community Readiness</h2>
-            <p class="panel-sub">School notes, safety summary, rental pressure, and community fit.</p>
-            <div class="list-grid">
-              <div class="quote-block" id="schoolsBlock">—</div>
-              <div class="quote-block" id="crimeBlock">—</div>
-              <div class="quote-block" id="vacancyBlock">—</div>
-              <div class="quote-block" id="communityBlock">—</div>
-            </div>
-          </div>
-        </div>
-        <div class="two-col">
-          <div class="panel glass">
-            <h2>Snapshot & Military Signals</h2>
-            <p class="panel-sub">Higher-level operating picture using quick-read fields already in the JSON.</p>
-            <div class="stats-grid-3" id="snapshotStats"></div>
-          </div>
-          <div class="panel glass">
-            <h2>Mortgage Assumptions & Rules</h2>
-            <p class="panel-sub">The assumptions your model is using for payment logic and affordability boundaries.</p>
-            <div class="stats-grid" id="assumptionStats"></div>
-          </div>
-        </div>
-        <div class="two-col">
-          <div class="panel glass">
-            <h2>Climate & Lifestyle</h2>
-            <p class="panel-sub">Seasonality and local lifestyle events that shape day-to-day living.</p>
-            <div class="stats-grid" id="climateStats"></div>
-            <div style="margin-top:14px;">
-              <div class="section-title" style="margin-bottom:10px;">Special Events</div>
-              <ul class="bullet-list" id="eventsList"></ul>
-            </div>
-          </div>
-          <div class="panel glass">
-            <h2>Data Provenance</h2>
-            <p class="panel-sub">What the dashboard is using right now from your city JSON.</p>
-            <div class="source-list" id="sourcesGrid"></div>
-          </div>
-        </div>
+        </section>
       </div>
       <script>
     (() => {
       "use strict";
-      const API_BASE = "/api";
-      const DIRECT_FN_BASE = "/.netlify/functions";
-      const GITHUB_RAW_BASE = "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/";
-      const BASES = [
-        { value: "Andrews AFB", fileKey: "Andrews" },
-        { value: "Barksdale AFB", fileKey: "Barksdale" },
-        { value: "Beale AFB", fileKey: "Beale" },
-        { value: "Cannon AFB", fileKey: "Cannon" },
-        { value: "Charleston AFB", fileKey: "Charleston" },
-        { value: "Davis-Monthan AFB", fileKey: "Davis-Monthan" },
-        { value: "Dover AFB", fileKey: "Dover" },
-        { value: "Dyess AFB", fileKey: "Dyess" },
-        { value: "Eglin AFB", fileKey: "Eglin" },
-        { value: "Elmendorf AFB", fileKey: "Elmendorf" },
-        { value: "F.E-Warren AFB", fileKey: "F.E-Warren" },
-        { value: "Fairchild AFB", fileKey: "Fairchild" },
-        { value: "Fort-Sam-Houston AFB", fileKey: "Fort-Sam-Houston" },
-        { value: "Holloman AFB", fileKey: "Holloman" },
-        { value: "Hurlburt AFB", fileKey: "Hurlburt" },
-        { value: "Keesler AFB", fileKey: "Keesler" },
-        { value: "Kirtland AFB", fileKey: "Kirtland" },
-        { value: "Lackland AFB", fileKey: "Lackland" },
-        { value: "Langley AFB", fileKey: "Langley" },
-        { value: "Laughlin AFB", fileKey: "Laughlin" },
-        { value: "Little-Rock AFB", fileKey: "Little-Rock" },
-        { value: "Luke AFB", fileKey: "Luke" },
-        { value: "MacDill AFB", fileKey: "MacDill" },
-        { value: "Malmstrom AFB", fileKey: "Malmstrom" },
-        { value: "Maxwell AFB", fileKey: "Maxwell" },
-        { value: "McConnell AFB", fileKey: "McConnell" },
-        { value: "McGuire AFB", fileKey: "McGuire" },
-        { value: "Minot AFB", fileKey: "Minot" },
-        { value: "Moody AFB", fileKey: "Moody" },
-        { value: "Mountain-Home AFB", fileKey: "Mountain-Home" },
-        { value: "Nellis AFB", fileKey: "Nellis" },
-        { value: "Offutt AFB", fileKey: "Offutt" },
-        { value: "Peterson AFB", fileKey: "Peterson" },
-        { value: "Randolph AFB", fileKey: "Randolph" },
-        { value: "Robins AFB", fileKey: "Robins" },
-        { value: "Scott AFB", fileKey: "Scott" },
-        { value: "Seymour-Johnson AFB", fileKey: "Seymour-Johnson" },
-        { value: "Shaw AFB", fileKey: "Shaw" },
-        { value: "Sheppard AFB", fileKey: "Sheppard" },
-        { value: "Tinker AFB", fileKey: "Tinker" },
-        { value: "Travis AFB", fileKey: "Travis" },
-        { value: "Tyndall AFB", fileKey: "Tyndall" },
-        { value: "Whiteman AFB", fileKey: "Whiteman" },
-        { value: "Wright-Patterson AFB", fileKey: "Wright-Patterson" }
-      ];
-      const baseSelect = document.getElementById("baseSelect");
-      const bedroomSelect = document.getElementById("bedroomSelect");
-      const modeSelect = document.getElementById("modeSelect");
-      const loadBtn = document.getElementById("loadBtn");
-      const loadStatus = document.getElementById("loadStatus");
-      let bedroomChart = null;
-      let marketChart = null;
-      function qs(id){ return document.getElementById(id); }
-      function money(n){
-        const x = Number(n);
-        if (!Number.isFinite(x)) return "—";
-        return "$" + Math.round(x).toLocaleString();
+      if (window.OROZCO_CITY_OVERVIEW_HERO_ONLY?.__mounted) return;
+      window.OROZCO_CITY_OVERVIEW_HERO_ONLY = { __mounted: true };
+      const root = document.getElementById("or-city-overview");
+      if (!root) return;
+      const CITY_JSON_URL =
+        window.OROZCO_CITY_JSON_URL ||
+        "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/market/san-antonio.json";
+      const $ = (sel, node = root) => node.querySelector(sel);
+      function fmtMoney(v){
+        const n = Number(v);
+        if (!Number.isFinite(n)) return "—";
+        return new Intl.NumberFormat("en-US", {
+          style: "currency",
+          currency: "USD",
+          maximumFractionDigits: 0
+        }).format(n);
       }
-      function pct(n, digits = 1){
-        const x = Number(n);
-        if (!Number.isFinite(x)) return "—";
-        return `${x.toFixed(digits)}%`;
+      function fmtNum(v){
+        const n = Number(v);
+        if (!Number.isFinite(n)) return "—";
+        return new Intl.NumberFormat("en-US").format(n);
       }
-      function num(n, digits = 0){
-        const x = Number(n);
-        if (!Number.isFinite(x)) return "—";
-        return x.toLocaleString(undefined, {
-          minimumFractionDigits: digits,
-          maximumFractionDigits: digits
-        });
+      function setText(sel, value){
+        const el = $(sel);
+        if (el) el.textContent = value ?? "—";
       }
-      function safe(obj, path, fallback = null){
-        try {
-          const out = path.split(".").reduce((acc, key) => acc && acc[key], obj);
-          return out ?? fallback;
-        } catch {
-          return fallback;
-        }
-      }
-      function first(...values){
-        for (const value of values){
-          if (value === 0) return value;
-          if (value === false) return value;
-          if (value !== undefined && value !== null && String(value).trim() !== "") return value;
-        }
-        return null;
-      }
-      function nonEmpty(value, fallback = "—"){
-        const v = first(value);
-        return v == null ? fallback : String(v);
-      }
-      function setText(id, value){
-        const el = qs(id);
-        if (el) el.textContent = value;
-      }
-      function card(k, v, s = ""){
-        return `
-          <div class="info-card">
-            <div class="k">${escapeHtml(k)}</div>
-            <div class="v">${escapeHtml(String(v ?? "—"))}</div>
-            ${s ? `<div class="s">${escapeHtml(String(s))}</div>` : ""}
-          </div>
-        `;
-      }
-      function escapeHtml(str){
-        return String(str)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
-      }
-      function slugKey(s){
-        return String(s || "").toLowerCase().replace(/[^a-z0-9]+/g, "_").replace(/^_+|_+$/g, "");
-      }
-      function detectMetroCrime(city){
-        const crime = safe(city, "crime_status", {}) || {};
-        const keys = Object.keys(crime);
-        const dynamicMetroKey = keys.find(k => /^metro_/i.test(k));
-        return first(
-          crime[dynamicMetroKey],
-          crime.metro,
-          crime.off_base,
-          crime.citywide,
-          crime.metro_area
-        );
-      }
-      function getQuarterSale(market){
-        return first(
-          safe(market, "q1_2026.median_sale_price"),
-          safe(market, "q1_2025.median_sale_price"),
-          safe(market, "q1_current.median_sale_price"),
-          safe(market, "quarter_current.median_sale_price")
-        );
-      }
-      function scoreLabel(score){
-        const x = Number(score);
-        if (!Number.isFinite(x)) return "—";
-        if (x >= 85) return "Excellent";
-        if (x >= 75) return "Strong";
-        if (x >= 65) return "Solid";
-        if (x >= 55) return "Mixed";
-        return "Challenging";
-      }
-      function verdictTone(value){
-        const s = String(value || "").toLowerCase();
-        if (s.includes("buy") || s.includes("strong") || s.includes("green") || s.includes("favorable")) return "ok";
-        if (s.includes("selective") || s.includes("balanced") || s.includes("moderate") || s.includes("yellow")) return "warn";
-        if (s.includes("tight") || s.includes("challenging") || s.includes("red")) return "bad";
-        return "";
-      }
-      async function fetchJson(url){
-        const res = await fetch(url, { cache: "no-store" });
-        if (!res.ok) throw new Error(`${url} (${res.status})`);
-        const text = await res.text();
-        try {
-          return JSON.parse(text);
-        } catch {
-          const repaired = text
-            .replace(/^\uFEFF/, "")
-            .replace(/(:\s*)\+(\d+(\.\d+)?)/g, "$1$2")
-            .replace(/([\[,]\s*)\+(\d+(\.\d+)?)/g, "$1$2");
-          return JSON.parse(repaired);
-        }
-      }
-      async function loadCity(base){
-        const baseMeta = BASES.find(b => b.value === base) || BASES[0];
-        try {
-          return await fetchJson(`${API_BASE}/city?base=${encodeURIComponent(base)}`);
-        } catch {}
-        try {
-          return await fetchJson(`${DIRECT_FN_BASE}/city?base=${encodeURIComponent(base)}`);
-        } catch {}
-        return await fetchJson(`${GITHUB_RAW_BASE}${encodeURIComponent(baseMeta.fileKey)}.json`);
-      }
-      function populateBases(){
-        baseSelect.innerHTML = BASES.map(b => `<option value="${escapeHtml(b.value)}">${escapeHtml(b.value)}</option>`).join("");
-        const url = new URL(window.location.href);
-        const baseFromUrl = url.searchParams.get("base");
-        const found = BASES.find(b => b.value === baseFromUrl);
-        baseSelect.value = found ? found.value : "Nellis AFB";
-      }
-      function buildQuickTake(city, mode){
-        const income = Number(first(
-          safe(city, "income.median_household_income"),
-          safe(city, "snapshot.median_household_income")
-        )) || 0;
-        const home = Number(first(
-          city.avg_home_value,
-          city.average_home_value,
-          safe(city, "housing.median_value_owner_occupied"),
-          safe(city, "snapshot.median_home_price")
-        )) || 0;
-        const ratio = income > 0 ? home / income : 0;
-        const dom = Number(safe(city, "housing.market.average_days_on_market")) || 0;
-        const vacancy = Number(safe(city, "rental_vacancy.rate_percent")) || 0;
-        const fit = first(
-          safe(city, "military_lifestyle_fit.rating"),
-          safe(city, "market_bluf.status")
-        );
-        let affordability = "mixed";
-        if (ratio > 0 && ratio <= 4.0) affordability = "strong";
-        else if (ratio > 4.0 && ratio <= 5.5) affordability = "moderate";
-        else if (ratio > 5.5) affordability = "tight";
-        if (mode === "family") {
-          const schoolOn = safe(city, "school_quality.on_base");
-          const schoolOff = safe(city, "school_quality.off_base");
-          const crime = first(safe(city, "crime_status.installation"), detectMetroCrime(city));
-          return [
-            `Family view: affordability looks ${affordability}, with military fit reading ${nonEmpty(fit, "mixed")}.`,
-            schoolOn ? `On-base school note: ${schoolOn}` : "",
-            schoolOff ? `Off-base school note: ${schoolOff}` : "",
-            crime ? `Safety lens: ${crime}` : ""
-          ].filter(Boolean).join(" ");
-        }
-        if (mode === "investor") {
-          const rentPos = safe(city, "financial_brief.bah_vs_rent_position");
-          const buyPos = safe(city, "financial_brief.bah_vs_buy_position");
-          const leverage = safe(city, "market_bluf.buyer_leverage");
-          return [
-            `Investor view: affordability reads ${affordability} and turnover pace is about ${dom || "—"} days on market.`,
-            buyPos ? `Buy positioning: ${buyPos}.` : "",
-            rentPos ? `Rent positioning: ${rentPos}.` : "",
-            leverage ? `Current buyer leverage: ${leverage}.` : "",
-            vacancy ? `Rental vacancy is around ${vacancy.toFixed(1)}%.` : ""
-          ].filter(Boolean).join(" ");
-        }
-        return [
-          `This market looks ${affordability} for owner-occupants relative to local income.`,
-          fit ? `Military fit reads ${fit}.` : "",
-          dom ? `Homes are averaging about ${dom} days on market.` : "",
-          vacancy ? `Rental vacancy is around ${vacancy.toFixed(1)}%.` : ""
-        ].filter(Boolean).join(" ");
-      }
-      function renderHero(city, mode){
-        const titleLeft = nonEmpty(first(city.place, city.city, city.name), "Unknown City");
-        const titleRight = nonEmpty(first(city.market_label, safe(city, "housing.market.market_type_summary")), "Market Overview");
-        setText("heroTitle", `${titleLeft} • ${titleRight}`);
-        const sub = [
-          first(city.last_updated_data_from_sources) ? `Updated ${city.last_updated_data_from_sources}` : "",
-          first(city.zip) ? `ZIP ${city.zip}` : "",
-          first(city.state) ? city.state : "",
-          first(safe(city, "snapshot.population_metro")) ? `Metro ${num(safe(city, "snapshot.population_metro"))}` : ""
-        ].filter(Boolean).join(" • ");
-        setText("heroSub", sub || "Base overview loaded.");
-        const verdict = safe(city, "market_bluf.verdict");
-        const verdictClass = verdictTone(verdict);
-        const chips = [
-          first(safe(city, "housing.market.market_type_summary")),
-          first(city.market_label),
-          first(safe(city, "military_lifestyle_fit.rating")),
-          first(verdict)
-        ].filter(Boolean).slice(0, 4);
-        qs("heroChips").innerHTML = chips.map((c, i) => {
-          const cls = i === chips.length - 1 && verdictClass ? `chip ${verdictClass}` : "chip";
-          return `<div class="${cls}">${escapeHtml(c)}</div>`;
-        }).join("");
-        setText("mAvgHome", money(first(city.avg_home_value, city.average_home_value, safe(city, "housing.median_value_owner_occupied"), safe(city, "snapshot.median_home_price"))));
-        setText("mIncome", money(first(safe(city, "income.median_household_income"), safe(city, "snapshot.median_household_income"))));
-        setText("mPopulation", num(first(safe(city, "population.estimate"), safe(city, "snapshot.population_city"))));
-        setText("mMarketType", nonEmpty(first(safe(city, "housing.market.market_type_summary"), city.market_label)));
-        const fit = safe(city, "military_lifestyle_fit.rating", "—");
-        const fitDesc = safe(city, "military_lifestyle_fit.description", "No military lifestyle fit summary yet.");
-        setText("fitRating", fit);
-        setText("fitDescription", fitDesc);
-        setText("overallScore", num(safe(city, "scorecard.overall_score")));
-        setText("fitScore", num(safe(city, "scorecard.military_fit_score")));
-        setText("growthScore", num(safe(city, "scorecard.growth_score")));
-        setText("stabilityScore", num(safe(city, "scorecard.stability_score")));
-        setText("quickTake", buildQuickTake(city, mode));
-        const img = qs("heroImage");
-        const imageUrl = first(city.image_url, city.imageUrl);
-        if (imageUrl && /^https?:\/\//i.test(imageUrl)) {
-          img.src = imageUrl;
-          img.style.display = "block";
-        } else {
-          img.removeAttribute("src");
-          img.style.display = "none";
-        }
-      }
-      function renderBluf(city, mode){
-        const verdict = nonEmpty(first(safe(city, "market_bluf.verdict"), safe(city, "market_bluf.status"), safe(city, "military_lifestyle_fit.rating")), "No verdict");
-        const tone = verdictTone(verdict);
-        const confidence = safe(city, "market_bluf.confidence_score");
-        const statusText = [
-          nonEmpty(first(safe(city, "market_bluf.status"), verdict)),
-          confidence != null ? `Confidence ${num(confidence)}` : ""
-        ].filter(Boolean).join(" • ");
-        const statusEl = qs("blufStatus");
-        statusEl.className = `bluf-status${tone ? " " + tone : ""}`;
-        statusEl.textContent = statusText || "No BLUF status";
-        let headline = first(
-          safe(city, "market_bluf.bluf_headline"),
-          safe(city, "financial_brief.affordability_summary"),
-          safe(city, "military_lifestyle_fit.rating")
-        );
-        let summary = first(
-          safe(city, "market_bluf.bluf_summary"),
-          safe(city, "financial_brief.affordability_summary"),
-          safe(city, "military_lifestyle_fit.description"),
-          "No executive summary available yet."
-        );
-        if (mode === "family") {
-          headline = first(headline, "Family Readiness View");
-          summary = [
-            first(safe(city, "school_quality.on_base")) ? `On-base: ${safe(city, "school_quality.on_base")}` : "",
-            first(safe(city, "school_quality.off_base")) ? `Off-base: ${safe(city, "school_quality.off_base")}` : "",
-            first(safe(city, "military_lifestyle_fit.description")) ? `Community fit: ${safe(city, "military_lifestyle_fit.description")}` : "",
-            first(detectMetroCrime(city)) ? `Metro safety: ${detectMetroCrime(city)}` : ""
-          ].filter(Boolean).join(" ");
-        } else if (mode === "investor") {
-          headline = first(headline, "Investor Positioning View");
-          summary = [
-            first(safe(city, "financial_brief.affordability_summary")) ? safe(city, "financial_brief.affordability_summary") : "",
-            first(safe(city, "financial_brief.buyer_opportunity")) ? `Opportunity: ${safe(city, "financial_brief.buyer_opportunity")}` : "",
-            first(safe(city, "market_bluf.inventory_trend")) ? `Inventory trend: ${safe(city, "market_bluf.inventory_trend")}.` : "",
-            first(safe(city, "market_bluf.buyer_leverage")) ? `Buyer leverage: ${safe(city, "market_bluf.buyer_leverage")}.` : ""
-          ].filter(Boolean).join(" ");
-        }
-        setText("blufHeadline", headline || "No BLUF headline");
-        setText("blufSummary", summary || "No BLUF summary");
-        setText("modeSummary", `Mode: ${mode.charAt(0).toUpperCase() + mode.slice(1)}`);
-      }
-      function renderFinancialBrief(city, mode){
-        const stats = [];
-        const fin = safe(city, "financial_brief", {}) || {};
-        const bluf = safe(city, "market_bluf", {}) || {};
-        const score = safe(city, "scorecard", {}) || {};
-        if (mode === "family") {
-          stats.push(card("Affordability Summary", nonEmpty(fin.affordability_summary), "Family lens"));
-          stats.push(card("Community Fit", nonEmpty(safe(city, "military_lifestyle_fit.rating")), nonEmpty(safe(city, "military_lifestyle_fit.description"))));
-          stats.push(card("Affordability Score", num(score.affordability_score), scoreLabel(score.affordability_score)));
-          stats.push(card("School Outlook", first(safe(city, "school_quality.off_base"), safe(city, "school_quality.on_base"), "—")));
-        } else if (mode === "investor") {
-          stats.push(card("Buy Position", nonEmpty(fin.bah_vs_buy_position), "Investor lens"));
-          stats.push(card("Rent Position", nonEmpty(fin.bah_vs_rent_position), "Cash-flow pressure"));
-          stats.push(card("Buyer Opportunity", nonEmpty(fin.buyer_opportunity), "Where edge may exist"));
-          stats.push(card("Buyer Leverage", nonEmpty(bluf.buyer_leverage), nonEmpty(bluf.inventory_trend, "Inventory trend")));
-        } else {
-          stats.push(card("Buy Position", nonEmpty(fin.bah_vs_buy_position), "Own-vs-buy reality"));
-          stats.push(card("Rent Position", nonEmpty(fin.bah_vs_rent_position), "Rent pressure"));
-          stats.push(card("Affordability Score", num(score.affordability_score), scoreLabel(score.affordability_score)));
-          stats.push(card("Verdict", nonEmpty(bluf.verdict), nonEmpty(bluf.bluf_summary)));
-        }
-        qs("financialBriefStats").innerHTML = stats.join("");
-      }
-      function renderHousing(city, bed, mode){
-        const bedData = safe(city, `by_bedroom.${bed}`, {}) || {};
-        const rent = first(safe(bedData, "rent_monthly.avg"));
-        const home = first(safe(bedData, "home_price.avg"));
-        const mortgage = first(safe(bedData, "mortgage_monthly.avg"), safe(city, "avg_home_mortgage_monthly.avg"));
-        const utilities = first(safe(bedData, "utilities.total.avg"));
-        const hoaMonthly = first(city.hoa_monthly);
-        const propertyTaxRate = first(city.property_tax_rate);
-        const insuranceRate = first(city.insurance_rate);
-        let cards = [
-          card("Avg Rent", money(rent), `${bed} bedroom focus`),
-          card("Avg Home Price", money(home), "Bedroom-based estimate"),
-          card("Avg Mortgage", money(mortgage), "Monthly estimate"),
-          card("Avg Utilities", money(utilities), "Electric/gas + water/sewer"),
-          card("Property Tax Rate", pct(propertyTaxRate), "Annual rate"),
-          card("Insurance Rate", pct(insuranceRate), "Annual default")
-        ];
-        if (mode === "family") {
-          cards = [
-            card("Avg Rent", money(rent), `${bed} bedroom focus`),
-            card("Avg Home Price", money(home), "Target family housing"),
-            card("Avg Mortgage", money(mortgage), "Monthly carry"),
-            card("Avg Utilities", money(utilities), "Household monthly"),
-            card("Avg HOA", hoaMonthly != null ? money(hoaMonthly) : "—", "Monthly"),
-            card("Median Home Price", money(first(safe(city, "snapshot.median_home_price"), safe(city, "housing.market.median_sale_price_current"))), "Market center")
-          ];
-        }
-        if (mode === "investor") {
-          const grossYield = (rent && home) ? ((Number(rent) * 12 / Number(home)) * 100) : null;
-          cards = [
-            card("Avg Rent", money(rent), `${bed} bedroom focus`),
-            card("Avg Home Price", money(home), "Acquisition marker"),
-            card("Gross Yield", grossYield != null ? pct(grossYield, 2) : "—", "Rent * 12 / price"),
-            card("Avg Mortgage", money(mortgage), "Debt service marker"),
-            card("Rental Vacancy", pct(safe(city, "rental_vacancy.rate_percent")), "Market slack"),
-            card("Avg HOA", hoaMonthly != null ? money(hoaMonthly) : "—", "Monthly")
-          ];
-        }
-        qs("housingStats").innerHTML = cards.join("");
-        const labels = ["Rent", "Home Price", "Mortgage", "Utilities"];
-        const data = [Number(rent) || 0, Number(home) || 0, Number(mortgage) || 0, Number(utilities) || 0];
-        if (bedroomChart) bedroomChart.destroy();
-        bedroomChart = new Chart(document.getElementById("bedroomChart"), {
-          type: "bar",
-          data: {
-            labels,
-            datasets: [{
-              data
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              y: {
-                ticks: {
-                  color: "#e9ecff",
-                  callback: (v) => money(v)
-                },
-                grid: { color: "rgba(255,255,255,.08)" }
-              },
-              x: {
-                ticks: { color: "#e9ecff" },
-                grid: { display: false }
-              }
-            }
-          }
-        });
-      }
-      function renderMarket(city, mode){
-        const market = safe(city, "housing.market", {}) || {};
-        const q1Sale = getQuarterSale(market);
-        const yoy = first(market.zillow_one_year_change_percent, safe(city, "snapshot.market_trend_yoy"));
-        const saleHistory = Array.isArray(market.sale_history_36_months) ? market.sale_history_36_months : [];
-        let marketCards = [
-          card("Zillow Avg Value", money(market.zillow_average_home_value)),
-          card("1Y Change", pct(yoy)),
-          card("Median Sale", money(market.median_sale_price_current)),
-          card("Median Listing", money(market.median_listing_price_realtor)),
-          card("Median $ / Sq Ft", market.median_listing_price_per_sqft ? `$${num(market.median_listing_price_per_sqft)}` : "—"),
-          card("Active Listings", num(market.active_listings_total)),
-          card("Avg Days on Market", num(market.average_days_on_market)),
-          card("Quarter Median Sale", money(q1Sale))
-        ];
-        if (mode === "investor") {
-          const spread = (Number(market.median_listing_price_realtor) || 0) - (Number(market.median_sale_price_current) || 0);
-          marketCards = [
-            card("Median Sale", money(market.median_sale_price_current)),
-            card("Median Listing", money(market.median_listing_price_realtor)),
-            card("Listing-Sale Spread", spread ? money(spread) : "—", "Negotiation room proxy"),
-            card("1Y Change", pct(yoy)),
-            card("Avg Days on Market", num(market.average_days_on_market)),
-            card("Active Listings", num(market.active_listings_total)),
-            card("Buyer Leverage", nonEmpty(safe(city, "market_bluf.buyer_leverage"))),
-            card("Inventory Trend", nonEmpty(safe(city, "market_bluf.inventory_trend")))
-          ];
-        }
-        if (mode === "family") {
-          marketCards = [
-            card("Median Sale", money(market.median_sale_price_current), "Family-market anchor"),
-            card("Median Listing", money(market.median_listing_price_realtor), "Ask pricing"),
-            card("Avg Days on Market", num(market.average_days_on_market), "How fast homes move"),
-            card("Active Listings", num(market.active_listings_total), "Choice set"),
-            card("1Y Change", pct(yoy), "Price trend"),
-            card("Quarter Median Sale", money(q1Sale), "Recent quarter"),
-            card("Market Type", nonEmpty(market.market_type_summary)),
-            card("Confidence", num(safe(city, "market_bluf.confidence_score")), "BLUF confidence")
-          ];
-        }
-        qs("marketStats").innerHTML = marketCards.join("");
-        let chartType = "line";
-        let chartLabels = [];
-        let chartData = [];
-        if (saleHistory.length) {
-          chartLabels = saleHistory.map(x => nonEmpty(x.month, "—"));
-          chartData = saleHistory.map(x => Number(x.median_sale_price) || 0);
-        } else {
-          chartType = "bar";
-          chartLabels = ["Sale", "Listing", "Quarter", "Zillow Avg"];
-          chartData = [
-            Number(market.median_sale_price_current) || 0,
-            Number(market.median_listing_price_realtor) || 0,
-            Number(q1Sale) || 0,
-            Number(market.zillow_average_home_value) || 0
-          ];
-        }
-        if (marketChart) marketChart.destroy();
-        marketChart = new Chart(document.getElementById("marketChart"), {
-          type: chartType,
-          data: {
-            labels: chartLabels,
-            datasets: [{
-              data: chartData,
-              tension: 0.28,
-              fill: false
-            }]
-          },
-          options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: false } },
-            scales: {
-              y: {
-                ticks: {
-                  color: "#e9ecff",
-                  callback: (v) => money(v)
-                },
-                grid: { color: "rgba(255,255,255,.08)" }
-              },
-              x: {
-                ticks: { color: "#e9ecff" },
-                grid: { display: chartType !== "line" ? false : true, color: "rgba(255,255,255,.03)" }
-              }
-            }
-          }
-        });
-      }
-      function renderDemographics(city, mode){
-        let cards = [
-          card("Population", num(first(safe(city, "population.estimate"), safe(city, "snapshot.population_city")))),
-          card("Metro Population", num(safe(city, "snapshot.population_metro"))),
-          card("Median Age", num(safe(city, "population.median_age"), 1)),
-          card("Persons / Household", num(safe(city, "population.persons_per_household"), 2)),
-          card("Households", num(safe(city, "households.total_households"))),
-          card("Median Household Income", money(first(safe(city, "income.median_household_income"), safe(city, "snapshot.median_household_income")))),
-          card("Per Capita Income", money(safe(city, "income.per_capita_income"))),
-          card("Poverty Rate", pct(safe(city, "income.poverty_rate_percent"))),
-          card("Unemployment", pct(safe(city, "labor.unemployment_rate_percent"))),
-          card("Commute Time", safe(city, "labor.mean_travel_time_to_work_minutes") != null ? `${num(safe(city, "labor.mean_travel_time_to_work_minutes"), 1)} min` : "—"),
-          card("HS Graduate+", pct(safe(city, "education.high_school_grad_or_higher_percent"))),
-          card("Bachelor's+", pct(safe(city, "education.bachelors_degree_or_higher_percent")))
-        ];
-        if (mode === "family") {
-          cards = [
-            card("Population", num(first(safe(city, "population.estimate"), safe(city, "snapshot.population_city")))),
-            card("Persons / Household", num(safe(city, "population.persons_per_household"), 2)),
-            card("Median Age", num(safe(city, "population.median_age"), 1)),
-            card("Households", num(safe(city, "households.total_households"))),
-            card("Median Household Income", money(first(safe(city, "income.median_household_income"), safe(city, "snapshot.median_household_income")))),
-            card("Commute Time", safe(city, "labor.mean_travel_time_to_work_minutes") != null ? `${num(safe(city, "labor.mean_travel_time_to_work_minutes"), 1)} min` : "—"),
-            card("Veteran Population", pct(safe(city, "veterans.veteran_population_percent"))),
-            card("Foreign-Born", pct(safe(city, "immigration.foreign_born_percent"))),
-            card("HS Graduate+", pct(safe(city, "education.high_school_grad_or_higher_percent"))),
-            card("Bachelor's+", pct(safe(city, "education.bachelors_degree_or_higher_percent"))),
-            card("Employment Status", nonEmpty(safe(city, "snapshot.employment_status"))),
-            card("Traffic Level", nonEmpty(safe(city, "snapshot.traffic_level")))
-          ];
-        }
-        if (mode === "investor") {
-          cards = [
-            card("Median Household Income", money(first(safe(city, "income.median_household_income"), safe(city, "snapshot.median_household_income")))),
-            card("Per Capita Income", money(safe(city, "income.per_capita_income"))),
-            card("Poverty Rate", pct(safe(city, "income.poverty_rate_percent"))),
-            card("Unemployment", pct(safe(city, "labor.unemployment_rate_percent"))),
-            card("Commute Time", safe(city, "labor.mean_travel_time_to_work_minutes") != null ? `${num(safe(city, "labor.mean_travel_time_to_work_minutes"), 1)} min` : "—"),
-            card("Veteran Population", pct(safe(city, "veterans.veteran_population_percent"))),
-            card("Metro Population", num(safe(city, "snapshot.population_metro"))),
-            card("Traffic Level", nonEmpty(safe(city, "snapshot.traffic_level"))),
-            card("Employment Status", nonEmpty(safe(city, "snapshot.employment_status"))),
-            card("Bachelor's+", pct(safe(city, "education.bachelors_degree_or_higher_percent"))),
-            card("Population", num(first(safe(city, "population.estimate"), safe(city, "snapshot.population_city")))),
-            card("Households", num(safe(city, "households.total_households")))
-          ];
-        }
-        qs("demoStats").innerHTML = cards.join("");
-      }
-      function renderCommunity(city, mode){
-        const schoolOn = safe(city, "school_quality.on_base", "");
-        const schoolOff = safe(city, "school_quality.off_base", "");
-        const installCrime = safe(city, "crime_status.installation", "");
-        const metroCrime = detectMetroCrime(city);
-        const vacancyRate = safe(city, "rental_vacancy.rate_percent", null);
-        const vacancyNotes = safe(city, "rental_vacancy.notes", "");
-        const communityFit = safe(city, "military_lifestyle_fit.description", "No community fit summary yet.");
-        if (mode === "family") {
-          setText("schoolsBlock",
-            [
-              schoolOn ? `On-base school environment: ${schoolOn}` : "",
-              schoolOff ? `Off-base school environment: ${schoolOff}` : ""
-            ].filter(Boolean).join(" ")
-            || "No school summary yet."
-          );
-          setText("crimeBlock",
-            [
-              installCrime ? `Installation safety: ${installCrime}` : "",
-              metroCrime ? `Metro safety: ${metroCrime}` : ""
-            ].filter(Boolean).join(" ")
-            || "No safety summary yet."
-          );
-        } else if (mode === "investor") {
-          setText("schoolsBlock",
-            schoolOff ? `Family-demand proxy: ${schoolOff}` : (schoolOn || "No school summary yet.")
-          );
-          setText("crimeBlock",
-            metroCrime ? `Neighborhood risk lens: ${metroCrime}` : (installCrime || "No safety summary yet.")
-          );
-        } else {
-          setText("schoolsBlock",
-            [
-              schoolOn ? `On-base: ${schoolOn}` : "",
-              schoolOff ? `Off-base: ${schoolOff}` : ""
-            ].filter(Boolean).join(" ")
-            || "No school summary yet."
-          );
-          setText("crimeBlock",
-            [
-              installCrime ? `Installation: ${installCrime}` : "",
-              metroCrime ? `Metro: ${metroCrime}` : ""
-            ].filter(Boolean).join(" ")
-            || "No safety summary yet."
-          );
+      function renderHero(data){
+        const bg = $("#orHeroBg");
+        if (bg && data.image_url){
+          bg.style.setProperty("--hero-image", `url("${data.image_url}")`);
         }
         setText(
-          "vacancyBlock",
-          vacancyRate != null
-            ? `Rental vacancy: ${num(vacancyRate, 1)}% • ${nonEmpty(vacancyNotes, "No extra notes.")}`
-            : "No rental vacancy summary yet."
+          "#orHeroEyebrow",
+          `${data.state || "State"} • ${data.market_label || "City Intelligence"}`
         );
-        setText("communityBlock", communityFit);
+        setText(
+          "#orHeroTitle",
+          `${data.city || data.name || "City"}${data.state_code ? `, ${data.state_code}` : ""}`
+        );
+        setText(
+          "#orHeroSubtitle",
+          data.profile || "City intelligence loaded."
+        );
+        setText(
+          "#orKpiHomePrice",
+          fmtMoney(data.metrics?.median_sale_price || data.avg_home_value)
+        );
+        setText(
+          "#orKpiRent",
+          fmtMoney(data.metrics?.median_rent || data.rental_metrics?.median_rent)
+        );
+        setText(
+          "#orKpiMortgage",
+          fmtMoney(data.avg_home_mortgage_monthly?.avg)
+        );
+        setText(
+          "#orKpiDom",
+          Number.isFinite(Number(data.metrics?.days_on_market))
+            ? `${fmtNum(data.metrics.days_on_market)} days`
+            : "—"
+        );
+        const status = data.market_bluf?.status || "Market Verdict";
+        const verdict = data.market_bluf?.verdict || data.market_bluf?.bluf_headline || "Market View";
+        const copyParts = [
+          data.market_bluf?.bluf_summary,
+          data.financial_brief?.affordability_summary,
+          data.market_bluf?.buyer_leverage ? `Buyer leverage: ${data.market_bluf.buyer_leverage}.` : "",
+          data.market_bluf?.inventory_trend ? `Inventory trend: ${data.market_bluf.inventory_trend}.` : ""
+        ].filter(Boolean);
+        setText("#orVerdictStatus", status);
+        setText("#orVerdictTitle", verdict);
+        setText("#orVerdictCopy", copyParts.join(" "));
+        setText("#orScoreAffordability", data.scorecard?.affordability_score ?? "—");
+        setText("#orScoreGrowth", data.scorecard?.growth_score ?? "—");
+        setText("#orScoreStability", data.scorecard?.stability_score ?? "—");
+        setText("#orScoreOverall", data.scorecard?.overall_score ?? "—");
       }
-      function renderSnapshotSignals(city, mode){
-        const snapshotCards = [
-          card("Traffic Level", nonEmpty(safe(city, "snapshot.traffic_level"))),
-          card("Employment Status", nonEmpty(safe(city, "snapshot.employment_status"))),
-          card("Median Home Price", money(first(safe(city, "snapshot.median_home_price"), safe(city, "housing.market.median_sale_price_current")))),
-          card("Market Trend YoY", pct(first(safe(city, "snapshot.market_trend_yoy"), safe(city, "housing.market.zillow_one_year_change_percent")))),
-          card("Veteran Population", pct(safe(city, "veterans.veteran_population_percent"))),
-          card("Housing Units", num(safe(city, "housing.housing_units"))),
-          card("Military Fit Score", num(safe(city, "scorecard.military_fit_score")), scoreLabel(safe(city, "scorecard.military_fit_score"))),
-          card("Affordability Score", num(safe(city, "scorecard.affordability_score")), scoreLabel(safe(city, "scorecard.affordability_score"))),
-          card("Growth Score", num(safe(city, "scorecard.growth_score")), scoreLabel(safe(city, "scorecard.growth_score"))),
-          card("Stability Score", num(safe(city, "scorecard.stability_score")), scoreLabel(safe(city, "scorecard.stability_score"))),
-          card("Overall Score", num(safe(city, "scorecard.overall_score")), scoreLabel(safe(city, "scorecard.overall_score"))),
-          card("Confidence", num(safe(city, "market_bluf.confidence_score")), "Market BLUF")
-        ];
-        qs("snapshotStats").innerHTML = snapshotCards.join("");
-        const assumptionCards = [
-          card("APR", pct(safe(city, "mortgage_assumptions.apr_percent"), 2), "Default financing assumption"),
-          card("Term", safe(city, "mortgage_assumptions.term_years") != null ? `${num(safe(city, "mortgage_assumptions.term_years"))} years` : "—"),
-          card("Down Payment", pct(safe(city, "mortgage_assumptions.down_payment_percent"), 1), "Default"),
-          card("Includes", nonEmpty(safe(city, "mortgage_assumptions.includes"))),
-          card("Avg Mortgage", money(safe(city, "avg_home_mortgage_monthly.avg")), nonEmpty(safe(city, "avg_home_mortgage_monthly.notes"))),
-          card("HOA", city.hoa_monthly != null ? money(city.hoa_monthly) : "—", "Monthly"),
-          card("Max Safe Housing Ratio", pct((Number(safe(city, "rules.max_safe_housing_ratio")) || 0) * 100, 0), "Guardrail"),
-          card("Warning Ratio", pct((Number(safe(city, "rules.warning_ratio")) || 0) * 100, 0), "Caution lane"),
-          card("Danger Ratio", pct((Number(safe(city, "rules.danger_ratio")) || 0) * 100, 0), "High-risk lane"),
-          card("Tax Rate", pct(city.property_tax_rate), "Annual"),
-          card("Insurance Rate", pct(city.insurance_rate), "Annual"),
-          card("Defaults Note", nonEmpty(safe(city, "mortgage_assumptions.defaults_note")))
-        ];
-        qs("assumptionStats").innerHTML = assumptionCards.join("");
+      async function loadCity(){
+        try{
+          const res = await fetch(CITY_JSON_URL, { cache: "no-store" });
+          if (!res.ok){
+            throw new Error(`HTTP ${res.status} while loading ${CITY_JSON_URL}`);
+          }
+          const data = await res.json();
+          renderHero(data);
+        }catch(err){
+          console.error("Cities Overview Hero load error:", err);
+          setText("#orHeroTitle", "City data could not load");
+          setText("#orHeroSubtitle", "Check the city JSON path.");
+          setText("#orVerdictTitle", "Load Error");
+          setText("#orVerdictCopy", "The shell loaded, but the city JSON did not.");
+        }
       }
-      function renderClimate(city){
-        qs("climateStats").innerHTML = [
-          card("Spring", nonEmpty(safe(city, "climate_weather.spring"), "—")),
-          card("Summer", nonEmpty(safe(city, "climate_weather.summer"), "—")),
-          card("Fall", nonEmpty(safe(city, "climate_weather.fall"), "—")),
-          card("Winter", nonEmpty(safe(city, "climate_weather.winter"), "—"))
-        ].join("");
-        const events = Array.isArray(city.special_events) ? city.special_events : [];
-        qs("eventsList").innerHTML = events.length
-          ? events.map(e => `<li>${escapeHtml(e)}</li>`).join("")
-          : `<li class="empty">No special events listed yet.</li>`;
-      }
-      function renderSources(city){
-        const sources = city.sources || {};
-        const keys = Object.keys(sources);
-        qs("sourcesGrid").innerHTML = keys.length
-          ? keys.map(key => {
-              const src = sources[key] || {};
-              return `
-                <div class="source-card">
-                  <div class="name">${escapeHtml(key)}</div>
-                  <div class="provider">${escapeHtml(nonEmpty(src.provider, "Unknown provider"))}</div>
-                  <div class="meta">
-                    As of: ${escapeHtml(nonEmpty(src.as_of, "—"))}
-                    ${src.notes ? `<br>${escapeHtml(src.notes)}` : ""}
-                  </div>
-                </div>
-              `;
-            }).join("")
-          : `<div class="source-card"><div class="meta">No source metadata available yet.</div></div>`;
-      }
-      function syncBedroomButtons(){
-        const activeBed = String(bedroomSelect.value || "4");
-        document.querySelectorAll(".bed-btn").forEach(btn => {
-          btn.classList.toggle("active", btn.dataset.bed === activeBed);
-        });
-      }
-      async function render(){
-        const base = baseSelect.value;
-        const bed = String(bedroomSelect.value || "4");
-        const mode = String(modeSelect.value || "overview");
-        loadStatus.textContent = "Loading base JSON…";
-        const city = await loadCity(base);
-        renderHero(city, mode);
-        renderBluf(city, mode);
-        renderFinancialBrief(city, mode);
-        renderHousing(city, bed, mode);
-        renderMarket(city, mode);
-        renderDemographics(city, mode);
-        renderCommunity(city, mode);
-        renderSnapshotSignals(city, mode);
-        renderClimate(city);
-        renderSources(city);
-        loadStatus.textContent = `Loaded ${base} • ${mode}.`;
-      }
-      loadBtn.addEventListener("click", () => {
-        render().catch(err => {
-          console.error(err);
-          loadStatus.textContent = "Load failed. Check city JSON / endpoint.";
-        });
-      });
-      baseSelect.addEventListener("change", () => {
-        render().catch(err => {
-          console.error(err);
-          loadStatus.textContent = "Reload failed.";
-        });
-      });
-      bedroomSelect.addEventListener("change", () => {
-        syncBedroomButtons();
-        render().catch(err => {
-          console.error(err);
-          loadStatus.textContent = "Reload failed.";
-        });
-      });
-      modeSelect.addEventListener("change", () => {
-        render().catch(err => {
-          console.error(err);
-          loadStatus.textContent = "Reload failed.";
-        });
-      });
-      document.getElementById("bedroomButtons").addEventListener("click", (e) => {
-        const btn = e.target.closest(".bed-btn");
-        if (!btn) return;
-        bedroomSelect.value = btn.dataset.bed;
-        syncBedroomButtons();
-        render().catch(err => {
-          console.error(err);
-          loadStatus.textContent = "Reload failed.";
-        });
-      });
-      populateBases();
-      syncBedroomButtons();
-      render().catch(err => {
-        console.error(err);
-        loadStatus.textContent = "Initial load failed.";
-      });
+      loadCity();
     })();
   </script>
-    </body>
-    </html>
+    </div>
   </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69b6b526f23748df9f189b16" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>

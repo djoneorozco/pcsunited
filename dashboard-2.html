@@ -1,10 +1,10 @@
 <!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Apr 19 2026 06:48:57 GMT+0000 (Coordinated Universal Time)  -->
-<html data-wf-page="69cbcdf7df604399de63eb2d" data-wf-site="69b6b526f23748df9f189b16" lang="en">
+<html data-wf-page="69d0537c1f552b91a1469e55" data-wf-site="69b6b526f23748df9f189b16" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Dashboard 2.0</title>
-  <meta content="Dashboard 2.0" property="og:title">
-  <meta content="Dashboard 2.0" property="twitter:title">
+  <title>Dashboard-2</title>
+  <meta content="Dashboard-2" property="og:title">
+  <meta content="Dashboard-2" property="twitter:title">
   <meta content="width=device-width, initial-scale=1" name="viewport">
   <meta content="Webflow" name="generator">
   <link href="css/normalize.css" rel="stylesheet" type="text/css">
@@ -14,7 +14,7 @@
   <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
   <link href="images/webclip.png" rel="apple-touch-icon">
 </head>
-<body>
+<body class="body-3">
   <section>
     <div class="w-embed w-script"><!--  =========================================================
   PCSUnited • Login Lock + 1A + 1B
@@ -1014,21 +1014,21 @@
     <div class="w-layout-blockcontainer container-6 w-container">
       <div class="code-embed-33 w-embed w-script"><!--  ============================================================
 PCSUnited • USER STRATEGY WORKSPACE — SHELL ONLY
-Aurora Theme
-v3.0.0
-FULL REBUILD
-- True Aurora visual system
-- No Executive styling
-- Lightweight luminous glass surfaces
-- Teal / navy / violet atmosphere with coral / amber ambient glow
-- Softer hierarchy, brighter cards, cleaner spacing
-- Preserved existing IDs for runtime compatibility
+Executive Theme
+v1.4.0
+UPDATE
+- Refactored shell styling to Executive theme
+- Midnight Executive palette + typography + glass panels
+- Reduced visual noise / stronger hierarchy
+- BLUF + Affordability shell aligned to premium executive look
+- Preserved IDs and runtime hooks
+- Keeps Market Insights shell for 2E
 - Keeps 2F recall bootstrap
 ============================================================  -->
         <div id="pcsu-user-shell" style="all: initial;">
           <link rel="preconnect" href="https://fonts.googleapis.com">
           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Cormorant+Garamond:wght@500;600;700&display=swap" rel="stylesheet">
+          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
           <style>
     #pcsu-user-shell,
     #pcsu-user-shell *{
@@ -1039,50 +1039,39 @@ FULL REBUILD
       width:100%;
       display:block;
       position:relative;
+      padding:28px 18px 36px;
       overflow:hidden;
-      color:#f4f8ff;
-      --aur-bg-1:#0d5c73;
-      --aur-bg-2:#17395b;
-      --aur-bg-3:#243759;
-      --aur-bg-4:#43354d;
-      --aur-ink:#f4f8ff;
-      --aur-ink-2:#ffffff;
-      --aur-sub:rgba(244,248,255,.78);
-      --aur-sub-2:rgba(244,248,255,.58);
-      --aur-cyan:#9de8ff;
-      --aur-mint:#79f3d2;
-      --aur-blue:#69b8ff;
-      --aur-violet:#8f7cff;
-      --aur-amber:#ffd084;
-      --aur-coral:#ff9e84;
-      --aur-danger:#ff8fa3;
-      --aur-line:rgba(255,255,255,.12);
-      --aur-line-2:rgba(255,255,255,.08);
-      --aur-line-3:rgba(255,255,255,.18);
-      --aur-panel:
-        linear-gradient(180deg, rgba(255,255,255,.14), rgba(255,255,255,.055));
-      --aur-panel-soft:
-        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.032));
-      --aur-panel-lite:
-        linear-gradient(180deg, rgba(255,255,255,.09), rgba(255,255,255,.022));
-      --aur-pill:
-        linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.045));
-      --aur-cta:
-        linear-gradient(135deg, rgba(193,250,255,.98), rgba(121,243,210,.95) 38%, rgba(105,184,255,.94) 100%);
-      --aur-shadow-wrap:0 30px 90px rgba(8,18,36,.16);
-      --aur-shadow-card:0 18px 44px rgba(8,18,36,.12);
-      --aur-shadow-soft:0 10px 24px rgba(8,18,36,.08);
-      --aur-r-xl:28px;
-      --aur-r-lg:22px;
-      --aur-r-md:16px;
-      --aur-r-sm:12px;
-      padding:22px 16px 30px;
+      color:#e9ecff;
+      --bg:#0B0F1A;
+      --bg-2:#0D1220;
+      --panel:rgba(12,14,25,.64);
+      --panel-2:rgba(14,17,29,.74);
+      --card:rgba(16,20,33,.78);
+      --card-2:rgba(14,18,30,.82);
+      --ink:#E9ECFF;
+      --muted:#A8B0D6;
+      --soft:#7E87AE;
+      --line:rgba(255,255,255,.08);
+      --line-2:rgba(255,255,255,.05);
+      --line-3:rgba(255,255,255,.03);
+      --mint:#8EF3C5;
+      --sapphire:#6AA7FF;
+      --gold:#F6D06D;
+      --danger:#FF6B6B;
+      --ok:#8EF3C5;
+      --warn:#F6D06D;
+      --bad:#FF6B6B;
+      --radius-xl:24px;
+      --radius-lg:20px;
+      --radius-md:16px;
+      --radius-sm:12px;
+      --shadow:0 24px 60px rgba(0,0,0,.55);
+      --inner:inset 0 1px 0 rgba(255,255,255,.03);
       background:
-        radial-gradient(1100px 620px at 8% 4%, rgba(88,225,255,.20), transparent 56%),
-        radial-gradient(900px 520px at 92% 8%, rgba(255,188,119,.15), transparent 44%),
-        radial-gradient(760px 460px at 100% 14%, rgba(255,145,132,.10), transparent 32%),
-        radial-gradient(760px 420px at 50% 100%, rgba(143,124,255,.14), transparent 50%),
-        linear-gradient(135deg, var(--aur-bg-1) 0%, var(--aur-bg-2) 32%, var(--aur-bg-3) 66%, var(--aur-bg-4) 100%);
+        radial-gradient(1200px 620px at 15% -10%, rgba(106,167,255,.08), transparent 42%),
+        radial-gradient(920px 520px at 100% 0%, rgba(142,243,197,.045), transparent 36%),
+        radial-gradient(780px 480px at 50% 110%, rgba(255,255,255,.025), transparent 36%),
+        linear-gradient(180deg, #09101B 0%, #0B0F1A 48%, #0A0E18 100%);
     }
     #pcsu-user-shell::before{
       content:"";
@@ -1090,10 +1079,9 @@ FULL REBUILD
       inset:0;
       pointer-events:none;
       background:
-        linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0) 34%),
-        radial-gradient(circle at 20% 14%, rgba(255,255,255,.08), transparent 20%),
-        radial-gradient(circle at 82% 10%, rgba(255,223,170,.10), transparent 18%);
-      opacity:.9;
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,0) 18%),
+        radial-gradient(circle at 20% 0%, rgba(255,255,255,.04), transparent 26%);
+      opacity:.8;
     }
     #pcsu-user-shell::after{
       content:"";
@@ -1101,203 +1089,165 @@ FULL REBUILD
       inset:0;
       pointer-events:none;
       background-image:
-        linear-gradient(rgba(255,255,255,.018) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.014) 1px, transparent 1px);
-      background-size:100% 52px, 52px 100%;
-      mask-image:linear-gradient(180deg, rgba(0,0,0,.28), transparent 72%);
-      opacity:.32;
+        linear-gradient(rgba(255,255,255,.012) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.01) 1px, transparent 1px);
+      background-size: 120px 120px, 120px 120px;
+      opacity:.05;
+      mix-blend-mode:screen;
     }
     .pcsu-wrap{
-      width:min(1420px,100%);
+      width:min(1380px, 100%);
       margin:0 auto;
       position:relative;
       z-index:2;
     }
-    /* ============================================================
-       TOPBAR
-    ============================================================ */
     .pcsu-topbar{
       display:flex;
       align-items:flex-start;
       justify-content:space-between;
       gap:20px;
-      margin-bottom:18px;
-      padding:20px 20px 18px;
-      border-radius:24px;
-      border:1px solid var(--aur-line);
-      background:
-        radial-gradient(420px 180px at 10% 0%, rgba(157,232,255,.10), transparent 72%),
-        radial-gradient(300px 150px at 100% 0%, rgba(255,188,119,.08), transparent 68%),
-        var(--aur-panel);
-      box-shadow:var(--aur-shadow-card);
-      backdrop-filter:blur(18px) saturate(140%);
-      -webkit-backdrop-filter:blur(18px) saturate(140%);
-      position:relative;
-      overflow:hidden;
-    }
-    .pcsu-topbar::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
-      opacity:.8;
+      margin-bottom:20px;
     }
     .pcsu-heading{
-      flex:1 1 auto;
       min-width:0;
-      position:relative;
-      z-index:1;
+      flex:1 1 auto;
     }
     .pcsu-kicker{
       display:inline-flex;
       align-items:center;
       gap:10px;
-      margin-bottom:10px;
-      color:var(--aur-sub);
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.16em;
+      margin-bottom:12px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.18em;
       text-transform:uppercase;
     }
     .pcsu-kicker::before{
       content:"";
       width:34px;
       height:1px;
-      background:linear-gradient(90deg, rgba(157,232,255,0), rgba(157,232,255,.95));
+      background:linear-gradient(90deg, transparent, rgba(255,255,255,.28));
     }
     .pcsu-title{
       margin:0;
-      color:var(--aur-ink-2);
-      font-family:"Cormorant Garamond", Georgia, serif;
-      font-size:clamp(30px,4vw,46px);
+      font-size:clamp(30px, 4vw, 46px);
       line-height:1.02;
-      font-weight:700;
+      font-weight:900;
       letter-spacing:-.045em;
-      text-shadow:0 2px 16px rgba(20,52,84,.08);
+      color:var(--ink);
     }
     .pcsu-subtitle{
-      margin:8px 0 0;
-      max-width:760px;
-      color:var(--aur-sub);
+      margin:10px 0 0;
+      color:var(--muted);
       font-size:15px;
-      line-height:1.58;
+      line-height:1.65;
+      max-width:760px;
     }
     .pcsu-brand{
       flex:0 0 auto;
       display:flex;
       align-items:center;
-      gap:12px;
-      padding:10px 14px;
+      gap:14px;
+      padding:12px 14px;
+      border:1px solid var(--line);
       border-radius:999px;
-      border:1px solid var(--aur-line);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.12), rgba(255,255,255,.05)),
-        rgba(255,255,255,.02);
-      box-shadow:var(--aur-shadow-soft);
+      background:rgba(12,14,25,.50);
       backdrop-filter:blur(12px) saturate(135%);
-      -webkit-backdrop-filter:blur(12px) saturate(135%);
-      position:relative;
-      z-index:1;
+      box-shadow:0 14px 30px rgba(0,0,0,.30);
     }
     .pcsu-brand-mark{
       display:flex;
       align-items:center;
       gap:10px;
       color:#fff;
-      font-size:18px;
       font-weight:800;
       letter-spacing:-.02em;
+      font-size:18px;
       white-space:nowrap;
     }
     .pcsu-brand-mark svg{
       width:22px;
       height:22px;
       flex:0 0 auto;
-      color:var(--aur-cyan);
     }
     .pcsu-avatar{
       width:36px;
       height:36px;
       border-radius:50%;
-      border:1px solid rgba(255,255,255,.20);
       background:
-        radial-gradient(circle at 30% 30%, #ffffff 0%, #f3e5ff 16%, #d4ebff 34%, #8f7cff 58%, #69b8ff 80%, #17395b 100%);
-      box-shadow:0 8px 20px rgba(12,30,52,.16);
+        radial-gradient(circle at 30% 30%, #e8eeff 0%, #c7d2f8 20%, #6b7597 58%, #1A2030 100%);
+      border:1px solid rgba(255,255,255,.14);
+      box-shadow:0 10px 20px rgba(0,0,0,.25);
       position:relative;
       overflow:hidden;
-      flex:0 0 auto;
     }
     .pcsu-avatar::before{
       content:"";
       position:absolute;
       left:50%;
-      top:31%;
+      top:32%;
       width:40%;
       height:40%;
       transform:translateX(-50%);
       border-radius:50%;
-      background:rgba(255,255,255,.94);
+      background:rgba(255,255,255,.88);
+      opacity:.9;
     }
     .pcsu-avatar::after{
       content:"";
       position:absolute;
       left:50%;
-      bottom:-4%;
+      bottom:-5%;
       width:68%;
       height:42%;
       transform:translateX(-50%);
       border-radius:40px 40px 12px 12px;
-      background:rgba(255,255,255,.94);
+      background:rgba(255,255,255,.88);
+      opacity:.9;
     }
-    /* ============================================================
-       GRID
-    ============================================================ */
     .pcsu-grid{
       display:grid;
-      grid-template-columns:minmax(0,1.78fr) 310px;
-      gap:18px;
+      grid-template-columns:minmax(0, 1.65fr) 320px;
+      gap:20px;
       align-items:start;
     }
     .pcsu-main{
       display:grid;
-      gap:18px;
+      gap:20px;
       min-width:0;
     }
     .pcsu-rail{
       display:grid;
-      gap:18px;
+      gap:20px;
       min-width:0;
     }
-    /* ============================================================
-       CARD BASE
-    ============================================================ */
     .pcsu-card{
       position:relative;
       min-width:0;
-      border-radius:var(--aur-r-xl);
-      border:1px solid var(--aur-line);
+      border:1px solid var(--line);
+      border-radius:var(--radius-xl);
       background:
-        radial-gradient(440px 180px at 0% 0%, rgba(157,232,255,.10), transparent 68%),
-        radial-gradient(320px 160px at 100% 0%, rgba(255,188,119,.07), transparent 62%),
-        var(--aur-panel);
-      box-shadow:var(--aur-shadow-card);
+        linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.012)),
+        linear-gradient(180deg, rgba(15,19,31,.78), rgba(10,14,24,.88));
+      backdrop-filter:blur(14px) saturate(140%);
+      box-shadow:var(--shadow), var(--inner);
       overflow:hidden;
-      backdrop-filter:blur(16px) saturate(138%);
-      -webkit-backdrop-filter:blur(16px) saturate(138%);
     }
     .pcsu-card::before{
       content:"";
       position:absolute;
       inset:0;
       pointer-events:none;
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,0));
-      opacity:.85;
+      background:
+        radial-gradient(520px 160px at 18% 0%, rgba(255,255,255,.05), transparent 52%),
+        linear-gradient(180deg, rgba(255,255,255,.02), transparent 22%);
+      opacity:.8;
     }
     .pcsu-card-inner{
       position:relative;
       z-index:2;
-      padding:18px;
+      padding:20px;
     }
     .pcsu-card-title{
       display:flex;
@@ -1306,34 +1256,31 @@ FULL REBUILD
       gap:14px;
       margin:0 0 16px;
       padding-bottom:12px;
-      border-bottom:1px solid var(--aur-line-2);
-      color:var(--aur-ink);
+      border-bottom:1px solid var(--line-2);
+      color:var(--ink);
       font-size:20px;
-      font-weight:850;
+      font-weight:800;
       letter-spacing:-.02em;
     }
     .pcsu-card-title small{
-      color:var(--aur-sub);
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.14em;
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.16em;
       text-transform:uppercase;
+      color:var(--muted);
     }
-    /* ============================================================
-       HERO
-    ============================================================ */
     .pcsu-hero{
-      border-radius:28px;
-      overflow:hidden;
+      border-radius:26px;
     }
     .pcsu-hero-top{
       display:flex;
       align-items:center;
       gap:14px;
-      padding:15px 18px;
-      border-bottom:1px solid var(--aur-line);
+      padding:16px 20px;
+      border-bottom:1px solid var(--line);
       background:
-        linear-gradient(90deg, rgba(121,243,210,.18), rgba(105,184,255,.14) 42%, rgba(255,158,132,.11) 100%);
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)),
+        linear-gradient(90deg, rgba(106,167,255,.04), rgba(142,243,197,.03));
     }
     .pcsu-hero-icon{
       width:34px;
@@ -1341,136 +1288,115 @@ FULL REBUILD
       border-radius:50%;
       display:grid;
       place-items:center;
-      color:#08232b;
-      font-size:13px;
-      font-weight:900;
+      background:rgba(142,243,197,.12);
+      color:var(--mint);
+      border:1px solid rgba(142,243,197,.20);
+      box-shadow:0 8px 18px rgba(0,0,0,.22);
       flex:0 0 auto;
-      background:
-        radial-gradient(circle at 30% 30%, #ffffff 0%, #d7fff5 18%, #79f3d2 52%, #69b8ff 100%);
-      box-shadow:0 10px 20px rgba(73,191,231,.14);
+      font-weight:900;
     }
     .pcsu-hero-state{
-      color:#f4fcff;
       font-size:12px;
       font-weight:900;
-      letter-spacing:.11em;
+      letter-spacing:.16em;
       text-transform:uppercase;
+      color:#F2FFF9;
     }
     .pcsu-hero-body{
       padding:22px 20px 18px;
-      position:relative;
-    }
-    .pcsu-hero-body::after{
-      content:"";
-      position:absolute;
-      right:-80px;
-      top:-40px;
-      width:220px;
-      height:220px;
-      border-radius:50%;
-      background:radial-gradient(circle, rgba(255,196,140,.12), rgba(255,196,140,0) 68%);
-      pointer-events:none;
     }
     .pcsu-hero-lead{
       margin:0;
-      color:#fff;
-      font-size:clamp(25px,2.6vw,36px);
-      line-height:1.14;
-      font-weight:950;
-      letter-spacing:-.04em;
-      max-width:980px;
-      position:relative;
-      z-index:1;
+      color:var(--ink);
+      font-size:clamp(26px, 2.6vw, 38px);
+      line-height:1.16;
+      font-weight:900;
+      letter-spacing:-.035em;
     }
     .pcsu-hero-lead .accent{
-      color:var(--aur-mint);
-      text-shadow:0 0 18px rgba(121,243,210,.10);
+      color:var(--mint);
     }
     .pcsu-hero-copy{
-      margin:12px 0 0;
-      color:var(--aur-sub);
-      font-size:14px;
+      margin:14px 0 0;
+      color:var(--muted);
+      font-size:15px;
       line-height:1.68;
       max-width:940px;
-      position:relative;
-      z-index:1;
     }
     .pcsu-hero-foot{
       display:flex;
       flex-wrap:wrap;
-      gap:12px 18px;
+      gap:18px 26px;
       align-items:center;
       margin-top:18px;
       padding-top:14px;
-      border-top:1px solid var(--aur-line-2);
-      position:relative;
-      z-index:1;
+      border-top:1px solid var(--line-2);
     }
     .pcsu-statline{
       display:flex;
-      align-items:baseline;
       gap:8px;
-      color:var(--aur-sub);
-      font-size:12px;
+      align-items:baseline;
+      color:var(--muted);
+      font-size:13px;
       font-weight:700;
     }
     .pcsu-statline strong{
       color:#fff;
-      font-size:18px;
-      font-weight:950;
+      font-size:20px;
+      font-weight:900;
       letter-spacing:-.03em;
     }
     .pcsu-pill{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      min-height:34px;
-      padding:0 12px;
+      padding:9px 12px;
       border-radius:999px;
-      border:1px solid var(--aur-line);
-      background:var(--aur-pill);
-      color:#eef6ff;
+      border:1px solid rgba(255,255,255,.08);
+      color:#E9ECFF;
+      background:rgba(255,255,255,.03);
       font-size:11px;
       font-weight:900;
-      letter-spacing:.07em;
+      letter-spacing:.10em;
       text-transform:uppercase;
       white-space:nowrap;
-      box-shadow:var(--aur-shadow-soft);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
     }
     .pcsu-pill.ok{
-      color:#08221b;
-      border-color:rgba(121,243,210,.28);
-      background:var(--aur-cta);
+      color:#CFFBE5;
+      border-color:rgba(142,243,197,.18);
+      background:rgba(142,243,197,.08);
     }
     .pcsu-pill.warn{
-      color:#fff8e9;
-      border-color:rgba(255,208,132,.25);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.03)),
-        rgba(255,208,132,.10);
+      color:#FBE6B7;
+      border-color:rgba(246,208,109,.18);
+      background:rgba(246,208,109,.09);
     }
-    /* ============================================================
-       AFFORDABILITY / STRATEGY
-    ============================================================ */
-    .pcsu-aff-card{
-      border-radius:30px;
+    .pcsu-middle{
+      display:grid;
+      grid-template-columns:340px minmax(0, 1fr);
+      gap:20px;
+      align-items:stretch;
+    }
+    .pcsu-price-board{
+      display:grid;
+      gap:18px;
+      align-content:start;
     }
     .pcsu-aff-head{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:14px;
-      margin:0 0 16px;
-      padding-bottom:12px;
-      border-bottom:1px solid var(--aur-line-2);
+      margin:0 0 18px;
+      padding-bottom:14px;
+      border-bottom:1px solid var(--line-2);
     }
     .pcsu-aff-head-title{
-      color:#fff;
-      font-size:21px;
-      font-weight:850;
-      letter-spacing:-.02em;
+      color:var(--ink);
+      font-size:15px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
     }
     .pcsu-aff-head-actions{
       display:flex;
@@ -1483,70 +1409,53 @@ FULL REBUILD
       align-items:center;
       justify-content:center;
       min-height:38px;
-      padding:0 15px;
-      border:none;
+      padding:0 16px;
       border-radius:999px;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.04);
+      color:#E9ECFF;
       cursor:pointer;
       text-decoration:none;
-      color:#072129;
-      font-size:10px;
+      font-size:11px;
       font-weight:900;
-      letter-spacing:.13em;
+      letter-spacing:.12em;
       text-transform:uppercase;
       white-space:nowrap;
-      background:var(--aur-cta);
-      box-shadow:var(--aur-shadow-soft);
+      box-shadow:0 10px 24px rgba(0,0,0,.28);
       transition:.18s ease;
     }
     .pcsu-aff-top-btn:hover{
       transform:translateY(-1px);
-      filter:brightness(1.03);
-    }
-    .pcsu-middle{
-      display:grid;
-      grid-template-columns:310px minmax(0,1fr);
-      gap:18px;
-      align-items:start;
-    }
-    #pcsu2cFinancePanel{
-      padding:16px;
-      border-radius:24px;
-      border:1px solid var(--aur-line);
-      background:
-        radial-gradient(240px 120px at 0% 0%, rgba(157,232,255,.09), transparent 70%),
-        var(--aur-panel-soft);
-      box-shadow:var(--aur-shadow-soft);
-      backdrop-filter:blur(12px) saturate(130%);
-      -webkit-backdrop-filter:blur(12px) saturate(130%);
+      border-color:rgba(255,255,255,.16);
+      background:rgba(255,255,255,.055);
     }
     .pcsu-fin-grid{
       display:grid;
-      gap:10px;
+      gap:12px;
       list-style:none;
       margin:0;
       padding:0;
     }
     .pcsu-fin-group-gap{
-      height:6px;
+      height:16px;
     }
     .pcsu-fin-row{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:14px;
-      padding:12px 0;
-      border-bottom:1px solid var(--aur-line-2);
-      color:var(--aur-sub);
-      font-size:13.5px;
+      padding:0 0 12px;
+      border-bottom:1px solid var(--line-2);
+      color:var(--muted);
+      font-size:13px;
+      font-weight:500;
+      letter-spacing:.01em;
     }
     .pcsu-fin-row strong{
       color:#fff;
-      font-size:15px;
-      font-weight:850;
-      letter-spacing:-.02em;
-    }
-    .pcsu-fin-row.is-total strong{
       font-size:17px;
+      font-weight:800;
+      letter-spacing:-.02em;
     }
     .pcsu-edit-value{
       display:inline-flex;
@@ -1554,206 +1463,184 @@ FULL REBUILD
       justify-content:flex-end;
       min-width:110px;
       min-height:34px;
-      padding:0 12px;
-      border-radius:12px;
-      border:1px solid var(--aur-line);
-      background:var(--aur-panel-lite);
+      padding:0 10px;
+      border-radius:10px;
+      border:1px solid transparent;
+      background:transparent;
       color:#fff;
-      font-size:15px;
-      font-weight:850;
+      font-size:17px;
+      font-weight:800;
       letter-spacing:-.02em;
       text-align:right;
       cursor:text;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.06);
       transition:.16s ease;
     }
     .pcsu-edit-value:hover,
     .pcsu-edit-value:focus{
       outline:none;
-      border-color:rgba(121,243,210,.35);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.11), rgba(255,255,255,.04)),
-        rgba(255,255,255,.03);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.08),
-        0 0 0 4px rgba(121,243,210,.06);
+      border-color:rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+    }
+    .pcsu-fin-row.is-total{
+      border-bottom-color:rgba(255,255,255,.08);
+    }
+    .pcsu-fin-row.is-total strong{
+      font-size:18px;
     }
     .pcsu-debt-tool{
-      margin-top:14px;
-      padding-top:14px;
-      border-top:1px solid var(--aur-line-2);
+      margin-top:18px;
+      padding-top:16px;
+      border-top:1px solid var(--line-2);
     }
     .pcsu-debt-tool-btn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      width:100%;
       min-height:40px;
       padding:0 16px;
       border-radius:999px;
-      border:1px solid var(--aur-line);
-      background:var(--aur-pill);
-      color:#eef6ff;
+      border:1px solid rgba(255,255,255,.10);
+      background:rgba(255,255,255,.03);
+      color:#E9ECFF;
       cursor:pointer;
-      font-size:10px;
+      font-size:11px;
       font-weight:900;
-      letter-spacing:.13em;
+      letter-spacing:.12em;
       text-transform:uppercase;
-      box-shadow:var(--aur-shadow-soft);
       backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
+      box-shadow:0 10px 24px rgba(0,0,0,.24);
       transition:.16s ease;
     }
     .pcsu-debt-tool-btn:hover{
       transform:translateY(-1px);
-      border-color:rgba(121,243,210,.32);
-      filter:brightness(1.03);
+      border-color:rgba(255,255,255,.16);
+      background:rgba(255,255,255,.05);
     }
     .pcsu-debt-tool-note{
       margin-top:10px;
-      color:var(--aur-sub);
+      color:var(--muted);
       font-size:12px;
-      line-height:1.52;
+      line-height:1.55;
       max-width:280px;
     }
-    .pcsu-price-board{
-      display:grid;
-      gap:14px;
-      align-content:start;
-    }
     .pcsu-fin-top{
-      display:flex;
-      align-items:stretch;
-      justify-content:space-between;
-      gap:12px;
+      display:grid;
+      grid-template-columns:repeat(2, minmax(0,1fr));
+      gap:14px;
     }
     .pcsu-health-chip{
-      flex:1 1 auto;
-      min-height:72px;
-      padding:15px 16px;
-      border-radius:22px;
-      border:1px solid var(--aur-line);
+      min-height:96px;
+      padding:16px 18px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
       background:
-        radial-gradient(200px 90px at 0% 0%, rgba(157,232,255,.08), transparent 72%),
-        var(--aur-panel-soft);
-      box-shadow:var(--aur-shadow-soft);
+        linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.012)),
+        rgba(10,14,24,.48);
+      box-shadow:var(--inner);
       display:flex;
       flex-direction:column;
       justify-content:center;
     }
     .pcsu-health-label{
-      color:var(--aur-sub);
+      color:var(--muted);
       font-size:11px;
       font-weight:900;
-      letter-spacing:.12em;
+      letter-spacing:.16em;
       text-transform:uppercase;
-      margin-bottom:6px;
+      margin-bottom:8px;
     }
     .pcsu-health-value{
       color:#fff;
-      font-size:19px;
-      font-weight:950;
-      letter-spacing:-.03em;
-      line-height:1;
+      font-size:20px;
+      font-weight:800;
+      letter-spacing:-.02em;
+      line-height:1.15;
     }
     .pcsu-health-value span{
-      color:var(--aur-mint);
-      font-size:24px;
-      text-shadow:0 0 18px rgba(121,243,210,.10);
+      color:var(--mint);
     }
     .pcsu-grade-badge-lg{
-      width:98px;
-      height:98px;
-      border-radius:50%;
-      display:grid;
-      place-items:center;
-      text-align:center;
-      border:1px solid var(--aur-line);
-      background:
-        radial-gradient(circle at 28% 28%, rgba(255,255,255,.42), rgba(255,255,255,.10) 16%, rgba(121,243,210,.20) 28%, rgba(105,184,255,.20) 52%, rgba(143,124,255,.16) 72%, rgba(23,57,91,.58) 100%);
-      box-shadow:0 14px 28px rgba(10,28,48,.10);
-      position:relative;
-      flex:0 0 auto;
+      min-height:96px;
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+      text-align:left;
       color:#fff;
-    }
-    .pcsu-grade-badge-lg::after{
-      content:"";
-      position:absolute;
-      inset:8px;
-      border-radius:50%;
-      border:1px dashed rgba(255,255,255,.15);
-      opacity:.7;
-    }
-    .pcsu-grade-badge-lg strong,
-    .pcsu-grade-badge-lg .sub1,
-    .pcsu-grade-badge-lg .sub2{
-      position:relative;
-      z-index:2;
+      border:1px solid rgba(255,255,255,.08);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.012)),
+        rgba(10,14,24,.48);
+      box-shadow:var(--inner);
+      padding:16px 18px;
     }
     .pcsu-grade-badge-lg strong{
       display:block;
-      font-size:24px;
+      font-size:36px;
       line-height:1;
-      font-weight:950;
-      letter-spacing:-.04em;
+      font-weight:900;
+      letter-spacing:-.05em;
+      color:#F3E1A6;
     }
     .pcsu-grade-badge-lg .sub1{
       display:block;
-      margin-top:4px;
-      color:#e7efff;
-      font-size:9px;
-      font-weight:850;
-      line-height:1.05;
+      margin-top:8px;
+      color:var(--muted);
+      font-size:10px;
+      font-weight:900;
+      line-height:1.1;
+      letter-spacing:.14em;
+      text-transform:uppercase;
     }
     .pcsu-grade-badge-lg .sub2{
       display:block;
-      margin-top:4px;
-      color:var(--aur-sub);
-      font-size:9px;
-      font-weight:850;
+      margin-top:5px;
+      color:#E9ECFF;
+      font-size:16px;
+      font-weight:800;
       line-height:1;
+      letter-spacing:-.02em;
     }
     .pcsu-pay-card{
       padding:18px;
-      border-radius:22px;
-      border:1px solid var(--aur-line);
+      border:1px solid rgba(255,255,255,.08);
+      border-radius:18px;
       background:
-        radial-gradient(240px 120px at 0% 0%, rgba(121,243,210,.09), transparent 72%),
-        var(--aur-panel-soft);
-      box-shadow:var(--aur-shadow-soft);
+        linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.012)),
+        rgba(10,14,24,.48);
+      box-shadow:var(--inner);
     }
     .pcsu-pay-label{
-      color:var(--aur-sub);
-      font-size:12px;
-      font-weight:800;
-      letter-spacing:.01em;
-      margin-bottom:8px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+      margin-bottom:10px;
     }
     .pcsu-pay-value{
       color:#fff;
       font-size:52px;
-      font-weight:1000;
+      font-weight:900;
       letter-spacing:-.06em;
       line-height:1;
-      margin-bottom:12px;
+      margin-bottom:16px;
     }
     .pcsu-slider{
       position:relative;
       height:12px;
       border-radius:999px;
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.10), rgba(255,255,255,.04)),
-        rgba(255,255,255,.03);
-      overflow:hidden;
-      box-shadow:inset 0 1px 2px rgba(0,0,0,.12);
+      background:rgba(255,255,255,.08);
+      overflow:visible;
+      box-shadow:inset 0 1px 1px rgba(0,0,0,.35);
     }
     .pcsu-slider-fill{
       position:absolute;
       inset:0 auto 0 0;
       width:43%;
       border-radius:inherit;
-      background:linear-gradient(90deg, #79f3d2 0%, #69b8ff 52%, #8f7cff 100%);
-      box-shadow:0 0 18px rgba(105,184,255,.16);
+      background:linear-gradient(90deg, rgba(142,243,197,.9) 0%, rgba(184,255,216,.95) 55%, rgba(106,167,255,.75) 100%);
+      box-shadow:0 0 18px rgba(142,243,197,.10);
     }
     .pcsu-slider-knob{
       position:absolute;
@@ -1762,29 +1649,30 @@ FULL REBUILD
       width:20px;
       height:20px;
       border-radius:50%;
-      transform:translate(-50%,-50%);
-      background:
-        radial-gradient(circle at 30% 30%, #ffffff 0%, #edf8ff 34%, #cfe7ff 100%);
-      border:1px solid rgba(255,255,255,.32);
-      box-shadow:0 6px 18px rgba(34,68,110,.18);
+      transform:translate(-50%, -50%);
+      background:linear-gradient(180deg, #f8fbff 0%, #d6deff 100%);
+      border:1px solid rgba(255,255,255,.34);
+      box-shadow:
+        0 4px 12px rgba(0,0,0,.35),
+        0 0 0 6px rgba(255,255,255,.03);
     }
     .pcsu-slider-scale{
-      margin-top:10px;
+      margin-top:12px;
       display:flex;
       justify-content:space-between;
       gap:10px;
-      color:var(--aur-sub);
+      color:var(--muted);
       font-size:12px;
       font-weight:700;
     }
     .pcsu-strategy-box{
       padding:18px;
-      border-radius:22px;
-      border:1px solid var(--aur-line);
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
       background:
-        radial-gradient(220px 120px at 100% 0%, rgba(255,188,119,.08), transparent 72%),
-        var(--aur-panel-soft);
-      box-shadow:var(--aur-shadow-soft);
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)),
+        rgba(10,14,24,.48);
+      box-shadow:var(--inner);
     }
     .pcsu-strategy-head{
       display:flex;
@@ -1797,7 +1685,7 @@ FULL REBUILD
       margin:0;
       color:#fff;
       font-size:22px;
-      font-weight:950;
+      font-weight:800;
       letter-spacing:-.03em;
     }
     .pcsu-strategy-price{
@@ -1805,27 +1693,27 @@ FULL REBUILD
       text-align:right;
     }
     .pcsu-strategy-price .lbl{
-      color:var(--aur-sub);
-      font-size:10px;
+      color:var(--muted);
+      font-size:11px;
       font-weight:900;
-      letter-spacing:.13em;
+      letter-spacing:.16em;
       text-transform:uppercase;
-      margin-bottom:4px;
+      margin-bottom:6px;
     }
     .pcsu-strategy-price .val{
       color:#fff;
-      font-size:18px;
-      font-weight:950;
+      font-size:20px;
+      font-weight:900;
       line-height:1;
       letter-spacing:-.03em;
       white-space:nowrap;
     }
     .pcsu-strategy-price .val span{
-      color:var(--aur-mint);
+      color:var(--mint);
     }
     .pcsu-bullets{
       display:grid;
-      gap:10px;
+      gap:12px;
       margin:0;
       padding:0;
       list-style:none;
@@ -1833,76 +1721,68 @@ FULL REBUILD
     .pcsu-bullets li{
       position:relative;
       padding-left:18px;
-      color:var(--aur-sub);
-      font-size:13.5px;
-      line-height:1.6;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.68;
     }
     .pcsu-bullets li::before{
       content:"";
       position:absolute;
       left:0;
       top:.62em;
-      width:8px;
-      height:8px;
+      width:6px;
+      height:6px;
       border-radius:50%;
-      background:linear-gradient(180deg, var(--aur-mint), var(--aur-blue));
-      box-shadow:0 0 0 5px rgba(121,243,210,.06);
+      background:var(--mint);
+      box-shadow:0 0 0 5px rgba(142,243,197,.04);
     }
-    /* ============================================================
-       BUTTONS
-    ============================================================ */
     .pcsu-btn{
       display:inline-flex;
       align-items:center;
       justify-content:center;
       gap:10px;
-      min-height:44px;
+      min-height:48px;
       padding:0 18px;
-      border:none;
       border-radius:999px;
       cursor:pointer;
       text-decoration:none;
       font-size:12px;
       font-weight:900;
-      letter-spacing:.08em;
+      letter-spacing:.12em;
       text-transform:uppercase;
       transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
       white-space:nowrap;
+      border:1px solid rgba(255,255,255,.10);
     }
     .pcsu-btn:hover{
       transform:translateY(-1px);
       filter:brightness(1.03);
     }
     .pcsu-btn.primary{
-      color:#072129;
-      background:var(--aur-cta);
-      box-shadow:var(--aur-shadow-soft);
+      color:#081019;
+      background:linear-gradient(180deg, #B9F8D8 0%, #8EF3C5 100%);
+      box-shadow:0 16px 32px rgba(0,0,0,.30);
+      border-color:rgba(142,243,197,.18);
     }
     .pcsu-btn.secondary{
-      color:#eef6ff;
-      background:var(--aur-pill);
-      border:1px solid var(--aur-line);
-      box-shadow:var(--aur-shadow-soft);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
+      color:#E9ECFF;
+      background:rgba(255,255,255,.03);
+      border:1px solid rgba(255,255,255,.09);
     }
-    /* ============================================================
-       SCENARIO LAB
-    ============================================================ */
     .pcsu-lab-grid{
       display:grid;
       grid-template-columns:repeat(3, minmax(0,1fr));
-      gap:14px;
-      margin-bottom:16px;
+      gap:16px;
+      margin-bottom:18px;
     }
     .pcsu-input-block{
       min-width:0;
     }
     .pcsu-input-label{
-      color:var(--aur-sub);
-      font-size:10px;
+      color:var(--muted);
+      font-size:11px;
       font-weight:900;
-      letter-spacing:.13em;
+      letter-spacing:.16em;
       text-transform:uppercase;
       margin-bottom:8px;
     }
@@ -1911,21 +1791,17 @@ FULL REBUILD
       align-items:center;
       justify-content:space-between;
       gap:10px;
-      min-height:54px;
+      min-height:48px;
       padding:0 14px;
-      border-radius:16px;
-      border:1px solid var(--aur-line);
-      background:
-        radial-gradient(180px 80px at 0% 0%, rgba(157,232,255,.07), transparent 72%),
-        var(--aur-panel-lite);
+      border-radius:12px;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.025);
       color:#fff;
-      box-shadow:var(--aur-shadow-soft);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
+      box-shadow:var(--inner);
     }
     .pcsu-input-box strong{
       font-size:20px;
-      font-weight:950;
+      font-weight:900;
       letter-spacing:-.03em;
     }
     .pcsu-mini-range{
@@ -1936,53 +1812,49 @@ FULL REBUILD
       justify-content:space-between;
       gap:8px;
       margin-top:8px;
-      color:var(--aur-sub);
-      font-size:11.5px;
+      color:var(--muted);
+      font-size:12px;
       font-weight:700;
     }
     .pcsu-live-grid{
       display:grid;
-      grid-template-columns:250px minmax(0,1fr);
-      gap:18px;
+      grid-template-columns:260px minmax(0,1fr);
+      gap:20px;
       align-items:end;
-      margin-top:6px;
+      margin-top:8px;
     }
     .pcsu-live-big{
       color:#fff;
-      font-size:54px;
-      line-height:.95;
-      font-weight:1000;
+      font-size:48px;
+      line-height:1;
+      font-weight:900;
       letter-spacing:-.06em;
       margin:0;
     }
     .pcsu-live-big span{
-      color:var(--aur-sub);
+      color:var(--muted);
       font-size:18px;
       font-weight:800;
       letter-spacing:-.02em;
     }
     .pcsu-live-state{
-      margin-top:8px;
-      color:var(--aur-mint);
-      font-size:18px;
+      margin-top:10px;
+      color:var(--mint);
+      font-size:26px;
       line-height:1;
-      font-weight:950;
-      letter-spacing:-.03em;
-      text-shadow:0 0 16px rgba(121,243,210,.10);
+      font-weight:900;
+      letter-spacing:-.04em;
     }
     .pcsu-chart{
       position:relative;
-      height:190px;
-      border-radius:24px;
-      border:1px solid var(--aur-line);
+      height:170px;
+      border-radius:18px;
+      border:1px solid rgba(255,255,255,.08);
       background:
-        radial-gradient(520px 170px at 50% 0%, rgba(255,255,255,.08), transparent 55%),
-        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.03)),
-        rgba(255,255,255,.02);
+        linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)),
+        rgba(255,255,255,.012);
       overflow:hidden;
-      box-shadow:var(--aur-shadow-soft);
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
+      box-shadow:var(--inner);
     }
     .pcsu-chart svg{
       position:absolute;
@@ -1995,8 +1867,8 @@ FULL REBUILD
       justify-content:center;
       gap:16px;
       margin-top:10px;
-      color:var(--aur-sub);
-      font-size:11.5px;
+      color:var(--muted);
+      font-size:12px;
       font-weight:700;
       flex-wrap:wrap;
     }
@@ -2008,74 +1880,68 @@ FULL REBUILD
       margin-right:6px;
       vertical-align:middle;
     }
-    .pcsu-dot.mint{ background:var(--aur-mint); }
-    .pcsu-dot.blue{ background:var(--aur-blue); }
+    .pcsu-dot.mint{ background:var(--mint); }
+    .pcsu-dot.blue{ background:var(--sapphire); }
     .pcsu-dot.ink{ background:#d7defc; }
-    /* ============================================================
-       RIGHT RAIL
-    ============================================================ */
-    .pcsu-rail .pcsu-card{
-      border-radius:24px;
-    }
-    .pcsu-market-stack,
-    .pcsu-pref-grid,
     .pcsu-rail-list{
       display:grid;
       gap:12px;
-    }
-    .pcsu-market-row,
-    .pcsu-pref-row{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:14px;
-      padding-bottom:10px;
-      border-bottom:1px solid var(--aur-line-2);
-      color:var(--aur-sub);
-      font-size:13.5px;
-      line-height:1.45;
-    }
-    .pcsu-market-row:last-child,
-    .pcsu-pref-row:last-child{
-      border-bottom:none;
-      padding-bottom:0;
-    }
-    .pcsu-market-row strong,
-    .pcsu-pref-row strong{
-      color:#fff;
-      font-size:14px;
-      font-weight:850;
-      letter-spacing:-.02em;
-      text-align:right;
-      min-width:0;
+      margin:0;
+      padding:0;
+      list-style:none;
     }
     .pcsu-task{
       display:flex;
       align-items:flex-start;
       gap:12px;
-      color:var(--aur-sub);
-      font-size:13.5px;
-      line-height:1.5;
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.52;
       padding-bottom:12px;
-      border-bottom:1px solid var(--aur-line-2);
+      border-bottom:1px solid var(--line-2);
     }
     .pcsu-task:last-child{
-      border-bottom:none;
       padding-bottom:0;
+      border-bottom:none;
     }
     .pcsu-task-icon{
-      width:24px;
-      height:24px;
+      width:22px;
+      height:22px;
       border-radius:50%;
       display:grid;
       place-items:center;
       flex:0 0 auto;
-      color:#08222d;
+      color:#081019;
+      background:rgba(142,243,197,.90);
+      box-shadow:0 8px 16px rgba(0,0,0,.16);
       font-size:12px;
       font-weight:900;
-      background:
-        radial-gradient(circle at 30% 30%, #ffffff 0%, #ccfff2 18%, #79f3d2 55%, #69b8ff 100%);
-      box-shadow:0 8px 16px rgba(73,191,231,.12);
+    }
+    .pcsu-market-stack{
+      display:grid;
+      gap:12px;
+    }
+    .pcsu-market-row{
+      display:flex;
+      justify-content:space-between;
+      gap:14px;
+      padding-bottom:10px;
+      border-bottom:1px solid var(--line-2);
+      color:var(--muted);
+      font-size:14px;
+      align-items:center;
+    }
+    .pcsu-market-row:last-child{
+      border-bottom:none;
+      padding-bottom:0;
+    }
+    .pcsu-market-row strong{
+      color:#fff;
+      font-size:16px;
+      font-weight:800;
+      letter-spacing:-.02em;
+      text-align:right;
+      min-width:0;
     }
     .pcsu-tool-link{
       display:flex;
@@ -2083,7 +1949,7 @@ FULL REBUILD
       justify-content:space-between;
       gap:12px;
       padding:14px 0;
-      border-bottom:1px solid var(--aur-line-2);
+      border-bottom:1px solid var(--line-2);
       text-decoration:none;
       color:inherit;
     }
@@ -2096,28 +1962,51 @@ FULL REBUILD
     }
     .pcsu-tool-name{
       color:#fff;
-      font-size:14px;
-      font-weight:850;
+      font-size:15px;
+      font-weight:800;
       letter-spacing:-.02em;
     }
     .pcsu-tool-sub{
       margin-top:4px;
-      color:var(--aur-sub);
-      font-size:12.5px;
-      line-height:1.44;
+      color:var(--muted);
+      font-size:13px;
+      line-height:1.45;
     }
     .pcsu-tool-arrow{
-      color:var(--aur-sub);
+      color:var(--muted);
       font-size:18px;
       flex:0 0 auto;
     }
-    /* ============================================================
-       RESPONSIVE
-    ============================================================ */
+    .pcsu-pref-grid{
+      display:grid;
+      gap:12px;
+    }
+    .pcsu-pref-row{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding-bottom:10px;
+      border-bottom:1px solid var(--line-2);
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.45;
+    }
+    .pcsu-pref-row:last-child{
+      border-bottom:none;
+      padding-bottom:0;
+    }
+    .pcsu-pref-row strong{
+      color:#fff;
+      font-size:15px;
+      font-weight:800;
+      letter-spacing:-.02em;
+      text-align:right;
+    }
     @media (max-width:1180px){
       .pcsu-grid{ grid-template-columns:1fr; }
       .pcsu-middle{ grid-template-columns:1fr; }
-      .pcsu-rail{ grid-template-columns:repeat(2, minmax(0,1fr)); }
+      .pcsu-rail{ grid-template-columns:repeat(3, minmax(0,1fr)); }
     }
     @media (max-width:920px){
       .pcsu-topbar{
@@ -2127,10 +2016,10 @@ FULL REBUILD
       .pcsu-rail{ grid-template-columns:1fr; }
       .pcsu-lab-grid{ grid-template-columns:1fr; }
       .pcsu-live-grid{ grid-template-columns:1fr; }
-      .pcsu-fin-top{ flex-direction:column; }
+      .pcsu-fin-top{ grid-template-columns:1fr; }
       .pcsu-aff-head{
-        flex-direction:column;
         align-items:flex-start;
+        flex-direction:column;
       }
       .pcsu-aff-head-actions{
         width:100%;
@@ -2141,16 +2030,14 @@ FULL REBUILD
       }
     }
     @media (max-width:640px){
-      #pcsu-user-shell{ padding:18px 12px 24px; }
-      .pcsu-topbar,
-      .pcsu-card-inner{ padding:14px; }
+      #pcsu-user-shell{ padding:20px 12px 28px; }
+      .pcsu-card-inner{ padding:16px; }
       .pcsu-hero-top,
-      .pcsu-hero-body{ padding-left:14px; padding-right:14px; }
-      .pcsu-title{ font-size:31px; }
-      .pcsu-card-title,
-      .pcsu-aff-head-title{ font-size:18px; }
-      .pcsu-pay-value,
-      .pcsu-live-big{ font-size:40px; }
+      .pcsu-hero-body{ padding-left:16px; padding-right:16px; }
+      .pcsu-title{ font-size:30px; }
+      .pcsu-card-title{ font-size:18px; }
+      .pcsu-pay-value{ font-size:38px; }
+      .pcsu-live-big{ font-size:36px; }
       .pcsu-strategy-head{
         flex-direction:column;
         align-items:flex-start;
@@ -2365,7 +2252,7 @@ FULL REBUILD
                         <div class="pcsu-input-label">Real-Time Results</div>
                         <p class="pcsu-live-big" id="pcsuLivePayment">$2,350 <span>/ mo</span></p>
                         <div class="pcsu-live-state" id="pcsuLiveState">Comfortable</div>
-                        <div style="margin-top:16px;">
+                        <div style="margin-top:18px;">
                           <a href="#" class="pcsu-btn secondary" id="pcsuTestAffordabilityBtn">Test Affordability</a>
                         </div>
                       </div>
@@ -2374,16 +2261,15 @@ FULL REBUILD
                           <svg viewbox="0 0 680 220" preserveaspectratio="none">
                             <defs>
                               <lineargradient id="pcsuArea" x1="0" x2="0" y1="0" y2="1">
-                                <stop offset="0%" stop-color="rgba(121,243,210,.35)"></stop>
-                                <stop offset="100%" stop-color="rgba(105,184,255,0)"></stop>
+                                <stop offset="0%" stop-color="rgba(142,243,197,.25)"></stop>
+                                <stop offset="100%" stop-color="rgba(106,167,255,0)"></stop>
                               </lineargradient>
                               <lineargradient id="pcsuLine" x1="0" x2="1" y1="0" y2="0">
-                                <stop offset="0%" stop-color="#79f3d2"></stop>
-                                <stop offset="55%" stop-color="#69b8ff"></stop>
-                                <stop offset="100%" stop-color="#8f7cff"></stop>
+                                <stop offset="0%" stop-color="#8ef3c5"></stop>
+                                <stop offset="100%" stop-color="#6aa7ff"></stop>
                               </lineargradient>
                             </defs>
-                            <g opacity=".18" stroke="#e6efff" stroke-width="1">
+                            <g opacity=".14" stroke="#dfe6ff" stroke-width="1">
                               <line x1="40" y1="30" x2="640" y2="30"></line>
                               <line x1="40" y1="75" x2="640" y2="75"></line>
                               <line x1="40" y1="120" x2="640" y2="120"></line>
@@ -2398,7 +2284,7 @@ FULL REBUILD
                             </g>
                             <path d="M40 180 C100 150, 140 140, 160 135 S240 110, 280 100 S360 82, 400 95 S480 115, 520 122 S590 118, 640 112 L640 210 L40 210 Z" fill="url(#pcsuArea)"></path>
                             <path d="M40 180 C100 150, 140 140, 160 135 S240 110, 280 100 S360 82, 400 95 S480 115, 520 122 S590 118, 640 112" fill="none" stroke="url(#pcsuLine)" stroke-width="4" stroke-linecap="round"></path>
-                            <g fill="#79f3d2" stroke="#173459" stroke-width="3">
+                            <g fill="#8ef3c5" stroke="#0b0e1a" stroke-width="3">
                               <circle cx="40" cy="180" r="6"></circle>
                               <circle cx="160" cy="135" r="6"></circle>
                               <circle cx="280" cy="100" r="6"></circle>
@@ -2448,7 +2334,7 @@ FULL REBUILD
                         <strong id="pcsuMarketGap">-$30k</strong>
                       </div>
                     </div>
-                    <div style="margin-top:14px;">
+                    <div style="margin-top:16px;">
                       <a href="#" class="pcsu-btn primary" id="pcsuRentVsBuyBtn" style="width:100%;">Rent vs Buy Comparison</a>
                     </div>
                   </div>
@@ -2560,11 +2446,11 @@ FULL REBUILD
         <script>
 /* ============================================================
   PCSUnited • 2A Greeting
-  v2.0.0 — VISUAL UPGRADE
+  v1.0.0
   PURPOSE
   - Reads logged-in PCSUnited user identity
   - Builds greeting as: Rank + Last Name
-  - Paints premium structured greeting into the shell
+  - Paints greeting into the shell
   - Re-runs after login/unlock events
   - Safe fallback if profile is incomplete
   EXPECTED SHELL TARGET
@@ -2577,7 +2463,6 @@ FULL REBUILD
   - Shell/UI only update
   - No server write
   - No API dependency required
-  - Injects lightweight styling for rank / name emphasis
 ============================================================ */
 (() => {
   "use strict";
@@ -2587,7 +2472,6 @@ FULL REBUILD
   const KEY_PROFILE = "pcsunited.profile.v1";
   const KEY_EMAIL   = "pcsunited.loginEmail";
   const KEY_SESS    = "pcsunited.sessionEmail";
-  const STYLE_ID    = "pcsu-2a-greeting-style";
   const TARGETS = {
     userName: "#pcsuUserName"
   };
@@ -2620,14 +2504,6 @@ FULL REBUILD
   //#4) HELPERS — STRING CLEANUP
   function str(v){
     return String(v == null ? "" : v).trim();
-  }
-  function escapeHTML(value){
-    return str(value)
-      .replace(/&/g, "&amp;")
-      .replace(/</g, "&lt;")
-      .replace(/>/g, "&gt;")
-      .replace(/"/g, "&quot;")
-      .replace(/'/g, "&#39;");
   }
   function titleCase(value){
     const s = str(value).toLowerCase();
@@ -2700,144 +2576,51 @@ FULL REBUILD
       str(profile.grade);
     return normalizeRank(rank);
   }
-  //#6) GREETING MODEL
-  function buildGreetingParts(){
+  //#6) BUILD DISPLAY NAME
+  function buildGreetingName(){
     const profile = getProfile();
     const email = getEmail();
     const rank = extractRank(profile);
     const lastName = extractLastName(profile, email);
-    if (rank && lastName){
-      return {
-        rank,
-        lastName,
-        plain: `${rank} ${lastName}`,
-        mode: "rank_last"
-      };
-    }
-    if (lastName){
-      return {
-        rank: "",
-        lastName,
-        plain: lastName,
-        mode: "last_only"
-      };
-    }
-    if (rank){
-      return {
-        rank,
-        lastName: "",
-        plain: rank,
-        mode: "rank_only"
-      };
-    }
-    return {
-      rank: "",
-      lastName: "",
-      plain: "Member",
-      mode: "fallback"
-    };
+    //#6.1) Preferred output = Rank + Last Name
+    if (rank && lastName) return `${rank} ${lastName}`;
+    //#6.2) If only last name exists
+    if (lastName) return lastName;
+    //#6.3) If only rank exists
+    if (rank) return rank;
+    //#6.4) Last fallback
+    return "Member";
   }
-  function buildGreetingName(){
-    return buildGreetingParts().plain;
-  }
-  //#7) STYLE INJECTION
-  function ensureGreetingStyles(){
-    if (document.getElementById(STYLE_ID)) return;
-    const style = document.createElement("style");
-    style.id = STYLE_ID;
-    style.textContent = `
-      #pcsuUserName{
-        display:inline-flex;
-        align-items:baseline;
-        gap:.28em;
-        min-width:0;
-        white-space:nowrap;
-      }
-      #pcsuUserName .pcsu-greet-rank{
-        display:inline-block;
-        color:#dce3ff;
-        opacity:.95;
-        font-weight:800;
-        letter-spacing:-.03em;
-      }
-      #pcsuUserName .pcsu-greet-name{
-        display:inline-block;
-        color:#ffffff;
-        font-weight:900;
-        letter-spacing:-.045em;
-        text-shadow:0 1px 0 rgba(255,255,255,.04);
-      }
-      #pcsuUserName .pcsu-greet-fallback{
-        display:inline-block;
-        color:#f6e6b3;
-        font-weight:800;
-        letter-spacing:-.03em;
-      }
-      @media (max-width:640px){
-        #pcsuUserName{
-          gap:.22em;
-        }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-  //#8) MARKUP BUILDERS
-  function buildGreetingHTML(parts){
-    const rank = escapeHTML(parts.rank);
-    const lastName = escapeHTML(parts.lastName);
-    const plain = escapeHTML(parts.plain);
-    switch(parts.mode){
-      case "rank_last":
-        return `<span class="pcsu-greet-rank">${rank}</span><span class="pcsu-greet-name">${lastName}</span>`;
-      case "last_only":
-        return `<span class="pcsu-greet-name">${lastName}</span>`;
-      case "rank_only":
-        return `<span class="pcsu-greet-rank">${rank}</span>`;
-      default:
-        return `<span class="pcsu-greet-fallback">${plain}</span>`;
-    }
-  }
-  //#9) PAINT
+  //#7) PAINT
   function paintGreeting(){
     const el = document.querySelector(TARGETS.userName);
     if (!el) return;
-    ensureGreetingStyles();
-    const parts = buildGreetingParts();
-    const html = buildGreetingHTML(parts);
-    el.innerHTML = html;
-    el.setAttribute("aria-label", parts.plain);
-    el.dataset.greetingMode = parts.mode;
-    el.dataset.greetingPlain = parts.plain;
-    el.title = parts.plain;
+    const displayName = buildGreetingName();
+    el.textContent = displayName;
   }
-  //#10) PUBLIC API
+  //#8) PUBLIC API
   const API = {
     __mounted: true,
     repaint: paintGreeting,
     getProfile,
     getEmail,
-    buildGreetingName,
-    buildGreetingParts
+    buildGreetingName
   };
   window.PCSU_2A_GREETING = API;
-  //#11) EVENT WIRING
+  //#9) EVENT WIRING
   function safeRepaint(){
-    try{
-      paintGreeting();
-    }catch(err){
-      console.error("PCSU 2A Greeting repaint failed:", err);
-    }
+    try{ paintGreeting(); }catch(err){ console.error("PCSU 2A Greeting repaint failed:", err); }
   }
-  //#11.1) Run now
+  //#9.1) Run now
   safeRepaint();
-  //#11.2) Re-run after login success from your lock layer
+  //#9.2) Re-run after login success from your lock layer
   window.addEventListener("pcsunited:unlocked", safeRepaint);
-  //#11.3) Re-run after logout so shell doesn't show stale name
+  //#9.3) Re-run after logout so shell doesn't show stale name
   window.addEventListener("pcsunited:loggedout", safeRepaint);
-  //#11.4) Re-run if bridge/profile systems fire later
+  //#9.4) Re-run if bridge/profile systems fire later
   window.addEventListener("pcsunited:bridge-ready", safeRepaint);
   window.addEventListener("realtysass:bridge-ready", safeRepaint);
-  //#11.5) Re-run shortly after load in case login/profile paint lands late
+  //#9.5) Re-run shortly after load in case login/profile paint lands late
   window.addEventListener("load", () => {
     safeRepaint();
     setTimeout(safeRepaint, 150);
@@ -2851,7 +2634,7 @@ FULL REBUILD
         <script>
 /* ============================================================
   PCSUnited • 2B Readiness
-  v2.1.0 — EXECUTIVE THEME FULL REPLACEMENT
+  v2.1.0 — FULL REPLACEMENT
   PURPOSE
   - Reads PCSUnited bridge/profile data
   - Computes a practical readiness snapshot
@@ -3356,44 +3139,25 @@ FULL REBUILD
         cursor:pointer !important;
         user-select:none !important;
         transition:.16s ease !important;
-        border-radius:999px !important;
       }
       .pcsu-2b-pillBtn:hover{
         transform:translateY(-1px);
         filter:brightness(1.04);
       }
       .pcsu-2b-pillBtn.is-active{
-        box-shadow:0 10px 28px rgba(102,178,255,.12), 0 0 0 1px rgba(102,178,255,.22) !important;
-      }
-      .pcsu-2b-pillBtn.ok{
-        border-color:rgba(70,230,179,.45) !important;
-        color:#DFFFF5 !important;
-      }
-      .pcsu-2b-pillBtn.warn{
-        border-color:rgba(255,209,102,.42) !important;
-        color:#FFF3CF !important;
+        box-shadow:0 0 0 1px rgba(142,243,197,.18), 0 10px 22px rgba(0,0,0,.18);
       }
       .pcsu-2b-insight-wrap{
         margin-top:14px;
         width:100%;
-        border-radius:20px;
+        border-radius:18px;
         padding:14px;
-        border:1px solid rgba(180,210,255,.14);
+        border:1px solid rgba(255,255,255,.10);
         background:
-          radial-gradient(1200px 700px at 15% 10%, rgba(102,178,255,.18), transparent 55%),
-          radial-gradient(900px 520px at 92% 12%, rgba(185,243,255,.10), transparent 55%),
-          linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-        box-shadow:0 18px 55px rgba(0,0,0,.60);
-        overflow:hidden;
-        position:relative;
-      }
-      .pcsu-2b-insight-wrap::before{
-        content:"";
-        position:absolute;
-        inset:0;
-        pointer-events:none;
-        background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
-        opacity:.7;
+          radial-gradient(520px 180px at 15% 15%, rgba(106,167,255,.08), transparent 60%),
+          radial-gradient(520px 180px at 85% 18%, rgba(142,243,197,.06), transparent 60%),
+          rgba(12,14,25,.54);
+        box-shadow:0 16px 32px rgba(0,0,0,.24);
       }
       .pcsu-2b-insight-head{
         display:flex;
@@ -3402,37 +3166,28 @@ FULL REBUILD
         gap:10px;
         flex-wrap:wrap;
         margin-bottom:10px;
-        position:relative;
-        z-index:1;
       }
       .pcsu-2b-insight-kicker{
         font-size:11px;
         font-weight:950;
         letter-spacing:.14em;
         text-transform:uppercase;
-        color:rgba(242,247,255,.92);
+        color:rgba(233,236,255,.92);
       }
       .pcsu-2b-insight-status{
         font-size:11px;
         font-weight:800;
-        color:rgba(242,247,255,.62);
+        color:rgba(168,176,214,.82);
       }
       .pcsu-2b-insight-list{
         display:flex;
         flex-direction:column;
         gap:10px;
-        position:relative;
-        z-index:1;
       }
       .pcsu-2b-insight-row{
         display:flex;
         align-items:flex-start;
         gap:10px;
-        border-radius:14px;
-        border:1px solid rgba(180,210,255,.14);
-        background:rgba(255,255,255,.05);
-        padding:12px;
-        box-shadow:0 10px 26px rgba(0,0,0,.38);
       }
       .pcsu-2b-insight-dot{
         width:10px;
@@ -3442,13 +3197,13 @@ FULL REBUILD
         margin-top:6px;
         box-shadow:0 0 0 4px rgba(255,255,255,.04);
       }
-      .pcsu-2b-insight-dot.ok{ background:#46E6B3; }
-      .pcsu-2b-insight-dot.warn{ background:#FFD166; }
+      .pcsu-2b-insight-dot.ok{ background:#8ef3c5; }
+      .pcsu-2b-insight-dot.warn{ background:#f9c74f; }
       .pcsu-2b-insight-copy{
         min-width:0;
         font-size:14px;
-        line-height:1.55;
-        color:#F2F7FF;
+        line-height:1.5;
+        color:#e9ecff;
         font-weight:700;
       }
       .pcsu-2b-insight-copy strong{
@@ -3458,9 +3213,7 @@ FULL REBUILD
       .pcsu-2b-insight-empty{
         font-size:14px;
         line-height:1.45;
-        color:rgba(242,247,255,.72);
-        position:relative;
-        z-index:1;
+        color:rgba(168,176,214,.82);
       }
     `;
     document.head.appendChild(style);
@@ -3706,19 +3459,23 @@ FULL REBUILD
         <script>
 (() => {
   "use strict";
-  if (window.PCSU_2C_FULL && window.PCSU_2C_FULL.__mounted_v536) return;
-  window.PCSU_2C_FULL = { __mounted_v536: true };
+  if (window.PCSU_2C_FULL && window.PCSU_2C_FULL.__mounted_v532) return;
+  window.PCSU_2C_FULL = { __mounted_v532: true };
   // ============================================================
   // PCSUnited • 2C Affordability Zone & Strategy
-  // v5.3.6 — EXECUTIVE THEME
+  // v5.3.2
   //
-  // FIX
-  // - Replaced flaky contenteditable behavior with real inputs
-  // - Savings / Monthly Expenses / Additional Income now type normally
-  // - Total Monthly Income remains locked
-  // - Keeps debt editor + fiduciary summary behavior
-  // - Executive theme visual treatment
+  // UPDATE
+  // - Fiduciary Summary payload now uses:
+  //   • additional_income
+  //   • savings
+  //   • monthly_expenses
+  // - 2C-1 remains the sole save owner
+  // - Nothing else changed
   // ============================================================
+  // ------------------------------------------------------------
+  // #1 CONFIG
+  // ------------------------------------------------------------
   const PROFILE_KEY = "pcsunited.profile.v1";
   const BRAIN_CACHE_KEY = "pcsunited.user_brain_cache.v1";
   const HOUSING_KEY = "pcsunited.housing_calculator.v6";
@@ -3746,6 +3503,9 @@ FULL REBUILD
   let chart = null;
   let model = null;
   let resizeObs = null;
+  // ------------------------------------------------------------
+  // #2 HELPERS
+  // ------------------------------------------------------------
   const $ = (sel, root = document) => root.querySelector(sel);
   const byId = (id) => document.getElementById(id);
   function readJSON(key, fallback = null){
@@ -3871,6 +3631,9 @@ FULL REBUILD
     }catch(_){}
     return "";
   }
+  // ------------------------------------------------------------
+  // #3 PANEL TARGETS
+  // ------------------------------------------------------------
   function getAffCard(){
     return $(".pcsu-aff-card");
   }
@@ -3885,6 +3648,9 @@ FULL REBUILD
   function getEditorRegion(){
     return byId("pcsu2cEditor");
   }
+  // ------------------------------------------------------------
+  // #4 CANONICAL STATE
+  // ------------------------------------------------------------
   const state = {
     totalIncome: 0,
     additionalIncome: 0,
@@ -3940,6 +3706,9 @@ FULL REBUILD
     const profile = getProfile();
     applyProfileToState(profile || {});
   }
+  // ------------------------------------------------------------
+  // #5 SCORE ENGINE
+  // ------------------------------------------------------------
   function buildAffordabilityInput(){
     const profile = getProfile();
     const totalMonthlyIncome = round0(readAutoMonthlyIncomeFromProfile(profile));
@@ -3985,14 +3754,22 @@ FULL REBUILD
       scoreState.error = String(err?.message || err);
     }
   }
+  // ------------------------------------------------------------
+  // #6 STYLE INJECTION
+  // ------------------------------------------------------------
   function injectStyles(){
-    if (byId("pcsu-2c-runtime-styles-v536")) return;
+    if (byId("pcsu-2c-runtime-styles-v532")) return;
     const style = document.createElement("style");
-    style.id = "pcsu-2c-runtime-styles-v536";
+    style.id = "pcsu-2c-runtime-styles-v532";
     style.textContent = `
       .pcsu-edit-value.locked{
         cursor:default !important;
-        border-color:rgba(180,210,255,.10) !important;
+        border-color:rgba(255,255,255,.10) !important;
+        background:rgba(255,255,255,.02) !important;
+      }
+      .pcsu-edit-value.locked:hover,
+      .pcsu-edit-value.locked:focus{
+        border-color:rgba(255,255,255,.10) !important;
         background:rgba(255,255,255,.02) !important;
       }
       .pcsu-2c-display-hidden{
@@ -4008,42 +3785,31 @@ FULL REBUILD
       .pcsu2c-card{
         width:100%;
         min-height:620px;
-        border-radius:24px;
-        padding:18px;
+        border-radius:26px;
+        padding:20px;
         background:
-          radial-gradient(1200px 700px at 15% 10%, rgba(102,178,255,.18), transparent 55%),
-          radial-gradient(900px 520px at 92% 12%, rgba(185,243,255,.10), transparent 55%),
-          linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.03));
-        border:1px solid rgba(180,210,255,.16);
-        box-shadow:0 18px 55px rgba(0,0,0,.60);
+          radial-gradient(1200px 480px at 18% 10%, rgba(106,167,255,.10), transparent 55%),
+          radial-gradient(900px 460px at 78% 16%, rgba(142,243,197,.08), transparent 55%),
+          linear-gradient(180deg, rgba(18,22,40,.94), rgba(10,13,28,.96));
+        border:1px solid rgba(255,255,255,.08);
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,.04),
+          0 24px 48px rgba(0,0,0,.38);
         position:relative;
         overflow:hidden;
       }
-      .pcsu2c-card::before{
-        content:"";
-        position:absolute;
-        inset:0;
-        pointer-events:none;
-        background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,0));
-        opacity:.7;
-      }
       .pcsu2c-top{
-        position:relative;
-        z-index:1;
         display:flex;
         align-items:flex-start;
         justify-content:space-between;
         gap:16px;
         flex-wrap:wrap;
-        padding:12px 14px 14px;
-        border:1px solid rgba(180,210,255,.14);
-        border-radius:16px;
-        background:rgba(0,0,0,.26);
-        box-shadow:0 10px 26px rgba(0,0,0,.38);
+        padding-bottom:14px;
+        border-bottom:1px solid rgba(255,255,255,.08);
       }
       .pcsu2c-kicker{
         font-size:11px;
-        color:rgba(242,247,255,.72);
+        color:rgba(168,176,214,.92);
         font-weight:950;
         letter-spacing:.14em;
         text-transform:uppercase;
@@ -4053,29 +3819,25 @@ FULL REBUILD
         margin:0;
         font-size:28px;
         line-height:1.02;
-        font-weight:950;
-        color:#F2F7FF;
+        font-weight:900;
+        color:#eef2ff;
       }
       .pcsu2c-sub{
         margin:8px 0 0;
         max-width:720px;
         font-size:13px;
-        line-height:1.5;
-        color:rgba(242,247,255,.72);
-        font-weight:700;
+        line-height:1.45;
+        color:rgba(200,208,236,.78);
       }
       .pcsu2c-right{
         font-size:11px;
-        font-weight:800;
-        color:rgba(242,247,255,.58);
-        letter-spacing:.08em;
-        text-transform:uppercase;
+        font-weight:700;
+        color:rgba(168,176,214,.80);
+        letter-spacing:.04em;
         white-space:nowrap;
         padding-top:4px;
       }
       .pcsu2c-controls{
-        position:relative;
-        z-index:1;
         display:flex;
         align-items:center;
         gap:12px;
@@ -4087,19 +3849,19 @@ FULL REBUILD
         display:flex;
         align-items:center;
         gap:12px;
-        min-height:50px;
+        min-height:48px;
         padding:0 14px;
-        border-radius:16px;
-        background:rgba(0,0,0,.30);
-        border:1px solid rgba(180,210,255,.16);
-        box-shadow:0 10px 26px rgba(0,0,0,.38);
+        border-radius:14px;
+        background:rgba(8,11,26,.72);
+        border:1px solid rgba(255,255,255,.10);
+        box-shadow:inset 0 0 0 1px rgba(0,0,0,.22);
       }
       .pcsu2c-total-label{
         font-size:12px;
-        font-weight:950;
+        font-weight:900;
         letter-spacing:.10em;
         text-transform:uppercase;
-        color:rgba(242,247,255,.84);
+        color:#e9ecff;
         white-space:nowrap;
       }
       .pcsu2c-total-input{
@@ -4110,16 +3872,16 @@ FULL REBUILD
         outline:none;
         color:#ffffff;
         font-size:28px;
-        font-weight:1000;
+        font-weight:900;
         text-align:right;
       }
       .pcsu2c-btn{
         min-height:46px;
         padding:0 18px;
         border-radius:14px;
-        border:1px solid rgba(180,210,255,.16);
-        background:rgba(0,0,0,.30);
-        color:rgba(242,247,255,.82);
+        border:1px solid rgba(255,255,255,.12);
+        background:rgba(18,22,40,.65);
+        color:#e9ecff;
         font-size:11px;
         font-weight:950;
         letter-spacing:.12em;
@@ -4130,38 +3892,35 @@ FULL REBUILD
       .pcsu2c-btn:hover{
         transform:translateY(-1px);
         filter:brightness(1.04);
-        border-color:rgba(180,210,255,.28);
       }
       .pcsu2c-btn.save{
-        border:1px solid rgba(102,178,255,.70);
-        color:#F2F7FF;
-        background:
-          radial-gradient(220px 110px at 20% 25%, rgba(102,178,255,.40), transparent 65%),
-          linear-gradient(180deg, rgba(102,178,255,.22), rgba(0,0,0,.28));
-        box-shadow:0 14px 30px rgba(102,178,255,.12);
+        border:none;
+        color:#050712;
+        background:radial-gradient(circle at top left, #8ef3c5, #6aa7ff);
+        box-shadow:0 14px 30px rgba(0,0,0,.36);
       }
       .pcsu2c-hint{
         margin-left:auto;
         font-size:12px;
         line-height:1.35;
-        color:rgba(242,247,255,.62);
-        font-weight:700;
+        color:rgba(221,229,255,.70);
         white-space:nowrap;
       }
       .pcsu2c-chart-wrap{
-        position:relative;
-        z-index:1;
         margin-top:10px;
         width:100%;
         height:340px;
         border-radius:18px;
         overflow:hidden;
         background:
-          radial-gradient(480px 200px at 22% 18%, rgba(70,230,179,.08), transparent 60%),
-          radial-gradient(420px 180px at 74% 20%, rgba(102,178,255,.08), transparent 60%),
-          rgba(0,0,0,.28);
-        border:1px solid rgba(180,210,255,.14);
-        box-shadow:0 10px 26px rgba(0,0,0,.38);
+          radial-gradient(480px 200px at 22% 18%, rgba(142,243,197,.08), transparent 60%),
+          radial-gradient(420px 180px at 74% 20%, rgba(106,167,255,.08), transparent 60%),
+          rgba(7,10,22,.68);
+        border:1px solid rgba(255,255,255,.08);
+        box-shadow:
+          inset 0 18px 40px rgba(0,0,0,.42),
+          0 10px 22px rgba(0,0,0,.24);
+        position:relative;
       }
       .pcsu2c-chart-wrap canvas{
         width:100% !important;
@@ -4169,55 +3928,21 @@ FULL REBUILD
         display:block;
       }
       .pcsu2c-foot{
-        position:relative;
-        z-index:1;
         margin-top:12px;
-        color:rgba(242,247,255,.62);
+        color:rgba(168,176,214,.82);
         font-size:12px;
-        line-height:1.5;
-        font-weight:700;
+        line-height:1.45;
       }
       .pcsu2c-ok{
-        position:relative;
-        z-index:1;
         margin-top:12px;
         display:none;
         font-size:12px;
-        font-weight:900;
-        color:#46E6B3;
+        font-weight:800;
+        color:#8ef3c5;
         letter-spacing:.04em;
       }
       .pcsu2c-ok.show{
         display:block;
-      }
-      .pcsu-edit-input{
-        width:124px !important;
-        min-width:124px !important;
-        height:36px !important;
-        padding:0 10px !important;
-        border-radius:10px !important;
-        border:1px solid rgba(180,210,255,.16) !important;
-        background:rgba(255,255,255,.06) !important;
-        color:#fff !important;
-        font-size:14px !important;
-        font-weight:950 !important;
-        letter-spacing:-.02em !important;
-        text-align:right !important;
-        outline:none !important;
-        box-shadow:inset 0 14px 28px rgba(0,0,0,.34) !important;
-        appearance:none !important;
-      }
-      .pcsu-edit-input:hover,
-      .pcsu-edit-input:focus{
-        border-color:rgba(102,178,255,.70) !important;
-        background:rgba(255,255,255,.06) !important;
-        box-shadow:0 0 0 4px rgba(102,178,255,.14) !important;
-      }
-      .pcsu-edit-input.locked{
-        cursor:default !important;
-        border-color:rgba(180,210,255,.10) !important;
-        background:rgba(255,255,255,.02) !important;
-        box-shadow:none !important;
       }
       @media (max-width: 900px){
         .pcsu2c-card{
@@ -4240,26 +3965,9 @@ FULL REBUILD
     `;
     document.head.appendChild(style);
   }
-  function ensureEditableInput(id, locked){
-    const oldEl = byId(id);
-    if (!oldEl) return null;
-    if (oldEl.tagName === "INPUT") return oldEl;
-    const input = document.createElement("input");
-    input.type = "text";
-    input.inputMode = "numeric";
-    input.autocomplete = "off";
-    input.spellcheck = false;
-    input.id = id;
-    input.className = \`\${oldEl.className || ""} pcsu-edit-input\`.trim();
-    const initial = parseMoneyText(oldEl.textContent || oldEl.innerText || "0");
-    input.value = String(initial);
-    if (locked){
-      input.readOnly = true;
-      input.classList.add("locked");
-    }
-    oldEl.replaceWith(input);
-    return input;
-  }
+  // ------------------------------------------------------------
+  // #7 AUTO-INJECT EDITOR
+  // ------------------------------------------------------------
   function ensureEditorMarkup(){
     if (byId("pcsu2cEditor")) return byId("pcsu2cEditor");
     const inner = getAffInner();
@@ -4298,6 +4006,9 @@ FULL REBUILD
     inner.appendChild(editor);
     return editor;
   }
+  // ------------------------------------------------------------
+  // #8 INCOME READERS
+  // ------------------------------------------------------------
   function extractIncomeFromObject(obj){
     if (!obj || typeof obj !== "object") return 0;
     const total = firstPositiveNumber(
@@ -4348,6 +4059,9 @@ FULL REBUILD
     if (fromBrainCache > 0) return fromBrainCache;
     return 0;
   }
+  // ------------------------------------------------------------
+  // #9 DEBT / MORTGAGE READERS
+  // ------------------------------------------------------------
   function readMonthlyDebt(){
     const saved = readJSON(DEBT_STORE_KEY, null) || readJSON(DEBT_STORE_KEY_LEGACY, null);
     if (saved && typeof saved === "object"){
@@ -4432,12 +4146,17 @@ FULL REBUILD
       cacheMonthly
     ));
   }
+  // ------------------------------------------------------------
+  // #10 STRATEGY COPY
+  // ------------------------------------------------------------
   function paintStrategyFromScore(){
     const bullets = byId("pcsuStrategyBullets");
     if (!bullets) return;
     const reasons = Array.isArray(scoreState.reasons) ? scoreState.reasons : [];
     if (!reasons.length){
-      bullets.innerHTML = `<li>Affordability analysis is loading.</li>`;
+      bullets.innerHTML = `
+        <li>Affordability analysis is loading.</li>
+      `;
       return;
     }
     bullets.innerHTML = reasons
@@ -4449,12 +4168,15 @@ FULL REBUILD
       const label = cleanString(scoreState?.recommendation?.price_range?.label || "$0 - $0");
       const parts = label.split("-");
       if (parts.length === 2){
-        priceRange.innerHTML = \`\${parts[0].trim()} - <span>\${parts[1].trim()}</span>\`;
+        priceRange.innerHTML = `${parts[0].trim()} - <span>${parts[1].trim()}</span>`;
       } else {
         priceRange.textContent = label;
       }
     }
   }
+  // ------------------------------------------------------------
+  // #11 SUMMARY HANDOFF
+  // ------------------------------------------------------------
   function buildSummaryPayload(){
     const metrics = scoreState.metrics || {};
     const scoring = scoreState.scoring || {};
@@ -4496,20 +4218,24 @@ FULL REBUILD
       }
     }catch(_){}
   }
+  // ------------------------------------------------------------
+  // #12 PAINT
+  // ------------------------------------------------------------
   function configureFields(){
-    const incomeEl = ensureEditableInput("pcsuIncome", true);
-    const addIncomeEl = ensureEditableInput("pcsuAdditionalIncome", false);
-    const savingsEl = ensureEditableInput("pcsuSavings", false);
-    const expensesEl = ensureEditableInput("pcsuExpenses", false);
+    const incomeEl = byId("pcsuIncome");
+    const addIncomeEl = byId("pcsuAdditionalIncome");
+    const savingsEl = byId("pcsuSavings");
+    const expensesEl = byId("pcsuExpenses");
     if (incomeEl){
-      incomeEl.readOnly = true;
+      incomeEl.setAttribute("contenteditable", "false");
       incomeEl.classList.add("locked");
       incomeEl.tabIndex = -1;
     }
     [addIncomeEl, savingsEl, expensesEl].forEach((el) => {
       if (!el) return;
-      el.readOnly = false;
+      el.setAttribute("contenteditable", "true");
       el.classList.remove("locked");
+      if (!el.hasAttribute("tabindex")) el.tabIndex = 0;
     });
   }
   function paint(){
@@ -4520,14 +4246,10 @@ FULL REBUILD
     state.totalIncome = totalMonthlyIncome;
     const metrics = scoreState.metrics || {};
     const scoring = scoreState.scoring || {};
-    const incomeEl = byId("pcsuIncome");
-    const addIncomeEl = byId("pcsuAdditionalIncome");
-    const savingsEl = byId("pcsuSavings");
-    const expensesEl = byId("pcsuExpenses");
-    if (incomeEl) incomeEl.value = String(totalMonthlyIncome);
-    if (addIncomeEl && document.activeElement !== addIncomeEl) addIncomeEl.value = String(round0(state.additionalIncome));
-    if (savingsEl && document.activeElement !== savingsEl) savingsEl.value = String(round0(state.savings));
-    if (expensesEl && document.activeElement !== expensesEl) expensesEl.value = String(round0(state.expenses));
+    if (byId("pcsuIncome")) byId("pcsuIncome").textContent = money(totalMonthlyIncome);
+    if (byId("pcsuAdditionalIncome")) byId("pcsuAdditionalIncome").textContent = money(state.additionalIncome);
+    if (byId("pcsuSavings")) byId("pcsuSavings").textContent = money(state.savings);
+    if (byId("pcsuExpenses")) byId("pcsuExpenses").textContent = money(state.expenses);
     if (byId("pcsuProjectedMortgage")) byId("pcsuProjectedMortgage").textContent = money(readProjectedMortgageAmount());
     if (byId("pcsuTotalMonthlyExpenses")) byId("pcsuTotalMonthlyExpenses").textContent = money(metrics.total_monthly_expenses);
     if (byId("pcsuResidualIncome")) byId("pcsuResidualIncome").textContent = money(metrics.residual_monthly_income);
@@ -4548,27 +4270,48 @@ FULL REBUILD
     await refreshAffordabilityScore();
     paint();
   }
-  function bindNumericInput(id, key){
+  // ------------------------------------------------------------
+  // #13 EDITABLE FIELDS
+  // ------------------------------------------------------------
+  function bindEditable(id, key){
     const el = byId(id);
     if (!el || el.__wiredEditable) return;
     el.__wiredEditable = true;
-    el.addEventListener("input", () => {
-      const cleaned = digitsOnly(el.value);
-      if (el.value !== cleaned) el.value = cleaned;
-    });
-    el.addEventListener("blur", async () => {
-      state[key] = parseMoneyText(el.value);
+    function stateValue(){
+      return Math.round(state[key] || 0);
+    }
+    async function commit(){
+      state[key] = parseMoneyText(el.textContent);
       if (state[key] < 0) state[key] = 0;
-      el.value = String(state[key]);
       await repaintWithScore();
+    }
+    el.addEventListener("focus", () => {
+      el.textContent = String(stateValue());
+      try{
+        const sel = window.getSelection();
+        const range = document.createRange();
+        range.selectNodeContents(el);
+        range.collapse(false);
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }catch(_){}
     });
-    el.addEventListener("keydown", async (e) => {
+    el.addEventListener("blur", () => { commit(); });
+    el.addEventListener("keydown", (e) => {
       if (e.key === "Enter"){
         e.preventDefault();
         el.blur();
       }
     });
+    el.addEventListener("paste", (e) => {
+      e.preventDefault();
+      const text = (e.clipboardData || window.clipboardData).getData("text");
+      document.execCommand("insertText", false, String(parseMoneyText(text)));
+    });
   }
+  // ------------------------------------------------------------
+  // #14 DEBT EDITOR
+  // ------------------------------------------------------------
   function buildDebtModel(){
     const saved = readJSON(DEBT_STORE_KEY, null) || readJSON(DEBT_STORE_KEY_LEGACY, null);
     if (saved && saved.buckets && typeof saved.buckets === "object"){
@@ -4881,6 +4624,9 @@ FULL REBUILD
       });
     }
   }
+  // ------------------------------------------------------------
+  // #15 BUTTON WIRING
+  // ------------------------------------------------------------
   function wireSummaryButton(){
     const btn = byId("pcsuFiduciarySummaryBtn") ||
                 $(".pcsu-summary-btn") ||
@@ -4894,14 +4640,16 @@ FULL REBUILD
       await openFiduciarySummary();
     });
   }
+  // ------------------------------------------------------------
+  // #16 BOOT
+  // ------------------------------------------------------------
   async function boot(){
     injectStyles();
     ensureEditorMarkup();
     hydrateFromCanonicalProfile();
-    configureFields();
-    bindNumericInput("pcsuAdditionalIncome", "additionalIncome");
-    bindNumericInput("pcsuSavings", "savings");
-    bindNumericInput("pcsuExpenses", "expenses");
+    bindEditable("pcsuAdditionalIncome", "additionalIncome");
+    bindEditable("pcsuSavings", "savings");
+    bindEditable("pcsuExpenses", "expenses");
     wireEditorControls();
     wireSummaryButton();
     const updateBtn = byId("pcsu2cUpdateBtn");
@@ -4911,6 +4659,9 @@ FULL REBUILD
     }
     await repaintWithScore();
   }
+  // ------------------------------------------------------------
+  // #17 EVENTS
+  // ------------------------------------------------------------
   window.addEventListener("pcsunited:unlocked", () => {
     setTimeout(() => {
       hydrateFromCanonicalProfile();
@@ -6663,7 +6414,7 @@ FULL REBUILD
         <script>
 /* ============================================================
   PCSUnited • 2E Market Insight
-  v1.4.1 — EXECUTIVE THEME FULL REPLACEMENT
+  v1.4.0 — FULL REPLACEMENT
   FIXED TO MATCH WORKING FAD PATTERN
   - Uses window.RS_FID / CORE.brain just like FAD
   - Does NOT fetch city JSON directly
@@ -6687,7 +6438,7 @@ FULL REBUILD
 (() => {
   "use strict";
   //#1) SINGLETON GUARD
-  if (window.PCSU_2E_MARKET && window.PCSU_2E_MARKET.__mounted_v141) return;
+  if (window.PCSU_2E_MARKET && window.PCSU_2E_MARKET.__mounted_v140) return;
   //#2) CORE
   const CORE = window.RS_FID;
   if (!CORE || !CORE.__coreMounted) return;
@@ -7019,9 +6770,9 @@ FULL REBUILD
   }
   //#11) HEADER STEPPER STYLES
   function injectStepperStyles(){
-    if (document.getElementById("pcsu-market-stepper-style-v141")) return;
+    if (document.getElementById("pcsu-market-stepper-style-v140")) return;
     const style = document.createElement("style");
-    style.id = "pcsu-market-stepper-style-v141";
+    style.id = "pcsu-market-stepper-style-v140";
     style.textContent = `
       .pcsu-card:has(#pcsuMarketBase) .pcsu-card-title{
         align-items:flex-start;
@@ -7030,18 +6781,13 @@ FULL REBUILD
         display:flex;
         align-items:flex-start;
         justify-content:flex-end;
-        min-width:96px;
+        min-width:88px;
       }
       .pcsu-market-headstep{
         display:flex;
         align-items:flex-start;
-        gap:10px;
-        color:#F2F7FF;
-        padding:8px 10px;
-        border-radius:14px;
-        border:1px solid rgba(180,210,255,.16);
-        background:rgba(0,0,0,.30);
-        box-shadow:0 10px 26px rgba(0,0,0,.38);
+        gap:8px;
+        color:#e9ecff;
       }
       .pcsu-market-headstep-main{
         display:flex;
@@ -7051,32 +6797,31 @@ FULL REBUILD
       }
       .pcsu-market-headstep-num{
         font-size:22px;
-        font-weight:950;
+        font-weight:900;
         letter-spacing:-.04em;
-        color:#B9F3FF;
-        text-shadow:0 0 18px rgba(185,243,255,.10);
+        color:var(--mint, #8ef3c5);
       }
       .pcsu-market-headstep-label{
-        margin-top:5px;
+        margin-top:4px;
         font-size:10px;
-        font-weight:950;
-        letter-spacing:.10em;
-        text-transform:uppercase;
-        color:rgba(242,247,255,.74);
+        font-weight:900;
+        letter-spacing:.08em;
+        text-transform:none;
+        color:#dfe6ff;
       }
       .pcsu-market-headstep-btncol{
         display:flex;
         flex-direction:column;
-        gap:5px;
+        gap:4px;
         margin-top:1px;
       }
       .pcsu-market-headstep-btn{
-        width:18px;
-        height:14px;
+        width:16px;
+        height:12px;
         border-radius:6px;
-        border:1px solid rgba(180,210,255,.16);
+        border:1px solid rgba(255,255,255,.10);
         background:rgba(255,255,255,.06);
-        color:#F2F7FF;
+        color:#e9ecff;
         cursor:pointer;
         display:flex;
         align-items:center;
@@ -7085,15 +6830,13 @@ FULL REBUILD
         user-select:none;
         font-size:8px;
         padding:0;
-        transition:.15s ease;
       }
       .pcsu-market-headstep-btn:hover{
-        border-color:rgba(102,178,255,.70);
-        box-shadow:0 0 0 4px rgba(102,178,255,.14);
-        transform:translateY(-1px);
+        border-color:rgba(142,243,197,.55);
+        box-shadow:0 0 0 1px rgba(142,243,197,.18);
       }
       .pcsu-market-headstep-btn:active{
-        transform:translateY(0);
+        transform:translateY(1px);
       }
       #pcsuMarketBase{
         display:inline-block;
@@ -7267,7 +7010,7 @@ FULL REBUILD
   //#19) PUBLIC API
   window.PCSU_2E_MARKET = {
     __mounted: true,
-    __mounted_v141: true,
+    __mounted_v140: true,
     repaint,
     buildMarketInsight,
     readBedsOverride: () => readBedsOverride(),
@@ -9478,6 +9221,10 @@ PURPOSE
           <h2 class="heading-75">Don&#x27;t Miss on Revelant News &amp; Updates</h2>
           <div class="spacer-xsmall-4"></div>
           <div class="text-style-muted80-5">Learn the newest updates and resources for the Military Community. Understand the best path forward for your family. Receive monthly blogs, updates and relevant information. </div>
+          <div data-w-id="2145174f-3b91-6e2a-3a18-a7c97414140e" class="about-image-block"><img sizes="100vw" srcset="images/about-img_1about-img.avif 500w, images/about-img_1about-img.avif 1114w" alt="Office image" src="images/about-img_1about-img.avif" loading="lazy" class="about-image"><img sizes="100vw" srcset="images/about-image-mobile_1about-image-mobile.avif 500w, images/about-image-mobile_1about-image-mobile.avif 1114w" alt="Office image" src="images/about-image-mobile_1about-image-mobile.avif" loading="lazy" class="about-image for-mobile">
+            <div class="about-graph-icon-block"><img loading="lazy" src="images/about-graph-icon.svg" alt="Graph icon"></div>
+            <div class="about-avatar-block"><img loading="lazy" src="images/about-avatar-01_1about-avatar-01.avif" alt="Person image" class="about-avatar-image"><img loading="lazy" src="images/about-avatar-02_1about-avatar-02.avif" alt="Person image" class="about-avatar-image margin-right--10px"><img loading="lazy" src="images/about-avatar-03_1about-avatar-03.avif" alt="Person image" class="about-avatar-image margin-right--10px"></div>
+          </div>
           <div class="code-embed-21 w-embed"><!--  =========================================================
   PCS UNITED • Premium Account Button (Redirect) v1.0.0
   ✅ Matches your “CREATE PREMIUM ACCOUNT” gradient pill button

@@ -1,385 +1,438 @@
-// netlify/functions/bah-calculator.js
-// ============================================================
-// PCSUnited • BAH Calculator
-// v1.0.0
-//
-// PURPOSE
-// - Lightweight endpoint for Webflow / PCSUnited BAH Calculator
-// - Computes Base Pay + BAH + BAS + Total Monthly Military Pay
-// - Uses militaryPayTables.json as source of truth
-// - Supports base -> zip via BAH.base_to_zip
-// - CORS-safe for Webflow previews
-//
-// POST BODY
-// {
-//   "rank": "E-5",
-//   "yos": 6,
-//   "base": "JBSA-Lackland",
-//   "family": true
-// }
-//
-// RESPONSE
-// {
-//   ok: true,
-//   rank: "E-5",
-//   rankTitle: "Staff Sergeant",
-//   yos: 6,
-//   base: "JBSA-Lackland",
-//   zip: "78236",
-//   family: true,
-//   basePay: 3946.8,
-//   bah: 1935,
-//   bas: 476.95,
-//   total: 6358.75,
-//   locationLabel: "SAN ANTONIO, TX"
-// }
-// ============================================================
+<script>
+(function () {
+  "use strict";
 
-"use strict";
+  /* =========================================================
+    PCSUnited • Aurora BAH Calculator Runtime
+    v2.0.0
+    SNAPSHOT-LOGIC VERSION
 
-const fs = require("node:fs");
-const path = require("node:path");
+    PURPOSE
+    - Reuses PCS Snapshot calculation pattern
+    - No bah-calculator.js required
+    - Loads militaryPayTables.json directly
+    - Loads base index directly
+    - Calculates:
+      • BAH
+      • Base Pay
+      • BAS
+      • Total Monthly Military Pay
+    - Paints the Aurora Webflow shell
 
-/* ============================================================
-  //#1) CORS
-============================================================ */
-const ALLOWED_ORIGINS = new Set([
-  "https://pcsunited.com",
-  "https://www.pcsunited.com",
-  "https://pcs-united.webflow.io",
-  "https://pcsu.webflow.io",
-  "http://localhost:3000",
-  "http://127.0.0.1:3000",
-  "http://localhost:8888",
-  "http://127.0.0.1:8888"
-]);
+    EXPECTED SHELL IDS
+    - #bah-paygrade
+    - #bah-yos
+    - #bah-location
+    - #bah-dependents
 
-function buildCorsHeaders(event) {
-  const origin =
-    event?.headers?.origin ||
-    event?.headers?.Origin ||
-    "";
+    - #bah-hero-label
+    - #bah-hero-value
+    - #bah-hero-fill
 
-  const allowOrigin = ALLOWED_ORIGINS.has(origin)
-    ? origin
-    : "https://pcsunited.com";
+    - #bah-info-status
+    - #bah-info-dependency
+    - #bah-info-location
+    - #bah-info-rank
+    - #bah-info-yos
 
-  return {
-    "Access-Control-Allow-Origin": allowOrigin,
-    "Access-Control-Allow-Headers": "Content-Type, Authorization",
-    "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
-    "Access-Control-Allow-Credentials": "true",
-    "Access-Control-Max-Age": "86400",
-    "Vary": "Origin",
-    "Content-Type": "application/json"
+    - #bah-pay-amount
+    - #bah-basepay-amount
+    - #bah-total-amount
+    - #bah-total-note
+
+    - #bah-breakdown-title
+    - #bah-breakdown-bah
+    - #bah-breakdown-basepay
+    - #bah-breakdown-bas
+
+    - #bah-bar-bah
+    - #bah-bar-basepay
+    - #bah-bar-bas
+
+    - #bah-insight-list
+    - #bah-footer-note
+  ========================================================= */
+
+  const MILPAY_JSON_URL = "https://raw.githubusercontent.com/djoneorozco/OrozcoRealty/main/netlify/functions/data/militaryPayTables.json";
+  const BASE_INDEX_URL = "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/index.byBase.json";
+  const CITY_GITHUB_RAW_BASE = "https://raw.githubusercontent.com/djoneorozco/pcsunited/main/netlify/functions/cities/";
+
+  const DEFAULT_BASE = "Lackland AFB";
+  const DEFAULT_FILE_KEY = "Lackland";
+  const DEFAULT_ZIP = "78236";
+
+  let LOADED_PAY = null;
+  let BASE_INDEX = { bases: {}, aliases: {} };
+  let LAST_KEY = "";
+  let IS_LOADING = false;
+
+  const $ = (s) => document.querySelector(s);
+  const safeText = (s, v) => { const e = $(s); if (e) e.textContent = v == null ? "" : String(v); };
+  const safeHTML = (s, v) => { const e = $(s); if (e) e.innerHTML = v == null ? "" : String(v); };
+
+  const money0 = n => {
+    const x = Number(n);
+    return Number.isFinite(x) ? "$" + Math.round(x).toLocaleString() : "$0";
   };
-}
 
-function respond(event, statusCode, obj) {
-  return {
-    statusCode,
-    headers: buildCorsHeaders(event),
-    body: JSON.stringify(obj)
+  const money2 = n => {
+    const x = Number(n);
+    return Number.isFinite(x) ? "$" + x.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 }) : "$0.00";
   };
-}
 
-/* ============================================================
-  //#2) FILE LOADING
-============================================================ */
-const __ROOT = process.cwd();
+  const clamp = (n, a, b) => Math.max(a, Math.min(b, n));
 
-const PAY_TABLE_PATHS = [
-
-  path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
-  path.join(__ROOT, "netlify", "functions", "militaryPayTables.json")
-];
-
-let PAY_TABLES_CACHE = null;
-let PAY_TABLES_PATH_USED = null;
-
-function parseJsonFile(filePath, label) {
-  try {
-    const raw = fs.readFileSync(filePath, "utf8");
-    return JSON.parse(raw);
-  } catch (err) {
-    throw new Error(`${label} JSON parse failed at ${filePath}: ${String(err?.message || err)}`);
+  function pctOf(total, value) {
+    const t = Number(total || 0);
+    const v = Number(value || 0);
+    if (!Number.isFinite(t) || t <= 0 || !Number.isFinite(v)) return 0;
+    return (v / t) * 100;
   }
-}
 
-function loadPayTables() {
-  if (PAY_TABLES_CACHE) return PAY_TABLES_CACHE;
+  function esc(s) {
+    return String(s == null ? "" : s)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#39;");
+  }
 
-  let found = null;
-  for (const p of PAY_TABLE_PATHS) {
-    if (fs.existsSync(p)) {
-      found = p;
-      break;
+  async function load(url) {
+    const r = await fetch(url, { cache: "no-store" });
+    if (!r.ok) throw new Error("load fail " + url + " (" + r.status + ")");
+    const ct = (r.headers.get("content-type") || "").toLowerCase();
+    if (ct.includes("text/html")) throw new Error("non-json response " + url + " (html)");
+    return r.json();
+  }
+
+  async function loadBaseIndex() {
+    if (Object.keys(BASE_INDEX.bases || {}).length) return BASE_INDEX;
+    BASE_INDEX = await fetch(BASE_INDEX_URL, { cache: "no-store" })
+      .then(r => r.json())
+      .catch(() => ({ bases: {}, aliases: {} }));
+    return BASE_INDEX;
+  }
+
+  function idx() {
+    return BASE_INDEX || { bases: {}, aliases: {} };
+  }
+
+  function baseName(raw) {
+    const s = String(raw || "").trim();
+    if (!s) return "";
+    const i = idx();
+    const b = i.bases || {};
+    const a = i.aliases || {};
+    return b[s] ? s : (a[s] || s);
+  }
+
+  function fileKeyFromBase(raw) {
+    const rec = (idx().bases || {})[baseName(raw)];
+    return (rec && rec.file) || "";
+  }
+
+  function zipFromBase(raw) {
+    const rec = (idx().bases || {})[baseName(raw)];
+    return (rec && rec.zip) || "";
+  }
+
+  const fallbackBase = raw => baseName(raw) || DEFAULT_BASE;
+  const fallbackFileKey = raw => fileKeyFromBase(raw) || DEFAULT_FILE_KEY;
+  const fallbackZip = raw => zipFromBase(raw) || DEFAULT_ZIP;
+
+  async function loadCityExact(fileKey) {
+    const k = String(fileKey || "").trim() || DEFAULT_FILE_KEY;
+    return load(`${CITY_GITHUB_RAW_BASE}${encodeURIComponent(k)}.json`);
+  }
+
+  function normRank(r) {
+    const s = String(r || "").toUpperCase().trim();
+    const m =
+      s.match(/^([EO])\s*-\s*(\d+)$/) ||
+      s.match(/^([EO])(\d+)$/) ||
+      s.match(/^(W)\s*-\s*(\d+)$/) ||
+      s.match(/^(W)(\d+)$/);
+    return m ? m[1] + "-" + m[2] : s.replace(/\s+/g, "");
+  }
+
+  const isE = r => String(r || "").startsWith("E-");
+
+  function pickYOS(y, table) {
+    const ks = Object.keys(table || {})
+      .map(k => parseInt(k, 10))
+      .filter(n => !isNaN(n))
+      .sort((a, b) => a - b);
+
+    if (!ks.length) return String(y || 2);
+
+    let chosen = ks[0];
+    for (const k of ks) {
+      if (k <= y) chosen = k;
     }
+    return String(chosen);
   }
 
-  if (!found) {
-    throw new Error(
-      `militaryPayTables.json not found. Tried:\n- ${PAY_TABLE_PATHS.join("\n- ")}`
+  function rankTitle(rank) {
+    const map = {
+      "E-1": "Airman Basic",
+      "E-2": "Airman",
+      "E-3": "Airman First Class",
+      "E-4": "Senior Airman",
+      "E-5": "Staff Sergeant",
+      "E-6": "Technical Sergeant",
+      "E-7": "Master Sergeant",
+      "E-8": "Senior Master Sergeant",
+      "E-9": "Chief Master Sergeant",
+      "O-1": "Second Lieutenant",
+      "O-2": "First Lieutenant",
+      "O-3": "Captain",
+      "O-4": "Major",
+      "O-5": "Lieutenant Colonel",
+      "O-6": "Colonel",
+      "O-7": "Brigadier General"
+    };
+    return map[rank] || rank;
+  }
+
+  async function calcBahFromPay(pay, opts) {
+    const rankKey = normRank(opts.rank);
+    const table = (pay.BASEPAY && pay.BASEPAY[rankKey]) ? pay.BASEPAY[rankKey] : {};
+    const yKey = pickYOS(parseInt(opts.yos, 10), table);
+    const basePay = Number(table[yKey] || 0) || 0;
+    const bas = isE(rankKey)
+      ? Number((pay.BAS && pay.BAS.enlisted) || 0)
+      : Number((pay.BAS && pay.BAS.officer) || 0);
+
+    const zip = String(opts.zip || fallbackZip(opts.baseLoc) || DEFAULT_ZIP).trim();
+    const rec = (((pay || {}).BAH || {}).by_zip || {})[zip] || null;
+    const grp = (parseInt(opts.family, 10) > 1) ? (rec && rec.with) : (rec && rec.without);
+
+    let bah = 0;
+    if (grp && grp[rankKey] != null) bah = Number(grp[rankKey]) || 0;
+
+    return {
+      bah,
+      basePay,
+      bas,
+      zip,
+      rankKey,
+      yKey,
+      locationLabel: rec ? (rec.location || rec.base || opts.baseLoc || zip) : (opts.baseLoc || zip)
+    };
+  }
+
+  function readInputs() {
+    const rankRaw = ($("#bah-paygrade") && $("#bah-paygrade").value) || "E-5";
+    const yosRaw = ($("#bah-yos") && $("#bah-yos").value) || "6 Years";
+    const baseRaw = ($("#bah-location") && $("#bah-location").value) || DEFAULT_BASE;
+    const depRaw = ($("#bah-dependents") && $("#bah-dependents").value) || "With Dependents";
+
+    const rank = normRank(rankRaw);
+    const yos = parseInt(String(yosRaw).replace(/[^\d]/g, ""), 10) || 6;
+    const base = fallbackBase(baseRaw);
+    const family = String(depRaw).toLowerCase().includes("with") ? 2 : 1;
+
+    return { rank, yos, base, family };
+  }
+
+  function setBar(selector, pct) {
+    const el = $(selector);
+    if (!el) return;
+    el.style.width = clamp(Number(pct || 0), 8, 100) + "%";
+  }
+
+  function paintInsights(lines) {
+    const tones = ["cyan", "peach", "lav"];
+    safeHTML("#bah-insight-list", (lines || []).slice(0, 3).map((line, i) => `
+      <div class="insight-item">
+        <span class="insight-dot ${tones[i] || "cyan"}"></span>
+        <div class="insight-text">${esc(line)}</div>
+      </div>
+    `).join(""));
+  }
+
+  function paintLoading(payload) {
+    safeText("#bah-hero-label", "Projected Housing Support");
+    safeText("#bah-hero-value", "Calculating...");
+    const fill = $("#bah-hero-fill");
+    if (fill) fill.style.width = "40%";
+
+    safeText("#bah-info-status", "Active Duty");
+    safeText("#bah-info-dependency", payload.family > 1 ? "With Dependents" : "Without Dependents");
+    safeText("#bah-info-location", payload.base);
+    safeText("#bah-info-rank", payload.rank);
+    safeText("#bah-info-yos", payload.yos + " Years");
+
+    safeText("#bah-pay-amount", "...");
+    safeText("#bah-basepay-amount", "...");
+    safeText("#bah-total-amount", "...");
+    safeText("#bah-total-note", "Using PCS Snapshot logic");
+
+    safeText("#bah-breakdown-title", "Compensation Breakdown");
+    safeText("#bah-breakdown-bah", "...");
+    safeText("#bah-breakdown-basepay", "...");
+    safeText("#bah-breakdown-bas", "...");
+
+    setBar("#bah-bar-bah", 50);
+    setBar("#bah-bar-basepay", 50);
+    setBar("#bah-bar-bas", 20);
+
+    paintInsights([
+      "We’re calculating your estimated BAH and military pay using the same pay-table logic already used in PCS Snapshot.",
+      "This Aurora calculator is a lighter front-end view, not a separate compensation system.",
+      "If a selected base is missing from the current mapped dataset, the calculator will show a safe fallback message."
+    ]);
+
+    safeText("#bah-footer-note", "Loading estimate from the same PCS Snapshot data path.");
+  }
+
+  function paintError(message, payload) {
+    safeText("#bah-hero-label", "Projected Housing Support");
+    safeText("#bah-hero-value", "Unavailable");
+    const fill = $("#bah-hero-fill");
+    if (fill) fill.style.width = "12%";
+
+    safeText("#bah-info-status", "Active Duty");
+    safeText("#bah-info-dependency", payload.family > 1 ? "With Dependents" : "Without Dependents");
+    safeText("#bah-info-location", payload.base || "—");
+    safeText("#bah-info-rank", payload.rank || "—");
+    safeText("#bah-info-yos", (payload.yos || 0) + " Years");
+
+    safeText("#bah-pay-amount", "$0");
+    safeText("#bah-basepay-amount", "$0");
+    safeText("#bah-total-amount", "$0");
+    safeText("#bah-total-note", "Unable to calculate");
+
+    safeText("#bah-breakdown-title", "Compensation Breakdown");
+    safeText("#bah-breakdown-bah", "$0");
+    safeText("#bah-breakdown-basepay", "$0");
+    safeText("#bah-breakdown-bas", "$0");
+
+    setBar("#bah-bar-bah", 10);
+    setBar("#bah-bar-basepay", 10);
+    setBar("#bah-bar-bas", 10);
+
+    paintInsights([
+      message || "We could not calculate this estimate.",
+      "This usually means the selected base is not mapped yet, or the pay-table source could not be loaded.",
+      "The calculator is intentionally using the same PCS Snapshot source logic to keep results consistent."
+    ]);
+
+    safeText("#bah-footer-note", "Calculator temporarily unavailable. Check source data or base mapping.");
+  }
+
+  async function paintSuccess(payload, pay) {
+    const cityFileKey = fallbackFileKey(payload.base);
+    let city = null;
+
+    try {
+      city = await loadCityExact(cityFileKey);
+    } catch (e) {
+      city = null;
+    }
+
+    const result = await calcBahFromPay(pay, {
+      rank: payload.rank,
+      yos: payload.yos,
+      family: payload.family,
+      baseLoc: payload.base,
+      zip: fallbackZip(payload.base)
+    });
+
+    const bah = Number(result.bah || 0);
+    const basePay = Number(result.basePay || 0);
+    const bas = Number(result.bas || 0);
+    const total = Number((bah + basePay + bas).toFixed(2));
+
+    const locationLabel =
+      (city && (city.place || city.city || city.name)) ||
+      result.locationLabel ||
+      payload.base;
+
+    safeText("#bah-hero-label", "Projected Housing Support");
+    safeText("#bah-hero-value", money0(bah) + " / month");
+    const fill = $("#bah-hero-fill");
+    if (fill) fill.style.width = clamp(Math.round(pctOf(total || 1, bah)), 18, 90) + "%";
+
+    safeText("#bah-info-status", "Active Duty");
+    safeText("#bah-info-dependency", payload.family > 1 ? "With Dependents" : "Without Dependents");
+    safeText("#bah-info-location", locationLabel);
+    safeText("#bah-info-rank", payload.rank + " • " + rankTitle(payload.rank));
+    safeText("#bah-info-yos", payload.yos + " Years");
+
+    safeText("#bah-pay-amount", money0(bah));
+    safeText("#bah-basepay-amount", money0(basePay));
+    safeText("#bah-total-amount", money2(total));
+    safeText("#bah-total-note", "Includes BAS of " + money2(bas));
+
+    safeText("#bah-breakdown-title", "Compensation Breakdown");
+    safeText("#bah-breakdown-bah", money0(bah));
+    safeText("#bah-breakdown-basepay", money0(basePay));
+    safeText("#bah-breakdown-bas", money2(bas));
+
+    setBar("#bah-bar-bah", pctOf(total, bah));
+    setBar("#bah-bar-basepay", pctOf(total, basePay));
+    setBar("#bah-bar-bas", pctOf(total, bas));
+
+    const lines = [
+      `${rankTitle(payload.rank)} at ${payload.yos} years of service is estimated at ${money0(basePay)} in monthly base pay.`,
+      `Projected BAH for ${locationLabel} (${result.zip}) is ${money0(bah)} ${payload.family > 1 ? "with dependents" : "without dependents"}.`,
+      `Estimated monthly military compensation is ${money2(total)}, including BAS of ${money2(bas)}.`
+    ];
+
+    paintInsights(lines);
+
+    safeText(
+      "#bah-footer-note",
+      `Estimate generated using PCS Snapshot logic and militaryPayTables.json for ${payload.base}.`
     );
   }
 
-  PAY_TABLES_CACHE = parseJsonFile(found, "militaryPayTables");
-  PAY_TABLES_PATH_USED = found;
-  return PAY_TABLES_CACHE;
-}
+  async function bootRun() {
+    const payload = readInputs();
+    const key = JSON.stringify(payload);
+    if (IS_LOADING && key === LAST_KEY) return;
 
-/* ============================================================
-  //#3) HELPERS
-============================================================ */
-function toInt(x) {
-  const n = Number.parseInt(String(x ?? "").trim(), 10);
-  return Number.isFinite(n) ? n : null;
-}
+    LAST_KEY = key;
+    IS_LOADING = true;
+    paintLoading(payload);
 
-function toNum(x) {
-  const n = Number(String(x ?? "").trim());
-  return Number.isFinite(n) ? n : null;
-}
-
-function normalizeRank(rank) {
-  const r = String(rank || "").trim().toUpperCase();
-  const m = r.match(/^([EO]|W)\s*-?\s*(\d{1,2})$/);
-  if (m) return `${m[1]}-${m[2]}`;
-  return r;
-}
-
-function normalizeBaseName(s) {
-  return String(s || "")
-    .trim()
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "");
-}
-
-function boolFamily(v) {
-  if (v === true) return true;
-  if (v === false) return false;
-  const s = String(v ?? "").trim().toLowerCase();
-  if (["true", "1", "yes", "with", "with dependents"].includes(s)) return true;
-  if (["false", "0", "no", "without", "without dependents"].includes(s)) return false;
-  return false;
-}
-
-function pickNearestYos(tableForRank, yos) {
-  const keys = Object.keys(tableForRank || {})
-    .map((k) => Number(k))
-    .filter((n) => Number.isFinite(n))
-    .sort((a, b) => a - b);
-
-  if (!keys.length) return null;
-
-  let chosen = keys[0];
-  for (const k of keys) {
-    if (k <= yos) chosen = k;
-  }
-
-  return tableForRank[String(chosen)] ?? null;
-}
-
-function rankTitle(rank) {
-  const map = {
-    "E-1": "Airman Basic",
-    "E-2": "Airman",
-    "E-3": "Airman First Class",
-    "E-4": "Senior Airman",
-    "E-5": "Staff Sergeant",
-    "E-6": "Technical Sergeant",
-    "E-7": "Master Sergeant",
-    "E-8": "Senior Master Sergeant",
-    "E-9": "Chief Master Sergeant",
-    "O-1": "Second Lieutenant",
-    "O-2": "First Lieutenant",
-    "O-3": "Captain",
-    "O-4": "Major",
-    "O-5": "Lieutenant Colonel",
-    "O-6": "Colonel",
-    "O-7": "Brigadier General",
-    "W-1": "Warrant Officer 1",
-    "W-2": "Chief Warrant Officer 2",
-    "W-3": "Chief Warrant Officer 3",
-    "W-4": "Chief Warrant Officer 4",
-    "W-5": "Chief Warrant Officer 5"
-  };
-  return map[rank] || rank;
-}
-
-function buildBaseToZipMap(payTables) {
-  const raw =
-    payTables?.BAH?.base_to_zip ||
-    payTables?.BAH?.baseToZip ||
-    {};
-
-  const map = new Map();
-
-  for (const [key, value] of Object.entries(raw)) {
-    const nk = normalizeBaseName(key);
-    const zip = String(value || "").trim();
-    if (nk && zip) map.set(nk, zip);
-  }
-
-  return map;
-}
-
-function resolveZipFromBase(base, payTables) {
-  const map = buildBaseToZipMap(payTables);
-  const norm = normalizeBaseName(base);
-  return map.get(norm) || null;
-}
-
-function computeBasePay(rank, yos, payTables) {
-  const tableForRank = payTables?.BASEPAY?.[rank];
-  if (!tableForRank) {
-    throw new Error(`No BASEPAY table found for rank ${rank}`);
-  }
-
-  const value = pickNearestYos(tableForRank, yos);
-  if (value == null) {
-    throw new Error(`No BASEPAY value found for rank ${rank} and YOS ${yos}`);
-  }
-
-  return Number(value) || 0;
-}
-
-function computeBAS(rank, payTables) {
-  const isOfficer = /^O-/.test(rank);
-  const bas = isOfficer
-    ? payTables?.BAS?.officer
-    : payTables?.BAS?.enlisted;
-
-  return Number(bas || 0);
-}
-
-function computeBAH(rank, zip, family, payTables) {
-  const zipBlock = payTables?.BAH?.by_zip?.[zip];
-  if (!zipBlock) {
-    throw new Error(`No BAH data found for ZIP ${zip}`);
-  }
-
-  const bucket = family ? zipBlock?.with : zipBlock?.without;
-  if (!bucket) {
-    throw new Error(`No BAH ${family ? "with" : "without"} dependent bucket for ZIP ${zip}`);
-  }
-
-  const value = bucket?.[rank];
-  if (value == null) {
-    throw new Error(`No BAH found for rank ${rank} at ZIP ${zip}`);
-  }
-
-  return {
-    bah: Number(value) || 0,
-    locationLabel: String(zipBlock?.location || zipBlock?.base || zip).trim(),
-    mha: String(zipBlock?.mha || "").trim() || null,
-    zipBlock
-  };
-}
-
-/* ============================================================
-  //#4) VALIDATION
-============================================================ */
-function validateInputs({ rank, yos, base }) {
-  if (!rank) throw new Error("Rank missing.");
-  if (yos === null || yos < 0) throw new Error("Years of service missing or invalid.");
-  if (!base) throw new Error("Base missing.");
-}
-
-/* ============================================================
-  //#5) HANDLER
-============================================================ */
-exports.handler = async function handler(event) {
-  try {
-    if (event.httpMethod === "OPTIONS") {
-      return {
-        statusCode: 204,
-        headers: buildCorsHeaders(event),
-        body: ""
-      };
-    }
-
-    if (event.httpMethod === "GET") {
-      return respond(event, 200, {
-        ok: true,
-        note: "POST JSON: { rank, yos, base, family }",
-        payTablesPathUsed: PAY_TABLES_PATH_USED || null
-      });
-    }
-
-    if (event.httpMethod !== "POST") {
-      return respond(event, 405, {
-        ok: false,
-        error: "Method not allowed."
-      });
-    }
-
-    let body = {};
     try {
-      body = JSON.parse(event.body || "{}");
+      await loadBaseIndex();
+      if (!LOADED_PAY) LOADED_PAY = await load(MILPAY_JSON_URL);
+      await paintSuccess(payload, LOADED_PAY);
     } catch (err) {
-      return respond(event, 400, {
-        ok: false,
-        error: "Invalid JSON body."
-      });
+      console.error("Aurora BAH Calculator error:", err);
+      paintError(err && err.message ? err.message : "Unable to calculate estimate.", payload);
+    } finally {
+      IS_LOADING = false;
     }
+  }
 
-    const payTables = loadPayTables();
-
-    const rank = normalizeRank(body.rank);
-    const yos = toInt(body.yos);
-    const base = String(body.base || "").trim();
-    const family = boolFamily(body.family);
-
-    validateInputs({ rank, yos, base });
-
-    const zip = resolveZipFromBase(base, payTables);
-    if (!zip) {
-      return respond(event, 400, {
-        ok: false,
-        error: `Base "${base}" is not mapped to a ZIP in BAH.base_to_zip.`,
-        debug: {
-          rank,
-          yos,
-          base,
-          family,
-          payTablesPathUsed: PAY_TABLES_PATH_USED
-        }
-      });
-    }
-
-    const basePay = computeBasePay(rank, yos, payTables);
-    const bas = computeBAS(rank, payTables);
-    const bahInfo = computeBAH(rank, zip, family, payTables);
-    const bah = bahInfo.bah;
-    const total = Number((basePay + bas + bah).toFixed(2));
-
-    return respond(event, 200, {
-      ok: true,
-      rank,
-      rankTitle: rankTitle(rank),
-      yos,
-      base,
-      zip,
-      family,
-      basePay: Number(basePay.toFixed(2)),
-      bah: Number(bah.toFixed(2)),
-      bas: Number(bas.toFixed(2)),
-      total,
-      locationLabel: bahInfo.locationLabel,
-      mha: bahInfo.mha,
-      debug: {
-        payTablesPathUsed: PAY_TABLES_PATH_USED,
-        familyBucket: family ? "with" : "without"
-      }
-    });
-  } catch (err) {
-    return respond(event, 500, {
-      ok: false,
-      error: String(err?.message || err),
-      debug: {
-        payTablesPathUsed: PAY_TABLES_PATH_USED || null
-      }
+  function bind() {
+    ["#bah-paygrade", "#bah-yos", "#bah-location", "#bah-dependents"].forEach(sel => {
+      const el = $(sel);
+      if (el) el.addEventListener("change", bootRun);
     });
   }
-};
+
+  function boot() {
+    bind();
+    bootRun();
+    window.PCSU_AURORA_BAH = {
+      run: bootRun,
+      reloadPayTables: async function () {
+        LOADED_PAY = await load(MILPAY_JSON_URL);
+        return LOADED_PAY;
+      }
+    };
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", boot, { once: true });
+  } else {
+    boot();
+  }
+})();
+</script>

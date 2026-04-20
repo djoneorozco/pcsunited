@@ -89,8 +89,9 @@ function respond(event, statusCode, obj) {
 const __ROOT = process.cwd();
 
 const PAY_TABLE_PATHS = [
-  path.join(__ROOT, "netlify", "functions", "militaryPayTables.json"),
-  path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json")
+
+  path.join(__ROOT, "netlify", "functions", "data", "militaryPayTables.json"),
+  path.join(__ROOT, "netlify", "functions", "militaryPayTables.json")
 ];
 
 let PAY_TABLES_CACHE = null;

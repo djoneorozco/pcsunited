@@ -1294,6 +1294,7 @@
       }
     }
   };
+  
   function listSupportedBases() {
     return Object.keys(BAH_2026_BY_BASE);
   }

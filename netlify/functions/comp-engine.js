@@ -1,7 +1,7 @@
 // comp-engine.js
 // ============================================================
 // PCSUnited • Compensation Engine
-// v1.0.0
+// v1.0.1
 //
 // PURPOSE
 // - Modular orchestration layer for PCSUnited financial calculations
@@ -50,7 +50,7 @@
 ) {
   "use strict";
 
-  const ENGINE_VERSION = "pcsu-comp-engine-1.0.0";
+  const ENGINE_VERSION = "pcsu-comp-engine-1.0.1";
 
   // ============================================================
   // //#1) DEPENDENCY CHECKS
@@ -114,6 +114,51 @@
     };
   }
 
+  function getPayRecordFromOfficialPay(rank, yearsOfService) {
+    if (typeof OFFICIAL_PAY.getPayRecord2026 === "function") {
+      return OFFICIAL_PAY.getPayRecord2026(rank, yearsOfService);
+    }
+
+    if (typeof OFFICIAL_PAY.getPayRecord === "function") {
+      return OFFICIAL_PAY.getPayRecord(rank, yearsOfService);
+    }
+
+    if (typeof OFFICIAL_PAY.getPay === "function") {
+      return OFFICIAL_PAY.getPay({
+        rank: rank,
+        yearsOfService: yearsOfService
+      });
+    }
+
+    throw new Error("official-pay.js does not expose a supported pay lookup function.");
+  }
+
+  function extractBasicPayMonthly(payRecord) {
+    return round2(
+      payRecord.basicPayMonthly ??
+      payRecord.monthlyBasePay ??
+      payRecord.basicPay ??
+      0
+    );
+  }
+
+  function extractBASMonthly(payRecord) {
+    return round2(
+      payRecord.basMonthly ??
+      payRecord.monthlyBAS ??
+      payRecord.bas ??
+      0
+    );
+  }
+
+  function extractYearsOfService(payRecord, fallback) {
+    return payRecord.yearsOfService ?? fallback;
+  }
+
+  function extractRank(payRecord, fallback) {
+    return payRecord.rank ?? fallback;
+  }
+
   // ============================================================
   // //#3) ACTIVE DUTY MONTHLY COMP
   // ============================================================
@@ -133,12 +178,14 @@
     if (!Number.isFinite(yearsOfService)) throw new Error("yos / yearsOfService is required.");
     if (!base) throw new Error("base is required.");
 
-    const payRecord = OFFICIAL_PAY.getPayRecord2026(rank, yearsOfService);
-    const bahAmount = OFFICIAL_BAH.getBAH(base, rank, dependents);
+    const payRecord = getPayRecordFromOfficialPay(rank, yearsOfService);
 
-    const basicPayMonthly = round2(payRecord.basicPayMonthly);
-    const basMonthly = round2(payRecord.basMonthly);
-    const bahMonthly = round2(bahAmount);
+    const bahResult = OFFICIAL_BAH.getBAH(base, rank, dependents);
+    const bahRecord = OFFICIAL_BAH.getBahRecord(base, rank);
+
+    const basicPayMonthly = extractBasicPayMonthly(payRecord);
+    const basMonthly = extractBASMonthly(payRecord);
+    const bahMonthly = round2(bahResult && bahResult.bah);
 
     const grossMonthlyComp = round2(
       basicPayMonthly + basMonthly + bahMonthly
@@ -147,8 +194,8 @@
     return {
       lane: "ACTIVE_DUTY",
       mode: "ACTIVE_DUTY",
-      rank: payRecord.rank,
-      yearsOfService: payRecord.yearsOfService,
+      rank: extractRank(payRecord, rank),
+      yearsOfService: extractYearsOfService(payRecord, yearsOfService),
       base: OFFICIAL_BAH.canonicalizeBase(base),
       dependents,
       monthly: {
@@ -159,7 +206,8 @@
       },
       detail: {
         dutyZip: OFFICIAL_BAH.getDutyZip(base),
-        bahRecord: OFFICIAL_BAH.getBahRecord(base, rank),
+        bahRecord: bahRecord,
+        bahLookup: bahResult,
         payRecord: payRecord
       },
       sourceVersions: getSourceVersions()
@@ -283,7 +331,6 @@
     }
 
     if (mode === "VETERAN") {
-      // Veteran can be VA-only or retired+VA depending on whether retirement data is present
       const hasRetirementSystem = !!normalizeString(input.retirementSystem);
       const hasRetirementBase =
         Array.isArray(input.high36MonthlyArray) ||

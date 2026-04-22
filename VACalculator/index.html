@@ -69,7 +69,7 @@
           <h2 class="panel-title">About the Retirement &amp; VA Calculator</h2>
           <div class="panel-rule"></div>
           <p>
-            PCSUnited’s Retirement &amp; VA Disability Pay Calculator gives military users a fast estimate
+            PCSUnited’s Retirement &amp; VA Disability Pay Calculator gives military users a quick estimate
             of post-service monthly income by combining projected retirement pay and estimated VA disability compensation.
           </p>
           <p>
@@ -123,7 +123,7 @@
               <div class="select-wrap">
                 <select id="retva-system">
                   <option selected>High-3</option>
-                  <option>Blended Retirement System</option>
+                  <option>BRS</option>
                 </select>
               </div>
             </div>
@@ -159,8 +159,8 @@
                 <select id="retva-household">
                   <option>Veteran Alone</option>
                   <option selected>Veteran + Spouse</option>
-                  <option>Veteran + Spouse + Child</option>
                   <option>Veteran + Child</option>
+                  <option>Veteran + Spouse + Child</option>
                 </select>
               </div>
             </div>
@@ -207,20 +207,20 @@
 
         <!-- //#10) MAIN GRID -->
         <div class="main-grid">
-          <!-- //#10A) LEFT PANEL -->
+          <!-- //#10A) LEFT PANEL : PAY ESTIMATE + INSIGHT -->
           <section class="panel glass">
             <h2 class="panel-title">Pay Estimate</h2>
             <div class="panel-rule"></div>
 
-            <!-- hidden info block kept for JS/runtime continuity -->
+            <!-- hidden runtime fields -->
             <div id="retva-info-panel" style="display:none;">
               <div id="retva-info-rank">E-6</div>
               <div id="retva-info-yos">22 Years</div>
-              <div id="retva-info-system">High-3</div>
+              <div id="retva-info-system">HIGH3</div>
               <div id="retva-info-disability">90%</div>
               <div id="retva-info-household">Veteran + Spouse</div>
-              <div id="retva-info-lane">Retirement + VA Combined</div>
-              <div id="retva-info-concurrent">Estimated CRDP Eligible</div>
+              <div id="retva-info-lane">RETIREMENT + VA COMBINED</div>
+              <div id="retva-info-concurrent">ESTIMATED CRDP ELIGIBLE</div>
             </div>
 
             <div class="calc-card pay-estimate-card">
@@ -283,7 +283,7 @@
             </ul>
           </section>
 
-          <!-- //#10B) RIGHT PANEL -->
+          <!-- //#10B) RIGHT PANEL : GRAPH / RING MOVED UP -->
           <section class="panel glass">
             <div class="chart-zone">
               <div class="bars breakdown-bars" id="retva-breakdown-rows">

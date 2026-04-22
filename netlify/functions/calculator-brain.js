@@ -2,7 +2,7 @@
 // ============================================================
 // PCSUnited • Calculator Brain
 // Netlify Function Endpoint
-// v1.0.0
+// v1.0.1
 //
 // PURPOSE
 // - Calculator-only serverless endpoint for PCSUnited quick calculators
@@ -25,7 +25,7 @@ const OFFICIAL_BAH = require("./official-bah");
 const OFFICIAL_RETIREMENT = require("./official-retirement");
 const OFFICIAL_VA = require("./official-va");
 
-const BRAIN_VERSION = "pcsu-calculator-brain-1.0.0";
+const BRAIN_VERSION = "pcsu-calculator-brain-1.0.1";
 const ALLOW_ORIGIN = "*";
 
 function json(statusCode, body) {
@@ -65,15 +65,13 @@ function round2(value) {
 
 function inferToolName(toolName) {
   const s = normalizeUpper(toolName || "GENERIC");
-  return [
-    "BAH_BASE_PAY",
-    "RETIREMENT",
-    "VA_DISABILITY",
-    "RETIREMENT_VA",
-    "GENERIC"
-  ].includes(s)
-    ? s
-    : "GENERIC";
+
+  if (s === "BAH_BASE_PAY") return "BAH_BASE_PAY";
+  if (s === "RETIREMENT") return "RETIREMENT";
+  if (s === "VA_DISABILITY") return "VA_DISABILITY";
+  if (s === "RETIREMENT_VA") return "RETIREMENT_VA";
+
+  return "GENERIC";
 }
 
 function sourceVersions() {
@@ -117,184 +115,244 @@ function normalizeRetirementSystem(retirementSystem) {
 
 function normalizeDependents(input) {
   const s = normalizeUpper(input);
-  return ["TRUE", "1", "YES", "Y", "WITH", "WITH_DEPENDENTS", "DEPENDENTS", "HAS_DEPENDENTS"].includes(s)
+
+  return [
+    "TRUE",
+    "1",
+    "YES",
+    "Y",
+    "WITH",
+    "WITH_DEPENDENTS",
+    "DEPENDENTS",
+    "HAS_DEPENDENTS"
+  ].includes(s)
     ? "with"
     : "without";
 }
 
+const BASE_ALIASES = Object.freeze({
+  "ANDREWS": "Andrews AFB",
+  "ANDREWSAFB": "Andrews AFB",
+  "ANDREWS AFB": "Andrews AFB",
+  "JOINT BASE ANDREWS": "Andrews AFB",
+  "JB ANDREWS": "Andrews AFB",
+
+  "BARKSDALE": "Barksdale AFB",
+  "BARKSDALEAFB": "Barksdale AFB",
+  "BARKSDALE AFB": "Barksdale AFB",
+
+  "BEALE": "Beale AFB",
+  "BEALEAFB": "Beale AFB",
+  "BEALE AFB": "Beale AFB",
+
+  "CANNON": "Cannon AFB",
+  "CANNONAFB": "Cannon AFB",
+  "CANNON AFB": "Cannon AFB",
+
+  "CHARLESTON": "Charleston AFB",
+  "CHARLESTONAFB": "Charleston AFB",
+  "CHARLESTON AFB": "Charleston AFB",
+  "JOINT BASE CHARLESTON": "Charleston AFB",
+
+  "DAVIS-MONTHAN": "Davis-Monthan AFB",
+  "DAVISMONTHAN": "Davis-Monthan AFB",
+  "DAVISMONTHANAFB": "Davis-Monthan AFB",
+  "DAVIS-MONTHAN AFB": "Davis-Monthan AFB",
+  "DMAFB": "Davis-Monthan AFB",
+
+  "DOVER": "Dover AFB",
+  "DOVERAFB": "Dover AFB",
+  "DOVER AFB": "Dover AFB",
+
+  "DYESS": "Dyess AFB",
+  "DYESSAFB": "Dyess AFB",
+  "DYESS AFB": "Dyess AFB",
+
+  "EGLIN": "Eglin AFB",
+  "EGLINAFB": "Eglin AFB",
+  "EGLIN AFB": "Eglin AFB",
+
+  "ELMENDORF": "Elmendorf AFB",
+  "ELMENDORFAFB": "Elmendorf AFB",
+  "ELMENDORF AFB": "Elmendorf AFB",
+  "JOINT BASE ELMENDORF-RICHARDSON": "Elmendorf AFB",
+  "JBER": "Elmendorf AFB",
+
+  "F.E-WARREN": "F.E-Warren AFB",
+  "FE-WARREN": "F.E-Warren AFB",
+  "FEWARREN": "F.E-Warren AFB",
+  "FEWARRENAFB": "F.E-Warren AFB",
+  "F E WARREN": "F.E-Warren AFB",
+  "F.E-WARREN AFB": "F.E-Warren AFB",
+
+  "FAIRCHILD": "Fairchild AFB",
+  "FAIRCHILDAFB": "Fairchild AFB",
+  "FAIRCHILD AFB": "Fairchild AFB",
+
+  "FORT-SAM-HOUSTON": "Fort-Sam-Houston AFB",
+  "FORT SAM HOUSTON": "Fort-Sam-Houston AFB",
+  "FORTSAMHOUSTON": "Fort-Sam-Houston AFB",
+  "FORTSAMHOUSTONAFB": "Fort-Sam-Houston AFB",
+  "FORT SAM HOUSTON AFB": "Fort-Sam-Houston AFB",
+  "JBSA-FORT-SAM-HOUSTON": "Fort-Sam-Houston AFB",
+  "JBSA FORT SAM HOUSTON": "Fort-Sam-Houston AFB",
+
+  "HOLLOMAN": "Holloman AFB",
+  "HOLLOMANAFB": "Holloman AFB",
+  "HOLLOMAN AFB": "Holloman AFB",
+
+  "HURLBURT": "Hurlburt AFB",
+  "HURLBURTAFB": "Hurlburt AFB",
+  "HURLBURT AFB": "Hurlburt AFB",
+  "HURLBURT FIELD": "Hurlburt AFB",
+
+  "KEESLER": "Keesler AFB",
+  "KEESLERAFB": "Keesler AFB",
+  "KEESLER AFB": "Keesler AFB",
+
+  "KIRTLAND": "Kirtland AFB",
+  "KIRTLANDAFB": "Kirtland AFB",
+  "KIRTLAND AFB": "Kirtland AFB",
+
+  "LACKLAND": "Lackland AFB",
+  "LACKLANDAFB": "Lackland AFB",
+  "LACKLAND AFB": "Lackland AFB",
+  "JBSA-LACKLAND": "Lackland AFB",
+  "JBSA LACKLAND": "Lackland AFB",
+  "JOINT BASE SAN ANTONIO LACKLAND": "Lackland AFB",
+
+  "LANGLEY": "Langley AFB",
+  "LANGLEYAFB": "Langley AFB",
+  "LANGLEY AFB": "Langley AFB",
+  "JOINT BASE LANGLEY-EUSTIS": "Langley AFB",
+
+  "LAUGHLIN": "Laughlin AFB",
+  "LAUGHLINAFB": "Laughlin AFB",
+  "LAUGHLIN AFB": "Laughlin AFB",
+
+  "LITTLE-ROCK": "Little-Rock AFB",
+  "LITTLEROCK": "Little-Rock AFB",
+  "LITTLEROCKAFB": "Little-Rock AFB",
+  "LITTLE ROCK": "Little-Rock AFB",
+  "LITTLE ROCK AFB": "Little-Rock AFB",
+
+  "LUKE": "Luke AFB",
+  "LUKEAFB": "Luke AFB",
+  "LUKE AFB": "Luke AFB",
+
+  "MACDILL": "MacDill AFB",
+  "MACDILLAFB": "MacDill AFB",
+  "MACDILL AFB": "MacDill AFB",
+
+  "MALMSTROM": "Malmstrom AFB",
+  "MALMSTROMAFB": "Malmstrom AFB",
+  "MALMSTROM AFB": "Malmstrom AFB",
+
+  "MAXWELL": "Maxwell AFB",
+  "MAXWELLAFB": "Maxwell AFB",
+  "MAXWELL AFB": "Maxwell AFB",
+
+  "MCCONNELL": "McConnell AFB",
+  "MCCONNELLAFB": "McConnell AFB",
+  "MCCONNELL AFB": "McConnell AFB",
+
+  "MCGUIRE": "McGuire AFB",
+  "MCGUIREAFB": "McGuire AFB",
+  "MCGUIRE AFB": "McGuire AFB",
+  "JOINT BASE MCGUIRE-DIX-LAKEHURST": "McGuire AFB",
+  "JBMDL": "McGuire AFB",
+
+  "MINOT": "Minot AFB",
+  "MINOTAFB": "Minot AFB",
+  "MINOT AFB": "Minot AFB",
+
+  "MOODY": "Moody AFB",
+  "MOODYAFB": "Moody AFB",
+  "MOODY AFB": "Moody AFB",
+
+  "MOUNTAIN-HOME": "Mountain-Home AFB",
+  "MOUNTAINHOME": "Mountain-Home AFB",
+  "MOUNTAIN HOME": "Mountain-Home AFB",
+  "MOUNTAINHOMEAFB": "Mountain-Home AFB",
+  "MOUNTAIN HOME AFB": "Mountain-Home AFB",
+
+  "NELLIS": "Nellis AFB",
+  "NELLISAFB": "Nellis AFB",
+  "NELLIS AFB": "Nellis AFB",
+
+  "OFFUTT": "Offutt AFB",
+  "OFFUTTAFB": "Offutt AFB",
+  "OFFUTT AFB": "Offutt AFB",
+
+  "PETERSON": "Peterson AFB",
+  "PETERSONAFB": "Peterson AFB",
+  "PETERSON AFB": "Peterson AFB",
+  "PETERSON SPACE FORCE BASE": "Peterson AFB",
+  "PETERSON SFB": "Peterson AFB",
+
+  "RANDOLPH": "Randolph AFB",
+  "RANDOLPHAFB": "Randolph AFB",
+  "RANDOLPH AFB": "Randolph AFB",
+  "JBSA-RANDOLPH": "Randolph AFB",
+  "JBSA RANDOLPH": "Randolph AFB",
+  "JOINT BASE SAN ANTONIO RANDOLPH": "Randolph AFB",
+
+  "ROBINS": "Robins AFB",
+  "ROBINSAFB": "Robins AFB",
+  "ROBINS AFB": "Robins AFB",
+
+  "SCOTT": "Scott AFB",
+  "SCOTTAFB": "Scott AFB",
+  "SCOTT AFB": "Scott AFB",
+
+  "SEYMOUR-JOHNSON": "Seymour-Johnson AFB",
+  "SEYMOURJOHNSON": "Seymour-Johnson AFB",
+  "SEYMOURJOHNSONAFB": "Seymour-Johnson AFB",
+  "SEYMOUR-JOHNSON AFB": "Seymour-Johnson AFB",
+
+  "SHAW": "Shaw AFB",
+  "SHAWAFB": "Shaw AFB",
+  "SHAW AFB": "Shaw AFB",
+
+  "SHEPPARD": "Sheppard AFB",
+  "SHEPPARDAFB": "Sheppard AFB",
+  "SHEPPARD AFB": "Sheppard AFB",
+
+  "TINKER": "Tinker AFB",
+  "TINKERAFB": "Tinker AFB",
+  "TINKER AFB": "Tinker AFB",
+
+  "TRAVIS": "Travis AFB",
+  "TRAVISAFB": "Travis AFB",
+  "TRAVIS AFB": "Travis AFB",
+
+  "TYNDALL": "Tyndall AFB",
+  "TYNDALLAFB": "Tyndall AFB",
+  "TYNDALL AFB": "Tyndall AFB",
+
+  "WHITEMAN": "Whiteman AFB",
+  "WHITEMANAFB": "Whiteman AFB",
+  "WHITEMAN AFB": "Whiteman AFB",
+
+  "WRIGHT-PATTERSON": "Wright-Patterson AFB",
+  "WRIGHTPATTERSON": "Wright-Patterson AFB",
+  "WRIGHTPATTERSONAFB": "Wright-Patterson AFB",
+  "WRIGHT-PATTERSON AFB": "Wright-Patterson AFB",
+  "WPAFB": "Wright-Patterson AFB"
+});
+
 function canonicalizeBase(base) {
   const raw = normalizeString(base);
+  const key = normalizeUpper(raw);
 
-  const aliases = {
-   "Andrews": "Andrews AFB",
-    "AndrewsAFB": "Andrews AFB",
-    "Joint Base Andrews": "Andrews AFB",
-    "JB Andrews": "Andrews AFB",
+  if (!raw) return "";
+  if (typeof OFFICIAL_BAH.canonicalizeBase === "function") {
+    try {
+      return OFFICIAL_BAH.canonicalizeBase(raw);
+    } catch (_err) {}
+  }
 
-    "Barksdale": "Barksdale AFB",
-    "BarksdaleAFB": "Barksdale AFB",
-
-    "Beale": "Beale AFB",
-    "BealeAFB": "Beale AFB",
-
-    "Cannon": "Cannon AFB",
-    "CannonAFB": "Cannon AFB",
-
-    "Charleston": "Charleston AFB",
-    "CharlestonAFB": "Charleston AFB",
-    "Joint Base Charleston": "Charleston AFB",
-
-    "Davis-Monthan": "Davis-Monthan AFB",
-    "DavisMonthan": "Davis-Monthan AFB",
-    "DavisMonthanAFB": "Davis-Monthan AFB",
-    "DMAFB": "Davis-Monthan AFB",
-
-    "Dover": "Dover AFB",
-    "DoverAFB": "Dover AFB",
-
-    "Dyess": "Dyess AFB",
-    "DyessAFB": "Dyess AFB",
-
-    "Eglin": "Eglin AFB",
-    "EglinAFB": "Eglin AFB",
-
-    "Elmendorf": "Elmendorf AFB",
-    "ElmendorfAFB": "Elmendorf AFB",
-    "Joint Base Elmendorf-Richardson": "Elmendorf AFB",
-    "JBER": "Elmendorf AFB",
-
-    "F.E-Warren": "F.E-Warren AFB",
-    "FEWarren": "F.E-Warren AFB",
-    "FEWarrenAFB": "F.E-Warren AFB",
-    "F E Warren": "F.E-Warren AFB",
-
-    "Fairchild": "Fairchild AFB",
-    "FairchildAFB": "Fairchild AFB",
-
-    "Fort-Sam-Houston": "Fort-Sam-Houston AFB",
-    "FortSamHouston": "Fort-Sam-Houston AFB",
-    "Fort Sam Houston": "Fort-Sam-Houston AFB",
-    "FortSamHoustonAFB": "Fort-Sam-Houston AFB",
-    "Fort Sam Houston AFB": "Fort-Sam-Houston AFB",
-    "JBSA-Fort-Sam-Houston": "Fort-Sam-Houston AFB",
-    "JBSA Fort Sam Houston": "Fort-Sam-Houston AFB",
-
-    "Holloman": "Holloman AFB",
-    "HollomanAFB": "Holloman AFB",
-
-    "Hurlburt": "Hurlburt AFB",
-    "HurlburtAFB": "Hurlburt AFB",
-    "Hurlburt Field": "Hurlburt AFB",
-
-    "Keesler": "Keesler AFB",
-    "KeeslerAFB": "Keesler AFB",
-
-    "Kirtland": "Kirtland AFB",
-    "KirtlandAFB": "Kirtland AFB",
-
-    "Lackland": "Lackland AFB",
-    "LacklandAFB": "Lackland AFB",
-    "JBSA-Lackland": "Lackland AFB",
-    "JBSA Lackland": "Lackland AFB",
-    "Joint Base San Antonio Lackland": "Lackland AFB",
-
-    "Langley": "Langley AFB",
-    "LangleyAFB": "Langley AFB",
-    "Joint Base Langley-Eustis": "Langley AFB",
-
-    "Laughlin": "Laughlin AFB",
-    "LaughlinAFB": "Laughlin AFB",
-
-    "Little-Rock": "Little-Rock AFB",
-    "LittleRock": "Little-Rock AFB",
-    "LittleRockAFB": "Little-Rock AFB",
-    "Little Rock": "Little-Rock AFB",
-    "Little Rock AFB": "Little-Rock AFB",
-
-    "Luke": "Luke AFB",
-    "LukeAFB": "Luke AFB",
-
-    "MacDill": "MacDill AFB",
-    "MacDillAFB": "MacDill AFB",
-
-    "Malmstrom": "Malmstrom AFB",
-    "MalmstromAFB": "Malmstrom AFB",
-
-    "Maxwell": "Maxwell AFB",
-    "MaxwellAFB": "Maxwell AFB",
-
-    "McConnell": "McConnell AFB",
-    "McConnellAFB": "McConnell AFB",
-
-    "McGuire": "McGuire AFB",
-    "McGuireAFB": "McGuire AFB",
-    "Joint Base McGuire-Dix-Lakehurst": "McGuire AFB",
-    "JBMDL": "McGuire AFB",
-
-    "Minot": "Minot AFB",
-    "MinotAFB": "Minot AFB",
-
-    "Moody": "Moody AFB",
-    "MoodyAFB": "Moody AFB",
-
-    "Mountain-Home": "Mountain-Home AFB",
-    "MountainHome": "Mountain-Home AFB",
-    "Mountain Home": "Mountain-Home AFB",
-    "MountainHomeAFB": "Mountain-Home AFB",
-    "Mountain Home AFB": "Mountain-Home AFB",
-
-    "Nellis": "Nellis AFB",
-    "NellisAFB": "Nellis AFB",
-
-    "Offutt": "Offutt AFB",
-    "OffuttAFB": "Offutt AFB",
-
-    "Peterson": "Peterson AFB",
-    "PetersonAFB": "Peterson AFB",
-    "Peterson Space Force Base": "Peterson AFB",
-    "Peterson SFB": "Peterson AFB",
-
-    "Randolph": "Randolph AFB",
-    "RandolphAFB": "Randolph AFB",
-    "JBSA-Randolph": "Randolph AFB",
-    "JBSA Randolph": "Randolph AFB",
-    "Joint Base San Antonio Randolph": "Randolph AFB",
-
-    "Robins": "Robins AFB",
-    "RobinsAFB": "Robins AFB",
-
-    "Scott": "Scott AFB",
-    "ScottAFB": "Scott AFB",
-
-    "Seymour-Johnson": "Seymour-Johnson AFB",
-    "SeymourJohnson": "Seymour-Johnson AFB",
-    "SeymourJohnsonAFB": "Seymour-Johnson AFB",
-
-    "Shaw": "Shaw AFB",
-    "ShawAFB": "Shaw AFB",
-
-    "Sheppard": "Sheppard AFB",
-    "SheppardAFB": "Sheppard AFB",
-
-    "Tinker": "Tinker AFB",
-    "TinkerAFB": "Tinker AFB",
-
-    "Travis": "Travis AFB",
-    "TravisAFB": "Travis AFB",
-
-    "Tyndall": "Tyndall AFB",
-    "TyndallAFB": "Tyndall AFB",
-
-    "Whiteman": "Whiteman AFB",
-    "WhitemanAFB": "Whiteman AFB",
-
-    "Wright-Patterson": "Wright-Patterson AFB",
-    "WrightPatterson": "Wright-Patterson AFB",
-    "WrightPattersonAFB": "Wright-Patterson AFB",
-    "WPAFB": "Wright-Patterson AFB"
-  };
-
-  return aliases[normalizeUpper(raw)] || raw;
+  return BASE_ALIASES[key] || raw;
 }
 
 function rankTitle(rank) {
@@ -341,7 +399,16 @@ function profileFromRetirementInput(input) {
     rank: normalizeRank(input.rank || "E-6"),
     yearsOfService: toFiniteNumber(input.yos ?? input.yearsOfService, 20),
     retirementSystem: normalizeRetirementSystem(input.retirementSystem || input.retirement_system),
-    monthlyBasicPayAtRetirement: null
+    monthlyBasicPayAtRetirement:
+      toFiniteNumber(
+        input.monthlyBasicPayAtRetirement ?? input.monthly_basic_pay_at_retirement,
+        null
+      ),
+    high36MonthlyArray: Array.isArray(input.high36MonthlyArray)
+      ? input.high36MonthlyArray.slice()
+      : Array.isArray(input.high36_monthly_array)
+      ? input.high36_monthly_array.slice()
+      : undefined
   };
 }
 
@@ -352,7 +419,10 @@ function profileFromVAInput(input) {
     spouse: !!input.spouse,
     dependentParents: toInteger(input.dependentParents ?? input.dependent_parents, 0),
     childrenUnder18: toInteger(input.childrenUnder18 ?? input.children_under_18, 0),
-    childrenInSchoolOver18: toInteger(input.childrenInSchoolOver18 ?? input.children_in_school_over_18, 0)
+    childrenInSchoolOver18: toInteger(
+      input.childrenInSchoolOver18 ?? input.children_in_school_over_18,
+      0
+    )
   };
 }
 
@@ -365,14 +435,22 @@ function profileFromRetirementVAInput(input) {
   });
 }
 
-function enrichRetirementPayBasis(profile) {
+function enrichRetirementPayBasis(profile, tool) {
   const enriched = Object.assign({}, profile);
 
   if (
-    (enriched.mode === "RETIRED" || enriched.mode === "VETERAN") &&
+    (tool === "RETIREMENT" || tool === "RETIREMENT_VA") &&
     !Number.isFinite(Number(enriched.monthlyBasicPayAtRetirement)) &&
-    Array.isArray(enriched.high36MonthlyArray) !== true
+    !Array.isArray(enriched.high36MonthlyArray)
   ) {
+    if (!enriched.rank) {
+      throw new Error("rank is required for retirement calculators.");
+    }
+
+    if (!Number.isFinite(Number(enriched.yearsOfService))) {
+      throw new Error("yearsOfService is required for retirement calculators.");
+    }
+
     const payRecord = OFFICIAL_PAY.getPayRecord2026(
       enriched.rank,
       enriched.yearsOfService
@@ -403,7 +481,9 @@ function toCompEngineInput(profile, tool) {
       yos: profile.yearsOfService,
       yearsOfService: profile.yearsOfService,
       monthlyBasicPayAtRetirement: profile.monthlyBasicPayAtRetirement,
-      high36MonthlyArray: Array.isArray(profile.high36MonthlyArray) ? profile.high36MonthlyArray : undefined
+      high36MonthlyArray: Array.isArray(profile.high36MonthlyArray)
+        ? profile.high36MonthlyArray
+        : undefined
     };
   }
 
@@ -425,7 +505,9 @@ function toCompEngineInput(profile, tool) {
       yos: profile.yearsOfService,
       yearsOfService: profile.yearsOfService,
       monthlyBasicPayAtRetirement: profile.monthlyBasicPayAtRetirement,
-      high36MonthlyArray: Array.isArray(profile.high36MonthlyArray) ? profile.high36MonthlyArray : undefined,
+      high36MonthlyArray: Array.isArray(profile.high36MonthlyArray)
+        ? profile.high36MonthlyArray
+        : undefined,
       vaRating: profile.vaRating,
       spouse: !!profile.spouse,
       dependentParents: toInteger(profile.dependentParents, 0),
@@ -610,7 +692,7 @@ function buildPayload(input, toolName) {
     throw new Error(`Unsupported calculator tool "${tool}".`);
   }
 
-  profile = enrichRetirementPayBasis(profile);
+  profile = enrichRetirementPayBasis(profile, tool);
 
   const compInput = toCompEngineInput(profile, tool);
   const compensation = COMP_ENGINE.getCompensationProfile(compInput);

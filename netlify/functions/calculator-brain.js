@@ -126,50 +126,172 @@ function canonicalizeBase(base) {
   const raw = normalizeString(base);
 
   const aliases = {
-    "JBSA-LACKLAND": "Lackland AFB",
-    "JBSA LACKLAND": "Lackland AFB",
-    "LACKLAND": "Lackland AFB",
-    "LACKLAND AFB": "Lackland AFB",
+   "Andrews": "Andrews AFB",
+    "AndrewsAFB": "Andrews AFB",
+    "Joint Base Andrews": "Andrews AFB",
+    "JB Andrews": "Andrews AFB",
 
-    "JBSA-RANDOLPH": "Randolph AFB",
-    "JBSA RANDOLPH": "Randolph AFB",
-    "RANDOLPH": "Randolph AFB",
-    "RANDOLPH AFB": "Randolph AFB",
+    "Barksdale": "Barksdale AFB",
+    "BarksdaleAFB": "Barksdale AFB",
 
-    "JBSA-FORT SAM HOUSTON": "Fort-Sam-Houston AFB",
-    "JBSA-FORT-SAM-HOUSTON": "Fort-Sam-Houston AFB",
-    "FORT SAM HOUSTON": "Fort-Sam-Houston AFB",
-    "FORT-SAM-HOUSTON": "Fort-Sam-Houston AFB",
+    "Beale": "Beale AFB",
+    "BealeAFB": "Beale AFB",
 
-    "DAVIS-MONTHAN": "Davis-Monthan AFB",
-    "DAVIS MONTHAN": "Davis-Monthan AFB",
-    "DAVIS-MONTHAN AFB": "Davis-Monthan AFB",
+    "Cannon": "Cannon AFB",
+    "CannonAFB": "Cannon AFB",
+
+    "Charleston": "Charleston AFB",
+    "CharlestonAFB": "Charleston AFB",
+    "Joint Base Charleston": "Charleston AFB",
+
+    "Davis-Monthan": "Davis-Monthan AFB",
+    "DavisMonthan": "Davis-Monthan AFB",
+    "DavisMonthanAFB": "Davis-Monthan AFB",
     "DMAFB": "Davis-Monthan AFB",
 
-    "NELLIS": "Nellis AFB",
-    "NELLIS AFB": "Nellis AFB",
+    "Dover": "Dover AFB",
+    "DoverAFB": "Dover AFB",
 
-    "ANDREWS": "Andrews AFB",
-    "ANDREWS AFB": "Andrews AFB",
+    "Dyess": "Dyess AFB",
+    "DyessAFB": "Dyess AFB",
 
-    "LUKE": "Luke AFB",
-    "LUKE AFB": "Luke AFB",
+    "Eglin": "Eglin AFB",
+    "EglinAFB": "Eglin AFB",
 
-    "TRAVIS": "Travis AFB",
-    "TRAVIS AFB": "Travis AFB",
+    "Elmendorf": "Elmendorf AFB",
+    "ElmendorfAFB": "Elmendorf AFB",
+    "Joint Base Elmendorf-Richardson": "Elmendorf AFB",
+    "JBER": "Elmendorf AFB",
 
-    "PETERSON": "Peterson AFB",
-    "PETERSON AFB": "Peterson AFB",
-    "PETERSON SFB": "Peterson AFB",
+    "F.E-Warren": "F.E-Warren AFB",
+    "FEWarren": "F.E-Warren AFB",
+    "FEWarrenAFB": "F.E-Warren AFB",
+    "F E Warren": "F.E-Warren AFB",
 
-    "LANGLEY": "Langley AFB",
-    "LANGLEY AFB": "Langley AFB",
+    "Fairchild": "Fairchild AFB",
+    "FairchildAFB": "Fairchild AFB",
 
-    "MACDILL": "MacDill AFB",
-    "MACDILL AFB": "MacDill AFB",
+    "Fort-Sam-Houston": "Fort-Sam-Houston AFB",
+    "FortSamHouston": "Fort-Sam-Houston AFB",
+    "Fort Sam Houston": "Fort-Sam-Houston AFB",
+    "FortSamHoustonAFB": "Fort-Sam-Houston AFB",
+    "Fort Sam Houston AFB": "Fort-Sam-Houston AFB",
+    "JBSA-Fort-Sam-Houston": "Fort-Sam-Houston AFB",
+    "JBSA Fort Sam Houston": "Fort-Sam-Houston AFB",
 
-    "OFFUTT": "Offutt AFB",
-    "OFFUTT AFB": "Offutt AFB"
+    "Holloman": "Holloman AFB",
+    "HollomanAFB": "Holloman AFB",
+
+    "Hurlburt": "Hurlburt AFB",
+    "HurlburtAFB": "Hurlburt AFB",
+    "Hurlburt Field": "Hurlburt AFB",
+
+    "Keesler": "Keesler AFB",
+    "KeeslerAFB": "Keesler AFB",
+
+    "Kirtland": "Kirtland AFB",
+    "KirtlandAFB": "Kirtland AFB",
+
+    "Lackland": "Lackland AFB",
+    "LacklandAFB": "Lackland AFB",
+    "JBSA-Lackland": "Lackland AFB",
+    "JBSA Lackland": "Lackland AFB",
+    "Joint Base San Antonio Lackland": "Lackland AFB",
+
+    "Langley": "Langley AFB",
+    "LangleyAFB": "Langley AFB",
+    "Joint Base Langley-Eustis": "Langley AFB",
+
+    "Laughlin": "Laughlin AFB",
+    "LaughlinAFB": "Laughlin AFB",
+
+    "Little-Rock": "Little-Rock AFB",
+    "LittleRock": "Little-Rock AFB",
+    "LittleRockAFB": "Little-Rock AFB",
+    "Little Rock": "Little-Rock AFB",
+    "Little Rock AFB": "Little-Rock AFB",
+
+    "Luke": "Luke AFB",
+    "LukeAFB": "Luke AFB",
+
+    "MacDill": "MacDill AFB",
+    "MacDillAFB": "MacDill AFB",
+
+    "Malmstrom": "Malmstrom AFB",
+    "MalmstromAFB": "Malmstrom AFB",
+
+    "Maxwell": "Maxwell AFB",
+    "MaxwellAFB": "Maxwell AFB",
+
+    "McConnell": "McConnell AFB",
+    "McConnellAFB": "McConnell AFB",
+
+    "McGuire": "McGuire AFB",
+    "McGuireAFB": "McGuire AFB",
+    "Joint Base McGuire-Dix-Lakehurst": "McGuire AFB",
+    "JBMDL": "McGuire AFB",
+
+    "Minot": "Minot AFB",
+    "MinotAFB": "Minot AFB",
+
+    "Moody": "Moody AFB",
+    "MoodyAFB": "Moody AFB",
+
+    "Mountain-Home": "Mountain-Home AFB",
+    "MountainHome": "Mountain-Home AFB",
+    "Mountain Home": "Mountain-Home AFB",
+    "MountainHomeAFB": "Mountain-Home AFB",
+    "Mountain Home AFB": "Mountain-Home AFB",
+
+    "Nellis": "Nellis AFB",
+    "NellisAFB": "Nellis AFB",
+
+    "Offutt": "Offutt AFB",
+    "OffuttAFB": "Offutt AFB",
+
+    "Peterson": "Peterson AFB",
+    "PetersonAFB": "Peterson AFB",
+    "Peterson Space Force Base": "Peterson AFB",
+    "Peterson SFB": "Peterson AFB",
+
+    "Randolph": "Randolph AFB",
+    "RandolphAFB": "Randolph AFB",
+    "JBSA-Randolph": "Randolph AFB",
+    "JBSA Randolph": "Randolph AFB",
+    "Joint Base San Antonio Randolph": "Randolph AFB",
+
+    "Robins": "Robins AFB",
+    "RobinsAFB": "Robins AFB",
+
+    "Scott": "Scott AFB",
+    "ScottAFB": "Scott AFB",
+
+    "Seymour-Johnson": "Seymour-Johnson AFB",
+    "SeymourJohnson": "Seymour-Johnson AFB",
+    "SeymourJohnsonAFB": "Seymour-Johnson AFB",
+
+    "Shaw": "Shaw AFB",
+    "ShawAFB": "Shaw AFB",
+
+    "Sheppard": "Sheppard AFB",
+    "SheppardAFB": "Sheppard AFB",
+
+    "Tinker": "Tinker AFB",
+    "TinkerAFB": "Tinker AFB",
+
+    "Travis": "Travis AFB",
+    "TravisAFB": "Travis AFB",
+
+    "Tyndall": "Tyndall AFB",
+    "TyndallAFB": "Tyndall AFB",
+
+    "Whiteman": "Whiteman AFB",
+    "WhitemanAFB": "Whiteman AFB",
+
+    "Wright-Patterson": "Wright-Patterson AFB",
+    "WrightPatterson": "Wright-Patterson AFB",
+    "WrightPattersonAFB": "Wright-Patterson AFB",
+    "WPAFB": "Wright-Patterson AFB"
   };
 
   return aliases[normalizeUpper(raw)] || raw;

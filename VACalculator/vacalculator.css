@@ -28,7 +28,8 @@
   box-sizing:border-box;
 }
 
-html,body{
+html,
+body{
   margin:0;
   padding:0;
   min-height:100%;
@@ -188,8 +189,8 @@ body::after{
   line-height:1.6;
 }
 
-#pcsu-retva-shell .seo-faq p:last-child,
-#pcsu-retva-shell .seo-copy p:last-child{
+#pcsu-retva-shell .seo-copy p:last-child,
+#pcsu-retva-shell .seo-faq p:last-child{
   margin-bottom:0;
 }
 
@@ -324,6 +325,7 @@ body::after{
   display:flex;
   flex-direction:column;
   gap:4px;
+  min-width:0;
 }
 
 #pcsu-retva-shell .calc-title{
@@ -340,6 +342,7 @@ body::after{
 
 #pcsu-retva-shell .calc-right{
   text-align:right;
+  min-width:130px;
 }
 
 #pcsu-retva-shell .calc-main{
@@ -366,6 +369,7 @@ body::after{
   gap:18px;
   align-items:start;
   padding-top:2px;
+  min-height:100%;
 }
 
 #pcsu-retva-shell .bars{
@@ -448,6 +452,7 @@ body::after{
   font-size:13px;
   font-weight:700;
   color:rgba(250,246,237,.92);
+  text-align:center;
 }
 
 #pcsu-retva-shell .score-ring-wrap{
@@ -664,6 +669,16 @@ body::after{
 
   #pcsu-retva-shell .insight-list li{
     font-size:16px;
+  }
+
+  #pcsu-retva-shell .calc-card{
+    grid-template-columns:1fr;
+    align-items:flex-start;
+  }
+
+  #pcsu-retva-shell .calc-right{
+    text-align:left;
+    min-width:0;
   }
 
   #pcsu-retva-shell .seo-copy,

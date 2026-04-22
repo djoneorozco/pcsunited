@@ -2,7 +2,7 @@
 // ============================================================
 // PCSUnited • Calculator Brain
 // Netlify Function Endpoint
-// v1.0.1
+// v1.0.2
 //
 // PURPOSE
 // - Calculator-only serverless endpoint for PCSUnited quick calculators
@@ -25,7 +25,7 @@ const OFFICIAL_BAH = require("./official-bah");
 const OFFICIAL_RETIREMENT = require("./official-retirement");
 const OFFICIAL_VA = require("./official-va");
 
-const BRAIN_VERSION = "pcsu-calculator-brain-1.0.1";
+const BRAIN_VERSION = "pcsu-calculator-brain-1.0.2";
 const ALLOW_ORIGIN = "*";
 
 function json(statusCode, body) {
@@ -63,6 +63,10 @@ function round2(value) {
   return Number((Number(value) || 0).toFixed(2));
 }
 
+function hasUsableNumber(value) {
+  return Number.isFinite(Number(value)) && Number(value) > 0;
+}
+
 function inferToolName(toolName) {
   const s = normalizeUpper(toolName || "GENERIC");
 
@@ -92,16 +96,6 @@ function normalizeRank(rank) {
   if (!m) return s.replace(/\s+/g, "");
 
   return `${m[1]}-${m[2]}${m[3] ? "E" : ""}`;
-}
-
-function normalizeMode(mode) {
-  const s = normalizeUpper(mode);
-
-  if (["AD", "ACTIVE_DUTY", "ACTIVE DUTY"].includes(s)) return "ACTIVE_DUTY";
-  if (["VETERAN", "VET"].includes(s)) return "VETERAN";
-  if (["RETIRED", "RETIREE"].includes(s)) return "RETIRED";
-
-  return s;
 }
 
 function normalizeRetirementSystem(retirementSystem) {
@@ -346,6 +340,7 @@ function canonicalizeBase(base) {
   const key = normalizeUpper(raw);
 
   if (!raw) return "";
+
   if (typeof OFFICIAL_BAH.canonicalizeBase === "function") {
     try {
       return OFFICIAL_BAH.canonicalizeBase(raw);
@@ -399,11 +394,10 @@ function profileFromRetirementInput(input) {
     rank: normalizeRank(input.rank || "E-6"),
     yearsOfService: toFiniteNumber(input.yos ?? input.yearsOfService, 20),
     retirementSystem: normalizeRetirementSystem(input.retirementSystem || input.retirement_system),
-    monthlyBasicPayAtRetirement:
-      toFiniteNumber(
-        input.monthlyBasicPayAtRetirement ?? input.monthly_basic_pay_at_retirement,
-        null
-      ),
+    monthlyBasicPayAtRetirement: toFiniteNumber(
+      input.monthlyBasicPayAtRetirement ?? input.monthly_basic_pay_at_retirement,
+      null
+    ),
     high36MonthlyArray: Array.isArray(input.high36MonthlyArray)
       ? input.high36MonthlyArray.slice()
       : Array.isArray(input.high36_monthly_array)
@@ -435,30 +429,79 @@ function profileFromRetirementVAInput(input) {
   });
 }
 
+function tryDeriveMonthlyBasicPay(rank, yearsOfService) {
+  if (!rank || !hasUsableNumber(yearsOfService)) return null;
+
+  try {
+    if (typeof OFFICIAL_PAY.getPayRecord2026 === "function") {
+      const rec = OFFICIAL_PAY.getPayRecord2026(rank, yearsOfService);
+      if (rec && hasUsableNumber(rec.basicPayMonthly)) {
+        return round2(rec.basicPayMonthly);
+      }
+      if (rec && hasUsableNumber(rec.monthlyBasicPay)) {
+        return round2(rec.monthlyBasicPay);
+      }
+    }
+  } catch (_err) {}
+
+  try {
+    if (typeof OFFICIAL_PAY.getMonthlyBasicPay === "function") {
+      const value = OFFICIAL_PAY.getMonthlyBasicPay(rank, yearsOfService);
+      if (hasUsableNumber(value)) {
+        return round2(value);
+      }
+    }
+  } catch (_err) {}
+
+  try {
+    if (typeof OFFICIAL_PAY.getBasicPayMonthly === "function") {
+      const value = OFFICIAL_PAY.getBasicPayMonthly(rank, yearsOfService);
+      if (hasUsableNumber(value)) {
+        return round2(value);
+      }
+    }
+  } catch (_err) {}
+
+  return null;
+}
+
 function enrichRetirementPayBasis(profile, tool) {
   const enriched = Object.assign({}, profile);
 
-  if (
-    (tool === "RETIREMENT" || tool === "RETIREMENT_VA") &&
-    !Number.isFinite(Number(enriched.monthlyBasicPayAtRetirement)) &&
-    !Array.isArray(enriched.high36MonthlyArray)
-  ) {
-    if (!enriched.rank) {
-      throw new Error("rank is required for retirement calculators.");
-    }
-
-    if (!Number.isFinite(Number(enriched.yearsOfService))) {
-      throw new Error("yearsOfService is required for retirement calculators.");
-    }
-
-    const payRecord = OFFICIAL_PAY.getPayRecord2026(
-      enriched.rank,
-      enriched.yearsOfService
-    );
-
-    enriched.monthlyBasicPayAtRetirement = round2(payRecord.basicPayMonthly || 0);
+  if (tool !== "RETIREMENT" && tool !== "RETIREMENT_VA") {
+    return enriched;
   }
 
+  const hasHigh36 =
+    Array.isArray(enriched.high36MonthlyArray) &&
+    enriched.high36MonthlyArray.length > 0;
+
+  const hasMonthlyBasis = hasUsableNumber(enriched.monthlyBasicPayAtRetirement);
+
+  if (hasHigh36 || hasMonthlyBasis) {
+    return enriched;
+  }
+
+  if (!enriched.rank) {
+    throw new Error("rank is required for retirement calculators.");
+  }
+
+  if (!hasUsableNumber(enriched.yearsOfService)) {
+    throw new Error("yearsOfService is required for retirement calculators.");
+  }
+
+  const derived = tryDeriveMonthlyBasicPay(
+    enriched.rank,
+    enriched.yearsOfService
+  );
+
+  if (!hasUsableNumber(derived)) {
+    throw new Error(
+      `Unable to derive monthlyBasicPayAtRetirement for ${enriched.rank} at ${enriched.yearsOfService} years.`
+    );
+  }
+
+  enriched.monthlyBasicPayAtRetirement = derived;
   return enriched;
 }
 
@@ -470,6 +513,7 @@ function toCompEngineInput(profile, tool) {
       yos: profile.yearsOfService,
       yearsOfService: profile.yearsOfService,
       base: profile.currentBase,
+      currentBase: profile.currentBase,
       dependents: profile.dependents
     };
   }
@@ -478,6 +522,7 @@ function toCompEngineInput(profile, tool) {
     return {
       mode: "RETIRED",
       retirementSystem: profile.retirementSystem,
+      rank: profile.rank,
       yos: profile.yearsOfService,
       yearsOfService: profile.yearsOfService,
       monthlyBasicPayAtRetirement: profile.monthlyBasicPayAtRetirement,
@@ -502,6 +547,7 @@ function toCompEngineInput(profile, tool) {
     return {
       mode: "RETIRED",
       retirementSystem: profile.retirementSystem,
+      rank: profile.rank,
       yos: profile.yearsOfService,
       yearsOfService: profile.yearsOfService,
       monthlyBasicPayAtRetirement: profile.monthlyBasicPayAtRetirement,
@@ -563,7 +609,11 @@ function buildSummaryFromComp(profile, compensation, tool) {
   if (tool === "RETIREMENT_VA" || compensation.lane === "RETIRED_VETERAN") {
     summary.monthlyRetiredPay = round2(monthly.retiredPayGross || 0);
     summary.monthlyVA = round2(monthly.vaCompensation || 0);
-    summary.combinedMonthlyGross = round2(monthly.combinedMonthlyGross || 0);
+    summary.combinedMonthlyGross = round2(
+      monthly.combinedMonthlyGross ||
+      monthly.grossMonthlyComp ||
+      (monthly.retiredPayGross || 0) + (monthly.vaCompensation || 0)
+    );
     summary.headline =
       `Estimated combined monthly retired pay and VA compensation is $${summary.combinedMonthlyGross.toLocaleString()}.`;
     return summary;
@@ -624,7 +674,11 @@ function buildRetirementPayload(profile, compensation) {
       yearsOfService: profile.yearsOfService,
       retirementSystem: profile.retirementSystem,
       monthlyBasicPayAtRetirement: round2(profile.monthlyBasicPayAtRetirement || 0),
-      retiredPayGross: round2(monthly.retiredPayGross || monthly.grossMonthlyComp || 0),
+      retiredPayGross: round2(
+        monthly.retiredPayGross ||
+        monthly.grossMonthlyComp ||
+        0
+      ),
       retirementRecord: detail.retirementRecord || null
     }
   });
@@ -669,7 +723,11 @@ function buildRetirementVAPayload(profile, compensation) {
       monthlyBasicPayAtRetirement: round2(profile.monthlyBasicPayAtRetirement || 0),
       retiredPayGross: round2(monthly.retiredPayGross || 0),
       vaCompensation: round2(monthly.vaCompensation || 0),
-      combinedMonthlyGross: round2(monthly.combinedMonthlyGross || 0),
+      combinedMonthlyGross: round2(
+        monthly.combinedMonthlyGross ||
+        monthly.grossMonthlyComp ||
+        (monthly.retiredPayGross || 0) + (monthly.vaCompensation || 0)
+      ),
       retirementRecord: detail.retirementRecord || null,
       vaRecord: detail.vaRecord || null
     }

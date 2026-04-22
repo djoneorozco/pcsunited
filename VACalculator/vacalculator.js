@@ -1,70 +1,57 @@
-(() => {
+(function () {
   "use strict";
 
-  //#1) BOOT
-  function bootPCSURetVARuntime() {
-    const ROOT = document.getElementById("pcsu-retva-shell");
+  function bootPCSURetireVARuntime() {
+    const ROOT = document.getElementById("pcsu-retire-va-shell");
     if (!ROOT) return;
 
-    //#2) HELPERS
     const $ = (selector) => ROOT.querySelector(selector);
 
     const els = {
-      rank: $("#retva-rank"),
-      yos: $("#retva-yos"),
-      system: $("#retva-system"),
-      disability: $("#retva-disability"),
-      household: $("#retva-household"),
-      lane: $("#retva-lane"),
-      concurrent: $("#retva-concurrent"),
-      taxview: $("#retva-taxview"),
+      retirementSystem: $("#rv-retirement-system"),
+      rank: $("#rv-rank"),
+      yos: $("#rv-yos"),
+      vaRating: $("#rv-va-rating"),
+      dependentProfile: $("#rv-dependent-profile"),
 
-      totalHeroLabel: $("#retva-total-hero-label"),
-      totalHeroValue: $("#retva-total-hero-value"),
-      totalHeroSub: $("#retva-total-hero-sub"),
+      totalHeroLabel: $("#rv-total-hero-label"),
+      totalHeroValue: $("#rv-total-hero-value"),
+      totalHeroSub: $("#rv-total-hero-sub"),
 
-      infoRank: $("#retva-info-rank"),
-      infoYos: $("#retva-info-yos"),
-      infoSystem: $("#retva-info-system"),
-      infoDisability: $("#retva-info-disability"),
-      infoHousehold: $("#retva-info-household"),
-      infoLane: $("#retva-info-lane"),
-      infoConcurrent: $("#retva-info-concurrent"),
+      infoSystem: $("#rv-info-system"),
+      infoRank: $("#rv-info-rank"),
+      infoYos: $("#rv-info-yos"),
+      infoRating: $("#rv-info-rating"),
+      infoProfile: $("#rv-info-profile"),
 
-      retiredPayLabel: $("#retva-retiredpay-label"),
-      retiredPayAmount: $("#retva-retiredpay-amount"),
-      vaPayLabel: $("#retva-vapay-label"),
-      vaPayAmount: $("#retva-vapay-amount"),
-      combinedLabel: $("#retva-combined-label"),
-      combinedAmount: $("#retva-combined-amount"),
+      retirementLabel: $("#rv-retirement-label"),
+      retirementAmount: $("#rv-retirement-amount"),
+      vaLabel: $("#rv-va-label"),
+      vaAmount: $("#rv-va-amount"),
+      combinedAmount: $("#rv-combined-amount"),
 
-      totalAmount: $("#retva-total-amount"),
-      totalNote: $("#retva-total-note"),
+      breakdownRetirement: $("#rv-breakdown-retirement"),
+      breakdownVA: $("#rv-breakdown-va"),
+      breakdownCombined: $("#rv-breakdown-combined"),
 
-      breakdownRetiredPay: $("#retva-breakdown-retiredpay"),
-      breakdownVAPay: $("#retva-breakdown-vapay"),
-      breakdownCombined: $("#retva-breakdown-combined"),
+      barRetirement: $("#rv-bar-retirement"),
+      barVA: $("#rv-bar-va"),
+      barCombined: $("#rv-bar-combined"),
 
-      barRetiredPay: $("#retva-bar-retiredpay"),
-      barVAPay: $("#retva-bar-vapay"),
-      barOffset: $("#retva-bar-offset"),
+      scoreRing: $("#scoreRing"),
+      scoreLabel: $("#scoreLabel"),
 
-      barRetiredPayValue: $("#retva-bar-retiredpay-value"),
-      barVAPayValue: $("#retva-bar-vapay-value"),
-      barOffsetValue: $("#retva-bar-offset-value"),
-
-      insightList: $("#retva-insight-list"),
-      footerNote: $("#retva-footer-note"),
-      scoreRing: $("#retva-scoreRing")
+      insightList: $("#rv-insight-list"),
+      totalWrapNote: $("#rv-total-wrap .total-pay-note"),
+      footerNote: ROOT.querySelector(".footer-note")
     };
 
-    //#3) API
-    // GitHub/static default. Override before this file loads if needed.
-    // window.PCSU_API_ORIGIN = "https://your-domain.com";
-    const API_ORIGIN = window.PCSU_API_ORIGIN || "https://pcsunited.netlify.app";
-    const ENDPOINT = API_ORIGIN + "/.netlify/functions/opensource-brain";
+    const API_ORIGIN = window.location.hostname.includes("webflow.io")
+      ? (window.PCSU_API_ORIGIN || "https://pcsunited.netlify.app")
+      : "";
 
-    //#4) FORMATTERS
+    const ENDPOINT = API_ORIGIN + "/.netlify/functions/calculator-brain";
+
     function money0(value) {
       const n = Number(value || 0);
       return "$" + Math.round(n).toLocaleString();
@@ -107,19 +94,17 @@
       el.style.height = clamp(Number(percent || 0), 8, 100) + "%";
     }
 
-    function setRing(total) {
-      if (!els.scoreRing) return;
-      const pct = clamp(Number(total || 0) / 100, 0, 100);
-      els.scoreRing.style.setProperty("--pct", String(pct.toFixed(2)));
+    function setRing(el, percent) {
+      if (!el) return;
+      el.style.setProperty("--pct", String(clamp(Number(percent || 0), 0, 100)));
     }
 
-    //#5) NORMALIZERS
-    function parseYears(raw) {
+    function parseYearsOfService(raw) {
       const n = parseInt(String(raw || "").replace(/[^\d]/g, ""), 10);
       return Number.isFinite(n) ? n : 20;
     }
 
-    function parseRating(raw) {
+    function parseVARating(raw) {
       const n = parseInt(String(raw || "").replace(/[^\d]/g, ""), 10);
       return Number.isFinite(n) ? n : 0;
     }
@@ -127,46 +112,69 @@
     function normalizeRank(rawRank) {
       const raw = String(rawRank || "").trim().toUpperCase();
       if (!raw) return "E-6";
-      if (/^[EWO]-\dE?$/.test(raw)) return raw;
-      return raw.replace(/\s+/g, "").replace(/^([EWO])(\dE?)$/, "$1-$2");
+      if (/^[EWO]-\d+$/.test(raw)) return raw;
+      return raw.replace(/\s+/g, "").replace(/^([EWO])(\d+)$/, "$1-$2");
     }
 
-    function normalizeSystem(rawSystem) {
-      const s = String(rawSystem || "").trim().toUpperCase();
-      return s.includes("BLENDED") || s === "BRS" ? "BRS" : "HIGH3";
+    function normalizeRetirementSystem(rawSystem) {
+      const raw = String(rawSystem || "").trim().toUpperCase();
+      if (raw === "HIGH-3" || raw === "HIGH3" || raw === "HIGH 3") return "HIGH3";
+      if (raw === "BRS") return "BRS";
+      return "HIGH3";
     }
 
-    function normalizeLane(rawLane) {
-      const s = String(rawLane || "").toLowerCase();
-      if (s.includes("retirement only")) return "RETIREMENT_ONLY";
-      if (s.includes("va disability only")) return "VA_ONLY";
-      return "COMBINED";
+    function retirementSystemLabel(system) {
+      return system === "HIGH3" ? "High-3" : system;
     }
 
-    function normalizeConcurrent(rawConcurrent) {
-      const s = String(rawConcurrent || "").toLowerCase();
-      if (s.includes("no concurrent")) return "NO_CONCURRENT";
-      if (s.includes("advanced")) return "ADVANCED_REVIEW";
-      return "CRDP_ESTIMATED";
+    function normalizeDependentProfile(rawProfile) {
+      return String(rawProfile || "Veteran Only").trim();
     }
 
-    function householdToDependents(rawHousehold) {
-      const s = String(rawHousehold || "").toLowerCase();
+    function dependentProfileToFields(profile) {
+      const p = String(profile || "").trim().toLowerCase();
 
-      let spouse = false;
-      let childrenUnder18 = 0;
-      let dependentParents = 0;
-      let childrenInSchoolOver18 = 0;
+      if (p === "veteran only") {
+        return {
+          spouse: false,
+          childrenUnder18: 0,
+          childrenInSchoolOver18: 0,
+          dependentParents: 0
+        };
+      }
 
-      if (s.includes("spouse")) spouse = true;
-      if (s.includes("child")) childrenUnder18 = 1;
+      if (p === "veteran + spouse") {
+        return {
+          spouse: true,
+          childrenUnder18: 0,
+          childrenInSchoolOver18: 0,
+          dependentParents: 0
+        };
+      }
+
+      if (p === "veteran + spouse + child") {
+        return {
+          spouse: true,
+          childrenUnder18: 1,
+          childrenInSchoolOver18: 0,
+          dependentParents: 0
+        };
+      }
+
+      if (p === "veteran + child") {
+        return {
+          spouse: false,
+          childrenUnder18: 1,
+          childrenInSchoolOver18: 0,
+          dependentParents: 0
+        };
+      }
 
       return {
-        spouse,
-        dependentParents,
-        childrenUnder18,
-        childrenInSchoolOver18,
-        label: rawHousehold || "Veteran Alone"
+        spouse: false,
+        childrenUnder18: 0,
+        childrenInSchoolOver18: 0,
+        dependentParents: 0
       };
     }
 
@@ -197,33 +205,6 @@
       return map[rank] || rank;
     }
 
-    //#6) LOCAL ESTIMATE FALLBACK INPUT
-    // Used only if the backend lane is unavailable but official local modules are present.
-    function estimateMonthlyBasicPayAtRetirement(rank, yos) {
-      const table = {
-        "E-5": {20: 4310, 22: 4380, 24: 4450, 26: 4520, 28: 4590, 30: 4660},
-        "E-6": {20: 4764, 22: 4860, 24: 4960, 26: 5060, 28: 5160, 30: 5260},
-        "E-7": {20: 5314, 22: 5430, 24: 5550, 26: 5670, 28: 5790, 30: 5910},
-        "E-8": {20: 6258, 22: 6385, 24: 6515, 26: 6645, 28: 6775, 30: 6905},
-        "E-9": {20: 7438, 22: 7580, 24: 7720, 26: 7860, 28: 8000, 30: 8140},
-        "O-1": {20: 4342, 22: 4342, 24: 4342, 26: 4342, 28: 4342, 30: 4342},
-        "O-2": {20: 5462, 22: 5462, 24: 5462, 26: 5462, 28: 5462, 30: 5462},
-        "O-3": {20: 7163, 22: 7163, 24: 7163, 26: 7163, 28: 7163, 30: 7163},
-        "O-4": {20: 8258, 22: 8400, 24: 8540, 26: 8680, 28: 8820, 30: 8960},
-        "O-5": {20: 9717, 22: 9890, 24: 10060, 26: 10230, 28: 10400, 30: 10570},
-        "O-6": {20: 11864, 22: 12070, 24: 12270, 26: 12470, 28: 12670, 30: 12870}
-      };
-
-      const byRank = table[rank] || table["E-6"];
-      const keys = Object.keys(byRank).map(Number).sort((a, b) => a - b);
-      let chosen = keys[0];
-      for (const key of keys) {
-        if (yos >= key) chosen = key;
-      }
-      return byRank[chosen];
-    }
-
-    //#7) INSIGHTS
     function paintInsights(lines) {
       if (!els.insightList) return;
 
@@ -238,125 +219,87 @@
       }).join("");
     }
 
-    //#8) INPUT READER
-    function readInputs() {
-      const rank = normalizeRank(els.rank && els.rank.value);
-      const yos = parseYears(els.yos && els.yos.value);
-      const retirementSystem = normalizeSystem(els.system && els.system.value);
-      const rating = parseRating(els.disability && els.disability.value);
-      const household = householdToDependents(els.household && els.household.value);
-      const lane = normalizeLane(els.lane && els.lane.value);
-      const concurrent = normalizeConcurrent(els.concurrent && els.concurrent.value);
-
-      return {
-        mode: "VETERAN",
-        rank,
-        yearsOfService: yos,
-        retirementSystem,
-        rating,
-        spouse: household.spouse,
-        dependentParents: household.dependentParents,
-        childrenUnder18: household.childrenUnder18,
-        childrenInSchoolOver18: household.childrenInSchoolOver18,
-        householdLabel: household.label,
-        lane,
-        concurrent,
-        taxView: els.taxview && els.taxview.value ? els.taxview.value : "Gross Monthly View",
-        monthlyBasicPayAtRetirement: estimateMonthlyBasicPayAtRetirement(rank, yos)
-      };
-    }
-
-    //#9) LOADING STATE
     function paintLoading(payload) {
-      setText(els.totalHeroLabel, "Total Monthly Income");
+      setText(els.totalHeroLabel, "Estimated Combined Monthly Income");
       setText(els.totalHeroValue, "Calculating...");
       setText(els.totalHeroSub, "Retirement Pay + VA Disability");
 
+      setText(els.infoSystem, payload.retirementSystemDisplay);
       setText(els.infoRank, payload.rank);
-      setText(els.infoYos, String(payload.yearsOfService) + " Years");
-      setText(els.infoSystem, payload.retirementSystem);
-      setText(els.infoDisability, String(payload.rating) + "%");
-      setText(els.infoHousehold, payload.householdLabel);
-      setText(els.infoLane, payload.lane.replaceAll("_", " "));
-      setText(els.infoConcurrent, payload.concurrent.replaceAll("_", " "));
+      setText(els.infoYos, String(payload.yos) + " Years");
+      setText(els.infoRating, String(payload.vaRating) + "%");
+      setText(els.infoProfile, payload.dependentProfile);
 
-      setText(els.retiredPayLabel, "Projected Monthly Retirement Pay");
-      setText(els.retiredPayAmount, "...");
-      setText(els.vaPayLabel, "Estimated Monthly VA Disability");
-      setText(els.vaPayAmount, "...");
-      setText(els.combinedLabel, "Projected Combined Monthly Income");
+      setText(els.retirementLabel, "Estimated Retirement Pay");
+      setText(els.retirementAmount, "...");
+      setText(els.vaLabel, "Estimated VA Disability");
+      setText(els.vaAmount, "...");
       setText(els.combinedAmount, "...");
 
-      setText(els.totalAmount, "...");
-      setText(els.totalNote, "Using PCSUnited Basic Calculator flow");
+      setText(els.breakdownRetirement, "...");
+      setText(els.breakdownVA, "...");
+      setText(els.breakdownCombined, "...");
 
-      setText(els.breakdownRetiredPay, "Retirement Component");
-      setText(els.breakdownVAPay, "VA Disability Component");
-      setText(els.breakdownCombined, "Combined Monthly View");
-
-      setText(els.barRetiredPayValue, "...");
-      setText(els.barVAPayValue, "...");
-      setText(els.barOffsetValue, "Review");
-
-      setBarHeight(els.barRetiredPay, 45);
-      setBarHeight(els.barVAPay, 35);
-      setBarHeight(els.barOffset, 16);
-      setRing(4500);
+      setBarHeight(els.barRetirement, 58);
+      setBarHeight(els.barVA, 40);
+      setBarHeight(els.barCombined, 78);
+      setRing(els.scoreRing, 54.82);
+      setText(els.scoreLabel, "Combined Monthly Total");
 
       paintInsights([
-        "This calculator uses the PCSUnited Basic Calculator flow through opensource-brain.js.",
-        "opensource-brain.js should route into comp-engine.js, then official-retirement.js and official-va.js.",
-        "That keeps this calculator aligned with the rest of PCSUnited."
+        "This calculator uses the PCSUnited Basic Calculator flow through calculator-brain.js.",
+        "calculator-brain.js routes into comp-engine.js, then official-retirement.js and official-va.js.",
+        "That keeps this calculator modular and aligned with the rest of PCSUnited."
       ]);
 
       setText(
+        els.totalWrapNote,
+        "Retirement Pay + VA Disability"
+      );
+
+      setText(
         els.footerNote,
-        "Running Basic Calculator flow: GitHub UI → opensource-brain.js → comp-engine.js → official-retirement / official-va."
+        "Running Basic Calculator flow: Webflow UI → calculator-brain.js → comp-engine.js → official-retirement / official-va."
       );
     }
 
-    //#10) ERROR STATE
     function paintError(message, payload) {
-      setText(els.totalHeroLabel, "Total Monthly Income");
-      setText(els.totalHeroValue, "$0");
+      setText(els.totalHeroLabel, "Estimated Combined Monthly Income");
+      setText(els.totalHeroValue, "$0.00");
       setText(els.totalHeroSub, "Retirement Pay + VA Disability");
 
+      setText(els.infoSystem, payload.retirementSystemDisplay || "High-3");
       setText(els.infoRank, payload.rank || "—");
-      setText(els.infoYos, String(payload.yearsOfService || 0) + " Years");
-      setText(els.infoSystem, payload.retirementSystem || "—");
-      setText(els.infoDisability, String(payload.rating || 0) + "%");
-      setText(els.infoHousehold, payload.householdLabel || "—");
-      setText(els.infoLane, String(payload.lane || "—").replaceAll("_", " "));
-      setText(els.infoConcurrent, String(payload.concurrent || "—").replaceAll("_", " "));
+      setText(els.infoYos, String(payload.yos || 0) + " Years");
+      setText(els.infoRating, String(payload.vaRating || 0) + "%");
+      setText(els.infoProfile, payload.dependentProfile || "Veteran Only");
 
-      setText(els.retiredPayLabel, "Projected Monthly Retirement Pay");
-      setText(els.retiredPayAmount, "$0");
-      setText(els.vaPayLabel, "Estimated Monthly VA Disability");
-      setText(els.vaPayAmount, "$0.00");
-      setText(els.combinedLabel, "Projected Combined Monthly Income");
-      setText(els.combinedAmount, "$0.00");
+      setText(els.retirementLabel, "Estimated Retirement Pay");
+      setText(els.retirementAmount, "$0");
+      setText(els.vaLabel, "Estimated VA Disability");
+      setText(els.vaAmount, "$0");
+      setText(els.combinedAmount, "$0");
 
-      setText(els.totalAmount, "$0.00");
-      setText(els.totalNote, "Unable to calculate");
+      setText(els.breakdownRetirement, "$0");
+      setText(els.breakdownVA, "$0");
+      setText(els.breakdownCombined, "$0");
 
-      setText(els.breakdownRetiredPay, "Retirement Component");
-      setText(els.breakdownVAPay, "VA Disability Component");
-      setText(els.breakdownCombined, "Combined Monthly View");
-
-      setText(els.barRetiredPayValue, "$0");
-      setText(els.barVAPayValue, "$0");
-      setText(els.barOffsetValue, "Review");
-
-      setBarHeight(els.barRetiredPay, 10);
-      setBarHeight(els.barVAPay, 10);
-      setBarHeight(els.barOffset, 10);
-      setRing(0);
+      setBarHeight(els.barRetirement, 10);
+      setBarHeight(els.barVA, 10);
+      setBarHeight(els.barCombined, 10);
+      setRing(els.scoreRing, 0);
+      setText(els.scoreLabel, "Unavailable");
 
       paintInsights([
         message || "We could not calculate this estimate.",
-        "This calculator uses the backend flow, so check opensource-brain.js first.",
-        "Then confirm opensource-brain.js is routing correctly into comp-engine.js and the official retirement and VA modules."
+        "This calculator now uses calculator-brain.js, so check that function first.",
+        "Then confirm calculator-brain.js is routing correctly into comp-engine.js and the official retirement / VA modules."
       ]);
+
+      setText(
+        els.totalWrapNote,
+        "Retirement Pay + VA Disability"
+      );
 
       setText(
         els.footerNote,
@@ -364,236 +307,192 @@
       );
     }
 
-    //#11) LOCAL OFFICIAL MODULE FALLBACK
-    function runLocalOfficialFallback(payload) {
-      const hasRet = typeof window.PCSU_OFFICIAL_RETIREMENT !== "undefined" &&
-        window.PCSU_OFFICIAL_RETIREMENT &&
-        typeof window.PCSU_OFFICIAL_RETIREMENT.getRetirementPay === "function";
-
-      const hasVA = typeof window.PCSU_OFFICIAL_VA !== "undefined" &&
-        window.PCSU_OFFICIAL_VA &&
-        typeof window.PCSU_OFFICIAL_VA.getVACompensation === "function";
-
-      if (!hasRet || !hasVA) {
-        throw new Error("Backend unavailable and official local modules are not loaded.");
-      }
-
-      const ret = window.PCSU_OFFICIAL_RETIREMENT.getRetirementPay({
-        retirementSystem: payload.retirementSystem,
-        yearsOfService: payload.yearsOfService,
-        monthlyBasicPayAtRetirement: payload.monthlyBasicPayAtRetirement
-      });
-
-      const va = window.PCSU_OFFICIAL_VA.getVACompensation({
-        rating: payload.rating,
-        spouse: payload.spouse,
-        dependentParents: payload.dependentParents,
-        childrenUnder18: payload.childrenUnder18,
-        childrenInSchoolOver18: payload.childrenInSchoolOver18
-      });
+    function readInputs() {
+      const retirementSystem = normalizeRetirementSystem(els.retirementSystem && els.retirementSystem.value);
+      const dependentProfile = normalizeDependentProfile(els.dependentProfile && els.dependentProfile.value);
+      const depFields = dependentProfileToFields(dependentProfile);
 
       return {
-        ok: true,
-        payload: {
-          retirement: ret,
-          va: va,
-          summary: {
-            lane: payload.lane,
-            concurrent: payload.concurrent,
-            totalMonthlyIncome:
-              payload.lane === "RETIREMENT_ONLY"
-                ? Number(ret.grossMonthlyRetiredPay || 0)
-                : payload.lane === "VA_ONLY"
-                  ? Number(va.monthlyVA || 0)
-                  : Number(ret.grossMonthlyRetiredPay || 0) + Number(va.monthlyVA || 0)
-          }
-        }
+        rank: normalizeRank(els.rank && els.rank.value),
+        yos: parseYearsOfService(els.yos && els.yos.value),
+        retirementSystem: retirementSystem,
+        retirementSystemDisplay: retirementSystemLabel(retirementSystem),
+        vaRating: parseVARating(els.vaRating && els.vaRating.value),
+        dependentProfile: dependentProfile,
+        spouse: depFields.spouse,
+        childrenUnder18: depFields.childrenUnder18,
+        childrenInSchoolOver18: depFields.childrenInSchoolOver18,
+        dependentParents: depFields.dependentParents
       };
     }
 
-    //#12) SUCCESS PAINTER
-    function paintSuccess(payload, data, sourceLabel) {
+    async function parseJSONResponse(res) {
+      const text = await res.text();
+      let data = null;
+
+      try {
+        data = JSON.parse(text || "{}");
+      } catch (_err) {
+        throw new Error("Invalid JSON response from calculator-brain.");
+      }
+
+      if (!res.ok || !data || data.ok === false) {
+        const msg =
+          (data && (data.error || data.message)) ||
+          ("HTTP " + res.status);
+        throw new Error(msg);
+      }
+
+      return data;
+    }
+
+    function paintSuccess(payload, data) {
       const responsePayload = (data && data.payload) || {};
-
-      const retirement =
-        responsePayload.retirement ||
-        responsePayload.retirementPay ||
-        responsePayload.retiredPay ||
-        {};
-
-      const va =
-        responsePayload.va ||
-        responsePayload.vaComp ||
-        responsePayload.vaDisability ||
-        {};
-
+      const calculator = responsePayload.calculator || {};
       const summary = responsePayload.summary || {};
+      const profile = responsePayload.profile || {};
+      const compensation = responsePayload.compensation || {};
+      const monthly = compensation.monthly || {};
 
-      const retiredPayRaw =
-        retirement.grossMonthlyRetiredPay ??
-        retirement.monthlyRetiredPay ??
-        retirement.monthlyRetirement ??
-        0;
-
-      const vaPayRaw =
-        va.monthlyVA ??
-        va.monthlyComp ??
-        va.monthlyDisability ??
-        0;
-
-      const retiredPay = Number(retiredPayRaw || 0);
-      const vaPay = Number(vaPayRaw || 0);
-
-      let combined = Number(
-        summary.totalMonthlyIncome ??
-        summary.combinedMonthlyIncome ??
-        (retiredPay + vaPay)
+      const retirement = Number(
+        calculator.retiredPayGross ??
+        monthly.retiredPayGross ??
+        0
       );
 
-      if (payload.lane === "RETIREMENT_ONLY") combined = retiredPay;
-      if (payload.lane === "VA_ONLY") combined = vaPay;
+      const va = Number(
+        calculator.vaCompensation ??
+        monthly.vaCompensation ??
+        0
+      );
 
-      const offsetVisual = payload.concurrent === "NO_CONCURRENT" ? 0 : (payload.concurrent === "ADVANCED_REVIEW" ? 12 : 18);
+      const combined = Number(
+        calculator.combinedMonthlyGross ??
+        summary.combinedMonthlyGross ??
+        monthly.combinedMonthlyGross ??
+        (retirement + va)
+      );
 
-      setText(els.totalHeroLabel, "Total Monthly Income");
+      const displaySystem =
+        calculator.retirementSystem ||
+        profile.retirementSystem ||
+        payload.retirementSystem ||
+        "HIGH3";
+
+      const displayRank =
+        calculator.rank ||
+        profile.rank ||
+        payload.rank;
+
+      const displayYos =
+        calculator.yearsOfService ||
+        profile.yearsOfService ||
+        payload.yos;
+
+      const displayRating =
+        calculator.vaRating ??
+        profile.vaRating ??
+        payload.vaRating;
+
+      const displayProfile = payload.dependentProfile;
+
+      setText(els.totalHeroLabel, "Estimated Combined Monthly Income");
       setText(els.totalHeroValue, money2(combined));
       setText(els.totalHeroSub, "Retirement Pay + VA Disability");
 
-      setText(els.infoRank, payload.rank + " • " + rankTitle(payload.rank));
-      setText(els.infoYos, String(payload.yearsOfService) + " Years");
-      setText(els.infoSystem, payload.retirementSystem);
-      setText(els.infoDisability, String(payload.rating) + "%");
-      setText(els.infoHousehold, payload.householdLabel);
-      setText(els.infoLane, payload.lane.replaceAll("_", " "));
-      setText(els.infoConcurrent, payload.concurrent.replaceAll("_", " "));
+      setText(els.infoSystem, retirementSystemLabel(displaySystem));
+      setText(els.infoRank, displayRank + " • " + rankTitle(displayRank));
+      setText(els.infoYos, String(displayYos) + " Years");
+      setText(els.infoRating, String(displayRating) + "%");
+      setText(els.infoProfile, displayProfile);
 
-      setText(els.retiredPayLabel, "Projected Monthly Retirement Pay");
-      setText(els.retiredPayAmount, money0(retiredPay));
+      setText(els.retirementLabel, "Estimated Retirement Pay");
+      setText(els.retirementAmount, money0(retirement));
+      setText(els.vaLabel, "Estimated VA Disability");
+      setText(els.vaAmount, money0(va));
+      setText(els.combinedAmount, money0(combined));
 
-      setText(els.vaPayLabel, "Estimated Monthly VA Disability");
-      setText(els.vaPayAmount, money2(vaPay));
+      setText(els.breakdownRetirement, money0(retirement));
+      setText(els.breakdownVA, money0(va));
+      setText(els.breakdownCombined, money0(combined));
 
-      setText(els.combinedLabel, "Projected Combined Monthly Income");
-      setText(els.combinedAmount, money2(combined));
+      setBarHeight(els.barRetirement, pctOf(combined, retirement));
+      setBarHeight(els.barVA, pctOf(combined, va));
+      setBarHeight(els.barCombined, 100);
 
-      setText(els.totalAmount, money2(combined));
-      setText(els.totalNote, "Retirement Pay + VA Disability");
+      setRing(els.scoreRing, clamp(combined / 100, 0, 100));
+      setText(els.scoreLabel, "Combined Monthly Total");
 
-      setText(els.breakdownRetiredPay, "Retirement Component");
-      setText(els.breakdownVAPay, "VA Disability Component");
-      setText(els.breakdownCombined, "Combined Monthly View");
+      paintInsights([
+        rankTitle(displayRank) + " retiring under " + retirementSystemLabel(displaySystem) + " at " + displayYos + " years is estimated at " + money0(retirement) + " per month.",
+        "Projected VA disability at " + displayRating + "% for " + displayProfile + " is " + money0(va) + " per month.",
+        "Estimated combined monthly income is " + money2(combined) + "."
+      ]);
 
-      setText(els.barRetiredPayValue, money0(retiredPay));
-      setText(els.barVAPayValue, money2(vaPay));
       setText(
-        els.barOffsetValue,
-        payload.concurrent === "NO_CONCURRENT"
-          ? "None"
-          : payload.concurrent === "ADVANCED_REVIEW"
-            ? "Review"
-            : "Est."
+        els.totalWrapNote,
+        "Retirement Pay + VA Disability"
       );
-
-      const totalForBars = Math.max(combined, retiredPay + vaPay, 1);
-
-      setBarHeight(
-        els.barRetiredPay,
-        payload.lane === "VA_ONLY" ? 8 : pctOf(totalForBars, retiredPay)
-      );
-
-      setBarHeight(
-        els.barVAPay,
-        payload.lane === "RETIREMENT_ONLY" ? 8 : pctOf(totalForBars, vaPay)
-      );
-
-      setBarHeight(els.barOffset, offsetVisual);
-      setRing(combined);
-
-      const insights = [
-        rankTitle(payload.rank) + " at " + payload.yearsOfService + " years under " + payload.retirementSystem + " is estimated at " + money0(retiredPay) + " in monthly gross retirement pay.",
-        "Estimated VA disability compensation at " + payload.rating + "% for " + payload.householdLabel + " is " + money2(vaPay) + " per month.",
-        "Projected monthly income in the selected " + payload.lane.replaceAll("_", " ").toLowerCase() + " lane is " + money2(combined) + "."
-      ];
-
-      if (payload.concurrent === "ADVANCED_REVIEW") {
-        insights[2] = "Projected monthly income is " + money2(combined) + ", but concurrent receipt and offset details should be reviewed in the advanced lane.";
-      }
-
-      paintInsights(insights);
 
       setText(
         els.footerNote,
-        sourceLabel === "LOCAL_OFFICIAL"
-          ? "Estimate generated using local official modules. Preferred PCSUnited Basic Calculator flow backend was unavailable."
-          : "Estimate generated using PCSUnited Basic Calculator flow through opensource-brain.js and comp-engine.js."
+        "Estimate generated using PCSUnited Basic Calculator flow through calculator-brain.js and comp-engine.js."
       );
     }
 
-    //#13) MAIN RUNNER
     async function run() {
-      const payload = readInputs();
-      paintLoading(payload);
+      const raw = readInputs();
+      paintLoading(raw);
+
+      const requestBody = {
+        tool: "RETIREMENT_VA",
+        input: {
+          rank: raw.rank,
+          yos: raw.yos,
+          retirementSystem: raw.retirementSystem,
+          vaRating: raw.vaRating,
+          spouse: raw.spouse,
+          childrenUnder18: raw.childrenUnder18,
+          childrenInSchoolOver18: raw.childrenInSchoolOver18,
+          dependentParents: raw.dependentParents
+        }
+      };
 
       try {
         const res = await fetch(ENDPOINT, {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            tool: "RETIREMENT_VA",
-            input: payload
-          })
+          body: JSON.stringify(requestBody)
         });
 
-        const data = await res.json();
-
-        if (!res.ok || !data || data.ok === false) {
-          throw new Error(
-            (data && (data.error || data.message)) ||
-            "Function error."
-          );
-        }
-
-        paintSuccess(payload, data, "BACKEND");
-      } catch (backendErr) {
-        try {
-          const fallbackData = runLocalOfficialFallback(payload);
-          paintSuccess(payload, fallbackData, "LOCAL_OFFICIAL");
-        } catch (fallbackErr) {
-          paintError(
-            fallbackErr && fallbackErr.message
-              ? fallbackErr.message
-              : (backendErr && backendErr.message ? backendErr.message : "Unable to calculate estimate."),
-            payload
-          );
-        }
+        const data = await parseJSONResponse(res);
+        paintSuccess(raw, data);
+      } catch (err) {
+        console.error("PCSU Retire+VA calculator error:", err);
+        console.error("Request body sent to calculator-brain:", requestBody);
+        paintError(err && err.message ? err.message : "Unable to calculate estimate.", raw);
       }
     }
 
-    //#14) BIND EVENTS
     function bind() {
-      ["rank", "yos", "system", "disability", "household", "lane", "concurrent", "taxview"].forEach(function (key) {
+      ["retirementSystem", "rank", "yos", "vaRating", "dependentProfile"].forEach(function (key) {
         const el = els[key];
-        if (el) {
-          el.addEventListener("change", run);
-          el.addEventListener("input", run);
-        }
+        if (el) el.addEventListener("change", run);
       });
     }
 
-    //#15) INIT
     bind();
     run();
 
-    window.PCSU_RETVA = {
+    window.PCSU_RETIRE_VA = {
       run: run,
       endpoint: ENDPOINT
     };
   }
 
-  //#16) DOM READY
   if (document.readyState === "loading") {
-    document.addEventListener("DOMContentLoaded", bootPCSURetVARuntime, { once: true });
+    document.addEventListener("DOMContentLoaded", bootPCSURetireVARuntime, { once: true });
   } else {
-    bootPCSURetVARuntime();
+    bootPCSURetireVARuntime();
   }
 })();

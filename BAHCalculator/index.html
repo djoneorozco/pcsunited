@@ -1,867 +1,344 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <!-- =========================================================
-    //#1) META
-  ========================================================== -->
+  <!-- //#1) META -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <title>BAH Calculator | PCSUnited</title>
-  <meta name="description" content="Estimate Basic Allowance for Housing and Base Pay with a clean Aurora-style PCSUnited calculator." />
+  <!-- //#2) SEO -->
+  <title>BAH & Base Pay Calculator | PCSUnited</title>
+  <meta
+    name="description"
+    content="Estimate Air Force monthly BAH, Base Pay, BAS, and total military compensation using PCSUnited's Aurora-style calculator."
+  />
+  <link rel="canonical" href="https://www.pcsunited.com/bah-calculator" />
 
-  <!-- =========================================================
-    //#2) FONTS
-  ========================================================== -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="BAH & Base Pay Calculator | PCSUnited" />
+  <meta
+    property="og:description"
+    content="Estimate monthly BAH, Base Pay, BAS, and total military compensation using PCSUnited's premium Aurora calculator."
+  />
+  <meta property="og:url" content="https://www.pcsunited.com/bah-calculator" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="BAH & Base Pay Calculator | PCSUnited" />
+  <meta
+    name="twitter:description"
+    content="Estimate monthly BAH, Base Pay, BAS, and total military compensation using PCSUnited's premium Aurora calculator."
+  />
+
+  <!-- //#3) FONTS -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
     rel="stylesheet"
   />
 
-  <style>
-    /* =========================================================
-      //#3) ROOT TOKENS
-    ========================================================== */
-    :root{
-      --bg-1:#071629;
-      --bg-2:#0b2340;
-      --bg-3:#1f3f69;
-      --panel:rgba(129, 158, 202, 0.16);
-      --panel-strong:rgba(148, 176, 219, 0.18);
-      --stroke:rgba(255,255,255,0.11);
-      --stroke-soft:rgba(255,255,255,0.07);
-      --text:#f5f7ff;
-      --muted:rgba(237,242,255,0.72);
-      --muted-2:rgba(237,242,255,0.56);
-      --shadow:0 18px 60px rgba(0,0,0,0.28);
-      --blur:18px;
-
-      --cyan:#95ecf2;
-      --mint:#a8efd8;
-      --peach:#efb48f;
-      --lav:#b9b8f5;
-      --gold:#f4e3b1;
-
-      --radius-xl:28px;
-      --radius-lg:22px;
-      --radius-md:16px;
-      --maxw:1280px;
-    }
-
-    /* =========================================================
-      //#4) GLOBAL RESET
-    ========================================================== */
-    *{
-      box-sizing:border-box;
-      margin:0;
-      padding:0;
-    }
-
-    html, body{
-      width:100%;
-      min-height:100%;
-    }
-
-    body{
-      font-family:"Inter", sans-serif;
-      color:var(--text);
-      background:
-        radial-gradient(circle at 15% 88%, rgba(110,191,255,0.24), transparent 26%),
-        radial-gradient(circle at 86% 8%, rgba(255,220,220,0.18), transparent 24%),
-        linear-gradient(135deg, var(--bg-1) 0%, var(--bg-2) 42%, var(--bg-3) 100%);
-      background-attachment:fixed;
-      overflow-x:hidden;
-    }
-
-    body::before{
-      content:"";
-      position:fixed;
-      inset:0;
-      pointer-events:none;
-      background:
-        linear-gradient(to bottom, rgba(255,255,255,0.06), transparent 12%),
-        radial-gradient(circle at 50% 50%, rgba(255,255,255,0.03), transparent 60%);
-      mix-blend-mode:screen;
-      opacity:.75;
-    }
-
-    a{
-      color:inherit;
-      text-decoration:none;
-    }
-
-    button, input, select{
-      font:inherit;
-    }
-
-    /* =========================================================
-      //#5) PAGE WRAP
-    ========================================================== */
-    .bah-page{
-      width:100%;
-      padding:28px 24px 44px;
-    }
-
-    .bah-shell{
-      width:100%;
-      max-width:var(--maxw);
-      margin:0 auto;
-    }
-
-    /* =========================================================
-      //#6) HERO
-    ========================================================== */
-    .hero{
-      display:flex;
-      align-items:flex-start;
-      justify-content:space-between;
-      gap:24px;
-      margin-bottom:28px;
-    }
-
-    .hero-copy{
-      flex:1 1 auto;
-      min-width:260px;
-      padding-top:4px;
-    }
-
-    .hero-title{
-      font-family:"Playfair Display", serif;
-      font-size:clamp(2.6rem, 5vw, 4.2rem);
-      line-height:.95;
-      letter-spacing:-0.03em;
-      font-weight:800;
-      color:#f5f7ff;
-      text-shadow:0 2px 18px rgba(0,0,0,0.10);
-    }
-
-    .hero-subtitle{
-      margin-top:14px;
-      font-size:clamp(1rem, 1.8vw, 1.45rem);
-      font-weight:500;
-      color:var(--muted);
-    }
-
-    .hero-accent{
-      flex:0 0 320px;
-      max-width:320px;
-      min-height:132px;
-      padding:20px 22px;
-      border-radius:26px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.12), rgba(255,255,255,0.08));
-      border:1px solid var(--stroke);
-      backdrop-filter:blur(var(--blur)) saturate(130%);
-      -webkit-backdrop-filter:blur(var(--blur)) saturate(130%);
-      box-shadow:var(--shadow);
-      position:relative;
-      overflow:hidden;
-    }
-
-    .hero-accent::before{
-      content:"";
-      position:absolute;
-      inset:auto -30% -20% auto;
-      width:180px;
-      height:180px;
-      background:radial-gradient(circle, rgba(149,236,242,0.18), transparent 64%);
-      pointer-events:none;
-    }
-
-    .hero-accent-label{
-      font-size:.92rem;
-      color:var(--muted);
-      margin-bottom:10px;
-    }
-
-    .hero-accent-value{
-      font-size:1.9rem;
-      font-weight:700;
-      line-height:1.1;
-      margin-bottom:14px;
-    }
-
-    .hero-mini-track{
-      width:100%;
-      height:10px;
-      border-radius:999px;
-      background:rgba(255,255,255,0.10);
-      overflow:hidden;
-      position:relative;
-    }
-
-    .hero-mini-fill{
-      width:68%;
-      height:100%;
-      border-radius:999px;
-      background:linear-gradient(90deg, var(--mint), var(--cyan));
-      box-shadow:0 0 12px rgba(149,236,242,.18);
-    }
-
-    .hero-mini-scale{
-      margin-top:10px;
-      display:flex;
-      justify-content:space-between;
-      font-size:.78rem;
-      color:var(--muted-2);
-    }
-
-    /* =========================================================
-      //#7) DIVIDER
-    ========================================================== */
-    .top-divider{
-      height:1px;
-      background:linear-gradient(
-        90deg,
-        transparent 0%,
-        rgba(255,255,255,.10) 15%,
-        rgba(255,255,255,.14) 50%,
-        rgba(255,255,255,.10) 85%,
-        transparent 100%
-      );
-      margin:12px 0 24px;
-    }
-
-    /* =========================================================
-      //#8) TOP CONTROLS
-    ========================================================== */
-    .controls-grid{
-      display:grid;
-      grid-template-columns:repeat(4, minmax(0, 1fr));
-      gap:18px;
-      margin-bottom:22px;
-    }
-
-    .control-card{
-      min-height:144px;
-      border-radius:26px;
-      padding:18px 22px;
-      background:linear-gradient(180deg, rgba(98,145,204,0.22), rgba(72,114,168,0.18));
-      border:1px solid var(--stroke);
-      backdrop-filter:blur(var(--blur)) saturate(130%);
-      -webkit-backdrop-filter:blur(var(--blur)) saturate(130%);
-      box-shadow:var(--shadow);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:10px;
-      position:relative;
-    }
-
-    .control-label{
-      font-size:1.02rem;
-      color:var(--muted);
-      font-weight:500;
-    }
-
-    .control-select-wrap{
-      position:relative;
-    }
-
-    .control-select{
-      width:100%;
-      appearance:none;
-      border:none;
-      outline:none;
-      background:transparent;
-      color:var(--text);
-      font-size:1.08rem;
-      font-weight:700;
-      line-height:1.3;
-      padding:2px 34px 2px 0;
-      cursor:pointer;
-    }
-
-    .control-chevron{
-      position:absolute;
-      right:2px;
-      top:50%;
-      transform:translateY(-50%);
-      width:18px;
-      height:18px;
-      pointer-events:none;
-      opacity:.8;
-    }
-
-    .control-chevron svg{
-      display:block;
-      width:100%;
-      height:100%;
-    }
-
-    /* =========================================================
-      //#9) MAIN CONTENT GRID
-    ========================================================== */
-    .main-grid{
-      display:grid;
-      grid-template-columns:1.12fr .88fr;
-      gap:20px;
-      align-items:stretch;
-    }
-
-    .left-stack{
-      display:grid;
-      grid-template-rows:auto auto;
-      gap:20px;
-    }
-
-    .right-stack{
-      display:grid;
-      grid-template-rows:auto;
-      gap:20px;
-    }
-
-    .glass-card{
-      border-radius:30px;
-      background:linear-gradient(180deg, rgba(86,135,195,0.24), rgba(74,112,166,0.16));
-      border:1px solid var(--stroke);
-      backdrop-filter:blur(var(--blur)) saturate(130%);
-      -webkit-backdrop-filter:blur(var(--blur)) saturate(130%);
-      box-shadow:var(--shadow);
-      padding:22px;
-      position:relative;
-      overflow:hidden;
-    }
-
-    .glass-card::after{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      pointer-events:none;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,0.05);
-    }
-
-    .section-title{
-      font-family:"Playfair Display", serif;
-      font-size:clamp(1.55rem, 2.1vw, 2rem);
-      font-weight:700;
-      color:#f7f8ff;
-      margin-bottom:14px;
-    }
-
-    .section-rule{
-      height:1px;
-      width:100%;
-      background:linear-gradient(90deg, rgba(255,255,255,.14), rgba(255,255,255,.05));
-      margin-bottom:16px;
-    }
-
-    /* =========================================================
-      //#10) INPUT INFORMATION
-    ========================================================== */
-    .info-panel{
-      border-radius:20px;
-      border:1px solid var(--stroke-soft);
-      background:linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03));
-      padding:16px 18px 6px;
-    }
-
-    .info-row{
-      display:grid;
-      grid-template-columns:220px 1fr;
-      gap:10px;
-      align-items:center;
-      padding:16px 0;
-      border-bottom:1px solid rgba(255,255,255,0.08);
-    }
-
-    .info-row:last-child{
-      border-bottom:none;
-    }
-
-    .info-key{
-      font-weight:700;
-      color:#eef3ff;
-    }
-
-    .info-value{
-      color:var(--text);
-      font-weight:500;
-    }
-
-    /* =========================================================
-      //#11) PAY ESTIMATE
-    ========================================================== */
-    .pay-box{
-      border-radius:22px;
-      border:1px solid var(--stroke-soft);
-      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
-      padding:20px 18px;
-      text-align:center;
-      margin-bottom:16px;
-    }
-
-    .pay-label{
-      font-family:"Playfair Display", serif;
-      font-size:1rem;
-      font-weight:700;
-      color:#f6f8ff;
-      margin-bottom:8px;
-    }
-
-    .pay-amount{
-      font-family:"Playfair Display", serif;
-      font-size:clamp(2.2rem, 5vw, 3.35rem);
-      line-height:1;
-      font-weight:800;
-      letter-spacing:-0.03em;
-      color:var(--gold);
-      text-shadow:0 2px 18px rgba(0,0,0,.15);
-    }
-
-    .pay-divider{
-      width:100%;
-      height:1px;
-      background:linear-gradient(90deg, transparent, rgba(255,255,255,.14), transparent);
-      margin:18px 0 14px;
-    }
-
-    .pay-sub-label{
-      font-family:"Playfair Display", serif;
-      font-size:1rem;
-      font-weight:700;
-      color:#f6f8ff;
-      margin-bottom:8px;
-    }
-
-    .sub-pay-amount{
-      font-family:"Playfair Display", serif;
-      font-size:clamp(1.8rem, 4vw, 2.7rem);
-      line-height:1;
-      font-weight:800;
-      letter-spacing:-0.03em;
-      color:#f4e7c3;
-    }
-
-    /* =========================================================
-      //#12) BREAKDOWN BARS
-    ========================================================== */
-    .breakdown-box{
-      border-radius:22px;
-      border:1px solid var(--stroke-soft);
-      background:linear-gradient(180deg, rgba(255,255,255,0.07), rgba(255,255,255,0.04));
-      padding:16px 18px 18px;
-    }
-
-    .breakdown-title{
-      font-family:"Playfair Display", serif;
-      font-size:1rem;
-      font-weight:700;
-      text-align:center;
-      margin-bottom:14px;
-      color:#f6f8ff;
-    }
-
-    .breakdown-rule{
-      height:1px;
-      background:linear-gradient(90deg, rgba(255,255,255,.06), rgba(255,255,255,.14), rgba(255,255,255,.06));
-      margin-bottom:12px;
-    }
-
-    .metric-row{
-      display:grid;
-      grid-template-columns:120px 1fr 80px;
-      gap:12px;
-      align-items:center;
-      padding:14px 0;
-      border-bottom:1px solid rgba(255,255,255,0.08);
-    }
-
-    .metric-row:last-child{
-      border-bottom:none;
-      padding-bottom:4px;
-    }
-
-    .metric-name{
-      font-family:"Playfair Display", serif;
-      font-size:.98rem;
-      color:#f1f4ff;
-    }
-
-    .metric-bar{
-      position:relative;
-      width:100%;
-      height:28px;
-      border-radius:999px;
-      background:rgba(255,255,255,.10);
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.06);
-    }
-
-    .metric-fill{
-      position:absolute;
-      inset:0 auto 0 0;
-      border-radius:999px;
-      box-shadow:0 0 14px rgba(255,255,255,.08) inset;
-    }
-
-    .metric-fill.cyan{ width:88%; background:linear-gradient(90deg, rgba(149,236,242,.88), rgba(149,236,242,.68)); }
-    .metric-fill.peach{ width:33%; background:linear-gradient(90deg, rgba(239,180,143,.92), rgba(239,180,143,.72)); }
-    .metric-fill.lav{ width:18%; background:linear-gradient(90deg, rgba(185,184,245,.92), rgba(185,184,245,.72)); }
-
-    .metric-value{
-      text-align:right;
-      font-weight:800;
-      font-size:1rem;
-      color:#f4e7c3;
-    }
-
-    /* =========================================================
-      //#13) INSIGHT LIST
-    ========================================================== */
-    .insight-list{
-      display:grid;
-      gap:20px;
-      padding-top:4px;
-    }
-
-    .insight-item{
-      display:grid;
-      grid-template-columns:14px 1fr;
-      gap:14px;
-      align-items:flex-start;
-    }
-
-    .insight-dot{
-      width:12px;
-      height:12px;
-      border-radius:50%;
-      margin-top:6px;
-      box-shadow:0 0 14px rgba(255,255,255,.08);
-    }
-
-    .insight-dot.cyan{ background:var(--cyan); }
-    .insight-dot.peach{ background:var(--peach); }
-    .insight-dot.lav{ background:#d8d6ff; }
-
-    .insight-text{
-      font-size:1.02rem;
-      line-height:1.65;
-      color:#eef3ff;
-    }
-
-    /* =========================================================
-      //#14) FOOTNOTE
-    ========================================================== */
-    .footer-note{
-      max-width:var(--maxw);
-      margin:18px auto 0;
-      padding:0 2px;
-      color:var(--muted-2);
-      font-size:.9rem;
-      line-height:1.55;
-    }
-
-    /* =========================================================
-      //#15) RESPONSIVE
-    ========================================================== */
-    @media (max-width: 1120px){
-      .controls-grid{
-        grid-template-columns:repeat(2, minmax(0, 1fr));
-      }
-
-      .main-grid{
-        grid-template-columns:1fr;
-      }
-
-      .hero{
-        flex-direction:column;
-      }
-
-      .hero-accent{
-        width:100%;
-        max-width:none;
-      }
-    }
-
-    @media (max-width: 760px){
-      .bah-page{
-        padding:20px 14px 32px;
-      }
-
-      .controls-grid{
-        grid-template-columns:1fr;
-        gap:14px;
-      }
-
-      .control-card{
-        min-height:112px;
-        border-radius:22px;
-      }
-
-      .glass-card{
-        border-radius:24px;
-        padding:18px;
-      }
-
-      .info-row{
-        grid-template-columns:1fr;
-        gap:6px;
-        padding:14px 0;
-      }
-
-      .metric-row{
-        grid-template-columns:1fr;
-        gap:8px;
-      }
-
-      .metric-value{
-        text-align:left;
-      }
-
-      .hero-title{
-        line-height:1.02;
-      }
-    }
-  </style>
+  <!-- //#4) STYLESHEET -->
+  <link rel="stylesheet" href="./bahcalculator.css" />
 </head>
 <body>
-  <!-- =========================================================
-    //#16) PAGE
-  ========================================================== -->
-  <main class="bah-page">
-    <section class="bah-shell">
+  <!-- //#5) ROOT -->
+  <div id="pcsu-bah-shell">
+    <div class="bah-stage">
+      <div class="app">
 
-      <!-- =====================================================
-        //#17) HERO
-      ====================================================== -->
-      <header class="hero">
-        <div class="hero-copy">
-          <h1 class="hero-title">Simple BAH Calculator</h1>
-          <p class="hero-subtitle">Estimate your Basic Allowance for Housing and Base Pay</p>
-        </div>
-
-        <aside class="hero-accent" aria-hidden="true">
-          <div class="hero-accent-label">Projected Housing Support</div>
-          <div class="hero-accent-value">$2,850 / month</div>
-          <div class="hero-mini-track">
-            <div class="hero-mini-fill"></div>
+        <!-- //#6) TOPBAR -->
+        <div class="topbar">
+          <div class="title-wrap">
+            <h1 class="title">BAH &amp; Base Pay Calculator</h1>
+            <div class="subtitle">
+              Estimate your monthly BAH, Base Pay, BAS, and total military compensation.
+            </div>
           </div>
-          <div class="hero-mini-scale">
-            <span>E-1</span>
-            <span>E-5</span>
-            <span>E-7</span>
-            <span>O-3</span>
-          </div>
-        </aside>
-      </header>
 
-      <div class="top-divider"></div>
-
-      <!-- =====================================================
-        //#18) TOP SELECTORS
-      ====================================================== -->
-      <section class="controls-grid" aria-label="Calculator inputs">
-        <div class="control-card">
-          <div class="control-label">Pay Grade</div>
-          <div class="control-select-wrap">
-            <select class="control-select" id="bah-paygrade">
-              <option selected>E-5</option>
-              <option>E-4</option>
-              <option>E-6</option>
-              <option>E-7</option>
-              <option>O-1</option>
-              <option>O-2</option>
-              <option>O-3</option>
-            </select>
-            <span class="control-chevron" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none">
-                <path d="M5 7.5L10 12.5L15 7.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
+          <div class="hero-card glass">
+            <div class="mini-label" id="bah-total-hero-label">Total Monthly Military Pay</div>
+            <div class="hero-value" id="bah-total-hero-value">$6,437.95</div>
+            <div class="hero-sub" id="bah-total-hero-sub">Base Pay + BAH + BAS</div>
           </div>
         </div>
 
-        <div class="control-card">
-          <div class="control-label">Years in Service</div>
-          <div class="control-select-wrap">
-            <select class="control-select" id="bah-yos">
-              <option>2 Years</option>
-              <option>4 Years</option>
-              <option selected>7 Years</option>
-              <option>10 Years</option>
-              <option>12 Years</option>
-              <option>16 Years</option>
-              <option>20 Years</option>
-            </select>
-            <span class="control-chevron" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none">
-                <path d="M5 7.5L10 12.5L15 7.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
-        </div>
+        <!-- //#7) DIVIDER -->
+        <div class="divider"></div>
 
-        <div class="control-card">
-          <div class="control-label">Location</div>
-          <div class="control-select-wrap">
-            <select class="control-select" id="bah-location">
-              <option selected>San Diego, CA</option>
-              <option>San Antonio, TX</option>
-              <option>Las Vegas, NV</option>
-              <option>Okinawa, Japan</option>
-              <option>Colorado Springs, CO</option>
-            </select>
-            <span class="control-chevron" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none">
-                <path d="M5 7.5L10 12.5L15 7.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
-        </div>
+        <!-- //#8) ABOUT / SEO COPY -->
+        <section class="seo-copy glass" aria-label="About this calculator">
+          <h2 class="panel-title">About the BAH Calculator</h2>
+          <div class="panel-rule"></div>
+          <p>
+            PCSUnited’s BAH &amp; Base Pay Calculator gives military users a quick estimate
+            of monthly compensation by combining projected BAH, estimated Base Pay,
+            and BAS into one clean readiness-style view.
+          </p>
+          <p>
+            Users can adjust pay grade, years in service, duty location, and dependency
+            status to preview housing-related compensation before moving into deeper
+            affordability and home-buying analysis.
+          </p>
+        </section>
 
-        <div class="control-card">
-          <div class="control-label">Dependents</div>
-          <div class="control-select-wrap">
-            <select class="control-select" id="bah-dependents">
-              <option>Without Dependents</option>
-              <option selected>With Dependents</option>
-            </select>
-            <span class="control-chevron" aria-hidden="true">
-              <svg viewBox="0 0 20 20" fill="none">
-                <path d="M5 7.5L10 12.5L15 7.5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </span>
-          </div>
-        </div>
-      </section>
-
-      <!-- =====================================================
-        //#19) MAIN GRID
-      ====================================================== -->
-      <section class="main-grid">
-
-        <!-- ===================================================
-          //#20) LEFT COLUMN
-        ==================================================== -->
-        <div class="left-stack">
-
-          <!-- =================================================
-            //#21) INPUT INFORMATION CARD
-          ================================================== -->
-          <article class="glass-card">
-            <h2 class="section-title">Input Information</h2>
-            <div class="section-rule"></div>
-
-            <div class="info-panel">
-              <div class="info-row">
-                <div class="info-key">Military Status:</div>
-                <div class="info-value">Active Duty</div>
-              </div>
-
-              <div class="info-row">
-                <div class="info-key">Dependency Status:</div>
-                <div class="info-value">With Dependents</div>
-              </div>
-
-              <div class="info-row">
-                <div class="info-key">Duty Location:</div>
-                <div class="info-value">San Diego, CA</div>
-              </div>
-
-              <div class="info-row">
-                <div class="info-key">Pay Grade:</div>
-                <div class="info-value">E-5</div>
-              </div>
-
-              <div class="info-row">
-                <div class="info-key">Years in Service:</div>
-                <div class="info-value">7 Years</div>
+        <!-- //#9) SUMMARY SELECTORS -->
+        <div class="summary-grid">
+          <div class="mini-card glass">
+            <div class="mini-label">Pay Grade</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="bah-paygrade">
+                  <option>E-4</option>
+                  <option selected>E-5</option>
+                  <option>E-6</option>
+                  <option>E-7</option>
+                  <option>E-8</option>
+                  <option>E-9</option>
+                  <option>O-1</option>
+                  <option>O-2</option>
+                  <option>O-3</option>
+                  <option>O-4</option>
+                  <option>O-5</option>
+                  <option>O-6</option>
+                </select>
               </div>
             </div>
-          </article>
+          </div>
 
-          <!-- =================================================
-            //#22) INSIGHT CARD
-          ================================================== -->
-          <article class="glass-card">
-            <h2 class="section-title">Estimation Insight</h2>
-            <div class="section-rule"></div>
-
-            <div class="insight-list">
-              <div class="insight-item">
-                <span class="insight-dot cyan"></span>
-                <p class="insight-text">
-                  This estimate combines projected monthly BAH and estimated base pay using the selected rank, years of service, and duty location.
-                </p>
-              </div>
-
-              <div class="insight-item">
-                <span class="insight-dot peach"></span>
-                <p class="insight-text">
-                  BAH rates vary by duty station and dependent status, while base pay is driven primarily by pay grade and time in service.
-                </p>
-              </div>
-
-              <div class="insight-item">
-                <span class="insight-dot lav"></span>
-                <p class="insight-text">
-                  This shell is designed to become the fast-entry PCSUnited calculator view before users move into deeper housing or affordability analysis.
-                </p>
+          <div class="mini-card glass">
+            <div class="mini-label">Years in Service</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="bah-yos">
+                  <option>0 Years</option>
+                  <option>2 Years</option>
+                  <option>4 Years</option>
+                  <option selected>6 Years</option>
+                  <option>8 Years</option>
+                  <option>10 Years</option>
+                  <option>12 Years</option>
+                  <option>14 Years</option>
+                  <option>16 Years</option>
+                  <option>18 Years</option>
+                  <option>20 Years</option>
+                </select>
               </div>
             </div>
-          </article>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">Location</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="bah-location">
+                  <option selected>JBSA-Lackland</option>
+                  <option>Nellis AFB</option>
+                  <option>Davis-Monthan AFB</option>
+                  <option>Andrews AFB</option>
+                  <option>Luke AFB</option>
+                  <option>Travis AFB</option>
+                  <option>Peterson AFB</option>
+                  <option>Langley AFB</option>
+                  <option>MacDill AFB</option>
+                  <option>Offutt AFB</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">Dependents</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="bah-dependents">
+                  <option selected>With Dependents</option>
+                  <option>Without Dependents</option>
+                </select>
+              </div>
+            </div>
+          </div>
         </div>
 
-        <!-- ===================================================
-          //#23) RIGHT COLUMN
-        ==================================================== -->
-        <div class="right-stack">
-          <article class="glass-card">
-            <h2 class="section-title">Pay Estimate</h2>
-            <div class="section-rule"></div>
+        <!-- //#10) MAIN GRID -->
+        <div class="main-grid">
+          <!-- //#10A) LEFT PANEL -->
+          <section class="panel glass">
+            <h2 class="panel-title">Input Information</h2>
+            <div class="panel-rule"></div>
 
-            <div class="pay-box">
-              <div class="pay-label">Projected Monthly BAH</div>
-              <div class="pay-amount">$2,850</div>
+            <div class="info-panel" id="bah-info-panel">
+              <div class="info-row">
+                <div class="info-key">Military Status</div>
+                <div class="info-value" id="bah-info-status">Active Duty</div>
+              </div>
 
-              <div class="pay-divider"></div>
+              <div class="info-row">
+                <div class="info-key">Dependency Status</div>
+                <div class="info-value" id="bah-info-dependency">With Dependents</div>
+              </div>
 
-              <div class="pay-sub-label">Estimated Monthly Base Pay</div>
-              <div class="sub-pay-amount">$3,111</div>
+              <div class="info-row">
+                <div class="info-key">Duty Location</div>
+                <div class="info-value" id="bah-info-location">JBSA-Lackland</div>
+              </div>
+
+              <div class="info-row">
+                <div class="info-key">Pay Grade</div>
+                <div class="info-value" id="bah-info-rank">E-5</div>
+              </div>
+
+              <div class="info-row">
+                <div class="info-key">Years in Service</div>
+                <div class="info-value" id="bah-info-yos">6 Years</div>
+              </div>
             </div>
 
-            <div class="breakdown-box">
-              <div class="breakdown-title">Housing Rate Breakdown</div>
-              <div class="breakdown-rule"></div>
+            <div class="input-divider"></div>
 
-              <div class="metric-row">
-                <div class="metric-name">Median Rent</div>
-                <div class="metric-bar">
-                  <div class="metric-fill cyan"></div>
+            <h2 class="panel-title insight-title">Estimation Insight</h2>
+            <div class="panel-rule insight-rule"></div>
+
+            <ul class="insight-list" id="bah-insight-list">
+              <li>
+                <span class="dot mint"></span>
+                <span>
+                  This estimate combines projected monthly BAH, estimated Base Pay,
+                  and BAS into one fast-read compensation view.
+                </span>
+              </li>
+              <li>
+                <span class="dot peach"></span>
+                <span>
+                  BAH changes based on duty location and dependency status, while
+                  Base Pay changes with grade and time in service.
+                </span>
+              </li>
+              <li>
+                <span class="dot lav"></span>
+                <span>
+                  This shell is designed for PCSUnited’s front-end housing workflow
+                  before deeper affordability analysis begins.
+                </span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- //#10B) RIGHT PANEL -->
+          <section class="panel glass">
+            <h2 class="panel-title">Pay Estimate</h2>
+            <div class="panel-rule"></div>
+
+            <div class="calc-card pay-estimate-card">
+              <div class="calc-left">
+                <div class="calc-title" id="bah-pay-label">Projected Monthly BAH</div>
+                <div class="calc-sub">Location-based housing allowance</div>
+              </div>
+              <div class="calc-right">
+                <div class="calc-main gold" id="bah-pay-amount">$2,850</div>
+                <div class="calc-mini" id="bah-breakdown-bah">BAH Component</div>
+              </div>
+            </div>
+
+            <div class="calc-card pay-estimate-card">
+              <div class="calc-left">
+                <div class="calc-title" id="bah-basepay-label">Estimated Monthly Base Pay</div>
+                <div class="calc-sub">Rank and years-of-service driven</div>
+              </div>
+              <div class="calc-right">
+                <div class="calc-main" id="bah-basepay-amount">$3,111</div>
+                <div class="calc-mini" id="bah-breakdown-basepay">Base Pay Component</div>
+              </div>
+            </div>
+
+            <div class="calc-card pay-estimate-card">
+              <div class="calc-left">
+                <div class="calc-title" id="bah-bas-label">Estimated Monthly BAS</div>
+                <div class="calc-sub">Standard food allowance estimate</div>
+              </div>
+              <div class="calc-right">
+                <div class="calc-main" id="bah-bas-amount">$476.95</div>
+                <div class="calc-mini" id="bah-breakdown-bas">BAS Component</div>
+              </div>
+            </div>
+
+            <div class="chart-zone">
+              <div class="bars breakdown-bars" id="bah-breakdown-rows">
+                <div class="bar-col">
+                  <div class="bar-stack">
+                    <div id="bah-bar-bah" class="bar-fill bar-aqua" style="height:78%;"></div>
+                  </div>
+                  <div class="bar-label">BAH</div>
+                  <div class="bar-value" id="bah-bar-bah-value">$2,850</div>
                 </div>
-                <div class="metric-value">$2,100</div>
+
+                <div class="bar-col">
+                  <div class="bar-stack">
+                    <div id="bah-bar-basepay" class="bar-fill bar-peach" style="height:84%;"></div>
+                  </div>
+                  <div class="bar-label">Base Pay</div>
+                  <div class="bar-value" id="bah-bar-basepay-value">$3,111</div>
+                </div>
+
+                <div class="bar-col">
+                  <div class="bar-stack">
+                    <div id="bah-bar-bas" class="bar-fill bar-lav" style="height:14%;"></div>
+                  </div>
+                  <div class="bar-label">BAS</div>
+                  <div class="bar-value" id="bah-bar-bas-value">$477</div>
+                </div>
               </div>
 
-              <div class="metric-row">
-                <div class="metric-name">Utilities</div>
-                <div class="metric-bar">
-                  <div class="metric-fill peach"></div>
+              <div class="score-ring-wrap">
+                <div id="scoreRing" class="score-ring" style="--pct:64.38;">
+                  <div class="score-center">
+                    <div id="bah-total-amount" class="score-number small-money">$6,437.95</div>
+                    <div id="scoreLabel" class="score-label">Total Monthly Pay</div>
+                  </div>
                 </div>
-                <div class="metric-value">$450</div>
-              </div>
 
-              <div class="metric-row">
-                <div class="metric-name">Insurance</div>
-                <div class="metric-bar">
-                  <div class="metric-fill lav"></div>
+                <div id="bah-total-wrap" class="next-assessment visible-pay-total">
+                  <div class="total-pay-label">Total Monthly Military Pay</div>
+                  <div class="total-pay-note" id="bah-total-note">Base Pay + BAH + BAS</div>
                 </div>
-                <div class="metric-value">$300</div>
               </div>
             </div>
-          </article>
+          </section>
         </div>
-      </section>
-    </section>
 
-    <!-- =======================================================
-      //#24) FOOTER NOTE
-    ======================================================== -->
-    <div class="footer-note">
-      Shell only. No live BAH or military pay logic is connected yet. This layout is ready for PCSUnited runtime wiring to connect pay tables, BAH tables, location lookup, and dependent-based calculation logic.
+        <!-- //#11) FAQ -->
+        <section class="seo-faq glass" aria-label="Frequently asked questions">
+          <h2 class="panel-title">BAH Calculator FAQ</h2>
+          <div class="panel-rule"></div>
+
+          <h3>What does this BAH calculator estimate?</h3>
+          <p>
+            It estimates projected monthly BAH, Base Pay, BAS, and total monthly
+            military compensation using the selected duty location, grade,
+            and years in service.
+          </p>
+
+          <h3>Does BAH change by location and dependents?</h3>
+          <p>
+            Yes. BAH can vary significantly by housing market and whether
+            the member has dependents.
+          </p>
+
+          <h3>Can this feed into a housing affordability tool?</h3>
+          <p>
+            Yes. This calculator is designed to act as a clean first step before
+            moving into a deeper mortgage and affordability workflow inside PCSUnited.
+          </p>
+        </section>
+
+        <!-- //#12) FOOTER NOTE -->
+        <div class="footer-note" id="bah-footer-note">
+          Demo logic included. You can now swap the mock data in
+          <code>bahcalculator.js</code> for official PCSUnited pay tables or live endpoints.
+        </div>
+      </div>
     </div>
-  </main>
+  </div>
+
+  <!-- //#13) SCRIPT -->
+  <script src="./bahcalculator.js"></script>
 </body>
 </html>

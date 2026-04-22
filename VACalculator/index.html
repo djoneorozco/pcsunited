@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- //#1) META -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- //#2) SEO -->
+  <title>Retirement & VA Disability Pay Calculator | PCSUnited</title>
+  <meta
+    name="description"
+    content="Estimate military retirement pay, VA disability compensation, and combined monthly income using PCSUnited's Aurora-style calculator."
+  />
+  <link rel="canonical" href="https://www.pcsunited.com/retirement-va-calculator" />
+
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Retirement & VA Disability Pay Calculator | PCSUnited" />
+  <meta
+    property="og:description"
+    content="Estimate monthly retirement pay, VA disability compensation, and combined income using PCSUnited's premium Aurora calculator."
+  />
+  <meta property="og:url" content="https://www.pcsunited.com/retirement-va-calculator" />
+
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Retirement & VA Disability Pay Calculator | PCSUnited" />
+  <meta
+    name="twitter:description"
+    content="Estimate monthly retirement pay, VA disability compensation, and combined income using PCSUnited's premium Aurora calculator."
+  />
+
+  <!-- //#3) FONTS -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Merriweather:wght@700&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- //#4) STYLESHEET -->
+  <link rel="stylesheet" href="./retirement-vacalculator.css" />
+</head>
+<body>
+  <!-- //#5) ROOT -->
+  <div id="pcsu-retva-shell">
+    <div class="retva-stage">
+      <div class="app">
+
+        <!-- //#6) TOPBAR -->
+        <div class="topbar">
+          <div class="title-wrap">
+            <h1 class="title">Retirement &amp; VA Disability Pay Calculator</h1>
+            <div class="subtitle">
+              Estimate military retirement pay, VA disability compensation, and total monthly income.
+            </div>
+          </div>
+
+          <div class="hero-card glass">
+            <div class="mini-label" id="retva-total-hero-label">Total Monthly Income</div>
+            <div class="hero-value" id="retva-total-hero-value">$7,284.16</div>
+            <div class="hero-sub" id="retva-total-hero-sub">Retirement Pay + VA Disability</div>
+          </div>
+        </div>
+
+        <!-- //#7) DIVIDER -->
+        <div class="divider"></div>
+
+        <!-- //#8) ABOUT / SEO COPY -->
+        <section class="seo-copy glass" aria-label="About this calculator">
+          <h2 class="panel-title">About the Retirement &amp; VA Calculator</h2>
+          <div class="panel-rule"></div>
+          <p>
+            PCSUnited’s Retirement &amp; VA Disability Pay Calculator gives military users a fast estimate
+            of post-service monthly income by combining projected retirement pay and estimated VA disability compensation.
+          </p>
+          <p>
+            Users can adjust retired grade, years of service, retirement system, VA disability percentage,
+            and household status to preview income before moving into deeper financial readiness and housing analysis.
+          </p>
+        </section>
+
+        <!-- //#9) SUMMARY SELECTORS -->
+        <div class="summary-grid">
+          <div class="mini-card glass">
+            <div class="mini-label">Retired Grade</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="retva-rank">
+                  <option>E-5</option>
+                  <option selected>E-6</option>
+                  <option>E-7</option>
+                  <option>E-8</option>
+                  <option>E-9</option>
+                  <option>O-1</option>
+                  <option>O-2</option>
+                  <option>O-3</option>
+                  <option>O-4</option>
+                  <option>O-5</option>
+                  <option>O-6</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">Years of Service</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="retva-yos">
+                  <option>20 Years</option>
+                  <option selected>22 Years</option>
+                  <option>24 Years</option>
+                  <option>26 Years</option>
+                  <option>28 Years</option>
+                  <option>30 Years</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">Retirement System</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="retva-system">
+                  <option selected>High-3</option>
+                  <option>Blended Retirement System</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">VA Disability</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="retva-disability">
+                  <option>0%</option>
+                  <option>10%</option>
+                  <option>20%</option>
+                  <option>30%</option>
+                  <option>40%</option>
+                  <option>50%</option>
+                  <option>60%</option>
+                  <option>70%</option>
+                  <option>80%</option>
+                  <option selected>90%</option>
+                  <option>100%</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="summary-grid secondary-grid">
+          <div class="mini-card glass">
+            <div class="mini-label">Household Status</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="retva-household">
+                  <option>Veteran Alone</option>
+                  <option selected>Veteran + Spouse</option>
+                  <option>Veteran + Spouse + Child</option>
+                  <option>Veteran + Child</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">Retirement Lane</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="retva-lane">
+                  <option selected>Retirement + VA Combined</option>
+                  <option>Retirement Only</option>
+                  <option>VA Disability Only</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">Concurrent Receipt</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="retva-concurrent">
+                  <option selected>Estimated CRDP Eligible</option>
+                  <option>No Concurrent Receipt</option>
+                  <option>Advanced Review Later</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
+          <div class="mini-card glass">
+            <div class="mini-label">State Tax View</div>
+            <div class="mini-value">
+              <div class="select-wrap">
+                <select id="retva-taxview">
+                  <option selected>Gross Monthly View</option>
+                  <option>Net Estimate Later</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- //#10) MAIN GRID -->
+        <div class="main-grid">
+          <!-- //#10A) LEFT PANEL -->
+          <section class="panel glass">
+            <h2 class="panel-title">Pay Estimate</h2>
+            <div class="panel-rule"></div>
+
+            <!-- hidden info block kept for JS/runtime continuity -->
+            <div id="retva-info-panel" style="display:none;">
+              <div id="retva-info-rank">E-6</div>
+              <div id="retva-info-yos">22 Years</div>
+              <div id="retva-info-system">High-3</div>
+              <div id="retva-info-disability">90%</div>
+              <div id="retva-info-household">Veteran + Spouse</div>
+              <div id="retva-info-lane">Retirement + VA Combined</div>
+              <div id="retva-info-concurrent">Estimated CRDP Eligible</div>
+            </div>
+
+            <div class="calc-card pay-estimate-card">
+              <div class="calc-left">
+                <div class="calc-title" id="retva-retiredpay-label">Projected Monthly Retirement Pay</div>
+                <div class="calc-sub">Based on retired grade, years of service, and retirement system</div>
+              </div>
+              <div class="calc-right">
+                <div class="calc-main gold" id="retva-retiredpay-amount">$3,985</div>
+                <div class="calc-mini" id="retva-breakdown-retiredpay">Retirement Component</div>
+              </div>
+            </div>
+
+            <div class="calc-card pay-estimate-card">
+              <div class="calc-left">
+                <div class="calc-title" id="retva-vapay-label">Estimated Monthly VA Disability</div>
+                <div class="calc-sub">Based on VA percentage and selected household status</div>
+              </div>
+              <div class="calc-right">
+                <div class="calc-main" id="retva-vapay-amount">$3,299.16</div>
+                <div class="calc-mini" id="retva-breakdown-vapay">VA Disability Component</div>
+              </div>
+            </div>
+
+            <div class="calc-card pay-estimate-card">
+              <div class="calc-left">
+                <div class="calc-title" id="retva-combined-label">Projected Combined Monthly Income</div>
+                <div class="calc-sub">Retirement pay plus estimated VA compensation</div>
+              </div>
+              <div class="calc-right">
+                <div class="calc-main" id="retva-combined-amount">$7,284.16</div>
+                <div class="calc-mini" id="retva-breakdown-combined">Combined Monthly View</div>
+              </div>
+            </div>
+
+            <div class="input-divider"></div>
+
+            <h2 class="panel-title insight-title">Retirement Insight</h2>
+            <div class="panel-rule insight-rule"></div>
+
+            <ul class="insight-list" id="retva-insight-list">
+              <li>
+                <span class="dot mint"></span>
+                <span>
+                  This estimate gives a fast view of retirement income by combining projected retired pay and estimated VA disability compensation.
+                </span>
+              </li>
+              <li>
+                <span class="dot peach"></span>
+                <span>
+                  Retirement pay is driven by grade, years of service, and retirement system, while VA compensation is driven by rating and household status.
+                </span>
+              </li>
+              <li>
+                <span class="dot lav"></span>
+                <span>
+                  This shell is designed to feed future PCSUnited retirement-readiness and housing-planning workflows.
+                </span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- //#10B) RIGHT PANEL -->
+          <section class="panel glass">
+            <div class="chart-zone">
+              <div class="bars breakdown-bars" id="retva-breakdown-rows">
+                <div class="bar-col">
+                  <div class="bar-stack">
+                    <div id="retva-bar-retiredpay" class="bar-fill bar-aqua" style="height:78%;"></div>
+                  </div>
+                  <div class="bar-label">Retirement</div>
+                  <div class="bar-value" id="retva-bar-retiredpay-value">$3,985</div>
+                </div>
+
+                <div class="bar-col">
+                  <div class="bar-stack">
+                    <div id="retva-bar-vapay" class="bar-fill bar-peach" style="height:65%;"></div>
+                  </div>
+                  <div class="bar-label">VA Pay</div>
+                  <div class="bar-value" id="retva-bar-vapay-value">$3,299.16</div>
+                </div>
+
+                <div class="bar-col">
+                  <div class="bar-stack">
+                    <div id="retva-bar-offset" class="bar-fill bar-lav" style="height:16%;"></div>
+                  </div>
+                  <div class="bar-label">Offset / CRDP</div>
+                  <div class="bar-value" id="retva-bar-offset-value">Review</div>
+                </div>
+              </div>
+
+              <div class="score-ring-wrap">
+                <div id="retva-scoreRing" class="score-ring" style="--pct:72.84;">
+                  <div class="score-center">
+                    <div id="retva-total-amount" class="score-number small-money">$7,284.16</div>
+                    <div id="retva-scoreLabel" class="score-label">Total Monthly Income</div>
+                  </div>
+                </div>
+
+                <div id="retva-total-wrap" class="next-assessment visible-pay-total">
+                  <div class="total-pay-label">Combined Retirement Income</div>
+                  <div class="total-pay-note" id="retva-total-note">Retirement Pay + VA Disability</div>
+                </div>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <!-- //#11) FAQ -->
+        <section class="seo-faq glass" aria-label="Frequently asked questions">
+          <h2 class="panel-title">Retirement &amp; VA Calculator FAQ</h2>
+          <div class="panel-rule"></div>
+
+          <h3>What does this calculator estimate?</h3>
+          <p>
+            It estimates projected military retirement pay, estimated VA disability compensation,
+            and combined monthly income based on the selected retirement and disability inputs.
+          </p>
+
+          <h3>Does household status affect VA compensation?</h3>
+          <p>
+            Yes. VA compensation can change based on rating level and dependent status,
+            which is why this tool includes a household-status selector.
+          </p>
+
+          <h3>Does this already solve CRDP and CRSC perfectly?</h3>
+          <p>
+            Not yet. This version is best treated as a strong planning estimate.
+            Advanced concurrent receipt logic can be layered in during the runtime phase.
+          </p>
+        </section>
+
+        <!-- //#12) FOOTER NOTE -->
+        <div class="footer-note" id="retva-footer-note">
+          Shell only. Runtime logic can now connect this calculator to PCSUnited retirement formulas,
+          VA compensation tables, and future CRDP / CRSC review logic.
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- //#13) SCRIPT -->
+  <script src="./retirement-vacalculator.js"></script>
+</body>
+</html>

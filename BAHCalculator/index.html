@@ -160,72 +160,19 @@
 
         <!-- //#10) MAIN GRID -->
         <div class="main-grid">
-          <!-- //#10A) LEFT PANEL -->
-          <section class="panel glass">
-            <h2 class="panel-title">Input Information</h2>
-            <div class="panel-rule"></div>
-
-            <div class="info-panel" id="bah-info-panel">
-              <div class="info-row">
-                <div class="info-key">Military Status</div>
-                <div class="info-value" id="bah-info-status">Active Duty</div>
-              </div>
-
-              <div class="info-row">
-                <div class="info-key">Dependency Status</div>
-                <div class="info-value" id="bah-info-dependency">With Dependents</div>
-              </div>
-
-              <div class="info-row">
-                <div class="info-key">Duty Location</div>
-                <div class="info-value" id="bah-info-location">JBSA-Lackland</div>
-              </div>
-
-              <div class="info-row">
-                <div class="info-key">Pay Grade</div>
-                <div class="info-value" id="bah-info-rank">E-5</div>
-              </div>
-
-              <div class="info-row">
-                <div class="info-key">Years in Service</div>
-                <div class="info-value" id="bah-info-yos">6 Years</div>
-              </div>
-            </div>
-
-            <div class="input-divider"></div>
-
-            <h2 class="panel-title insight-title">Estimation Insight</h2>
-            <div class="panel-rule insight-rule"></div>
-
-            <ul class="insight-list" id="bah-insight-list">
-              <li>
-                <span class="dot mint"></span>
-                <span>
-                  This estimate combines projected monthly BAH, estimated Base Pay,
-                  and BAS into one fast-read compensation view.
-                </span>
-              </li>
-              <li>
-                <span class="dot peach"></span>
-                <span>
-                  BAH changes based on duty location and dependency status, while
-                  Base Pay changes with grade and time in service.
-                </span>
-              </li>
-              <li>
-                <span class="dot lav"></span>
-                <span>
-                  This shell is designed for PCSUnited’s front-end housing workflow
-                  before deeper affordability analysis begins.
-                </span>
-              </li>
-            </ul>
-          </section>
-
-          <!-- //#10B) RIGHT PANEL -->
+          <!-- //#10A) LEFT PANEL : PAY ESTIMATE + INSIGHT -->
           <section class="panel glass">
             <h2 class="panel-title">Pay Estimate</h2>
             <div class="panel-rule"></div>
+
+            <!-- keep hidden info values for JS/runtime continuity -->
+            <div id="bah-info-panel" style="display:none;">
+              <div id="bah-info-status">Active Duty</div>
+              <div id="bah-info-dependency">With Dependents</div>
+              <div id="bah-info-location">JBSA-Lackland</div>
+              <div id="bah-info-rank">E-5</div>
+              <div id="bah-info-yos">6 Years</div>
+            </div>
 
             <div class="calc-card pay-estimate-card">
               <div class="calc-left">
@@ -260,6 +207,38 @@
               </div>
             </div>
 
+            <div class="input-divider"></div>
+
+            <h2 class="panel-title insight-title">Estimation Insight</h2>
+            <div class="panel-rule insight-rule"></div>
+
+            <ul class="insight-list" id="bah-insight-list">
+              <li>
+                <span class="dot mint"></span>
+                <span>
+                  This estimate combines projected monthly BAH, estimated Base Pay,
+                  and BAS into one fast-read compensation view.
+                </span>
+              </li>
+              <li>
+                <span class="dot peach"></span>
+                <span>
+                  BAH changes based on duty location and dependency status, while
+                  Base Pay changes with grade and time in service.
+                </span>
+              </li>
+              <li>
+                <span class="dot lav"></span>
+                <span>
+                  This shell is designed for PCSUnited’s front-end housing workflow
+                  before deeper affordability analysis begins.
+                </span>
+              </li>
+            </ul>
+          </section>
+
+          <!-- //#10B) RIGHT PANEL : GRAPH / RING MOVED UP -->
+          <section class="panel glass">
             <div class="chart-zone">
               <div class="bars breakdown-bars" id="bah-breakdown-rows">
                 <div class="bar-col">

@@ -1,13 +1,20 @@
 {
-  "city": "Camp Springs, MD",
-  "place": "Joint Base Andrews",
-  "state": "MD",
+  "slug": "andrews-afb",
+  "name": "Andrews AFB",
+  "city": "Andrews AFB",
+  "submarket": "Camp Springs",
+  "place": "Andrews AFB, MD",
+  "place_detail": "Camp Springs / Washington DC Metro, MD",
+  "state": "Maryland",
+  "state_code": "MD",
   "geo_id": "1600000US2412650",
   "year": 2026,
   "last_updated_data_from_sources": "March 2026",
-  "image_url": "https://cdn.prod.website-files.com",
+  "image_url": "https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/69f1786791ebcdddcdb6b68f_D11B76B2-958B-4871-B121-30BA68667423.png",
+  "base_image_url": "https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/69f1786791ebcdddcdb6b68f_D11B76B2-958B-4871-B121-30BA68667423.png",
   "zip": "20762",
   "market_label": "Washington-Arlington-Alexandria Metro",
+  "profile": "Military-connected Andrews AFB housing snapshot anchored to Camp Springs and the Washington DC metro, built for PCSUnited base-level market overviews.",
 
   "avg_home_value": 445000,
   "average_home_value": 445000,
@@ -24,6 +31,33 @@
     "employment_status": "Robust"
   },
 
+  "market_metrics": {
+    "median_list_price": 455000,
+    "median_sold_price": 438000,
+    "median_sale_price": 438000,
+    "days_on_market": 42,
+    "inventory_months": null,
+    "price_per_sqft": 248,
+    "active_listings_total": 410,
+    "market_type_summary": "Steady demand with low inventory and strong DC metro employment support",
+    "zillow_average_home_value": 445000,
+    "zillow_one_year_change_percent": 1.2,
+    "as_of": "2026-03"
+  },
+
+  "metrics": {
+    "median_list_price": 455000,
+    "median_sold_price": 438000,
+    "median_sale_price": 438000,
+    "days_on_market": 42,
+    "inventory_months": null,
+    "price_per_sqft": 248,
+    "median_rent": 2750,
+    "active_listings_total": 410,
+    "property_tax_rate": 0.0105,
+    "as_of": "2026-03"
+  },
+
   "mortgage_assumptions": {
     "apr_percent": 6.25,
     "term_years": 30,
@@ -32,14 +66,35 @@
     "defaults_note": "Based on March 2026 Maryland VA loan rates."
   },
 
-  "property_tax_rate": 1.05,
-  "insurance_rate": 0.45,
+  "property_tax_rate": 0.0105,
+  "property_tax_rate_percent": 1.05,
+  "insurance_rate": 0.0045,
+  "insurance_rate_percent": 0.45,
   "hoa_monthly": 65,
+
+  "ownership_costs": {
+    "property_tax_rate": 0.0105,
+    "property_tax_rate_percent": 1.05,
+    "insurance_rate_estimate": 0.0045,
+    "insurance_rate_percent": 0.45,
+    "insurance_annual_default": 2003,
+    "hoa_monthly_default": 65,
+    "notes": [
+      "Maryland property taxes are lower than some high-tax military markets, but DC metro purchase prices keep all-in ownership costs elevated.",
+      "Insurance, HOA, commute costs, and parking/toll exposure should be included when comparing rent versus buy near Andrews."
+    ]
+  },
+
+  "costs": {
+    "property_tax_rate": 0.0105,
+    "insurance_annual_default": 2003,
+    "hoa_monthly_default": 65
+  },
 
   "avg_home_mortgage_monthly": {
     "avg": 3150,
     "as_of": "2026-03",
-    "notes": "VA loan estimate; high BAH area but significantly higher commute costs and traffic impact."
+    "notes": "VA loan estimate; high BAH area but significantly higher commute costs and DC metro housing pressure."
   },
 
   "population": {
@@ -77,18 +132,24 @@
   },
 
   "crime_status": {
-    "installation": "Extremely safe; high-security gated community.",
-    "metro_shreveport_bossier": "Camp Springs is moderate; most military families prefer living in Upper Marlboro or southern Calvert County for enhanced safety."
+    "installation": "Extremely safe; high-security gated military installation.",
+    "metro_washington_dc": "Neighborhood safety varies across Prince George's County and the broader DC metro; many military families compare Camp Springs, Upper Marlboro, Waldorf, Bowie, and Calvert County areas carefully."
   },
 
   "school_quality": {
-    "on_base": "No on-base schools; students attend Prince George's County Public Schools.",
-    "off_base": "Northern Calvert County and specific Upper Marlboro zones are highly preferred."
+    "on_base": "No traditional on-base K-12 school system should be assumed; families should verify current school options by exact housing address.",
+    "off_base": "School quality varies significantly by exact address; many families research Upper Marlboro, Bowie, Waldorf, northern Calvert County, and select Prince George's County zones."
   },
 
   "rental_vacancy": {
     "rate_percent": 5.4,
-    "notes": "Very tight rental market due to high civilian government demand."
+    "notes": "Tight rental market influenced by military demand, federal employment, contractors, and broader DC metro housing pressure."
+  },
+
+  "rental_metrics": {
+    "median_rent": 2750,
+    "vacancy_rate_percent": 5.4,
+    "notes": "Based on 3-bedroom average rent and tight DC metro military-renter inventory."
   },
 
   "climate_weather": {
@@ -101,29 +162,30 @@
   "special_events": [
     "Joint Base Andrews Air Show",
     "National Cherry Blossom Festival",
-    "Maryland State Fair"
+    "Maryland State Fair",
+    "Washington DC military and federal events"
   ],
 
   "military_lifestyle_fit": {
     "rating": "Very Good",
-    "description": "High-visibility assignment; massive support infrastructure across the DMV region."
+    "description": "High-visibility assignment with major Air Force, joint, federal, and national-capital support infrastructure."
   },
 
   "financial_brief": {
     "bah_vs_buy_position": "Neutral",
     "bah_vs_rent_position": "Neutral",
-    "affordability_summary": "High BAH makes entry possible, but property taxes and insurance are rising.",
-    "buyer_opportunity": "Strongest in Upper Marlboro and growing areas of Charles County.",
+    "affordability_summary": "High BAH helps offset DC metro costs, but purchase prices, traffic, insurance, and HOA exposure can tighten the real monthly picture.",
+    "buyer_opportunity": "Strongest fit appears in Upper Marlboro, Waldorf, Bowie, and selected southern Maryland corridors where buyers can balance commute and value.",
     "renter_advantage": true
   },
 
   "market_bluf": {
     "bluf_headline": "High-Stakes Strategic Hub",
-    "bluf_summary": "Stable values but intense competition from the civilian sector in the DC metro.",
+    "bluf_summary": "Andrews offers strong long-term stability near the nation’s capital, but military buyers must manage high competition, commute pressure, and elevated monthly ownership costs.",
     "status": "Balanced",
     "inventory_trend": "Stable",
     "buyer_leverage": "Medium",
-    "verdict": "BUY FOR EQUITY",
+    "verdict": "BUY FOR STABILITY",
     "verdict_color": "green",
     "confidence_score": 84
   },
@@ -137,53 +199,240 @@
   },
 
   "rules": {
-    "max_safe_housing_ratio": 0.30,
+    "max_safe_housing_ratio": 0.3,
     "warning_ratio": 0.35,
-    "danger_ratio": 0.40
+    "danger_ratio": 0.4
   },
+
+  "summary_points": [
+    "Andrews AFB sits inside one of the most strategically important and economically stable military-adjacent metros in the country.",
+    "The DC metro supports strong long-term housing demand, but entry costs are materially higher than many military markets.",
+    "Military buyers should treat commute time, route reliability, and exact neighborhood selection as core financial variables.",
+    "BAH may support renting or buying depending on rank, dependents, debt, and willingness to live farther from the installation.",
+    "Upper Marlboro, Waldorf, Bowie, and selected southern Maryland corridors may offer stronger lifestyle-to-cost balance than immediate high-congestion zones."
+  ],
+
+  "opportunities": [
+    "Long-term stability is supported by federal employment, defense contracting, and national-capital-region demand.",
+    "High BAH can help qualified military buyers enter the market if debt and target price are controlled.",
+    "Selected Maryland suburbs may offer more space and stronger family fit than immediate close-in areas.",
+    "Strong resale relevance exists when homes balance commute, schools, safety, and access to the DC employment base."
+  ],
+
+  "risks": [
+    "Traffic and commute friction can materially reduce quality of life even when a property appears close on a map.",
+    "Competition from civilian government workers and contractors can pressure both rental and purchase markets.",
+    "A higher purchase price can make the gap between BAH and true ownership cost feel tighter than expected.",
+    "School quality and neighborhood fit vary sharply by exact address, not just city or ZIP code."
+  ],
+
+  "buyer_notes": [
+    "Andrews AFB buyers should avoid choosing purely by distance to the gate; route reliability often matters more.",
+    "The real decision should include mortgage, taxes, insurance, HOA, utilities, tolls, parking, and commute stress.",
+    "Families should verify school zones by exact property address before committing to a lease or purchase.",
+    "This market is strongest for disciplined buyers who prioritize long-term stability and avoid stretching into DC metro price pressure."
+  ],
+
+  "seller_notes": [
+    "Sellers can benefit from DC metro stability, but pricing should reflect current inventory and buyer payment sensitivity.",
+    "Move-in-ready homes with strong commute logic and clear military-friendly positioning can stand out.",
+    "Military-adjacent listings should emphasize route access, neighborhood fit, and practical monthly ownership value."
+  ],
+
+  "investor_angles": [
+    "Rental demand is supported by military, federal, contractor, and commuter populations, but acquisition costs can compress cash flow.",
+    "Andrews-area rentals may work best for investors prioritizing durable occupancy and stability over high immediate yield.",
+    "Investors should stress-test vacancy, maintenance, HOA exposure, commute desirability, and rent caps carefully."
+  ],
+
+  "neighborhoods": [
+    "Camp Springs",
+    "Upper Marlboro",
+    "Waldorf",
+    "Bowie",
+    "Clinton",
+    "Oxon Hill / National Harbor",
+    "Northern Calvert County"
+  ],
+
+  "target_neighborhoods": [
+    "Upper Marlboro",
+    "Waldorf",
+    "Bowie",
+    "Clinton",
+    "Northern Calvert County",
+    "Camp Springs close-in pockets"
+  ],
+
+  "buyer_guidance": [
+    "Use all-in monthly cost, not just list price, as the primary decision screen.",
+    "Test commute routes during actual report-time windows before choosing a neighborhood.",
+    "Compare rent, buy, and on-base housing alternatives against BAH, debt, and savings goals.",
+    "Families should verify schools, childcare, and medical access before committing to a location."
+  ],
+
+  "seller_guidance": [
+    "Price against current buyer payment sensitivity, not only DC metro prestige.",
+    "Highlight commute logic, route access, condition, and military-friendly features.",
+    "Homes that reduce friction for military families should be positioned around practical lifestyle fit."
+  ],
+
+  "landlord_notes": [
+    "Military and federal renter demand can support durable occupancy near Andrews.",
+    "Investors should model HOA, maintenance, insurance, vacancy, and tenant turnover conservatively.",
+    "The best rental positioning is stable access, clean condition, and strong commute logic."
+  ],
 
   "by_bedroom": {
     "2": {
-      "rent_monthly": { "low": 1850, "high": 2400, "avg": 2100, "as_of": "2026-03" },
-      "home_price": { "low": 310000, "high": 375000, "avg": 345000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 2400, "high": 2900, "avg": 2650, "as_of": "2026-03" },
+      "rent_monthly": {
+        "low": 1850,
+        "high": 2400,
+        "avg": 2100,
+        "as_of": "2026-03"
+      },
+      "home_price": {
+        "low": 310000,
+        "high": 375000,
+        "avg": 345000,
+        "as_of": "2026-01"
+      },
+      "mortgage_monthly": {
+        "low": 2400,
+        "high": 2900,
+        "avg": 2650,
+        "as_of": "2026-03"
+      },
       "utilities": {
-        "electric_gas": { "low": 160, "high": 240, "avg": 200 },
-        "water_sewer": { "low": 55, "high": 85, "avg": 70 },
-        "total": { "low": 215, "high": 325, "avg": 270 },
+        "electric_gas": {
+          "low": 160,
+          "high": 240,
+          "avg": 200
+        },
+        "water_sewer": {
+          "low": 55,
+          "high": 85,
+          "avg": 70
+        },
+        "total": {
+          "low": 215,
+          "high": 325,
+          "avg": 270
+        },
         "as_of": "2026-03"
       }
     },
     "3": {
-      "rent_monthly": { "low": 2400, "high": 3100, "avg": 2750, "as_of": "2026-03" },
-      "home_price": { "low": 390000, "high": 510000, "avg": 445000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 2800, "high": 3500, "avg": 3150, "as_of": "2026-03" },
+      "rent_monthly": {
+        "low": 2400,
+        "high": 3100,
+        "avg": 2750,
+        "as_of": "2026-03"
+      },
+      "home_price": {
+        "low": 390000,
+        "high": 510000,
+        "avg": 445000,
+        "as_of": "2026-01"
+      },
+      "mortgage_monthly": {
+        "low": 2800,
+        "high": 3500,
+        "avg": 3150,
+        "as_of": "2026-03"
+      },
       "utilities": {
-        "electric_gas": { "low": 190, "high": 300, "avg": 245 },
-        "water_sewer": { "low": 65, "high": 100, "avg": 82 },
-        "total": { "low": 255, "high": 400, "avg": 327 },
+        "electric_gas": {
+          "low": 190,
+          "high": 300,
+          "avg": 245
+        },
+        "water_sewer": {
+          "low": 65,
+          "high": 100,
+          "avg": 82
+        },
+        "total": {
+          "low": 255,
+          "high": 400,
+          "avg": 327
+        },
         "as_of": "2026-03"
       }
     },
     "4": {
-      "rent_monthly": { "low": 3100, "high": 4200, "avg": 3600, "as_of": "2026-03" },
-      "home_price": { "low": 520000, "high": 680000, "avg": 595000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 3700, "high": 4800, "avg": 4250, "as_of": "2026-03" },
+      "rent_monthly": {
+        "low": 3100,
+        "high": 4200,
+        "avg": 3600,
+        "as_of": "2026-03"
+      },
+      "home_price": {
+        "low": 520000,
+        "high": 680000,
+        "avg": 595000,
+        "as_of": "2026-01"
+      },
+      "mortgage_monthly": {
+        "low": 3700,
+        "high": 4800,
+        "avg": 4250,
+        "as_of": "2026-03"
+      },
       "utilities": {
-        "electric_gas": { "low": 240, "high": 380, "avg": 310 },
-        "water_sewer": { "low": 85, "high": 130, "avg": 107 },
-        "total": { "low": 325, "high": 510, "avg": 417 },
+        "electric_gas": {
+          "low": 240,
+          "high": 380,
+          "avg": 310
+        },
+        "water_sewer": {
+          "low": 85,
+          "high": 130,
+          "avg": 107
+        },
+        "total": {
+          "low": 325,
+          "high": 510,
+          "avg": 417
+        },
         "as_of": "2026-03"
       }
     },
     "5": {
-      "rent_monthly": { "low": 3900, "high": 5500, "avg": 4600, "as_of": "2026-03" },
-      "home_price": { "low": 720000, "high": 950000, "avg": 835000, "as_of": "2026-01" },
-      "mortgage_monthly": { "low": 5100, "high": 6700, "avg": 5900, "as_of": "2026-03" },
+      "rent_monthly": {
+        "low": 3900,
+        "high": 5500,
+        "avg": 4600,
+        "as_of": "2026-03"
+      },
+      "home_price": {
+        "low": 720000,
+        "high": 950000,
+        "avg": 835000,
+        "as_of": "2026-01"
+      },
+      "mortgage_monthly": {
+        "low": 5100,
+        "high": 6700,
+        "avg": 5900,
+        "as_of": "2026-03"
+      },
       "utilities": {
-        "electric_gas": { "low": 310, "high": 500, "avg": 405 },
-        "water_sewer": { "low": 110, "high": 170, "avg": 140 },
-        "total": { "low": 420, "high": 670, "avg": 545 },
+        "electric_gas": {
+          "low": 310,
+          "high": 500,
+          "avg": 405
+        },
+        "water_sewer": {
+          "low": 110,
+          "high": 170,
+          "avg": 140
+        },
+        "total": {
+          "low": 420,
+          "high": 670,
+          "avg": 545
+        },
         "as_of": "2026-03"
       }
     }
@@ -201,19 +450,827 @@
       "median_listing_price_realtor": 455000,
       "median_listing_price_per_sqft": 248,
       "active_listings_total": 410,
-      "q1_2026": { "median_sale_price": 438000 },
+      "q1_2026": {
+        "median_sale_price": 438000
+      },
       "sale_history_36_months": [
-        { "month": "2023-01", "median_sale_price": 415000 },
-        { "month": "2024-12", "median_sale_price": 428000 },
-        { "month": "2025-06", "median_sale_price": 442000 },
-        { "month": "2026-01", "median_sale_price": 438000 }
+        {
+          "month": "2023-01",
+          "median_sale_price": 415000
+        },
+        {
+          "month": "2024-12",
+          "median_sale_price": 428000
+        },
+        {
+          "month": "2025-06",
+          "median_sale_price": 442000
+        },
+        {
+          "month": "2026-01",
+          "median_sale_price": 438000
+        }
       ]
     }
   },
 
+  "base_profile": {
+    "schema_version": "pcsu-base-profile-v1.0.0",
+    "base_id": "joint-base-andrews",
+    "base_name": "Joint Base Andrews",
+    "display_name": "Joint Base Andrews",
+    "short_name": "Andrews",
+    "branch": "Air Force",
+    "joint_base": true,
+    "parent_installation": "Joint Base Andrews",
+    "city": "Camp Springs",
+    "state": "Maryland",
+    "state_abbr": "MD",
+    "zip": "20762",
+    "metro": "Washington-Arlington-Alexandria, DC-VA-MD-WV",
+    "market_label": "Washington DC / Joint Base Andrews Military Housing Market",
+    "installation_type": "Executive Airlift / National Capital Region / Joint Base Support",
+    "host_or_major_command": "316th Wing / Air Force District of Washington",
+    "primary_mission_summary": "Joint Base Andrews is a high-visibility Air Force and joint installation supporting executive airlift, national leadership movement, contingency response, and national-capital-region military operations.",
+    "pcs_personality": "High-visibility, high-traffic, expensive, career-significant, and highly tied to commute timing, school zones, BAH fit, and neighborhood selection.",
+    "base_bluf": "Andrews is not just a Maryland housing decision. It is a commute, BAH, route-risk, school-zone, and DC metro cost decision. Families should compare nearby areas by realistic drive time, all-in housing pressure, and lifestyle fit instead of judging only by distance to the installation.",
+    "user_positioning": {
+      "military_family_bluf": "Prioritize commute testing, school-zone verification, BAH fit, childcare access, and neighborhood safety before signing a lease or purchase contract.",
+      "single_airman_bluf": "Prioritize commute simplicity, rent control, parking, roommate flexibility, and access to daily services without overpaying for DC metro lifestyle creep.",
+      "realtor_bluf": "The strongest Andrews housing conversations are about commute realism, BAH pressure, school-zone confidence, and DC metro affordability — not generic Maryland market stats.",
+      "investor_bluf": "Rental demand near Andrews is influenced by military turnover, federal employment, defense contractors, and commuters who need access to the National Capital Region."
+    },
+    "base_map_image": {
+      "url": "https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/69f1786791ebcdddcdb6b68f_D11B76B2-958B-4871-B121-30BA68667423.png",
+      "alt": "PCSUnited public-facing Joint Base Andrews placeholder orientation image for base housing and relocation planning.",
+      "title": "Joint Base Andrews Base & Housing Overview",
+      "caption": "Placeholder PCSUnited orientation image until a dedicated Andrews gate and neighborhood map is available.",
+      "last_updated": "2026-05-05",
+      "status": "generic_placeholder_map",
+      "map_type": "generic_pcsunited_orientation_image",
+      "confidence": "medium",
+      "safety_note": "This is not an official DoD map. It is a placeholder PCSUnited orientation image and should not be used for access control, emergency routing, or official navigation."
+    },
+    "official_links": {
+      "joint_base_andrews_home": "https://www.jba.af.mil/",
+      "joint_base_andrews_newcomers": "https://www.jba.af.mil/Resources/Newcomers/",
+      "joint_base_andrews_housing": "https://www.jba.af.mil/Resources/Housing/",
+      "air_force_housing_andrews": "https://www.housing.af.mil/",
+      "joint_base_andrews_exchange": "https://www.shopmyexchange.com/",
+      "joint_base_andrews_commissary": "https://corp.commissaries.com/",
+      "malcolm_grow_medical_clinics": "https://andrews.tricare.mil/"
+    },
+    "visitor_control_center": {
+      "name": "Joint Base Andrews Visitor Control Center",
+      "building": "Verify current building before arrival",
+      "address": "Verify current visitor center routing with official Joint Base Andrews sources before arrival",
+      "phone": "Verify current phone number with official installation sources",
+      "hours": "Verify official hours before travel",
+      "best_for": [
+        "Visitors",
+        "Newcomers",
+        "Family members without routine installation access",
+        "PCS arrival planning"
+      ],
+      "map_label": "Visitor Control Center",
+      "map_zone": "main access / visitor processing area",
+      "note": "Use official Joint Base Andrews visitor information before arrival. Access requirements, sponsor rules, gate procedures, and hours can change."
+    },
+    "gates": [
+      {
+        "name": "Main Gate",
+        "type": "primary_gate",
+        "status": "verify_current_status",
+        "hours": "Verify official Joint Base Andrews gate hours",
+        "map_label": "Main Gate",
+        "map_zone": "primary access area",
+        "best_for": [
+          "Newcomer routing",
+          "General base access",
+          "Visitor processing when directed"
+        ],
+        "commute_notes": "Common anchor point for arrival planning, but route performance depends heavily on traffic, gate flow, and duty location.",
+        "user_warning": "Verify current gate status with official Joint Base Andrews sources before travel."
+      },
+      {
+        "name": "Virginia Gate",
+        "type": "commuter_gate",
+        "status": "verify_current_status",
+        "hours": "Verify official Joint Base Andrews gate hours",
+        "map_label": "Virginia Gate",
+        "map_zone": "commuter access area",
+        "best_for": [
+          "Daily commuters",
+          "Alternate route planning",
+          "Users approaching from specific Prince George's County corridors"
+        ],
+        "commute_notes": "May be useful for commuters depending on exact home address and duty location.",
+        "user_warning": "Do not assume availability or best routing without checking current gate procedures."
+      },
+      {
+        "name": "Pearl Harbor Gate",
+        "type": "commuter_or_limited_gate",
+        "status": "verify_current_status",
+        "hours": "Verify official Joint Base Andrews gate hours",
+        "map_label": "Pearl Harbor Gate",
+        "map_zone": "alternate access area",
+        "best_for": [
+          "Specific commute patterns",
+          "Alternate access when applicable"
+        ],
+        "commute_notes": "Useful only if the user's route and duty location make it practical.",
+        "user_warning": "Gate hours and routing can change. Confirm before relying on this gate."
+      },
+      {
+        "name": "Commercial Gate",
+        "type": "commercial_or_limited_gate",
+        "status": "verify_current_status",
+        "hours": "Verify official Joint Base Andrews commercial access procedures",
+        "map_label": "Commercial Gate",
+        "map_zone": "commercial access area",
+        "best_for": [
+          "Commercial traffic",
+          "Deliveries",
+          "Mover coordination when directed"
+        ],
+        "commute_notes": "Useful for commercial or delivery planning, not a default family commute gate.",
+        "user_warning": "Movers and commercial deliveries should verify procedures through official base access guidance."
+      }
+    ],
+    "major_services": [
+      {
+        "name": "Malcolm Grow Medical Clinics and Surgery Center",
+        "category": "medical",
+        "map_label": "Medical",
+        "address": "Verify current clinic address before travel",
+        "phone": "Verify through official TRICARE / Andrews medical source",
+        "hours": "Verify current clinic and pharmacy hours",
+        "best_for": [
+          "Primary military medical services",
+          "Specialty clinic planning",
+          "Pharmacy-related planning",
+          "Family medical orientation"
+        ],
+        "map_zone": "medical support area",
+        "user_note": "Treat this as a major medical anchor for PCS planning. Verify emergency care options, pharmacy procedures, and clinic availability directly with official medical sources."
+      },
+      {
+        "name": "Joint Base Andrews Commissary",
+        "category": "commissary",
+        "map_label": "Commissary",
+        "address": "Verify current commissary address before travel",
+        "phone": "Verify current phone number with DeCA",
+        "best_for": [
+          "Grocery savings",
+          "Family shopping",
+          "BAH and monthly budget planning"
+        ],
+        "map_zone": "main services / retail area",
+        "user_note": "Commissary access can materially affect monthly food budget for eligible users in a high-cost metro."
+      },
+      {
+        "name": "Joint Base Andrews Exchange",
+        "category": "exchange_bx",
+        "map_label": "BX / Exchange",
+        "address": "Verify current Exchange location before travel",
+        "phone": "Verify current phone number with AAFES",
+        "hours": "Verify current Exchange hours",
+        "best_for": [
+          "Shopping",
+          "Uniform-related errands",
+          "Food court / daily services",
+          "Family convenience"
+        ],
+        "map_zone": "main services / retail area",
+        "user_note": "Important daily-life anchor for new arrivals, families, and permanent party."
+      },
+      {
+        "name": "Military Clothing Store",
+        "category": "military_clothing",
+        "map_label": "Military Clothing",
+        "address": "Verify current location before travel",
+        "hours": "Verify current hours",
+        "best_for": [
+          "Uniform items",
+          "New arrivals",
+          "Permanent party needs"
+        ],
+        "map_zone": "retail / services area",
+        "user_note": "Useful for military-specific shopping needs after arrival."
+      },
+      {
+        "name": "Joint Base Andrews Housing Office",
+        "category": "housing_office",
+        "map_label": "Housing Office",
+        "address": "Verify current housing office address before travel",
+        "phone": "Verify current housing office phone number",
+        "email": "Verify current housing office email through official sources",
+        "hours": "Verify current housing office hours",
+        "best_for": [
+          "On-base housing questions",
+          "Off-base housing guidance",
+          "PCS housing counseling",
+          "Unaccompanied housing questions"
+        ],
+        "map_zone": "housing support area",
+        "user_note": "Military families should contact the housing office before committing to on-base or off-base housing."
+      },
+      {
+        "name": "Unaccompanied Housing Office",
+        "category": "unaccompanied_housing",
+        "map_label": "Unaccompanied Housing",
+        "address": "Verify current office location before travel",
+        "phone": "Verify current phone number with official installation sources",
+        "email": "Verify current email with official installation sources",
+        "hours": "Verify current hours",
+        "best_for": [
+          "Dormitory questions",
+          "Single service member housing",
+          "Unaccompanied PCS planning"
+        ],
+        "map_zone": "housing support area",
+        "user_note": "Eligibility and availability should be verified directly with the housing office."
+      },
+      {
+        "name": "Bank / Credit Union / ATM Services",
+        "category": "banking",
+        "map_label": "Bank / ATM",
+        "address": "Verify current branch or ATM location before travel",
+        "best_for": [
+          "Daily banking",
+          "PCS funds access",
+          "ATM convenience",
+          "Relocation errands"
+        ],
+        "map_zone": "main services / retail area",
+        "user_note": "Specific bank or credit union locations may change. Use current official branch locator or base directory before routing users."
+      },
+      {
+        "name": "Legal / Finance / Admin Services",
+        "category": "admin_support",
+        "map_label": "Admin Support",
+        "address": "Verify current office location before travel",
+        "best_for": [
+          "Power of attorney",
+          "PCS documents",
+          "Pay questions",
+          "Arrival admin"
+        ],
+        "map_zone": "administrative services area",
+        "user_note": "Use this as a planning category in the Base tab; exact office routing should point to official base directory links."
+      },
+      {
+        "name": "Child / Youth / Family Support Services",
+        "category": "family_support",
+        "map_label": "Family Support",
+        "address": "Verify current CDC, youth center, and school liaison locations before travel",
+        "best_for": [
+          "Childcare planning",
+          "Youth programs",
+          "School transition support",
+          "Family PCS support"
+        ],
+        "map_zone": "family services / youth support areas",
+        "user_note": "Critical for families. Exact program availability, waitlists, and eligibility should be verified with official Joint Base Andrews resources."
+      }
+    ],
+    "on_base_housing": {
+      "housing_type": "Privatized and military housing support environment",
+      "housing_office_name": "Joint Base Andrews Housing Office",
+      "housing_office_address": "Verify current housing office address before travel",
+      "housing_office_phone": "Verify current housing office phone number",
+      "housing_office_email": "Verify current housing office email through official sources",
+      "housing_office_hours": "Verify current housing office hours",
+      "map_label": "Family Housing / Housing Office",
+      "map_zone": "housing support area",
+      "best_for": [
+        "Families prioritizing proximity",
+        "New arrivals wanting simplicity",
+        "Users who value base-connected lifestyle",
+        "Families wanting to reduce commute uncertainty"
+      ],
+      "watchouts": [
+        "Availability and waitlists can change",
+        "On-base housing may capture BAH differently than off-base renting",
+        "Pet policies and breed restrictions should be verified",
+        "School assignment must be verified by exact address",
+        "DC metro commute and cost tradeoffs should still be compared against off-base options"
+      ],
+      "pcsu_strategy_note": "Compare on-base housing against off-base rent and mortgage options. Around Andrews, the best choice depends on rank, dependents, BAH, debt, commute tolerance, school priorities, and assignment length."
+    },
+    "recommended_neighborhoods": [
+      {
+        "name": "Upper Marlboro",
+        "type": "nearby_neighborhood",
+        "fit_summary": "Popular military-family option with suburban feel, access to Andrews, and broader housing choices than immediate close-in pockets.",
+        "best_for": [
+          "Families",
+          "VA buyers",
+          "Users wanting suburban lifestyle",
+          "BAH-conscious buyers comparing space and commute"
+        ],
+        "commute_band": "Approx. 15-30 minutes depending on exact address, gate, and traffic",
+        "likely_gate_logic": [
+          "Main Gate",
+          "Virginia Gate depending on route",
+          "Other gates depending on duty location and current access rules"
+        ],
+        "bah_fit": "medium",
+        "family_fit": "high",
+        "single_airman_fit": "medium",
+        "va_buyer_fit": "high",
+        "traffic_risk": "medium_high",
+        "watchouts": [
+          "Traffic can vary materially by time of day",
+          "School zones should be verified by exact address",
+          "Prices can move quickly in stronger pockets"
+        ],
+        "pcsu_recommendation": "Strong first-look area for families who want suburban balance without pushing too far from Andrews."
+      },
+      {
+        "name": "Waldorf",
+        "type": "nearby_city_area",
+        "fit_summary": "More space and value potential south of Andrews, with a longer commute tradeoff.",
+        "best_for": [
+          "Families wanting more home for the money",
+          "VA buyers",
+          "Users comfortable with commute tradeoffs",
+          "Buyers prioritizing space over shortest drive"
+        ],
+        "commute_band": "Approx. 30-50+ minutes depending on traffic, exact address, and gate",
+        "likely_gate_logic": [
+          "Main Gate",
+          "Alternate gates depending on route and current access rules"
+        ],
+        "bah_fit": "medium_high",
+        "family_fit": "medium_high",
+        "single_airman_fit": "medium_low",
+        "va_buyer_fit": "high",
+        "traffic_risk": "high",
+        "watchouts": [
+          "Commute can become draining during peak traffic",
+          "Route reliability matters more than mileage",
+          "Users should test the drive during actual report windows"
+        ],
+        "pcsu_recommendation": "Good for families who need more space and can tolerate a longer commute."
+      },
+      {
+        "name": "Bowie",
+        "type": "nearby_neighborhood",
+        "fit_summary": "Established suburban option with strong family appeal and access to multiple regional employment corridors.",
+        "best_for": [
+          "Families",
+          "Longer-term assignments",
+          "Buyers prioritizing stability",
+          "Users balancing schools, resale, and commute"
+        ],
+        "commute_band": "Approx. 25-45 minutes depending on route, traffic, and gate",
+        "likely_gate_logic": [
+          "Main Gate",
+          "Virginia Gate depending on route"
+        ],
+        "bah_fit": "medium_low",
+        "family_fit": "high",
+        "single_airman_fit": "medium_low",
+        "va_buyer_fit": "medium_high",
+        "traffic_risk": "high",
+        "watchouts": [
+          "Pricing may stretch some BAH profiles",
+          "Commute can vary sharply by Beltway and local road conditions",
+          "Exact school assignment should be verified"
+        ],
+        "pcsu_recommendation": "Better for families prioritizing stability and lifestyle over lowest cost."
+      },
+      {
+        "name": "Clinton",
+        "type": "nearby_neighborhood",
+        "fit_summary": "Close-in option with practical commute potential, but requires property-level and neighborhood-level screening.",
+        "best_for": [
+          "Shorter commute seekers",
+          "Budget-sensitive buyers",
+          "Renters",
+          "Users prioritizing proximity"
+        ],
+        "commute_band": "Approx. 10-25 minutes depending on gate and exact address",
+        "likely_gate_logic": [
+          "Main Gate",
+          "Other gates depending on route"
+        ],
+        "bah_fit": "medium_high",
+        "family_fit": "medium",
+        "single_airman_fit": "medium_high",
+        "va_buyer_fit": "medium",
+        "traffic_risk": "medium",
+        "watchouts": [
+          "Property condition can vary",
+          "Neighborhood feel varies block by block",
+          "School and safety review should be specific to the exact address"
+        ],
+        "pcsu_recommendation": "Best treated as a commute-first zone that needs strong property and neighborhood screening."
+      },
+      {
+        "name": "Camp Springs",
+        "type": "nearby_neighborhood",
+        "fit_summary": "Immediate base-area market with strong proximity but more limited housing and lifestyle tradeoffs.",
+        "best_for": [
+          "Shortest commute seekers",
+          "Renters",
+          "Single airmen",
+          "Users prioritizing immediate access"
+        ],
+        "commute_band": "Approx. 5-15 minutes depending on gate and exact address",
+        "likely_gate_logic": [
+          "Main Gate",
+          "Visitor access routing depending on current procedures"
+        ],
+        "bah_fit": "medium",
+        "family_fit": "medium_low",
+        "single_airman_fit": "medium_high",
+        "va_buyer_fit": "medium",
+        "traffic_risk": "medium",
+        "watchouts": [
+          "Proximity does not automatically mean best fit",
+          "Housing options may be more limited",
+          "Users should compare convenience against schools, amenities, and long-term flexibility"
+        ],
+        "pcsu_recommendation": "Useful for users who value proximity, but not automatically the best family or ownership play."
+      },
+      {
+        "name": "Northern Calvert County",
+        "type": "nearby_county_area",
+        "fit_summary": "Quieter lifestyle and family-oriented option farther from Andrews, with stronger space and school appeal for some households.",
+        "best_for": [
+          "Families",
+          "Buyers prioritizing schools and space",
+          "Longer assignment horizons",
+          "Users wanting less urban density"
+        ],
+        "commute_band": "Approx. 35-60+ minutes depending on exact address, traffic, and gate",
+        "likely_gate_logic": [
+          "Main Gate",
+          "Route-dependent gate planning"
+        ],
+        "bah_fit": "medium",
+        "family_fit": "high",
+        "single_airman_fit": "low",
+        "va_buyer_fit": "medium_high",
+        "traffic_risk": "high",
+        "watchouts": [
+          "Longer commute can wear on early-report personnel",
+          "Distance to base services and DC amenities increases",
+          "Budget and commute should be tested together"
+        ],
+        "pcsu_recommendation": "Lifestyle-first option for families willing to trade convenience for space and quieter surroundings."
+      },
+      {
+        "name": "Oxon Hill / National Harbor",
+        "type": "urban_lifestyle_area",
+        "fit_summary": "Urban lifestyle and access option with higher cost exposure and less family-first housing fit for many PCS users.",
+        "best_for": [
+          "Single airmen",
+          "Couples without children",
+          "Users prioritizing entertainment and city access",
+          "Shorter-term renters"
+        ],
+        "commute_band": "Approx. 15-35 minutes depending on traffic, route, and gate",
+        "likely_gate_logic": [
+          "Main Gate",
+          "Route-dependent gate planning"
+        ],
+        "bah_fit": "medium_low",
+        "family_fit": "medium_low",
+        "single_airman_fit": "high",
+        "va_buyer_fit": "medium_low",
+        "traffic_risk": "high",
+        "watchouts": [
+          "Rent, parking, traffic, and lifestyle costs can reduce value",
+          "Less ideal for families prioritizing schools and space",
+          "Urban convenience may come with higher monthly friction"
+        ],
+        "pcsu_recommendation": "Better for lifestyle-focused singles or couples than family-first PCS planning."
+      }
+    ],
+    "commute_intelligence": {
+      "commute_bluf": "For Andrews, commute reliability matters more than straight-line distance. A home that looks close can still become frustrating if traffic, gate access, school schedules, or Beltway dependency create daily friction.",
+      "primary_commute_factors": [
+        "Gate hours and current access rules",
+        "Morning inbound traffic",
+        "Afternoon outbound traffic",
+        "I-495 / Capital Beltway dependency",
+        "Suitland Parkway and local corridor congestion",
+        "School drop-off timing",
+        "Exact duty location on or near the installation",
+        "Shift schedule or early report time"
+      ],
+      "commute_bands": [
+        {
+          "label": "Close-in",
+          "range": "0-15 minutes",
+          "fit": "Best for users prioritizing proximity and daily convenience",
+          "watchout": "Close-in areas still need safety, school, and property-level screening."
+        },
+        {
+          "label": "Balanced",
+          "range": "15-35 minutes",
+          "fit": "Often the best balance between housing quality, lifestyle, and commute",
+          "watchout": "Traffic can still turn a reasonable drive into a stressful routine."
+        },
+        {
+          "label": "Lifestyle tradeoff",
+          "range": "35-60+ minutes",
+          "fit": "May work for families wanting larger homes, quieter areas, or specific schools",
+          "watchout": "Can become painful for early reporting, shift work, or frequent base errands."
+        }
+      ],
+      "gate_selection_logic": [
+        "Start with the user's likely duty location.",
+        "Identify the most realistic gate based on current access rules.",
+        "Check alternate gates only as optional commute helpers.",
+        "Compare the commute during the user's actual report window.",
+        "Do not choose a neighborhood based only on mileage."
+      ],
+      "user_instruction": "Before signing a lease or contract, users should test the commute from the exact property address to the expected gate during the same time window they would normally report to work."
+    },
+    "bah_market_reality": {
+      "bah_bluf": "Andrews-area housing decisions should compare BAH against rent, mortgage, utilities, HOA, insurance, tolls, parking, commute cost, and debt. High BAH helps, but DC metro housing pressure can still make buying tight for some ranks.",
+      "recommended_calculations": [
+        "BAH with dependents vs estimated rent",
+        "BAH without dependents vs estimated rent",
+        "BAH vs estimated mortgage payment",
+        "Total housing cost vs 30% income lane",
+        "Residual monthly income after expenses and housing",
+        "Debt-to-income pressure",
+        "Commute cost and time stress",
+        "Rent vs buy break-even horizon"
+      ],
+      "pcsu_decision_outputs": [
+        "Rent",
+        "Buy",
+        "Wait",
+        "Widen search",
+        "Reduce target price",
+        "Consider roommate",
+        "Use on-base housing as comparison"
+      ],
+      "base_tab_message": "Show BAH as a decision filter, not a promise of affordability. The Base tab should push users into the PCSUnited financial calculator when the housing gap, commute cost, or debt pressure looks tight."
+    },
+    "family_readiness": {
+      "family_bluf": "Families PCSing to Andrews should verify school zones, childcare options, medical access, commute reality, and housing availability before choosing a neighborhood.",
+      "school_guidance": {
+        "school_zone_warning": "Always verify school assignment by exact address before signing a lease or purchase contract.",
+        "nearby_school_district_note": "Common Andrews-area school research may include Prince George's County, Charles County, Calvert County, and other address-specific districts depending on the neighborhood.",
+        "school_liaison_note": "Use official school liaison resources where available for military school transition support."
+      },
+      "childcare_guidance": {
+        "cdc_note": "Child Development Center availability, waitlists, and eligibility should be verified directly with official base resources.",
+        "youth_program_note": "Youth programs and school-age care can materially affect family housing decisions."
+      },
+      "medical_guidance": {
+        "primary_medical_anchor": "Malcolm Grow Medical Clinics and Surgery Center",
+        "medical_warning": "Verify clinic availability, pharmacy procedures, and emergency care options directly with official medical sources before relying on any single facility."
+      },
+      "spouse_employment_note": "The DC metro can offer strong spouse employment potential, but commute, childcare, credentialing, and cost of living should be considered together."
+    },
+    "arrival_checklist": {
+      "before_arrival": [
+        "Verify official gate and Visitor Control Center hours.",
+        "Confirm sponsor contact and unit reporting instructions.",
+        "Confirm lodging or temporary housing plan.",
+        "Review housing office guidance before signing any lease or purchase contract.",
+        "Compare BAH against rent, mortgage, utilities, HOA, commute cost, and debt.",
+        "Shortlist neighborhoods by likely gate and commute band.",
+        "Verify school zones by exact property address.",
+        "Check pet policies for on-base housing, rentals, and temporary lodging."
+      ],
+      "first_week": [
+        "Complete unit check-in requirements.",
+        "Visit or contact the housing office if still deciding between on-base and off-base options.",
+        "Confirm medical/pharmacy setup.",
+        "Handle ID/admin/finance/legal needs as applicable.",
+        "Drive the commute from target neighborhoods during expected report time.",
+        "Tour properties before committing when possible.",
+        "Avoid choosing purely by distance or rent price."
+      ],
+      "first_30_days": [
+        "Finalize housing only after comparing commute, BAH fit, school zones, and total monthly cost.",
+        "Save emergency, medical, gate, and housing office contact information.",
+        "Update PCSUnited profile and financial readiness dashboard with final housing numbers.",
+        "Review whether the selected area supports the user's assignment length and family needs."
+      ]
+    },
+    "pcs_watchouts": [
+      {
+        "title": "Traffic can dominate the assignment",
+        "severity": "high",
+        "message": "Route reliability and report-time testing matter more than simple mileage near Andrews."
+      },
+      {
+        "title": "Distance is not the same as commute",
+        "severity": "high",
+        "message": "Neighborhoods should be compared by realistic gate access, Beltway exposure, and traffic timing."
+      },
+      {
+        "title": "School zones are address-specific",
+        "severity": "high",
+        "message": "Never assume a school assignment from neighborhood name alone."
+      },
+      {
+        "title": "BAH is not the full affordability picture",
+        "severity": "high",
+        "message": "Users must compare rent or mortgage against income, debt, expenses, utilities, HOA, insurance, and commute costs."
+      },
+      {
+        "title": "Close-in housing varies widely",
+        "severity": "medium_high",
+        "message": "Some areas near base may be convenient but require stronger property, safety, and school review."
+      },
+      {
+        "title": "Civilian demand competes with military demand",
+        "severity": "medium_high",
+        "message": "Federal workers and contractors can increase competition for quality rentals and homes."
+      },
+      {
+        "title": "On-base housing is not automatically the best financial answer",
+        "severity": "medium",
+        "message": "Compare waitlist, BAH capture, commute, home condition, schools, and lifestyle before deciding."
+      }
+    ],
+    "realtor_intelligence": {
+      "buyer_personas": [
+        {
+          "persona": "First-time VA buyer",
+          "likely_questions": [
+            "Can I afford to buy near Andrews?",
+            "Which areas fit my BAH?",
+            "How bad is the commute?",
+            "Should I rent first?"
+          ],
+          "agent_strategy": "Lead with BAH realism, payment clarity, commute testing, and VA loan education."
+        },
+        {
+          "persona": "E-5 / E-6 family with dependents",
+          "likely_questions": [
+            "Where do military families usually live?",
+            "Which school zones should I research?",
+            "Is Waldorf too far?",
+            "Is on-base housing better?"
+          ],
+          "agent_strategy": "Compare Upper Marlboro, Waldorf, Bowie, Clinton, and on-base housing against commute and monthly cost."
+        },
+        {
+          "persona": "Single airman / short-term renter",
+          "likely_questions": [
+            "What is close and affordable?",
+            "Do I need a roommate?",
+            "Where should I avoid signing too fast?"
+          ],
+          "agent_strategy": "Keep recommendations practical: commute, rent, parking, safety, property condition, and lease flexibility."
+        },
+        {
+          "persona": "Permanent party / national capital region assignment",
+          "likely_questions": [
+            "Should I buy if I may stay longer?",
+            "What areas have resale strength?",
+            "Where can I balance family and commute?"
+          ],
+          "agent_strategy": "Use assignment length, family needs, and rent-vs-buy math to guide the recommendation."
+        }
+      ],
+      "listing_angles": [
+        "Near Joint Base Andrews gate access",
+        "Convenient to National Capital Region assignments",
+        "Short drive to Andrews services",
+        "Military PCS-friendly Maryland location",
+        "BAH-conscious rental or purchase option",
+        "Access to I-495, Suitland Parkway, and regional employment corridors",
+        "Strong fit for defense, federal, and military-connected households"
+      ],
+      "common_objections": [
+        "Commute uncertainty",
+        "Traffic stress",
+        "School-zone confusion",
+        "Safety perception",
+        "Higher DC metro cost",
+        "Affordability gap between BAH and mortgage",
+        "Short assignment timeline"
+      ],
+      "recommended_agent_behavior": [
+        "Do not overpromise commute times.",
+        "Always recommend school-zone verification by address.",
+        "Use payment math, not just listing price.",
+        "Discuss gate access and route reliability early.",
+        "Compare on-base housing as a legitimate alternative.",
+        "Avoid generic Maryland advice when the user is assigned to Andrews."
+      ]
+    },
+    "data_confidence": {
+      "overall": "medium",
+      "gate_data": "requires_current_official_verification",
+      "visitor_control_center": "requires_current_official_verification",
+      "housing_office": "requires_current_official_verification",
+      "major_services": "medium_public_sources_requires_verification",
+      "recommended_neighborhoods": "curated_pcsunited_intelligence",
+      "commute_bands": "estimated_requires_address_level_validation",
+      "bah_market_guidance": "strategy_layer_requires_rank_family_and_financial_inputs",
+      "last_reviewed": "2026-05-05"
+    },
+    "source_notes": [
+      {
+        "label": "Official Joint Base Andrews website",
+        "type": "official",
+        "url": "https://www.jba.af.mil/",
+        "used_for": [
+          "Installation identity",
+          "Newcomer orientation reference",
+          "Official verification starting point"
+        ]
+      },
+      {
+        "label": "Official Joint Base Andrews newcomer resources",
+        "type": "official",
+        "url": "https://www.jba.af.mil/Resources/Newcomers/",
+        "used_for": [
+          "PCS arrival planning",
+          "Newcomer routing",
+          "Official verification starting point"
+        ]
+      },
+      {
+        "label": "Official Joint Base Andrews housing resources",
+        "type": "official",
+        "url": "https://www.jba.af.mil/Resources/Housing/",
+        "used_for": [
+          "Housing office verification",
+          "On-base and off-base housing guidance",
+          "PCS housing support"
+        ]
+      },
+      {
+        "label": "Air Force Housing",
+        "type": "official",
+        "url": "https://www.housing.af.mil/",
+        "used_for": [
+          "Military housing verification",
+          "Privatized housing reference",
+          "Housing office confirmation"
+        ]
+      },
+      {
+        "label": "Defense Commissary Agency",
+        "type": "official_commercial_military",
+        "url": "https://corp.commissaries.com/",
+        "used_for": [
+          "Commissary verification",
+          "Grocery benefit planning"
+        ]
+      },
+      {
+        "label": "Army & Air Force Exchange Service",
+        "type": "official_commercial_military",
+        "url": "https://www.shopmyexchange.com/",
+        "used_for": [
+          "Exchange verification",
+          "Retail services planning"
+        ]
+      },
+      {
+        "label": "Malcolm Grow Medical Clinics and Surgery Center",
+        "type": "official_medical",
+        "url": "https://andrews.tricare.mil/",
+        "used_for": [
+          "Medical facility verification",
+          "Clinic and pharmacy planning"
+        ]
+      }
+    ],
+    "disclaimer": "PCSUnited is not an official DoD source. This Base tab is intended for public-facing PCS orientation, housing research, and relocation planning. Users should verify gate hours, access requirements, medical services, housing availability, school zones, and official procedures directly with the installation or official service provider before travel, lease signing, or home purchase."
+  },
+
   "sources": {
-    "demographics": { "provider": "US Census Bureau / Prince George's County EDC", "as_of": "2026-03" },
-    "rent": { "provider": "RentCafe / Zumper", "as_of": "2026-03" },
-    "home_price": { "provider": "GCAAR (Greater Capital Area Association of Realtors)", "as_of": "2026-03" }
+    "demographics": {
+      "provider": "US Census Bureau / Prince George's County EDC",
+      "as_of": "2026-03"
+    },
+    "rent": {
+      "provider": "RentCafe / Zumper",
+      "as_of": "2026-03"
+    },
+    "home_price": {
+      "provider": "GCAAR / DC Metro Market Sources",
+      "as_of": "2026-03"
+    }
+  },
+
+  "compatibility": {
+    "orozco_realty_ready": true,
+    "pcsunited_ready": true,
+    "intended_primary_slug": "andrews-afb",
+    "parser_notes": [
+      "This Andrews AFB file now follows the Lackland AFB standard schema with slug, name, state_code, profile, market_metrics, metrics, ownership_costs, costs, rental_metrics, summary_points, risks, opportunities, buyer_notes, seller_notes, investor_angles, and guidance arrays.",
+      "Base-facing label is set to Andrews AFB, while Camp Springs and the Washington DC metro are preserved as surrounding submarket context.",
+      "property_tax_rate and insurance_rate are normalized to decimal form for deterministic math, with percent aliases preserved for display compatibility.",
+      "This file now includes base_profile for the PCSUnited Base tab, including gate orientation, visitor control center placeholder verification, major services, on-base housing, recommended nearby neighborhoods, commute intelligence, BAH market guidance, PCS watchouts, and source notes.",
+      "Generic PCSUnited placeholder image is used for base_image_url and base_profile.base_map_image.url until a dedicated Andrews base map is created."
+    ]
   }
 }

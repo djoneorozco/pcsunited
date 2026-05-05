@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon May 04 2026 15:18:37 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue May 05 2026 23:50:30 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e1a06" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.26/webfont.js" type="text/javascript"></script>
-  <script type="text/javascript">WebFont.load({  google: {    families: ["Droid Serif:400,400italic,700,700italic","DM Sans:300,400,500,600,700","Inter:300,400,500,600,700"]  }});</script>
+  <script type="text/javascript">WebFont.load({  google: {    families: ["Droid Serif:400,400italic,700,700italic","Montserrat:100,100italic,200,200italic,300,300italic,400,400italic,500,500italic,600,600italic,700,700italic,800,800italic,900,900italic","DM Sans:300,400,500,600,700","Inter:300,400,500,600,700"]  }});</script>
   <script type="text/javascript">!function(o,c){var n=c.documentElement,t=" w-mod-";n.className+=t+"js",("ontouchstart"in o||o.DocumentTouch&&c instanceof DocumentTouch)&&(n.className+=t+"touch")}(window,document);</script>
   <link href="../images/favicon.png" rel="icon" type="image/png" sizes="32x32" media="(prefers-color-scheme: light)">
   <link href="../images/favicon-dark.png" rel="icon" type="image/png" sizes="32x32" media="(prefers-color-scheme: dark)">
@@ -24,52 +24,1116 @@
 </head>
 <body>
   <div class="page-wrapper">
-    <div class="navigation">
-      <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease-in-out-quad" role="banner" class="navbar w-nav">
-        <div class="nav-wrapper">
-          <div class="nav-container">
-            <div class="nav-left">
-              <a aria-label="Yeyeyeah" href="../old-home.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 479px) 96vw, 235px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
+    <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="tormain tormainpage w-nav">
+      <div class="navbar-wrapper-12">
+        <a href="../index.html" class="link-block-7 w-inline-block"><img src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="image-130"></a>
+        <div class="code-embed-42 w-embed w-script"><!--  =========================================================
+  PCSUnited • Header Compensation Strip
+  v1.1.2
+  PURPOSE
+  - Header-friendly compensation display
+  - Shows Base Pay, BAS, BAH, Total Monthly
+  - Uses saved Quick Setup baseline:
+    localStorage["pcsunited.baseline.v1"]
+  - Reads selected base from:
+    localStorage["pcsunited.selectedBase.v1"]
+    localStorage["pcsunited.selectedCityJsonUrl.v1"]
+  - Fetches selected base JSON to extract ZIP
+  - Calls:
+    /.netlify/functions/opensource-brain
+    /.netlify/functions/pay-tables as selected-base BAH fallback
+  - Recalculates when Base Selector changes
+  - v1.1.2 UPDATE:
+    Font, label sizing, value sizing, and tile proportions matched closer to Select Base dropdown
+=========================================================  -->
+          <div id="pcsu-header-comp-api" style="all:initial;">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+            <style>
+    #pcsu-header-comp-api,
+    #pcsu-header-comp-api *{
+      box-sizing:border-box;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    #pcsu-header-comp-api{
+      display:block;
+      width:100%;
+      color:#f5f5f5;
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-wrap{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:flex-start;
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(112px, 1fr));
+      gap:10px;
+      width:min(560px, 100%);
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-tile{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:10px;
+      padding:10px 12px;
+      min-height:52px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.032), rgba(255,255,255,.012)),
+        rgba(10,14,26,.70);
+      box-shadow:none;
+      backdrop-filter:blur(12px) saturate(135%);
+      -webkit-backdrop-filter:blur(12px) saturate(135%);
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-tile::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(
+        90deg,
+        rgba(142,243,197,.24),
+        rgba(106,167,255,.18),
+        transparent
+      );
+      pointer-events:none;
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-label{
+      display:block;
+      margin-bottom:5px;
+      color:#a8a8a8;
+      font-size:.66rem;
+      line-height:1;
+      font-weight:700;
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      white-space:nowrap;
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-value{
+      display:block;
+      color:#fff;
+      font-size:.95rem;
+      line-height:1.15;
+      font-weight:800;
+      letter-spacing:-.02em;
+      white-space:nowrap;
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-value.is-total{
+      background:linear-gradient(90deg,#8ef3c5,#6aa7ff);
+      -webkit-background-clip:text;
+      background-clip:text;
+      color:transparent;
+      font-weight:900;
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-tile.is-loading .pcsu-header-comp-value{
+      opacity:.72;
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-tile.is-missing{
+      opacity:.62;
+    }
+    @media(max-width:980px){
+      #pcsu-header-comp-api .pcsu-header-comp-grid{
+        grid-template-columns:repeat(4, minmax(94px, 1fr));
+        gap:8px;
+        width:min(500px, 100%);
+      }
+      #pcsu-header-comp-api .pcsu-header-comp-tile{
+        min-height:48px;
+        padding:9px 10px;
+        border-radius:10px;
+      }
+      #pcsu-header-comp-api .pcsu-header-comp-label{
+        font-size:.62rem;
+        letter-spacing:.12em;
+      }
+      #pcsu-header-comp-api .pcsu-header-comp-value{
+        font-size:.9rem;
+      }
+    }
+    @media(max-width:760px){
+      #pcsu-header-comp-api .pcsu-header-comp-grid{
+        grid-template-columns:repeat(2, minmax(112px, 1fr));
+        width:100%;
+      }
+    }
+    @media(max-width:480px){
+      #pcsu-header-comp-api .pcsu-header-comp-grid{
+        grid-template-columns:1fr 1fr;
+        gap:7px;
+      }
+      #pcsu-header-comp-api .pcsu-header-comp-tile{
+        min-height:46px;
+        padding:8px 10px;
+      }
+      #pcsu-header-comp-api .pcsu-header-comp-value{
+        font-size:.88rem;
+      }
+    }
+  </style>
+            <div class="pcsu-header-comp-wrap" aria-label="Current monthly compensation">
+              <div class="pcsu-header-comp-grid">
+                <div class="pcsu-header-comp-tile is-loading">
+                  <span class="pcsu-header-comp-label">Base Pay</span>
+                  <span class="pcsu-header-comp-value" id="header-api-basic">$0</span>
+                </div>
+                <div class="pcsu-header-comp-tile is-loading">
+                  <span class="pcsu-header-comp-label">BAS</span>
+                  <span class="pcsu-header-comp-value" id="header-api-bas">$0</span>
+                </div>
+                <div class="pcsu-header-comp-tile is-loading">
+                  <span class="pcsu-header-comp-label">BAH</span>
+                  <span class="pcsu-header-comp-value" id="header-api-bah">$0</span>
+                </div>
+                <div class="pcsu-header-comp-tile is-loading">
+                  <span class="pcsu-header-comp-label">Total Monthly</span>
+                  <span class="pcsu-header-comp-value is-total" id="header-api-total">$0</span>
+                </div>
+              </div>
             </div>
-            <nav role="navigation" id="w-node-a20e7068-528c-2165-b385-785e4c45ca5e-4c45ca57" class="nav-menu w-nav-menu">
-              <div class="default-nav-links big-menu">
-                <a href="#" class="nav-link overview-mobile w-nav-link">Overview</a>
-                <a href="../index.html" class="nav-link w-nav-link">Home Page</a>
-                <a href="../air-force/resources.html" target="_blank" class="nav-link w-nav-link">Resources</a>
-                <a href="../about-us.html" class="nav-link w-nav-link">About Us</a>
-                <a href="../blog-v1.html" class="nav-link w-nav-link">Blog</a>
-              </div>
-              <div class="nav-mobile-social">
-                <div line-split="intro" class="fsize-body-large primary-color-emphasis all-caps">Connect</div>
-                <div class="w-dyn-list">
-                  <div role="list" class="social-nav-wrapper w-dyn-items">
-                    <div fade-in="intro" role="listitem" class="w-dyn-item">
-                      <a aria-label="" href="#" class="social-icon-link w-inline-block"><img src="https://d3e54v103j8qbb.cloudfront.net/plugins/Basic/assets/placeholder.60f9b1840c.svg" loading="lazy" alt="" class="w-dyn-bind-empty"></a>
-                    </div>
+            <script>
+    (function () {
+      "use strict";
+      function initHeaderCompStrip() {
+        const root = document.getElementById("pcsu-header-comp-api");
+        if (!root) return;
+        if (root.dataset.mounted === "true") return;
+        root.dataset.mounted = "true";
+        const els = {
+          basic: root.querySelector("#header-api-basic"),
+          bas: root.querySelector("#header-api-bas"),
+          bah: root.querySelector("#header-api-bah"),
+          total: root.querySelector("#header-api-total")
+        };
+        const tiles = Array.from(root.querySelectorAll(".pcsu-header-comp-tile"));
+        if (Object.values(els).some(el => !el)) {
+          console.warn("PCSU header comp strip: missing required DOM elements.");
+          return;
+        }
+        const BASELINE_KEY = "pcsunited.baseline.v1";
+        const SELECTED_BASE_KEY = "pcsunited.selectedBase.v1";
+        const SELECTED_JSON_URL_KEY = "pcsunited.selectedCityJsonUrl.v1";
+        const API_ORIGIN = window.location.hostname.includes("webflow.io")
+          ? "https://pcsunited.netlify.app"
+          : "";
+        const OPEN_SOURCE_ENDPOINT = API_ORIGIN + "/.netlify/functions/opensource-brain";
+        const PAY_TABLES_ENDPOINT = API_ORIGIN + "/.netlify/functions/pay-tables";
+        let requestSeq = 0;
+        const cityJsonCache = new Map();
+        function setLoading(isLoading) {
+          tiles.forEach(tile => {
+            tile.classList.toggle("is-loading", !!isLoading);
+          });
+        }
+        function setMissing(isMissing) {
+          tiles.forEach(tile => {
+            tile.classList.toggle("is-missing", !!isMissing);
+          });
+        }
+        function money(n) {
+          return "$" + Number(n || 0).toLocaleString(undefined, {
+            maximumFractionDigits: 0
+          });
+        }
+        function num(value, fallback = 0) {
+          const n = Number(String(value ?? "").replace(/[$,]/g, ""));
+          return Number.isFinite(n) ? n : fallback;
+        }
+        function safeJsonParse(raw, fallback) {
+          try {
+            return raw ? JSON.parse(raw) : fallback;
+          } catch (_e) {
+            return fallback;
+          }
+        }
+        function readJsonKey(key, fallback) {
+          try {
+            return safeJsonParse(localStorage.getItem(key), fallback);
+          } catch (_e) {
+            return fallback;
+          }
+        }
+        function readTextKey(key, fallback) {
+          try {
+            return localStorage.getItem(key) || fallback;
+          } catch (_e) {
+            return fallback;
+          }
+        }
+        function readBaseline() {
+          return readJsonKey(BASELINE_KEY, null);
+        }
+        function readSelectedBase() {
+          return readJsonKey(SELECTED_BASE_KEY, null);
+        }
+        function readSelectedJsonUrl(selectedBase) {
+          return (
+            selectedBase?.jsonUrl ||
+            selectedBase?.selectedCityJsonUrl ||
+            selectedBase?.selected_city_json_url ||
+            readTextKey(SELECTED_JSON_URL_KEY, "") ||
+            window.PCSU_SELECTED_CITY_JSON_URL ||
+            window.OROZCO_CITY_JSON_URL ||
+            ""
+          );
+        }
+        function getSelectedBaseName(selectedBase, rawBaseline) {
+          return (
+            selectedBase?.base ||
+            selectedBase?.label ||
+            selectedBase?.name ||
+            rawBaseline?.current_base ||
+            rawBaseline?.currentBase ||
+            rawBaseline?.base ||
+            rawBaseline?.selected_base ||
+            rawBaseline?.selectedBase ||
+            ""
+          );
+        }
+        function cleanZip(value) {
+          const match = String(value || "").match(/\b\d{5}\b/);
+          return match ? match[0] : "";
+        }
+        function extractZipFromCityJson(data) {
+          if (!data || typeof data !== "object") return "";
+          return cleanZip(
+            data.zip ||
+            data.zip_code ||
+            data.zipCode ||
+            data.primary_zip ||
+            data.primaryZip ||
+            data.base_profile?.zip ||
+            data.profile?.zip ||
+            data.market?.zip ||
+            ""
+          );
+        }
+        async function fetchSelectedCityJson(selectedBase) {
+          const jsonUrl = readSelectedJsonUrl(selectedBase);
+          if (!jsonUrl) return null;
+          if (cityJsonCache.has(jsonUrl)) {
+            return cityJsonCache.get(jsonUrl);
+          }
+          try {
+            const res = await fetch(jsonUrl + "?t=" + Date.now(), {
+              method: "GET",
+              cache: "no-store"
+            });
+            if (!res.ok) return null;
+            const data = await res.json();
+            cityJsonCache.set(jsonUrl, data);
+            return data;
+          } catch (_e) {
+            return null;
+          }
+        }
+        function resolveRank(raw) {
+          return (
+            raw?.rank ||
+            raw?.rank_paygrade ||
+            raw?.paygrade ||
+            raw?.last_held_rank ||
+            raw?.lastHeldRank ||
+            ""
+          );
+        }
+        function resolveYos(raw) {
+          const yos = raw?.yos ?? raw?.yearsOfService ?? raw?.years_of_service ?? 0;
+          if (String(yos).toLowerCase() === "not_retired") return 0;
+          return num(yos, 0);
+        }
+        function resolveFamily(raw) {
+          if (typeof raw?.family === "boolean") return raw.family;
+          if (typeof raw?.dependents === "boolean") return raw.dependents;
+          const familyCount = num(raw?.family ?? raw?.family_size ?? raw?.dependents_count, 0);
+          if (familyCount > 1) return true;
+          const depText = String(raw?.dependents ?? "").toLowerCase();
+          if (["yes", "true", "with", "with_dependents"].includes(depText)) return true;
+          return false;
+        }
+        function mapBaseline(raw, selectedBase, cityJson) {
+          if (!raw) return null;
+          const selectedBaseName = getSelectedBaseName(selectedBase, raw);
+          const selectedZip = extractZipFromCityJson(cityJson);
+          if (raw.mode === "ad") {
+            return {
+              mode: "ACTIVE_DUTY",
+              rank: raw.rank,
+              yos: raw.yos,
+              base: selectedBaseName,
+              current_base: selectedBaseName,
+              currentBase: selectedBaseName,
+              newBase: selectedBaseName,
+              selected_base: selectedBaseName,
+              selectedBase: selectedBaseName,
+              selected_base_id: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
+              selectedBaseId: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
+              selected_base_file: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
+              selectedBaseFile: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
+              selected_city_json_url: readSelectedJsonUrl(selectedBase),
+              selectedCityJsonUrl: readSelectedJsonUrl(selectedBase),
+              zip: selectedZip,
+              bahZip: selectedZip,
+              bah_zip: selectedZip,
+              current_zip: selectedZip,
+              currentZip: selectedZip,
+              dependents: raw.dependents,
+              family: raw.family,
+              source: "baseline_overlay"
+            };
+          }
+          if (raw.mode === "vet") {
+            return {
+              mode: "VETERAN",
+              rank: raw.last_held_rank,
+              last_held_rank: raw.last_held_rank,
+              yos: raw.yos === "not_retired" ? 0 : raw.yos,
+              vaRating: raw.va_disability,
+              va_disability: raw.va_disability,
+              base: selectedBaseName,
+              current_base: selectedBaseName,
+              currentBase: selectedBaseName,
+              newBase: selectedBaseName,
+              selected_base: selectedBaseName,
+              selectedBase: selectedBaseName,
+              selected_base_id: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
+              selectedBaseId: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
+              selected_base_file: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
+              selectedBaseFile: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
+              selected_city_json_url: readSelectedJsonUrl(selectedBase),
+              selectedCityJsonUrl: readSelectedJsonUrl(selectedBase),
+              zip: selectedZip,
+              bahZip: selectedZip,
+              bah_zip: selectedZip,
+              current_zip: selectedZip,
+              currentZip: selectedZip,
+              dependents: raw.dependents,
+              family: raw.family,
+              source: "baseline_overlay"
+            };
+          }
+          return {
+            ...raw,
+            base: selectedBaseName,
+            current_base: selectedBaseName,
+            currentBase: selectedBaseName,
+            newBase: selectedBaseName,
+            selected_base: selectedBaseName,
+            selectedBase: selectedBaseName,
+            selected_base_id: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
+            selectedBaseId: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
+            selected_base_file: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
+            selectedBaseFile: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
+            selected_city_json_url: readSelectedJsonUrl(selectedBase),
+            selectedCityJsonUrl: readSelectedJsonUrl(selectedBase),
+            zip: selectedZip,
+            bahZip: selectedZip,
+            bah_zip: selectedZip,
+            current_zip: selectedZip,
+            currentZip: selectedZip
+          };
+        }
+        function paintEmpty() {
+          els.basic.textContent = "$0";
+          els.bas.textContent = "$0";
+          els.bah.textContent = "$0";
+          els.total.textContent = "$0";
+          setLoading(false);
+          setMissing(true);
+        }
+        function paintComp(comp) {
+          const basePay = num(comp.basePay, 0);
+          const bas = num(comp.bas, 0);
+          const bah = num(comp.bah, 0);
+          const total = num(comp.total, basePay + bas + bah);
+          els.basic.textContent = money(basePay);
+          els.bas.textContent = money(bas);
+          els.bah.textContent = money(bah);
+          els.total.textContent = money(total);
+          setLoading(false);
+          setMissing(false);
+        }
+        function extractOpenSourceMonthly(data) {
+          const c = (data?.payload && data.payload.compensation) || {};
+          const m = c.monthly || {};
+          const basePay =
+            m.basicPay ||
+            m.basePay ||
+            m.base_pay ||
+            0;
+          const bas =
+            m.bas ||
+            m.BAS ||
+            m.basMonthly ||
+            0;
+          const bah =
+            m.bah ||
+            m.BAH ||
+            m.bahMonthly ||
+            0;
+          const total =
+            m.grossMonthlyComp ||
+            m.combinedMonthlyGross ||
+            m.totalMonthly ||
+            m.total ||
+            m.retiredPayGross ||
+            m.vaCompensation ||
+            0;
+          return {
+            basePay: num(basePay, 0),
+            bas: num(bas, 0),
+            bah: num(bah, 0),
+            total: num(total, 0)
+          };
+        }
+        async function callOpenSourceBrain(input) {
+          const res = await fetch(OPEN_SOURCE_ENDPOINT + "?t=" + Date.now(), {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            cache: "no-store",
+            body: JSON.stringify({
+              tool: "PCS_SNAPSHOT",
+              input
+            })
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            return null;
+          }
+          return extractOpenSourceMonthly(data);
+        }
+        async function callPayTables(rawBaseline, selectedZip) {
+          const rank = resolveRank(rawBaseline);
+          const yos = resolveYos(rawBaseline);
+          const family = resolveFamily(rawBaseline);
+          if (!rank || !selectedZip) return null;
+          const res = await fetch(PAY_TABLES_ENDPOINT + "?t=" + Date.now(), {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json"
+            },
+            cache: "no-store",
+            body: JSON.stringify({
+              rank,
+              yos,
+              zip: selectedZip,
+              family
+            })
+          });
+          const data = await res.json();
+          if (!res.ok || !data.ok) {
+            return null;
+          }
+          return {
+            basePay: num(data.basePay, 0),
+            bah: num(data.bah, 0),
+            total: num(data.total, 0)
+          };
+        }
+        function mergeComp(openSourceComp, payTableComp) {
+          const open = openSourceComp || {};
+          const pay = payTableComp || {};
+          const basePay =
+            num(pay.basePay, 0) ||
+            num(open.basePay, 0);
+          const bas =
+            num(open.bas, 0);
+          const bah =
+            num(pay.bah, 0) ||
+            num(open.bah, 0);
+          const computedTotal = basePay + bas + bah;
+          const total =
+            computedTotal ||
+            num(pay.total, 0) ||
+            num(open.total, 0);
+          return {
+            basePay,
+            bas,
+            bah,
+            total
+          };
+        }
+        async function run(reason) {
+          const seq = ++requestSeq;
+          const raw = readBaseline();
+          const selectedBase = readSelectedBase();
+          if (!raw || raw.source !== "baseline_overlay") {
+            paintEmpty();
+            return false;
+          }
+          try {
+            setLoading(true);
+            setMissing(false);
+            const cityJson = await fetchSelectedCityJson(selectedBase);
+            const selectedZip = extractZipFromCityJson(cityJson);
+            const input = mapBaseline(raw, selectedBase, cityJson);
+            let openSourceComp = null;
+            let payTableComp = null;
+            try {
+              openSourceComp = await callOpenSourceBrain(input);
+            } catch (_openErr) {
+              openSourceComp = null;
+            }
+            if (selectedZip) {
+              try {
+                payTableComp = await callPayTables(raw, selectedZip);
+              } catch (_payErr) {
+                payTableComp = null;
+              }
+            }
+            if (seq !== requestSeq) return true;
+            const finalComp = mergeComp(openSourceComp, payTableComp);
+            if (
+              !finalComp ||
+              (!finalComp.basePay && !finalComp.bas && !finalComp.bah && !finalComp.total)
+            ) {
+              paintEmpty();
+              return true;
+            }
+            paintComp(finalComp);
+            return true;
+          } catch (_err) {
+            if (seq === requestSeq) paintEmpty();
+            return true;
+          }
+        }
+        function scheduleRun(reason, delay) {
+          window.clearTimeout(root.__pcsuCompTimer);
+          root.__pcsuCompTimer = window.setTimeout(function () {
+            run(reason);
+          }, typeof delay === "number" ? delay : 120);
+        }
+        run("initial");
+        let attempts = 0;
+        const interval = setInterval(async function () {
+          attempts++;
+          const done = await run("startup-poll");
+          if (done || attempts > 10) clearInterval(interval);
+        }, 300);
+        window.addEventListener("pcsu:base-selected", function () {
+          scheduleRun("base-selected", 120);
+        });
+        window.addEventListener("pcsunited:baseline-ready", function () {
+          scheduleRun("baseline-ready", 150);
+        });
+        window.addEventListener("pcsunited:bridge-ready", function () {
+          scheduleRun("bridge-ready", 150);
+        });
+        window.addEventListener("storage", function (event) {
+          if (
+            event &&
+            (
+              event.key === BASELINE_KEY ||
+              event.key === SELECTED_BASE_KEY ||
+              event.key === SELECTED_JSON_URL_KEY
+            )
+          ) {
+            scheduleRun("storage", 150);
+          }
+        });
+        window.addEventListener("message", function (event) {
+          const data = event && event.data;
+          if (!data || typeof data !== "object") return;
+          if (
+            data.type === "pcsunited-bridge" ||
+            data.source === "pcsu_base_selector"
+          ) {
+            scheduleRun("message", 150);
+          }
+        });
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initHeaderCompStrip);
+      } else {
+        initHeaderCompStrip();
+      }
+    })();
+  </script>
+          </div>
+        </div>
+        <div class="navbar-wrapper-11">
+          <div class="style-three-nav-brand">
+            <a href="#" role="link" class="home-three-nav-menu-brand rezoid w-nav-brand"></a>
+          </div>
+          <div class="code-embed-41 w-embed w-script"><!--  =========================================================
+  PCSUnited • Base Selector Dropdown
+  v1.3.0 HEADER MATCH VERSION
+  PURPOSE
+  - Header-ready scrollable dropdown for all bases in registry
+  - Matches header color #2e2e2e
+  - Saves selected base + JSON URL
+  - Redirects to /air-force/base-demographics
+=========================================================  -->
+            <div id="pcsu-base-selector" style="all:initial;">
+              <style>
+    #pcsu-base-selector,
+    #pcsu-base-selector *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+    #pcsu-base-selector{
+      --header:#2e2e2e;
+      --headerHover:#383838;
+      --menu:#262626;
+      --menuDark:#1f1f1f;
+      --stroke:rgba(255,255,255,.10);
+      --strokeStrong:rgba(255,255,255,.20);
+      --ink:#f5f5f5;
+      --muted:#a8a8a8;
+      --accent:#6aa7ff;
+      --accent2:#8ef3c5;
+      display:block;
+      width:100%;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+      color:var(--ink);
+    }
+    #pcsu-base-selector .pcsu-base-wrap{
+      position:relative;
+      width:min(100%, 520px);
+    }
+    #pcsu-base-selector .pcsu-base-btn{
+      width:100%;
+      appearance:none;
+      border:none;
+      outline:none;
+      cursor:pointer;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      min-height:52px;
+      padding:10px 13px 10px 15px;
+      border-radius:10px;
+      color:#fff;
+      background:#2e2e2e;
+      border:1px solid var(--stroke);
+      box-shadow:none;
+      transition:
+        background .16s ease,
+        border-color .16s ease,
+        transform .16s ease;
+    }
+    #pcsu-base-selector .pcsu-base-btn:hover{
+      background:var(--headerHover);
+      border-color:var(--strokeStrong);
+      transform:translateY(-1px);
+    }
+    #pcsu-base-selector .pcsu-base-btn-left{
+      min-width:0;
+      display:flex;
+      flex-direction:column;
+      align-items:flex-start;
+      gap:3px;
+    }
+    #pcsu-base-selector .pcsu-base-label{
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.13em;
+      font-size:.66rem;
+      line-height:1;
+      font-weight:700;
+    }
+    #pcsu-base-selector .pcsu-base-value{
+      font-size:.95rem;
+      font-weight:800;
+      color:#fff;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width:285px;
+      line-height:1.15;
+    }
+    #pcsu-base-selector .pcsu-base-arrow{
+      flex:0 0 auto;
+      width:30px;
+      height:30px;
+      border-radius:8px;
+      display:grid;
+      place-items:center;
+      border:1px solid rgba(255,255,255,.08);
+      background:rgba(255,255,255,.06);
+      color:#d8d8d8;
+      font-size:.9rem;
+      line-height:1;
+      transition:
+        transform .18s ease,
+        background .18s ease,
+        color .18s ease;
+    }
+    #pcsu-base-selector .pcsu-base-btn:hover .pcsu-base-arrow{
+      background:rgba(255,255,255,.10);
+      color:#fff;
+    }
+    #pcsu-base-selector .pcsu-base-wrap.is-open .pcsu-base-arrow{
+      transform:rotate(180deg);
+    }
+    #pcsu-base-selector .pcsu-base-menu{
+      position:absolute;
+      left:0;
+      right:0;
+      top:calc(100% + 7px);
+      z-index:9999;
+      display:none;
+      border-radius:12px;
+      overflow:hidden;
+      background:#262626;
+      border:1px solid rgba(255,255,255,.12);
+      box-shadow:0 18px 46px rgba(0,0,0,.38);
+    }
+    #pcsu-base-selector .pcsu-base-wrap.is-open .pcsu-base-menu{
+      display:block;
+    }
+    #pcsu-base-selector .pcsu-base-search-wrap{
+      padding:10px;
+      border-bottom:1px solid rgba(255,255,255,.08);
+      background:#262626;
+    }
+    #pcsu-base-selector .pcsu-base-search{
+      width:100%;
+      height:38px;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.10);
+      background:#1f1f1f;
+      color:#fff;
+      outline:none;
+      padding:0 11px;
+      font-size:.88rem;
+      font-family:inherit;
+    }
+    #pcsu-base-selector .pcsu-base-search:focus{
+      border-color:rgba(106,167,255,.45);
+      box-shadow:0 0 0 2px rgba(106,167,255,.12);
+    }
+    #pcsu-base-selector .pcsu-base-search::placeholder{
+      color:#8f8f8f;
+    }
+    #pcsu-base-selector .pcsu-base-list{
+      max-height:310px;
+      overflow:auto;
+      padding:6px;
+      background:#262626;
+    }
+    #pcsu-base-selector .pcsu-base-list::-webkit-scrollbar{
+      width:8px;
+    }
+    #pcsu-base-selector .pcsu-base-list::-webkit-scrollbar-track{
+      background:#202020;
+    }
+    #pcsu-base-selector .pcsu-base-list::-webkit-scrollbar-thumb{
+      background:#555;
+      border-radius:999px;
+    }
+    #pcsu-base-selector .pcsu-base-list::-webkit-scrollbar-thumb:hover{
+      background:#666;
+    }
+    #pcsu-base-selector .pcsu-base-item{
+      width:100%;
+      appearance:none;
+      border:none;
+      outline:none;
+      cursor:pointer;
+      text-align:left;
+      display:flex;
+      flex-direction:column;
+      gap:3px;
+      padding:10px 11px;
+      border-radius:8px;
+      background:transparent;
+      color:#edf2ff;
+      transition:
+        background .14s ease,
+        border-color .14s ease;
+    }
+    #pcsu-base-selector .pcsu-base-item:hover{
+      background:#373737;
+    }
+    #pcsu-base-selector .pcsu-base-item.is-active{
+      background:linear-gradient(135deg, rgba(106,167,255,.18), rgba(142,243,197,.10));
+      border:1px solid rgba(106,167,255,.20);
+    }
+    #pcsu-base-selector .pcsu-base-item-title{
+      font-size:.9rem;
+      font-weight:800;
+      color:#fff;
+      line-height:1.15;
+    }
+    #pcsu-base-selector .pcsu-base-item-sub{
+      font-size:.75rem;
+      color:#aaa;
+      line-height:1.25;
+    }
+    #pcsu-base-selector .pcsu-base-empty{
+      padding:16px 12px;
+      color:var(--muted);
+      font-size:.88rem;
+    }
+    @media (max-width:640px){
+      #pcsu-base-selector .pcsu-base-wrap{
+        width:100%;
+      }
+      #pcsu-base-selector .pcsu-base-btn{
+        min-height:48px;
+        padding:9px 11px 9px 12px;
+      }
+      #pcsu-base-selector .pcsu-base-value{
+        max-width:200px;
+        font-size:.9rem;
+      }
+      #pcsu-base-selector .pcsu-base-label{
+        font-size:.62rem;
+      }
+      #pcsu-base-selector .pcsu-base-arrow{
+        width:28px;
+        height:28px;
+      }
+    }
+  </style>
+              <div class="pcsu-base-wrap" id="pcsuBaseWrap">
+                <button class="pcsu-base-btn" id="pcsuBaseBtn" type="button" aria-expanded="false" aria-controls="pcsuBaseMenu">
+                  <div class="pcsu-base-btn-left">
+                    <div class="pcsu-base-label">Select Base</div>
+                    <div class="pcsu-base-value" id="pcsuBaseValue">Choose a base</div>
                   </div>
-                  <div class="w-dyn-empty">
-                    <div>No items found.</div>
+                  <div class="pcsu-base-arrow">⌄</div>
+                </button>
+                <div class="pcsu-base-menu" id="pcsuBaseMenu">
+                  <div class="pcsu-base-search-wrap">
+                    <input id="pcsuBaseSearch" class="pcsu-base-search" type="text" placeholder="Search base..." autocomplete="off">
                   </div>
+                  <div class="pcsu-base-list" id="pcsuBaseList"></div>
                 </div>
               </div>
-              <div class="mobile-sign-cta">
-                <div class="sign-cta-navwrap">
-                  <a href="../signin-signup/sign-in.html" aria-label="sign in" class="menu-sign-btn w-nav-link">Sign In</a>
-                  <div class="nav-btn-wrapper">
-                    <a aria-label="Start for Free" href="#" class="btn-menu">Start for Free</a>
-                  </div>
-                </div>
-              </div>
-            </nav>
-            <div id="w-node-a20e7068-528c-2165-b385-785e4c45cb07-4c45ca57" class="nav-right">
-              <div class="burger w-nav-button">
-                <div class="icon-wrapper">
-                  <div class="burger-icon">
-                    <div class="line1"></div>
-                    <div class="line2"></div>
-                  </div>
-                </div>
-              </div>
+              <script>
+    (() => {
+      "use strict";
+      if (window.PCSU_BASE_SELECTOR?.__mounted_v130) return;
+      window.PCSU_BASE_SELECTOR = { __mounted_v130: true };
+      const STORAGE_KEY = "pcsunited.selectedBase.v1";
+      const JSON_URL_KEY = "pcsunited.selectedCityJsonUrl.v1";
+      const DESTINATION_URL =
+        window.PCSU_BASE_DEMOGRAPHICS_URL ||
+        "https://pcsunited-com-28346d.webflow.io/air-force/base-demographics";
+      const REDIRECT_ON_SELECT = true;
+      const BASE_FILES = [
+        "Andrews.json",
+        "Barksdale.json",
+        "Beale.json",
+        "Cannon.json",
+        "Charleston.json",
+        "Davis-Monthan.json",
+        "Dover.json",
+        "Dyess.json",
+        "Eglin.json",
+        "Elmendorf.json",
+        "F-E-Warren.json",
+        "Fairchild.json",
+        "Fort-Sam-Houston.json",
+        "Holloman.json",
+        "Hurlburt.json",
+        "Keesler.json",
+        "Kirtland.json",
+        "Lackland.json",
+        "Langley.json",
+        "Laughlin.json",
+        "Little-Rock.json",
+        "Luke.json",
+        "MacDill.json",
+        "Malmstrom.json",
+        "Maxwell.json",
+        "McConnell.json",
+        "McGuire.json",
+        "Minot.json",
+        "Moody.json",
+        "Mountain-Home.json",
+        "Nellis.json",
+        "Offutt.json",
+        "Peterson.json",
+        "Randolph.json",
+        "Robins.json",
+        "Scott.json",
+        "Seymour-Johnson.json",
+        "Shaw.json",
+        "Sheppard.json",
+        "Tinker.json",
+        "Travis.json",
+        "Tyndall.json",
+        "Whiteman.json",
+        "Wright-Patterson.json"
+      ];
+      const JSON_BASE_URL =
+        window.PCSU_CITIES_BASE_URL ||
+        "https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/";
+      const root = document.getElementById("pcsu-base-selector");
+      if (!root) return;
+      const wrap = root.querySelector("#pcsuBaseWrap");
+      const btn = root.querySelector("#pcsuBaseBtn");
+      const valueEl = root.querySelector("#pcsuBaseValue");
+      const search = root.querySelector("#pcsuBaseSearch");
+      const list = root.querySelector("#pcsuBaseList");
+      let activeId = null;
+      let BASES = [];
+      let filtered = [];
+      function esc(str){
+        return String(str ?? "")
+          .replaceAll("&","&amp;")
+          .replaceAll("<","&lt;")
+          .replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;")
+          .replaceAll("'","&#039;");
+      }
+      function slugify(str){
+        return String(str || "")
+          .replace(/\.json$/i, "")
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+      }
+      function prettyBaseName(fileName){
+        return String(fileName || "")
+          .replace(/\.json$/i, "")
+          .split("-")
+          .filter(Boolean)
+          .map(part => {
+            if (/^[a-z]$/i.test(part)) return part.toUpperCase();
+            return part.charAt(0).toUpperCase() + part.slice(1);
+          })
+          .join(" ");
+      }
+      function buildBases(){
+        return BASE_FILES.map(fileName => {
+          const baseName = prettyBaseName(fileName);
+          return {
+            id: slugify(fileName),
+            fileName,
+            base: baseName,
+            label: baseName,
+            jsonUrl: JSON_BASE_URL + fileName
+          };
+        }).sort((a, b) => a.base.localeCompare(b.base));
+      }
+      function saveSelection(item){
+        try{
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(item));
+          localStorage.setItem(JSON_URL_KEY, item.jsonUrl || "");
+        }catch(err){
+          console.warn("Could not save base selection", err);
+        }
+      }
+      function loadSelection(){
+        try{
+          const raw = localStorage.getItem(STORAGE_KEY);
+          return raw ? JSON.parse(raw) : null;
+        }catch{
+          return null;
+        }
+      }
+      function openMenu(){
+        wrap.classList.add("is-open");
+        btn.setAttribute("aria-expanded", "true");
+        setTimeout(() => search && search.focus(), 20);
+      }
+      function closeMenu(){
+        wrap.classList.remove("is-open");
+        btn.setAttribute("aria-expanded", "false");
+      }
+      function renderList(items){
+        if (!list) return;
+        if (!items.length){
+          list.innerHTML = '<div class="pcsu-base-empty">No bases found.</div>';
+          return;
+        }
+        list.innerHTML = items.map(item => `
+          <button
+            class="pcsu-base-item ${item.id === activeId ? "is-active" : ""}"
+            type="button"
+            data-base-id="${esc(item.id)}"
+          >
+            <div class="pcsu-base-item-title">${esc(item.base)}</div>
+            <div class="pcsu-base-item-sub">${esc(item.fileName)}</div>
+          </button>
+        `).join("");
+      }
+      function filterList(term){
+        const q = String(term || "").trim().toLowerCase();
+        filtered = !q
+          ? [...BASES]
+          : BASES.filter(item => {
+              const hay = [
+                item.base,
+                item.fileName,
+                item.id
+              ].join(" ").toLowerCase();
+              return hay.includes(q);
+            });
+        renderList(filtered);
+      }
+      function navigateToDestination(item){
+        if (!REDIRECT_ON_SELECT) return;
+        const url = new URL(DESTINATION_URL, window.location.origin);
+        url.searchParams.set("base", item.id);
+        window.location.href = url.toString();
+      }
+      function setActive(item, options = {}){
+        if (!item) return;
+        const shouldRedirect = options.redirect !== false;
+        activeId = item.id;
+        valueEl.textContent = item.label;
+        window.OROZCO_CITY_JSON_URL = item.jsonUrl;
+        window.PCSU_SELECTED_CITY_JSON_URL = item.jsonUrl;
+        saveSelection(item);
+        renderList(filtered);
+        window.dispatchEvent(new CustomEvent("pcsu:base-selected", {
+          detail: item
+        }));
+        if (typeof window.PCSU_ON_BASE_SELECTED === "function"){
+          try{
+            window.PCSU_ON_BASE_SELECTED(item);
+          }catch(err){
+            console.error("PCSU_ON_BASE_SELECTED error:", err);
+          }
+        }
+        if (shouldRedirect){
+          navigateToDestination(item);
+        }
+      }
+      BASES = buildBases();
+      filtered = [...BASES];
+      btn.addEventListener("click", () => {
+        if (wrap.classList.contains("is-open")) closeMenu();
+        else openMenu();
+      });
+      document.addEventListener("click", (e) => {
+        if (!root.contains(e.target)) closeMenu();
+      });
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape") closeMenu();
+      });
+      search.addEventListener("input", () => {
+        filterList(search.value);
+      });
+      list.addEventListener("click", (e) => {
+        const itemBtn = e.target.closest("[data-base-id]");
+        if (!itemBtn) return;
+        const id = itemBtn.getAttribute("data-base-id");
+        const match = BASES.find(x => x.id === id);
+        if (!match) return;
+        setActive(match, { redirect: true });
+        closeMenu();
+      });
+      const saved = loadSelection();
+      const initial =
+        BASES.find(x => x.id === saved?.id) ||
+        BASES.find(x => x.base === "Lackland") ||
+        BASES[0];
+      renderList(filtered);
+      setActive(initial, { redirect: false });
+    })();
+  </script>
             </div>
           </div>
         </div>
@@ -79,11 +1143,13 @@
       <section class="section faq">
         <div class="code-embed-22 w-embed"><!--  =========================================================
   PCSUnited • Base Demographics SaaS
-  FULL SHELL
-  UPDATED
-  - Removed internal blue top header panel
-  - Reordered tabs to:
+  FULL SHELL v2.0 • DECISION-FIRST UI UPGRADE
+  COSMETIC UPDATE
+  - Preserves ALL existing IDs for current JS compatibility
+  - Keeps all sections:
     Overview, Real Estate, Demographics, Base, Guidance
+  - Makes hero overlay panels more transparent so base images show through
+  - No structural / JS-facing changes
 =========================================================  -->
           <div id="or-city-overview" style="all:initial;">
             <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -98,24 +1164,32 @@
     #or-city-overview{
       --bg:#071018;
       --bg2:#0b1621;
-      --panel:rgba(17,24,34,.78);
-      --panel2:rgba(12,18,28,.72);
+      --bg3:#050912;
+      --panel:rgba(17,24,34,.56);
+      --panel2:rgba(12,18,28,.46);
+      --panel3:rgba(7,12,19,.58);
       --stroke:rgba(216,184,122,.16);
+      --stroke2:rgba(255,255,255,.08);
       --ink:#f3efe7;
       --muted:#b8b0a4;
       --gold:#d8b87a;
+      --gold2:#f6d06d;
       --blue:#6f8fb7;
+      --sapphire:#6aa7ff;
       --mint:#94c7b3;
+      --mint2:#8ef3c5;
       --danger:#d98c8c;
       --shadow:0 24px 70px rgba(0,0,0,.42);
+      --shadow2:0 34px 90px rgba(0,0,0,.62);
       --wrap:min(1380px, calc(100% - 32px));
       display:block;
       font-family:"Barlow",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
       color:var(--ink);
       background:
-        radial-gradient(circle at top left, rgba(216,184,122,.10), transparent 26%),
-        radial-gradient(circle at top right, rgba(111,143,183,.10), transparent 26%),
-        linear-gradient(180deg, var(--bg), var(--bg2));
+        radial-gradient(circle at 8% 0%, rgba(216,184,122,.15), transparent 30%),
+        radial-gradient(circle at 92% 4%, rgba(111,143,183,.14), transparent 28%),
+        radial-gradient(circle at 50% 100%, rgba(142,243,197,.06), transparent 34%),
+        linear-gradient(180deg, var(--bg), var(--bg2) 58%, var(--bg3));
       min-height:100vh;
     }
     #or-city-overview a{ color:inherit; text-decoration:none; }
@@ -127,59 +1201,88 @@
     #or-city-overview .or-hero{
       position:relative;
       overflow:hidden;
-      min-height:430px;
-      border-radius:32px;
-      border:1px solid rgba(216,184,122,.12);
-      box-shadow:var(--shadow);
+      min-height:460px;
+      border-radius:34px;
+      border:1px solid rgba(216,184,122,.16);
+      box-shadow:var(--shadow2);
       background:#0c131c;
+      isolation:isolate;
+    }
+    #or-city-overview .or-hero::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.045), transparent 22%),
+        radial-gradient(circle at 20% 20%, rgba(216,184,122,.09), transparent 28%),
+        radial-gradient(circle at 88% 16%, rgba(106,167,255,.075), transparent 26%);
+      mix-blend-mode:screen;
+    }
+    #or-city-overview .or-hero::after{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      background:
+        linear-gradient(90deg, rgba(0,0,0,.24), transparent 46%, rgba(0,0,0,.10)),
+        linear-gradient(180deg, transparent 56%, rgba(0,0,0,.26));
     }
     #or-city-overview .or-hero-bg{
       position:absolute;
       inset:0;
       background:
-        linear-gradient(90deg, rgba(5,8,13,.88) 0%, rgba(8,12,18,.82) 28%, rgba(8,12,18,.48) 63%, rgba(8,12,18,.28) 100%),
+        linear-gradient(90deg, rgba(5,8,13,.62) 0%, rgba(8,12,18,.42) 30%, rgba(8,12,18,.22) 62%, rgba(8,12,18,.12) 100%),
         var(--hero-image, linear-gradient(135deg, #1a2430, #0b1218));
       background-size:cover;
       background-position:center;
-      transform:scale(1.02);
+      transform:scale(1.025);
+      filter:saturate(1.08) contrast(1.05);
     }
     #or-city-overview .or-hero-inner{
       position:relative;
-      z-index:1;
-      min-height:430px;
+      z-index:2;
+      min-height:460px;
       display:grid;
-      grid-template-columns:minmax(0,1.22fr) minmax(320px,.88fr);
-      gap:20px;
+      grid-template-columns:minmax(0,1.16fr) minmax(340px,.84fr);
+      gap:22px;
       align-items:end;
-      padding:30px;
+      padding:34px;
     }
     #or-city-overview .or-eyebrow{
       display:inline-flex;
       align-items:center;
       gap:8px;
-      padding:9px 12px;
+      padding:9px 13px;
       border-radius:999px;
-      border:1px solid rgba(216,184,122,.18);
-      background:rgba(216,184,122,.07);
-      color:var(--gold);
+      border:1px solid rgba(216,184,122,.22);
+      background:linear-gradient(135deg, rgba(216,184,122,.11), rgba(111,143,183,.06));
+      color:var(--gold2);
       text-transform:uppercase;
-      letter-spacing:.14em;
-      font-size:.77rem;
+      letter-spacing:.15em;
+      font-size:.76rem;
+      font-weight:800;
       margin-bottom:16px;
+      box-shadow:0 10px 30px rgba(0,0,0,.22);
     }
     #or-city-overview .or-title{
       font-family:"Gilda Display",serif;
-      font-size:clamp(2.2rem, 4vw, 4rem);
-      line-height:1.02;
+      font-size:clamp(2.35rem, 4.4vw, 4.45rem);
+      line-height:.98;
       color:#fbf4e7;
-      margin-bottom:12px;
+      margin-bottom:13px;
+      text-shadow:0 14px 40px rgba(0,0,0,.55);
+      letter-spacing:-.025em;
     }
     #or-city-overview .or-subtitle{
-      max-width:760px;
-      color:#ddd4c7;
-      font-size:1.02rem;
-      line-height:1.7;
-      margin-bottom:20px;
+      max-width:780px;
+      color:#e4dccf;
+      font-size:1.04rem;
+      line-height:1.72;
+      margin-bottom:22px;
+      text-shadow:0 8px 26px rgba(0,0,0,.55);
     }
     #or-city-overview .or-kpis{
       display:grid;
@@ -187,35 +1290,67 @@
       gap:14px;
     }
     #or-city-overview .or-kpi{
-      border-radius:18px;
-      padding:16px;
-      background:rgba(10,16,24,.56);
-      border:1px solid rgba(255,255,255,.08);
-      backdrop-filter:blur(12px);
+      position:relative;
+      overflow:hidden;
+      border-radius:20px;
+      padding:17px;
+      background:
+        linear-gradient(180deg, rgba(10,16,24,.42), rgba(8,12,18,.30));
+      border:1px solid rgba(255,255,255,.075);
+      backdrop-filter:blur(10px) saturate(132%);
+      -webkit-backdrop-filter:blur(10px) saturate(132%);
+      box-shadow:0 18px 42px rgba(0,0,0,.22);
+    }
+    #or-city-overview .or-kpi::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(106,167,255,.13), transparent);
+      pointer-events:none;
     }
     #or-city-overview .or-kpi-label{
       color:var(--muted);
       text-transform:uppercase;
       letter-spacing:.14em;
-      font-size:.74rem;
+      font-size:.72rem;
+      font-weight:800;
       margin-bottom:8px;
     }
     #or-city-overview .or-kpi-value{
-      font-size:1.45rem;
-      font-weight:800;
+      font-size:1.52rem;
+      font-weight:900;
       color:#fff;
+      letter-spacing:-.02em;
     }
     #or-city-overview .or-hero-side{
       display:grid;
       gap:14px;
     }
     #or-city-overview .or-card{
-      border-radius:24px;
-      padding:22px;
-      background:linear-gradient(180deg, rgba(18,24,34,.78), rgba(11,16,24,.84));
-      border:1px solid rgba(216,184,122,.10);
-      backdrop-filter:blur(16px);
-      box-shadow:var(--shadow);
+      position:relative;
+      overflow:hidden;
+      border-radius:26px;
+      padding:23px;
+      background:
+        linear-gradient(180deg, rgba(18,24,34,.50), rgba(8,12,18,.40));
+      border:1px solid rgba(216,184,122,.105);
+      backdrop-filter:blur(10px) saturate(132%);
+      -webkit-backdrop-filter:blur(10px) saturate(132%);
+      box-shadow:0 22px 60px rgba(0,0,0,.26);
+    }
+    #or-city-overview .or-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      pointer-events:none;
+      background:
+        radial-gradient(circle at top left, rgba(216,184,122,.065), transparent 32%),
+        linear-gradient(180deg, rgba(255,255,255,.028), transparent 24%);
+    }
+    #or-city-overview .or-card > *{
+      position:relative;
+      z-index:1;
     }
     #or-city-overview .or-status{
       display:inline-flex;
@@ -225,22 +1360,62 @@
       border-radius:999px;
       text-transform:uppercase;
       letter-spacing:.12em;
-      font-size:.78rem;
-      font-weight:800;
-      color:var(--gold);
-      background:rgba(216,184,122,.08);
-      border:1px solid rgba(216,184,122,.18);
+      font-size:.76rem;
+      font-weight:900;
+      color:var(--gold2);
+      background:rgba(216,184,122,.075);
+      border:1px solid rgba(216,184,122,.20);
       margin-bottom:14px;
     }
     #or-city-overview .or-card-title{
       font-family:"Gilda Display",serif;
-      font-size:1.7rem;
-      color:#fbf2e2;
-      margin-bottom:8px;
+      font-size:clamp(1.85rem, 2.3vw, 2.55rem);
+      line-height:1.02;
+      color:#fff6e7;
+      margin-bottom:10px;
+      letter-spacing:-.015em;
+      text-shadow:0 10px 32px rgba(0,0,0,.48);
     }
     #or-city-overview .or-card-copy{
-      color:#d7cfbf;
-      line-height:1.7;
+      color:#f0e8dc;
+      line-height:1.72;
+      font-size:1rem;
+      text-shadow:0 8px 22px rgba(0,0,0,.40);
+    }
+    #or-city-overview .or-decision-strip{
+      display:grid;
+      grid-template-columns:repeat(3,minmax(0,1fr));
+      gap:10px;
+      margin-top:17px;
+    }
+    #or-city-overview .or-decision-pill{
+      border-radius:16px;
+      padding:12px 12px;
+      background:rgba(255,255,255,.026);
+      border:1px solid rgba(255,255,255,.06);
+      min-height:72px;
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      gap:5px;
+      backdrop-filter:blur(8px) saturate(125%);
+      -webkit-backdrop-filter:blur(8px) saturate(125%);
+    }
+    #or-city-overview .or-decision-pill span{
+      display:block;
+      color:var(--muted);
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      font-size:.64rem;
+      font-weight:900;
+      line-height:1.2;
+    }
+    #or-city-overview .or-decision-pill strong{
+      display:block;
+      color:#fff;
+      font-size:.92rem;
+      line-height:1.22;
+      font-weight:900;
     }
     #or-city-overview .or-score-grid{
       display:grid;
@@ -249,70 +1424,94 @@
       margin-top:12px;
     }
     #or-city-overview .or-score-mini{
-      border-radius:16px;
+      position:relative;
+      overflow:hidden;
+      border-radius:17px;
       padding:14px;
-      background:rgba(255,255,255,.03);
+      background:rgba(255,255,255,.026);
       border:1px solid rgba(255,255,255,.06);
+      backdrop-filter:blur(8px) saturate(125%);
+      -webkit-backdrop-filter:blur(8px) saturate(125%);
+    }
+    #or-city-overview .or-score-mini::after{
+      content:"";
+      position:absolute;
+      inset:auto 0 0 0;
+      height:2px;
+      background:linear-gradient(90deg, rgba(216,184,122,.50), rgba(106,167,255,.22), transparent);
     }
     #or-city-overview .or-score-mini span{
       display:block;
-      font-size:.74rem;
+      font-size:.72rem;
       text-transform:uppercase;
       letter-spacing:.12em;
       color:var(--muted);
       margin-bottom:6px;
+      font-weight:800;
     }
     #or-city-overview .or-score-mini strong{
       display:block;
-      font-size:1.5rem;
+      font-size:1.58rem;
       color:#fff;
-      font-weight:800;
+      font-weight:900;
     }
     #or-city-overview .or-tabs{
       display:flex;
       flex-wrap:wrap;
       gap:10px;
-      padding:18px 0 10px;
+      padding:20px 0 10px;
     }
     #or-city-overview .or-tab{
-      border:1px solid rgba(216,184,122,.12);
-      background:rgba(255,255,255,.03);
+      border:1px solid rgba(216,184,122,.13);
+      background:rgba(255,255,255,.035);
       color:var(--muted);
-      padding:12px 16px;
+      padding:12px 17px;
       border-radius:999px;
       cursor:pointer;
       font-size:.80rem;
-      font-weight:800;
+      font-weight:900;
       letter-spacing:.10em;
       text-transform:uppercase;
       transition:.18s ease;
+      box-shadow:0 12px 30px rgba(0,0,0,.12);
+    }
+    #or-city-overview .or-tab:hover{
+      transform:translateY(-1px);
+      border-color:rgba(216,184,122,.26);
+      color:#fff3dd;
+      background:rgba(255,255,255,.055);
     }
     #or-city-overview .or-tab.is-active{
-      background:linear-gradient(135deg, rgba(216,184,122,.16), rgba(111,143,183,.12));
+      background:linear-gradient(135deg, rgba(216,184,122,.22), rgba(111,143,183,.15));
       color:#fff3dd;
-      border-color:rgba(216,184,122,.26);
-      box-shadow:0 10px 30px rgba(0,0,0,.22);
+      border-color:rgba(216,184,122,.30);
+      box-shadow:0 14px 36px rgba(0,0,0,.25);
     }
     #or-city-overview .or-panel{
       display:none;
-      border-radius:28px;
-      padding:22px;
-      background:var(--panel);
-      border:1px solid rgba(216,184,122,.12);
+      border-radius:30px;
+      padding:24px;
+      background:
+        radial-gradient(circle at top left, rgba(216,184,122,.06), transparent 28%),
+        linear-gradient(180deg, rgba(17,24,34,.82), rgba(8,13,20,.78));
+      border:1px solid rgba(216,184,122,.13);
       box-shadow:var(--shadow);
-      backdrop-filter:blur(18px);
+      backdrop-filter:blur(20px) saturate(145%);
       margin-top:14px;
     }
     #or-city-overview .or-panel.is-active{ display:block; }
     #or-city-overview .or-section-title{
       font-family:"Gilda Display",serif;
-      font-size:1.95rem;
+      font-size:2.05rem;
+      line-height:1.12;
       color:#fbf2e2;
       margin-bottom:8px;
+      letter-spacing:-.01em;
     }
     #or-city-overview .or-section-sub{
       color:var(--muted);
-      line-height:1.7;
+      line-height:1.72;
+      font-size:1rem;
     }
     #or-city-overview .or-grid-4,
     #or-city-overview .or-grid-3,
@@ -325,23 +1524,36 @@
     #or-city-overview .or-grid-3{ grid-template-columns:repeat(3,minmax(0,1fr)); }
     #or-city-overview .or-grid-2{ grid-template-columns:repeat(2,minmax(0,1fr)); }
     #or-city-overview .or-stat{
-      border-radius:20px;
-      padding:18px;
-      background:var(--panel2);
-      border:1px solid rgba(255,255,255,.06);
+      position:relative;
+      overflow:hidden;
+      border-radius:22px;
+      padding:19px;
+      background:linear-gradient(180deg, rgba(12,18,28,.78), rgba(7,12,19,.72));
+      border:1px solid rgba(255,255,255,.065);
+      box-shadow:0 18px 44px rgba(0,0,0,.18);
+    }
+    #or-city-overview .or-stat::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
+      pointer-events:none;
     }
     #or-city-overview .or-stat-label{
       color:var(--muted);
       text-transform:uppercase;
       letter-spacing:.12em;
-      font-size:.74rem;
+      font-size:.73rem;
+      font-weight:900;
       margin-bottom:8px;
     }
     #or-city-overview .or-stat-value{
-      font-size:1.65rem;
-      font-weight:800;
+      font-size:1.72rem;
+      font-weight:900;
       color:#fff;
       margin-bottom:8px;
+      letter-spacing:-.02em;
     }
     #or-city-overview .or-stat-hint{
       color:#d7cfbf;
@@ -360,33 +1572,58 @@
       gap:16px;
     }
     #or-city-overview .or-list-card{
-      border-radius:20px;
-      padding:18px;
-      background:var(--panel2);
-      border:1px solid rgba(255,255,255,.06);
+      position:relative;
+      overflow:hidden;
+      border-radius:22px;
+      padding:19px;
+      background:linear-gradient(180deg, rgba(12,18,28,.78), rgba(7,12,19,.72));
+      border:1px solid rgba(255,255,255,.065);
+      box-shadow:0 18px 44px rgba(0,0,0,.18);
+    }
+    #or-city-overview .or-list-card::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
+      pointer-events:none;
     }
     #or-city-overview .or-list-title{
-      font-size:.98rem;
+      position:relative;
+      z-index:1;
+      font-size:.96rem;
       text-transform:uppercase;
-      letter-spacing:.12em;
+      letter-spacing:.13em;
       color:#fbf2e2;
       margin-bottom:12px;
-      font-weight:800;
+      font-weight:900;
     }
     #or-city-overview .or-list{
+      position:relative;
+      z-index:1;
       padding-left:18px;
       color:#dcd3c4;
       line-height:1.75;
     }
     #or-city-overview .or-list li + li{ margin-top:8px; }
     #or-city-overview .or-quote{
-      border-radius:20px;
-      padding:20px;
-      background:linear-gradient(180deg, rgba(216,184,122,.06), rgba(255,255,255,.03));
-      border:1px solid rgba(216,184,122,.14);
+      position:relative;
+      overflow:hidden;
+      border-radius:22px;
+      padding:21px;
+      background:linear-gradient(180deg, rgba(216,184,122,.075), rgba(255,255,255,.035));
+      border:1px solid rgba(216,184,122,.16);
       color:#ebe3d5;
       line-height:1.75;
       font-size:1rem;
+      box-shadow:0 18px 44px rgba(0,0,0,.16);
+    }
+    #or-city-overview .or-quote::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(90deg, rgba(246,208,109,.42), rgba(106,167,255,.20), transparent);
     }
     #or-city-overview .or-bar-list{
       display:grid;
@@ -400,7 +1637,7 @@
       align-items:center;
     }
     #or-city-overview .or-bar-name{
-      font-weight:700;
+      font-weight:800;
       color:#eadfcb;
     }
     #or-city-overview .or-bar-track{
@@ -414,11 +1651,12 @@
       height:100%;
       width:0;
       border-radius:999px;
-      background:linear-gradient(90deg, var(--gold), var(--blue));
+      background:linear-gradient(90deg, var(--gold2), var(--sapphire));
+      box-shadow:0 0 18px rgba(216,184,122,.18);
     }
     #or-city-overview .or-bar-val{
       text-align:right;
-      font-weight:800;
+      font-weight:900;
       color:#fff;
     }
     #or-city-overview .or-bed-top{
@@ -435,18 +1673,39 @@
       flex-wrap:wrap;
     }
     #or-city-overview .or-bed-btn{
-      border:1px solid rgba(216,184,122,.12);
-      background:rgba(255,255,255,.03);
+      border:1px solid rgba(216,184,122,.13);
+      background:rgba(255,255,255,.035);
       color:var(--muted);
-      padding:10px 14px;
+      padding:10px 15px;
       border-radius:999px;
-      font-weight:800;
+      font-weight:900;
       cursor:pointer;
+      transition:.18s ease;
+    }
+    #or-city-overview .or-bed-btn:hover{
+      transform:translateY(-1px);
+      color:#fff;
+      border-color:rgba(216,184,122,.26);
     }
     #or-city-overview .or-bed-btn.is-active{
-      background:linear-gradient(135deg, rgba(216,184,122,.16), rgba(111,143,183,.12));
-      border-color:rgba(216,184,122,.24);
+      background:linear-gradient(135deg, rgba(216,184,122,.20), rgba(111,143,183,.14));
+      border-color:rgba(216,184,122,.28);
       color:#fff3dd;
+    }
+    #or-city-overview .or-pill{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:38px;
+      border-radius:999px;
+      padding:9px 13px;
+      color:#fff3dd;
+      background:rgba(216,184,122,.08);
+      border:1px solid rgba(216,184,122,.17);
+      font-size:.78rem;
+      font-weight:900;
+      letter-spacing:.08em;
+      text-transform:uppercase;
     }
     #or-city-overview .or-mini-bars{
       display:grid;
@@ -462,6 +1721,7 @@
     #or-city-overview .or-mini-row span{
       color:#e2d8c8;
       font-size:.92rem;
+      font-weight:700;
     }
     #or-city-overview .or-mini-track{
       height:9px;
@@ -474,12 +1734,13 @@
       height:100%;
       width:0;
       border-radius:999px;
-      background:linear-gradient(90deg, var(--gold), var(--mint));
+      background:linear-gradient(90deg, var(--gold2), var(--mint2));
     }
     #or-city-overview .or-mini-row strong{
       text-align:right;
       color:#fff;
       font-size:.92rem;
+      font-weight:900;
     }
     #or-city-overview .or-error{
       margin-top:18px;
@@ -501,7 +1762,7 @@
       margin-top:18px;
     }
     #or-city-overview .or-base-bluf-card{
-      min-height:170px;
+      min-height:184px;
       display:flex;
       flex-direction:column;
       justify-content:flex-start;
@@ -514,18 +1775,18 @@
       inset:0 auto auto 0;
       width:100%;
       height:1px;
-      background:linear-gradient(90deg, rgba(216,184,122,.30), rgba(111,143,183,.18), transparent);
+      background:linear-gradient(90deg, rgba(216,184,122,.36), rgba(111,143,183,.20), transparent);
       pointer-events:none;
     }
     #or-city-overview .or-base-bluf-copy{
       color:#f3efe7;
       font-size:1rem;
-      line-height:1.65;
-      font-weight:600;
+      line-height:1.67;
+      font-weight:700;
     }
     #or-city-overview .or-base-map-layout{
       display:grid;
-      grid-template-columns:minmax(0,1.45fr) minmax(300px,.75fr);
+      grid-template-columns:minmax(0,1.62fr) minmax(300px,.68fr);
       gap:18px;
       margin-top:18px;
       align-items:start;
@@ -536,24 +1797,33 @@
     }
     #or-city-overview .or-base-map-card{
       overflow:hidden;
-      padding:18px;
+      padding:20px;
+      border-color:rgba(216,184,122,.18);
+      background:
+        radial-gradient(circle at top left, rgba(216,184,122,.09), transparent 30%),
+        linear-gradient(180deg, rgba(12,18,28,.84), rgba(6,10,16,.80));
     }
     #or-city-overview .or-base-map-link{
       display:block;
-      border-radius:20px;
+      border-radius:23px;
       overflow:hidden;
-      border:1px solid rgba(255,255,255,.06);
+      border:1px solid rgba(216,184,122,.13);
       background:rgba(255,255,255,.02);
-      box-shadow:0 16px 40px rgba(0,0,0,.25);
+      box-shadow:0 24px 64px rgba(0,0,0,.35);
     }
     #or-city-overview .or-base-map-img{
       display:block;
       width:100%;
       height:auto;
-      min-height:460px;
-      max-height:700px;
+      min-height:560px;
+      max-height:820px;
       object-fit:cover;
       background:#101823;
+      transition:.24s ease;
+    }
+    #or-city-overview .or-base-map-link:hover .or-base-map-img{
+      transform:scale(1.012);
+      filter:saturate(1.06) contrast(1.04);
     }
     #or-city-overview .or-base-map-empty{
       display:none;
@@ -578,20 +1848,35 @@
       gap:16px;
     }
     #or-city-overview .or-rail-card{
-      border-radius:20px;
-      padding:18px;
-      background:var(--panel2);
-      border:1px solid rgba(255,255,255,.06);
+      position:relative;
+      overflow:hidden;
+      border-radius:22px;
+      padding:19px;
+      background:linear-gradient(180deg, rgba(12,18,28,.78), rgba(7,12,19,.72));
+      border:1px solid rgba(255,255,255,.065);
+      box-shadow:0 18px 44px rgba(0,0,0,.18);
+    }
+    #or-city-overview .or-rail-card::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
+      pointer-events:none;
     }
     #or-city-overview .or-rail-title{
-      font-size:.98rem;
+      position:relative;
+      z-index:1;
+      font-size:.96rem;
       text-transform:uppercase;
-      letter-spacing:.12em;
+      letter-spacing:.13em;
       color:#fbf2e2;
       margin-bottom:12px;
-      font-weight:800;
+      font-weight:900;
     }
     #or-city-overview .or-signal-list{
+      position:relative;
+      z-index:1;
       display:grid;
       gap:10px;
     }
@@ -608,11 +1893,11 @@
       padding:7px 10px;
       border-radius:999px;
       font-size:.72rem;
-      font-weight:800;
+      font-weight:900;
       text-transform:uppercase;
       letter-spacing:.10em;
-      border:1px solid rgba(216,184,122,.18);
-      background:rgba(216,184,122,.08);
+      border:1px solid rgba(216,184,122,.20);
+      background:rgba(216,184,122,.09);
       color:#f4dfb6;
     }
     #or-city-overview .or-signal-copy{
@@ -625,23 +1910,24 @@
       gap:12px;
     }
     #or-city-overview .or-quick-mini{
-      border-radius:16px;
+      border-radius:17px;
       padding:14px;
-      background:rgba(255,255,255,.03);
-      border:1px solid rgba(255,255,255,.06);
+      background:rgba(255,255,255,.035);
+      border:1px solid rgba(255,255,255,.07);
     }
     #or-city-overview .or-quick-mini-label{
       color:var(--muted);
       text-transform:uppercase;
       letter-spacing:.12em;
-      font-size:.72rem;
+      font-size:.71rem;
+      font-weight:900;
       margin-bottom:8px;
     }
     #or-city-overview .or-quick-mini-value{
       color:#fff;
       font-size:1rem;
       line-height:1.45;
-      font-weight:700;
+      font-weight:800;
     }
     @media (max-width:1180px){
       #or-city-overview .or-hero-inner,
@@ -651,15 +1937,22 @@
       }
       #or-city-overview .or-grid-4{ grid-template-columns:repeat(2,minmax(0,1fr)); }
       #or-city-overview .or-grid-3{ grid-template-columns:repeat(2,minmax(0,1fr)); }
+      #or-city-overview .or-base-map-img{
+        min-height:500px;
+        max-height:760px;
+      }
     }
     @media (max-width:760px){
       #or-city-overview{ --wrap:min(100% - 20px, 1380px); }
+      #or-city-overview .or-wrap{ padding:16px 0 32px; }
+      #or-city-overview .or-hero{ min-height:auto; border-radius:26px; }
       #or-city-overview .or-hero-inner{ padding:20px; min-height:auto; }
       #or-city-overview .or-grid-4,
       #or-city-overview .or-grid-3,
       #or-city-overview .or-grid-2,
       #or-city-overview .or-score-grid,
-      #or-city-overview .or-quick-grid{
+      #or-city-overview .or-quick-grid,
+      #or-city-overview .or-decision-strip{
         grid-template-columns:1fr;
       }
       #or-city-overview .or-kpis{
@@ -675,8 +1968,12 @@
         min-height:auto;
       }
       #or-city-overview .or-base-map-img{
-        min-height:280px;
-        max-height:420px;
+        min-height:320px;
+        max-height:500px;
+      }
+      #or-city-overview .or-panel{
+        padding:18px;
+        border-radius:24px;
       }
     }
   </style>
@@ -690,15 +1987,15 @@
                     <p class="or-subtitle" id="orHeroSubtitle">Preparing base and city intelligence.</p>
                     <div class="or-kpis">
                       <div class="or-kpi">
-                        <div class="or-kpi-label">Median Home Price</div>
+                        <div class="or-kpi-label">Typical Buy Price</div>
                         <div class="or-kpi-value" id="orKpiHomePrice">—</div>
                       </div>
                       <div class="or-kpi">
-                        <div class="or-kpi-label">Median Rent</div>
+                        <div class="or-kpi-label">Typical Rent</div>
                         <div class="or-kpi-value" id="orKpiRent">—</div>
                       </div>
                       <div class="or-kpi">
-                        <div class="or-kpi-label">All-In Mortgage</div>
+                        <div class="or-kpi-label">Est. Monthly Payment</div>
                         <div class="or-kpi-value" id="orKpiMortgage">—</div>
                       </div>
                       <div class="or-kpi">
@@ -712,6 +2009,20 @@
                       <div class="or-status" id="orVerdictStatus">Market Verdict</div>
                       <div class="or-card-title" id="orVerdictTitle">—</div>
                       <div class="or-card-copy" id="orVerdictCopy">—</div>
+                      <div class="or-decision-strip" aria-label="Decision summary">
+                        <div class="or-decision-pill">
+                          <span>Best Move</span>
+                          <strong>Use the market verdict</strong>
+                        </div>
+                        <div class="or-decision-pill">
+                          <span>Leverage</span>
+                          <strong>Compare price + DOM</strong>
+                        </div>
+                        <div class="or-decision-pill">
+                          <span>Watch</span>
+                          <strong>Taxes, insurance, commute</strong>
+                        </div>
+                      </div>
                     </div>
                     <div class="or-card">
                       <div class="or-kpi-label">Market Scorecard</div>

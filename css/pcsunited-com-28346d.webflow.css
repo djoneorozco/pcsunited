@@ -760,6 +760,7 @@ blockquote {
 .main {
   z-index: 1;
   background-color: var(--_theme---bodybackground);
+  padding-bottom: 10px;
   position: relative;
 }
 
@@ -925,10 +926,13 @@ blockquote {
 }
 
 .section.interstitial {
-  background-color: #000;
+  background-color: #fff;
   border-radius: 20px;
+  margin-bottom: 10px;
   margin-left: 10px;
   margin-right: 10px;
+  padding-top: 20px;
+  padding-bottom: 0;
   position: relative;
   box-shadow: 0 2px 5px #00000078;
 }
@@ -1257,6 +1261,7 @@ blockquote {
 .section.home3-bento-cards {
   padding-top: var(--_size---paddingsize--lar);
   padding-bottom: var(--_size---paddingsize--lar);
+  margin-bottom: 20px;
 }
 
 .section.dev {
@@ -4930,7 +4935,8 @@ blockquote {
 .interstitial-2cols.full-bg.home-3 {
   background-color: #00000030;
   border-radius: 20px;
-  padding-left: 20px;
+  margin-top: -21px;
+  padding-left: 0;
 }
 
 .interstitial-img-wrapper {
@@ -6142,6 +6148,7 @@ blockquote {
   z-index: 1;
   transform-style: preserve-3d;
   background-color: #00000026;
+  margin-top: 10px;
   position: absolute;
   inset: 0%;
 }
@@ -6149,6 +6156,7 @@ blockquote {
 .bg-opacity-layer.gradient-left {
   background-color: #0000;
   background-image: linear-gradient(90deg, #0000008a, #0000);
+  margin-top: 0;
 }
 
 .apps-sidenavigation-grid {
@@ -7306,6 +7314,7 @@ blockquote {
   grid-column-gap: var(--_size---paddingsize--minimum);
   grid-row-gap: var(--_size---paddingsize--minimum);
   flex-flow: column;
+  padding-right: 10px;
   display: flex;
 }
 
@@ -8510,7 +8519,7 @@ blockquote {
 .padding-global.padding-section-medium {
   background-color: #0000;
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 10px;
   padding-top: 6rem;
   padding-bottom: 6rem;
 }
@@ -11401,6 +11410,7 @@ blockquote {
   --_theme---textcolor--tertiarytext: var(--colors--dark-40);
   background-color: #e0e0e1;
   margin-top: 20px;
+  margin-bottom: 20px;
   position: relative;
   overflow: hidden;
 }
@@ -11410,7 +11420,7 @@ blockquote {
   font-size: var(--_textstyle---fontsize);
   line-height: var(--_textstyle---lineheight);
   font-weight: var(--_textstyle---fontweight);
-  text-align: right;
+  text-align: left;
   --_textstyle---font-family: var(--fonts--secondaryfont);
   --_textstyle---fontsize: var(--_size---fonts--bodylarge);
   --_textstyle---lineheight: 1.4;
@@ -12908,6 +12918,10 @@ blockquote {
     color: #382608;
   }
 
+  .image-90 {
+    margin-left: 40px;
+  }
+
   .footer-links-wrapper {
     grid-column-gap: 48px;
     grid-row-gap: 48px;
@@ -13673,6 +13687,10 @@ blockquote {
     padding-top: 20px;
   }
 
+  .image-90 {
+    margin-left: 40px;
+  }
+
   .logo-image.half-size {
     transform: translate(7px, -7px);
   }
@@ -14285,6 +14303,10 @@ blockquote {
 
   .code-for-create-account-2 {
     margin-bottom: 20px;
+  }
+
+  .image-90 {
+    margin-left: 60px;
   }
 
   .footer-flex-wrapper {
@@ -18720,32 +18742,6 @@ blockquote {
   grid-area: span 1 / span 3 / span 1 / span 3;
 }
 
-#w-node-ea62daea-eadd-7697-67bc-49728ae20d6c-0e0e1a1b {
-  grid-area: span 1 / span 1 / span 1 / span 1;
-  place-self: stretch end;
-}
-
-#w-node-_892092b7-e47b-f166-144a-8307a8400492-0e0e1a1b {
-  place-self: end stretch;
-}
-
-#w-node-_13797138-527f-e742-29bd-cde16fc24218-0e0e1a1b {
-  grid-area: span 1 / span 1 / span 1 / span 1;
-  place-self: stretch end;
-}
-
-#w-node-_56e793ba-5eda-4647-e877-06894226d02b-0e0e1a1b {
-  place-self: start stretch;
-}
-
-#w-node-_56e793ba-5eda-4647-e877-06894226d037-0e0e1a1b {
-  place-self: stretch stretch;
-}
-
-#w-node-_980dc384-bc72-3331-4d8b-a0b38f448ecb-0e0e1a1b {
-  grid-area: span 1 / span 1 / span 1 / span 1;
-}
-
 #w-node-d28b0724-bb28-d5e9-4eaf-90c909ff93c8-09ff93c1 {
   place-self: center;
 }
@@ -18917,14 +18913,6 @@ blockquote {
   }
 
   #w-node-f4ef9468-c7b9-b20c-0717-4208a20f0e92-0e0e1a0b, #w-node-d378a676-8b2a-0a5d-4ac7-fa778187fed4-0e0e1a0c, #w-node-_07c50369-d3f7-1634-b7c6-f713700ee950-0e0e1a10 {
-    grid-area: span 1 / span 1 / span 1 / span 1;
-  }
-
-  #w-node-ea62daea-eadd-7697-67bc-49728ae20d6c-0e0e1a1b {
-    place-self: stretch stretch;
-  }
-
-  #w-node-_56e793ba-5eda-4647-e877-06894226d014-0e0e1a1b {
     grid-area: span 1 / span 1 / span 1 / span 1;
   }
 }

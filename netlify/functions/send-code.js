@@ -110,7 +110,7 @@ export async function handler(event) {
   const fromAddress =
     process.env.EMAIL_FROM ||
     process.env.FROM_EMAIL ||
-    "PCS United <noreply@theorozcorealty.com>"; // must be a verified domain in Resend
+    "PCS United <concierge@pcsunited.com>"; // must be a verified domain in Resend
 
   const resend = new Resend(RESEND_API_KEY);
 

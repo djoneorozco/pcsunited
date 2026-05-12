@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu May 07 2026 02:03:58 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue May 12 2026 23:47:30 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69fab947c66f42aa792d2a99" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -30,23 +30,30 @@
       <div class="navbar-wrapper-12">
         <a href="../index.html" class="link-block-7 w-inline-block"><img src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="image-130"></a>
         <div class="code-embed-42 w-embed w-script"><!--  =========================================================
-  PCSUnited • Header Compensation Strip
-  v1.1.2
+  PCSUnited • Member Header Compensation Strip
+  v2.0.0 • THEWING / SUPABASE PROFILE FLOW
   PURPOSE
-  - Header-friendly compensation display
+  - Header-friendly compensation display after member login
   - Shows Base Pay, BAS, BAH, Total Monthly
-  - Uses saved Quick Setup baseline:
-    localStorage["pcsunited.baseline.v1"]
-  - Reads selected base from:
-    localStorage["pcsunited.selectedBase.v1"]
-    localStorage["pcsunited.selectedCityJsonUrl.v1"]
-  - Fetches selected base JSON to extract ZIP
-  - Calls:
-    /.netlify/functions/opensource-brain
-    /.netlify/functions/pay-tables as selected-base BAH fallback
-  - Recalculates when Base Selector changes
-  - v1.1.2 UPDATE:
-    Font, label sizing, value sizing, and tile proportions matched closer to Select Base dropdown
+  - Reads logged-in Supabase profile from:
+      localStorage["pcsunited.profile.v1"]
+      localStorage["pcsunited.identity.v1"]
+      localStorage["pcsunited.bridge.v1"]
+      sessionStorage equivalents
+  - Fallback reads old baseline:
+      localStorage["pcsunited.baseline.v1"]
+  - Calls TheWing:
+      https://thewing.netlify.app/api/opensource-brain
+      https://thewing.netlify.app/api/pay-tables   fallback if available
+  - Recalculates when login/profile/bridge events fire
+  EXPECTED PROFILE FIELDS
+  - email
+  - rank or rank_paygrade
+  - yos
+  - family
+  - base
+  - mode
+  - va_disability
 =========================================================  -->
           <div id="pcsu-header-comp-api" style="all:initial;">
             <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -135,6 +142,18 @@
     #pcsu-header-comp-api .pcsu-header-comp-tile.is-missing{
       opacity:.62;
     }
+    #pcsu-header-comp-api .pcsu-header-comp-foot{
+      display:none;
+      margin-top:8px;
+      color:rgba(233,236,255,.58);
+      font-size:10px;
+      line-height:1.35;
+      font-weight:600;
+      letter-spacing:.01em;
+    }
+    #pcsu-header-comp-api .pcsu-header-comp-foot.is-visible{
+      display:block;
+    }
     @media(max-width:980px){
       #pcsu-header-comp-api .pcsu-header-comp-grid{
         grid-template-columns:repeat(4, minmax(94px, 1fr));
@@ -175,22 +194,27 @@
     }
   </style>
             <div class="pcsu-header-comp-wrap" aria-label="Current monthly compensation">
-              <div class="pcsu-header-comp-grid">
-                <div class="pcsu-header-comp-tile is-loading">
-                  <span class="pcsu-header-comp-label">Base Pay</span>
-                  <span class="pcsu-header-comp-value" id="header-api-basic">$0</span>
+              <div style="width:100%;">
+                <div class="pcsu-header-comp-grid">
+                  <div class="pcsu-header-comp-tile is-loading">
+                    <span class="pcsu-header-comp-label">Base Pay</span>
+                    <span class="pcsu-header-comp-value" id="header-api-basic">$0</span>
+                  </div>
+                  <div class="pcsu-header-comp-tile is-loading">
+                    <span class="pcsu-header-comp-label">BAS</span>
+                    <span class="pcsu-header-comp-value" id="header-api-bas">$0</span>
+                  </div>
+                  <div class="pcsu-header-comp-tile is-loading">
+                    <span class="pcsu-header-comp-label">BAH</span>
+                    <span class="pcsu-header-comp-value" id="header-api-bah">$0</span>
+                  </div>
+                  <div class="pcsu-header-comp-tile is-loading">
+                    <span class="pcsu-header-comp-label">Total Monthly</span>
+                    <span class="pcsu-header-comp-value is-total" id="header-api-total">$0</span>
+                  </div>
                 </div>
-                <div class="pcsu-header-comp-tile is-loading">
-                  <span class="pcsu-header-comp-label">BAS</span>
-                  <span class="pcsu-header-comp-value" id="header-api-bas">$0</span>
-                </div>
-                <div class="pcsu-header-comp-tile is-loading">
-                  <span class="pcsu-header-comp-label">BAH</span>
-                  <span class="pcsu-header-comp-value" id="header-api-bah">$0</span>
-                </div>
-                <div class="pcsu-header-comp-tile is-loading">
-                  <span class="pcsu-header-comp-label">Total Monthly</span>
-                  <span class="pcsu-header-comp-value is-total" id="header-api-total">$0</span>
+                <div class="pcsu-header-comp-foot" id="header-api-foot">
+                  Loading member compensation profile...
                 </div>
               </div>
             </div>
@@ -206,41 +230,59 @@
           basic: root.querySelector("#header-api-basic"),
           bas: root.querySelector("#header-api-bas"),
           bah: root.querySelector("#header-api-bah"),
-          total: root.querySelector("#header-api-total")
+          total: root.querySelector("#header-api-total"),
+          foot: root.querySelector("#header-api-foot")
         };
         const tiles = Array.from(root.querySelectorAll(".pcsu-header-comp-tile"));
-        if (Object.values(els).some(el => !el)) {
+        if (!els.basic || !els.bas || !els.bah || !els.total) {
           console.warn("PCSU header comp strip: missing required DOM elements.");
           return;
         }
+        // ============================================================
+        // #1) STORAGE KEYS
+        // ============================================================
+        const PROFILE_KEY = "pcsunited.profile.v1";
+        const ID_KEY = "pcsunited.identity.v1";
+        const BRIDGE_KEY = "pcsunited.bridge.v1";
+        const LEGACY_BRIDGE_KEY = "realtysass.bridge";
         const BASELINE_KEY = "pcsunited.baseline.v1";
         const SELECTED_BASE_KEY = "pcsunited.selectedBase.v1";
         const SELECTED_JSON_URL_KEY = "pcsunited.selectedCityJsonUrl.v1";
-        const API_ORIGIN = window.location.hostname.includes("webflow.io")
-          ? "https://pcsunited.netlify.app"
-          : "";
-        const OPEN_SOURCE_ENDPOINT = API_ORIGIN + "/.netlify/functions/opensource-brain";
-        const PAY_TABLES_ENDPOINT = API_ORIGIN + "/.netlify/functions/pay-tables";
+        const API_BASE = "https://thewing.netlify.app/api";
+        const OPEN_SOURCE_ENDPOINT = API_BASE + "/opensource-brain";
+        const PAY_TABLES_ENDPOINT = API_BASE + "/pay-tables";
         let requestSeq = 0;
         const cityJsonCache = new Map();
+        // ============================================================
+        // #2) UI HELPERS
+        // ============================================================
         function setLoading(isLoading) {
-          tiles.forEach(tile => {
+          tiles.forEach(function(tile){
             tile.classList.toggle("is-loading", !!isLoading);
           });
         }
         function setMissing(isMissing) {
-          tiles.forEach(tile => {
+          tiles.forEach(function(tile){
             tile.classList.toggle("is-missing", !!isMissing);
           });
         }
+        function setFoot(text, visible) {
+          if (!els.foot) return;
+          els.foot.textContent = text || "";
+          els.foot.classList.toggle("is-visible", !!visible);
+        }
         function money(n) {
-          return "$" + Number(n || 0).toLocaleString(undefined, {
+          return "$" + Number(n || 0).toLocaleString("en-US", {
             maximumFractionDigits: 0
           });
         }
-        function num(value, fallback = 0) {
+        function num(value, fallback) {
+          if (fallback === undefined) fallback = 0;
           const n = Number(String(value ?? "").replace(/[$,]/g, ""));
           return Number.isFinite(n) ? n : fallback;
+        }
+        function cleanString(value) {
+          return value === undefined || value === null ? "" : String(value).trim();
         }
         function safeJsonParse(raw, fallback) {
           try {
@@ -249,53 +291,134 @@
             return fallback;
           }
         }
-        function readJsonKey(key, fallback) {
+        function readJsonStorage(key, fallback) {
           try {
-            return safeJsonParse(localStorage.getItem(key), fallback);
+            const localRaw = localStorage.getItem(key);
+            if (localRaw) return safeJsonParse(localRaw, fallback);
+            const sessionRaw = sessionStorage.getItem(key);
+            if (sessionRaw) return safeJsonParse(sessionRaw, fallback);
+            return fallback;
           } catch (_e) {
             return fallback;
           }
         }
-        function readTextKey(key, fallback) {
+        function readTextStorage(key, fallback) {
           try {
-            return localStorage.getItem(key) || fallback;
+            return (
+              localStorage.getItem(key) ||
+              sessionStorage.getItem(key) ||
+              fallback ||
+              ""
+            );
           } catch (_e) {
-            return fallback;
+            return fallback || "";
           }
         }
-        function readBaseline() {
-          return readJsonKey(BASELINE_KEY, null);
+        function cleanZip(value) {
+          const match = String(value || "").match(/\b\d{5}\b/);
+          return match ? match[0] : "";
         }
+        function normalizeRank(value) {
+          const raw = cleanString(value).toUpperCase();
+          if (!raw) return "";
+          const compact = raw.replace(/\s+/g, "").replace("–", "-").replace("—", "-");
+          if (/^[EOW]-\d{1,2}$/.test(compact)) return compact;
+          if (/^[EOW]\d{1,2}$/.test(compact)) {
+            return compact.charAt(0) + "-" + compact.slice(1);
+          }
+          return compact;
+        }
+        function normalizeMode(value) {
+          const raw = cleanString(value).toLowerCase();
+          if (
+            raw === "ad" ||
+            raw === "active" ||
+            raw === "active_duty" ||
+            raw === "active duty" ||
+            raw === "service_member"
+          ) {
+            return "ACTIVE_DUTY";
+          }
+          if (
+            raw === "vet" ||
+            raw === "veteran" ||
+            raw === "retired" ||
+            raw === "retiree"
+          ) {
+            return "VETERAN";
+          }
+          return raw ? raw.toUpperCase() : "ACTIVE_DUTY";
+        }
+        function isVeteranProfile(profile) {
+          return normalizeMode(profile && profile.mode) === "VETERAN";
+        }
+        // ============================================================
+        // #3) PROFILE READERS
+        // ============================================================
         function readSelectedBase() {
-          return readJsonKey(SELECTED_BASE_KEY, null);
+          return readJsonStorage(SELECTED_BASE_KEY, null);
         }
         function readSelectedJsonUrl(selectedBase) {
           return (
             selectedBase?.jsonUrl ||
             selectedBase?.selectedCityJsonUrl ||
             selectedBase?.selected_city_json_url ||
-            readTextKey(SELECTED_JSON_URL_KEY, "") ||
+            readTextStorage(SELECTED_JSON_URL_KEY, "") ||
             window.PCSU_SELECTED_CITY_JSON_URL ||
             window.OROZCO_CITY_JSON_URL ||
             ""
           );
         }
-        function getSelectedBaseName(selectedBase, rawBaseline) {
-          return (
-            selectedBase?.base ||
-            selectedBase?.label ||
-            selectedBase?.name ||
-            rawBaseline?.current_base ||
-            rawBaseline?.currentBase ||
-            rawBaseline?.base ||
-            rawBaseline?.selected_base ||
-            rawBaseline?.selectedBase ||
-            ""
-          );
+        function readMemberProfile() {
+          const profile = readJsonStorage(PROFILE_KEY, null);
+          const identity = readJsonStorage(ID_KEY, null);
+          const bridge = readJsonStorage(BRIDGE_KEY, null);
+          const legacyBridge = readJsonStorage(LEGACY_BRIDGE_KEY, null);
+          const merged = {
+            ...(legacyBridge && typeof legacyBridge === "object" ? legacyBridge : {}),
+            ...(bridge && typeof bridge === "object" ? bridge : {}),
+            ...(identity && typeof identity === "object" ? identity : {}),
+            ...(profile && typeof profile === "object" ? profile : {})
+          };
+          if (!Object.keys(merged).length) return null;
+          return merged;
         }
-        function cleanZip(value) {
-          const match = String(value || "").match(/\b\d{5}\b/);
-          return match ? match[0] : "";
+        function readBaselineProfile() {
+          const raw = readJsonStorage(BASELINE_KEY, null);
+          if (!raw || typeof raw !== "object") return null;
+          if (raw.mode === "ad") {
+            return {
+              mode: "ad",
+              rank: raw.rank,
+              rank_paygrade: raw.rank,
+              yos: raw.yos,
+              family: raw.family,
+              dependents: raw.dependents,
+              base: raw.current_base || raw.base || "",
+              current_base: raw.current_base || raw.base || "",
+              current_zip: raw.current_zip || raw.zip || "",
+              source: "baseline_overlay"
+            };
+          }
+          if (raw.mode === "vet") {
+            return {
+              mode: "vet",
+              rank: raw.last_held_rank || raw.rank,
+              rank_paygrade: raw.last_held_rank || raw.rank,
+              yos: raw.yos === "not_retired" ? 0 : raw.yos,
+              va_disability: raw.va_disability,
+              family: raw.family,
+              dependents: raw.dependents,
+              base: raw.current_base || raw.base || "",
+              current_base: raw.current_base || raw.base || "",
+              current_zip: raw.current_zip || raw.zip || "",
+              source: "baseline_overlay"
+            };
+          }
+          return raw;
+        }
+        function getActiveProfile() {
+          return readMemberProfile() || readBaselineProfile();
         }
         function extractZipFromCityJson(data) {
           if (!data || typeof data !== "object") return "";
@@ -305,9 +428,27 @@
             data.zipCode ||
             data.primary_zip ||
             data.primaryZip ||
+            data.base_zip ||
+            data.baseZip ||
             data.base_profile?.zip ||
             data.profile?.zip ||
             data.market?.zip ||
+            data.housing_market?.zip ||
+            ""
+          );
+        }
+        function getSelectedBaseName(selectedBase, profile) {
+          return cleanString(
+            selectedBase?.base ||
+            selectedBase?.label ||
+            selectedBase?.name ||
+            profile?.base ||
+            profile?.pcsBase ||
+            profile?.pcs_base ||
+            profile?.current_base ||
+            profile?.currentBase ||
+            profile?.selected_base ||
+            profile?.selectedBase ||
             ""
           );
         }
@@ -330,121 +471,140 @@
             return null;
           }
         }
-        function resolveRank(raw) {
-          return (
-            raw?.rank ||
-            raw?.rank_paygrade ||
-            raw?.paygrade ||
-            raw?.last_held_rank ||
-            raw?.lastHeldRank ||
+        function resolveRank(profile) {
+          return normalizeRank(
+            profile?.rank_paygrade ||
+            profile?.rankPaygrade ||
+            profile?.rank ||
+            profile?.paygrade ||
+            profile?.last_held_rank ||
+            profile?.lastHeldRank ||
             ""
           );
         }
-        function resolveYos(raw) {
-          const yos = raw?.yos ?? raw?.yearsOfService ?? raw?.years_of_service ?? 0;
-          if (String(yos).toLowerCase() === "not_retired") return 0;
-          return num(yos, 0);
+        function resolveYos(profile) {
+          const raw =
+            profile?.yos ??
+            profile?.yearsOfService ??
+            profile?.years_of_service ??
+            profile?.service_years ??
+            0;
+          if (String(raw).toLowerCase() === "not_retired") return 0;
+          return num(raw, 0);
         }
-        function resolveFamily(raw) {
-          if (typeof raw?.family === "boolean") return raw.family;
-          if (typeof raw?.dependents === "boolean") return raw.dependents;
-          const familyCount = num(raw?.family ?? raw?.family_size ?? raw?.dependents_count, 0);
+        function resolveFamilyBoolean(profile) {
+          if (typeof profile?.family === "boolean") return profile.family;
+          if (typeof profile?.dependents === "boolean") return profile.dependents;
+          const familyCount = num(
+            profile?.family ??
+            profile?.family_size ??
+            profile?.familySize ??
+            profile?.dependents_count ??
+            profile?.dependentsCount,
+            0
+          );
           if (familyCount > 1) return true;
-          const depText = String(raw?.dependents ?? "").toLowerCase();
-          if (["yes", "true", "with", "with_dependents"].includes(depText)) return true;
+          const depText = cleanString(profile?.dependents).toLowerCase();
+          if (["yes", "true", "with", "with_dependents", "with dependents"].includes(depText)) {
+            return true;
+          }
           return false;
         }
-        function mapBaseline(raw, selectedBase, cityJson) {
-          if (!raw) return null;
-          const selectedBaseName = getSelectedBaseName(selectedBase, raw);
-          const selectedZip = extractZipFromCityJson(cityJson);
-          if (raw.mode === "ad") {
-            return {
-              mode: "ACTIVE_DUTY",
-              rank: raw.rank,
-              yos: raw.yos,
-              base: selectedBaseName,
-              current_base: selectedBaseName,
-              currentBase: selectedBaseName,
-              newBase: selectedBaseName,
-              selected_base: selectedBaseName,
-              selectedBase: selectedBaseName,
-              selected_base_id: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
-              selectedBaseId: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
-              selected_base_file: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
-              selectedBaseFile: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
-              selected_city_json_url: readSelectedJsonUrl(selectedBase),
-              selectedCityJsonUrl: readSelectedJsonUrl(selectedBase),
-              zip: selectedZip,
-              bahZip: selectedZip,
-              bah_zip: selectedZip,
-              current_zip: selectedZip,
-              currentZip: selectedZip,
-              dependents: raw.dependents,
-              family: raw.family,
-              source: "baseline_overlay"
-            };
-          }
-          if (raw.mode === "vet") {
-            return {
-              mode: "VETERAN",
-              rank: raw.last_held_rank,
-              last_held_rank: raw.last_held_rank,
-              yos: raw.yos === "not_retired" ? 0 : raw.yos,
-              vaRating: raw.va_disability,
-              va_disability: raw.va_disability,
-              base: selectedBaseName,
-              current_base: selectedBaseName,
-              currentBase: selectedBaseName,
-              newBase: selectedBaseName,
-              selected_base: selectedBaseName,
-              selectedBase: selectedBaseName,
-              selected_base_id: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
-              selectedBaseId: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
-              selected_base_file: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
-              selectedBaseFile: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
-              selected_city_json_url: readSelectedJsonUrl(selectedBase),
-              selectedCityJsonUrl: readSelectedJsonUrl(selectedBase),
-              zip: selectedZip,
-              bahZip: selectedZip,
-              bah_zip: selectedZip,
-              current_zip: selectedZip,
-              currentZip: selectedZip,
-              dependents: raw.dependents,
-              family: raw.family,
-              source: "baseline_overlay"
-            };
-          }
+        function resolveFamilyCount(profile) {
+          const n = num(
+            profile?.family ??
+            profile?.family_size ??
+            profile?.familySize ??
+            profile?.dependents_count ??
+            profile?.dependentsCount,
+            0
+          );
+          if (n > 0) return n;
+          return resolveFamilyBoolean(profile) ? 2 : 1;
+        }
+        function resolveVaDisability(profile) {
+          return num(
+            profile?.va_disability ??
+            profile?.vaDisability ??
+            profile?.vaRating ??
+            profile?.va_rating ??
+            0,
+            0
+          );
+        }
+        function buildBrainInput(profile, selectedBase, cityJson) {
+          const baseName = getSelectedBaseName(selectedBase, profile);
+          const jsonZip = extractZipFromCityJson(cityJson);
+          const zip = cleanZip(
+            jsonZip ||
+            profile?.bahZip ||
+            profile?.bah_zip ||
+            profile?.zip ||
+            profile?.current_zip ||
+            profile?.currentZip ||
+            profile?.base_zip ||
+            profile?.baseZip ||
+            ""
+          );
+          const mode = normalizeMode(profile?.mode);
+          const rank = resolveRank(profile);
+          const yos = resolveYos(profile);
+          const familyBool = resolveFamilyBoolean(profile);
+          const familyCount = resolveFamilyCount(profile);
+          const va = resolveVaDisability(profile);
           return {
-            ...raw,
-            base: selectedBaseName,
-            current_base: selectedBaseName,
-            currentBase: selectedBaseName,
-            newBase: selectedBaseName,
-            selected_base: selectedBaseName,
-            selectedBase: selectedBaseName,
-            selected_base_id: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
-            selectedBaseId: selectedBase?.id || raw.selected_base_id || raw.selectedBaseId || "",
-            selected_base_file: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
-            selectedBaseFile: selectedBase?.fileName || raw.selected_base_file || raw.selectedBaseFile || "",
+            // Primary fields
+            mode,
+            rank,
+            rank_paygrade: rank,
+            rankPaygrade: rank,
+            yos,
+            family: familyCount,
+            dependents: familyBool ? "yes" : "no",
+            has_dependents: familyBool,
+            hasDependents: familyBool,
+            va_disability: va,
+            vaDisability: va,
+            vaRating: va,
+            // Base / ZIP fields
+            base: baseName,
+            current_base: baseName,
+            currentBase: baseName,
+            newBase: baseName,
+            selected_base: baseName,
+            selectedBase: baseName,
+            zip,
+            bahZip: zip,
+            bah_zip: zip,
+            current_zip: zip,
+            currentZip: zip,
+            // Optional selected-base metadata
+            selected_base_id: selectedBase?.id || profile?.selected_base_id || profile?.selectedBaseId || "",
+            selectedBaseId: selectedBase?.id || profile?.selected_base_id || profile?.selectedBaseId || "",
+            selected_base_file: selectedBase?.fileName || profile?.selected_base_file || profile?.selectedBaseFile || "",
+            selectedBaseFile: selectedBase?.fileName || profile?.selected_base_file || profile?.selectedBaseFile || "",
             selected_city_json_url: readSelectedJsonUrl(selectedBase),
             selectedCityJsonUrl: readSelectedJsonUrl(selectedBase),
-            zip: selectedZip,
-            bahZip: selectedZip,
-            bah_zip: selectedZip,
-            current_zip: selectedZip,
-            currentZip: selectedZip
+            // User identity
+            email: profile?.email || "",
+            full_name: profile?.full_name || profile?.fullName || profile?.name || "",
+            fullName: profile?.fullName || profile?.full_name || profile?.name || "",
+            source: "pcsunited.member.comp-strip.v2.0"
           };
         }
-        function paintEmpty() {
+        // ============================================================
+        // #4) PAINTERS
+        // ============================================================
+        function paintEmpty(message) {
           els.basic.textContent = "$0";
           els.bas.textContent = "$0";
           els.bah.textContent = "$0";
           els.total.textContent = "$0";
           setLoading(false);
           setMissing(true);
+          setFoot(message || "No member compensation profile found yet.", true);
         }
-        function paintComp(comp) {
+        function paintComp(comp, input) {
           const basePay = num(comp.basePay, 0);
           const bas = num(comp.bas, 0);
           const bah = num(comp.bah, 0);
@@ -455,32 +615,53 @@
           els.total.textContent = money(total);
           setLoading(false);
           setMissing(false);
+          const rank = input?.rank || "";
+          const base = input?.base || "";
+          const zip = input?.zip || "";
+          const context = [rank, base, zip].filter(Boolean).join(" • ");
+          setFoot(context ? "Loaded from member profile: " + context : "", !!context);
         }
+        // ============================================================
+        // #5) RESPONSE NORMALIZERS
+        // ============================================================
         function extractOpenSourceMonthly(data) {
-          const c = (data?.payload && data.payload.compensation) || {};
-          const m = c.monthly || {};
+          const payload = data?.payload || data?.data || data || {};
+          const c = payload.compensation || payload.comp || payload.pay || {};
+          const m = c.monthly || payload.monthly || c || {};
           const basePay =
-            m.basicPay ||
-            m.basePay ||
-            m.base_pay ||
+            m.basicPay ??
+            m.basePay ??
+            m.base_pay ??
+            m.BASEPAY ??
+            m.base ??
+            payload.basePay ??
+            payload.base_pay ??
             0;
           const bas =
-            m.bas ||
-            m.BAS ||
-            m.basMonthly ||
+            m.bas ??
+            m.BAS ??
+            m.basMonthly ??
+            payload.bas ??
+            payload.BAS ??
             0;
           const bah =
-            m.bah ||
-            m.BAH ||
-            m.bahMonthly ||
+            m.bah ??
+            m.BAH ??
+            m.bahMonthly ??
+            payload.bah ??
+            payload.BAH ??
             0;
           const total =
-            m.grossMonthlyComp ||
-            m.combinedMonthlyGross ||
-            m.totalMonthly ||
-            m.total ||
-            m.retiredPayGross ||
-            m.vaCompensation ||
+            m.grossMonthlyComp ??
+            m.combinedMonthlyGross ??
+            m.totalMonthly ??
+            m.total_monthly ??
+            m.total ??
+            m.retiredPayGross ??
+            m.vaCompensation ??
+            payload.total ??
+            payload.totalMonthly ??
+            payload.total_monthly ??
             0;
           return {
             basePay: num(basePay, 0),
@@ -489,68 +670,98 @@
             total: num(total, 0)
           };
         }
+        function hasAnyComp(comp) {
+          if (!comp) return false;
+          return !!(
+            num(comp.basePay, 0) ||
+            num(comp.bas, 0) ||
+            num(comp.bah, 0) ||
+            num(comp.total, 0)
+          );
+        }
         async function callOpenSourceBrain(input) {
-          const res = await fetch(OPEN_SOURCE_ENDPOINT + "?t=" + Date.now(), {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
-            },
-            cache: "no-store",
-            body: JSON.stringify({
+          const requestBodies = [
+            {
               tool: "PCS_SNAPSHOT",
               input
-            })
-          });
-          const data = await res.json();
-          if (!res.ok || !data.ok) {
-            return null;
-          }
-          return extractOpenSourceMonthly(data);
-        }
-        async function callPayTables(rawBaseline, selectedZip) {
-          const rank = resolveRank(rawBaseline);
-          const yos = resolveYos(rawBaseline);
-          const family = resolveFamily(rawBaseline);
-          if (!rank || !selectedZip) return null;
-          const res = await fetch(PAY_TABLES_ENDPOINT + "?t=" + Date.now(), {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json"
             },
-            cache: "no-store",
-            body: JSON.stringify({
-              rank,
-              yos,
-              zip: selectedZip,
-              family
-            })
-          });
-          const data = await res.json();
-          if (!res.ok || !data.ok) {
+            {
+              type: "PCS_SNAPSHOT",
+              input
+            },
+            input
+          ];
+          for (let i = 0; i < requestBodies.length; i++) {
+            try {
+              const res = await fetch(OPEN_SOURCE_ENDPOINT + "?t=" + Date.now(), {
+                method: "POST",
+                headers: {
+                  "Content-Type": "application/json"
+                },
+                cache: "no-store",
+                body: JSON.stringify(requestBodies[i])
+              });
+              const data = await res.json().catch(function(){ return {}; });
+              if (!res.ok || data.ok === false) {
+                continue;
+              }
+              const comp = extractOpenSourceMonthly(data);
+              if (hasAnyComp(comp)) return comp;
+            } catch (_err) {}
+          }
+          return null;
+        }
+        async function callPayTables(input) {
+          const rank = resolveRank(input);
+          const yos = resolveYos(input);
+          const family = resolveFamilyBoolean(input);
+          const zip = cleanZip(input?.zip || input?.bahZip || input?.bah_zip || input?.current_zip || "");
+          if (!rank || !zip) return null;
+          try {
+            const res = await fetch(PAY_TABLES_ENDPOINT + "?t=" + Date.now(), {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json"
+              },
+              cache: "no-store",
+              body: JSON.stringify({
+                rank,
+                yos,
+                zip,
+                family
+              })
+            });
+            const data = await res.json().catch(function(){ return {}; });
+            if (!res.ok || data.ok === false) {
+              return null;
+            }
+            return {
+              basePay: num(data.basePay ?? data.base_pay, 0),
+              bas: num(data.bas ?? data.BAS, 0),
+              bah: num(data.bah ?? data.BAH, 0),
+              total: num(data.total ?? data.totalMonthly ?? data.total_monthly, 0)
+            };
+          } catch (_e) {
             return null;
           }
-          return {
-            basePay: num(data.basePay, 0),
-            bah: num(data.bah, 0),
-            total: num(data.total, 0)
-          };
         }
         function mergeComp(openSourceComp, payTableComp) {
           const open = openSourceComp || {};
           const pay = payTableComp || {};
           const basePay =
-            num(pay.basePay, 0) ||
-            num(open.basePay, 0);
+            num(open.basePay, 0) ||
+            num(pay.basePay, 0);
           const bas =
-            num(open.bas, 0);
+            num(open.bas, 0) ||
+            num(pay.bas, 0);
           const bah =
-            num(pay.bah, 0) ||
-            num(open.bah, 0);
+            num(open.bah, 0) ||
+            num(pay.bah, 0);
           const computedTotal = basePay + bas + bah;
           const total =
             computedTotal ||
-            num(pay.total, 0) ||
-            num(open.total, 0);
+            num(open.total, 0) ||
+            num(pay.total, 0);
           return {
             basePay,
             bas,
@@ -558,20 +769,29 @@
             total
           };
         }
+        // ============================================================
+        // #6) MAIN RUNNER
+        // ============================================================
         async function run(reason) {
           const seq = ++requestSeq;
-          const raw = readBaseline();
-          const selectedBase = readSelectedBase();
-          if (!raw || raw.source !== "baseline_overlay") {
-            paintEmpty();
+          const profile = getActiveProfile();
+          if (!profile) {
+            paintEmpty("Log in to load pay, BAS, BAH, and total monthly compensation.");
             return false;
+          }
+          const rank = resolveRank(profile);
+          const mode = normalizeMode(profile.mode);
+          if (!rank) {
+            paintEmpty("Profile found, but rank/paygrade is missing.");
+            return true;
           }
           try {
             setLoading(true);
             setMissing(false);
+            setFoot("Loading compensation from TheWing...", true);
+            const selectedBase = readSelectedBase();
             const cityJson = await fetchSelectedCityJson(selectedBase);
-            const selectedZip = extractZipFromCityJson(cityJson);
-            const input = mapBaseline(raw, selectedBase, cityJson);
+            const input = buildBrainInput(profile, selectedBase, cityJson);
             let openSourceComp = null;
             let payTableComp = null;
             try {
@@ -579,26 +799,27 @@
             } catch (_openErr) {
               openSourceComp = null;
             }
-            if (selectedZip) {
-              try {
-                payTableComp = await callPayTables(raw, selectedZip);
-              } catch (_payErr) {
-                payTableComp = null;
-              }
+            try {
+              payTableComp = await callPayTables(input);
+            } catch (_payErr) {
+              payTableComp = null;
             }
             if (seq !== requestSeq) return true;
             const finalComp = mergeComp(openSourceComp, payTableComp);
-            if (
-              !finalComp ||
-              (!finalComp.basePay && !finalComp.bas && !finalComp.bah && !finalComp.total)
-            ) {
-              paintEmpty();
+            if (!hasAnyComp(finalComp)) {
+              const baseLabel = input.base || "selected base";
+              const zipLabel = input.zip ? " ZIP " + input.zip : "";
+              paintEmpty("Unable to calculate compensation for " + rank + " at " + baseLabel + zipLabel + ".");
               return true;
             }
-            paintComp(finalComp);
+            // Veterans may not have BAS/BAH depending on the backend output.
+            // We still paint whatever TheWing returns.
+            paintComp(finalComp, input);
             return true;
-          } catch (_err) {
-            if (seq === requestSeq) paintEmpty();
+          } catch (err) {
+            if (seq === requestSeq) {
+              paintEmpty("Compensation data could not be loaded from TheWing.");
+            }
             return true;
           }
         }
@@ -608,26 +829,39 @@
             run(reason);
           }, typeof delay === "number" ? delay : 120);
         }
+        // ============================================================
+        // #7) STARTUP + EVENTS
+        // ============================================================
         run("initial");
         let attempts = 0;
         const interval = setInterval(async function () {
           attempts++;
           const done = await run("startup-poll");
-          if (done || attempts > 10) clearInterval(interval);
-        }, 300);
-        window.addEventListener("pcsu:base-selected", function () {
-          scheduleRun("base-selected", 120);
+          if (done || attempts > 12) clearInterval(interval);
+        }, 350);
+        window.addEventListener("pcsunited:logged-in", function () {
+          scheduleRun("logged-in", 150);
         });
-        window.addEventListener("pcsunited:baseline-ready", function () {
-          scheduleRun("baseline-ready", 150);
+        window.addEventListener("pcsunited:profile-ready", function () {
+          scheduleRun("profile-ready", 150);
         });
         window.addEventListener("pcsunited:bridge-ready", function () {
           scheduleRun("bridge-ready", 150);
+        });
+        window.addEventListener("pcsu:base-selected", function () {
+          scheduleRun("base-selected", 150);
+        });
+        window.addEventListener("pcsunited:baseline-ready", function () {
+          scheduleRun("baseline-ready", 150);
         });
         window.addEventListener("storage", function (event) {
           if (
             event &&
             (
+              event.key === PROFILE_KEY ||
+              event.key === ID_KEY ||
+              event.key === BRIDGE_KEY ||
+              event.key === LEGACY_BRIDGE_KEY ||
               event.key === BASELINE_KEY ||
               event.key === SELECTED_BASE_KEY ||
               event.key === SELECTED_JSON_URL_KEY
@@ -641,11 +875,25 @@
           if (!data || typeof data !== "object") return;
           if (
             data.type === "pcsunited-bridge" ||
-            data.source === "pcsu_base_selector"
+            data.type === "pcsunited-profile" ||
+            data.source === "pcsu_base_selector" ||
+            data.source === "pcsunited-login"
           ) {
             scheduleRun("message", 150);
           }
         });
+        window.PCSU_HEADER_COMP = {
+          run: run,
+          refresh: function(){
+            return run("manual-refresh");
+          },
+          getProfile: getActiveProfile,
+          buildBrainInput: function(){
+            const profile = getActiveProfile();
+            const selectedBase = readSelectedBase();
+            return buildBrainInput(profile || {}, selectedBase, null);
+          }
+        };
       }
       if (document.readyState === "loading") {
         document.addEventListener("DOMContentLoaded", initHeaderCompStrip);
@@ -1187,15 +1435,9 @@
     </div>
     <div class="main">
       <section class="section faq">
-        <div class="code-embed-22 w-embed"><!--  =========================================================
+        <div class="code-embed-46 w-embed"><!--  =========================================================
   PCSUnited • Base Demographics SaaS
-  FULL SHELL v2.0 • DECISION-FIRST UI UPGRADE
-  COSMETIC UPDATE
-  - Preserves ALL existing IDs for current JS compatibility
-  - Keeps all sections:
-    Overview, Real Estate, Demographics, Base, Guidance
-  - Makes hero overlay panels more transparent so base images show through
-  - No structural / JS-facing changes
+  SHELL EMBED v3.0 • SPLIT-TAB WEBFLOW ARCHITECTURE
 =========================================================  -->
           <div id="or-city-overview" style="all:initial;">
             <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1211,18 +1453,15 @@
       --bg:#071018;
       --bg2:#0b1621;
       --bg3:#050912;
-      --panel:rgba(17,24,34,.56);
-      --panel2:rgba(12,18,28,.46);
-      --panel3:rgba(7,12,19,.58);
+      --panel:rgba(17,24,34,.78);
+      --panel2:rgba(12,18,28,.72);
       --stroke:rgba(216,184,122,.16);
       --stroke2:rgba(255,255,255,.08);
       --ink:#f3efe7;
       --muted:#b8b0a4;
       --gold:#d8b87a;
       --gold2:#f6d06d;
-      --blue:#6f8fb7;
       --sapphire:#6aa7ff;
-      --mint:#94c7b3;
       --mint2:#8ef3c5;
       --danger:#d98c8c;
       --shadow:0 24px 70px rgba(0,0,0,.42);
@@ -1238,7 +1477,7 @@
         linear-gradient(180deg, var(--bg), var(--bg2) 58%, var(--bg3));
       min-height:100vh;
     }
-    #or-city-overview a{ color:inherit; text-decoration:none; }
+    #or-city-overview a{color:inherit;text-decoration:none;}
     #or-city-overview .or-wrap{
       width:var(--wrap);
       margin:0 auto;
@@ -1247,7 +1486,7 @@
     #or-city-overview .or-hero{
       position:relative;
       overflow:hidden;
-      min-height:460px;
+      min-height:520px;
       border-radius:34px;
       border:1px solid rgba(216,184,122,.16);
       box-shadow:var(--shadow2);
@@ -1261,9 +1500,9 @@
       z-index:1;
       pointer-events:none;
       background:
-        linear-gradient(180deg, rgba(255,255,255,.045), transparent 22%),
-        radial-gradient(circle at 20% 20%, rgba(216,184,122,.09), transparent 28%),
-        radial-gradient(circle at 88% 16%, rgba(106,167,255,.075), transparent 26%);
+        linear-gradient(180deg, rgba(255,255,255,.06), transparent 22%),
+        radial-gradient(circle at 20% 20%, rgba(216,184,122,.13), transparent 28%),
+        radial-gradient(circle at 88% 16%, rgba(106,167,255,.10), transparent 26%);
       mix-blend-mode:screen;
     }
     #or-city-overview .or-hero::after{
@@ -1273,243 +1512,150 @@
       z-index:1;
       pointer-events:none;
       background:
-        linear-gradient(90deg, rgba(0,0,0,.24), transparent 46%, rgba(0,0,0,.10)),
-        linear-gradient(180deg, transparent 56%, rgba(0,0,0,.26));
+        linear-gradient(90deg, rgba(0,0,0,.58), rgba(0,0,0,.28) 48%, rgba(0,0,0,.18)),
+        linear-gradient(180deg, transparent 52%, rgba(0,0,0,.46));
     }
     #or-city-overview .or-hero-bg{
       position:absolute;
       inset:0;
       background:
-        linear-gradient(90deg, rgba(5,8,13,.62) 0%, rgba(8,12,18,.42) 30%, rgba(8,12,18,.22) 62%, rgba(8,12,18,.12) 100%),
+        linear-gradient(90deg, rgba(5,8,13,.94) 0%, rgba(8,12,18,.80) 38%, rgba(8,12,18,.36) 100%),
         var(--hero-image, linear-gradient(135deg, #1a2430, #0b1218));
       background-size:cover;
       background-position:center;
       transform:scale(1.025);
-      filter:saturate(1.08) contrast(1.05);
+      filter:saturate(1.06) contrast(1.04);
     }
     #or-city-overview .or-hero-inner{
       position:relative;
       z-index:2;
-      min-height:460px;
+      min-height:520px;
       display:grid;
-      grid-template-columns:minmax(0,1.16fr) minmax(340px,.84fr);
-      gap:22px;
-      align-items:end;
+      grid-template-columns:minmax(0,1.08fr) minmax(360px,.72fr);
+      gap:34px;
+      align-items:center;
       padding:34px;
     }
     #or-city-overview .or-eyebrow{
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      padding:9px 13px;
+      padding:9px 14px;
       border-radius:999px;
       border:1px solid rgba(216,184,122,.22);
-      background:linear-gradient(135deg, rgba(216,184,122,.11), rgba(111,143,183,.06));
+      background:linear-gradient(135deg, rgba(216,184,122,.13), rgba(111,143,183,.07));
       color:var(--gold2);
       text-transform:uppercase;
       letter-spacing:.15em;
       font-size:.76rem;
-      font-weight:800;
+      font-weight:900;
       margin-bottom:16px;
       box-shadow:0 10px 30px rgba(0,0,0,.22);
     }
     #or-city-overview .or-title{
+      max-width:800px;
       font-family:"Gilda Display",serif;
-      font-size:clamp(2.35rem, 4.4vw, 4.45rem);
-      line-height:.98;
+      font-size:clamp(3rem, 5.1vw, 5.35rem);
+      line-height:.95;
       color:#fbf4e7;
-      margin-bottom:13px;
-      text-shadow:0 14px 40px rgba(0,0,0,.55);
-      letter-spacing:-.025em;
+      margin-bottom:18px;
+      text-shadow:0 14px 40px rgba(0,0,0,.62);
+      letter-spacing:-.035em;
     }
     #or-city-overview .or-subtitle{
       max-width:780px;
-      color:#e4dccf;
-      font-size:1.04rem;
+      color:#f0e7d8;
+      font-size:1.07rem;
       line-height:1.72;
       margin-bottom:22px;
-      text-shadow:0 8px 26px rgba(0,0,0,.55);
+      font-weight:600;
     }
-    #or-city-overview .or-kpis{
-      display:grid;
-      grid-template-columns:repeat(4, minmax(0,1fr));
-      gap:14px;
+    #or-city-overview .or-hero-tags{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
     }
-    #or-city-overview .or-kpi{
-      position:relative;
-      overflow:hidden;
-      border-radius:20px;
-      padding:17px;
-      background:
-        linear-gradient(180deg, rgba(10,16,24,.42), rgba(8,12,18,.30));
-      border:1px solid rgba(255,255,255,.075);
-      backdrop-filter:blur(10px) saturate(132%);
-      -webkit-backdrop-filter:blur(10px) saturate(132%);
-      box-shadow:0 18px 42px rgba(0,0,0,.22);
-    }
-    #or-city-overview .or-kpi::before{
-      content:"";
-      position:absolute;
-      inset:0 0 auto 0;
-      height:1px;
-      background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(106,167,255,.13), transparent);
-      pointer-events:none;
-    }
-    #or-city-overview .or-kpi-label{
-      color:var(--muted);
-      text-transform:uppercase;
-      letter-spacing:.14em;
-      font-size:.72rem;
-      font-weight:800;
-      margin-bottom:8px;
-    }
-    #or-city-overview .or-kpi-value{
-      font-size:1.52rem;
-      font-weight:900;
-      color:#fff;
-      letter-spacing:-.02em;
-    }
-    #or-city-overview .or-hero-side{
-      display:grid;
-      gap:14px;
-    }
-    #or-city-overview .or-card{
-      position:relative;
-      overflow:hidden;
-      border-radius:26px;
-      padding:23px;
-      background:
-        linear-gradient(180deg, rgba(18,24,34,.50), rgba(8,12,18,.40));
-      border:1px solid rgba(216,184,122,.105);
-      backdrop-filter:blur(10px) saturate(132%);
-      -webkit-backdrop-filter:blur(10px) saturate(132%);
-      box-shadow:0 22px 60px rgba(0,0,0,.26);
-    }
-    #or-city-overview .or-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        radial-gradient(circle at top left, rgba(216,184,122,.065), transparent 32%),
-        linear-gradient(180deg, rgba(255,255,255,.028), transparent 24%);
-    }
-    #or-city-overview .or-card > *{
-      position:relative;
-      z-index:1;
-    }
-    #or-city-overview .or-status{
+    #or-city-overview .or-tag{
       display:inline-flex;
       align-items:center;
-      gap:8px;
-      padding:8px 12px;
+      min-height:38px;
+      padding:9px 14px;
       border-radius:999px;
+      color:#fff3dd;
+      background:rgba(255,255,255,.075);
+      border:1px solid rgba(255,255,255,.11);
+      font-size:.78rem;
+      font-weight:900;
+      letter-spacing:.07em;
       text-transform:uppercase;
-      letter-spacing:.12em;
-      font-size:.76rem;
-      font-weight:900;
-      color:var(--gold2);
-      background:rgba(216,184,122,.075);
-      border:1px solid rgba(216,184,122,.20);
-      margin-bottom:14px;
+      backdrop-filter:blur(12px);
     }
-    #or-city-overview .or-card-title{
-      font-family:"Gilda Display",serif;
-      font-size:clamp(1.85rem, 2.3vw, 2.55rem);
-      line-height:1.02;
-      color:#fff6e7;
-      margin-bottom:10px;
-      letter-spacing:-.015em;
-      text-shadow:0 10px 32px rgba(0,0,0,.48);
-    }
-    #or-city-overview .or-card-copy{
-      color:#f0e8dc;
-      line-height:1.72;
-      font-size:1rem;
-      text-shadow:0 8px 22px rgba(0,0,0,.40);
-    }
-    #or-city-overview .or-decision-strip{
-      display:grid;
-      grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:10px;
-      margin-top:17px;
-    }
-    #or-city-overview .or-decision-pill{
-      border-radius:16px;
-      padding:12px 12px;
-      background:rgba(255,255,255,.026);
-      border:1px solid rgba(255,255,255,.06);
-      min-height:72px;
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      gap:5px;
-      backdrop-filter:blur(8px) saturate(125%);
-      -webkit-backdrop-filter:blur(8px) saturate(125%);
-    }
-    #or-city-overview .or-decision-pill span{
-      display:block;
-      color:var(--muted);
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      font-size:.64rem;
-      font-weight:900;
-      line-height:1.2;
-    }
-    #or-city-overview .or-decision-pill strong{
-      display:block;
-      color:#fff;
-      font-size:.92rem;
-      line-height:1.22;
-      font-weight:900;
-    }
-    #or-city-overview .or-score-grid{
-      display:grid;
-      grid-template-columns:repeat(2,1fr);
-      gap:12px;
+    #or-city-overview .or-mini-label{
       margin-top:12px;
-    }
-    #or-city-overview .or-score-mini{
-      position:relative;
-      overflow:hidden;
-      border-radius:17px;
-      padding:14px;
-      background:rgba(255,255,255,.026);
-      border:1px solid rgba(255,255,255,.06);
-      backdrop-filter:blur(8px) saturate(125%);
-      -webkit-backdrop-filter:blur(8px) saturate(125%);
-    }
-    #or-city-overview .or-score-mini::after{
-      content:"";
-      position:absolute;
-      inset:auto 0 0 0;
-      height:2px;
-      background:linear-gradient(90deg, rgba(216,184,122,.50), rgba(106,167,255,.22), transparent);
-    }
-    #or-city-overview .or-score-mini span{
-      display:block;
-      font-size:.72rem;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      color:var(--muted);
-      margin-bottom:6px;
-      font-weight:800;
-    }
-    #or-city-overview .or-score-mini strong{
-      display:block;
-      font-size:1.58rem;
       color:#fff;
-      font-weight:900;
+      font-size:.95rem;
+      line-height:1.4;
+      font-weight:700;
+    }
+    #or-city-overview .or-profile-glass{
+      position:relative;
+      width:100%;
+      min-height:330px;
+      padding:30px 32px;
+      border-radius:10px;
+      border:1px solid rgba(255,255,255,.24);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.22), rgba(255,255,255,.08)),
+        rgba(22,24,28,.34);
+      box-shadow:
+        0 28px 70px rgba(0,0,0,.42),
+        inset 0 1px 0 rgba(255,255,255,.28);
+      backdrop-filter:blur(18px) saturate(120%);
+      -webkit-backdrop-filter:blur(18px) saturate(120%);
+    }
+    #or-city-overview .or-profile-glass-title{
+      color:rgba(255,255,255,.94);
+      font-size:clamp(2rem, 3vw, 3rem);
+      font-weight:400;
+      line-height:1.05;
+      text-align:center;
+      margin-bottom:28px;
+      letter-spacing:-.03em;
+    }
+    #or-city-overview .or-profile-glass-list{
+      display:grid;
+      gap:8px;
+    }
+    #or-city-overview .or-profile-glass-row{
+      display:grid;
+      grid-template-columns:minmax(150px,1fr) auto;
+      gap:16px;
+      align-items:baseline;
+      color:#fff;
+    }
+    #or-city-overview .or-profile-glass-row span{
+      color:rgba(255,255,255,.92);
+      font-size:clamp(1.18rem, 1.55vw, 1.7rem);
+      line-height:1.12;
+      font-weight:400;
+      letter-spacing:-.02em;
+    }
+    #or-city-overview .or-profile-glass-row strong{
+      color:rgba(255,255,255,.96);
+      font-size:clamp(1.05rem, 1.35vw, 1.45rem);
+      line-height:1.12;
+      font-weight:800;
+      text-align:right;
+      letter-spacing:-.02em;
     }
     #or-city-overview .or-tabs{
       display:flex;
       flex-wrap:wrap;
       gap:10px;
-      padding:20px 0 10px;
+      padding:18px 10px 0;
     }
     #or-city-overview .or-tab{
       border:1px solid rgba(216,184,122,.13);
-      background:rgba(255,255,255,.035);
+      background:rgba(255,255,255,.045);
       color:var(--muted);
       padding:12px 17px;
       border-radius:999px;
@@ -1525,7 +1671,7 @@
       transform:translateY(-1px);
       border-color:rgba(216,184,122,.26);
       color:#fff3dd;
-      background:rgba(255,255,255,.055);
+      background:rgba(255,255,255,.065);
     }
     #or-city-overview .or-tab.is-active{
       background:linear-gradient(135deg, rgba(216,184,122,.22), rgba(111,143,183,.15));
@@ -1545,7 +1691,7 @@
       backdrop-filter:blur(20px) saturate(145%);
       margin-top:14px;
     }
-    #or-city-overview .or-panel.is-active{ display:block; }
+    #or-city-overview .or-panel.is-active{display:block;}
     #or-city-overview .or-section-title{
       font-family:"Gilda Display",serif;
       font-size:2.05rem;
@@ -1566,10 +1712,12 @@
       gap:16px;
       margin-top:18px;
     }
-    #or-city-overview .or-grid-4{ grid-template-columns:repeat(4,minmax(0,1fr)); }
-    #or-city-overview .or-grid-3{ grid-template-columns:repeat(3,minmax(0,1fr)); }
-    #or-city-overview .or-grid-2{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-    #or-city-overview .or-stat{
+    #or-city-overview .or-grid-4{grid-template-columns:repeat(4,minmax(0,1fr));}
+    #or-city-overview .or-grid-3{grid-template-columns:repeat(3,minmax(0,1fr));}
+    #or-city-overview .or-grid-2{grid-template-columns:repeat(2,minmax(0,1fr));}
+    #or-city-overview .or-stat,
+    #or-city-overview .or-list-card,
+    #or-city-overview .or-rail-card{
       position:relative;
       overflow:hidden;
       border-radius:22px;
@@ -1578,7 +1726,9 @@
       border:1px solid rgba(255,255,255,.065);
       box-shadow:0 18px 44px rgba(0,0,0,.18);
     }
-    #or-city-overview .or-stat::before{
+    #or-city-overview .or-stat::before,
+    #or-city-overview .or-list-card::before,
+    #or-city-overview .or-rail-card::before{
       content:"";
       position:absolute;
       inset:0 0 auto 0;
@@ -1586,13 +1736,22 @@
       background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
       pointer-events:none;
     }
-    #or-city-overview .or-stat-label{
+    #or-city-overview .or-stat-label,
+    #or-city-overview .or-kpi-label,
+    #or-city-overview .or-list-title,
+    #or-city-overview .or-rail-title{
       color:var(--muted);
       text-transform:uppercase;
       letter-spacing:.12em;
       font-size:.73rem;
       font-weight:900;
       margin-bottom:8px;
+    }
+    #or-city-overview .or-list-title,
+    #or-city-overview .or-rail-title{
+      color:#fbf2e2;
+      font-size:.96rem;
+      margin-bottom:12px;
     }
     #or-city-overview .or-stat-value{
       font-size:1.72rem;
@@ -1601,7 +1760,8 @@
       margin-bottom:8px;
       letter-spacing:-.02em;
     }
-    #or-city-overview .or-stat-hint{
+    #or-city-overview .or-stat-hint,
+    #or-city-overview .or-card-copy{
       color:#d7cfbf;
       line-height:1.58;
       font-size:.95rem;
@@ -1613,37 +1773,7 @@
       margin-top:18px;
       align-items:start;
     }
-    #or-city-overview .or-stack{
-      display:grid;
-      gap:16px;
-    }
-    #or-city-overview .or-list-card{
-      position:relative;
-      overflow:hidden;
-      border-radius:22px;
-      padding:19px;
-      background:linear-gradient(180deg, rgba(12,18,28,.78), rgba(7,12,19,.72));
-      border:1px solid rgba(255,255,255,.065);
-      box-shadow:0 18px 44px rgba(0,0,0,.18);
-    }
-    #or-city-overview .or-list-card::before{
-      content:"";
-      position:absolute;
-      inset:0 0 auto 0;
-      height:1px;
-      background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
-      pointer-events:none;
-    }
-    #or-city-overview .or-list-title{
-      position:relative;
-      z-index:1;
-      font-size:.96rem;
-      text-transform:uppercase;
-      letter-spacing:.13em;
-      color:#fbf2e2;
-      margin-bottom:12px;
-      font-weight:900;
-    }
+    #or-city-overview .or-stack{display:grid;gap:16px;}
     #or-city-overview .or-list{
       position:relative;
       z-index:1;
@@ -1651,7 +1781,7 @@
       color:#dcd3c4;
       line-height:1.75;
     }
-    #or-city-overview .or-list li + li{ margin-top:8px; }
+    #or-city-overview .or-list li + li{margin-top:8px;}
     #or-city-overview .or-quote{
       position:relative;
       overflow:hidden;
@@ -1664,14 +1794,8 @@
       font-size:1rem;
       box-shadow:0 18px 44px rgba(0,0,0,.16);
     }
-    #or-city-overview .or-quote::before{
-      content:"";
-      position:absolute;
-      inset:0 0 auto 0;
-      height:1px;
-      background:linear-gradient(90deg, rgba(246,208,109,.42), rgba(106,167,255,.20), transparent);
-    }
-    #or-city-overview .or-bar-list{
+    #or-city-overview .or-bar-list,
+    #or-city-overview .or-mini-bars{
       display:grid;
       gap:14px;
       margin-top:6px;
@@ -1686,14 +1810,16 @@
       font-weight:800;
       color:#eadfcb;
     }
-    #or-city-overview .or-bar-track{
+    #or-city-overview .or-bar-track,
+    #or-city-overview .or-mini-track{
       height:10px;
       border-radius:999px;
       background:rgba(255,255,255,.07);
       overflow:hidden;
       border:1px solid rgba(255,255,255,.06);
     }
-    #or-city-overview .or-bar-fill{
+    #or-city-overview .or-bar-fill,
+    #or-city-overview .or-mini-fill{
       height:100%;
       width:0;
       border-radius:999px;
@@ -1718,7 +1844,8 @@
       gap:10px;
       flex-wrap:wrap;
     }
-    #or-city-overview .or-bed-btn{
+    #or-city-overview .or-bed-btn,
+    #or-city-overview .or-pill{
       border:1px solid rgba(216,184,122,.13);
       background:rgba(255,255,255,.035);
       color:var(--muted);
@@ -1728,35 +1855,11 @@
       cursor:pointer;
       transition:.18s ease;
     }
-    #or-city-overview .or-bed-btn:hover{
-      transform:translateY(-1px);
-      color:#fff;
-      border-color:rgba(216,184,122,.26);
-    }
-    #or-city-overview .or-bed-btn.is-active{
+    #or-city-overview .or-bed-btn.is-active,
+    #or-city-overview .or-pill{
       background:linear-gradient(135deg, rgba(216,184,122,.20), rgba(111,143,183,.14));
       border-color:rgba(216,184,122,.28);
       color:#fff3dd;
-    }
-    #or-city-overview .or-pill{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-height:38px;
-      border-radius:999px;
-      padding:9px 13px;
-      color:#fff3dd;
-      background:rgba(216,184,122,.08);
-      border:1px solid rgba(216,184,122,.17);
-      font-size:.78rem;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-    }
-    #or-city-overview .or-mini-bars{
-      display:grid;
-      gap:12px;
-      margin-top:12px;
     }
     #or-city-overview .or-mini-row{
       display:grid;
@@ -1769,66 +1872,11 @@
       font-size:.92rem;
       font-weight:700;
     }
-    #or-city-overview .or-mini-track{
-      height:9px;
-      border-radius:999px;
-      overflow:hidden;
-      background:rgba(255,255,255,.07);
-      border:1px solid rgba(255,255,255,.05);
-    }
-    #or-city-overview .or-mini-fill{
-      height:100%;
-      width:0;
-      border-radius:999px;
-      background:linear-gradient(90deg, var(--gold2), var(--mint2));
-    }
     #or-city-overview .or-mini-row strong{
       text-align:right;
       color:#fff;
       font-size:.92rem;
       font-weight:900;
-    }
-    #or-city-overview .or-error{
-      margin-top:18px;
-      border-radius:18px;
-      padding:16px;
-      background:rgba(217,140,140,.10);
-      border:1px solid rgba(217,140,140,.20);
-      color:#f3d8d8;
-      display:none;
-    }
-    #or-city-overview .or-error.is-show{ display:block; }
-    #or-city-overview .or-foot{
-      padding:24px 2px 6px;
-      color:var(--muted);
-      font-size:.92rem;
-      line-height:1.75;
-    }
-    #or-city-overview .or-base-bluf-grid{
-      margin-top:18px;
-    }
-    #or-city-overview .or-base-bluf-card{
-      min-height:184px;
-      display:flex;
-      flex-direction:column;
-      justify-content:flex-start;
-      position:relative;
-      overflow:hidden;
-    }
-    #or-city-overview .or-base-bluf-card::before{
-      content:"";
-      position:absolute;
-      inset:0 auto auto 0;
-      width:100%;
-      height:1px;
-      background:linear-gradient(90deg, rgba(216,184,122,.36), rgba(111,143,183,.20), transparent);
-      pointer-events:none;
-    }
-    #or-city-overview .or-base-bluf-copy{
-      color:#f3efe7;
-      font-size:1rem;
-      line-height:1.67;
-      font-weight:700;
     }
     #or-city-overview .or-base-map-layout{
       display:grid;
@@ -1837,7 +1885,8 @@
       margin-top:18px;
       align-items:start;
     }
-    #or-city-overview .or-base-map-stack{
+    #or-city-overview .or-base-map-stack,
+    #or-city-overview .or-base-right-rail{
       display:grid;
       gap:16px;
     }
@@ -1845,9 +1894,6 @@
       overflow:hidden;
       padding:20px;
       border-color:rgba(216,184,122,.18);
-      background:
-        radial-gradient(circle at top left, rgba(216,184,122,.09), transparent 30%),
-        linear-gradient(180deg, rgba(12,18,28,.84), rgba(6,10,16,.80));
     }
     #or-city-overview .or-base-map-link{
       display:block;
@@ -1867,10 +1913,6 @@
       background:#101823;
       transition:.24s ease;
     }
-    #or-city-overview .or-base-map-link:hover .or-base-map-img{
-      transform:scale(1.012);
-      filter:saturate(1.06) contrast(1.04);
-    }
     #or-city-overview .or-base-map-empty{
       display:none;
       border-radius:18px;
@@ -1880,75 +1922,12 @@
       color:var(--muted);
       line-height:1.7;
     }
-    #or-city-overview .or-base-map-empty.is-show{
-      display:block;
-    }
+    #or-city-overview .or-base-map-empty.is-show{display:block;}
     #or-city-overview .or-base-map-caption{
       margin-top:12px;
       color:var(--muted);
       font-size:.92rem;
       line-height:1.6;
-    }
-    #or-city-overview .or-base-right-rail{
-      display:grid;
-      gap:16px;
-    }
-    #or-city-overview .or-rail-card{
-      position:relative;
-      overflow:hidden;
-      border-radius:22px;
-      padding:19px;
-      background:linear-gradient(180deg, rgba(12,18,28,.78), rgba(7,12,19,.72));
-      border:1px solid rgba(255,255,255,.065);
-      box-shadow:0 18px 44px rgba(0,0,0,.18);
-    }
-    #or-city-overview .or-rail-card::before{
-      content:"";
-      position:absolute;
-      inset:0 0 auto 0;
-      height:1px;
-      background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
-      pointer-events:none;
-    }
-    #or-city-overview .or-rail-title{
-      position:relative;
-      z-index:1;
-      font-size:.96rem;
-      text-transform:uppercase;
-      letter-spacing:.13em;
-      color:#fbf2e2;
-      margin-bottom:12px;
-      font-weight:900;
-    }
-    #or-city-overview .or-signal-list{
-      position:relative;
-      z-index:1;
-      display:grid;
-      gap:10px;
-    }
-    #or-city-overview .or-signal-row{
-      display:flex;
-      flex-wrap:wrap;
-      align-items:flex-start;
-      gap:10px;
-      line-height:1.55;
-      color:#e8ddca;
-    }
-    #or-city-overview .or-signal-pill{
-      flex:0 0 auto;
-      padding:7px 10px;
-      border-radius:999px;
-      font-size:.72rem;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.10em;
-      border:1px solid rgba(216,184,122,.20);
-      background:rgba(216,184,122,.09);
-      color:#f4dfb6;
-    }
-    #or-city-overview .or-signal-copy{
-      flex:1 1 180px;
-      min-width:0;
     }
     #or-city-overview .or-quick-grid{
       display:grid;
@@ -1975,52 +1954,51 @@
       line-height:1.45;
       font-weight:800;
     }
-    @media (max-width:1180px){
+    #or-city-overview .or-error{
+      margin-top:18px;
+      border-radius:18px;
+      padding:16px;
+      background:rgba(217,140,140,.10);
+      border:1px solid rgba(217,140,140,.20);
+      color:#f3d8d8;
+      display:none;
+    }
+    #or-city-overview .or-error.is-show{display:block;}
+    #or-city-overview .or-foot{
+      padding:24px 2px 6px;
+      color:var(--muted);
+      font-size:.92rem;
+      line-height:1.75;
+    }
+    @media(max-width:1180px){
       #or-city-overview .or-hero-inner,
       #or-city-overview .or-split,
       #or-city-overview .or-base-map-layout{
         grid-template-columns:1fr;
       }
-      #or-city-overview .or-grid-4{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-      #or-city-overview .or-grid-3{ grid-template-columns:repeat(2,minmax(0,1fr)); }
-      #or-city-overview .or-base-map-img{
-        min-height:500px;
-        max-height:760px;
+      #or-city-overview .or-grid-4,
+      #or-city-overview .or-grid-3{
+        grid-template-columns:repeat(2,minmax(0,1fr));
       }
     }
-    @media (max-width:760px){
-      #or-city-overview{ --wrap:min(100% - 20px, 1380px); }
-      #or-city-overview .or-wrap{ padding:16px 0 32px; }
-      #or-city-overview .or-hero{ min-height:auto; border-radius:26px; }
-      #or-city-overview .or-hero-inner{ padding:20px; min-height:auto; }
+    @media(max-width:760px){
+      #or-city-overview{--wrap:min(100% - 20px, 1380px);}
+      #or-city-overview .or-wrap{padding:16px 0 32px;}
+      #or-city-overview .or-hero{min-height:auto;border-radius:26px;}
+      #or-city-overview .or-hero-inner{padding:20px;min-height:auto;}
       #or-city-overview .or-grid-4,
       #or-city-overview .or-grid-3,
       #or-city-overview .or-grid-2,
-      #or-city-overview .or-score-grid,
-      #or-city-overview .or-quick-grid,
-      #or-city-overview .or-decision-strip{
+      #or-city-overview .or-quick-grid{
         grid-template-columns:1fr;
       }
-      #or-city-overview .or-kpis{
+      #or-city-overview .or-bar-row,
+      #or-city-overview .or-profile-glass-row{
         grid-template-columns:1fr;
       }
-      #or-city-overview .or-bar-row{
-        grid-template-columns:1fr;
-      }
-      #or-city-overview .or-mini-row{
-        grid-template-columns:100px 1fr 50px;
-      }
-      #or-city-overview .or-base-bluf-card{
-        min-height:auto;
-      }
-      #or-city-overview .or-base-map-img{
-        min-height:320px;
-        max-height:500px;
-      }
-      #or-city-overview .or-panel{
-        padding:18px;
-        border-radius:24px;
-      }
+      #or-city-overview .or-profile-glass-row strong{text-align:left;}
+      #or-city-overview .or-base-map-img{min-height:320px;max-height:500px;}
+      #or-city-overview .or-panel{padding:18px;border-radius:24px;}
     }
   </style>
             <div class="or-wrap">
@@ -2031,67 +2009,24 @@
                     <div class="or-eyebrow" id="orHeroEyebrow">Base Intelligence</div>
                     <h1 class="or-title" id="orHeroTitle">Loading base...</h1>
                     <p class="or-subtitle" id="orHeroSubtitle">Preparing base and city intelligence.</p>
-                    <div class="or-kpis">
-                      <div class="or-kpi">
-                        <div class="or-kpi-label">Typical Buy Price</div>
-                        <div class="or-kpi-value" id="orKpiHomePrice">—</div>
-                      </div>
-                      <div class="or-kpi">
-                        <div class="or-kpi-label">Typical Rent</div>
-                        <div class="or-kpi-value" id="orKpiRent">—</div>
-                      </div>
-                      <div class="or-kpi">
-                        <div class="or-kpi-label">Est. Monthly Payment</div>
-                        <div class="or-kpi-value" id="orKpiMortgage">—</div>
-                      </div>
-                      <div class="or-kpi">
-                        <div class="or-kpi-label">Days On Market</div>
-                        <div class="or-kpi-value" id="orKpiDom">—</div>
-                      </div>
+                    <div class="or-hero-tags">
+                      <span class="or-tag" id="orSelectedBaseTag">Selected Base</span>
+                      <span class="or-tag" id="orUpdatedTag">Updated —</span>
+                      <span class="or-tag">Member View</span>
                     </div>
+                    <div class="or-mini-label">Member Housing Snapshot</div>
                   </div>
-                  <div class="or-hero-side">
-                    <div class="or-card">
-                      <div class="or-status" id="orVerdictStatus">Market Verdict</div>
-                      <div class="or-card-title" id="orVerdictTitle">—</div>
-                      <div class="or-card-copy" id="orVerdictCopy">—</div>
-                      <div class="or-decision-strip" aria-label="Decision summary">
-                        <div class="or-decision-pill">
-                          <span>Best Move</span>
-                          <strong>Use the market verdict</strong>
-                        </div>
-                        <div class="or-decision-pill">
-                          <span>Leverage</span>
-                          <strong>Compare price + DOM</strong>
-                        </div>
-                        <div class="or-decision-pill">
-                          <span>Watch</span>
-                          <strong>Taxes, insurance, commute</strong>
-                        </div>
-                      </div>
+                  <aside class="or-profile-glass">
+                    <h2 class="or-profile-glass-title">Profile Information</h2>
+                    <div class="or-profile-glass-list">
+                      <div class="or-profile-glass-row"><span>Base Pay</span><strong id="orMemberBasePay">—</strong></div>
+                      <div class="or-profile-glass-row"><span>BAH</span><strong id="orMemberBah">—</strong></div>
+                      <div class="or-profile-glass-row"><span>Total Monthly Income</span><strong id="orMemberTotalIncome">—</strong></div>
+                      <div class="or-profile-glass-row"><span>Target Price</span><strong id="orMemberTargetPrice">—</strong></div>
+                      <div class="or-profile-glass-row"><span>Family Size</span><strong id="orMemberFamilySize">—</strong></div>
+                      <div class="or-profile-glass-row"><span>Recommended Rooms</span><strong id="orMemberRooms">—</strong></div>
                     </div>
-                    <div class="or-card">
-                      <div class="or-kpi-label">Market Scorecard</div>
-                      <div class="or-score-grid">
-                        <div class="or-score-mini">
-                          <span>Affordability</span>
-                          <strong id="orScoreAffordability">—</strong>
-                        </div>
-                        <div class="or-score-mini">
-                          <span>Growth</span>
-                          <strong id="orScoreGrowth">—</strong>
-                        </div>
-                        <div class="or-score-mini">
-                          <span>Stability</span>
-                          <strong id="orScoreStability">—</strong>
-                        </div>
-                        <div class="or-score-mini">
-                          <span>Overall</span>
-                          <strong id="orScoreOverall">—</strong>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                  </aside>
                 </div>
               </section>
               <div class="or-tabs">
@@ -2101,275 +2036,11 @@
                 <button class="or-tab" data-or-tab="base" type="button">Base</button>
                 <button class="or-tab" data-or-tab="guidance" type="button">Guidance</button>
               </div>
-              <section class="or-panel" data-or-panel="base">
-                <h2 class="or-section-title">Base Overview</h2>
-                <p class="or-section-sub" id="orBaseIntro">Base overview loaded from JSON.</p>
-                <div class="or-grid-4 or-base-bluf-grid">
-                  <div class="or-stat or-base-bluf-card">
-                    <div class="or-stat-label">Mission BLUF</div>
-                    <div class="or-base-bluf-copy" id="orBaseBlufMission">—</div>
-                  </div>
-                  <div class="or-stat or-base-bluf-card">
-                    <div class="or-stat-label">Commute BLUF</div>
-                    <div class="or-base-bluf-copy" id="orBaseBlufCommute">—</div>
-                  </div>
-                  <div class="or-stat or-base-bluf-card">
-                    <div class="or-stat-label">Housing BLUF</div>
-                    <div class="or-base-bluf-copy" id="orBaseBlufHousing">—</div>
-                  </div>
-                  <div class="or-stat or-base-bluf-card">
-                    <div class="or-stat-label">Family BLUF</div>
-                    <div class="or-base-bluf-copy" id="orBaseBlufFamily">—</div>
-                  </div>
-                </div>
-                <div class="or-base-map-layout">
-                  <div class="or-base-map-stack">
-                    <div class="or-list-card or-base-map-card">
-                      <div class="or-list-title">Base Map</div>
-                      <a id="orBaseMapLink" href="#" target="_blank" rel="noopener noreferrer" class="or-base-map-link" aria-label="Open base map">
-                        <img id="orBaseMapImg" class="or-base-map-img" src="" alt="Base map">
-                      </a>
-                      <div class="or-base-map-empty" id="orBaseMapEmpty">No base map available yet.</div>
-                      <div class="or-base-map-caption" id="orBaseMapCaption">Public-facing base orientation map.</div>
-                    </div>
-                    <div class="or-list-card">
-                      <div class="or-list-title">Base Quick Facts</div>
-                      <ul class="or-list" id="orBaseQuickFacts"></ul>
-                    </div>
-                    <div class="or-quote" id="orBaseWhyItMatters">Loading base summary...</div>
-                  </div>
-                  <div class="or-base-right-rail">
-                    <div class="or-rail-card">
-                      <div class="or-rail-title">Strategy Signals</div>
-                      <div class="or-signal-list" id="orBaseSignals"></div>
-                    </div>
-                    <div class="or-rail-card">
-                      <div class="or-rail-title">Access & Commute</div>
-                      <ul class="or-list" id="orBaseAccess"></ul>
-                    </div>
-                    <div class="or-rail-card">
-                      <div class="or-rail-title">On-Base Living Notes</div>
-                      <ul class="or-list" id="orBaseHousing"></ul>
-                    </div>
-                    <div class="or-rail-card">
-                      <div class="or-rail-title">Fast Read</div>
-                      <div class="or-quick-grid">
-                        <div class="or-quick-mini">
-                          <div class="or-quick-mini-label">Installation</div>
-                          <div class="or-quick-mini-value" id="orBaseQuickInstall">—</div>
-                        </div>
-                        <div class="or-quick-mini">
-                          <div class="or-quick-mini-label">Metro</div>
-                          <div class="or-quick-mini-value" id="orBaseQuickMetro">—</div>
-                        </div>
-                        <div class="or-quick-mini">
-                          <div class="or-quick-mini-label">Housing Type</div>
-                          <div class="or-quick-mini-value" id="orBaseQuickHousingType">—</div>
-                        </div>
-                        <div class="or-quick-mini">
-                          <div class="or-quick-mini-label">PCS Personality</div>
-                          <div class="or-quick-mini-value" id="orBaseQuickPersonality">—</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-              <section class="or-panel is-active" data-or-panel="overview">
-                <h2 class="or-section-title">City Overview</h2>
-                <p class="or-section-sub" id="orOverviewIntro">City overview loaded from JSON.</p>
-                <div class="or-grid-4">
-                  <div class="or-stat">
-                    <div class="or-stat-label">Median List Price</div>
-                    <div class="or-stat-value" id="orOvListPrice">—</div>
-                    <div class="or-stat-hint">Current pricing posture across the city.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Price Per Sq Ft</div>
-                    <div class="or-stat-value" id="orOvPpsf">—</div>
-                    <div class="or-stat-hint">Useful for fast area comparisons.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Active Listings</div>
-                    <div class="or-stat-value" id="orOvListings">—</div>
-                    <div class="or-stat-hint">Helps frame current buyer leverage.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Property Tax Rate</div>
-                    <div class="or-stat-value" id="orOvTaxRate">—</div>
-                    <div class="or-stat-hint">Texas ownership cost needs this, not just list price.</div>
-                  </div>
-                </div>
-                <div class="or-split">
-                  <div class="or-stack">
-                    <div class="or-list-card">
-                      <div class="or-list-title">Summary Points</div>
-                      <ul class="or-list" id="orSummaryPoints"></ul>
-                    </div>
-                    <div class="or-quote" id="orFinancialBrief">Loading financial brief...</div>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Market Score Breakdown</div>
-                    <div class="or-bar-list" id="orScoreBars"></div>
-                  </div>
-                </div>
-              </section>
-              <section class="or-panel" data-or-panel="real-estate">
-                <h2 class="or-section-title">Real Estate</h2>
-                <p class="or-section-sub" id="orRealEstateIntro">
-                  Home values, rent ranges, ownership costs, and neighborhood positioning.
-                </p>
-                <div class="or-bed-top">
-                  <div>
-                    <div class="or-kpi-label">Bedroom Filter</div>
-                    <div class="or-bed-buttons" id="orBedButtons">
-                      <button class="or-bed-btn is-active" data-or-bed="3" type="button">3 Bed</button>
-                      <button class="or-bed-btn" data-or-bed="2" type="button">2 Bed</button>
-                      <button class="or-bed-btn" data-or-bed="4" type="button">4 Bed</button>
-                      <button class="or-bed-btn" data-or-bed="5" type="button">5 Bed</button>
-                    </div>
-                  </div>
-                  <div class="or-pill" id="orBedAsOf">As of —</div>
-                </div>
-                <div class="or-grid-4">
-                  <div class="or-stat">
-                    <div class="or-stat-label">Avg Home Price</div>
-                    <div class="or-stat-value" id="orBedHomePrice">—</div>
-                    <div class="or-stat-hint">Average target price for selected bedroom count.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Avg Rent</div>
-                    <div class="or-stat-value" id="orBedRent">—</div>
-                    <div class="or-stat-hint">Average monthly rent for selected bedroom count.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Avg Mortgage</div>
-                    <div class="or-stat-value" id="orBedMortgage">—</div>
-                    <div class="or-stat-hint">Estimated all-in monthly payment anchor.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Avg Utilities</div>
-                    <div class="or-stat-value" id="orBedUtilities">—</div>
-                    <div class="or-stat-hint">Electric, gas, water, and sewer estimate.</div>
-                  </div>
-                </div>
-                <div class="or-grid-2">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Ownership Cost Notes</div>
-                    <ul class="or-list" id="orOwnershipNotes"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Target Neighborhoods</div>
-                    <ul class="or-list" id="orTargetNeighborhoods"></ul>
-                  </div>
-                </div>
-                <div class="or-grid-3">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Opportunities</div>
-                    <ul class="or-list" id="orOpportunities"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Risks</div>
-                    <ul class="or-list" id="orRisks"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Investor Angle</div>
-                    <ul class="or-list" id="orInvestorAngles"></ul>
-                  </div>
-                </div>
-              </section>
-              <section class="or-panel" data-or-panel="demographics">
-                <h2 class="or-section-title">Demographics</h2>
-                <p class="or-section-sub">
-                  Population, income, education, workforce, and housing context.
-                </p>
-                <div class="or-grid-3">
-                  <div class="or-stat">
-                    <div class="or-stat-label">Population</div>
-                    <div class="or-stat-value" id="orDemoPopulation">—</div>
-                    <div class="or-stat-hint">Current estimate from the city intelligence file.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Median Age</div>
-                    <div class="or-stat-value" id="orDemoAge">—</div>
-                    <div class="or-stat-hint">Signal for life stage and housing demand.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Persons / Household</div>
-                    <div class="or-stat-value" id="orDemoHouseholdSize">—</div>
-                    <div class="or-stat-hint">Useful indicator for bedroom demand.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Median Household Income</div>
-                    <div class="or-stat-value" id="orDemoIncome">—</div>
-                    <div class="or-stat-hint">Core measure of city purchasing power.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Per Capita Income</div>
-                    <div class="or-stat-value" id="orDemoPerCapita">—</div>
-                    <div class="or-stat-hint">Broad individual earning context.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Poverty Rate</div>
-                    <div class="or-stat-value" id="orDemoPoverty">—</div>
-                    <div class="or-stat-hint">Signals economic strain across the city.</div>
-                  </div>
-                </div>
-                <div class="or-grid-3">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Education</div>
-                    <div class="or-mini-bars" id="orEducationBars"></div>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Workforce & Mobility</div>
-                    <div class="or-mini-bars" id="orLaborBars"></div>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Housing / Rental Snapshot</div>
-                    <div class="or-mini-bars" id="orHousingBars"></div>
-                  </div>
-                </div>
-                <div class="or-grid-2">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Schools & Safety</div>
-                    <ul class="or-list" id="orQualityNotes"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Climate & Lifestyle</div>
-                    <ul class="or-list" id="orClimateList"></ul>
-                  </div>
-                </div>
-              </section>
-              <section class="or-panel" data-or-panel="guidance">
-                <h2 class="or-section-title">Buyer, Seller, and Landlord Guidance</h2>
-                <p class="or-section-sub">
-                  Decision notes built directly from your city JSON.
-                </p>
-                <div class="or-grid-3">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Buyer Guidance</div>
-                    <ul class="or-list" id="orBuyerGuidance"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Seller Guidance</div>
-                    <ul class="or-list" id="orSellerGuidance"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Landlord Notes</div>
-                    <ul class="or-list" id="orLandlordNotes"></ul>
-                  </div>
-                </div>
-                <div class="or-grid-2">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Buyer Notes</div>
-                    <ul class="or-list" id="orBuyerNotes"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Seller Notes</div>
-                    <ul class="or-list" id="orSellerNotes"></ul>
-                  </div>
-                </div>
-              </section>
+              <section class="or-panel is-active" data-or-panel="overview" id="orPanelOverview"></section>
+              <section class="or-panel" data-or-panel="real-estate" id="orPanelRealEstate"></section>
+              <section class="or-panel" data-or-panel="demographics" id="orPanelDemographics"></section>
+              <section class="or-panel" data-or-panel="base" id="orPanelBase"></section>
+              <section class="or-panel" data-or-panel="guidance" id="orPanelGuidance"></section>
               <div class="or-error" id="orCityError"></div>
               <div class="or-foot">
                 PCSUnited Base Demographics is powered by your base cities JSON files.
@@ -2377,7 +2048,279 @@
             </div>
           </div>
         </div>
-        <div class="w-embed w-script">
+        <div class="code-embed-46 w-embed w-script">
+          <script>
+(() => {
+  window.PCSU_BASE_TABS = window.PCSU_BASE_TABS || {};
+  window.PCSU_BASE_TABS.overview = function(){
+    const panel = document.getElementById("orPanelOverview");
+    if (!panel) return;
+    panel.innerHTML = `
+      <h2 class="or-section-title">City Overview</h2>
+      <p class="or-section-sub" id="orOverviewIntro">City overview loaded from JSON.</p>
+      <div class="or-grid-4">
+        <div class="or-stat">
+          <div class="or-stat-label">Median List Price</div>
+          <div class="or-stat-value" id="orOvListPrice">—</div>
+          <div class="or-stat-hint">Current pricing posture across the city.</div>
+        </div>
+        <div class="or-stat">
+          <div class="or-stat-label">Price Per Sq Ft</div>
+          <div class="or-stat-value" id="orOvPpsf">—</div>
+          <div class="or-stat-hint">Useful for fast area comparisons.</div>
+        </div>
+        <div class="or-stat">
+          <div class="or-stat-label">Active Listings</div>
+          <div class="or-stat-value" id="orOvListings">—</div>
+          <div class="or-stat-hint">Helps frame current buyer leverage.</div>
+        </div>
+        <div class="or-stat">
+          <div class="or-stat-label">Property Tax Rate</div>
+          <div class="or-stat-value" id="orOvTaxRate">—</div>
+          <div class="or-stat-hint">Ownership cost needs this, not just list price.</div>
+        </div>
+      </div>
+      <div class="or-split">
+        <div class="or-stack">
+          <div class="or-list-card">
+            <div class="or-list-title">Summary Points</div>
+            <ul class="or-list" id="orSummaryPoints"></ul>
+          </div>
+          <div class="or-quote" id="orFinancialBrief">Loading financial brief...</div>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Market Score Breakdown</div>
+          <div class="or-bar-list" id="orScoreBars"></div>
+        </div>
+      </div>
+    `;
+  };
+})();
+</script>
+        </div>
+        <div class="code-embed-46 w-embed w-script">
+          <script>
+(() => {
+  window.PCSU_BASE_TABS = window.PCSU_BASE_TABS || {};
+  window.PCSU_BASE_TABS.realEstate = function(){
+    const panel = document.getElementById("orPanelRealEstate");
+    if (!panel) return;
+    panel.innerHTML = `
+      <h2 class="or-section-title">Real Estate</h2>
+      <p class="or-section-sub" id="orRealEstateIntro">
+        Home values, rent ranges, ownership costs, and neighborhood positioning.
+      </p>
+      <div class="or-bed-top">
+        <div>
+          <div class="or-kpi-label">Bedroom Filter</div>
+          <div class="or-bed-buttons" id="orBedButtons">
+            <button class="or-bed-btn is-active" data-or-bed="3" type="button">3 Bed</button>
+            <button class="or-bed-btn" data-or-bed="2" type="button">2 Bed</button>
+            <button class="or-bed-btn" data-or-bed="4" type="button">4 Bed</button>
+            <button class="or-bed-btn" data-or-bed="5" type="button">5 Bed</button>
+          </div>
+        </div>
+        <div class="or-pill" id="orBedAsOf">As of —</div>
+      </div>
+      <div class="or-grid-4">
+        <div class="or-stat">
+          <div class="or-stat-label">Avg Home Price</div>
+          <div class="or-stat-value" id="orBedHomePrice">—</div>
+          <div class="or-stat-hint">Average target price for selected bedroom count.</div>
+        </div>
+        <div class="or-stat">
+          <div class="or-stat-label">Avg Rent</div>
+          <div class="or-stat-value" id="orBedRent">—</div>
+          <div class="or-stat-hint">Average monthly rent for selected bedroom count.</div>
+        </div>
+        <div class="or-stat">
+          <div class="or-stat-label">Avg Mortgage</div>
+          <div class="or-stat-value" id="orBedMortgage">—</div>
+          <div class="or-stat-hint">Estimated all-in monthly payment anchor.</div>
+        </div>
+        <div class="or-stat">
+          <div class="or-stat-label">Avg Utilities</div>
+          <div class="or-stat-value" id="orBedUtilities">—</div>
+          <div class="or-stat-hint">Electric, gas, water, and sewer estimate.</div>
+        </div>
+      </div>
+      <div class="or-grid-2">
+        <div class="or-list-card">
+          <div class="or-list-title">Ownership Cost Notes</div>
+          <ul class="or-list" id="orOwnershipNotes"></ul>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Target Neighborhoods</div>
+          <ul class="or-list" id="orTargetNeighborhoods"></ul>
+        </div>
+      </div>
+      <div class="or-grid-3">
+        <div class="or-list-card">
+          <div class="or-list-title">Opportunities</div>
+          <ul class="or-list" id="orOpportunities"></ul>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Risks</div>
+          <ul class="or-list" id="orRisks"></ul>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Investor Angle</div>
+          <ul class="or-list" id="orInvestorAngles"></ul>
+        </div>
+      </div>
+    `;
+  };
+})();
+</script>
+        </div>
+        <div class="code-embed-46 w-embed w-script">
+          <script>
+(() => {
+  window.PCSU_BASE_TABS = window.PCSU_BASE_TABS || {};
+  window.PCSU_BASE_TABS.demographics = function(){
+    const panel = document.getElementById("orPanelDemographics");
+    if (!panel) return;
+    panel.innerHTML = `
+      <h2 class="or-section-title">Demographics</h2>
+      <p class="or-section-sub">
+        Population, income, education, workforce, and housing context.
+      </p>
+      <div class="or-grid-3">
+        <div class="or-stat"><div class="or-stat-label">Population</div><div class="or-stat-value" id="orDemoPopulation">—</div><div class="or-stat-hint">Current estimate from the city intelligence file.</div></div>
+        <div class="or-stat"><div class="or-stat-label">Median Age</div><div class="or-stat-value" id="orDemoAge">—</div><div class="or-stat-hint">Signal for life stage and housing demand.</div></div>
+        <div class="or-stat"><div class="or-stat-label">Persons / Household</div><div class="or-stat-value" id="orDemoHouseholdSize">—</div><div class="or-stat-hint">Useful indicator for bedroom demand.</div></div>
+        <div class="or-stat"><div class="or-stat-label">Median Household Income</div><div class="or-stat-value" id="orDemoIncome">—</div><div class="or-stat-hint">Core measure of city purchasing power.</div></div>
+        <div class="or-stat"><div class="or-stat-label">Per Capita Income</div><div class="or-stat-value" id="orDemoPerCapita">—</div><div class="or-stat-hint">Broad individual earning context.</div></div>
+        <div class="or-stat"><div class="or-stat-label">Poverty Rate</div><div class="or-stat-value" id="orDemoPoverty">—</div><div class="or-stat-hint">Signals economic strain across the city.</div></div>
+      </div>
+      <div class="or-grid-3">
+        <div class="or-list-card">
+          <div class="or-list-title">Education</div>
+          <div class="or-mini-bars" id="orEducationBars"></div>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Workforce & Mobility</div>
+          <div class="or-mini-bars" id="orLaborBars"></div>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Housing / Rental Snapshot</div>
+          <div class="or-mini-bars" id="orHousingBars"></div>
+        </div>
+      </div>
+      <div class="or-grid-2">
+        <div class="or-list-card">
+          <div class="or-list-title">Schools & Safety</div>
+          <ul class="or-list" id="orQualityNotes"></ul>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Climate & Lifestyle</div>
+          <ul class="or-list" id="orClimateList"></ul>
+        </div>
+      </div>
+    `;
+  };
+})();
+</script>
+        </div>
+        <div class="code-embed-46 w-embed w-script">
+          <script>
+(() => {
+  window.PCSU_BASE_TABS = window.PCSU_BASE_TABS || {};
+  window.PCSU_BASE_TABS.base = function(){
+    const panel = document.getElementById("orPanelBase");
+    if (!panel) return;
+    panel.innerHTML = `
+      <h2 class="or-section-title">Base Overview</h2>
+      <p class="or-section-sub" id="orBaseIntro">Base overview loaded from JSON.</p>
+      <div class="or-grid-4">
+        <div class="or-stat"><div class="or-stat-label">Mission BLUF</div><div class="or-stat-hint" id="orBaseBlufMission">—</div></div>
+        <div class="or-stat"><div class="or-stat-label">Commute BLUF</div><div class="or-stat-hint" id="orBaseBlufCommute">—</div></div>
+        <div class="or-stat"><div class="or-stat-label">Housing BLUF</div><div class="or-stat-hint" id="orBaseBlufHousing">—</div></div>
+        <div class="or-stat"><div class="or-stat-label">Family BLUF</div><div class="or-stat-hint" id="orBaseBlufFamily">—</div></div>
+      </div>
+      <div class="or-base-map-layout">
+        <div class="or-base-map-stack">
+          <div class="or-list-card or-base-map-card">
+            <div class="or-list-title">Base Map</div>
+            <a id="orBaseMapLink" href="#" target="_blank" rel="noopener noreferrer" class="or-base-map-link">
+              <img id="orBaseMapImg" class="or-base-map-img" src="" alt="Base map" />
+            </a>
+            <div class="or-base-map-empty" id="orBaseMapEmpty">No base map available yet.</div>
+            <div class="or-base-map-caption" id="orBaseMapCaption">Public-facing base orientation map.</div>
+          </div>
+          <div class="or-list-card">
+            <div class="or-list-title">Base Quick Facts</div>
+            <ul class="or-list" id="orBaseQuickFacts"></ul>
+          </div>
+          <div class="or-quote" id="orBaseWhyItMatters">Loading base summary...</div>
+        </div>
+        <div class="or-base-right-rail">
+          <div class="or-rail-card">
+            <div class="or-rail-title">Access & Commute</div>
+            <ul class="or-list" id="orBaseAccess"></ul>
+          </div>
+          <div class="or-rail-card">
+            <div class="or-rail-title">On-Base Living Notes</div>
+            <ul class="or-list" id="orBaseHousing"></ul>
+          </div>
+          <div class="or-rail-card">
+            <div class="or-rail-title">Fast Read</div>
+            <div class="or-quick-grid">
+              <div class="or-quick-mini"><div class="or-quick-mini-label">Installation</div><div class="or-quick-mini-value" id="orBaseQuickInstall">—</div></div>
+              <div class="or-quick-mini"><div class="or-quick-mini-label">Metro</div><div class="or-quick-mini-value" id="orBaseQuickMetro">—</div></div>
+              <div class="or-quick-mini"><div class="or-quick-mini-label">Housing Type</div><div class="or-quick-mini-value" id="orBaseQuickHousingType">—</div></div>
+              <div class="or-quick-mini"><div class="or-quick-mini-label">PCS Personality</div><div class="or-quick-mini-value" id="orBaseQuickPersonality">—</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+  };
+})();
+</script>
+        </div>
+        <div class="code-embed-46 w-embed w-script">
+          <script>
+(() => {
+  window.PCSU_BASE_TABS = window.PCSU_BASE_TABS || {};
+  window.PCSU_BASE_TABS.guidance = function(){
+    const panel = document.getElementById("orPanelGuidance");
+    if (!panel) return;
+    panel.innerHTML = `
+      <h2 class="or-section-title">Buyer, Seller, and Landlord Guidance</h2>
+      <p class="or-section-sub">
+        Decision notes built directly from your city JSON.
+      </p>
+      <div class="or-grid-3">
+        <div class="or-list-card">
+          <div class="or-list-title">Buyer Guidance</div>
+          <ul class="or-list" id="orBuyerGuidance"></ul>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Seller Guidance</div>
+          <ul class="or-list" id="orSellerGuidance"></ul>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Landlord Notes</div>
+          <ul class="or-list" id="orLandlordNotes"></ul>
+        </div>
+      </div>
+      <div class="or-grid-2">
+        <div class="or-list-card">
+          <div class="or-list-title">Buyer Notes</div>
+          <ul class="or-list" id="orBuyerNotes"></ul>
+        </div>
+        <div class="or-list-card">
+          <div class="or-list-title">Seller Notes</div>
+          <ul class="or-list" id="orSellerNotes"></ul>
+        </div>
+      </div>
+    `;
+  };
+})();
+</script>
+        </div>
+        <div class="code-embed-46 w-embed w-script">
           <script>
 (() => {
   "use strict";
@@ -2409,13 +2352,26 @@
       console.warn("Could not hydrate selected base from storage:", err);
     }
   }
+  function safeParse(raw){
+    try{return raw ? JSON.parse(raw) : null;}catch(_e){return null;}
+  }
+  function firstDefined(...vals){
+    for (const v of vals){
+      if (v !== undefined && v !== null && v !== "") return v;
+    }
+    return null;
+  }
+  function num(v){
+    const n = Number(String(v ?? "").replace(/[$,]/g,""));
+    return Number.isFinite(n) ? n : 0;
+  }
   function fmtMoney(v){
     const n = Number(v);
     if (!Number.isFinite(n)) return "—";
     return new Intl.NumberFormat("en-US", {
-      style: "currency",
-      currency: "USD",
-      maximumFractionDigits: 0
+      style:"currency",
+      currency:"USD",
+      maximumFractionDigits:0
     }).format(n);
   }
   function fmtNum(v){
@@ -2444,12 +2400,6 @@
       .replaceAll('"',"&quot;")
       .replaceAll("'","&#039;");
   }
-  function firstDefined(...vals){
-    for (const v of vals){
-      if (v !== undefined && v !== null && v !== "") return v;
-    }
-    return null;
-  }
   function flattenTextList(input){
     if (!input) return [];
     if (Array.isArray(input)) return input.flatMap(flattenTextList).filter(Boolean);
@@ -2473,6 +2423,80 @@
       ? safe.map(item => `<li>${esc(item)}</li>`).join("")
       : `<li>No data available yet.</li>`;
   }
+  function showError(message){
+    const box = $("#orCityError");
+    if (!box) return;
+    box.textContent = message;
+    box.classList.add("is-show");
+  }
+  function hideError(){
+    const box = $("#orCityError");
+    if (!box) return;
+    box.textContent = "";
+    box.classList.remove("is-show");
+  }
+  function readProfile(){
+    const keys = [
+      "pcsunited.profile.v1",
+      "pcsunited.identity.v1",
+      "pcsunited.bridge.v1",
+      "pcsunited.bridge",
+      "realtysass.bridge",
+      "pcsunited.session.v1",
+      "pcsunited.baseline.v1",
+      "pcsunited.financial_intake.v1",
+      "pcsunited.kpi_overrides.v1"
+    ];
+    let merged = {};
+    keys.forEach(key => {
+      const parsed = safeParse(localStorage.getItem(key)) || safeParse(sessionStorage.getItem(key));
+      if (!parsed || typeof parsed !== "object") return;
+      const candidate = parsed.profile || parsed.user || parsed.member || parsed.identity || parsed;
+      if (candidate && typeof candidate === "object"){
+        merged = {...merged, ...candidate};
+      }
+    });
+    return merged;
+  }
+  function familySizeFromProfile(profile){
+    const direct = num(firstDefined(
+      profile.family_size,
+      profile.familySize,
+      profile.household_size,
+      profile.householdSize,
+      profile.dependents_count,
+      profile.dependentsCount,
+      profile.family
+    ));
+    if (direct > 0) return Math.round(direct);
+    const dep = String(profile.dependents || "").toLowerCase();
+    if (dep.includes("spouse") && (dep.includes("2 children") || dep.includes("2 child"))) return 4;
+    if (["yes","true","with","with dependents","with_dependents"].includes(dep)) return 2;
+    return 1;
+  }
+  function renderMemberGlass(data){
+    const profile = readProfile();
+    const familySize = familySizeFromProfile(profile);
+    const rooms = Math.max(1, familySize - 1);
+    const basePay = firstDefined(profile.base_pay, profile.basePay, profile.basic_pay, profile.basicPay, profile.basePayMonthly, 0);
+    const bah = firstDefined(profile.bah, profile.BAH, profile.monthly_bah, profile.bah_monthly, 0);
+    const total = firstDefined(profile.total_monthly_income, profile.monthly_income, profile.income, profile.totalPay, profile.total_monthly_pay, 0);
+    const targetPrice = firstDefined(
+      profile.projected_home_price,
+      profile.home_purchase_price,
+      profile.purchase_price,
+      profile.target_price,
+      data.avg_home_value,
+      data.metrics?.median_sale_price,
+      0
+    );
+    setText("#orMemberBasePay", fmtMoney(basePay));
+    setText("#orMemberBah", fmtMoney(bah));
+    setText("#orMemberTotalIncome", fmtMoney(total));
+    setText("#orMemberTargetPrice", fmtMoney(targetPrice));
+    setText("#orMemberFamilySize", String(familySize));
+    setText("#orMemberRooms", `${rooms} rooms`);
+  }
   function renderScoreBars(scorecard = {}){
     const rows = [
       ["Affordability", scorecard.affordability_score],
@@ -2487,9 +2511,7 @@
       return `
         <div class="or-bar-row">
           <div class="or-bar-name">${esc(label)}</div>
-          <div class="or-bar-track">
-            <div class="or-bar-fill" style="width:${width}%"></div>
-          </div>
+          <div class="or-bar-track"><div class="or-bar-fill" style="width:${width}%"></div></div>
           <div class="or-bar-val">${Number.isFinite(n) ? n : "—"}</div>
         </div>
       `;
@@ -2503,24 +2525,18 @@
     return `
       <div class="or-mini-row">
         <span>${esc(label)}</span>
-        <div class="or-mini-track">
-          <div class="or-mini-fill" style="width:${width}%"></div>
-        </div>
+        <div class="or-mini-track"><div class="or-mini-fill" style="width:${width}%"></div></div>
         <strong>${esc(displayText)}</strong>
       </div>
     `;
   }
-  function showError(message){
-    const box = $("#orCityError");
-    if (!box) return;
-    box.textContent = message;
-    box.classList.add("is-show");
-  }
-  function hideError(){
-    const box = $("#orCityError");
-    if (!box) return;
-    box.textContent = "";
-    box.classList.remove("is-show");
+  function bootTabTemplates(){
+    const tabs = window.PCSU_BASE_TABS || {};
+    if (typeof tabs.overview === "function") tabs.overview();
+    if (typeof tabs.realEstate === "function") tabs.realEstate();
+    if (typeof tabs.demographics === "function") tabs.demographics();
+    if (typeof tabs.base === "function") tabs.base();
+    if (typeof tabs.guidance === "function") tabs.guidance();
   }
   function bindTabs(){
     $$("[data-or-tab]").forEach(btn => {
@@ -2530,10 +2546,7 @@
         $$("[data-or-tab]").forEach(node => node.classList.remove("is-active"));
         btn.classList.add("is-active");
         $$("[data-or-panel]").forEach(panel => {
-          panel.classList.toggle(
-            "is-active",
-            panel.getAttribute("data-or-panel") === tab
-          );
+          panel.classList.toggle("is-active", panel.getAttribute("data-or-panel") === tab);
         });
       });
     });
@@ -2553,193 +2566,24 @@
   function getBaseProfile(data){
     return data?.base_profile || {};
   }
-  function renderBase(data){
-    const base = getBaseProfile(data);
-    const housing = base?.on_base_housing || {};
-    const commute = base?.commute_intelligence || {};
-    const bah = base?.bah_market_reality || {};
-    const family = base?.family_readiness || {};
-    const mapMeta = base?.base_map_image || {};
-    const installationName = firstDefined(
-      base.display_name,
-      base.base_name,
-      base.short_name,
-      data.name,
-      data.slug
-    );
-    const mapUrl = firstDefined(
-      data.base_image_url,
-      mapMeta.url,
-      data.image_url
-    );
-    const mapAlt = firstDefined(
-      mapMeta.alt,
-      `${installationName || "Base"} map`
-    );
-    const mapCaption = firstDefined(
-      mapMeta.caption,
-      mapMeta.safety_note,
-      "Public-facing base orientation map."
-    );
-    setText(
-      "#orBaseIntro",
-      firstDefined(
-        base.base_bluf,
-        base.primary_mission_summary,
-        data.profile,
-        "Base overview loaded from JSON."
-      )
-    );
-    setText(
-      "#orBaseBlufMission",
-      firstDefined(
-        base.primary_mission_summary,
-        base.installation_type,
-        "No mission summary available yet."
-      )
-    );
-    setText(
-      "#orBaseBlufCommute",
-      firstDefined(
-        commute.commute_bluf,
-        base.pcs_personality,
-        "No commute guidance available yet."
-      )
-    );
-    setText(
-      "#orBaseBlufHousing",
-      firstDefined(
-        bah.bah_bluf,
-        housing.pcsu_strategy_note,
-        "No housing guidance available yet."
-      )
-    );
-    setText(
-      "#orBaseBlufFamily",
-      firstDefined(
-        family.family_bluf,
-        base.user_positioning?.military_family_bluf,
-        "No family guidance available yet."
-      )
-    );
-    const quickFacts = [];
-    if (installationName) quickFacts.push(`Installation: ${installationName}`);
-    if (base.parent_installation) quickFacts.push(`Parent installation: ${base.parent_installation}`);
-    if (base.host_or_major_command) quickFacts.push(`Host / major command: ${base.host_or_major_command}`);
-    if (base.installation_type) quickFacts.push(`Installation type: ${base.installation_type}`);
-    if (base.metro) quickFacts.push(`Metro: ${base.metro}`);
-    if (base.zip) quickFacts.push(`ZIP: ${base.zip}`);
-    if (base.joint_base === true) quickFacts.push(`Joint base: Yes`);
-    if (base.pcs_personality) quickFacts.push(`PCS personality: ${base.pcs_personality}`);
-    renderList("#orBaseQuickFacts", quickFacts);
-    const accessNotes = [];
-    const vcc = base.visitor_control_center || {};
-    if (vcc.name) accessNotes.push(`Visitor Control Center: ${vcc.name}`);
-    if (vcc.address) accessNotes.push(`VCC address: ${vcc.address}`);
-    if (vcc.hours) accessNotes.push(`VCC hours: ${vcc.hours}`);
-    if (vcc.phone) accessNotes.push(`VCC phone: ${vcc.phone}`);
-    arr(base.gates).slice(0, 5).forEach(g => {
-      const gateLine = [
-        g.name,
-        g.hours ? `(${g.hours})` : "",
-        g.commute_notes || g.user_warning || ""
-      ].filter(Boolean).join(" ");
-      if (gateLine) accessNotes.push(gateLine);
-    });
-    renderList("#orBaseAccess", accessNotes);
-    const housingNotes = [];
-    if (housing.housing_type) housingNotes.push(`Housing type: ${housing.housing_type}`);
-    if (housing.housing_office_name) housingNotes.push(`Housing office: ${housing.housing_office_name}`);
-    if (housing.housing_office_address) housingNotes.push(`Housing office address: ${housing.housing_office_address}`);
-    if (housing.housing_office_phone) housingNotes.push(`Housing office phone: ${housing.housing_office_phone}`);
-    flattenTextList(housing.best_for).forEach(x => housingNotes.push(`Best for: ${x}`));
-    flattenTextList(housing.watchouts).forEach(x => housingNotes.push(`Watchout: ${x}`));
-    renderList("#orBaseHousing", housingNotes);
-    setText(
-      "#orBaseWhyItMatters",
-      firstDefined(
-        base.base_bluf,
-        housing.pcsu_strategy_note,
-        bah.base_tab_message,
-        base.primary_mission_summary,
-        "No base summary available yet."
-      )
-    );
-    const mapImg = $("#orBaseMapImg");
-    const mapLink = $("#orBaseMapLink");
-    const mapEmpty = $("#orBaseMapEmpty");
-    if (mapUrl){
-      if (mapImg){
-        mapImg.src = mapUrl;
-        mapImg.alt = mapAlt;
-        mapImg.style.display = "block";
-      }
-      if (mapLink){
-        mapLink.href = mapUrl;
-        mapLink.style.display = "block";
-      }
-      if (mapEmpty){
-        mapEmpty.classList.remove("is-show");
-      }
-    }else{
-      if (mapImg){
-        mapImg.removeAttribute("src");
-        mapImg.style.display = "none";
-      }
-      if (mapLink){
-        mapLink.removeAttribute("href");
-        mapLink.style.display = "none";
-      }
-      if (mapEmpty){
-        mapEmpty.classList.add("is-show");
-      }
-    }
-    setText("#orBaseMapCaption", mapCaption);
-  }
   function renderHero(data){
     const bg = $("#orHeroBg");
     if (bg && data.image_url){
       bg.style.setProperty("--hero-image", `url("${data.image_url}")`);
     }
-    setText("#orTopPlace", `${data.place || data.city || "City"} • ${data.market_label || "Market Intelligence"}`);
-    setText("#orTopUpdated", `Updated — ${data.last_updated_data_from_sources || data.market_metrics?.as_of || "N/A"}`);
-    setText("#orHeroEyebrow", `${data.state || "State"} • ${data.market_label || "City Intelligence"}`);
-    setText("#orHeroTitle", `${data.name || data.city || "Base"}${data.state_code ? `, ${data.state_code}` : ""}`);
-    setText("#orHeroSubtitle", data.profile || "City intelligence loaded.");
-    setText("#orKpiHomePrice", fmtMoney(data.metrics?.median_sale_price || data.avg_home_value));
-    setText("#orKpiRent", fmtMoney(data.metrics?.median_rent || data.rental_metrics?.median_rent));
-    setText("#orKpiMortgage", fmtMoney(data.avg_home_mortgage_monthly?.avg));
-    setText(
-      "#orKpiDom",
-      Number.isFinite(Number(data.metrics?.days_on_market))
-        ? `${fmtNum(data.metrics.days_on_market)} days`
-        : "—"
-    );
-    const status = data.market_bluf?.status || "Market Verdict";
-    const verdict = data.market_bluf?.verdict || data.market_bluf?.bluf_headline || "Market View";
-    const copyParts = [
-      data.market_bluf?.bluf_summary,
-      data.financial_brief?.affordability_summary,
-      data.market_bluf?.buyer_leverage ? `Buyer leverage: ${data.market_bluf.buyer_leverage}.` : "",
-      data.market_bluf?.inventory_trend ? `Inventory trend: ${data.market_bluf.inventory_trend}.` : ""
-    ].filter(Boolean);
-    setText("#orVerdictStatus", status);
-    setText("#orVerdictTitle", verdict);
-    setText("#orVerdictCopy", copyParts.join(" "));
-    setText("#orScoreAffordability", data.scorecard?.affordability_score ?? "—");
-    setText("#orScoreGrowth", data.scorecard?.growth_score ?? "—");
-    setText("#orScoreStability", data.scorecard?.stability_score ?? "—");
-    setText("#orScoreOverall", data.scorecard?.overall_score ?? "—");
+    const title = getBaseProfile(data).display_name || data.name || data.city || "Base";
+    const state = data.state_code ? `, ${data.state_code}` : "";
+    setText("#orHeroEyebrow", `${data.market_label || data.state || "Base Intelligence"}`);
+    setText("#orHeroTitle", `${title}${state}`);
+    setText("#orHeroSubtitle", data.profile || getBaseProfile(data).base_bluf || "City intelligence loaded.");
+    setText("#orSelectedBaseTag", data.place || data.name || "Selected Base");
+    setText("#orUpdatedTag", `Updated ${data.last_updated_data_from_sources || data.market_metrics?.as_of || "N/A"}`);
+    renderMemberGlass(data);
   }
   function renderOverview(data){
     setText("#orOverviewIntro", data.profile || "City overview loaded.");
     setText("#orOvListPrice", fmtMoney(data.metrics?.median_list_price || data.market_metrics?.median_list_price));
-    setText(
-      "#orOvPpsf",
-      Number.isFinite(Number(data.metrics?.price_per_sqft || data.market_metrics?.price_per_sqft))
-        ? fmtMoney(data.metrics?.price_per_sqft || data.market_metrics?.price_per_sqft)
-        : "—"
-    );
+    setText("#orOvPpsf", Number.isFinite(Number(data.metrics?.price_per_sqft || data.market_metrics?.price_per_sqft)) ? fmtMoney(data.metrics?.price_per_sqft || data.market_metrics?.price_per_sqft) : "—");
     setText("#orOvListings", fmtNum(data.metrics?.active_listings_total || data.market_metrics?.active_listings_total));
     setText("#orOvTaxRate", fmtPctFromDecimal(data.property_tax_rate ?? data.ownership_costs?.property_tax_rate));
     renderList("#orSummaryPoints", data.summary_points);
@@ -2769,10 +2613,7 @@
     setText("#orBedUtilities", fmtMoney(bed.utilities?.total?.avg));
   }
   function renderRealEstate(data){
-    setText(
-      "#orRealEstateIntro",
-      `${data.city || data.name || "City"} pricing and cost structure, including taxes, insurance, HOA assumptions, and bedroom-level ranges.`
-    );
+    setText("#orRealEstateIntro", `${data.city || data.name || "City"} pricing and cost structure, including taxes, insurance, HOA assumptions, and bedroom-level ranges.`);
     renderBedroom(data, ACTIVE_BED);
     renderList("#orOwnershipNotes", data.ownership_costs?.notes);
     renderList("#orTargetNeighborhoods", data.target_neighborhoods || data.neighborhoods);
@@ -2807,8 +2648,6 @@
       data.school_quality?.on_base,
       data.school_quality?.off_base,
       data.crime_status?.installation,
-      data.crime_status?.metro_laredo,
-      data.crime_status?.metro_mcallen,
       data.crime_status?.metro_san_antonio
     ]);
     renderList("#orClimateList", [
@@ -2818,6 +2657,70 @@
       data.climate_weather?.winter ? `Winter: ${data.climate_weather.winter}` : null,
       ...arr(data.special_events).map(x => `Local event: ${x}`)
     ]);
+  }
+  function renderBase(data){
+    const base = getBaseProfile(data);
+    const housing = base?.on_base_housing || {};
+    const commute = base?.commute_intelligence || {};
+    const bah = base?.bah_market_reality || {};
+    const family = base?.family_readiness || {};
+    const mapMeta = base?.base_map_image || {};
+    const installationName = firstDefined(base.display_name, base.base_name, base.short_name, data.name, data.slug);
+    const mapUrl = firstDefined(data.base_image_url, mapMeta.url, data.image_url);
+    const mapAlt = firstDefined(mapMeta.alt, `${installationName || "Base"} map`);
+    const mapCaption = firstDefined(mapMeta.caption, mapMeta.safety_note, "Public-facing base orientation map.");
+    setText("#orBaseIntro", firstDefined(base.base_bluf, base.primary_mission_summary, data.profile, "Base overview loaded from JSON."));
+    setText("#orBaseBlufMission", firstDefined(base.primary_mission_summary, base.installation_type, "No mission summary available yet."));
+    setText("#orBaseBlufCommute", firstDefined(commute.commute_bluf, base.pcs_personality, "No commute guidance available yet."));
+    setText("#orBaseBlufHousing", firstDefined(bah.bah_bluf, housing.pcsu_strategy_note, "No housing guidance available yet."));
+    setText("#orBaseBlufFamily", firstDefined(family.family_bluf, base.user_positioning?.military_family_bluf, "No family guidance available yet."));
+    renderList("#orBaseQuickFacts", [
+      installationName ? `Installation: ${installationName}` : null,
+      base.parent_installation ? `Parent installation: ${base.parent_installation}` : null,
+      base.host_or_major_command ? `Host / major command: ${base.host_or_major_command}` : null,
+      base.installation_type ? `Installation type: ${base.installation_type}` : null,
+      base.metro ? `Metro: ${base.metro}` : null,
+      base.zip ? `ZIP: ${base.zip}` : null,
+      base.joint_base === true ? `Joint base: Yes` : null,
+      base.pcs_personality ? `PCS personality: ${base.pcs_personality}` : null
+    ]);
+    const accessNotes = [];
+    const vcc = base.visitor_control_center || {};
+    if (vcc.name) accessNotes.push(`Visitor Control Center: ${vcc.name}`);
+    if (vcc.address) accessNotes.push(`VCC address: ${vcc.address}`);
+    if (vcc.hours) accessNotes.push(`VCC hours: ${vcc.hours}`);
+    if (vcc.phone) accessNotes.push(`VCC phone: ${vcc.phone}`);
+    arr(base.gates).slice(0, 5).forEach(g => {
+      const gateLine = [g.name, g.hours ? `(${g.hours})` : "", g.commute_notes || g.user_warning || ""].filter(Boolean).join(" ");
+      if (gateLine) accessNotes.push(gateLine);
+    });
+    renderList("#orBaseAccess", accessNotes);
+    const housingNotes = [];
+    if (housing.housing_type) housingNotes.push(`Housing type: ${housing.housing_type}`);
+    if (housing.housing_office_name) housingNotes.push(`Housing office: ${housing.housing_office_name}`);
+    if (housing.housing_office_address) housingNotes.push(`Housing office address: ${housing.housing_office_address}`);
+    if (housing.housing_office_phone) housingNotes.push(`Housing office phone: ${housing.housing_office_phone}`);
+    flattenTextList(housing.best_for).forEach(x => housingNotes.push(`Best for: ${x}`));
+    flattenTextList(housing.watchouts).forEach(x => housingNotes.push(`Watchout: ${x}`));
+    renderList("#orBaseHousing", housingNotes);
+    setText("#orBaseWhyItMatters", firstDefined(base.base_bluf, housing.pcsu_strategy_note, bah.base_tab_message, base.primary_mission_summary, "No base summary available yet."));
+    const mapImg = $("#orBaseMapImg");
+    const mapLink = $("#orBaseMapLink");
+    const mapEmpty = $("#orBaseMapEmpty");
+    if (mapUrl){
+      if (mapImg){ mapImg.src = mapUrl; mapImg.alt = mapAlt; mapImg.style.display = "block"; }
+      if (mapLink){ mapLink.href = mapUrl; mapLink.style.display = "block"; }
+      if (mapEmpty){ mapEmpty.classList.remove("is-show"); }
+    }else{
+      if (mapImg){ mapImg.removeAttribute("src"); mapImg.style.display = "none"; }
+      if (mapLink){ mapLink.removeAttribute("href"); mapLink.style.display = "none"; }
+      if (mapEmpty){ mapEmpty.classList.add("is-show"); }
+    }
+    setText("#orBaseMapCaption", mapCaption);
+    setText("#orBaseQuickInstall", installationName || "—");
+    setText("#orBaseQuickMetro", base.metro || data.market_label || "—");
+    setText("#orBaseQuickHousingType", housing.housing_type || "—");
+    setText("#orBaseQuickPersonality", base.pcs_personality || "—");
   }
   function renderGuidance(data){
     renderList("#orBuyerGuidance", data.buyer_guidance);
@@ -2829,28 +2732,24 @@
   function renderAll(data){
     CITY = data;
     hideError();
-    renderBase(data);
     renderHero(data);
     renderOverview(data);
     renderRealEstate(data);
     renderDemographics(data);
+    renderBase(data);
     renderGuidance(data);
   }
   async function loadCity(){
     const cityJsonUrl = getCityJsonUrl();
     try{
-      const res = await fetch(cityJsonUrl, { cache: "no-store" });
-      if (!res.ok){
-        throw new Error(`HTTP ${res.status} while loading ${cityJsonUrl}`);
-      }
+      const res = await fetch(cityJsonUrl, { cache:"no-store" });
+      if (!res.ok) throw new Error(`HTTP ${res.status} while loading ${cityJsonUrl}`);
       const data = await res.json();
       renderAll(data);
     }catch(err){
       console.error("Cities Overview load error:", err);
       setText("#orHeroTitle", "City data could not load");
       setText("#orHeroSubtitle", "Check the city JSON path.");
-      setText("#orVerdictTitle", "Load Error");
-      setText("#orVerdictCopy", "The shell loaded, but the city JSON did not.");
       showError(String(err?.message || err));
     }
   }
@@ -2864,6 +2763,7 @@
     loadCity();
   });
   hydrateSelectedBaseFromStorage();
+  bootTabTemplates();
   bindTabs();
   bindBedrooms();
   loadCity();
@@ -2877,20 +2777,6 @@
         <div class="footer_banners">
           <div class="footer_buy"><img src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="logo-footer">
             <div class="heading-style-h4-3 text-align-center"><em>Built for service members, veterans, and military families who need clearer PCS, housing, pay, and financial readiness decisions before the move gets expensive.</em></div>
-            <div class="flex-footer">
-              <div class="form-block w-form">
-                <form id="wf-form-Newsletter-2" name="wf-form-Newsletter-2" data-name="Newsletter" method="get" data-wf-page-id="69fab947c66f42aa792d2a99" data-wf-element-id="a61b0545-5f07-12f7-b32e-ae8b6dc26dce">
-                  <div class="div-block-2"><input class="form_input-2 is-footer w-input" maxlength="256" name="Email-Address" data-name="Email Address" placeholder="Email Address" type="email" id="Email-Address-3" required=""><input type="submit" data-wait="Please wait..." class="button-8 is-footer w-button" value="Send"></div>
-                </form>
-                <div class="form_message-success-2 w-form-done">
-                  <div>Thank you! Your submission has been received!</div>
-                </div>
-                <div class="form_message-error w-form-fail">
-                  <div>Oops! Something went wrong while submitting the form.</div>
-                </div>
-              </div>
-              <div class="footer-text">Subcribe to our Monthly Blogs, New &amp; Resources</div>
-            </div>
           </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
         <div data-w-id="ee73203a-eb4c-0a70-cb0c-c0e63e1d2416" class="footer-flex-wrapper">

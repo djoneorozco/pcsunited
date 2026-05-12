@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu May 07 2026 02:03:58 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue May 12 2026 23:47:30 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e1a03" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -37,13 +37,13 @@
         <div class="nav-wrapper">
           <div class="nav-container">
             <div class="nav-left">
-              <a aria-label="Yeyeyeah" href="../old-home.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 479px) 98vw, (max-width: 767px) 99vw, (max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
+              <a aria-label="Yeyeyeah" href="../user-dashboard.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 479px) 98vw, (max-width: 767px) 99vw, (max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
             </div>
             <nav role="navigation" id="w-node-a20e7068-528c-2165-b385-785e4c45ca5e-4c45ca57" class="nav-menu w-nav-menu">
               <div class="default-nav-links big-menu">
                 <a href="../index.html" class="nav-link w-nav-link">Home Page</a>
-                <a href="../air-force/resources.html" class="nav-link w-nav-link">Resources</a>
                 <a href="../about-us.html" class="nav-link w-nav-link">About Us</a>
+                <a href="../air-force/resources.html" class="nav-link w-nav-link">Resources</a>
                 <a href="../blog-v1.html" class="nav-link w-nav-link">Blog</a>
               </div>
               <div class="nav-mobile-social">
@@ -51,14 +51,20 @@
               </div>
               <div class="mobile-sign-cta">
                 <div class="sign-cta-navwrap">
-                  <a href="../signin-signup/sign-in.html" aria-label="sign in" class="menu-sign-btn w-nav-link">Sign In</a>
                   <div class="nav-btn-wrapper">
                     <a aria-label="Start for Free" href="../air-force/account.html" target="_blank" aria-current="page" class="btn-menu w--current">Create Account</a>
                   </div>
                 </div>
               </div>
             </nav>
-            <div id="w-node-a20e7068-528c-2165-b385-785e4c45cb07-4c45ca57" class="nav-right">
+            <div id="w-node-_250c14b8-4215-eefa-17ad-f687c748e030-4c45ca57" class="nav-right">
+              <div class="nav-right-sign-cta-wrap">
+                <div class="sign-cta-navwrap">
+                  <div class="nav-btn-wrapper">
+                    <a aria-label="Start for Free" href="../user-dashboard.html" target="_blank" class="btn-menu">   Log In   </a>
+                  </div>
+                </div>
+              </div>
               <div class="burger w-nav-button">
                 <div class="icon-wrapper">
                   <div class="burger-icon">
@@ -71,9 +77,265 @@
           </div>
         </div>
       </div>
+      <div class="w-embed w-script"><!--  =========================================================
+  RealtySaSS • Frosted Glass Login Lock (Email + Password)
+  - Uses /api/login (Supabase Auth check)
+  - After success:
+      • Unlocks page
+      • Stores login email/profile in localStorage for dashboards
+=========================================================  -->
+        <div id="rs-lock-overlay" aria-hidden="true" style="visibility:hidden; opacity:0;">
+          <div class="rs-lock-centered" role="dialog" aria-labelledby="rs-lock-title" aria-modal="true">
+            <div class="rs-lock-card" id="rs-lock-card">
+              <h1 id="rs-lock-title">Sign In to Continue</h1>
+              <p class="rs-lock-sub">This page is private — please enter your credentials.</p>
+              <div class="rs-field">
+                <input id="rs-email-input" type="email" placeholder="Email Address" autocomplete="email">
+              </div>
+              <div class="rs-field">
+                <input id="rs-pass-input" type="password" placeholder="Password" minlength="8" autocomplete="current-password">
+              </div>
+              <div class="rs-login-row">
+                <button id="rs-login-btn" type="button">Log In</button>
+              </div>
+              <!--  SIGN UP BLOCK  -->
+              <div class="rs-signup-row">
+                <p class="rs-signup-text">Not a Prime Member yet?</p>
+                <a class="rs-signup-btn" href="https://new-real-estate-purchase.webflow.io/user-profile">
+                  Sign Up
+                </a>
+              </div>
+              <p id="rs-lock-msg" class="rs-lock-msg" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+        <style>
+  :root{
+    --rs-overlay-bg: rgba(6,10,18,0.55);
+    --rs-accent: #8ef3c5;
+    --rs-ink: #e9ecff;
+    --rs-muted: #a8b0d6;
+    --rs-radius: 14px;
+  }
+  #rs-lock-overlay{
+    position:fixed; inset:0; width:100%; height:100%;
+    z-index:99999; display:flex; align-items:center; justify-content:center;
+    background:var(--rs-overlay-bg);
+    backdrop-filter:blur(10px) saturate(120%);
+    -webkit-backdrop-filter:blur(10px) saturate(120%);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    transition:opacity .25s ease, visibility .25s ease;
+  }
+  #rs-lock-overlay.rs-hidden{
+    opacity:0; pointer-events:none; visibility:hidden;
+  }
+  .rs-lock-centered{
+    width:100%; max-width:520px; padding:20px;
+  }
+  .rs-lock-card{
+    background:rgba(255,255,255,0.03);
+    border-radius:var(--rs-radius);
+    border:1px solid rgba(255,255,255,0.06);
+    box-shadow:0 8px 30px rgba(3,6,15,0.6);
+    padding:28px 24px; color:var(--rs-ink);
+  }
+  .rs-lock-card h1{
+    margin:0 0 8px; font-size:20px; font-weight:700;
+  }
+  .rs-lock-sub{
+    margin:0 0 18px; color:var(--rs-muted); font-size:13px;
+  }
+  .rs-field{
+    margin-bottom:14px;
+  }
+  #rs-email-input,
+  #rs-pass-input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.06);
+    background:rgba(255,255,255,0.02);
+    color:var(--rs-ink); 
+    font-size:16px;
+    outline:none;
+  }
+  #rs-email-input::placeholder,
+  #rs-pass-input::placeholder{
+    color:var(--rs-muted);
+  }
+  #rs-login-btn{
+    width:100%;
+    padding:12px 16px;
+    border-radius:10px;
+    border:none;
+    background:linear-gradient(180deg,var(--rs-accent),rgba(100,230,190,0.85));
+    color:#02110b; font-weight:700; cursor:pointer; font-size:15px;
+  }
+  .rs-lock-msg{
+    margin-top:12px; 
+    color:var(--rs-muted); 
+    font-size:13px; 
+    min-height:18px;
+  }
+  /* NEW: Sign Up area */
+  .rs-signup-row{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,0.05);
+    text-align:center;
+  }
+  .rs-signup-text{
+    margin:0 0 8px;
+    font-size:13px;
+    color:var(--rs-muted);
+  }
+  .rs-signup-btn{
+    display:inline-block;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid rgba(142,243,197,0.65);
+    background:rgba(255,255,255,0.02);
+    color:var(--rs-accent);
+    font-size:13px;
+    font-weight:700;
+    text-decoration:none;
+    transition:background .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+  .rs-signup-btn:hover{
+    background:rgba(142,243,197,0.10);
+    box-shadow:0 8px 20px rgba(0,0,0,0.7);
+    transform:translateY(-1px);
+  }
+</style>
+        <script>
+(function(){
+  "use strict";
+  const API_BASE = "https://theorozcorealty.netlify.app/api";
+  // Which pages should be locked
+  const ALLOW_PATHS = [
+    /\/realtysass(?:\.html)?$/i,
+  ];
+  const path = (location.pathname || "/").toLowerCase();
+  const shouldLock = ALLOW_PATHS.some(re => re.test(path));
+  if (!shouldLock){
+    document.querySelectorAll('#rs-lock-overlay').forEach(el => el.remove());
+    return;
+  }
+  const overlay  = document.getElementById('rs-lock-overlay');
+  const msg      = document.getElementById('rs-lock-msg');
+  const emailInp = document.getElementById('rs-email-input');
+  const passInp  = document.getElementById('rs-pass-input');
+  const loginBtn = document.getElementById('rs-login-btn');
+  const card     = document.getElementById('rs-lock-card');
+  // Show overlay
+  overlay.classList.remove('rs-hidden');
+  overlay.style.visibility = 'visible';
+  overlay.style.opacity = '1';
+  // ARIA fix
+  overlay.removeAttribute("aria-hidden");
+  function showMsg(text, isError){
+    msg.textContent = text || '';
+    msg.style.color = isError ? '#ffb3b3' : 'var(--rs-muted)';
+  }
+  function unlock(){
+    document.querySelectorAll('#rs-lock-overlay').forEach(el=>{
+      el.classList.add('rs-hidden');
+      el.style.visibility = 'hidden';
+      el.style.opacity = '0';
+      el.setAttribute("aria-hidden","true");
+    });
+  }
+  async function loginWithServer(email, password){
+    const res = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.ok === false){
+      throw new Error(data.error || "Incorrect email or password.");
+    }
+    return data;
+  }
+  // NEW: remember who just logged in (for dashboards)
+  function rememberLogin(email, serverData){
+    try{
+      // core key the dashboards can read
+      localStorage.setItem("realtysass.loginEmail", email);
+      // optional identity blob
+      const existing = JSON.parse(localStorage.getItem("realtysass.identity") || "{}") || {};
+      existing.email = email;
+      // if the API happens to send a profile, lightly merge it
+      const profile = (serverData && (serverData.profile || serverData.user || {})) || {};
+      if (profile.full_name && !existing.name){
+        existing.name = profile.full_name;
+      }
+      if (profile.phone && !existing.phone){
+        existing.phone = profile.phone;
+      }
+      if (profile.rank && !existing.rankPaygrade){
+        existing.rankPaygrade = profile.rank;
+      }
+      if (profile.va_disability && !existing.vaDisability){
+        existing.vaDisability = profile.va_disability;
+      }
+      if (profile.years_of_service && !existing.yearsOfService){
+        existing.yearsOfService = profile.years_of_service;
+      }
+      if (profile.mode && !existing.mode){
+        existing.mode = profile.mode;
+      }
+      localStorage.setItem("realtysass.identity", JSON.stringify(existing));
+    }catch(e){
+      // fail silently; login still works
+    }
+  }
+  async function onLogin(){
+    const em = emailInp.value.trim().toLowerCase();
+    const pw = passInp.value.trim();
+    if (!em){
+      showMsg("Please enter your email.", true);
+      return;
+    }
+    if (pw.length < 8){
+      showMsg("Password must be at least 8 characters.", true);
+      return;
+    }
+    loginBtn.disabled = true;
+    showMsg("Checking credentials...");
+    try {
+      const data = await loginWithServer(em, pw);
+      // NEW: store email/profile locally for the Financial Dashboard
+      rememberLogin(em, data);
+      showMsg("");
+      unlock();
+    } catch (err){
+      showMsg(err.message || "Incorrect email or password.", true);
+      if(card && card.animate){
+        card.animate(
+          [
+            { transform:'translateX(-5px)' },
+            { transform:'translateX(5px)' },
+            { transform:'translateX(0)' }
+          ],
+          { duration:260 }
+        );
+      }
+    } finally {
+      loginBtn.disabled = false;
+    }
+  }
+  loginBtn.addEventListener("click", onLogin);
+  passInp.addEventListener("keydown", e=>{
+    if (e.key === "Enter") onLogin();
+  });
+  setTimeout(()=> emailInp.focus(), 0);
+})();
+</script>
+      </div>
     </div>
     <div class="main dark-secondary">
-      <div class="pricing-v2-background"><img src="../images/bg-pricing_1bg-pricing.avif" loading="lazy" sizes="(max-width: 1373px) 100vw, 1373px" srcset="../images/bg-pricing_1-p-500.png 500w, ../images/bg-pricing_1-p-800.png 800w, ../images/bg-pricing_1bg-pricing.avif 1373w" alt="" class="pricing-v2-bg-img"></div>
+      <div class="pricing-v2-background"><img src="../images/bg-pricing_1bg-pricing.avif" loading="lazy" sizes="100vw" srcset="../images/bg-pricing_1-p-500.png 500w, ../images/bg-pricing_1-p-800.png 800w, ../images/bg-pricing_1bg-pricing.avif 1373w" alt="" class="pricing-v2-bg-img"></div>
       <header class="header dark">
         <div class="w-layout-blockcontainer container w-container">
           <div class="header-text-wrapper centered">
@@ -266,13 +528,13 @@
               </div>
               <div class="code-embed-18 w-embed w-script"><!--  =========================================================
   PCS UNITED • Premium Signup + Integrated Housing Intake
-  v4.6.0
-  FIXES
-  - Uses second embed window.PCSU_BASES_INDEX for ALL bases
-  - No hardcoded base list in the form
-  - VERIFY_PAGE detects Webflow and uses full URL
-  - Passes email to verify page via query string
-  - Normalizes aliases when possible
+  v4.7.0 • THEWING BACKEND HANDOFF
+  UPDATES
+  - References TheWing.ai backend API
+  - Calls /register on TheWing
+  - Calls /send-code on TheWing after registration succeeds
+  - Redirects to existing PCSUnited verify-account page
+  - Keeps existing localStorage behavior
   - Keeps Housing Intake integrated
   - Password is NOT stored in localStorage
   IMPORTANT
@@ -974,10 +1236,26 @@
                   <script>
     (function(){
       "use strict";
-      const API_BASE = "https://pcsunited.netlify.app/api";
+      const API_BASE = (function(){
+        const h = String(location.hostname || "").toLowerCase();
+        if (
+          h === "thewing.ai" ||
+          h === "www.thewing.ai" ||
+          h.includes("thewing.netlify.app") ||
+          h.includes("thewingai.netlify.app")
+        ) {
+          return "/api";
+        }
+        return "https://thewing.netlify.app/api";
+      })();
       const VERIFY_PAGE = (function(){
         const h = String(location.hostname || "").toLowerCase();
-        if (h.includes("webflow.io")) return "https://pcs-united.webflow.io/verify-account";
+        if (h.includes("webflow.io")) {
+          return "https://pcsunited-com-28346d.webflow.io/air-force/verify-account";
+        }
+        if (h === "pcsunited.com" || h === "www.pcsunited.com") {
+          return "/verify-account";
+        }
         return "/verify-account";
       })();
       const ID_KEY       = "pcsunited.identity.v1";
@@ -1250,7 +1528,7 @@
         const firstName = String($("#pcs-first-name").value || "").trim();
         const lastName  = String($("#pcs-last-name").value || "").trim();
         const fullName  = [firstName, lastName].filter(Boolean).join(" ").trim();
-        const email     = String($("#pcs-email").value || "").trim();
+        const email     = String($("#pcs-email").value || "").trim().toLowerCase();
         const password  = String($("#pcs-password").value || "").trim();
         const phone     = String($("#pcs-phone").value || "").trim();
         const yos       = String($("#pcs-yos").value || "").trim();
@@ -1335,7 +1613,7 @@
           downpayment: hasAnyHousingInput ? downpayment : null,
           credit_score: hasAnyHousingInput ? creditScore : null,
           updated_at: new Date().toISOString(),
-          source: "pcsunited.signup.v4.6"
+          source: "pcsunited.signup.v4.7.thewing"
         };
         writeJSON(ID_KEY, identity);
         const existingIdentity = readJSON(ID_KEY, null);
@@ -1354,7 +1632,7 @@
           ov.creditScore = creditScore;
           ov.dpManual = true;
           ov._intakeTs = Date.now();
-          ov._intakeSource = "pcsunited.signup.v4.6";
+          ov._intakeSource = "pcsunited.signup.v4.7.thewing";
           writeJSON(OV_KEY, ov);
           const bridge = readJSON(BRIDGE_KEY, {}) || {};
           bridge.housing = projectedHomePrice;
@@ -1362,19 +1640,19 @@
           bridge.creditScore = creditScore;
           bridge.base = base;
           bridge._intakeTs = Date.now();
-          bridge._intakeSource = "pcsunited.signup.v4.6";
+          bridge._intakeSource = "pcsunited.signup.v4.7.thewing";
           writeJSON(BRIDGE_KEY, bridge);
           writeJSON(INTAKE_KEY, {
             projected_home_price: projectedHomePrice,
             downpayment: downpayment,
             credit_score: creditScore,
             saved_at: savedAt,
-            source: "pcsunited.signup.v4.6"
+            source: "pcsunited.signup.v4.7.thewing"
           });
           writeJSON(PENDING_KEY, {
             attempt_id: makeAttemptId(),
             created_at: savedAt,
-            source: "pcsunited.signup.v4.6",
+            source: "pcsunited.signup.v4.7.thewing",
             projected_home_price: projectedHomePrice,
             downpayment: downpayment,
             credit_score: creditScore,
@@ -1383,42 +1661,63 @@
         } else {
           removeKey(INTAKE_KEY);
         }
+        const registerPayload = {
+          email: email,
+          password: password,
+          first_name: firstName,
+          last_name: lastName,
+          full_name: fullName,
+          fullName: fullName,
+          phone: phone,
+          mode: isVet ? "vet" : "ad",
+          rank: rankPaygrade || null,
+          rank_paygrade: rankPaygrade || null,
+          rank_title: rankTitle || null,
+          va_disability: isVet ? (vaDisability || null) : null,
+          retired: retired,
+          retire_system: isVet ? (retireSystem || null) : null,
+          yos: yos || null,
+          family: family || null,
+          base: base || null,
+          projected_home_price: hasAnyHousingInput ? projectedHomePrice : null,
+          downpayment: hasAnyHousingInput ? downpayment : null,
+          credit_score: hasAnyHousingInput ? creditScore : null,
+          source: "pcsunited.signup.v4.7.thewing"
+        };
+        const sendCodePayload = {
+          email: email,
+          rank: rankTitle || rankPaygrade || "",
+          rank_title: rankTitle || "",
+          rankTitle: rankTitle || "",
+          lastName: lastName,
+          last_name: lastName,
+          firstName: firstName,
+          first_name: firstName,
+          fullName: fullName,
+          full_name: fullName,
+          phone: phone,
+          source: "pcsunited.signup.v4.7.thewing"
+        };
         try {
-          await postJSON(API_BASE + "/register", {
-            email: email,
-            password: password,
-            first_name: firstName,
-            last_name: lastName,
-            full_name: fullName,
-            fullName: fullName,
-            phone: phone,
-            mode: isVet ? "vet" : "ad",
-            rank: rankPaygrade || null,
-            rank_paygrade: rankPaygrade || null,
-            rank_title: rankTitle || null,
-            va_disability: isVet ? (vaDisability || null) : null,
-            retired: retired,
-            retire_system: isVet ? (retireSystem || null) : null,
-            yos: yos || null,
-            family: family || null,
-            base: base || null,
-            projected_home_price: hasAnyHousingInput ? projectedHomePrice : null,
-            downpayment: hasAnyHousingInput ? downpayment : null,
-            credit_score: hasAnyHousingInput ? creditScore : null
-          });
+          setSuccess("Creating your account…");
+          await postJSON(API_BASE + "/register", registerPayload);
+          setSuccess("Account created. Sending verification code…");
+          await postJSON(API_BASE + "/send-code", sendCodePayload);
         } catch (e) {
-          console.error("Register failed:", e);
+          console.error("TheWing signup failed:", e);
+          setSuccess("");
           setError("Registration error: " + (e && e.message ? e.message : "Unknown error"));
           signupBusy = false;
           signupBtn.disabled = false;
           return;
         }
-        setSuccess("Account created. Redirecting to verification…");
+        setSuccess("Account created. Verification code sent. Redirecting…");
         setTimeout(function(){
           const verifyUrl = new URL(VERIFY_PAGE, location.origin);
           verifyUrl.searchParams.set("email", email);
+          verifyUrl.searchParams.set("source", "thewing");
           location.href = verifyUrl.toString();
-        }, 300);
+        }, 500);
       });
       formatPriceInput();
       updateDownUI();
@@ -1494,6 +1793,18 @@
                       <p class="accordion-content-text">Yes, you can delete your account at any point for any reason. You will still be able to use our services but won&#x27;t access enhanced analytics and A.I services. </p>
                     </div>
                   </div>
+                  <div class="accordion-item">
+                    <div class="accordion-title-toggle">
+                      <div>What is TheWing.ai</div>
+                      <div class="accordion-toggle">
+                        <div class="cross-h"></div>
+                        <div class="cross-v"></div>
+                      </div>
+                    </div>
+                    <div class="accordion-content">
+                      <p class="accordion-content-text">TheWing.ai is our Software as a Service (S.A.A.S) platform. This premium FinTech service takes our platform to new heights, by going beyond basic calculators and static pages to an modern and intuitive dashboard. Finally providing you with the service you deserve. </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1506,20 +1817,6 @@
         <div class="footer_banners">
           <div class="footer_buy"><img src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="logo-footer">
             <div class="heading-style-h4-3 text-align-center"><em>Built for service members, veterans, and military families who need clearer PCS, housing, pay, and financial readiness decisions before the move gets expensive.</em></div>
-            <div class="flex-footer">
-              <div class="form-block w-form">
-                <form id="wf-form-Newsletter-2" name="wf-form-Newsletter-2" data-name="Newsletter" method="get" data-wf-page-id="69eb162637c57d450e0e1a03" data-wf-element-id="a61b0545-5f07-12f7-b32e-ae8b6dc26dce">
-                  <div class="div-block-2"><input class="form_input-2 is-footer w-input" maxlength="256" name="Email-Address" data-name="Email Address" placeholder="Email Address" type="email" id="Email-Address-3" required=""><input type="submit" data-wait="Please wait..." class="button-8 is-footer w-button" value="Send"></div>
-                </form>
-                <div class="form_message-success-2 w-form-done">
-                  <div>Thank you! Your submission has been received!</div>
-                </div>
-                <div class="form_message-error w-form-fail">
-                  <div>Oops! Something went wrong while submitting the form.</div>
-                </div>
-              </div>
-              <div class="footer-text">Subcribe to our Monthly Blogs, New &amp; Resources</div>
-            </div>
           </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
         <div data-w-id="ee73203a-eb4c-0a70-cb0c-c0e63e1d2416" class="footer-flex-wrapper">

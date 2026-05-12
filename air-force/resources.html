@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu May 07 2026 02:03:58 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue May 12 2026 23:47:30 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f6df2366c61b76c85e09e0" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -292,995 +292,7 @@
     }
   ]
 }
-</script><!--  =========================================================
-  PCSUnited • Frosted Glass Baseline Overlay
-  v2.0.2
-  FULL REPLACEMENT
-  UPDATED
-  - Reduced modal/card size by ~20%
-  - Added max-height + internal scroll protection
-  - Reduced font sizes, spacing, buttons, fields
-  - Keeps homepage/root path support
-=========================================================  -->
-  <div id="pcsu-baseline-app" style="all:initial;">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Gilda+Display&display=swap" rel="stylesheet">
-    <div id="pcsu-baseline-overlay" aria-hidden="true" style="visibility:hidden; opacity:0;">
-      <div class="pcsu-baseline-centered" role="dialog" aria-labelledby="pcsu-baseline-title" aria-modal="true">
-        <div class="pcsu-baseline-card" id="pcsu-baseline-card">
-          <div class="pcsu-baseline-eyebrow">PCSUnited • Quick Setup</div>
-          <h1 id="pcsu-baseline-title">Let’s personalize your starting point</h1>
-          <p class="pcsu-baseline-sub" id="pcsu-baseline-subtext">
-            We use this to estimate your pay, BAH, and basic affordability before you explore tools like PCS Snapshot or the Financial Dashboard.
-          </p>
-          <div class="pcsu-block">
-            <div class="pcsu-label-top">Status</div>
-            <div class="pcsu-status-wrap">
-              <div class="pcsu-status-grid">
-                <button type="button" class="pcsu-status-btn is-active" data-mode="ad">Active Duty</button>
-                <button type="button" class="pcsu-status-btn" data-mode="vet">Veteran</button>
-              </div>
-            </div>
-          </div>
-          <div class="pcsu-fields-shell">
-            <div class="pcsu-pane is-active" id="pcsu-pane-ad">
-              <div class="pcsu-baseline-grid">
-                <div class="pcsu-field pcus-field-full">
-                  <label class="pcsu-label" for="pcsu-current-base">Current Duty Station</label>
-                  <div class="pcsu-select-shell">
-                    <select id="pcsu-current-base" class="pcsu-select" aria-label="Current Duty Station">
-                      <option value="">Select your current duty station</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="pcsu-field">
-                  <label class="pcsu-label" for="pcsu-rank">Rank</label>
-                  <div class="pcsu-select-shell">
-                    <select id="pcsu-rank" class="pcsu-select" aria-label="Rank">
-                      <optgroup label="Enlisted">
-                        <option value="E1">E-1</option>
-                        <option value="E2">E-2</option>
-                        <option value="E3">E-3</option>
-                        <option value="E4">E-4</option>
-                        <option value="E5">E-5</option>
-                        <option value="E6">E-6</option>
-                        <option value="E7" selected="">E-7</option>
-                        <option value="E8">E-8</option>
-                        <option value="E9">E-9</option>
-                      </optgroup>
-                      <optgroup label="Officers">
-                        <option value="O1">O-1</option>
-                        <option value="O2">O-2</option>
-                        <option value="O3">O-3</option>
-                        <option value="O4">O-4</option>
-                        <option value="O5">O-5</option>
-                        <option value="O6">O-6</option>
-                        <option value="O7">O-7</option>
-                        <option value="O8">O-8</option>
-                      </optgroup>
-                    </select>
-                  </div>
-                </div>
-                <div class="pcsu-field">
-                  <label class="pcsu-label" for="pcsu-yos">Years of Service</label>
-                  <div class="pcsu-select-shell">
-                    <select id="pcsu-yos" class="pcsu-select" aria-label="Years of Service">
-                      <option value="2">2 Years</option>
-                      <option value="4">4 Years</option>
-                      <option value="6">6 Years</option>
-                      <option value="8">8 Years</option>
-                      <option value="10">10 Years</option>
-                      <option value="12">12 Years</option>
-                      <option value="14">14 Years</option>
-                      <option value="16" selected="">16 Years</option>
-                      <option value="18">18 Years</option>
-                      <option value="20">20 Years</option>
-                      <option value="22">22 Years</option>
-                      <option value="24">24 Years</option>
-                      <option value="26">26 Years</option>
-                      <option value="28">28 Years</option>
-                      <option value="30">30 Years</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="pcsu-field pcus-field-full">
-                  <label class="pcsu-label">Dependents</label>
-                  <div class="pcsu-dep-row" data-dependents="ad">
-                    <label class="pcsu-dep-option">
-                      <input class="pcsu-dep-check" type="checkbox" data-value="yes">
-                      <span class="pcsu-dep-text">I have dependents</span>
-                    </label>
-                    <label class="pcsu-dep-option">
-                      <input class="pcsu-dep-check" type="checkbox" data-value="no">
-                      <span class="pcsu-dep-text">I have no dependents</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="pcsu-pane" id="pcsu-pane-vet">
-              <div class="pcsu-baseline-grid">
-                <div class="pcsu-field pcus-field-full">
-                  <label class="pcsu-label" for="pcsu-vet-yos">Years of Service</label>
-                  <div class="pcsu-select-shell">
-                    <select id="pcsu-vet-yos" class="pcsu-select" aria-label="Years of Service">
-                      <option value="not_retired" selected="">Not Retired</option>
-                      <option value="15">15 Years</option>
-                      <option value="16">16 Years</option>
-                      <option value="17">17 Years</option>
-                      <option value="18">18 Years</option>
-                      <option value="19">19 Years</option>
-                      <option value="20">20 Years</option>
-                      <option value="21">21 Years</option>
-                      <option value="22">22 Years</option>
-                      <option value="23">23 Years</option>
-                      <option value="24">24 Years</option>
-                      <option value="25">25 Years</option>
-                      <option value="26">26 Years</option>
-                      <option value="27">27 Years</option>
-                      <option value="28">28 Years</option>
-                      <option value="29">29 Years</option>
-                      <option value="30">30 Years</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="pcsu-field">
-                  <label class="pcsu-label" for="pcsu-vet-rank">Last Held Rank</label>
-                  <div class="pcsu-select-shell">
-                    <select id="pcsu-vet-rank" class="pcsu-select" aria-label="Last Held Rank">
-                      <optgroup label="Enlisted">
-                        <option value="E1">E-1</option>
-                        <option value="E2">E-2</option>
-                        <option value="E3">E-3</option>
-                        <option value="E4">E-4</option>
-                        <option value="E5">E-5</option>
-                        <option value="E6">E-6</option>
-                        <option value="E7" selected="">E-7</option>
-                        <option value="E8">E-8</option>
-                        <option value="E9">E-9</option>
-                      </optgroup>
-                      <optgroup label="Officers">
-                        <option value="O1">O-1</option>
-                        <option value="O2">O-2</option>
-                        <option value="O3">O-3</option>
-                        <option value="O4">O-4</option>
-                        <option value="O5">O-5</option>
-                        <option value="O6">O-6</option>
-                        <option value="O7">O-7</option>
-                        <option value="O8">O-8</option>
-                      </optgroup>
-                    </select>
-                  </div>
-                </div>
-                <div class="pcsu-field">
-                  <label class="pcsu-label" for="pcsu-vet-disability">VA Disability</label>
-                  <div class="pcsu-select-shell">
-                    <select id="pcsu-vet-disability" class="pcsu-select" aria-label="VA Disability">
-                      <option value="0">0%</option>
-                      <option value="10">10%</option>
-                      <option value="20">20%</option>
-                      <option value="30">30%</option>
-                      <option value="40">40%</option>
-                      <option value="50" selected="">50%</option>
-                      <option value="60">60%</option>
-                      <option value="70">70%</option>
-                      <option value="80">80%</option>
-                      <option value="90">90%</option>
-                      <option value="100">100%</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="pcsu-field pcus-field-full">
-                  <label class="pcsu-label">Dependents</label>
-                  <div class="pcsu-dep-row" data-dependents="vet">
-                    <label class="pcsu-dep-option">
-                      <input class="pcsu-dep-check" type="checkbox" data-value="yes">
-                      <span class="pcsu-dep-text">I have dependents</span>
-                    </label>
-                    <label class="pcsu-dep-option">
-                      <input class="pcsu-dep-check" type="checkbox" data-value="no">
-                      <span class="pcsu-dep-text">I have no dependents</span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <p id="pcsu-baseline-msg" class="pcsu-baseline-msg" aria-live="polite"></p>
-          <div class="pcsu-baseline-note">Stored locally on this device. You can reset anytime.</div>
-          <div class="pcsu-baseline-actions">
-            <button id="pcsu-skip-btn" type="button" class="pcsu-btn pcusu-btn-ghost">Skip for now</button>
-            <button id="pcsu-continue-btn" type="button" class="pcsu-btn pcusu-btn-primary">Continue</button>
-          </div>
-        </div>
-      </div>
-    </div>
-    <style>
-    #pcsu-baseline-app,
-    #pcsu-baseline-app *{
-      box-sizing:border-box;
-    }
-    #pcsu-baseline-app{
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    }
-    #pcsu-baseline-overlay{
-      position:fixed;
-      inset:0;
-      width:100%;
-      height:100%;
-      z-index:99999;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:
-        radial-gradient(circle at 20% 20%, rgba(106,167,255,.10), transparent 28%),
-        radial-gradient(circle at 80% 10%, rgba(142,243,197,.08), transparent 26%),
-        rgba(6,10,18,0.58);
-      backdrop-filter:blur(8px) saturate(120%);
-      -webkit-backdrop-filter:blur(8px) saturate(120%);
-      transition:opacity .25s ease, visibility .25s ease;
-      padding:12px;
-    }
-    #pcsu-baseline-overlay.pcsu-hidden{
-      opacity:0;
-      pointer-events:none;
-      visibility:hidden;
-    }
-    .pcsu-baseline-centered{
-      width:100%;
-      max-width:656px;
-      max-height:calc(100vh - 24px);
-    }
-    .pcsu-baseline-card{
-      position:relative;
-      width:100%;
-      max-height:calc(100vh - 24px);
-      overflow:auto;
-      overscroll-behavior:contain;
-      background:linear-gradient(180deg, rgba(255,255,255,.05), rgba(255,255,255,.025));
-      border-radius:18px;
-      border:1px solid rgba(255,255,255,0.09);
-      box-shadow:0 22px 52px rgba(0,0,0,.70), inset 0 1px 0 rgba(255,255,255,.06);
-      padding:22px 20px 18px;
-      color:#e9ecff;
-      scrollbar-width:thin;
-      scrollbar-color:rgba(142,243,197,.35) rgba(255,255,255,.04);
-    }
-    .pcsu-baseline-card::-webkit-scrollbar{
-      width:7px;
-    }
-    .pcsu-baseline-card::-webkit-scrollbar-track{
-      background:rgba(255,255,255,.04);
-      border-radius:999px;
-    }
-    .pcsu-baseline-card::-webkit-scrollbar-thumb{
-      background:rgba(142,243,197,.35);
-      border-radius:999px;
-    }
-    .pcsu-baseline-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      pointer-events:none;
-      background:
-        linear-gradient(135deg, rgba(255,255,255,.08), transparent 28%),
-        radial-gradient(circle at top right, rgba(142,243,197,.07), transparent 26%);
-      opacity:.95;
-    }
-    .pcsu-baseline-card > *{
-      position:relative;
-      z-index:1;
-    }
-    .pcsu-baseline-eyebrow{
-      margin:0 0 7px;
-      font-size:9px;
-      font-weight:800;
-      text-transform:uppercase;
-      letter-spacing:.16em;
-      color:#a8b0d6;
-    }
-    .pcsu-baseline-card h1{
-      margin:0 0 8px;
-      font-family:"Gilda Display", Georgia, serif;
-      font-size:clamp(25px, 3.2vw, 42px);
-      line-height:1.02;
-      font-weight:400;
-      letter-spacing:-.02em;
-      color:#f4f7ff;
-      text-wrap:balance;
-    }
-    .pcsu-baseline-sub{
-      margin:0 0 14px;
-      color:#a8b0d6;
-      font-size:13px;
-      line-height:1.5;
-      max-width:620px;
-    }
-    .pcsu-block{
-      margin-top:6px;
-    }
-    .pcsu-label-top{
-      margin:0 0 7px;
-      font-size:11px;
-      font-weight:700;
-      color:#a8b0d6;
-      letter-spacing:.02em;
-    }
-    .pcsu-status-wrap{
-      padding:7px;
-      border-radius:16px;
-      border:1px solid rgba(255,255,255,.08);
-      background:linear-gradient(180deg, rgba(255,255,255,.03), rgba(255,255,255,.015)), rgba(8,11,21,.82);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.04);
-      margin-bottom:13px;
-    }
-    .pcsu-status-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:8px;
-    }
-    .pcsu-status-btn{
-      appearance:none;
-      border:none;
-      border-radius:13px;
-      min-height:46px;
-      padding:10px 14px;
-      font-size:13px;
-      font-weight:700;
-      color:#eaf0ff;
-      cursor:pointer;
-      background:linear-gradient(180deg, rgba(10,14,30,.96), rgba(7,10,20,.96));
-      border:1px solid rgba(255,255,255,.08);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.02), 0 8px 20px rgba(0,0,0,.25);
-      transition:transform .16s ease,border-color .16s ease,box-shadow .16s ease,background .16s ease,color .16s ease;
-    }
-    .pcsu-status-btn:hover{
-      transform:translateY(-1px);
-      border-color:rgba(255,255,255,.14);
-    }
-    .pcsu-status-btn.is-active[data-mode="ad"]{
-      color:#f8fffc;
-      border-color:rgba(142,243,197,.56);
-      background:linear-gradient(180deg, rgba(142,243,197,.18), rgba(106,167,255,.14)), rgba(8,12,20,.95);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 0 0 1px rgba(142,243,197,.14), 0 12px 24px rgba(0,0,0,.25);
-    }
-    .pcsu-status-btn.is-active[data-mode="vet"]{
-      color:#f8fffc;
-      border-color:rgba(106,167,255,.56);
-      background:linear-gradient(180deg, rgba(106,167,255,.20), rgba(142,243,197,.10)), rgba(8,12,20,.95);
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.05), 0 0 0 1px rgba(106,167,255,.14), 0 12px 24px rgba(0,0,0,.25);
-    }
-    .pcsu-fields-shell{
-      position:relative;
-      min-height:236px;
-    }
-    .pcsu-pane{
-      position:absolute;
-      inset:0;
-      opacity:0;
-      transform:translateY(8px);
-      pointer-events:none;
-      transition:opacity .22s ease, transform .22s ease;
-    }
-    .pcsu-pane.is-active{
-      opacity:1;
-      transform:translateY(0);
-      pointer-events:auto;
-      position:relative;
-    }
-    .pcsu-baseline-grid{
-      display:grid;
-      grid-template-columns:1fr 1fr;
-      gap:11px;
-      margin-top:3px;
-    }
-    .pcus-field-full{
-      grid-column:1 / -1;
-    }
-    .pcsu-field{
-      min-width:0;
-    }
-    .pcsu-label{
-      display:block;
-      margin:0 0 6px;
-      font-size:9px;
-      font-weight:700;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      color:#a8b0d6;
-    }
-    .pcsu-select-shell{
-      position:relative;
-    }
-    .pcsu-select-shell::after{
-      content:"";
-      position:absolute;
-      right:12px;
-      top:50%;
-      width:7px;
-      height:7px;
-      border-right:2px solid rgba(233,236,255,.75);
-      border-bottom:2px solid rgba(233,236,255,.75);
-      transform:translateY(-65%) rotate(45deg);
-      pointer-events:none;
-    }
-    .pcsu-select{
-      width:100%;
-      appearance:none;
-      -webkit-appearance:none;
-      -moz-appearance:none;
-      padding:10px 36px 10px 12px;
-      border-radius:11px;
-      border:1px solid rgba(255,255,255,0.09);
-      background:rgba(12,14,25,0.68);
-      color:#e9ecff;
-      font-size:12px;
-      outline:none;
-      transition:border-color .15s ease, box-shadow .15s ease, transform .15s ease;
-      box-shadow:inset 0 1px 0 rgba(255,255,255,.03);
-    }
-    .pcsu-select:focus{
-      border-color:rgba(142,243,197,.75);
-      box-shadow:0 0 0 1px rgba(142,243,197,.22);
-    }
-    .pcsu-dep-row{
-      display:flex;
-      align-items:center;
-      gap:22px;
-      flex-wrap:wrap;
-      min-height:34px;
-      padding-top:4px;
-    }
-    .pcsu-dep-option{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      cursor:pointer;
-      user-select:none;
-    }
-    .pcsu-dep-check{
-      appearance:none;
-      -webkit-appearance:none;
-      width:18px;
-      height:18px;
-      border-radius:0;
-      border:2px solid rgba(91,153,255,.85);
-      background:transparent;
-      cursor:pointer;
-      position:relative;
-      transition:border-color .15s ease, background .15s ease, box-shadow .15s ease;
-      flex:0 0 auto;
-    }
-    .pcsu-dep-check:checked{
-      border-color:rgba(106,167,255,.95);
-      background:rgba(106,167,255,.10);
-      box-shadow:0 0 0 1px rgba(106,167,255,.12);
-    }
-    .pcsu-dep-check:checked::after{
-      content:"";
-      position:absolute;
-      left:5px;
-      top:1px;
-      width:4px;
-      height:9px;
-      border-right:2px solid #eef5ff;
-      border-bottom:2px solid #eef5ff;
-      transform:rotate(45deg);
-    }
-    .pcsu-dep-text{
-      font-size:12px;
-      line-height:1;
-      font-weight:600;
-      color:#cfd8f8;
-    }
-    .pcsu-baseline-msg{
-      margin:8px 0 0;
-      min-height:16px;
-      color:#a8b0d6;
-      font-size:11px;
-    }
-    .pcsu-baseline-note{
-      margin-top:9px;
-      font-size:10px;
-      color:#8f98bc;
-      line-height:1.45;
-    }
-    .pcsu-baseline-actions{
-      display:flex;
-      justify-content:flex-end;
-      gap:10px;
-      margin-top:13px;
-      flex-wrap:wrap;
-    }
-    .pcsu-btn{
-      appearance:none;
-      border:none;
-      border-radius:999px;
-      padding:10px 15px;
-      font-size:11px;
-      font-weight:800;
-      letter-spacing:.10em;
-      text-transform:uppercase;
-      cursor:pointer;
-      transition:transform .15s ease, filter .15s ease, opacity .15s ease;
-    }
-    .pcsu-btn:hover{
-      transform:translateY(-1px);
-      filter:brightness(1.04);
-    }
-    .pcusu-btn-primary{
-      background:radial-gradient(circle at top left, #8ef3c5, #6aa7ff);
-      color:#050712;
-      box-shadow:0 12px 24px rgba(0,0,0,.42);
-    }
-    .pcusu-btn-ghost{
-      background:rgba(255,255,255,0.03);
-      color:#d9e3ff;
-      border:1px solid rgba(255,255,255,0.08);
-    }
-    @media (max-height: 720px){
-      .pcsu-baseline-card{
-        padding:18px 18px 15px;
-      }
-      .pcsu-baseline-card h1{
-        font-size:clamp(23px, 3vw, 34px);
-      }
-      .pcsu-baseline-sub{
-        font-size:12px;
-        line-height:1.42;
-        margin-bottom:10px;
-      }
-      .pcsu-status-btn{
-        min-height:40px;
-      }
-      .pcsu-fields-shell{
-        min-height:218px;
-      }
-    }
-    @media (max-width: 640px){
-      #pcsu-baseline-overlay{
-        padding:10px;
-        align-items:flex-start;
-      }
-      .pcsu-baseline-centered{
-        max-width:100%;
-        max-height:calc(100vh - 20px);
-      }
-      .pcsu-baseline-card{
-        max-height:calc(100vh - 20px);
-        padding:18px 14px 15px;
-        border-radius:16px;
-      }
-      .pcsu-baseline-card h1{
-        font-size:23px;
-      }
-      .pcsu-status-grid{
-        grid-template-columns:1fr;
-      }
-      .pcsu-baseline-grid{
-        grid-template-columns:1fr;
-      }
-      .pcus-field-full{
-        grid-column:auto;
-      }
-      .pcsu-dep-row{
-        gap:13px;
-        align-items:flex-start;
-        flex-direction:column;
-      }
-      .pcsu-fields-shell{
-        min-height:330px;
-      }
-      .pcsu-baseline-actions{
-        flex-direction:column-reverse;
-      }
-      .pcsu-btn{
-        width:100%;
-      }
-    }
-  </style>
-    <script>
-  (function(){
-    "use strict";
-    const BASELINE_KEY = "pcsunited.baseline.v1";
-    const SKIPPED_KEY  = "pcsunited.baseline_skipped.v1";
-    const AD_COPY  = "We use this to estimate your pay, BAH, and basic affordability before you explore tools like PCS Snapshot or the Financial Dashboard.";
-    const VET_COPY = "We use this to estimate your retirement profile, VA disability support, and basic affordability before you explore tools like the Mortgage Calculator or Financial Dashboard.";
-    const USE_ALLOW_LIST = true;
-    const ALLOW_PATHS = [
-      /^\/$/i,
-      /\/home(?:\.html)?$/i,
-      /\/realty-resources(?:\.html)?$/i,
-      /\/resources(?:\.html)?$/i,
-      /\/pcsunited(?:\/)?$/i,
-      /\/pcsunited-resources(?:\.html)?$/i
-    ];
-    const EXEMPT_PATHS = [];
-    const BASES = [
-      { value: "Andrews AFB", fileKey: "Andrews", zip: "20762" },
-      { value: "Barksdale AFB", fileKey: "Barksdale", zip: "71110" },
-      { value: "Beale AFB", fileKey: "Beale", zip: "95903" },
-      { value: "Cannon AFB", fileKey: "Cannon", zip: "88103" },
-      { value: "Charleston AFB", fileKey: "Charleston", zip: "29404" },
-      { value: "Davis-Monthan AFB", fileKey: "Davis-Monthan", zip: "85707" },
-      { value: "Dover AFB", fileKey: "Dover", zip: "19902" },
-      { value: "Dyess AFB", fileKey: "Dyess", zip: "79607" },
-      { value: "Eglin AFB", fileKey: "Eglin", zip: "32542" },
-      { value: "Elmendorf AFB", fileKey: "Elmendorf", zip: "99506" },
-      { value: "F.E-Warren AFB", fileKey: "F.E-Warren", zip: "82005" },
-      { value: "Fairchild AFB", fileKey: "Fairchild", zip: "99011" },
-      { value: "Fort-Sam-Houston AFB", fileKey: "Fort-Sam-Houston", zip: "78234" },
-      { value: "Holloman AFB", fileKey: "Holloman", zip: "88330" },
-      { value: "Hurlburt AFB", fileKey: "Hurlburt", zip: "32544" },
-      { value: "Keesler AFB", fileKey: "Keesler", zip: "39534" },
-      { value: "Kirtland AFB", fileKey: "Kirtland", zip: "87117" },
-      { value: "Lackland AFB", fileKey: "Lackland", zip: "78236" },
-      { value: "Langley AFB", fileKey: "Langley", zip: "23665" },
-      { value: "Laughlin AFB", fileKey: "Laughlin", zip: "78843" },
-      { value: "Little-Rock AFB", fileKey: "Little-Rock", zip: "72099" },
-      { value: "Luke AFB", fileKey: "Luke", zip: "85309" },
-      { value: "MacDill AFB", fileKey: "MacDill", zip: "33621" },
-      { value: "Malmstrom AFB", fileKey: "Malmstrom", zip: "59402" },
-      { value: "Maxwell AFB", fileKey: "Maxwell", zip: "36112" },
-      { value: "McConnell AFB", fileKey: "McConnell", zip: "67221" },
-      { value: "McGuire AFB", fileKey: "McGuire", zip: "08641" },
-      { value: "Minot AFB", fileKey: "Minot", zip: "58705" },
-      { value: "Moody AFB", fileKey: "Moody", zip: "31699" },
-      { value: "Mountain-Home AFB", fileKey: "Mountain-Home", zip: "83648" },
-      { value: "Nellis AFB", fileKey: "Nellis", zip: "89191" },
-      { value: "Offutt AFB", fileKey: "Offutt", zip: "68113" },
-      { value: "Peterson AFB", fileKey: "Peterson", zip: "80914" },
-      { value: "Randolph AFB", fileKey: "Randolph", zip: "78150" },
-      { value: "Robins AFB", fileKey: "Robins", zip: "31098" },
-      { value: "Scott AFB", fileKey: "Scott", zip: "62225" },
-      { value: "Seymour-Johnson AFB", fileKey: "Seymour-Johnson", zip: "27531" },
-      { value: "Shaw AFB", fileKey: "Shaw", zip: "29152" },
-      { value: "Sheppard AFB", fileKey: "Sheppard", zip: "76311" },
-      { value: "Tinker AFB", fileKey: "Tinker", zip: "73145" },
-      { value: "Travis AFB", fileKey: "Travis", zip: "94535" },
-      { value: "Tyndall AFB", fileKey: "Tyndall", zip: "32403" },
-      { value: "Whiteman AFB", fileKey: "Whiteman", zip: "65305" },
-      { value: "Wright-Patterson AFB", fileKey: "Wright-Patterson", zip: "45433" }
-    ];
-    const BASE_META = Object.create(null);
-    BASES.forEach(function(base){
-      BASE_META[base.value] = { label: base.value, fileKey: base.fileKey, zip: base.zip };
-    });
-    const BASE_ALIASES = {
-      "Andrews": "Andrews AFB", "AndrewsAFB": "Andrews AFB", "Joint Base Andrews": "Andrews AFB", "JB Andrews": "Andrews AFB",
-      "Barksdale": "Barksdale AFB", "BarksdaleAFB": "Barksdale AFB",
-      "Beale": "Beale AFB", "BealeAFB": "Beale AFB",
-      "Cannon": "Cannon AFB", "CannonAFB": "Cannon AFB",
-      "Charleston": "Charleston AFB", "CharlestonAFB": "Charleston AFB", "Joint Base Charleston": "Charleston AFB",
-      "Davis-Monthan": "Davis-Monthan AFB", "DavisMonthan": "Davis-Monthan AFB", "DavisMonthanAFB": "Davis-Monthan AFB", "DMAFB": "Davis-Monthan AFB",
-      "Dover": "Dover AFB", "DoverAFB": "Dover AFB",
-      "Dyess": "Dyess AFB", "DyessAFB": "Dyess AFB",
-      "Eglin": "Eglin AFB", "EglinAFB": "Eglin AFB",
-      "Elmendorf": "Elmendorf AFB", "ElmendorfAFB": "Elmendorf AFB", "JBER": "Elmendorf AFB", "Joint Base Elmendorf-Richardson": "Elmendorf AFB",
-      "F.E-Warren": "F.E-Warren AFB", "FE-Warren": "F.E-Warren AFB", "FEWarren": "F.E-Warren AFB", "FEWarrenAFB": "F.E-Warren AFB", "F E Warren": "F.E-Warren AFB", "Francis E. Warren": "F.E-Warren AFB",
-      "Fairchild": "Fairchild AFB", "FairchildAFB": "Fairchild AFB",
-      "Fort Sam Houston": "Fort-Sam-Houston AFB", "Fort-Sam-Houston": "Fort-Sam-Houston AFB", "FortSamHouston": "Fort-Sam-Houston AFB", "FortSamHoustonAFB": "Fort-Sam-Houston AFB", "Fort Sam Houston AFB": "Fort-Sam-Houston AFB", "JBSA-Fort-Sam-Houston": "Fort-Sam-Houston AFB", "JBSA-Fort Sam Houston": "Fort-Sam-Houston AFB", "JBSA Fort Sam Houston": "Fort-Sam-Houston AFB",
-      "Holloman": "Holloman AFB", "HollomanAFB": "Holloman AFB",
-      "Hurlburt": "Hurlburt AFB", "HurlburtAFB": "Hurlburt AFB", "Hurlburt Field": "Hurlburt AFB",
-      "Keesler": "Keesler AFB", "KeeslerAFB": "Keesler AFB",
-      "Kirtland": "Kirtland AFB", "KirtlandAFB": "Kirtland AFB",
-      "Lackland": "Lackland AFB", "LacklandAFB": "Lackland AFB", "JBSA-Lackland": "Lackland AFB", "JBSA Lackland": "Lackland AFB", "Joint Base San Antonio Lackland": "Lackland AFB",
-      "Langley": "Langley AFB", "LangleyAFB": "Langley AFB", "Joint Base Langley-Eustis": "Langley AFB",
-      "Laughlin": "Laughlin AFB", "LaughlinAFB": "Laughlin AFB",
-      "Little Rock AFB": "Little-Rock AFB", "Little-Rock": "Little-Rock AFB", "LittleRock": "Little-Rock AFB", "LittleRockAFB": "Little-Rock AFB", "Little Rock": "Little-Rock AFB",
-      "Luke": "Luke AFB", "LukeAFB": "Luke AFB",
-      "MacDill": "MacDill AFB", "MacDillAFB": "MacDill AFB",
-      "Malmstrom": "Malmstrom AFB", "MalmstromAFB": "Malmstrom AFB",
-      "Maxwell": "Maxwell AFB", "MaxwellAFB": "Maxwell AFB",
-      "McConnell": "McConnell AFB", "McConnellAFB": "McConnell AFB",
-      "McGuire": "McGuire AFB", "McGuireAFB": "McGuire AFB", "JBMDL": "McGuire AFB", "Joint Base McGuire-Dix-Lakehurst": "McGuire AFB",
-      "Minot": "Minot AFB", "MinotAFB": "Minot AFB",
-      "Moody": "Moody AFB", "MoodyAFB": "Moody AFB",
-      "Mountain Home AFB": "Mountain-Home AFB", "Mountain-Home": "Mountain-Home AFB", "MountainHome": "Mountain-Home AFB", "MountainHomeAFB": "Mountain-Home AFB", "Mountain Home": "Mountain-Home AFB",
-      "Nellis": "Nellis AFB", "NellisAFB": "Nellis AFB",
-      "Offutt": "Offutt AFB", "OffuttAFB": "Offutt AFB",
-      "Peterson": "Peterson AFB", "PetersonAFB": "Peterson AFB", "Peterson SFB": "Peterson AFB", "Peterson Space Force Base": "Peterson AFB",
-      "Randolph": "Randolph AFB", "RandolphAFB": "Randolph AFB", "JBSA-Randolph": "Randolph AFB", "JBSA Randolph": "Randolph AFB", "Joint Base San Antonio Randolph": "Randolph AFB",
-      "Robins": "Robins AFB", "RobinsAFB": "Robins AFB",
-      "Scott": "Scott AFB", "ScottAFB": "Scott AFB",
-      "Seymour Johnson AFB": "Seymour-Johnson AFB", "Seymour-Johnson": "Seymour-Johnson AFB", "SeymourJohnson": "Seymour-Johnson AFB", "SeymourJohnsonAFB": "Seymour-Johnson AFB",
-      "Shaw": "Shaw AFB", "ShawAFB": "Shaw AFB",
-      "Sheppard": "Sheppard AFB", "SheppardAFB": "Sheppard AFB",
-      "Tinker": "Tinker AFB", "TinkerAFB": "Tinker AFB",
-      "Travis": "Travis AFB", "TravisAFB": "Travis AFB",
-      "Tyndall": "Tyndall AFB", "TyndallAFB": "Tyndall AFB",
-      "Whiteman": "Whiteman AFB", "WhitemanAFB": "Whiteman AFB",
-      "Wright-Patterson": "Wright-Patterson AFB", "WrightPatterson": "Wright-Patterson AFB", "WrightPattersonAFB": "Wright-Patterson AFB", "WPAFB": "Wright-Patterson AFB"
-    };
-    const overlay         = document.getElementById("pcsu-baseline-overlay");
-    const card            = document.getElementById("pcsu-baseline-card");
-    const continueBtn     = document.getElementById("pcsu-continue-btn");
-    const skipBtn         = document.getElementById("pcsu-skip-btn");
-    const msgEl           = document.getElementById("pcsu-baseline-msg");
-    const subtextEl       = document.getElementById("pcsu-baseline-subtext");
-    const modeButtons     = Array.from(document.querySelectorAll("#pcsu-baseline-app .pcsu-status-btn"));
-    const paneAD          = document.getElementById("pcsu-pane-ad");
-    const paneVET         = document.getElementById("pcsu-pane-vet");
-    const currentBaseEl   = document.getElementById("pcsu-current-base");
-    const rankEl          = document.getElementById("pcsu-rank");
-    const yosEl           = document.getElementById("pcsu-yos");
-    const vetYosEl        = document.getElementById("pcsu-vet-yos");
-    const vetRankEl       = document.getElementById("pcsu-vet-rank");
-    const vetDisabilityEl = document.getElementById("pcsu-vet-disability");
-    const path = (location.pathname || "/").toLowerCase();
-    const isAllowed = ALLOW_PATHS.some(re => re.test(path));
-    const shouldShowOnPath = USE_ALLOW_LIST ? isAllowed : !EXEMPT_PATHS.some(re => re.test(path));
-    function escapeHtml(str){
-      return String(str).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;").replace(/'/g,"&#039;");
-    }
-    function populateBaseSelect(selectEl){
-      if (!selectEl) return;
-      let html = '<option value="">Select your current duty station</option>';
-      BASES.forEach(function(base){
-        html += '<option value="' + escapeHtml(base.value) + '">' + escapeHtml(base.value) + '</option>';
-      });
-      selectEl.innerHTML = html;
-    }
-    function canonicalBaseName(raw){
-      const s = String(raw || "").trim();
-      if (!s) return "";
-      if (BASE_META[s]) return s;
-      return BASE_ALIASES[s] || s;
-    }
-    function fileKeyFromBase(raw){
-      const canonical = canonicalBaseName(raw);
-      return (BASE_META[canonical] && BASE_META[canonical].fileKey) || "";
-    }
-    function zipFromBase(raw){
-      const canonical = canonicalBaseName(raw);
-      return (BASE_META[canonical] && BASE_META[canonical].zip) || "";
-    }
-    function showMsg(text, isError){
-      if (!msgEl) return;
-      msgEl.textContent = text || "";
-      msgEl.style.color = isError ? "#ffb3b3" : "#a8b0d6";
-    }
-    function shakeCard(){
-      if (!card || !card.animate) return;
-      card.animate([{transform:"translateX(-5px)"},{transform:"translateX(5px)"},{transform:"translateX(0)"}],{duration:260});
-    }
-    function readJson(key){
-      try{ return JSON.parse(localStorage.getItem(key) || "null"); }catch(_e){ return null; }
-    }
-    function writeJson(key, value){
-      try{ localStorage.setItem(key, JSON.stringify(value)); }catch(_e){}
-    }
-    function removeKey(key){
-      try{ localStorage.removeItem(key); }catch(_e){}
-    }
-    function setMode(mode){
-      const isVet = mode === "vet";
-      modeButtons.forEach(function(btn){
-        btn.classList.toggle("is-active", btn.getAttribute("data-mode") === mode);
-      });
-      if (paneAD) paneAD.classList.toggle("is-active", !isVet);
-      if (paneVET) paneVET.classList.toggle("is-active", isVet);
-      if (subtextEl) subtextEl.textContent = isVet ? VET_COPY : AD_COPY;
-    }
-    function getMode(){
-      const active = document.querySelector("#pcsu-baseline-app .pcsu-status-btn.is-active");
-      return active ? String(active.getAttribute("data-mode") || "ad") : "ad";
-    }
-    function hookDependents(name){
-      const wrap = document.querySelector('[data-dependents="' + name + '"]');
-      if (!wrap) return;
-      Array.from(wrap.querySelectorAll(".pcsu-dep-check")).forEach(function(box){
-        box.addEventListener("change", function(){
-          if (box.checked){
-            Array.from(wrap.querySelectorAll(".pcsu-dep-check")).forEach(function(other){
-              if (other !== box) other.checked = false;
-            });
-          }
-        });
-      });
-    }
-    function getDependentsValue(name){
-      const checked = document.querySelector('[data-dependents="' + name + '"] .pcsu-dep-check:checked');
-      return checked ? String(checked.getAttribute("data-value") || "") : "";
-    }
-    function setDependentsValue(name, value){
-      const wrap = document.querySelector('[data-dependents="' + name + '"]');
-      if (!wrap) return;
-      const target = String(value || "").toLowerCase();
-      wrap.querySelectorAll(".pcsu-dep-check").forEach(function(box){
-        box.checked = String(box.getAttribute("data-value") || "") === target;
-      });
-    }
-    function hasValidBaseline(obj){
-      if (!obj || typeof obj !== "object") return false;
-      if (String(obj.mode || "") === "ad"){
-        return !!(String(obj.rank || "").trim() && String(obj.yos || "").trim() && String(obj.current_base || "").trim() && String(obj.dependents || "").trim());
-      }
-      if (String(obj.mode || "") === "vet"){
-        return !!(String(obj.yos || "").trim() && String(obj.last_held_rank || "").trim() && String(obj.va_disability || "").trim() && String(obj.dependents || "").trim());
-      }
-      return false;
-    }
-    function saveBaseline(){
-      const mode = getMode();
-      if (mode === "ad"){
-        const currentBaseRaw = String(currentBaseEl && currentBaseEl.value || "").trim();
-        const currentBase = canonicalBaseName(currentBaseRaw);
-        const rank = String(rankEl && rankEl.value || "").trim();
-        const yos = String(yosEl && yosEl.value || "").trim();
-        const dependents = getDependentsValue("ad");
-        if (!currentBase){
-          showMsg("Please select your current duty station.", true);
-          shakeCard();
-          if (currentBaseEl) currentBaseEl.focus();
-          return false;
-        }
-        if (!dependents){
-          showMsg("Please select your dependent status.", true);
-          shakeCard();
-          return false;
-        }
-        const payload = {
-          mode:"ad",
-          rank:rank,
-          yos:yos,
-          current_base:currentBase,
-          current_cityKey:fileKeyFromBase(currentBase),
-          current_fileKey:fileKeyFromBase(currentBase),
-          current_zip:zipFromBase(currentBase),
-          dependents:dependents,
-          family:dependents === "yes" ? "with_dependents" : "without_dependents",
-          source:"baseline_overlay",
-          ts:Date.now()
-        };
-        writeJson(BASELINE_KEY, payload);
-        removeKey(SKIPPED_KEY);
-        try{ window.dispatchEvent(new CustomEvent("pcsunited:baseline-ready", { detail: payload })); }catch(_e){}
-        return true;
-      }
-      const vetYos = String(vetYosEl && vetYosEl.value || "").trim();
-      const vetRank = String(vetRankEl && vetRankEl.value || "").trim();
-      const vetDisability = String(vetDisabilityEl && vetDisabilityEl.value || "").trim();
-      const dependents = getDependentsValue("vet");
-      if (!vetYos){
-        showMsg("Please select years of service.", true);
-        shakeCard();
-        if (vetYosEl) vetYosEl.focus();
-        return false;
-      }
-      if (!vetRank){
-        showMsg("Please select last held rank.", true);
-        shakeCard();
-        if (vetRankEl) vetRankEl.focus();
-        return false;
-      }
-      if (!vetDisability){
-        showMsg("Please select VA disability.", true);
-        shakeCard();
-        if (vetDisabilityEl) vetDisabilityEl.focus();
-        return false;
-      }
-      if (!dependents){
-        showMsg("Please select your dependent status.", true);
-        shakeCard();
-        return false;
-      }
-      const payload = {
-        mode:"vet",
-        yos:vetYos,
-        last_held_rank:vetRank,
-        va_disability:vetDisability,
-        dependents:dependents,
-        family:dependents === "yes" ? "with_dependents" : "without_dependents",
-        source:"baseline_overlay",
-        ts:Date.now()
-      };
-      writeJson(BASELINE_KEY, payload);
-      removeKey(SKIPPED_KEY);
-      try{ window.dispatchEvent(new CustomEvent("pcsunited:baseline-ready", { detail: payload })); }catch(_e){}
-      return true;
-    }
-    function skipBaseline(){
-      writeJson(SKIPPED_KEY, { skipped:true, ts:Date.now(), source:"baseline_overlay" });
-      try{ window.dispatchEvent(new CustomEvent("pcsunited:baseline-skipped", { detail:{ skipped:true, ts:Date.now() } })); }catch(_e){}
-    }
-    function hideOverlay(){
-      if (!overlay) return;
-      overlay.classList.add("pcsu-hidden");
-      overlay.setAttribute("aria-hidden","true");
-      overlay.style.visibility = "hidden";
-      overlay.style.opacity = "0";
-    }
-    function showOverlay(){
-      if (!overlay) return;
-      overlay.classList.remove("pcsu-hidden");
-      overlay.setAttribute("aria-hidden","false");
-      overlay.style.visibility = "visible";
-      overlay.style.opacity = "1";
-      setTimeout(function(){
-        if (getMode() === "vet" && vetYosEl){
-          vetYosEl.focus();
-          return;
-        }
-        if (currentBaseEl) currentBaseEl.focus();
-      }, 0);
-    }
-    function prefillFromBaseline(obj){
-      if (!obj || typeof obj !== "object") return;
-      if (String(obj.mode || "") === "vet"){
-        setMode("vet");
-        if (vetYosEl && obj.yos) vetYosEl.value = String(obj.yos);
-        if (vetRankEl && obj.last_held_rank) vetRankEl.value = String(obj.last_held_rank);
-        if (vetDisabilityEl && obj.va_disability) vetDisabilityEl.value = String(obj.va_disability);
-        setDependentsValue("vet", obj.dependents || "");
-        return;
-      }
-      setMode("ad");
-      const base = canonicalBaseName(obj.current_base || "");
-      if (currentBaseEl && base && BASE_META[base]) currentBaseEl.value = base;
-      if (rankEl && obj.rank) rankEl.value = String(obj.rank);
-      if (yosEl && obj.yos) yosEl.value = String(obj.yos);
-      setDependentsValue("ad", obj.dependents || "");
-    }
-    modeButtons.forEach(function(btn){
-      btn.addEventListener("click", function(){
-        setMode(btn.getAttribute("data-mode") || "ad");
-        showMsg("", false);
-      });
-    });
-    hookDependents("ad");
-    hookDependents("vet");
-    populateBaseSelect(currentBaseEl);
-    if (continueBtn){
-      continueBtn.addEventListener("click", function(){
-        showMsg("", false);
-        if (!saveBaseline()) return;
-        hideOverlay();
-      });
-    }
-    if (skipBtn){
-      skipBtn.addEventListener("click", function(){
-        skipBaseline();
-        hideOverlay();
-      });
-    }
-    (function init(){
-      if (!overlay) return;
-      if (!shouldShowOnPath){
-        overlay.remove();
-        return;
-      }
-      const existingBaseline = readJson(BASELINE_KEY);
-      if (hasValidBaseline(existingBaseline)){
-        prefillFromBaseline(existingBaseline);
-      } else {
-        setMode("ad");
-      }
-      showOverlay();
-    })();
-    window.PCSU_BASELINE_OVERLAY = {
-      open:function(){
-        removeKey(SKIPPED_KEY);
-        showOverlay();
-      },
-      close:function(){
-        hideOverlay();
-      },
-      clear:function(){
-        removeKey(BASELINE_KEY);
-        removeKey(SKIPPED_KEY);
-      },
-      getBaseline:function(){
-        return readJson(BASELINE_KEY);
-      },
-      setMode:function(mode){
-        setMode(mode === "vet" ? "vet" : "ad");
-      }
-    };
-  })();
-  </script>
-  </div>
+</script>
 </head>
 <body>
   <div class="page-wrapper">
@@ -1289,13 +301,13 @@
         <div class="nav-wrapper">
           <div class="nav-container">
             <div class="nav-left">
-              <a aria-label="Yeyeyeah" href="../old-home.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 479px) 98vw, (max-width: 767px) 99vw, (max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
+              <a aria-label="Yeyeyeah" href="../user-dashboard.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 479px) 98vw, (max-width: 767px) 99vw, (max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
             </div>
             <nav role="navigation" id="w-node-a20e7068-528c-2165-b385-785e4c45ca5e-4c45ca57" class="nav-menu w-nav-menu">
               <div class="default-nav-links big-menu">
                 <a href="../index.html" class="nav-link w-nav-link">Home Page</a>
-                <a href="../air-force/resources.html" aria-current="page" class="nav-link w-nav-link w--current">Resources</a>
                 <a href="../about-us.html" class="nav-link w-nav-link">About Us</a>
+                <a href="../air-force/resources.html" aria-current="page" class="nav-link w-nav-link w--current">Resources</a>
                 <a href="../blog-v1.html" class="nav-link w-nav-link">Blog</a>
               </div>
               <div class="nav-mobile-social">
@@ -1303,14 +315,20 @@
               </div>
               <div class="mobile-sign-cta">
                 <div class="sign-cta-navwrap">
-                  <a href="../signin-signup/sign-in.html" aria-label="sign in" class="menu-sign-btn w-nav-link">Sign In</a>
                   <div class="nav-btn-wrapper">
                     <a aria-label="Start for Free" href="../air-force/account.html" target="_blank" class="btn-menu">Create Account</a>
                   </div>
                 </div>
               </div>
             </nav>
-            <div id="w-node-a20e7068-528c-2165-b385-785e4c45cb07-4c45ca57" class="nav-right">
+            <div id="w-node-_250c14b8-4215-eefa-17ad-f687c748e030-4c45ca57" class="nav-right">
+              <div class="nav-right-sign-cta-wrap">
+                <div class="sign-cta-navwrap">
+                  <div class="nav-btn-wrapper">
+                    <a aria-label="Start for Free" href="../user-dashboard.html" target="_blank" class="btn-menu">   Log In   </a>
+                  </div>
+                </div>
+              </div>
               <div class="burger w-nav-button">
                 <div class="icon-wrapper">
                   <div class="burger-icon">
@@ -1323,40 +341,848 @@
           </div>
         </div>
       </div>
+      <div class="w-embed w-script"><!--  =========================================================
+  RealtySaSS • Frosted Glass Login Lock (Email + Password)
+  - Uses /api/login (Supabase Auth check)
+  - After success:
+      • Unlocks page
+      • Stores login email/profile in localStorage for dashboards
+=========================================================  -->
+        <div id="rs-lock-overlay" aria-hidden="true" style="visibility:hidden; opacity:0;">
+          <div class="rs-lock-centered" role="dialog" aria-labelledby="rs-lock-title" aria-modal="true">
+            <div class="rs-lock-card" id="rs-lock-card">
+              <h1 id="rs-lock-title">Sign In to Continue</h1>
+              <p class="rs-lock-sub">This page is private — please enter your credentials.</p>
+              <div class="rs-field">
+                <input id="rs-email-input" type="email" placeholder="Email Address" autocomplete="email">
+              </div>
+              <div class="rs-field">
+                <input id="rs-pass-input" type="password" placeholder="Password" minlength="8" autocomplete="current-password">
+              </div>
+              <div class="rs-login-row">
+                <button id="rs-login-btn" type="button">Log In</button>
+              </div>
+              <!--  SIGN UP BLOCK  -->
+              <div class="rs-signup-row">
+                <p class="rs-signup-text">Not a Prime Member yet?</p>
+                <a class="rs-signup-btn" href="https://new-real-estate-purchase.webflow.io/user-profile">
+                  Sign Up
+                </a>
+              </div>
+              <p id="rs-lock-msg" class="rs-lock-msg" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+        <style>
+  :root{
+    --rs-overlay-bg: rgba(6,10,18,0.55);
+    --rs-accent: #8ef3c5;
+    --rs-ink: #e9ecff;
+    --rs-muted: #a8b0d6;
+    --rs-radius: 14px;
+  }
+  #rs-lock-overlay{
+    position:fixed; inset:0; width:100%; height:100%;
+    z-index:99999; display:flex; align-items:center; justify-content:center;
+    background:var(--rs-overlay-bg);
+    backdrop-filter:blur(10px) saturate(120%);
+    -webkit-backdrop-filter:blur(10px) saturate(120%);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    transition:opacity .25s ease, visibility .25s ease;
+  }
+  #rs-lock-overlay.rs-hidden{
+    opacity:0; pointer-events:none; visibility:hidden;
+  }
+  .rs-lock-centered{
+    width:100%; max-width:520px; padding:20px;
+  }
+  .rs-lock-card{
+    background:rgba(255,255,255,0.03);
+    border-radius:var(--rs-radius);
+    border:1px solid rgba(255,255,255,0.06);
+    box-shadow:0 8px 30px rgba(3,6,15,0.6);
+    padding:28px 24px; color:var(--rs-ink);
+  }
+  .rs-lock-card h1{
+    margin:0 0 8px; font-size:20px; font-weight:700;
+  }
+  .rs-lock-sub{
+    margin:0 0 18px; color:var(--rs-muted); font-size:13px;
+  }
+  .rs-field{
+    margin-bottom:14px;
+  }
+  #rs-email-input,
+  #rs-pass-input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.06);
+    background:rgba(255,255,255,0.02);
+    color:var(--rs-ink); 
+    font-size:16px;
+    outline:none;
+  }
+  #rs-email-input::placeholder,
+  #rs-pass-input::placeholder{
+    color:var(--rs-muted);
+  }
+  #rs-login-btn{
+    width:100%;
+    padding:12px 16px;
+    border-radius:10px;
+    border:none;
+    background:linear-gradient(180deg,var(--rs-accent),rgba(100,230,190,0.85));
+    color:#02110b; font-weight:700; cursor:pointer; font-size:15px;
+  }
+  .rs-lock-msg{
+    margin-top:12px; 
+    color:var(--rs-muted); 
+    font-size:13px; 
+    min-height:18px;
+  }
+  /* NEW: Sign Up area */
+  .rs-signup-row{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,0.05);
+    text-align:center;
+  }
+  .rs-signup-text{
+    margin:0 0 8px;
+    font-size:13px;
+    color:var(--rs-muted);
+  }
+  .rs-signup-btn{
+    display:inline-block;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid rgba(142,243,197,0.65);
+    background:rgba(255,255,255,0.02);
+    color:var(--rs-accent);
+    font-size:13px;
+    font-weight:700;
+    text-decoration:none;
+    transition:background .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+  .rs-signup-btn:hover{
+    background:rgba(142,243,197,0.10);
+    box-shadow:0 8px 20px rgba(0,0,0,0.7);
+    transform:translateY(-1px);
+  }
+</style>
+        <script>
+(function(){
+  "use strict";
+  const API_BASE = "https://theorozcorealty.netlify.app/api";
+  // Which pages should be locked
+  const ALLOW_PATHS = [
+    /\/realtysass(?:\.html)?$/i,
+  ];
+  const path = (location.pathname || "/").toLowerCase();
+  const shouldLock = ALLOW_PATHS.some(re => re.test(path));
+  if (!shouldLock){
+    document.querySelectorAll('#rs-lock-overlay').forEach(el => el.remove());
+    return;
+  }
+  const overlay  = document.getElementById('rs-lock-overlay');
+  const msg      = document.getElementById('rs-lock-msg');
+  const emailInp = document.getElementById('rs-email-input');
+  const passInp  = document.getElementById('rs-pass-input');
+  const loginBtn = document.getElementById('rs-login-btn');
+  const card     = document.getElementById('rs-lock-card');
+  // Show overlay
+  overlay.classList.remove('rs-hidden');
+  overlay.style.visibility = 'visible';
+  overlay.style.opacity = '1';
+  // ARIA fix
+  overlay.removeAttribute("aria-hidden");
+  function showMsg(text, isError){
+    msg.textContent = text || '';
+    msg.style.color = isError ? '#ffb3b3' : 'var(--rs-muted)';
+  }
+  function unlock(){
+    document.querySelectorAll('#rs-lock-overlay').forEach(el=>{
+      el.classList.add('rs-hidden');
+      el.style.visibility = 'hidden';
+      el.style.opacity = '0';
+      el.setAttribute("aria-hidden","true");
+    });
+  }
+  async function loginWithServer(email, password){
+    const res = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.ok === false){
+      throw new Error(data.error || "Incorrect email or password.");
+    }
+    return data;
+  }
+  // NEW: remember who just logged in (for dashboards)
+  function rememberLogin(email, serverData){
+    try{
+      // core key the dashboards can read
+      localStorage.setItem("realtysass.loginEmail", email);
+      // optional identity blob
+      const existing = JSON.parse(localStorage.getItem("realtysass.identity") || "{}") || {};
+      existing.email = email;
+      // if the API happens to send a profile, lightly merge it
+      const profile = (serverData && (serverData.profile || serverData.user || {})) || {};
+      if (profile.full_name && !existing.name){
+        existing.name = profile.full_name;
+      }
+      if (profile.phone && !existing.phone){
+        existing.phone = profile.phone;
+      }
+      if (profile.rank && !existing.rankPaygrade){
+        existing.rankPaygrade = profile.rank;
+      }
+      if (profile.va_disability && !existing.vaDisability){
+        existing.vaDisability = profile.va_disability;
+      }
+      if (profile.years_of_service && !existing.yearsOfService){
+        existing.yearsOfService = profile.years_of_service;
+      }
+      if (profile.mode && !existing.mode){
+        existing.mode = profile.mode;
+      }
+      localStorage.setItem("realtysass.identity", JSON.stringify(existing));
+    }catch(e){
+      // fail silently; login still works
+    }
+  }
+  async function onLogin(){
+    const em = emailInp.value.trim().toLowerCase();
+    const pw = passInp.value.trim();
+    if (!em){
+      showMsg("Please enter your email.", true);
+      return;
+    }
+    if (pw.length < 8){
+      showMsg("Password must be at least 8 characters.", true);
+      return;
+    }
+    loginBtn.disabled = true;
+    showMsg("Checking credentials...");
+    try {
+      const data = await loginWithServer(em, pw);
+      // NEW: store email/profile locally for the Financial Dashboard
+      rememberLogin(em, data);
+      showMsg("");
+      unlock();
+    } catch (err){
+      showMsg(err.message || "Incorrect email or password.", true);
+      if(card && card.animate){
+        card.animate(
+          [
+            { transform:'translateX(-5px)' },
+            { transform:'translateX(5px)' },
+            { transform:'translateX(0)' }
+          ],
+          { duration:260 }
+        );
+      }
+    } finally {
+      loginBtn.disabled = false;
+    }
+  }
+  loginBtn.addEventListener("click", onLogin);
+  passInp.addEventListener("keydown", e=>{
+    if (e.key === "Enter") onLogin();
+  });
+  setTimeout(()=> emailInp.focus(), 0);
+})();
+</script>
+      </div>
     </div>
     <div class="main">
-      <section class="section hero-1">
-        <div class="hero-content">
-          <div class="w-layout-grid hero1-grid">
-            <div class="hero-left-col">
-              <div class="hero-text-wrap">
-                <h1 hero-line-split="true" class="hero-heading">Military FinTech Solutions</h1>
-                <p hero-line-split="true" class="hero-paragraph">Specialized S.A.A.S &quot;Software as a Service&quot; for the Military Community. Our Platform is designed go beyond simple calculations to decision based algorithm. </p>
+      <section class="section-for-resources resourcss-1st-section">
+        <div class="w-layout-blockcontainer container w-container">
+          <div class="key-figures-home1-wrapper">
+            <div reveal-content="true" class="w-layout-grid title-for-resources">
+              <div id="w-node-cc8eacc6-3af4-d68e-1466-28d184ef642f-c85e09e0" class="subtitle-for-resources">
+                <h4 line-split="true" class="heading-98">Product &amp; Services for <span class="tertiary-color-emphasis">The Military Community.</span></h4>
+                <p line-split="true">Companies, startups, builders, sales teams, and marketers all use Orvimo to streamline processes, reduce friction, and improve productivity through seamless AI-powered workflow automation.</p>
               </div>
             </div>
-            <div id="w-node-_8889c2aa-c769-f1b8-011f-7b64d29c80b1-c85e09e0" class="hero1-background">
-              <div class="gradient-wrapper">
-                <div gradient="true" class="yellow-gradient"></div>
-                <div gradient="true" class="blue-gradient"></div>
-                <div gradient="true" class="orange-gradient"></div>
-                <div gradient="true" class="light"></div><img src="../images/icon.png" loading="lazy" sizes="(max-width: 1122px) 100vw, 1122px" srcset="../images/icon-p-500.png 500w, ../images/icon-p-800.png 800w, ../images/icon-p-1080.png 1080w, ../images/icon.png 1122w" alt="">
+            <div data-poster-url="../videos/Basic-Flag-1_poster.0000000.jpg" data-video-urls="../videos/Basic-Flag-1_mp4.mp4,../videos/Basic-Flag-1_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="flag-for-resources w-background-video w-background-video-atom"><video id="ab6bc1c2-7476-6d55-b2b0-bbed56c29ecb-video" autoplay="" loop="" style="background-image:url(&quot;../videos/Basic-Flag-1_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
+                <source src="../videos/Basic-Flag-1_mp4.mp4" data-wf-ignore="true">
+                <source src="../videos/Basic-Flag-1_webm.webm" data-wf-ignore="true">
+              </video></div>
+            <div reveal-content="true" class="w-layout-grid key-figures-grid"><img src="../images/VIRIN-220407-F-FM924-1053.jpg" loading="lazy" sizes="(max-width: 479px) 48vw, (max-width: 767px) 49vw, (max-width: 991px) 47vw, 462px" srcset="../images/VIRIN-220407-F-FM924-1053-p-500.jpg 500w, ../images/VIRIN-220407-F-FM924-1053-p-800.jpg 800w, ../images/VIRIN-220407-F-FM924-1053.jpg 1050w" alt=""><img src="../images/PCSU.png" loading="lazy" sizes="(max-width: 479px) 48vw, (max-width: 767px) 49vw, (max-width: 991px) 47vw, 462px" srcset="../images/825300feceeba760c9d12166657de43b_PCSU-p-500.png 500w, ../images/PCSU.png 800w" alt=""><img src="../images/VIRIN-220407-F-FM924-1053.jpg" loading="lazy" sizes="(max-width: 479px) 48vw, (max-width: 767px) 49vw, (max-width: 991px) 47vw, 462px" srcset="../images/VIRIN-220407-F-FM924-1053-p-500.jpg 500w, ../images/VIRIN-220407-F-FM924-1053-p-800.jpg 800w, ../images/VIRIN-220407-F-FM924-1053.jpg 1050w" alt="" class="image-132"></div>
+          </div>
+        </div>
+      </section>
+      <div class="sliderinblack">
+        <div data-w-id="4a262289-c61c-7481-d7fc-c48302bb136f" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
+              </div>
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
+              </div>
+            </div>
+          </div>
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
               </div>
             </div>
           </div>
         </div>
-      </section>
-      <section class="section market-ana">
-        <div class="w-layout-blockcontainer container w-container">
-          <div class="market-analytics">
-            <div reveal-content="true" class="home1-pricing-left-col">
-              <div class="heading-wrapper">
-                <h2 line-split="true" class="heading-92">Market Analytics</h2>
-                <p line-split="true" class="paragraph-10">Obtain a comprehensive summary of your next duty station or current market. Our Base Dashboard provides insight into City&#x27;s Demographic, current Real Estate Trends, Base Information and more.  <br><br>Select your Base now.</p>
+      </div>
+      <section class="section pcssnapshot">
+        <div class="hero2-content">
+          <div class="hero2-top-row">
+            <div class="hero2-text-wrap">
+              <h1 hero-line-split="true" class="hero-heading">Try our Advanced <span class="pcs-snapshot">PCS Calculator.</span></h1>
+              <p hero-line-split="true" class="text-pcs-snapshot">Experience the Quality of PCSUnited. <br>PCS Calculator is an advance dashboad that provides concise and accurate data about your current or next PCS Location. Simply enter your Rank, YoS, Dependent status and New Duty Location and see your Estimated Home Price Range, Finaical Readiness Estimage and a Buy vs Rent Guide.  </p>
+              <div class="code-embed w-embed w-script"><!--  //#0 HOUSE OF SASS • TRANSPARENT INPUT STRIP (CANONICAL 44-BASE SNAPSHOT READY)  -->
+                <div id="sass-front-strip" style="all: initial;">
+                  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+                  <style>
+    #sass-front-strip, #sass-front-strip * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    #sass-shell {
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 10px 0 10px;
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+    }
+    #sass-duty-row{
+      display: flex;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+    #sass-duty-stack{
+      position: relative;
+      width: 320px;
+      max-width: 86vw;
+      height: 36px;
+      border-radius: 999px;
+    }
+    #sass-duty-select{
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+      cursor: pointer;
+      border: none;
+      background: transparent;
+      z-index: 10;
+    }
+    #sass-duty-shell{
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      border-radius: 999px;
+      background: radial-gradient(circle at top left, #8ef3c5, #6aa7ff);
+      box-shadow: 0 14px 30px rgba(0,0,0,.80);
+      transition: 0.15s ease;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      color: #050712;
+      line-height: 1;
+      user-select: none;
+    }
+    #sass-duty-stack:hover #sass-duty-shell{
+      transform: translateY(-1px);
+      filter: brightness(1.06);
+    }
+    #sass-duty-stack:focus-within #sass-duty-shell{
+      box-shadow:
+        0 14px 30px rgba(0,0,0,.80),
+        0 0 0 1px rgba(142,243,197,.25);
+    }
+    #sass-duty-text{
+      padding: 0 44px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      width: 100%;
+      text-align: center;
+    }
+    #sass-duty-caret{
+      position: absolute;
+      right: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 18px;
+      height: 18px;
+      opacity: .9;
+    }
+    #sass-input-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+    }
+    @media (max-width: 768px) {
+      #sass-input-row { grid-template-columns: repeat(2, 1fr); }
+      #sass-duty-stack { width: 260px; }
+    }
+    .sass-field-label {
+      font-size: 11px;
+      text-transform: uppercase;
+      color: #a8b0d6;
+      letter-spacing: .1em;
+      margin-bottom: 5px;
+      display: block;
+    }
+    .sass-select {
+      width: 100%;
+      padding: 8px 10px;
+      border-radius: 10px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(12,14,25,0.65);
+      backdrop-filter: blur(4px);
+      color: #e9ecff;
+      font-size: 14px;
+      outline: none;
+      transition: 0.15s ease;
+    }
+    .sass-select:focus {
+      border-color: #8ef3c5;
+      box-shadow: 0 0 0 1px rgba(142,243,197,.25);
+    }
+    #sass-analyze-btn {
+      margin: 22px auto 0;
+      display: block;
+      padding: 10px 26px;
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      border: none;
+      border-radius: 999px;
+      background: radial-gradient(circle at top left, #8ef3c5, #6aa7ff);
+      color: #050712;
+      cursor: pointer;
+      box-shadow: 0 14px 30px rgba(0,0,0,.80);
+      transition: 0.15s ease;
+    }
+    #sass-analyze-btn:hover {
+      transform: translateY(-1px);
+      filter: brightness(1.06);
+    }
+    .sass-hidden { display: none !important; }
+  </style>
+                  <div id="sass-shell">
+                    <div id="sass-duty-row">
+                      <div id="sass-duty-stack">
+                        <select id="sass-duty-select" aria-label="Current Duty Station">
+                          <option value="" selected="">Current Duty Station</option>
+                        </select>
+                        <div id="sass-duty-shell">
+                          <div id="sass-duty-text">Current Duty Station</div>
+                          <svg id="sass-duty-caret" viewbox="0 0 24 24" fill="none" aria-hidden="true">
+                            <path d="M7 10l5 5 5-5" stroke="rgba(5,7,18,.9)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
+                          </svg>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="sass-input-row">
+                      <div id="wrap-rank">
+                        <label class="sass-field-label">Rank</label>
+                        <select id="sass-rank" class="sass-select">
+                          <optgroup label="Enlisted">
+                            <option value="E1">E-1</option>
+                            <option value="E2">E-2</option>
+                            <option value="E3">E-3</option>
+                            <option value="E4">E-4</option>
+                            <option value="E5">E-5</option>
+                            <option value="E6">E-6</option>
+                            <option value="E7" selected="">E-7</option>
+                            <option value="E8">E-8</option>
+                            <option value="E9">E-9</option>
+                          </optgroup>
+                          <optgroup label="Officers">
+                            <option value="O1">O-1</option>
+                            <option value="O2">O-2</option>
+                            <option value="O3">O-3</option>
+                            <option value="O4">O-4</option>
+                            <option value="O5">O-5</option>
+                            <option value="O6">O-6</option>
+                            <option value="O7">O-7</option>
+                            <option value="O8">O-8</option>
+                          </optgroup>
+                        </select>
+                      </div>
+                      <div>
+                        <label class="sass-field-label">Years of Service</label>
+                        <select id="sass-yos" class="sass-select">
+                          <option value="2">2 Years</option>
+                          <option value="4">4 Years</option>
+                          <option value="6">6 Years</option>
+                          <option value="8">8 Years</option>
+                          <option value="10">10 Years</option>
+                          <option value="12">12 Years</option>
+                          <option value="14">14 Years</option>
+                          <option value="16" selected="">16 Years</option>
+                          <option value="18">18 Years</option>
+                          <option value="20">20 Years</option>
+                          <option value="22">22 Years</option>
+                          <option value="24">24 Years</option>
+                          <option value="26">26 Years</option>
+                          <option value="28">28 Years</option>
+                          <option value="30">30 Years</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label class="sass-field-label">Family Size</label>
+                        <select id="sass-family" class="sass-select">
+                          <option value="1">1 Person</option>
+                          <option value="2">2 People</option>
+                          <option value="3">3 People</option>
+                          <option value="4" selected="">4 People</option>
+                          <option value="5">5 People</option>
+                          <option value="6">6 People</option>
+                          <option value="7">7 People</option>
+                          <option value="8">8 People</option>
+                        </select>
+                      </div>
+                      <div>
+                        <label class="sass-field-label">New Base Location</label>
+                        <select id="sass-base" class="sass-select"></select>
+                      </div>
+                    </div>
+                    <button id="sass-analyze-btn">Analyze</button>
+                  </div>
+                  <script>
+    (function() {
+      "use strict";
+      const SNAPSHOT_BASE_URL = "https://pcsunited.netlify.app/snapshot/";
+      const BASES = [
+        { value: "Andrews AFB",          fileKey: "Andrews",          zip: "20762" },
+        { value: "Barksdale AFB",        fileKey: "Barksdale",        zip: "71110" },
+        { value: "Beale AFB",            fileKey: "Beale",            zip: "95903" },
+        { value: "Cannon AFB",           fileKey: "Cannon",           zip: "88103" },
+        { value: "Charleston AFB",       fileKey: "Charleston",       zip: "29404" },
+        { value: "Davis-Monthan AFB",    fileKey: "Davis-Monthan",    zip: "85707" },
+        { value: "Dover AFB",            fileKey: "Dover",            zip: "19902" },
+        { value: "Dyess AFB",            fileKey: "Dyess",            zip: "79607" },
+        { value: "Eglin AFB",            fileKey: "Eglin",            zip: "32542" },
+        { value: "Elmendorf AFB",        fileKey: "Elmendorf",        zip: "99506" },
+        { value: "F.E-Warren AFB",       fileKey: "F.E-Warren",       zip: "82005" },
+        { value: "Fairchild AFB",        fileKey: "Fairchild",        zip: "99011" },
+        { value: "Fort-Sam-Houston AFB", fileKey: "Fort-Sam-Houston", zip: "78234" },
+        { value: "Holloman AFB",         fileKey: "Holloman",         zip: "88330" },
+        { value: "Hurlburt AFB",         fileKey: "Hurlburt",         zip: "32544" },
+        { value: "Keesler AFB",          fileKey: "Keesler",          zip: "39534" },
+        { value: "Kirtland AFB",         fileKey: "Kirtland",         zip: "87117" },
+        { value: "Lackland AFB",         fileKey: "Lackland",         zip: "78236" },
+        { value: "Langley AFB",          fileKey: "Langley",          zip: "23665" },
+        { value: "Laughlin AFB",         fileKey: "Laughlin",         zip: "78843" },
+        { value: "Little-Rock AFB",      fileKey: "Little-Rock",      zip: "72099" },
+        { value: "Luke AFB",             fileKey: "Luke",             zip: "85309" },
+        { value: "MacDill AFB",          fileKey: "MacDill",          zip: "33621" },
+        { value: "Malmstrom AFB",        fileKey: "Malmstrom",        zip: "59402" },
+        { value: "Maxwell AFB",          fileKey: "Maxwell",          zip: "36112" },
+        { value: "McConnell AFB",        fileKey: "McConnell",        zip: "67221" },
+        { value: "McGuire AFB",          fileKey: "McGuire",          zip: "08641" },
+        { value: "Minot AFB",            fileKey: "Minot",            zip: "58705" },
+        { value: "Moody AFB",            fileKey: "Moody",            zip: "31699" },
+        { value: "Mountain-Home AFB",    fileKey: "Mountain-Home",    zip: "83648" },
+        { value: "Nellis AFB",           fileKey: "Nellis",           zip: "89191" },
+        { value: "Offutt AFB",           fileKey: "Offutt",           zip: "68113" },
+        { value: "Peterson AFB",         fileKey: "Peterson",         zip: "80914" },
+        { value: "Randolph AFB",         fileKey: "Randolph",         zip: "78150" },
+        { value: "Robins AFB",           fileKey: "Robins",           zip: "31098" },
+        { value: "Scott AFB",            fileKey: "Scott",            zip: "62225" },
+        { value: "Seymour-Johnson AFB",  fileKey: "Seymour-Johnson",  zip: "27531" },
+        { value: "Shaw AFB",             fileKey: "Shaw",             zip: "29152" },
+        { value: "Sheppard AFB",         fileKey: "Sheppard",         zip: "76311" },
+        { value: "Tinker AFB",           fileKey: "Tinker",           zip: "73145" },
+        { value: "Travis AFB",           fileKey: "Travis",           zip: "94535" },
+        { value: "Tyndall AFB",          fileKey: "Tyndall",          zip: "32403" },
+        { value: "Whiteman AFB",         fileKey: "Whiteman",         zip: "65305" },
+        { value: "Wright-Patterson AFB", fileKey: "Wright-Patterson", zip: "45433" }
+      ];
+      const BASE_META = Object.create(null);
+      BASES.forEach(function(base) {
+        BASE_META[base.value] = {
+          label: base.value,
+          fileKey: base.fileKey,
+          zip: base.zip
+        };
+      });
+      const BASE_ALIASES = {
+        "Andrews": "Andrews AFB",
+        "AndrewsAFB": "Andrews AFB",
+        "Joint Base Andrews": "Andrews AFB",
+        "JB Andrews": "Andrews AFB",
+        "Barksdale": "Barksdale AFB",
+        "BarksdaleAFB": "Barksdale AFB",
+        "Beale": "Beale AFB",
+        "BealeAFB": "Beale AFB",
+        "Cannon": "Cannon AFB",
+        "CannonAFB": "Cannon AFB",
+        "Charleston": "Charleston AFB",
+        "CharlestonAFB": "Charleston AFB",
+        "Joint Base Charleston": "Charleston AFB",
+        "Davis-Monthan": "Davis-Monthan AFB",
+        "DavisMonthan": "Davis-Monthan AFB",
+        "DavisMonthanAFB": "Davis-Monthan AFB",
+        "DMAFB": "Davis-Monthan AFB",
+        "Dover": "Dover AFB",
+        "DoverAFB": "Dover AFB",
+        "Dyess": "Dyess AFB",
+        "DyessAFB": "Dyess AFB",
+        "Eglin": "Eglin AFB",
+        "EglinAFB": "Eglin AFB",
+        "Elmendorf": "Elmendorf AFB",
+        "ElmendorfAFB": "Elmendorf AFB",
+        "JBER": "Elmendorf AFB",
+        "Joint Base Elmendorf-Richardson": "Elmendorf AFB",
+        "F.E-Warren": "F.E-Warren AFB",
+        "FE-Warren": "F.E-Warren AFB",
+        "FEWarren": "F.E-Warren AFB",
+        "FEWarrenAFB": "F.E-Warren AFB",
+        "F E Warren": "F.E-Warren AFB",
+        "Francis E. Warren": "F.E-Warren AFB",
+        "Fairchild": "Fairchild AFB",
+        "FairchildAFB": "Fairchild AFB",
+        "Fort Sam Houston": "Fort-Sam-Houston AFB",
+        "Fort-Sam-Houston": "Fort-Sam-Houston AFB",
+        "FortSamHouston": "Fort-Sam-Houston AFB",
+        "FortSamHoustonAFB": "Fort-Sam-Houston AFB",
+        "Fort Sam Houston AFB": "Fort-Sam-Houston AFB",
+        "JBSA-Fort-Sam-Houston": "Fort-Sam-Houston AFB",
+        "JBSA-Fort Sam Houston": "Fort-Sam-Houston AFB",
+        "JBSA Fort Sam Houston": "Fort-Sam-Houston AFB",
+        "Holloman": "Holloman AFB",
+        "HollomanAFB": "Holloman AFB",
+        "Hurlburt": "Hurlburt AFB",
+        "HurlburtAFB": "Hurlburt AFB",
+        "Hurlburt Field": "Hurlburt AFB",
+        "Keesler": "Keesler AFB",
+        "KeeslerAFB": "Keesler AFB",
+        "Kirtland": "Kirtland AFB",
+        "KirtlandAFB": "Kirtland AFB",
+        "Lackland": "Lackland AFB",
+        "LacklandAFB": "Lackland AFB",
+        "JBSA-Lackland": "Lackland AFB",
+        "JBSA Lackland": "Lackland AFB",
+        "Joint Base San Antonio Lackland": "Lackland AFB",
+        "Langley": "Langley AFB",
+        "LangleyAFB": "Langley AFB",
+        "Joint Base Langley-Eustis": "Langley AFB",
+        "Laughlin": "Laughlin AFB",
+        "LaughlinAFB": "Laughlin AFB",
+        "Little Rock AFB": "Little-Rock AFB",
+        "Little-Rock": "Little-Rock AFB",
+        "LittleRock": "Little-Rock AFB",
+        "LittleRockAFB": "Little-Rock AFB",
+        "Little Rock": "Little-Rock AFB",
+        "Luke": "Luke AFB",
+        "LukeAFB": "Luke AFB",
+        "MacDill": "MacDill AFB",
+        "MacDillAFB": "MacDill AFB",
+        "Malmstrom": "Malmstrom AFB",
+        "MalmstromAFB": "Malmstrom AFB",
+        "Maxwell": "Maxwell AFB",
+        "MaxwellAFB": "Maxwell AFB",
+        "McConnell": "McConnell AFB",
+        "McConnellAFB": "McConnell AFB",
+        "McGuire": "McGuire AFB",
+        "McGuireAFB": "McGuire AFB",
+        "JBMDL": "McGuire AFB",
+        "Joint Base McGuire-Dix-Lakehurst": "McGuire AFB",
+        "Minot": "Minot AFB",
+        "MinotAFB": "Minot AFB",
+        "Moody": "Moody AFB",
+        "MoodyAFB": "Moody AFB",
+        "Mountain Home AFB": "Mountain-Home AFB",
+        "Mountain-Home": "Mountain-Home AFB",
+        "MountainHome": "Mountain-Home AFB",
+        "MountainHomeAFB": "Mountain-Home AFB",
+        "Mountain Home": "Mountain-Home AFB",
+        "Nellis": "Nellis AFB",
+        "NellisAFB": "Nellis AFB",
+        "Offutt": "Offutt AFB",
+        "OffuttAFB": "Offutt AFB",
+        "Peterson": "Peterson AFB",
+        "PetersonAFB": "Peterson AFB",
+        "Peterson SFB": "Peterson AFB",
+        "Peterson Space Force Base": "Peterson AFB",
+        "Randolph": "Randolph AFB",
+        "RandolphAFB": "Randolph AFB",
+        "JBSA-Randolph": "Randolph AFB",
+        "JBSA Randolph": "Randolph AFB",
+        "Joint Base San Antonio Randolph": "Randolph AFB",
+        "Robins": "Robins AFB",
+        "RobinsAFB": "Robins AFB",
+        "Scott": "Scott AFB",
+        "ScottAFB": "Scott AFB",
+        "Seymour Johnson AFB": "Seymour-Johnson AFB",
+        "Seymour-Johnson": "Seymour-Johnson AFB",
+        "SeymourJohnson": "Seymour-Johnson AFB",
+        "SeymourJohnsonAFB": "Seymour-Johnson AFB",
+        "Shaw": "Shaw AFB",
+        "ShawAFB": "Shaw AFB",
+        "Sheppard": "Sheppard AFB",
+        "SheppardAFB": "Sheppard AFB",
+        "Tinker": "Tinker AFB",
+        "TinkerAFB": "Tinker AFB",
+        "Travis": "Travis AFB",
+        "TravisAFB": "Travis AFB",
+        "Tyndall": "Tyndall AFB",
+        "TyndallAFB": "Tyndall AFB",
+        "Whiteman": "Whiteman AFB",
+        "WhitemanAFB": "Whiteman AFB",
+        "Wright-Patterson": "Wright-Patterson AFB",
+        "WrightPatterson": "Wright-Patterson AFB",
+        "WrightPattersonAFB": "Wright-Patterson AFB",
+        "WPAFB": "Wright-Patterson AFB"
+      };
+      function canonicalBaseName(raw) {
+        const s = String(raw || "").trim();
+        if (!s) return "";
+        if (BASE_META[s]) return s;
+        return BASE_ALIASES[s] || s;
+      }
+      function fileKeyFromBase(raw) {
+        const canonical = canonicalBaseName(raw);
+        return (BASE_META[canonical] && BASE_META[canonical].fileKey) || "Lackland";
+      }
+      function zipFromBase(raw) {
+        const canonical = canonicalBaseName(raw);
+        return (BASE_META[canonical] && BASE_META[canonical].zip) || "78236";
+      }
+      function escapeHtml(str) {
+        return String(str)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+      function populateBaseSelect(selectEl, includePlaceholder) {
+        if (!selectEl) return;
+        let html = "";
+        if (includePlaceholder) {
+          html += '<option value="" selected>Current Duty Station</option>';
+        }
+        BASES.forEach(function(base) {
+          html += '<option value="' + escapeHtml(base.value) + '">' + escapeHtml(base.value) + '</option>';
+        });
+        selectEl.innerHTML = html;
+      }
+      const dutySel = document.getElementById("sass-duty-select");
+      const dutyText = document.getElementById("sass-duty-text");
+      const newBaseSel = document.getElementById("sass-base");
+      const btn = document.getElementById("sass-analyze-btn");
+      populateBaseSelect(dutySel, true);
+      populateBaseSelect(newBaseSel, false);
+      newBaseSel.value = "Lackland AFB";
+      function syncDutyText() {
+        const val = String(dutySel.value || "").trim();
+        dutyText.textContent = val ? val : "Current Duty Station";
+      }
+      dutySel.addEventListener("change", syncDutyText);
+      syncDutyText();
+      btn.addEventListener("click", function() {
+        const rank = String(document.getElementById("sass-rank").value || "").trim();
+        const yos = String(document.getElementById("sass-yos").value || "").trim();
+        const fam = String(document.getElementById("sass-family").value || "").trim();
+        const curBaseRaw = String(dutySel.value || "").trim();
+        const newBaseRaw = String(newBaseSel.value || "").trim();
+        if (!curBaseRaw) {
+          alert("Please select your Current Duty Station.");
+          dutySel.focus();
+          return;
+        }
+        if (!newBaseRaw) {
+          alert("Please select your New Base Location.");
+          newBaseSel.focus();
+          return;
+        }
+        const curBase = canonicalBaseName(curBaseRaw);
+        const newBase = canonicalBaseName(newBaseRaw);
+        const curFileKey = fileKeyFromBase(curBase);
+        const newFileKey = fileKeyFromBase(newBase);
+        const curZip = zipFromBase(curBase);
+        const newZip = zipFromBase(newBase);
+        try {
+          sessionStorage.setItem("pcs_rank", rank);
+          sessionStorage.setItem("pcs_yos", yos);
+          sessionStorage.setItem("pcs_family", fam);
+          sessionStorage.setItem("pcs_current_base", curBase);
+          sessionStorage.setItem("pcs_current_cityKey", curFileKey);
+          sessionStorage.setItem("pcs_current_fileKey", curFileKey);
+          sessionStorage.setItem("pcs_current_zip", curZip);
+          sessionStorage.setItem("pcs_new_base", newBase);
+          sessionStorage.setItem("pcs_new_cityKey", newFileKey);
+          sessionStorage.setItem("pcs_new_fileKey", newFileKey);
+          sessionStorage.setItem("pcs_new_zip", newZip);
+        } catch (e) {}
+        const params = new URLSearchParams();
+        params.set("type", "ad");
+        params.set("rank", rank);
+        params.set("yos", yos);
+        params.set("family", fam);
+        params.set("base", newBase);
+        params.set("cityKey", newFileKey);
+        params.set("curBase", curBase);
+        params.set("newBase", newBase);
+        params.set("curCityKey", curFileKey);
+        params.set("newCityKey", newFileKey);
+        params.set("curFileKey", curFileKey);
+        params.set("newFileKey", newFileKey);
+        params.set("curZip", curZip);
+        params.set("newZip", newZip);
+        window.location.href = SNAPSHOT_BASE_URL + "?" + params.toString();
+      });
+    })();
+  </script>
+                </div>
               </div>
-              <div fade-in="true" parallax-container="true" class="pricing-v3-picture-wrap">
-                <div class="img-curtain"></div>
-                <div parallax-container="true" class="pricingv3-background"><img src="../images/ChatGPT-Image-Apr-25-2026-08_21_56-PM.png" loading="lazy" sizes="(max-width: 1672px) 100vw, 1672px" srcset="../images/ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-500.png 500w, ../images/ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-800.png 800w, ../images/ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-1080.png 1080w, ../images/ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-1600.png 1600w, ../images/ChatGPT-Image-Apr-25-2026-08_21_56-PM.png 1672w" alt="" class="img-pricing-v3 parallax">
-                  <div class="w-embed w-script"><!--  =========================================================
+            </div>
+          </div>
+          <div class="spline-hero3"></div>
+        </div>
+      </section>
+      <section class="section home1-testimonials">
+        <div class="w-layout-blockcontainer container w-container">
+          <div class="w-layout-grid home1-grid-testimonials">
+            <div class="testimonial-card-wrapper">
+              <div class="testimonial-card">
+                <div class="testimonial-logo">
+                  <h2 line-split="true" class="heading-92">Base Demographics<br></h2>
+                </div>
+                <div class="code-embed-44 w-embed w-script"><!--  =========================================================
   PCSUnited • Base Selector Dropdown
   v1.2.0
   PURPOSE
@@ -1365,8 +1191,8 @@
   - Redirects to /air-force/base-demographics
   - Also supports same-page usage if redirect is disabled
 =========================================================  -->
-                    <div id="pcsu-base-selector" style="all:initial;">
-                      <style>
+                  <div id="pcsu-base-selector" style="all:initial;">
+                    <style>
     #pcsu-base-selector, #pcsu-base-selector *{
       box-sizing:border-box;
       margin:0;
@@ -1548,22 +1374,22 @@
       }
     }
   </style>
-                      <div class="pcsu-base-wrap" id="pcsuBaseWrap">
-                        <button class="pcsu-base-btn" id="pcsuBaseBtn" type="button" aria-expanded="false" aria-controls="pcsuBaseMenu">
-                          <div class="pcsu-base-btn-left">
-                            <div class="pcsu-base-label">Select Base</div>
-                            <div class="pcsu-base-value" id="pcsuBaseValue">Choose a base</div>
-                          </div>
-                          <div class="pcsu-base-arrow">⌄</div>
-                        </button>
-                        <div class="pcsu-base-menu" id="pcsuBaseMenu">
-                          <div class="pcsu-base-search-wrap">
-                            <input id="pcsuBaseSearch" class="pcsu-base-search" type="text" placeholder="Search base..." autocomplete="off">
-                          </div>
-                          <div class="pcsu-base-list" id="pcsuBaseList"></div>
+                    <div class="pcsu-base-wrap" id="pcsuBaseWrap">
+                      <button class="pcsu-base-btn" id="pcsuBaseBtn" type="button" aria-expanded="false" aria-controls="pcsuBaseMenu">
+                        <div class="pcsu-base-btn-left">
+                          <div class="pcsu-base-label">Select Base</div>
+                          <div class="pcsu-base-value" id="pcsuBaseValue">Choose a base</div>
                         </div>
+                        <div class="pcsu-base-arrow">⌄</div>
+                      </button>
+                      <div class="pcsu-base-menu" id="pcsuBaseMenu">
+                        <div class="pcsu-base-search-wrap">
+                          <input id="pcsuBaseSearch" class="pcsu-base-search" type="text" placeholder="Search base..." autocomplete="off">
+                        </div>
+                        <div class="pcsu-base-list" id="pcsuBaseList"></div>
                       </div>
-                      <script>
+                    </div>
+                    <script>
     (() => {
       "use strict";
       if (window.PCSU_BASE_SELECTOR?.__mounted) return;
@@ -1796,138 +1622,50 @@
       setActive(initial, { redirect: false });
     })();
   </script>
-                    </div>
                   </div>
                 </div>
+                <div class="testimonial-content">
+                  <div class="testimonial-quote">Obtain an Overview of your Base &amp; City of choice;  Real Estate Market Insight, City Demographics &amp; Costs, Base Information. </div>
+                  <div><strong class="testimonial-author">Select your PCS Location</strong></div>
+                </div>
+              </div>
+              <div class="below-section-on-base-demo">
+                <div class="testimonial-content">
+                  <div class="descrbing-bse-demo">The Base Demographic App, <br>Is available only for CONUS Air Force installations. We data present is gathered from &quot;list of places&quot; which provide an estimate on Real-Estate market, Demographics, and Base Resources. <br><br>Our products serves as a Overview of your upcoming PCS location. Data present should be used as Guidance to enhance your PCS or as Home Purchase resource. <br>‍</div>
+                  <div><strong class="testimonial-author">Write something here.</strong></div>
+                </div>
+              </div>
+              <div class="buttons-row-6">
+                <a href="#" class="primary-glow-wrapper-22 full w-inline-block">
+                  <div class="button-overflow-hidden-2 mobile-full-width">
+                    <div class="box-shadow-block-17">
+                      <div class="pedding-stroke-13"></div>
+                      <div class="glow-wrapper stroke">
+                        <div class="glow-item left"></div>
+                        <div class="glow-item"></div>
+                      </div>
+                    </div>
+                  </div>
+                </a>
               </div>
             </div>
-            <div reveal-content="true" class="w-layout-grid grid-pricing-v3-home1">
-              <div fade-in="true" class="pricing-v3-col home1 first">
-                <div class="pricing-row1">
-                  <div class="pricing-title-wrap">
-                    <div class="price-title">City Overview</div>
-                    <div>Great for getting started and seeing the power of Orvimo.</div>
-                  </div>
-                  <div class="price-wrapper">
-                    <div class="billed-monthly">
-                      <div class="price">$25</div>
-                      <div class="period">/mo, billed monthly</div>
-                    </div>
-                  </div>
-                  <div class="pricing-infos">
-                    <div class="info-figure">2,5k</div>
-                    <div class="infos-sub-text">workflows executions <br>with unlimited steps</div>
-                  </div>
-                </div>
-              </div>
-              <div fade-in="true" class="pricing-v3-col home1">
-                <div class="pricing-row1">
-                  <div class="pricing-title-wrap">
-                    <div class="price-title">Real Estate Insig</div>
-                    <div>For solo builders and small teams running workflows in production.</div>
-                  </div>
-                  <div class="price-wrapper">
-                    <div class="billed-monthly">
-                      <div class="price">$60</div>
-                      <div class="period">/mo, billed monthly</div>
-                    </div>
-                  </div>
-                  <div class="pricing-infos">
-                    <div class="info-figure">10k</div>
-                    <div class="infos-sub-text">workflows executions <br>with unlimited steps</div>
-                  </div>
-                </div>
-              </div>
-              <div fade-in="true" class="pricing-v3-col home1">
-                <div class="pricing-row1">
-                  <div class="pricing-title-wrap">
-                    <div class="price-title">Demographics</div>
-                    <div>For companies with &lt; 100 employees needing collaboration and scale.<br>‍</div>
-                  </div>
-                  <div class="price-wrapper">
-                    <div class="billed-monthly">
-                      <div class="price">$700</div>
-                      <div class="period">/mo, billed monthly</div>
-                    </div>
-                  </div>
-                  <div class="pricing-infos">
-                    <div class="info-figure">40k</div>
-                    <div class="infos-sub-text">workflows executions <br>with unlimited steps</div>
-                  </div>
-                </div>
-              </div>
-              <div fade-in="true" class="pricing-v3-col home1">
-                <div class="pricing-row1">
-                  <div class="pricing-title-wrap">
-                    <div class="price-title">Base Informatio</div>
-                    <div>For companies with &lt; 100 employees needing collaboration and scale.</div>
-                  </div>
-                  <div class="price-wrapper">
-                    <div class="billed-monthly">
-                      <div class="price">$700</div>
-                      <div class="period">/mo, billed monthly</div>
-                    </div>
-                  </div>
-                  <div class="pricing-infos">
-                    <div class="info-figure">Base Map</div>
-                    <div class="infos-sub-text">workflows executions <br>with unlimited steps</div>
-                  </div>
-                </div>
+            <div class="testimonial-card-bg-img dark">
+              <div parallax-container="true" class="testimonial-bg-wrapper">
+                <div class="gradient-testimonall"></div>
               </div>
             </div>
           </div>
         </div>
       </section>
-      <div class="sliderinblack">
-        <div data-w-id="4a262289-c61c-7481-d7fc-c48302bb136f" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div data-w-id="504754d4-8dd6-99dc-bcfe-29ea9c1d3594" class="citiestitle citiestitles">
-        <h2 class="heading-78">Military Calculators</h2>
-        <h5 class="sub-title-cal">Try our Array of Air Force Calculator &amp; Resources.</h5>
-        <div class="space-text"></div>
-        <a href="#" class="button-white w-inline-block">
-          <div class="button-primary-overlay"></div>
-        </a>
-        <div class="actual-citiy-copy padding-144px w-container"></div>
-        <div data-delay="4000" data-animation="slide" class="locations-slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-w-id="504754d4-8dd6-99dc-bcfe-29ea9c1d35a1" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
+      <section class="section market-ana">
+        <h1 hero-line-split="true" class="military-resources-title">Advanced <span class="pcs-snapshot">Military Calculators.</span></h1>
+        <h6 class="heading-99-copy">I.A.W DFAS Manuals &amp; Regulations</h6>
+        <div data-delay="4000" data-animation="slide" class="locations-slider w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
           <div class="locations-mask w-slider-mask">
             <div class="locations-slide w-slide">
-              <a href="../air-force/bah-base-pay-calculator.html" data-w-id="504754d4-8dd6-99dc-bcfe-29ea9c1d35a4" class="locations-card-6-copy w-inline-block">
+              <a href="../air-force/bah-base-pay-calculator.html" class="locations-card-6-copy w-inline-block">
                 <div class="image-locations-5">
-                  <div class="locations-overlay-half"><img width="524" sizes="(max-width: 479px) 100vw, 524px" alt="" src="../images/BAHCalculator.png" loading="lazy" srcset="../images/5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator-p-500.png 500w, ../images/5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator-p-800.png 800w, ../images/5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator-p-1080.png 1080w, ../images/BAHCalculator.png 1536w" class="image-99"></div><img loading="lazy" src="" alt="" class="locations-image">
+                  <div class="locations-overlay-half"><img width="524" sizes="(max-width: 767px) 100vw, 524px" alt="" src="../images/BAHCalculator.png" loading="lazy" srcset="../images/5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator-p-500.png 500w, ../images/5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator-p-800.png 800w, ../images/5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator-p-1080.png 1080w, ../images/BAHCalculator.png 1536w" class="image-99"></div><img loading="lazy" src="" alt="" class="locations-image">
                 </div>
                 <div class="locations-title-wrapper">
                   <h6 class="locations-title-5">BAH &amp; Base Pay</h6>
@@ -1944,9 +1682,9 @@
               </a>
             </div>
             <div class="locations-slide w-slide">
-              <a href="../air-force/va-calculator.html" data-w-id="504754d4-8dd6-99dc-bcfe-29ea9c1d35bf" class="locations-card-6 w-inline-block">
+              <a href="../air-force/va-calculator.html" class="locations-card-6 w-inline-block">
                 <div class="image-locations-5">
-                  <div class="locations-overlay-half"><img width="524" sizes="(max-width: 479px) 100vw, 524px" alt="" src="../images/PT.jpg" loading="lazy" srcset="../images/PT-p-500.jpg 500w, ../images/PT.jpg 570w" class="image-99"></div><img loading="lazy" src="" alt="" class="locations-image">
+                  <div class="locations-overlay-half"><img width="524" sizes="(max-width: 767px) 100vw, 524px" alt="" src="../images/PT.jpg" loading="lazy" srcset="../images/PT-p-500.jpg 500w, ../images/PT.jpg 570w" class="image-99"></div><img loading="lazy" src="" alt="" class="locations-image">
                 </div>
                 <div class="locations-title-wrapper">
                   <div class="w-layout-hflex subheading-flex">
@@ -1970,9 +1708,9 @@
               </a>
             </div>
             <div class="locations-slide w-slide">
-              <a href="../air-force/pt-calculator.html" data-w-id="504754d4-8dd6-99dc-bcfe-29ea9c1d35da" class="locations-card-6 w-inline-block">
+              <a href="../air-force/pt-calculator.html" class="locations-card-6 w-inline-block">
                 <div class="image-locations-5">
-                  <div class="locations-overlay-half"><img width="524" sizes="(max-width: 479px) 100vw, 524px" alt="" src="../images/PT.jpg" loading="lazy" srcset="../images/PT-p-500.jpg 500w, ../images/PT.jpg 570w" class="image-99"></div><img loading="lazy" src="" alt="" class="locations-image">
+                  <div class="locations-overlay-half"><img width="524" sizes="(max-width: 767px) 100vw, 524px" alt="" src="../images/PT.jpg" loading="lazy" srcset="../images/PT-p-500.jpg 500w, ../images/PT.jpg 570w" class="image-99"></div><img loading="lazy" src="" alt="" class="locations-image">
                 </div>
                 <div class="locations-title-wrapper">
                   <div class="w-layout-hflex subheading-flex">
@@ -1994,9 +1732,9 @@
               </a>
             </div>
             <div class="locations-slide w-slide">
-              <a href="#" data-w-id="504754d4-8dd6-99dc-bcfe-29ea9c1d35f5" class="locations-card-6 w-inline-block">
+              <a href="#" class="locations-card-6 w-inline-block">
                 <div class="image-locations-5">
-                  <div class="locations-overlay-half"><img width="524" sizes="(max-width: 479px) 100vw, 524px" alt="" src="../images/PT.jpg" loading="lazy" srcset="../images/PT-p-500.jpg 500w, ../images/PT.jpg 570w" class="image-99"></div><img loading="lazy" src="" alt="" class="locations-image">
+                  <div class="locations-overlay-half"><img width="524" sizes="(max-width: 767px) 100vw, 524px" alt="" src="../images/PT.jpg" loading="lazy" srcset="../images/PT-p-500.jpg 500w, ../images/PT.jpg 570w" class="image-99"></div><img loading="lazy" src="" alt="" class="locations-image">
                 </div>
                 <div class="locations-title-wrapper">
                   <div class="w-layout-hflex subheading-flex">
@@ -2027,951 +1765,8 @@
           </div>
           <div class="locations-nav w-slider-nav"></div>
         </div>
-      </div>
-      <div class="sliderinblack">
-        <div data-w-id="ddcd1e31-557c-b4e2-b159-f75ec5da6722" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <section class="section market-ana">
-        <div data-w-id="4536f755-800a-2c01-796f-fc4d2fc3d161" class="home2_about_grid-2">
-          <div data-poster-url="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg" data-video-urls="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4,https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="home2_hero_image-3 w-background-video w-background-video-atom"><video id="4536f755-800a-2c01-796f-fc4d2fc3d162-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
-              <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4" data-wf-ignore="true">
-              <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-wf-ignore="true">
-            </video></div>
-          <div class="home2_about_content">
-            <h2 class="heading-style-h1"></h2>
-            <h1 class="frd-title">Comprehensive Financial Dashboard</h1>
-            <h6 class="heading-96">Market Analytics + Mortage Estimator + Financial Health</h6>
-            <div class="opensource-financial-cab">
-              <div class="section_heading-3">
-                <div class="text-block-21">Get a comprehensive Financial analysis based on your current status and projected home value. Our Financial dashboard provides unparallel data visualization that help understand your Financial Health. We provide insight on how your project mortgage cost affect your overall financial health. </div>
-                <div class="spacer-xsmall-2"></div>
-                <div class="spacer-small-3">
-                  <div class="code-embed-21-copy w-embed w-script"><!--  //#0 HOUSE OF SASS • PCS UNITED • FINANCIAL INTAKE
-     v2.2.0 • FOUR-SLIDER LUXURY FINISH
-     INPUT ONLY → saves locally → redirects to OPEN Financial Dashboard
-     ✅ NO Supabase
-     ✅ NO pending cloud save
-     ✅ Transparent section / no page background
- -->
-                    <div id="sass-mortgage-strip" style="all: initial;">
-                      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-                      <style>
-    #sass-mortgage-strip,
-    #sass-mortgage-strip *{
-      box-sizing:border-box;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    }
-    #sass-mortgage-strip{
-      display:block;
-      width:100%;
-      background:transparent !important;
-      color:#171b2c;
-    }
-    #sass-shell{
-      width:100%;
-      max-width:980px;
-      margin:0 auto;
-      padding:18px 0 10px;
-      background:transparent !important;
-    }
-    #intent-row{
-      display:flex;
-      justify-content:center;
-      gap:14px;
-      margin-bottom:30px;
-      flex-wrap:wrap;
-      background:transparent !important;
-    }
-    .intent-btn{
-      appearance:none;
-      padding:10px 22px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.09em;
-      text-transform:uppercase;
-      border:1px solid rgba(18,24,38,.14);
-      background:linear-gradient(180deg,#7b808a,#5d626e);
-      color:#f8f9fc;
-      cursor:pointer;
-      transition:.18s ease;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.20),
-        inset 0 -2px 4px rgba(0,0,0,.12),
-        0 10px 20px rgba(0,0,0,.16);
-    }
-    .intent-btn:hover{
-      transform:translateY(-1px);
-      filter:brightness(1.04);
-    }
-    .intent-btn.active{
-      background:linear-gradient(135deg,#8ef3c5 0%,#6aa7ff 100%);
-      color:#050712;
-      border-color:rgba(255,255,255,.38);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.55),
-        inset 0 -2px 8px rgba(33,95,170,.16),
-        0 14px 30px rgba(42,120,220,.22);
-    }
-    #sass-input-row{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:22px;
-      align-items:start;
-      background:transparent !important;
-    }
-    @media(max-width:960px){
-      #sass-input-row{grid-template-columns:repeat(2,minmax(0,1fr));}
-    }
-    @media(max-width:620px){
-      #sass-input-row{grid-template-columns:1fr;}
-    }
-    .sass-card{
-      min-width:0;
-      padding:0;
-      background:transparent !important;
-      border:none !important;
-      box-shadow:none !important;
-    }
-    .sass-field-label{
-      display:block;
-      margin:0 0 8px;
-      font-size:11px;
-      line-height:1;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.115em;
-      color:#9aa7d8;
-      text-shadow:0 1px 0 rgba(255,255,255,.55);
-    }
-    .sass-topbox{
-      min-height:46px;
-      border-radius:13px;
-      border:1px solid rgba(18,24,38,.11);
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.78),rgba(240,244,255,.58));
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.92),
-        inset 0 -1px 0 rgba(255,255,255,.36),
-        0 12px 26px rgba(18,24,38,.085);
-      padding:10px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      overflow:hidden;
-      backdrop-filter:blur(9px);
-      -webkit-backdrop-filter:blur(9px);
-      transition:.18s ease;
-    }
-    .sass-topbox:hover{
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -1px 0 rgba(255,255,255,.42),
-        0 16px 32px rgba(18,24,38,.12);
-    }
-    .sass-money-input{
-      width:100%;
-      min-width:0;
-      border:0;
-      outline:0;
-      background:transparent;
-      color:#0f1629;
-      font-size:25px;
-      line-height:1;
-      font-weight:900;
-      letter-spacing:-.04em;
-      padding:0;
-      text-shadow:0 1px 0 rgba(255,255,255,.62);
-    }
-    .sass-money-input::placeholder{
-      color:rgba(15,22,41,.32);
-    }
-    .sass-value,
-    .sass-score-value{
-      font-size:25px;
-      line-height:1;
-      font-weight:900;
-      color:#0f1629;
-      letter-spacing:-.04em;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      text-shadow:0 1px 0 rgba(255,255,255,.62);
-    }
-    .sass-pill-mini{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:58px;
-      height:28px;
-      padding:0 11px;
-      border-radius:999px;
-      border:1px solid rgba(18,24,38,.10);
-      background:linear-gradient(180deg,rgba(255,255,255,.86),rgba(239,242,248,.76));
-      font-size:11px;
-      font-weight:900;
-      color:#343b52;
-      white-space:nowrap;
-      flex:0 0 auto;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.92),
-        0 5px 12px rgba(18,24,38,.06);
-    }
-    .sass-slider-wrap{
-      margin-top:17px;
-    }
-    .sass-slider-shell{
-      position:relative;
-      height:20px;
-      border-radius:999px;
-      background:transparent;
-    }
-    .sass-slider-shell::before{
-      content:"";
-      position:absolute;
-      left:0;
-      right:0;
-      top:50%;
-      height:7px;
-      transform:translateY(-50%);
-      border-radius:999px;
-      background:var(
-        --rail-bg,
-        linear-gradient(90deg,#8ef3c5 0%,#6aa7ff 60%,rgba(18,24,38,.18) 60%,rgba(18,24,38,.18) 100%)
-      );
-      box-shadow:
-        inset 0 1px 2px rgba(255,255,255,.62),
-        inset 0 -1px 2px rgba(18,24,38,.08),
-        0 7px 16px rgba(106,167,255,.18);
-      pointer-events:none;
-    }
-    .sass-range{
-      width:100%;
-      -webkit-appearance:none;
-      appearance:none;
-      background:transparent;
-      position:relative;
-      z-index:2;
-      height:20px;
-      margin:0;
-      cursor:pointer;
-    }
-    .sass-range:focus{outline:none;}
-    .sass-range::-webkit-slider-runnable-track{
-      height:20px;
-      background:transparent;
-      border:none;
-    }
-    .sass-range::-moz-range-track{
-      height:20px;
-      background:transparent;
-      border:none;
-    }
-    .sass-range::-webkit-slider-thumb{
-      -webkit-appearance:none;
-      appearance:none;
-      width:28px;
-      height:28px;
-      margin-top:-4px;
-      border-radius:999px;
-      background:linear-gradient(180deg,#ffffff,#e9eef6);
-      border:1px solid rgba(18,24,38,.13);
-      box-shadow:
-        0 10px 22px rgba(0,0,0,.24),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -2px 6px rgba(18,24,38,.08);
-      transition:.16s ease;
-    }
-    .sass-range:hover::-webkit-slider-thumb{
-      transform:scale(1.05);
-    }
-    .sass-range::-moz-range-thumb{
-      width:28px;
-      height:28px;
-      border-radius:999px;
-      background:linear-gradient(180deg,#ffffff,#e9eef6);
-      border:1px solid rgba(18,24,38,.13);
-      box-shadow:
-        0 10px 22px rgba(0,0,0,.24),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -2px 6px rgba(18,24,38,.08);
-      cursor:pointer;
-      transition:.16s ease;
-    }
-    .sass-scale{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-top:10px;
-      font-size:11px;
-      font-weight:900;
-      color:#7280a5;
-      padding:0 2px;
-    }
-    .sass-help{
-      margin-top:16px;
-      font-size:13px;
-      color:#4f5a73;
-      line-height:1.45;
-    }
-    .sass-number{
-      display:none;
-    }
-    #sass-analyze-btn{
-      margin:34px auto 0;
-      display:block;
-      min-width:178px;
-      padding:14px 38px;
-      font-size:13px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      border:none;
-      border-radius:999px;
-      background:linear-gradient(135deg,#8ef3c5 0%,#6aa7ff 100%);
-      color:#050712;
-      cursor:pointer;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.48),
-        inset 0 -2px 8px rgba(33,95,170,.16),
-        0 18px 38px rgba(0,0,0,.18);
-      transition:.18s ease;
-    }
-    #sass-analyze-btn:hover{
-      transform:translateY(-1px);
-      filter:brightness(1.035);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.55),
-        inset 0 -2px 8px rgba(33,95,170,.16),
-        0 22px 44px rgba(0,0,0,.21);
-    }
-    #sass-analyze-btn[disabled]{
-      opacity:.72;
-      cursor:not-allowed;
-      transform:none;
-      filter:none;
-    }
-    #sass-err{
-      margin:10px auto 0;
-      max-width:720px;
-      font-size:12px;
-      color:rgba(190,40,40,.95);
-      text-align:center;
-      display:none;
-      line-height:1.45;
-      font-weight:800;
-    }
-  </style>
-                      <div id="sass-shell">
-                        <div id="intent-row">
-                          <button class="intent-btn active" data-mode="ready" type="button">Ready Now</button>
-                          <button class="intent-btn" data-mode="soon" type="button">Within 6 Months</button>
-                          <button class="intent-btn" data-mode="unsure" type="button">Unsure</button>
-                        </div>
-                        <div id="sass-input-row">
-                          <div class="sass-card">
-                            <label class="sass-field-label" for="rs-expenses">Monthly Expenses</label>
-                            <div class="sass-topbox">
-                              <input class="sass-money-input" id="rs-expenses" type="text" inputmode="numeric" placeholder="$1,800">
-                            </div>
-                            <div class="sass-slider-wrap">
-                              <div class="sass-slider-shell">
-                                <input id="sass-expenses-range" class="sass-range" type="range" min="500" max="5000" step="100" value="1800">
-                              </div>
-                              <div class="sass-scale"><span>$500</span><span>$5,000+</span></div>
-                            </div>
-                            <div class="sass-help">All non-housing monthly spend.</div>
-                          </div>
-                          <div class="sass-card">
-                            <label class="sass-field-label" for="rs-price">Housing Cost</label>
-                            <div class="sass-topbox">
-                              <input class="sass-money-input" id="rs-price" type="text" inputmode="numeric" placeholder="$350,000">
-                            </div>
-                            <div class="sass-slider-wrap">
-                              <div class="sass-slider-shell">
-                                <input id="sass-price-range" class="sass-range" type="range" min="150000" max="750000" step="5000" value="350000">
-                              </div>
-                              <div class="sass-scale"><span>$150K</span><span>$750K+</span></div>
-                            </div>
-                            <div class="sass-help">Target purchase price for mortgage estimate.</div>
-                          </div>
-                          <div class="sass-card">
-                            <label class="sass-field-label">Downpayment</label>
-                            <div class="sass-topbox">
-                              <div class="sass-value" id="sass-down-amount">$17,500</div>
-                              <div class="sass-pill-mini" id="sass-down-pill">5%</div>
-                            </div>
-                            <div class="sass-slider-wrap">
-                              <div class="sass-slider-shell">
-                                <input id="sass-down-range" class="sass-range" type="range" min="0" max="30" step="1" value="5">
-                              </div>
-                              <div class="sass-scale"><span>0%</span><span>15%</span><span>30%</span></div>
-                            </div>
-                            <div class="sass-help">From 0% to 30% of the home price.</div>
-                            <input class="sass-number" id="rs-down" type="hidden" inputmode="numeric" min="0" step="1" value="17500">
-                          </div>
-                          <div class="sass-card">
-                            <label class="sass-field-label">Credit Score</label>
-                            <div class="sass-topbox">
-                              <div class="sass-score-value" id="sass-score-num">720</div>
-                              <div class="sass-pill-mini">APR <span id="sass-score-apr" style="margin-left:4px;">7.00%</span></div>
-                            </div>
-                            <div class="sass-slider-wrap">
-                              <div class="sass-slider-shell">
-                                <input id="sass-score-range" class="sass-range" type="range" min="300" max="850" step="10" value="720">
-                              </div>
-                              <div class="sass-scale"><span>300</span><span>575</span><span>850</span></div>
-                            </div>
-                            <div class="sass-help">Affects your mortgage rate and loan options.</div>
-                            <input class="sass-number" id="rs-score" type="hidden" inputmode="numeric" min="300" max="850" step="1" value="720">
-                          </div>
-                        </div>
-                        <button id="sass-analyze-btn" type="button">Continue</button>
-                        <div id="sass-err"></div>
-                      </div>
-                      <script>
-    (function(){
-      "use strict";
-      const DASHBOARD_URL = "https://pcsunited-com-28346d.webflow.io/air-force/financial-dashboard";
-      const OV_KEY               = "pcsunited.kpi_overrides.v1";
-      const BRIDGE_V1_KEY        = "pcsunited.bridge.v1";
-      const BRIDGE_KEY           = "pcsunited.bridge";
-      const REALTY_BRIDGE_KEY    = "realtysass.bridge";
-      const INTAKE_KEY           = "pcsunited.financial_intake.v1";
-      const OPEN_FLOW_MARKER_KEY = "pcsunited.open_flow_ready.v1";
-      const AIOU_KEYS = [
-        "pcsunited.user_aiou_inputs.v1",
-        "pcsunited.aiou_inputs.v1",
-        "realtysass.user_aiou_inputs.v1",
-        "realtysass.aiou_inputs.v1"
-      ];
-      const root = document.getElementById("sass-mortgage-strip");
-      if (!root) return;
-      const buttons     = root.querySelectorAll(".intent-btn");
-      const continueBtn = document.getElementById("sass-analyze-btn");
-      const errEl       = document.getElementById("sass-err");
-      const elExpenses  = document.getElementById("rs-expenses");
-      const elPrice     = document.getElementById("rs-price");
-      const elDown      = document.getElementById("rs-down");
-      const elScore     = document.getElementById("rs-score");
-      const expensesRange = document.getElementById("sass-expenses-range");
-      const priceRange    = document.getElementById("sass-price-range");
-      const downRange     = document.getElementById("sass-down-range");
-      const downAmount    = document.getElementById("sass-down-amount");
-      const downPill      = document.getElementById("sass-down-pill");
-      const scoreRange    = document.getElementById("sass-score-range");
-      const scoreNum      = document.getElementById("sass-score-num");
-      const scoreApr      = document.getElementById("sass-score-apr");
-      function n0(v){
-        const n = Number(v);
-        return Number.isFinite(n) ? n : 0;
-      }
-      function clamp(n,min,max){
-        return Math.max(min,Math.min(max,n));
-      }
-      function digitsOnly(str){
-        return String(str || "").replace(/[^\d]/g,"");
-      }
-      function cur(n,d){
-        return (Number(n) || 0).toLocaleString("en-US",{
-          style:"currency",
-          currency:"USD",
-          minimumFractionDigits:d || 0,
-          maximumFractionDigits:d || 0
-        });
-      }
-      function readMoneyInput(el){
-        if(!el) return 0;
-        const raw = digitsOnly(el.value);
-        const n = Number(raw || 0);
-        return Number.isFinite(n) ? Math.max(0,n) : 0;
-      }
-      function writeMoneyInput(el,value){
-        if(!el) return;
-        const n = Number(value || 0);
-        el.value = n > 0 ? cur(n,0) : "";
-      }
-      function scoreAPR(s){
-        s = Number(s) || 720;
-        if(s >= 780) return 6.50;
-        if(s >= 760) return 6.75;
-        if(s >= 720) return 7.00;
-        if(s >= 700) return 7.20;
-        if(s >= 680) return 7.35;
-        if(s >= 660) return 7.85;
-        if(s >= 640) return 8.25;
-        if(s >= 620) return 9.25;
-        return 9.95;
-      }
-      function readJSON(key,fallback){
-        try{
-          return JSON.parse(localStorage.getItem(key) || "null") ?? fallback;
-        }catch(_){
-          return fallback;
-        }
-      }
-      function writeJSON(key,val){
-        try{
-          localStorage.setItem(key,JSON.stringify(val));
-        }catch(_){}
-      }
-      function getActiveMode(){
-        const active = root.querySelector(".intent-btn.active");
-        return active ? String(active.dataset.mode || "ready") : "ready";
-      }
-      function setError(msg){
-        if(!errEl) return;
-        if(!msg){
-          errEl.style.display = "none";
-          errEl.textContent = "";
-          return;
-        }
-        errEl.style.display = "block";
-        errEl.textContent = msg;
-      }
-      function readAiouIfPresent(){
-        for(const key of AIOU_KEYS){
-          const value = readJSON(key,null);
-          if(value && typeof value === "object"){
-            return { key, data:value };
-          }
-        }
-        return null;
-      }
-      function dispatchEventSafe(name,detail){
-        try{
-          window.dispatchEvent(new CustomEvent(name,{ detail:detail || {} }));
-        }catch(_){}
-      }
-      function updateRangeFill(range){
-        if(!range) return;
-        const min = Number(range.min || 0);
-        const max = Number(range.max || 100);
-        const val = Number(range.value || min);
-        const pct = clamp(((val - min) / (max - min)) * 100,0,100);
-        const shell = range.closest(".sass-slider-shell");
-        if(!shell) return;
-        shell.style.setProperty(
-          "--rail-bg",
-          "linear-gradient(90deg,#8ef3c5 0%,#6aa7ff " + pct + "%,rgba(18,24,38,.18) " + pct + "%,rgba(18,24,38,.18) 100%)"
-        );
-      }
-      function updateDownUI(){
-        const price = readMoneyInput(elPrice);
-        const pct = clamp(Number(downRange && downRange.value) || 0,0,30);
-        const amount = Math.round(price * (pct / 100));
-        if(downAmount) downAmount.textContent = cur(amount,0);
-        if(downPill) downPill.textContent = pct + "%";
-        if(elDown) elDown.value = String(amount);
-        updateRangeFill(downRange);
-      }
-      function updateScoreUI(){
-        const score = clamp(Number(scoreRange && scoreRange.value) || 720,300,850);
-        if(scoreNum) scoreNum.textContent = String(score);
-        if(scoreApr) scoreApr.textContent = scoreAPR(score).toFixed(2) + "%";
-        if(elScore) elScore.value = String(score);
-        updateRangeFill(scoreRange);
-      }
-      function updateExpensesFromRange(){
-        const v = Number(expensesRange && expensesRange.value) || 1800;
-        writeMoneyInput(elExpenses,v);
-        updateRangeFill(expensesRange);
-      }
-      function updatePriceFromRange(){
-        const v = Number(priceRange && priceRange.value) || 350000;
-        writeMoneyInput(elPrice,v);
-        updateRangeFill(priceRange);
-        updateDownUI();
-      }
-      function syncRangeFromMoney(el,range,min,max,step){
-        const value = readMoneyInput(el);
-        if(!range || !value) return;
-        const rounded = Math.round(value / step) * step;
-        range.value = String(clamp(rounded,min,max));
-        updateRangeFill(range);
-      }
-      function bindMoneyField(el,onBlurUpdate){
-        if(!el) return;
-        el.addEventListener("focus",function(){
-          const raw = digitsOnly(el.value);
-          el.value = raw ? Number(raw).toLocaleString("en-US") : "";
-        });
-        el.addEventListener("blur",function(){
-          const n = readMoneyInput(el);
-          el.value = n > 0 ? cur(n,0) : "";
-          if(typeof onBlurUpdate === "function") onBlurUpdate();
-        });
-      }
-      buttons.forEach(btn => {
-        btn.addEventListener("click",() => {
-          buttons.forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-        });
-      });
-      bindMoneyField(elExpenses,function(){
-        syncRangeFromMoney(elExpenses,expensesRange,500,5000,100);
-      });
-      bindMoneyField(elPrice,function(){
-        syncRangeFromMoney(elPrice,priceRange,150000,750000,5000);
-        updateDownUI();
-      });
-      if(expensesRange){
-        expensesRange.addEventListener("input",updateExpensesFromRange);
-        expensesRange.addEventListener("change",updateExpensesFromRange);
-      }
-      if(priceRange){
-        priceRange.addEventListener("input",updatePriceFromRange);
-        priceRange.addEventListener("change",updatePriceFromRange);
-      }
-      if(downRange){
-        downRange.addEventListener("input",updateDownUI);
-        downRange.addEventListener("change",updateDownUI);
-      }
-      if(scoreRange){
-        scoreRange.addEventListener("input",updateScoreUI);
-        scoreRange.addEventListener("change",updateScoreUI);
-      }
-      (function prefill(){
-        const ov = readJSON(OV_KEY,{}) || {};
-        const intake = readJSON(INTAKE_KEY,{}) || {};
-        const bridge = readJSON(BRIDGE_V1_KEY,{}) || {};
-        const prevExpenses =
-          ov.expensesOverride ??
-          intake.expenses ??
-          intake.monthly_expenses ??
-          bridge.expenses ??
-          1800;
-        const prevPrice =
-          ov.projected_home_price ??
-          ov.housingOverride ??
-          intake.price ??
-          intake.projected_home_price ??
-          bridge.price ??
-          bridge.housing ??
-          350000;
-        const prevDown =
-          ov.downpayment ??
-          ov.savingsOverride ??
-          intake.downpayment ??
-          bridge.dpAmt ??
-          17500;
-        const prevScore =
-          ov.credit_score ??
-          ov.creditScore ??
-          intake.creditScore ??
-          intake.credit_score ??
-          bridge.creditScore ??
-          720;
-        writeMoneyInput(elExpenses,prevExpenses);
-        writeMoneyInput(elPrice,prevPrice);
-        if(expensesRange) expensesRange.value = String(clamp(Math.round(Number(prevExpenses || 1800) / 100) * 100,500,5000));
-        if(priceRange) priceRange.value = String(clamp(Math.round(Number(prevPrice || 350000) / 5000) * 5000,150000,750000));
-        const priceNum = Number(prevPrice || 0);
-        const downNum = Number(prevDown || 0);
-        if(downRange && priceNum > 0 && downNum >= 0){
-          const pct = clamp(Math.round((downNum / priceNum) * 100),0,30);
-          downRange.value = String(pct);
-        }
-        if(scoreRange && prevScore !== ""){
-          scoreRange.value = String(clamp(Math.round(Number(prevScore) || 720),300,850));
-        }
-        const intakeMode = intake.mode || "";
-        if(intakeMode){
-          buttons.forEach(btn => {
-            btn.classList.toggle("active",String(btn.dataset.mode || "") === String(intakeMode));
-          });
-        }
-        updateRangeFill(expensesRange);
-        updateRangeFill(priceRange);
-        updateDownUI();
-        updateScoreUI();
-      })();
-      continueBtn.addEventListener("click",function(){
-        setError("");
-        const mode     = getActiveMode();
-        const expenses = Math.max(0,readMoneyInput(elExpenses));
-        const price    = Math.max(0,readMoneyInput(elPrice));
-        const down     = Math.max(0,n0(elDown && elDown.value));
-        let score      = Math.round(n0(elScore && elScore.value));
-        if(score <= 0) score = 720;
-        score = Math.max(300,Math.min(850,score));
-        if(price > 0 && down > price){
-          setError("Downpayment can’t be greater than the home price.");
-          return;
-        }
-        const aiouWrap = readAiouIfPresent();
-        const ov = readJSON(OV_KEY,{}) || {};
-        ov.expensesOverride      = expenses;
-        ov.housingOverride       = price;
-        ov.savingsOverride       = down;
-        ov.creditScore           = score;
-        ov.credit_score          = score;
-        ov.downpayment           = down;
-        ov.projected_home_price  = price;
-        ov.dpManual              = true;
-        ov._intakeTs             = Date.now();
-        ov._intakeMode           = mode;
-        ov._intakeSource         = "pcsunited.financial.intake.v1";
-        writeJSON(OV_KEY,ov);
-        const bridge = readJSON(BRIDGE_V1_KEY,{}) || {};
-        bridge.expenses             = expenses;
-        bridge.monthly_expenses     = expenses;
-        bridge.monthlyExpenses      = expenses;
-        bridge.housing              = price;
-        bridge.price                = price;
-        bridge.projected_home_price = price;
-        bridge.projectedHomePrice   = price;
-        bridge.homePrice            = price;
-        bridge.dpAmt                = down;
-        bridge.downpayment          = down;
-        bridge.downPayment          = down;
-        bridge.creditScore          = score;
-        bridge.credit_score         = score;
-        bridge.fico                 = score;
-        bridge._intakeMode          = mode;
-        bridge._intakeTs            = Date.now();
-        bridge._intakeSource        = "pcsunited.financial.intake.v1";
-        if(aiouWrap && aiouWrap.data){
-          bridge._aiou = aiouWrap.data;
-          bridge._aiouKey = aiouWrap.key;
-        }
-        writeJSON(BRIDGE_V1_KEY,bridge);
-        writeJSON(BRIDGE_KEY,bridge);
-        writeJSON(REALTY_BRIDGE_KEY,bridge);
-        const intakePayload = {
-          mode:mode,
-          expenses:expenses,
-          monthly_expenses:expenses,
-          price:price,
-          projected_home_price:price,
-          downpayment:down,
-          creditScore:score,
-          credit_score:score,
-          estimated_apr:scoreAPR(score),
-          downpayment_percent:Number(downRange && downRange.value) || 0,
-          saved_at:new Date().toISOString(),
-          source:"pcsunited.financial_intake.v1",
-          aiou:aiouWrap ? aiouWrap.data : null,
-          aiou_key:aiouWrap ? aiouWrap.key : null
-        };
-        writeJSON(INTAKE_KEY,intakePayload);
-        writeJSON(OPEN_FLOW_MARKER_KEY,{
-          ready:true,
-          ts:Date.now(),
-          source:"pcsunited.financial_intake.v1",
-          dashboard_url:DASHBOARD_URL
-        });
-        dispatchEventSafe("pcsunited:financial-intake-ready",{
-          intake:intakePayload,
-          overrides:ov,
-          bridge:bridge
-        });
-        dispatchEventSafe("pcsunited:bridge-ready",{
-          bridge:bridge
-        });
-        continueBtn.disabled = true;
-        continueBtn.textContent = "Continuing…";
-        window.location.assign(DASHBOARD_URL.trim());
-      });
-      updateRangeFill(expensesRange);
-      updateRangeFill(priceRange);
-      updateDownUI();
-      updateScoreUI();
-    })();
-  </script>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
       </section>
-      <div class="sliderinblack">
-        <div data-w-id="6d500b8e-05b8-aedf-dd66-a3c7cb4f437d" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <section class="section home1-testimonials">
-        <div class="w-layout-blockcontainer container w-container">
-          <div class="w-layout-grid home1-grid-testimonials">
-            <div class="testimonial-card-wrapper">
-              <div class="testimonial-card">
-                <div class="testimonial-logo"><img src="../images/Logo-5.svg" loading="lazy" alt="Logo client"></div>
-                <div class="testimonial-content">
-                  <div class="testimonial-quote">&quot;A game-changer for our startup; Orvimo unified tools, reduced manual work, and accelerated our entire delivery pipeline.&quot;</div>
-                  <div><strong class="testimonial-author">Raj Patel — Co-Founder &amp; CTO</strong></div>
-                </div>
-              </div>
-              <div class="testimonial-card">
-                <div class="testimonial-logo"><img src="../images/Logo-4.svg" loading="lazy" alt="Logo client"></div>
-                <div class="testimonial-content">
-                  <div class="testimonial-quote">&quot;Sales and marketing productivity skyrocketed thanks to Orvimo’s AI-driven automation and clear, predictable workflow insights.&quot;</div>
-                  <div><strong class="testimonial-author">Maya Delgado — Head of Sale</strong></div>
-                </div>
-              </div>
-              <div class="buttons-row-6">
-                <a href="#" class="primary-glow-wrapper-22 full w-inline-block">
-                  <div class="button-overflow-hidden-2 mobile-full-width">
-                    <div class="box-shadow-block-17">
-                      <div class="pedding-stroke-13">
-                        <div class="inside-button-31">
-                          <div class="button-text-33">Get your Base Analysis</div>
-                          <div class="hover-line-44"></div>
-                        </div>
-                      </div>
-                      <div class="glow-wrapper stroke">
-                        <div class="glow-item left"></div>
-                        <div class="glow-item"></div>
-                      </div>
-                    </div>
-                  </div>
-                </a>
-              </div>
-            </div>
-            <div class="testimonial-card-bg-img dark">
-              <div parallax-container="true" class="testimonial-bg-wrapper">
-                <div class="gradient-testimonall"></div><img class="testimonial-bg-img parallax" src="../images/gradiant-hero-2_1gradiant-hero-2.avif" alt="" sizes="(max-width: 1771px) 100vw, 1771px" loading="lazy" srcset="../images/gradiant-hero-2_1-p-500.png 500w, ../images/gradiant-hero-2_1-p-800.png 800w, ../images/gradiant-hero-2_1gradiant-hero-2.avif 1771w">
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div class="sliderinblack">
-        <div data-w-id="9d9b26ad-35d5-c1ca-3b61-63bd1f8f4890" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="creagteaccountafter-resouses fad">
-        <div class="spacer-xsmall-2">
-          <h1 class="max-width-large-2">Financial Readiness Dashboard</h1>
-          <h1 class="heading-88">Take our fun 2-minute Quiz and Find out. </h1>
-          <div data-w-id="e9537041-f77e-9c1f-5524-4d0a44055df1" class="home1_links_grid-3">
-            <a href="https://www.youtube.com/watch?v=-yXdPqm7zC0&amp;feature=youtu.be" class="home1_links_card-2 w-inline-block"><img src="../images/D11B76B2-958B-4871-B121-30BA68667423.png" loading="lazy" sizes="100vw" srcset="../images/D11B76B2-958B-4871-B121-30BA68667423-p-500.png 500w, ../images/D11B76B2-958B-4871-B121-30BA68667423-p-800.png 800w, ../images/D11B76B2-958B-4871-B121-30BA68667423-p-1080.png 1080w, ../images/D11B76B2-958B-4871-B121-30BA68667423.png 1254w" alt=""></a>
-            <a href="https://www.youtube.com/watch?v=-yXdPqm7zC0&amp;feature=youtu.be" class="home1_links_card-2 w-inline-block">
-              <div data-poster-url="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_poster.0000000.jpg" data-video-urls="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_mp4.mp4,https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="center-video w-background-video w-background-video-atom"><video id="cf5ee41e-f05d-c352-f606-7a058c0ab10a-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
-                  <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_mp4.mp4" data-wf-ignore="true">
-                  <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-wf-ignore="true">
-                </video></div>
-            </a>
-            <a href="https://www.youtube.com/watch?v=-yXdPqm7zC0&amp;feature=youtu.be" class="home1_links_card-2 w-inline-block"><img src="../images/D11B76B2-958B-4871-B121-30BA68667423.png" loading="lazy" sizes="100vw" srcset="../images/D11B76B2-958B-4871-B121-30BA68667423-p-500.png 500w, ../images/D11B76B2-958B-4871-B121-30BA68667423-p-800.png 800w, ../images/D11B76B2-958B-4871-B121-30BA68667423-p-1080.png 1080w, ../images/D11B76B2-958B-4871-B121-30BA68667423.png 1254w" alt=""></a>
-          </div>
-        </div>
-      </div>
-      <section class="section home1-key-figures">
-        <div class="w-layout-blockcontainer container w-container">
-          <div class="key-figures-home1-wrapper">
-            <div reveal-content="true" class="w-layout-grid key-figures-grid">
-              <div id="w-node-cc8eacc6-3af4-d68e-1466-28d184ef642f-c85e09e0" class="heading-wrapper">
-                <h4 line-split="true">Loved by Teams <span class="tertiary-color-emphasis">That Move Fast.</span></h4>
-                <p line-split="true">Companies, startups, builders, sales teams, and marketers all use Orvimo to streamline processes, reduce friction, and improve productivity through seamless AI-powered workflow automation.</p>
-              </div>
-            </div>
-            <div reveal-content="true" class="w-layout-grid key-figures-grid"><img src="../images/D11B76B2-958B-4871-B121-30BA68667423.png" loading="lazy" sizes="100vw" srcset="../images/D11B76B2-958B-4871-B121-30BA68667423-p-500.png 500w, ../images/D11B76B2-958B-4871-B121-30BA68667423-p-800.png 800w, ../images/D11B76B2-958B-4871-B121-30BA68667423-p-1080.png 1080w, ../images/D11B76B2-958B-4871-B121-30BA68667423.png 1254w" alt=""><img src="../images/PCSU.png" loading="lazy" sizes="100vw" srcset="../images/825300feceeba760c9d12166657de43b_PCSU-p-500.png 500w, ../images/PCSU.png 800w" alt=""><img src="../images/D11B76B2-958B-4871-B121-30BA68667423.png" loading="lazy" sizes="100vw" srcset="../images/D11B76B2-958B-4871-B121-30BA68667423-p-500.png 500w, ../images/D11B76B2-958B-4871-B121-30BA68667423-p-800.png 800w, ../images/D11B76B2-958B-4871-B121-30BA68667423-p-1080.png 1080w, ../images/D11B76B2-958B-4871-B121-30BA68667423.png 1254w" alt=""></div>
-            <div data-poster-url="../videos/Basic-Flag-1_poster.0000000.jpg" data-video-urls="../videos/Basic-Flag-1_mp4.mp4,../videos/Basic-Flag-1_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="flag-video-in-resources w-background-video w-background-video-atom"><video id="ab6bc1c2-7476-6d55-b2b0-bbed56c29ecb-video" autoplay="" loop="" style="background-image:url(&quot;../videos/Basic-Flag-1_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
-                <source src="../videos/Basic-Flag-1_mp4.mp4" data-wf-ignore="true">
-                <source src="../videos/Basic-Flag-1_webm.webm" data-wf-ignore="true">
-              </video></div>
-          </div>
-        </div>
-      </section>
+      <section class="section pcssnapshot"></section>
       <section class="section faq-home1">
         <div reveal-content="true" class="w-layout-blockcontainer container w-container">
           <h2 line-split="true" class="center-align">Frequently Asked Questions</h2>
@@ -3039,14 +1834,50 @@
           </div>
         </div>
       </section>
+      <div class="sliderinblack">
+        <div data-w-id="c42d35e1-6316-a5a1-093a-4550960735ff" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
+              </div>
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
+              </div>
+            </div>
+          </div>
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <section class="section cta-v1">
         <div reveal-content="true" class="cta1-wrapper">
           <div class="w-layout-grid cta1-content">
             <div id="w-node-_612a9483-36b5-11bb-5e43-bd3178ecec30-78ecec2d" class="cta-text-wrapper-left">
-              <h2 line-split="true" class="heading-cta">Book a demo <br>Unlock your <br>workflow</h2>
+              <h2 line-split="true" class="heading-cta">Create your <br>Account today</h2>
             </div>
             <div id="w-node-_612a9483-36b5-11bb-5e43-bd3178ecec38-78ecec2d" class="cta-text-wrapper-right">
-              <div line-split="true" class="cta-text-right">Discover how Orvimo elevates your daily operations instantly.</div>
+              <div line-split="true" class="cta-text-right">Create your account today to obtain enhanced Analytics &amp; Insight.</div>
               <div class="code-for-create-account w-embed"><!--  =========================================================
   PCS UNITED • Premium Account Button (Redirect) v1.0.0
   ✅ Matches your “CREATE PREMIUM ACCOUNT” gradient pill button
@@ -3118,7 +1949,7 @@
               </div>
             </div>
           </div>
-          <div class="background-cta"><img class="cta-img-bg" src="../images/background_1background.avif" alt="" sizes="(max-width: 1808px) 100vw, 1808px" fade-in="y" loading="lazy" srcset="../images/background_1-p-500.png 500w, ../images/background_1-p-800.png 800w, ../images/background_1background.avif 1808w"></div>
+          <div class="background-cta"><img class="cta-img-bg" src="../images/background_1background.avif" alt="" sizes="100vw" fade-in="y" loading="lazy" srcset="../images/background_1-p-500.png 500w, ../images/background_1-p-800.png 800w, ../images/background_1background.avif 1808w"></div>
         </div>
       </section>
     </div>
@@ -3127,20 +1958,6 @@
         <div class="footer_banners">
           <div class="footer_buy"><img src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="logo-footer">
             <div class="heading-style-h4-3 text-align-center"><em>Built for service members, veterans, and military families who need clearer PCS, housing, pay, and financial readiness decisions before the move gets expensive.</em></div>
-            <div class="flex-footer">
-              <div class="form-block w-form">
-                <form id="wf-form-Newsletter-2" name="wf-form-Newsletter-2" data-name="Newsletter" method="get" data-wf-page-id="69f6df2366c61b76c85e09e0" data-wf-element-id="a61b0545-5f07-12f7-b32e-ae8b6dc26dce">
-                  <div class="div-block-2"><input class="form_input-2 is-footer w-input" maxlength="256" name="Email-Address" data-name="Email Address" placeholder="Email Address" type="email" id="Email-Address-3" required=""><input type="submit" data-wait="Please wait..." class="button-8 is-footer w-button" value="Send"></div>
-                </form>
-                <div class="form_message-success-2 w-form-done">
-                  <div>Thank you! Your submission has been received!</div>
-                </div>
-                <div class="form_message-error w-form-fail">
-                  <div>Oops! Something went wrong while submitting the form.</div>
-                </div>
-              </div>
-              <div class="footer-text">Subcribe to our Monthly Blogs, New &amp; Resources</div>
-            </div>
           </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
         <div data-w-id="ee73203a-eb4c-0a70-cb0c-c0e63e1d2416" class="footer-flex-wrapper">

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu May 07 2026 02:03:58 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue May 12 2026 23:47:30 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e1a1a" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -222,13 +222,13 @@
         <div class="nav-wrapper">
           <div class="nav-container">
             <div class="nav-left">
-              <a aria-label="Yeyeyeah" href="old-home.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 479px) 98vw, (max-width: 767px) 99vw, (max-width: 1368px) 100vw, 1368px" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
+              <a aria-label="Yeyeyeah" href="user-dashboard.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 479px) 98vw, (max-width: 767px) 99vw, (max-width: 1368px) 100vw, 1368px" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
             </div>
             <nav role="navigation" id="w-node-a20e7068-528c-2165-b385-785e4c45ca5e-4c45ca57" class="nav-menu w-nav-menu">
               <div class="default-nav-links big-menu">
                 <a href="index.html" aria-current="page" class="nav-link w-nav-link w--current">Home Page</a>
-                <a href="air-force/resources.html" class="nav-link w-nav-link">Resources</a>
                 <a href="about-us.html" class="nav-link w-nav-link">About Us</a>
+                <a href="air-force/resources.html" class="nav-link w-nav-link">Resources</a>
                 <a href="blog-v1.html" class="nav-link w-nav-link">Blog</a>
               </div>
               <div class="nav-mobile-social">
@@ -236,14 +236,20 @@
               </div>
               <div class="mobile-sign-cta">
                 <div class="sign-cta-navwrap">
-                  <a href="signin-signup/sign-in.html" aria-label="sign in" class="menu-sign-btn w-nav-link">Sign In</a>
                   <div class="nav-btn-wrapper">
                     <a aria-label="Start for Free" href="air-force/account.html" target="_blank" class="btn-menu">Create Account</a>
                   </div>
                 </div>
               </div>
             </nav>
-            <div id="w-node-a20e7068-528c-2165-b385-785e4c45cb07-4c45ca57" class="nav-right">
+            <div id="w-node-_250c14b8-4215-eefa-17ad-f687c748e030-4c45ca57" class="nav-right">
+              <div class="nav-right-sign-cta-wrap">
+                <div class="sign-cta-navwrap">
+                  <div class="nav-btn-wrapper">
+                    <a aria-label="Start for Free" href="user-dashboard.html" target="_blank" class="btn-menu">   Log In   </a>
+                  </div>
+                </div>
+              </div>
               <div class="burger w-nav-button">
                 <div class="icon-wrapper">
                   <div class="burger-icon">
@@ -256,16 +262,272 @@
           </div>
         </div>
       </div>
+      <div class="w-embed w-script"><!--  =========================================================
+  RealtySaSS • Frosted Glass Login Lock (Email + Password)
+  - Uses /api/login (Supabase Auth check)
+  - After success:
+      • Unlocks page
+      • Stores login email/profile in localStorage for dashboards
+=========================================================  -->
+        <div id="rs-lock-overlay" aria-hidden="true" style="visibility:hidden; opacity:0;">
+          <div class="rs-lock-centered" role="dialog" aria-labelledby="rs-lock-title" aria-modal="true">
+            <div class="rs-lock-card" id="rs-lock-card">
+              <h1 id="rs-lock-title">Sign In to Continue</h1>
+              <p class="rs-lock-sub">This page is private — please enter your credentials.</p>
+              <div class="rs-field">
+                <input id="rs-email-input" type="email" placeholder="Email Address" autocomplete="email">
+              </div>
+              <div class="rs-field">
+                <input id="rs-pass-input" type="password" placeholder="Password" minlength="8" autocomplete="current-password">
+              </div>
+              <div class="rs-login-row">
+                <button id="rs-login-btn" type="button">Log In</button>
+              </div>
+              <!--  SIGN UP BLOCK  -->
+              <div class="rs-signup-row">
+                <p class="rs-signup-text">Not a Prime Member yet?</p>
+                <a class="rs-signup-btn" href="https://new-real-estate-purchase.webflow.io/user-profile">
+                  Sign Up
+                </a>
+              </div>
+              <p id="rs-lock-msg" class="rs-lock-msg" aria-live="polite"></p>
+            </div>
+          </div>
+        </div>
+        <style>
+  :root{
+    --rs-overlay-bg: rgba(6,10,18,0.55);
+    --rs-accent: #8ef3c5;
+    --rs-ink: #e9ecff;
+    --rs-muted: #a8b0d6;
+    --rs-radius: 14px;
+  }
+  #rs-lock-overlay{
+    position:fixed; inset:0; width:100%; height:100%;
+    z-index:99999; display:flex; align-items:center; justify-content:center;
+    background:var(--rs-overlay-bg);
+    backdrop-filter:blur(10px) saturate(120%);
+    -webkit-backdrop-filter:blur(10px) saturate(120%);
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    transition:opacity .25s ease, visibility .25s ease;
+  }
+  #rs-lock-overlay.rs-hidden{
+    opacity:0; pointer-events:none; visibility:hidden;
+  }
+  .rs-lock-centered{
+    width:100%; max-width:520px; padding:20px;
+  }
+  .rs-lock-card{
+    background:rgba(255,255,255,0.03);
+    border-radius:var(--rs-radius);
+    border:1px solid rgba(255,255,255,0.06);
+    box-shadow:0 8px 30px rgba(3,6,15,0.6);
+    padding:28px 24px; color:var(--rs-ink);
+  }
+  .rs-lock-card h1{
+    margin:0 0 8px; font-size:20px; font-weight:700;
+  }
+  .rs-lock-sub{
+    margin:0 0 18px; color:var(--rs-muted); font-size:13px;
+  }
+  .rs-field{
+    margin-bottom:14px;
+  }
+  #rs-email-input,
+  #rs-pass-input{
+    width:100%;
+    padding:12px 14px;
+    border-radius:10px;
+    border:1px solid rgba(255,255,255,0.06);
+    background:rgba(255,255,255,0.02);
+    color:var(--rs-ink); 
+    font-size:16px;
+    outline:none;
+  }
+  #rs-email-input::placeholder,
+  #rs-pass-input::placeholder{
+    color:var(--rs-muted);
+  }
+  #rs-login-btn{
+    width:100%;
+    padding:12px 16px;
+    border-radius:10px;
+    border:none;
+    background:linear-gradient(180deg,var(--rs-accent),rgba(100,230,190,0.85));
+    color:#02110b; font-weight:700; cursor:pointer; font-size:15px;
+  }
+  .rs-lock-msg{
+    margin-top:12px; 
+    color:var(--rs-muted); 
+    font-size:13px; 
+    min-height:18px;
+  }
+  /* NEW: Sign Up area */
+  .rs-signup-row{
+    margin-top:18px;
+    padding-top:14px;
+    border-top:1px solid rgba(255,255,255,0.05);
+    text-align:center;
+  }
+  .rs-signup-text{
+    margin:0 0 8px;
+    font-size:13px;
+    color:var(--rs-muted);
+  }
+  .rs-signup-btn{
+    display:inline-block;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid rgba(142,243,197,0.65);
+    background:rgba(255,255,255,0.02);
+    color:var(--rs-accent);
+    font-size:13px;
+    font-weight:700;
+    text-decoration:none;
+    transition:background .2s ease, box-shadow .2s ease, transform .2s ease;
+  }
+  .rs-signup-btn:hover{
+    background:rgba(142,243,197,0.10);
+    box-shadow:0 8px 20px rgba(0,0,0,0.7);
+    transform:translateY(-1px);
+  }
+</style>
+        <script>
+(function(){
+  "use strict";
+  const API_BASE = "https://theorozcorealty.netlify.app/api";
+  // Which pages should be locked
+  const ALLOW_PATHS = [
+    /\/realtysass(?:\.html)?$/i,
+  ];
+  const path = (location.pathname || "/").toLowerCase();
+  const shouldLock = ALLOW_PATHS.some(re => re.test(path));
+  if (!shouldLock){
+    document.querySelectorAll('#rs-lock-overlay').forEach(el => el.remove());
+    return;
+  }
+  const overlay  = document.getElementById('rs-lock-overlay');
+  const msg      = document.getElementById('rs-lock-msg');
+  const emailInp = document.getElementById('rs-email-input');
+  const passInp  = document.getElementById('rs-pass-input');
+  const loginBtn = document.getElementById('rs-login-btn');
+  const card     = document.getElementById('rs-lock-card');
+  // Show overlay
+  overlay.classList.remove('rs-hidden');
+  overlay.style.visibility = 'visible';
+  overlay.style.opacity = '1';
+  // ARIA fix
+  overlay.removeAttribute("aria-hidden");
+  function showMsg(text, isError){
+    msg.textContent = text || '';
+    msg.style.color = isError ? '#ffb3b3' : 'var(--rs-muted)';
+  }
+  function unlock(){
+    document.querySelectorAll('#rs-lock-overlay').forEach(el=>{
+      el.classList.add('rs-hidden');
+      el.style.visibility = 'hidden';
+      el.style.opacity = '0';
+      el.setAttribute("aria-hidden","true");
+    });
+  }
+  async function loginWithServer(email, password){
+    const res = await fetch(`${API_BASE}/login`, {
+      method: "POST",
+      headers: {"Content-Type": "application/json"},
+      body: JSON.stringify({ email, password })
+    });
+    const data = await res.json().catch(() => ({}));
+    if (!res.ok || data.ok === false){
+      throw new Error(data.error || "Incorrect email or password.");
+    }
+    return data;
+  }
+  // NEW: remember who just logged in (for dashboards)
+  function rememberLogin(email, serverData){
+    try{
+      // core key the dashboards can read
+      localStorage.setItem("realtysass.loginEmail", email);
+      // optional identity blob
+      const existing = JSON.parse(localStorage.getItem("realtysass.identity") || "{}") || {};
+      existing.email = email;
+      // if the API happens to send a profile, lightly merge it
+      const profile = (serverData && (serverData.profile || serverData.user || {})) || {};
+      if (profile.full_name && !existing.name){
+        existing.name = profile.full_name;
+      }
+      if (profile.phone && !existing.phone){
+        existing.phone = profile.phone;
+      }
+      if (profile.rank && !existing.rankPaygrade){
+        existing.rankPaygrade = profile.rank;
+      }
+      if (profile.va_disability && !existing.vaDisability){
+        existing.vaDisability = profile.va_disability;
+      }
+      if (profile.years_of_service && !existing.yearsOfService){
+        existing.yearsOfService = profile.years_of_service;
+      }
+      if (profile.mode && !existing.mode){
+        existing.mode = profile.mode;
+      }
+      localStorage.setItem("realtysass.identity", JSON.stringify(existing));
+    }catch(e){
+      // fail silently; login still works
+    }
+  }
+  async function onLogin(){
+    const em = emailInp.value.trim().toLowerCase();
+    const pw = passInp.value.trim();
+    if (!em){
+      showMsg("Please enter your email.", true);
+      return;
+    }
+    if (pw.length < 8){
+      showMsg("Password must be at least 8 characters.", true);
+      return;
+    }
+    loginBtn.disabled = true;
+    showMsg("Checking credentials...");
+    try {
+      const data = await loginWithServer(em, pw);
+      // NEW: store email/profile locally for the Financial Dashboard
+      rememberLogin(em, data);
+      showMsg("");
+      unlock();
+    } catch (err){
+      showMsg(err.message || "Incorrect email or password.", true);
+      if(card && card.animate){
+        card.animate(
+          [
+            { transform:'translateX(-5px)' },
+            { transform:'translateX(5px)' },
+            { transform:'translateX(0)' }
+          ],
+          { duration:260 }
+        );
+      }
+    } finally {
+      loginBtn.disabled = false;
+    }
+  }
+  loginBtn.addEventListener("click", onLogin);
+  passInp.addEventListener("keydown", e=>{
+    if (e.key === "Enter") onLogin();
+  });
+  setTimeout(()=> emailInp.focus(), 0);
+})();
+</script>
+      </div>
     </div>
     <div class="main">
       <section class="section_home1_hero">
         <div class="padding-global padding-section-medium">
-          <div data-w-id="9676ed2b-3a6c-c63c-e94d-7292d77a5e47" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="home1_hero_grid">
+          <div data-w-id="9676ed2b-3a6c-c63c-e94d-7292d77a5e47" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="home-section-intor">
             <div class="home1_hero_content"><img src="images/PCSU.png" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" srcset="images/825300feceeba760c9d12166657de43b_PCSU-p-500.png 500w, images/PCSU.png 800w" alt="" class="image-91">
               <h2 class="heading-57"></h2>
             </div>
             <div class="home1_hero_info">
-              <div>Welcome to PCS United. <br>‍<br>We provide Answers to your financial Questions. We are an A.I Driven Platform build to provide Clear &amp; Concise solutions to your PCS and Home-Buying concerns. From Projecting BAH to Calculating 0% Risk Monthly Home Mortgage, our dashboards are based on AF calcualtions, Data Science and Market Insight to provide you with you deserve. <br>‍<br></div>
+              <div class="text-block-25">Welcome to PCS United. <br>‍<br>We provide Answers to your financial Questions. We are an A.I Driven Platform build to provide Clear &amp; Concise solutions to your PCS and Home-Buying concerns. From Projecting BAH to Calculating 0% Risk Monthly Home Mortgage, our dashboards are based on AF calcualtions, Data Science and Market Insight to provide you with you deserve. <br>‍<br></div>
             </div>
           </div>
         </div>
@@ -277,14 +539,16 @@
           </video></div>
       </section>
       <section class="section home1-3col"><img src="images/69ba53d24d169e2593688e05_PCSU.png" loading="lazy" sizes="(max-width: 1350px) 100vw, 1350px" srcset="images/69ba53d24d169e2593688e05_PCSU-p-500.png 500w, images/69ba53d24d169e2593688e05_PCSU-p-800.png 800w, images/69ba53d24d169e2593688e05_PCSU-p-1080.png 1080w, images/69ba53d24d169e2593688e05_PCSU.png 1350w" alt="" class="image-85">
+        <h3 line-split="true" class="center-align">Solutions for our <br><span class="tertiary-color-emphasis">Military Community</span></h3>
         <div class="w-layout-blockcontainer container w-container">
           <div reveal-content="true" class="_3cols-heading">
-            <h3 line-split="true" class="center-align">Solutions for our <br><span class="tertiary-color-emphasis">Military Community</span></h3>
             <p line-split="true" class="fierst-sub-text center-align">Solutions bases on your current military status and PCS location. Through the use of Data Science and Current Market Analysis we provide you Clear &amp; Concise Answers to your Home-Buying questions.</p>
           </div>
           <div reveal-content="true" class="w-layout-grid three-setions">
             <div fade-in="true" id="w-node-_3473cdd1-5b48-052d-6943-d93053cbdea5-0e0e1a1a" class="card-item-home1">
-              <div id="w-node-_3473cdd1-5b48-052d-6943-d93053cbdea6-0e0e1a1a" class="card-item-img-wrap"><img src="images/EE383CF0-BB01-4D01-BBA8-BFF3A709E189.jpg" loading="lazy" sizes="(max-width: 767px) 48vw, (max-width: 991px) 356px, 462px" srcset="images/ceae08477a715706bba3ee4d3adbbe12_EE383CF0-BB01-4D01-BBA8-BFF3A709E189-p-500.jpg 500w, images/ceae08477a715706bba3ee4d3adbbe12_EE383CF0-BB01-4D01-BBA8-BFF3A709E189-p-800.jpg 800w, images/ceae08477a715706bba3ee4d3adbbe12_EE383CF0-BB01-4D01-BBA8-BFF3A709E189-p-1080.jpg 1080w, images/EE383CF0-BB01-4D01-BBA8-BFF3A709E189.jpg 1536w" alt="" class="img-card-home1"></div>
+              <a id="w-node-_0b087bf2-f9ce-c4c2-e9c2-05c66b206467-0e0e1a1a" href="#" class="w-inline-block">
+                <div class="card-item-img-wrap"><img src="images/spline.png" loading="lazy" sizes="(max-width: 767px) 48vw, (max-width: 991px) 47vw, 462px" srcset="images/d8820be754541924f3963882ea08298b_spline-p-500.png 500w, images/d8820be754541924f3963882ea08298b_spline-p-800.png 800w, images/d8820be754541924f3963882ea08298b_spline-p-1080.png 1080w, images/d8820be754541924f3963882ea08298b_spline-p-1600.png 1600w, images/spline.png 1625w" alt="" class="img-card-home1"></div>
+              </a>
               <div id="w-node-_3473cdd1-5b48-052d-6943-d93053cbdea8-0e0e1a1a" class="card-text-content-home1">
                 <a href="https://pcsunited.com/air-force/resources.html#financial-readiness" class="w-inline-block">
                   <h4 class="fsize-xxs">Financial Solutions</h4>
@@ -292,621 +556,26 @@
                 <p class="paragraph-15">Understand your financial readiness, affordability range, and homebuying strategy with military-first analysis built around your income, expenses, debt, and PCS goals.</p>
               </div>
             </div>
-            <div fade-in="true" id="w-node-_3473cdd1-5b48-052d-6943-d93053cbdeaf-0e0e1a1a" class="card-item-home1">
-              <div id="w-node-_3473cdd1-5b48-052d-6943-d93053cbdeb0-0e0e1a1a" class="card-item-img-wrap">
-                <a href="air-force/base-demographics.html" target="_blank" class="w-inline-block"><img src="images/9F0B023D-BC14-46DD-83EA-F6AB944CF660.png" loading="lazy" sizes="(max-width: 479px) 72vw, (max-width: 767px) 48vw, (max-width: 991px) 356px, 462px" srcset="images/9F0B023D-BC14-46DD-83EA-F6AB944CF660-p-500.png 500w, images/9F0B023D-BC14-46DD-83EA-F6AB944CF660-p-800.png 800w, images/9F0B023D-BC14-46DD-83EA-F6AB944CF660-p-1080.png 1080w, images/9F0B023D-BC14-46DD-83EA-F6AB944CF660.png 1536w" alt="" class="img-card-home1"></a>
-              </div>
-              <div id="w-node-_3473cdd1-5b48-052d-6943-d93053cbdeb2-0e0e1a1a" class="card-text-content-home1">
-                <a href="air-force/base-demographics.html" target="_blank" class="w-inline-block">
-                  <h4 class="font-size">Base Demograhpics</h4>
+            <div fade-in="true" id="w-node-edb9b476-e551-6acd-30a4-ec8f22837574-0e0e1a1a" class="card-item-home1">
+              <a id="w-node-edb9b476-e551-6acd-30a4-ec8f22837575-0e0e1a1a" href="#" class="w-inline-block">
+                <div class="card-item-img-wrap"><img src="images/SA.jpg" loading="lazy" sizes="(max-width: 479px) 52vw, (max-width: 767px) 48vw, (max-width: 991px) 47vw, 462px" srcset="images/8b6bcb8c114f0911d2e20747794cefe5_SA-p-500.jpg 500w, images/8b6bcb8c114f0911d2e20747794cefe5_SA-p-800.jpg 800w, images/8b6bcb8c114f0911d2e20747794cefe5_SA-p-1080.jpg 1080w, images/SA.jpg 1086w" alt="" class="img-card-home1"></div>
+              </a>
+              <div id="w-node-edb9b476-e551-6acd-30a4-ec8f22837578-0e0e1a1a" class="card-text-content-home1">
+                <a href="https://pcsunited.com/air-force/resources.html#financial-readiness" class="w-inline-block">
+                  <h4 class="fsize-xxs">Base Demographics</h4>
                 </a>
-                <p class="paragraph-12">Explore base-level housing data, commute insights, local demographics, gate access, market scorecards, and neighborhood context before choosing where to live.</p>
+                <p class="paragraph-15">Understand your financial readiness, affordability range, and homebuying strategy with military-first analysis built around your income, expenses, debt, and PCS goals.</p>
               </div>
             </div>
-            <div fade-in="true" class="card-item-home1">
-              <div id="w-node-_3473cdd1-5b48-052d-6943-d93053cbdeba-0e0e1a1a" class="card-item-img-wrap">
-                <a href="air-force/bah-base-pay-calculator.html" class="w-inline-block"><img src="images/BAHCalculator.png" loading="lazy" sizes="(max-width: 767px) 48vw, (max-width: 991px) 356px, 462px" srcset="images/5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator-p-500.png 500w, images/5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator-p-800.png 800w, images/5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator-p-1080.png 1080w, images/BAHCalculator.png 1536w" alt="" class="img-card-home1"></a>
-              </div>
-              <div id="w-node-_3473cdd1-5b48-052d-6943-d93053cbdebc-0e0e1a1a" class="card-text-content-home1">
-                <a href="air-force/bah-base-pay-calculator.html" class="w-inline-block">
+            <div fade-in="true" id="w-node-_0d1a72e1-8bd5-b8eb-4b19-60ec336ad173-0e0e1a1a" class="card-item-home1">
+              <a id="w-node-_0d1a72e1-8bd5-b8eb-4b19-60ec336ad174-0e0e1a1a" href="#" class="w-inline-block">
+                <div class="card-item-img-wrap"><img src="images/Styleguide.jpg" loading="lazy" sizes="(max-width: 767px) 48vw, (max-width: 991px) 47vw, 462px" srcset="images/aaece03fe00ad2ac89e2c4487e3dd233_Styleguide-p-500.jpg 500w, images/aaece03fe00ad2ac89e2c4487e3dd233_Styleguide-p-800.jpg 800w, images/aaece03fe00ad2ac89e2c4487e3dd233_Styleguide-p-1080.jpg 1080w, images/Styleguide.jpg 1400w" alt="" class="img-card-home1"></div>
+              </a>
+              <div id="w-node-_0d1a72e1-8bd5-b8eb-4b19-60ec336ad177-0e0e1a1a" class="card-text-content-home1">
+                <a href="https://pcsunited.com/air-force/resources.html#financial-readiness" class="w-inline-block">
                   <h4 class="fsize-xxs">Military Resources</h4>
                 </a>
-                <p class="paragraph-11">Estimate BAH, base pay, BAS, retirement, VA disability, and other military compensation factors with simple tools built for service members and families.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div class="sliderinblack">
-        <div data-w-id="fbb87999-ce57-6d1f-bbea-7cbeb684e039" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <section class="section pcssnapshot">
-        <div class="hero2-content">
-          <div class="hero2-top-row">
-            <div class="hero2-text-wrap">
-              <h1 hero-line-split="true" class="hero-heading">Try our Advanced <span class="tertiary-color-emphasis">PCS Calculator.</span></h1>
-              <p hero-line-split="true" class="hero2-paragraph">Experience the Quality of PCSUnited. <br>PCS Calculator is an advance dashboad that provides concise and accurate data about your current or next PCS Location. Simply enter your Rank, YoS, Dependent status and New Duty Location and see your Estimated Home Price Range, Finaical Readiness Estimage and a Buy vs Rent Guide.  </p>
-              <div class="code-embed w-embed w-script"><!--  //#0 HOUSE OF SASS • TRANSPARENT INPUT STRIP (CANONICAL 44-BASE SNAPSHOT READY)  -->
-                <div id="sass-front-strip" style="all: initial;">
-                  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-                  <style>
-    #sass-front-strip, #sass-front-strip * {
-      box-sizing: border-box;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    #sass-shell {
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 10px 0 10px;
-      background: transparent !important;
-      border: none !important;
-      box-shadow: none !important;
-    }
-    #sass-duty-row{
-      display: flex;
-      justify-content: center;
-      margin-bottom: 16px;
-    }
-    #sass-duty-stack{
-      position: relative;
-      width: 320px;
-      max-width: 86vw;
-      height: 36px;
-      border-radius: 999px;
-    }
-    #sass-duty-select{
-      position: absolute;
-      inset: 0;
-      width: 100%;
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-      border: none;
-      background: transparent;
-      z-index: 10;
-    }
-    #sass-duty-shell{
-      position: absolute;
-      inset: 0;
-      z-index: 1;
-      pointer-events: none;
-      border-radius: 999px;
-      background: radial-gradient(circle at top left, #8ef3c5, #6aa7ff);
-      box-shadow: 0 14px 30px rgba(0,0,0,.80);
-      transition: 0.15s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      color: #050712;
-      line-height: 1;
-      user-select: none;
-    }
-    #sass-duty-stack:hover #sass-duty-shell{
-      transform: translateY(-1px);
-      filter: brightness(1.06);
-    }
-    #sass-duty-stack:focus-within #sass-duty-shell{
-      box-shadow:
-        0 14px 30px rgba(0,0,0,.80),
-        0 0 0 1px rgba(142,243,197,.25);
-    }
-    #sass-duty-text{
-      padding: 0 44px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 100%;
-      text-align: center;
-    }
-    #sass-duty-caret{
-      position: absolute;
-      right: 16px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 18px;
-      height: 18px;
-      opacity: .9;
-    }
-    #sass-input-row {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
-    }
-    @media (max-width: 768px) {
-      #sass-input-row { grid-template-columns: repeat(2, 1fr); }
-      #sass-duty-stack { width: 260px; }
-    }
-    .sass-field-label {
-      font-size: 11px;
-      text-transform: uppercase;
-      color: #a8b0d6;
-      letter-spacing: .1em;
-      margin-bottom: 5px;
-      display: block;
-    }
-    .sass-select {
-      width: 100%;
-      padding: 8px 10px;
-      border-radius: 10px;
-      border: 1px solid rgba(255,255,255,0.10);
-      background: rgba(12,14,25,0.65);
-      backdrop-filter: blur(4px);
-      color: #e9ecff;
-      font-size: 14px;
-      outline: none;
-      transition: 0.15s ease;
-    }
-    .sass-select:focus {
-      border-color: #8ef3c5;
-      box-shadow: 0 0 0 1px rgba(142,243,197,.25);
-    }
-    #sass-analyze-btn {
-      margin: 22px auto 0;
-      display: block;
-      padding: 10px 26px;
-      font-size: 13px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: .1em;
-      border: none;
-      border-radius: 999px;
-      background: radial-gradient(circle at top left, #8ef3c5, #6aa7ff);
-      color: #050712;
-      cursor: pointer;
-      box-shadow: 0 14px 30px rgba(0,0,0,.80);
-      transition: 0.15s ease;
-    }
-    #sass-analyze-btn:hover {
-      transform: translateY(-1px);
-      filter: brightness(1.06);
-    }
-    .sass-hidden { display: none !important; }
-  </style>
-                  <div id="sass-shell">
-                    <div id="sass-duty-row">
-                      <div id="sass-duty-stack">
-                        <select id="sass-duty-select" aria-label="Current Duty Station">
-                          <option value="" selected="">Current Duty Station</option>
-                        </select>
-                        <div id="sass-duty-shell">
-                          <div id="sass-duty-text">Current Duty Station</div>
-                          <svg id="sass-duty-caret" viewbox="0 0 24 24" fill="none" aria-hidden="true">
-                            <path d="M7 10l5 5 5-5" stroke="rgba(5,7,18,.9)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path>
-                          </svg>
-                        </div>
-                      </div>
-                    </div>
-                    <div id="sass-input-row">
-                      <div id="wrap-rank">
-                        <label class="sass-field-label">Rank</label>
-                        <select id="sass-rank" class="sass-select">
-                          <optgroup label="Enlisted">
-                            <option value="E1">E-1</option>
-                            <option value="E2">E-2</option>
-                            <option value="E3">E-3</option>
-                            <option value="E4">E-4</option>
-                            <option value="E5">E-5</option>
-                            <option value="E6">E-6</option>
-                            <option value="E7" selected="">E-7</option>
-                            <option value="E8">E-8</option>
-                            <option value="E9">E-9</option>
-                          </optgroup>
-                          <optgroup label="Officers">
-                            <option value="O1">O-1</option>
-                            <option value="O2">O-2</option>
-                            <option value="O3">O-3</option>
-                            <option value="O4">O-4</option>
-                            <option value="O5">O-5</option>
-                            <option value="O6">O-6</option>
-                            <option value="O7">O-7</option>
-                            <option value="O8">O-8</option>
-                          </optgroup>
-                        </select>
-                      </div>
-                      <div>
-                        <label class="sass-field-label">Years of Service</label>
-                        <select id="sass-yos" class="sass-select">
-                          <option value="2">2 Years</option>
-                          <option value="4">4 Years</option>
-                          <option value="6">6 Years</option>
-                          <option value="8">8 Years</option>
-                          <option value="10">10 Years</option>
-                          <option value="12">12 Years</option>
-                          <option value="14">14 Years</option>
-                          <option value="16" selected="">16 Years</option>
-                          <option value="18">18 Years</option>
-                          <option value="20">20 Years</option>
-                          <option value="22">22 Years</option>
-                          <option value="24">24 Years</option>
-                          <option value="26">26 Years</option>
-                          <option value="28">28 Years</option>
-                          <option value="30">30 Years</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label class="sass-field-label">Family Size</label>
-                        <select id="sass-family" class="sass-select">
-                          <option value="1">1 Person</option>
-                          <option value="2">2 People</option>
-                          <option value="3">3 People</option>
-                          <option value="4" selected="">4 People</option>
-                          <option value="5">5 People</option>
-                          <option value="6">6 People</option>
-                          <option value="7">7 People</option>
-                          <option value="8">8 People</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label class="sass-field-label">New Base Location</label>
-                        <select id="sass-base" class="sass-select"></select>
-                      </div>
-                    </div>
-                    <button id="sass-analyze-btn">Analyze</button>
-                  </div>
-                  <script>
-    (function() {
-      "use strict";
-      const SNAPSHOT_BASE_URL = "https://pcsunited.netlify.app/snapshot/";
-      const BASES = [
-        { value: "Andrews AFB",          fileKey: "Andrews",          zip: "20762" },
-        { value: "Barksdale AFB",        fileKey: "Barksdale",        zip: "71110" },
-        { value: "Beale AFB",            fileKey: "Beale",            zip: "95903" },
-        { value: "Cannon AFB",           fileKey: "Cannon",           zip: "88103" },
-        { value: "Charleston AFB",       fileKey: "Charleston",       zip: "29404" },
-        { value: "Davis-Monthan AFB",    fileKey: "Davis-Monthan",    zip: "85707" },
-        { value: "Dover AFB",            fileKey: "Dover",            zip: "19902" },
-        { value: "Dyess AFB",            fileKey: "Dyess",            zip: "79607" },
-        { value: "Eglin AFB",            fileKey: "Eglin",            zip: "32542" },
-        { value: "Elmendorf AFB",        fileKey: "Elmendorf",        zip: "99506" },
-        { value: "F.E-Warren AFB",       fileKey: "F.E-Warren",       zip: "82005" },
-        { value: "Fairchild AFB",        fileKey: "Fairchild",        zip: "99011" },
-        { value: "Fort-Sam-Houston AFB", fileKey: "Fort-Sam-Houston", zip: "78234" },
-        { value: "Holloman AFB",         fileKey: "Holloman",         zip: "88330" },
-        { value: "Hurlburt AFB",         fileKey: "Hurlburt",         zip: "32544" },
-        { value: "Keesler AFB",          fileKey: "Keesler",          zip: "39534" },
-        { value: "Kirtland AFB",         fileKey: "Kirtland",         zip: "87117" },
-        { value: "Lackland AFB",         fileKey: "Lackland",         zip: "78236" },
-        { value: "Langley AFB",          fileKey: "Langley",          zip: "23665" },
-        { value: "Laughlin AFB",         fileKey: "Laughlin",         zip: "78843" },
-        { value: "Little-Rock AFB",      fileKey: "Little-Rock",      zip: "72099" },
-        { value: "Luke AFB",             fileKey: "Luke",             zip: "85309" },
-        { value: "MacDill AFB",          fileKey: "MacDill",          zip: "33621" },
-        { value: "Malmstrom AFB",        fileKey: "Malmstrom",        zip: "59402" },
-        { value: "Maxwell AFB",          fileKey: "Maxwell",          zip: "36112" },
-        { value: "McConnell AFB",        fileKey: "McConnell",        zip: "67221" },
-        { value: "McGuire AFB",          fileKey: "McGuire",          zip: "08641" },
-        { value: "Minot AFB",            fileKey: "Minot",            zip: "58705" },
-        { value: "Moody AFB",            fileKey: "Moody",            zip: "31699" },
-        { value: "Mountain-Home AFB",    fileKey: "Mountain-Home",    zip: "83648" },
-        { value: "Nellis AFB",           fileKey: "Nellis",           zip: "89191" },
-        { value: "Offutt AFB",           fileKey: "Offutt",           zip: "68113" },
-        { value: "Peterson AFB",         fileKey: "Peterson",         zip: "80914" },
-        { value: "Randolph AFB",         fileKey: "Randolph",         zip: "78150" },
-        { value: "Robins AFB",           fileKey: "Robins",           zip: "31098" },
-        { value: "Scott AFB",            fileKey: "Scott",            zip: "62225" },
-        { value: "Seymour-Johnson AFB",  fileKey: "Seymour-Johnson",  zip: "27531" },
-        { value: "Shaw AFB",             fileKey: "Shaw",             zip: "29152" },
-        { value: "Sheppard AFB",         fileKey: "Sheppard",         zip: "76311" },
-        { value: "Tinker AFB",           fileKey: "Tinker",           zip: "73145" },
-        { value: "Travis AFB",           fileKey: "Travis",           zip: "94535" },
-        { value: "Tyndall AFB",          fileKey: "Tyndall",          zip: "32403" },
-        { value: "Whiteman AFB",         fileKey: "Whiteman",         zip: "65305" },
-        { value: "Wright-Patterson AFB", fileKey: "Wright-Patterson", zip: "45433" }
-      ];
-      const BASE_META = Object.create(null);
-      BASES.forEach(function(base) {
-        BASE_META[base.value] = {
-          label: base.value,
-          fileKey: base.fileKey,
-          zip: base.zip
-        };
-      });
-      const BASE_ALIASES = {
-        "Andrews": "Andrews AFB",
-        "AndrewsAFB": "Andrews AFB",
-        "Joint Base Andrews": "Andrews AFB",
-        "JB Andrews": "Andrews AFB",
-        "Barksdale": "Barksdale AFB",
-        "BarksdaleAFB": "Barksdale AFB",
-        "Beale": "Beale AFB",
-        "BealeAFB": "Beale AFB",
-        "Cannon": "Cannon AFB",
-        "CannonAFB": "Cannon AFB",
-        "Charleston": "Charleston AFB",
-        "CharlestonAFB": "Charleston AFB",
-        "Joint Base Charleston": "Charleston AFB",
-        "Davis-Monthan": "Davis-Monthan AFB",
-        "DavisMonthan": "Davis-Monthan AFB",
-        "DavisMonthanAFB": "Davis-Monthan AFB",
-        "DMAFB": "Davis-Monthan AFB",
-        "Dover": "Dover AFB",
-        "DoverAFB": "Dover AFB",
-        "Dyess": "Dyess AFB",
-        "DyessAFB": "Dyess AFB",
-        "Eglin": "Eglin AFB",
-        "EglinAFB": "Eglin AFB",
-        "Elmendorf": "Elmendorf AFB",
-        "ElmendorfAFB": "Elmendorf AFB",
-        "JBER": "Elmendorf AFB",
-        "Joint Base Elmendorf-Richardson": "Elmendorf AFB",
-        "F.E-Warren": "F.E-Warren AFB",
-        "FE-Warren": "F.E-Warren AFB",
-        "FEWarren": "F.E-Warren AFB",
-        "FEWarrenAFB": "F.E-Warren AFB",
-        "F E Warren": "F.E-Warren AFB",
-        "Francis E. Warren": "F.E-Warren AFB",
-        "Fairchild": "Fairchild AFB",
-        "FairchildAFB": "Fairchild AFB",
-        "Fort Sam Houston": "Fort-Sam-Houston AFB",
-        "Fort-Sam-Houston": "Fort-Sam-Houston AFB",
-        "FortSamHouston": "Fort-Sam-Houston AFB",
-        "FortSamHoustonAFB": "Fort-Sam-Houston AFB",
-        "Fort Sam Houston AFB": "Fort-Sam-Houston AFB",
-        "JBSA-Fort-Sam-Houston": "Fort-Sam-Houston AFB",
-        "JBSA-Fort Sam Houston": "Fort-Sam-Houston AFB",
-        "JBSA Fort Sam Houston": "Fort-Sam-Houston AFB",
-        "Holloman": "Holloman AFB",
-        "HollomanAFB": "Holloman AFB",
-        "Hurlburt": "Hurlburt AFB",
-        "HurlburtAFB": "Hurlburt AFB",
-        "Hurlburt Field": "Hurlburt AFB",
-        "Keesler": "Keesler AFB",
-        "KeeslerAFB": "Keesler AFB",
-        "Kirtland": "Kirtland AFB",
-        "KirtlandAFB": "Kirtland AFB",
-        "Lackland": "Lackland AFB",
-        "LacklandAFB": "Lackland AFB",
-        "JBSA-Lackland": "Lackland AFB",
-        "JBSA Lackland": "Lackland AFB",
-        "Joint Base San Antonio Lackland": "Lackland AFB",
-        "Langley": "Langley AFB",
-        "LangleyAFB": "Langley AFB",
-        "Joint Base Langley-Eustis": "Langley AFB",
-        "Laughlin": "Laughlin AFB",
-        "LaughlinAFB": "Laughlin AFB",
-        "Little Rock AFB": "Little-Rock AFB",
-        "Little-Rock": "Little-Rock AFB",
-        "LittleRock": "Little-Rock AFB",
-        "LittleRockAFB": "Little-Rock AFB",
-        "Little Rock": "Little-Rock AFB",
-        "Luke": "Luke AFB",
-        "LukeAFB": "Luke AFB",
-        "MacDill": "MacDill AFB",
-        "MacDillAFB": "MacDill AFB",
-        "Malmstrom": "Malmstrom AFB",
-        "MalmstromAFB": "Malmstrom AFB",
-        "Maxwell": "Maxwell AFB",
-        "MaxwellAFB": "Maxwell AFB",
-        "McConnell": "McConnell AFB",
-        "McConnellAFB": "McConnell AFB",
-        "McGuire": "McGuire AFB",
-        "McGuireAFB": "McGuire AFB",
-        "JBMDL": "McGuire AFB",
-        "Joint Base McGuire-Dix-Lakehurst": "McGuire AFB",
-        "Minot": "Minot AFB",
-        "MinotAFB": "Minot AFB",
-        "Moody": "Moody AFB",
-        "MoodyAFB": "Moody AFB",
-        "Mountain Home AFB": "Mountain-Home AFB",
-        "Mountain-Home": "Mountain-Home AFB",
-        "MountainHome": "Mountain-Home AFB",
-        "MountainHomeAFB": "Mountain-Home AFB",
-        "Mountain Home": "Mountain-Home AFB",
-        "Nellis": "Nellis AFB",
-        "NellisAFB": "Nellis AFB",
-        "Offutt": "Offutt AFB",
-        "OffuttAFB": "Offutt AFB",
-        "Peterson": "Peterson AFB",
-        "PetersonAFB": "Peterson AFB",
-        "Peterson SFB": "Peterson AFB",
-        "Peterson Space Force Base": "Peterson AFB",
-        "Randolph": "Randolph AFB",
-        "RandolphAFB": "Randolph AFB",
-        "JBSA-Randolph": "Randolph AFB",
-        "JBSA Randolph": "Randolph AFB",
-        "Joint Base San Antonio Randolph": "Randolph AFB",
-        "Robins": "Robins AFB",
-        "RobinsAFB": "Robins AFB",
-        "Scott": "Scott AFB",
-        "ScottAFB": "Scott AFB",
-        "Seymour Johnson AFB": "Seymour-Johnson AFB",
-        "Seymour-Johnson": "Seymour-Johnson AFB",
-        "SeymourJohnson": "Seymour-Johnson AFB",
-        "SeymourJohnsonAFB": "Seymour-Johnson AFB",
-        "Shaw": "Shaw AFB",
-        "ShawAFB": "Shaw AFB",
-        "Sheppard": "Sheppard AFB",
-        "SheppardAFB": "Sheppard AFB",
-        "Tinker": "Tinker AFB",
-        "TinkerAFB": "Tinker AFB",
-        "Travis": "Travis AFB",
-        "TravisAFB": "Travis AFB",
-        "Tyndall": "Tyndall AFB",
-        "TyndallAFB": "Tyndall AFB",
-        "Whiteman": "Whiteman AFB",
-        "WhitemanAFB": "Whiteman AFB",
-        "Wright-Patterson": "Wright-Patterson AFB",
-        "WrightPatterson": "Wright-Patterson AFB",
-        "WrightPattersonAFB": "Wright-Patterson AFB",
-        "WPAFB": "Wright-Patterson AFB"
-      };
-      function canonicalBaseName(raw) {
-        const s = String(raw || "").trim();
-        if (!s) return "";
-        if (BASE_META[s]) return s;
-        return BASE_ALIASES[s] || s;
-      }
-      function fileKeyFromBase(raw) {
-        const canonical = canonicalBaseName(raw);
-        return (BASE_META[canonical] && BASE_META[canonical].fileKey) || "Lackland";
-      }
-      function zipFromBase(raw) {
-        const canonical = canonicalBaseName(raw);
-        return (BASE_META[canonical] && BASE_META[canonical].zip) || "78236";
-      }
-      function escapeHtml(str) {
-        return String(str)
-          .replace(/&/g, "&amp;")
-          .replace(/</g, "&lt;")
-          .replace(/>/g, "&gt;")
-          .replace(/"/g, "&quot;")
-          .replace(/'/g, "&#039;");
-      }
-      function populateBaseSelect(selectEl, includePlaceholder) {
-        if (!selectEl) return;
-        let html = "";
-        if (includePlaceholder) {
-          html += '<option value="" selected>Current Duty Station</option>';
-        }
-        BASES.forEach(function(base) {
-          html += '<option value="' + escapeHtml(base.value) + '">' + escapeHtml(base.value) + '</option>';
-        });
-        selectEl.innerHTML = html;
-      }
-      const dutySel = document.getElementById("sass-duty-select");
-      const dutyText = document.getElementById("sass-duty-text");
-      const newBaseSel = document.getElementById("sass-base");
-      const btn = document.getElementById("sass-analyze-btn");
-      populateBaseSelect(dutySel, true);
-      populateBaseSelect(newBaseSel, false);
-      newBaseSel.value = "Lackland AFB";
-      function syncDutyText() {
-        const val = String(dutySel.value || "").trim();
-        dutyText.textContent = val ? val : "Current Duty Station";
-      }
-      dutySel.addEventListener("change", syncDutyText);
-      syncDutyText();
-      btn.addEventListener("click", function() {
-        const rank = String(document.getElementById("sass-rank").value || "").trim();
-        const yos = String(document.getElementById("sass-yos").value || "").trim();
-        const fam = String(document.getElementById("sass-family").value || "").trim();
-        const curBaseRaw = String(dutySel.value || "").trim();
-        const newBaseRaw = String(newBaseSel.value || "").trim();
-        if (!curBaseRaw) {
-          alert("Please select your Current Duty Station.");
-          dutySel.focus();
-          return;
-        }
-        if (!newBaseRaw) {
-          alert("Please select your New Base Location.");
-          newBaseSel.focus();
-          return;
-        }
-        const curBase = canonicalBaseName(curBaseRaw);
-        const newBase = canonicalBaseName(newBaseRaw);
-        const curFileKey = fileKeyFromBase(curBase);
-        const newFileKey = fileKeyFromBase(newBase);
-        const curZip = zipFromBase(curBase);
-        const newZip = zipFromBase(newBase);
-        try {
-          sessionStorage.setItem("pcs_rank", rank);
-          sessionStorage.setItem("pcs_yos", yos);
-          sessionStorage.setItem("pcs_family", fam);
-          sessionStorage.setItem("pcs_current_base", curBase);
-          sessionStorage.setItem("pcs_current_cityKey", curFileKey);
-          sessionStorage.setItem("pcs_current_fileKey", curFileKey);
-          sessionStorage.setItem("pcs_current_zip", curZip);
-          sessionStorage.setItem("pcs_new_base", newBase);
-          sessionStorage.setItem("pcs_new_cityKey", newFileKey);
-          sessionStorage.setItem("pcs_new_fileKey", newFileKey);
-          sessionStorage.setItem("pcs_new_zip", newZip);
-        } catch (e) {}
-        const params = new URLSearchParams();
-        params.set("type", "ad");
-        params.set("rank", rank);
-        params.set("yos", yos);
-        params.set("family", fam);
-        params.set("base", newBase);
-        params.set("cityKey", newFileKey);
-        params.set("curBase", curBase);
-        params.set("newBase", newBase);
-        params.set("curCityKey", curFileKey);
-        params.set("newCityKey", newFileKey);
-        params.set("curFileKey", curFileKey);
-        params.set("newFileKey", newFileKey);
-        params.set("curZip", curZip);
-        params.set("newZip", newZip);
-        window.location.href = SNAPSHOT_BASE_URL + "?" + params.toString();
-      });
-    })();
-  </script>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="spline-hero3"></div>
-        </div>
-      </section>
-      <section class="section scrollz">
-        <div class="w-layout-blockcontainer container w-container">
-          <div class="w-layout-grid home1-2cols">
-            <div reveal-content="true" class="home1-left-sticky">
-              <h2 line-split="true" class="heading-89">Why Should you Trust <br><span class="tertiary-color-emphasis">PCSUnited.com</span></h2>
-              <p line-split="true" class="sub-text-for-why"> Designed to Serve the Military Community with the Precision and Quality it deserves. Our Platform is created to provide Financial Solutions and Insight for your PCS concerns. <br>  <br> Beyond Simple Dashboard, our goal is to provide Financial Fiduciary support that provide Answers based on exact calculations and market analysis to provide you with insight not available any where else. <br>‍<br>A.I Integration allows for even better customization and fidelty. Our platform is designed to improve its responses as additional data is entered. Account Creation is Recommended for better Performance.<br>‍<br> Not a Selling Platform!  PCSU is a non profit organization. We do not sell your data, show listings or charge any fee for our services. <br><br>We are the Platform, The Military Community Deserve!. <br><br>‍</p>
-              <a href="air-force/financial-dashboard.html" target="_blank" class="button-yellow w-button">Financial Dashboard</a>
-            </div>
-            <div class="home1-cards-scroll">
-              <div reveal-card="true" class="tryitnow dark">
-                <p line-split="true">Try it Now</p>
-                <div class="big-card-img-wrapper"><img class="big-card--home1-img" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" alt="" card="true" sizes="(max-width: 479px) 56vw, (max-width: 767px) 47vw, (max-width: 991px) 356px, 462px" loading="lazy" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w"></div>
-                <div class="big-card-text">
-                  <h3 line-split="true" class="fsize-s">Not a Selling Platform</h3>
-                  <p line-split="true">Unlike other platform we don&#x27;t sell, or push listings to our customers. We are a service based platform build to support the military community by providing unbiased and data based analysis. </p>
-                </div>
-              </div>
-              <div reveal-card="true" class="tryit-ow dark">
-                <p line-split="true">Try it now</p>
-                <div class="big-card-img-wrapper"><img class="big-card--home1-img" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" alt="" card="true" sizes="(max-width: 479px) 56vw, (max-width: 767px) 47vw, (max-width: 991px) 356px, 462px" loading="lazy" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w"></div>
-                <div class="big-card-text">
-                  <h3 line-split="true" class="fsize-s">Psychology Insight</h3>
-                  <p line-split="true">Our specialized assessment provides insight and clarity into the right house to buy for your family. Understand your True Needs before you start looking. </p>
-                </div>
-              </div>
-              <div reveal-card="true" class="account-required-box-card dark">
-                <p line-split="true">Account Members</p>
-                <div class="big-card-img-wrapper"><img class="big-card--home1-img" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" alt="" card="true" sizes="(max-width: 479px) 56vw, (max-width: 767px) 47vw, (max-width: 991px) 356px, 462px" loading="lazy" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w"></div>
-                <div class="big-card-text">
-                  <h3 line-split="true" class="fsize-s">A.I Support</h3>
-                  <p line-split="true">Receive detailed summary, answers and information about your specific financial situations from your personal Concierge.<br><br>Account is required for added security measures. </p>
-                </div>
+                <p class="paragraph-15">Understand your financial readiness, affordability range, and homebuying strategy with military-first analysis built around your income, expenses, debt, and PCS goals.</p>
               </div>
             </div>
           </div>
@@ -923,7 +592,7 @@
               <h2 line-split="true" class="about-us-title">Our Story <span class="tertiary-color-emphasis"> <br>&amp; Our Purpose</span></h2>
               <div class="text-content">
                 <h4 line-splt="true" class="fsize-xxs">Veteran Owned &amp; Operated</h4>
-                <p line-split="true" class="paragraph-8">Orvimo offers a robust suite of APIs and dedicated support for seamless integration. Our APIs enable developers to connect Orvimo to their systems, backed by comprehensive documentation, code samples, and tutorials to assist throughout the process.</p>
+                <p line-split="true" class="paragraph-8">Designed as a modern military FinTech platform, PCSUnited goes beyond basic calculators. It combines military pay context, base-level housing insight, financial readiness tools, and AI-supported guidance to help families make confident, informed decisions.</p>
                 <div class="code-for-create-account-2 w-embed"><!--  =========================================================
   PCS UNITED • Premium Account Button (Redirect) v1.0.0
   ✅ Matches your “CREATE PREMIUM ACCOUNT” gradient pill button
@@ -994,102 +663,77 @@
                   </div>
                 </div>
               </div>
-            </div><img src="images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 767px) 48vw, (max-width: 991px) 356px, 462px" srcset="images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="image-90">
+            </div><img src="images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 767px) 48vw, (max-width: 991px) 47vw, 462px" srcset="images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="image-90">
           </div>
         </div>
       </section>
-      <section class="section home1-dev">
-        <div reveal-content="true" class="w-layout-grid title-for-dashboard">
-          <h3 line-split="true" class="fsize-s">Seamlessly Military Integration<br> <span class="tertiary-color-emphasis">Enhance Financial Resources.</span></h3>
-        </div>
-        <div class="w-layout-blockcontainer dashboard-promo w-container">
-          <div reveal-content="true" class="reveal-content-wrap">
-            <div fade-in="true" data-current="Market Insight" data-easing="ease-in-out" data-duration-in="300" data-duration-out="200" class="tabs w-tabs">
-              <div class="tabs-menu w-tab-menu">
-                <a data-w-tab="Market Insight" class="tab-link w-inline-block w-tab-link w--current">
-                  <div>Market Insight</div>
-                </a>
-                <a data-w-tab="Mortgage Estitames" class="tab-link w-inline-block w-tab-link">
-                  <div>Mortgage Estimates</div>
-                </a>
-                <a data-w-tab="Financial Anlaysis" class="tab-link w-inline-block w-tab-link">
-                  <div>Financial Analysis</div>
-                </a>
-                <a data-w-tab="Tab 4" class="tab-link w-inline-block w-tab-link">
-                  <div>A.I Fiduciary Summary</div>
-                </a>
+      <div class="sliderinblack">
+        <div data-w-id="fbb87999-ce57-6d1f-bbea-7cbeb684e039" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="tabs-content w-tab-content">
-                <div data-w-tab="Market Insight" class="tab-pane w-tab-pane w--tab-active">
-                  <div class="w-layout-grid tab-pane-grid">
-                    <div id="w-node-_23991246-7a26-2796-7409-784ffb98a58a-0e0e1a1a" class="tab-pane-text">
-                      <div tab-split-text="true" class="fsize-xxs">Get Market &amp; Demographic Insight</div>
-                      <p tab-split-text="true" class="paragraph-14">Avg Utility Costs, Best Communities, Housing Trends, Base Specifics, Demographics and More. </p>
-                    </div><img sizes="100vw" srcset="images/tab1_1-p-500.avif 500w, images/tab1_1-p-800.avif 800w, images/tab1_1-p-1080.avif 1080w, images/tab1_1-p-1600.avif 1600w, images/tab1_1tab1.avif 2654w" alt="Screenshot of a workflow diagram titled Language Converter showing connected nodes including Webhook, AI Agent, Switch, Giggle Chat Model, Proxmox API Documentation, Auto-fixing Parser, and Chat Model in an editor interface." src="images/tab1_1tab1.avif" loading="lazy" class="tab-img">
-                  </div>
-                </div>
-                <div data-w-tab="Mortgage Estitames" class="tab-pane w-tab-pane">
-                  <div class="w-layout-grid tab-pane-grid">
-                    <div id="w-node-_23991246-7a26-2796-7409-784ffb98a592-0e0e1a1a" class="tab-pane-text">
-                      <div tab-split-text="true" class="fsize-xxs">Complete Mortgage Calculator</div>
-                      <p tab-split-text="true">The IT Ops onboarding workflow automates configuring security for immediate productivity.</p>
-                    </div><img sizes="100vw" srcset="images/tab2_1-p-500.avif 500w, images/tab2_1-p-800.avif 800w, images/tab2_1-p-1080.avif 1080w, images/tab2_1-p-1600.avif 1600w, images/tab2_1tab2.avif 2654w" alt="Workflow diagram on a screen showing an ‘On Create User’ form submission linked to an AI Agent with tools including Rawtropic Chat Model, Postgres Chat Memory, and Microsoft Entra ID, with a decision node checking if user is manager." src="images/tab2_1tab2.avif" loading="lazy" class="tab-img">
-                  </div>
-                </div>
-                <div data-w-tab="Financial Anlaysis" class="tab-pane w-tab-pane">
-                  <div class="w-layout-grid tab-pane-grid">
-                    <div id="w-node-_23991246-7a26-2796-7409-784ffb98a59a-0e0e1a1a" class="tab-pane-text">
-                      <div tab-split-text="true" class="fsize-xxs">How Much Should can you Afford?</div>
-                      <p tab-split-text="true">We provide an unbiased and data driven financial analysis. Providing clear and unbiased solutions to your financial health. </p>
-                    </div><img sizes="100vw" srcset="images/tab3_1-p-500.avif 500w, images/tab3_1-p-800.avif 800w, images/tab3_1-p-1080.avif 1080w, images/tab3_1-p-1600.avif 1600w, images/tab3_1tab3.avif 2654w" alt="Workflow diagram on a digital interface showing steps for incident ticket processing with nodes labeled On new issue, Extract IPs and domains, SeekVirus Scan URL, urlfind.io scan, and Merge reports." src="images/tab3_1tab3.avif" loading="lazy" class="tab-img">
-                  </div>
-                </div>
-                <div data-w-tab="Tab 4" class="tab-pane w-tab-pane">
-                  <div class="w-layout-grid tab-pane-grid">
-                    <div id="w-node-_23991246-7a26-2796-7409-784ffb98a5a2-0e0e1a1a" class="tab-pane-text">
-                      <div tab-split-text="true" class="fsize-xxs">A.I Solutions</div>
-                      <p tab-split-text="true">The dashboard offers a comprehensive view of system health, displaying usage metrics and workflow statuses. It turns complex data into actionable insights, helping operators monitor automation ROI and enhance process efficiency.</p>
-                    </div><img sizes="100vw" srcset="images/6edf4df3cc67c12ccae2774648141280_tab4-p-500.png 500w, images/6edf4df3cc67c12ccae2774648141280_tab4-p-800.png 800w, images/6edf4df3cc67c12ccae2774648141280_tab4-p-1080.png 1080w, images/6edf4df3cc67c12ccae2774648141280_tab4-p-1600.png 1600w, images/tab4.png 1672w" alt="Dashboard interface showing usage statistics, credits left as a circular progress bar with 380 out of 1000, and a list of scenarios with categories like IT Ops and Sales." src="images/tab4.png" loading="lazy" class="tab-img">
-                  </div>
-                </div>
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
+              </div>
+            </div>
+          </div>
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
               </div>
             </div>
           </div>
         </div>
+      </div>
+      <section class="section scrollz">
         <div class="w-layout-blockcontainer container w-container">
-          <div reveal-content="true" class="w-layout-grid dev-home1-grid">
-            <div class="features-item-wrapper">
-              <a href="air-force/bah-base-pay-calculator.html" target="_blank" class="w-inline-block">
-                <div fade-in="true" class="code-feature-item"><img src="images/dev-research-icon.svg" loading="lazy" alt="dev &amp; research icon" class="code-feature-icon">
-                  <div class="fsize-body-large primary-color-emphasis">BAH &amp; Base Pay</div>
-                  <p class="primary-color-emphasis">Exploring advanced methods to build faster, smarter, and scalable workflow systems.</p>
-                </div>
-              </a>
-              <a href="air-force/pt-calculator.html" target="_blank" class="w-inline-block">
-                <div fade-in="true" class="code-feature-item"><img src="images/orvimo-lab-icon.svg" loading="lazy" alt="orvimo lab" class="code-feature-icon">
-                  <div class="fsize-body-large primary-color-emphasis">PT Calculator</div>
-                  <p class="primary-color-emphasis">Pioneering new workflow technologies through continuous experimentation and discovery.</p>
-                </div>
-              </a>
-              <a href="air-force/va-calculator.html" target="_blank" class="w-inline-block">
-                <div fade-in="true" class="code-feature-item"><img src="images/smart-monitoring-orvimo.svg" loading="lazy" alt="monitoring" class="code-feature-icon">
-                  <div class="fsize-body-large primary-color-emphasis">Retirement &amp; Disability Pay</div>
-                  <p class="primary-color-emphasis">Delivering real-time insights to track performance, forecast needs, and ensure reliability.</p>
-                </div>
-              </a>
-              <a href="#" class="w-inline-block">
-                <div fade-in="true" class="code-feature-item"><img src="images/ai-intelligence.svg" loading="lazy" alt="ai intelligence" class="code-feature-icon">
-                  <div class="fsize-body-large primary-color-emphasis">AI Intelligence</div>
-                  <p class="primary-color-emphasis">Enhancing automation with adaptive AI that learns, predicts, and optimizes processes.</p>
-                </div>
-              </a>
+          <div class="w-layout-grid home1-2cols">
+            <div reveal-content="true" class="home1-left-sticky">
+              <h2 line-split="true" class="heading-89">Why Should you Trust <br><span class="tertiary-color-emphasis">PCSUnited.com</span></h2>
+              <p line-split="true" class="sub-text-for-why"> Designed to Serve the Military Community with the Precision and Quality it deserves. Our Platform is created to provide Financial Solutions and Insight for your PCS concerns. <br>  <br> Beyond Simple Dashboard, our goal is to provide Financial Fiduciary support that provide Answers based on exact calculations and market analysis to provide you with insight not available any where else. <br>‍<br>A.I Integration allows for even better customization and fidelty. Our platform is designed to improve its responses as additional data is entered. Account Creation is Recommended for better Performance.<br>‍<br> Not a Selling Platform!  PCSU is a non profit organization. We do not sell your data, show listings or charge any fee for our services. <br><br>We are the Platform, The Military Community Deserve!. <br><br>‍</p>
             </div>
-            <div fade-in="true" class="black-pcsu">
-              <div class="black-pscu-test">
-                <h4 line-splt="true" class="fsize-xxs">Orvimo offers effortless API integration and dedicated support.</h4>
-                <p line-split="true" class="paragraph-9">Orvimo offers a robust suite of APIs and dedicated support for seamless integration. Our APIs enable developers to connect Orvimo to their systems, backed by comprehensive documentation, code samples, and tutorials to assist throughout the process.</p>
+            <div class="home1-cards-scroll">
+              <div reveal-card="true" class="tryitnow dark">
+                <p line-split="true">Try it Now</p>
+                <div class="big-card-img-wrapper"><img class="big-card--home1-img" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" alt="" card="true" sizes="(max-width: 479px) 56vw, (max-width: 991px) 47vw, 462px" loading="lazy" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w"></div>
+                <div class="big-card-text">
+                  <h3 line-split="true" class="fsize-s">Not a Selling Platform</h3>
+                  <p line-split="true">Unlike other platform we don&#x27;t sell, or push listings to our customers. We are a service based platform build to support the military community by providing unbiased and data based analysis. </p>
+                </div>
               </div>
-              <div id="w-node-_2102b3c4-64ee-87e7-28ee-2f970a7c4b8f-0e0e1a1a" class="full-card-img-wrapper"><img src="images/D11B76B2-958B-4871-B121-30BA68667423.png" loading="lazy" sizes="100vw" srcset="images/D11B76B2-958B-4871-B121-30BA68667423-p-500.png 500w, images/D11B76B2-958B-4871-B121-30BA68667423-p-800.png 800w, images/D11B76B2-958B-4871-B121-30BA68667423-p-1080.png 1080w, images/D11B76B2-958B-4871-B121-30BA68667423.png 1254w" alt="" class="code-ui-img"></div>
+              <div reveal-card="true" class="tryit-ow dark">
+                <p line-split="true">Try it now</p>
+                <div class="big-card-img-wrapper"><img class="big-card--home1-img" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" alt="" card="true" sizes="(max-width: 479px) 56vw, (max-width: 991px) 47vw, 462px" loading="lazy" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w"></div>
+                <div class="big-card-text">
+                  <h3 line-split="true" class="fsize-s">Psychology Insight</h3>
+                  <p line-split="true">Our specialized assessment provides insight and clarity into the right house to buy for your family. Understand your True Needs before you start looking. </p>
+                </div>
+              </div>
+              <div reveal-card="true" class="account-required-box-card dark">
+                <p line-split="true">Account Members </p>
+                <div class="big-card-img-wrapper"><img class="big-card--home1-img" src="images/68d0de67ecf408940f4a88b7_92070394-54DB-4D73-992E-2166B9FC7C04.png" alt="" card="true" sizes="100vw" loading="lazy" srcset="images/92eb47c5593840a6e32b936e16ff5c29_68d0de67ecf408940f4a88b7_92070394-54DB-4D73-992E-2166B9FC7C04-p-500.png 500w, images/92eb47c5593840a6e32b936e16ff5c29_68d0de67ecf408940f4a88b7_92070394-54DB-4D73-992E-2166B9FC7C04-p-800.png 800w, images/68d0de67ecf408940f4a88b7_92070394-54DB-4D73-992E-2166B9FC7C04.png 950w"></div>
+                <div class="big-card-text">
+                  <p line-split="true">Receive detailed summary, answers and information about your specific financial situations from your personal Concierge.<br><br>Account is required for added security measures. </p>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -1157,8 +801,9 @@
           <div class="gradiant-wrapper"><img src="images/gradiant-hero-2_1gradiant-hero-2.avif" loading="lazy" sizes="100vw" srcset="images/gradiant-hero-2_1-p-500.png 500w, images/gradiant-hero-2_1-p-800.png 800w, images/gradiant-hero-2_1gradiant-hero-2.avif 1771w" alt="" class="create-account-cabinet"></div>
           <div class="aiouwrapper reverse-on-tab">
             <div data-w-id="5f4434da-8e91-59ab-ace6-d14939859259" style="opacity:0" class="text-wrapper align-right">
-              <h2 class="heading-80">Create Your Premium Account Today</h2>
-              <div class="code-for-create-account w-embed"><!--  =========================================================
+              <h2 class="heading-80">Create Your  Account Today</h2>
+              <p class="createaccount-summary">Create your account Today, to enjoy the Premium Benefits &amp; A.I Driven Insight on our Platform Provides. Premium Members Gain Additional Forecasts, Tailored Financial Dashbard &amp; Comprehensive Services. <br></p>
+              <div class="code-for-create-account-3 w-embed"><!--  =========================================================
   PCS UNITED • Premium Account Button (Redirect) v1.0.0
   ✅ Matches your “CREATE PREMIUM ACCOUNT” gradient pill button
   ✅ Redirects to: https://pcs-united.webflow.io/veteran-activeduty-account
@@ -1227,14 +872,34 @@
                   </div>
                 </div>
               </div>
-              <p class="createaccount-summary">Create your account Today, to enjoy the Premium Benefits &amp; A.I Driven Insight on our Platform Provides. Premium Members Gain Additional Forecasts, Tailored Financial Dashbard &amp; Comprehensive Services. <br></p>
             </div>
-            <div class="features-image-wrapper">
-              <div class="w-layout-hflex flex-features-image reverse-images-on-tab">
-                <div class="features-image-wrapper-03"><img src="images/Backdropaboutus.jpg" loading="lazy" sizes="100vw" srcset="images/Backdropaboutus-p-500.jpg 500w, images/Backdropaboutus-p-800.jpg 800w, images/Backdropaboutus-p-1080.jpg 1080w, images/Backdropaboutus-p-1600.jpg 1600w, images/Backdropaboutus.jpg 1680w" alt="" class="features-image"></div>
-                <div class="features-image-wrapper-04"><img src="https://cdn.prod.website-files.com/691facbe35fbba00c096f2b7/69ccbb05e671661fbed881cd_us.jpg" loading="lazy" alt="" class="features-image"></div>
+            <div data-w-id="f28a4c20-8f18-aeee-0ac5-a6094ec9ad00" style="opacity:0" class="card-item-5">
+              <div class="card-link-7">
+                <div data-poster-url="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099%2F690af8ececad201acb231a57_text-to-video-f9b3f647-poster-00001.jpg" data-video-urls="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099%2F690af8ececad201acb231a57_text-to-video-f9b3f647-poster-00001.jpg,https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099%2F690af8ececad201acb231a57_text-to-video-f9b3f647-transcode.mp4,https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099%2F690af8ececad201acb231a57_text-to-video-f9b3f647-transcode.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="background-video-6 w-background-video w-background-video-atom"><video id="f28a4c20-8f18-aeee-0ac5-a6094ec9ad02-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099%2F690af8ececad201acb231a57_text-to-video-f9b3f647-poster-00001.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
+                    <source src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099%2F690af8ececad201acb231a57_text-to-video-f9b3f647-poster-00001.jpg" data-wf-ignore="true">
+                    <source src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099%2F690af8ececad201acb231a57_text-to-video-f9b3f647-transcode.mp4" data-wf-ignore="true">
+                    <source src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099%2F690af8ececad201acb231a57_text-to-video-f9b3f647-transcode.webm" data-wf-ignore="true">
+                  </video>
+                  <div style="opacity:0" class="home-two-card-marquee">
+                    <div class="w-layout-hflex home-two-card-marquee-wrap">
+                      <div class="w-layout-hflex home-two-card-marquee-block">
+                        <div class="home-two-card-marquee-box-4"></div>
+                        <div class="home-two-card-marquee-box-4"></div>
+                        <div class="home-two-card-marquee-box-4"></div>
+                      </div>
+                      <div class="w-layout-hflex home-two-card-marquee-block">
+                        <div class="home-two-card-marquee-box-4"></div>
+                        <div class="home-two-card-marquee-box-4"></div>
+                        <div class="home-two-card-marquee-box-4"></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div style="opacity:1" class="card-text-details-8">
+                    <h1 class="heading-97">Advanced Analytics</h1><img width="150" height="102" alt="Logo" src="images/TheWingIcon.png" loading="lazy" srcset="images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, images/TheWingIcon.png 1100w" sizes="150px" class="image-for-creat-account">
+                    <p class="text-center-12 margin-top-forty">A.I Concierge: <br>Powered by TheWing.ai</p>
+                  </div>
+                </div>
               </div>
-              <div class="gradient-overlay"></div>
             </div>
           </div>
           <div class="aiouwrapper"></div>
@@ -1246,20 +911,6 @@
         <div class="footer_banners">
           <div class="footer_buy"><img src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="logo-footer">
             <div class="heading-style-h4-3 text-align-center"><em>Built for service members, veterans, and military families who need clearer PCS, housing, pay, and financial readiness decisions before the move gets expensive.</em></div>
-            <div class="flex-footer">
-              <div class="form-block w-form">
-                <form id="wf-form-Newsletter-2" name="wf-form-Newsletter-2" data-name="Newsletter" method="get" data-wf-page-id="69eb162637c57d450e0e1a1a" data-wf-element-id="a61b0545-5f07-12f7-b32e-ae8b6dc26dce">
-                  <div class="div-block-2"><input class="form_input-2 is-footer w-input" maxlength="256" name="Email-Address" data-name="Email Address" placeholder="Email Address" type="email" id="Email-Address-3" required=""><input type="submit" data-wait="Please wait..." class="button-8 is-footer w-button" value="Send"></div>
-                </form>
-                <div class="form_message-success-2 w-form-done">
-                  <div>Thank you! Your submission has been received!</div>
-                </div>
-                <div class="form_message-error w-form-fail">
-                  <div>Oops! Something went wrong while submitting the form.</div>
-                </div>
-              </div>
-              <div class="footer-text">Subcribe to our Monthly Blogs, New &amp; Resources</div>
-            </div>
           </div><img src="images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
         <div data-w-id="ee73203a-eb4c-0a70-cb0c-c0e63e1d2416" class="footer-flex-wrapper">

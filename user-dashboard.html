@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed May 13 2026 02:09:19 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue May 19 2026 01:08:34 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e19f3" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -913,7 +913,7 @@
   <div class="page-wrapper">
     <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="pcus-header pcsu-header w-nav">
       <div class="navbar-wrapper-12">
-        <a href="index.html" class="link-block-7 w-inline-block"><img src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="100vw" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="image-130"></a>
+        <a href="index.html" class="link-block-7 w-inline-block"><img src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="image-130"></a>
         <div class="code-embed-42 w-embed w-script"><!--  =========================================================
   PCSUnited • Member Header Compensation Strip
   v2.0.0 • THEWING / SUPABASE PROFILE FLOW
@@ -1851,6 +1851,453 @@
           </div>
         </div>
       </div>
+      <section class="section-15 slideshow">
+        <div class="offset-separator">
+          <div class="offset-top"></div>
+          <div class="offset-bottom-2"></div>
+        </div>
+        <div reveal-content="true" class="w-layout-blockcontainer container-73 slideshow w-container">
+          <h2 line-split="true" class="fsize-m-2"><br> </h2>
+          <div fade-in="true" class="slideshow-wrapper">
+            <div data-delay="3000" data-animation="over" class="slider-2 w-slider" data-autoplay="true" data-easing="ease-in-out-circ" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="10" data-duration="700" data-infinite="true">
+              <div class="mask-2 w-slider-mask">
+                <div class="slide-3 w-slide">
+                  <div class="w-embed w-script"><!--  PCSUnited • Real Interactive U.S. Base Demographics Map v2.1 FULL CODE  -->
+                    <div id="pcsu-real-us-map">
+                      <style>
+    #pcsu-real-us-map,
+    #pcsu-real-us-map * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+    #pcsu-real-us-map {
+      width: 100%;
+      color: #e9ecff;
+    }
+    #pcsu-map-card {
+      width: 100%;
+      padding: 28px;
+      border-radius: 26px;
+      background:
+        radial-gradient(circle at top left, rgba(142, 243, 197, .18), transparent 34%),
+        radial-gradient(circle at bottom right, rgba(106, 167, 255, .18), transparent 36%),
+        linear-gradient(135deg, rgba(15, 19, 36, .96), rgba(11, 14, 26, .98));
+      border: 1px solid rgba(255,255,255,.14);
+      box-shadow: 0 24px 60px rgba(0,0,0,.42);
+      overflow: hidden;
+    }
+    #pcsu-map-eyebrow {
+      color: #8ef3c5;
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: .16em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    #pcsu-map-title {
+      font-size: clamp(28px, 4vw, 46px);
+      line-height: 1.02;
+      font-weight: 900;
+      margin: 0;
+      color: #ffffff;
+    }
+    #pcsu-map-copy {
+      max-width: 780px;
+      margin-top: 12px;
+      margin-bottom: 22px;
+      color: #a8b0d6;
+      font-size: 15px;
+      line-height: 1.65;
+    }
+    #pcsu-map-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, .55fr);
+      gap: 22px;
+      align-items: stretch;
+    }
+    #pcsu-map-stage {
+      min-height: 500px;
+      padding: 16px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.12);
+    }
+    #pcsu-us-svg {
+      width: 100%;
+      height: 100%;
+      min-height: 460px;
+      display: block;
+    }
+    .pcsu-state {
+      fill: #e8edf5;
+      stroke: #162033;
+      stroke-width: 1.1;
+      cursor: pointer;
+      transition: fill .18s ease, filter .18s ease;
+    }
+    .pcsu-state:hover {
+      fill: #8ef3c5;
+      filter: drop-shadow(0 0 10px rgba(142, 243, 197, .85));
+    }
+    .pcsu-state.has-bases {
+      fill: #dfe8f5;
+    }
+    .pcsu-state.is-active {
+      fill: #8ef3c5;
+      filter: drop-shadow(0 0 14px rgba(142, 243, 197, .9));
+    }
+    .pcsu-state-label {
+      fill: #1b2740;
+      font-size: 10px;
+      font-weight: 900;
+      pointer-events: none;
+      text-anchor: middle;
+    }
+    #pcsu-base-panel {
+      padding: 22px;
+      border-radius: 22px;
+      background: rgba(255,255,255,.075);
+      border: 1px solid rgba(255,255,255,.13);
+      min-height: 500px;
+    }
+    #pcsu-panel-kicker {
+      color: #6aa7ff;
+      font-size: 11px;
+      font-weight: 900;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+    #pcsu-selected-state {
+      font-size: 24px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+    #pcsu-panel-copy {
+      color: #a8b0d6;
+      font-size: 14px;
+      line-height: 1.55;
+      margin-bottom: 18px;
+    }
+    #pcsu-base-list {
+      display: grid;
+      gap: 10px;
+    }
+    .pcsu-base-btn {
+      appearance: none;
+      width: 100%;
+      border: 1px solid rgba(255,255,255,.14);
+      border-radius: 16px;
+      padding: 14px 15px;
+      background: rgba(255,255,255,.08);
+      color: #e9ecff;
+      text-align: left;
+      cursor: pointer;
+      transition: .18s ease;
+    }
+    .pcsu-base-btn:hover {
+      border-color: rgba(142, 243, 197, .65);
+      background: rgba(142, 243, 197, .11);
+      transform: translateY(-1px);
+    }
+    .pcsu-base-name {
+      display: block;
+      font-size: 15px;
+      font-weight: 900;
+      color: #ffffff;
+    }
+    .pcsu-base-meta {
+      display: block;
+      margin-top: 4px;
+      font-size: 12px;
+      color: #a8b0d6;
+    }
+    @media (max-width: 900px) {
+      #pcsu-map-layout {
+        grid-template-columns: 1fr;
+      }
+      #pcsu-map-stage,
+      #pcsu-base-panel {
+        min-height: auto;
+      }
+      #pcsu-us-svg {
+        min-height: 360px;
+      }
+    }
+  </style>
+                      <div id="pcsu-map-card">
+                        <div id="pcsu-map-eyebrow">Base Demographics Explorer</div>
+                        <h2 id="pcsu-map-title">Search Air Force Bases by State</h2>
+                        <div id="pcsu-map-copy">
+                          Hover over a state to explore available PCSUnited base markets. Click a state to view supported Air Force bases and open the matching Base Demographics profile.
+                        </div>
+                        <div id="pcsu-map-layout">
+                          <div id="pcsu-map-stage">
+                            <svg id="pcsu-us-svg" viewbox="0 0 960 600" preserveaspectratio="xMidYMid meet"></svg>
+                          </div>
+                          <aside id="pcsu-base-panel">
+                            <div id="pcsu-panel-kicker">Selected State</div>
+                            <div id="pcsu-selected-state">Choose a state</div>
+                            <div id="pcsu-panel-copy">
+                              Click a state on the map to view available PCSUnited Base Demographics profiles.
+                            </div>
+                            <div id="pcsu-base-list"></div>
+                          </aside>
+                        </div>
+                      </div>
+                      <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+                      <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+                      <script>
+    (() => {
+      const FIPS_TO_ABBR = {
+        "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC",
+        "12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY",
+        "22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN","28":"MS","29":"MO","30":"MT",
+        "31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH",
+        "40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN","48":"TX","49":"UT",
+        "50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY"
+      };
+      const STATE_NAMES = {
+        AL:"Alabama", AK:"Alaska", AZ:"Arizona", AR:"Arkansas", CA:"California",
+        CO:"Colorado", CT:"Connecticut", DE:"Delaware", FL:"Florida", GA:"Georgia",
+        HI:"Hawaii", ID:"Idaho", IL:"Illinois", IN:"Indiana", IA:"Iowa",
+        KS:"Kansas", KY:"Kentucky", LA:"Louisiana", ME:"Maine", MD:"Maryland",
+        MA:"Massachusetts", MI:"Michigan", MN:"Minnesota", MS:"Mississippi",
+        MO:"Missouri", MT:"Montana", NE:"Nebraska", NV:"Nevada", NH:"New Hampshire",
+        NJ:"New Jersey", NM:"New Mexico", NY:"New York", NC:"North Carolina",
+        ND:"North Dakota", OH:"Ohio", OK:"Oklahoma", OR:"Oregon", PA:"Pennsylvania",
+        RI:"Rhode Island", SC:"South Carolina", SD:"South Dakota", TN:"Tennessee",
+        TX:"Texas", UT:"Utah", VT:"Vermont", VA:"Virginia", WA:"Washington",
+        WV:"West Virginia", WI:"Wisconsin", WY:"Wyoming", DC:"Washington, DC"
+      };
+      const STATE_BASES = {
+        AK: [
+          { name: "Joint Base Elmendorf-Richardson", slug: "elmendorf", city: "Anchorage, AK" },
+          { name: "Eielson AFB", slug: "eielson", city: "Fairbanks, AK" }
+        ],
+        AL: [
+          { name: "Maxwell AFB", slug: "maxwell", city: "Montgomery, AL" }
+        ],
+        AZ: [
+          { name: "Davis-Monthan AFB", slug: "davis-monthan", city: "Tucson, AZ" },
+          { name: "Luke AFB", slug: "luke", city: "Glendale, AZ" }
+        ],
+        CA: [
+          { name: "Beale AFB", slug: "beale", city: "Marysville, CA" },
+          { name: "Edwards AFB", slug: "edwards", city: "Edwards, CA" },
+          { name: "Los Angeles AFB", slug: "los-angeles", city: "El Segundo, CA" },
+          { name: "Travis AFB", slug: "travis", city: "Fairfield, CA" },
+          { name: "Vandenberg SFB", slug: "vandenberg", city: "Lompoc, CA" }
+        ],
+        CO: [
+          { name: "Buckley SFB", slug: "buckley", city: "Aurora, CO" },
+          { name: "Peterson SFB", slug: "peterson", city: "Colorado Springs, CO" },
+          { name: "Schriever SFB", slug: "schriever", city: "Colorado Springs, CO" },
+          { name: "U.S. Air Force Academy", slug: "air-force-academy", city: "Colorado Springs, CO" }
+        ],
+        DE: [
+          { name: "Dover AFB", slug: "dover", city: "Dover, DE" }
+        ],
+        FL: [
+          { name: "Eglin AFB", slug: "eglin", city: "Valparaiso, FL" },
+          { name: "Hurlburt Field", slug: "hurlburt", city: "Mary Esther, FL" },
+          { name: "MacDill AFB", slug: "macdill", city: "Tampa, FL" },
+          { name: "Patrick SFB", slug: "patrick", city: "Cocoa Beach, FL" },
+          { name: "Tyndall AFB", slug: "tyndall", city: "Panama City, FL" }
+        ],
+        GA: [
+          { name: "Moody AFB", slug: "moody", city: "Valdosta, GA" },
+          { name: "Robins AFB", slug: "robins", city: "Warner Robins, GA" }
+        ],
+        HI: [
+          { name: "Joint Base Pearl Harbor-Hickam", slug: "hickam", city: "Honolulu, HI" }
+        ],
+        ID: [
+          { name: "Mountain Home AFB", slug: "mountain-home", city: "Mountain Home, ID" }
+        ],
+        IL: [
+          { name: "Scott AFB", slug: "scott", city: "Belleville, IL" }
+        ],
+        KS: [
+          { name: "McConnell AFB", slug: "mcconnell", city: "Wichita, KS" }
+        ],
+        LA: [
+          { name: "Barksdale AFB", slug: "barksdale", city: "Bossier City, LA" }
+        ],
+        MA: [
+          { name: "Hanscom AFB", slug: "hanscom", city: "Bedford, MA" }
+        ],
+        MD: [
+          { name: "Joint Base Andrews", slug: "andrews", city: "Camp Springs, MD" }
+        ],
+        MS: [
+          { name: "Columbus AFB", slug: "columbus", city: "Columbus, MS" },
+          { name: "Keesler AFB", slug: "keesler", city: "Biloxi, MS" }
+        ],
+        MT: [
+          { name: "Malmstrom AFB", slug: "malmstrom", city: "Great Falls, MT" }
+        ],
+        NC: [
+          { name: "Seymour Johnson AFB", slug: "seymour-johnson", city: "Goldsboro, NC" }
+        ],
+        ND: [
+          { name: "Grand Forks AFB", slug: "grand-forks", city: "Grand Forks, ND" },
+          { name: "Minot AFB", slug: "minot", city: "Minot, ND" }
+        ],
+        NE: [
+          { name: "Offutt AFB", slug: "offutt", city: "Bellevue, NE" }
+        ],
+        NJ: [
+          { name: "Joint Base McGuire-Dix-Lakehurst", slug: "mcguire", city: "Wrightstown, NJ" }
+        ],
+        NM: [
+          { name: "Cannon AFB", slug: "cannon", city: "Clovis, NM" },
+          { name: "Holloman AFB", slug: "holloman", city: "Alamogordo, NM" },
+          { name: "Kirtland AFB", slug: "kirtland", city: "Albuquerque, NM" }
+        ],
+        NV: [
+          { name: "Creech AFB", slug: "creech", city: "Indian Springs, NV" },
+          { name: "Nellis AFB", slug: "nellis", city: "Las Vegas, NV" }
+        ],
+        OH: [
+          { name: "Wright-Patterson AFB", slug: "wright-patterson", city: "Dayton, OH" }
+        ],
+        OK: [
+          { name: "Altus AFB", slug: "altus", city: "Altus, OK" },
+          { name: "Tinker AFB", slug: "tinker", city: "Oklahoma City, OK" },
+          { name: "Vance AFB", slug: "vance", city: "Enid, OK" }
+        ],
+        SC: [
+          { name: "Joint Base Charleston", slug: "charleston", city: "Charleston, SC" },
+          { name: "Shaw AFB", slug: "shaw", city: "Sumter, SC" }
+        ],
+        SD: [
+          { name: "Ellsworth AFB", slug: "ellsworth", city: "Rapid City, SD" }
+        ],
+        TX: [
+          { name: "Dyess AFB", slug: "dyess", city: "Abilene, TX" },
+          { name: "Goodfellow AFB", slug: "goodfellow", city: "San Angelo, TX" },
+          { name: "Joint Base San Antonio-Lackland", slug: "lackland", city: "San Antonio, TX" },
+          { name: "Laughlin AFB", slug: "laughlin", city: "Del Rio, TX" },
+          { name: "Sheppard AFB", slug: "sheppard", city: "Wichita Falls, TX" }
+        ],
+        UT: [
+          { name: "Hill AFB", slug: "hill", city: "Ogden, UT" }
+        ],
+        VA: [
+          { name: "Joint Base Langley-Eustis", slug: "langley", city: "Hampton, VA" }
+        ],
+        WA: [
+          { name: "Fairchild AFB", slug: "fairchild", city: "Spokane, WA" },
+          { name: "Joint Base Lewis-McChord", slug: "mcchord", city: "Tacoma, WA" }
+        ],
+        WY: [
+          { name: "F. E. Warren AFB", slug: "fe-warren", city: "Cheyenne, WY" }
+        ]
+      };
+      const basePageUrl = "/air-force/base-demographics";
+      const svg = d3.select("#pcsu-us-svg");
+      const selectedStateEl = document.getElementById("pcsu-selected-state");
+      const panelCopyEl = document.getElementById("pcsu-panel-copy");
+      const baseListEl = document.getElementById("pcsu-base-list");
+      function openBase(base) {
+        const savedBase = {
+          name: base.name,
+          slug: base.slug,
+          city: base.city,
+          json: base.slug
+        };
+        try {
+          localStorage.setItem("pcsunited.selectedBase.v1", JSON.stringify(savedBase));
+          localStorage.setItem("pcsunited.selectedBaseSlug.v1", base.slug);
+        } catch (err) {}
+        window.location.href = `${basePageUrl}?base=${encodeURIComponent(base.slug)}`;
+      }
+      function renderState(stateCode) {
+        const bases = STATE_BASES[stateCode] || [];
+        const stateName = STATE_NAMES[stateCode] || stateCode;
+        d3.selectAll(".pcsu-state").classed("is-active", false);
+        d3.select(`#state-${stateCode}`).classed("is-active", true);
+        selectedStateEl.textContent = stateName;
+        if (!bases.length) {
+          panelCopyEl.textContent = "PCSUnited does not have supported Base Demographics profiles for this state yet.";
+          baseListEl.innerHTML = "";
+          return;
+        }
+        panelCopyEl.textContent = `${bases.length} supported base profile${bases.length > 1 ? "s" : ""} available.`;
+        baseListEl.innerHTML = bases.map(base => `
+          <button class="pcsu-base-btn" type="button" data-slug="${base.slug}">
+            <span class="pcsu-base-name">${base.name}</span>
+            <span class="pcsu-base-meta">${base.city} • Open Base Demographics</span>
+          </button>
+        `).join("");
+        baseListEl.querySelectorAll(".pcsu-base-btn").forEach(button => {
+          button.addEventListener("click", () => {
+            const selected = bases.find(base => base.slug === button.dataset.slug);
+            if (selected) openBase(selected);
+          });
+        });
+      }
+      d3.json("https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json").then(us => {
+        const states = topojson.feature(us, us.objects.states).features;
+        const projection = d3.geoAlbersUsa()
+          .translate([480, 300])
+          .scale(1250);
+        const path = d3.geoPath(projection);
+        svg.append("g")
+          .selectAll("path")
+          .data(states)
+          .join("path")
+          .attr("class", d => {
+            const abbr = FIPS_TO_ABBR[String(d.id).padStart(2, "0")];
+            return STATE_BASES[abbr] ? "pcsu-state has-bases" : "pcsu-state";
+          })
+          .attr("id", d => {
+            const abbr = FIPS_TO_ABBR[String(d.id).padStart(2, "0")];
+            return `state-${abbr}`;
+          })
+          .attr("d", path)
+          .on("click", (event, d) => {
+            const abbr = FIPS_TO_ABBR[String(d.id).padStart(2, "0")];
+            renderState(abbr);
+          });
+        svg.append("path")
+          .datum(topojson.mesh(us, us.objects.states, (a, b) => a !== b))
+          .attr("fill", "none")
+          .attr("stroke", "rgba(16,20,38,.75)")
+          .attr("stroke-width", 1)
+          .attr("d", path);
+        svg.append("g")
+          .selectAll("text")
+          .data(states)
+          .join("text")
+          .attr("class", "pcsu-state-label")
+          .attr("x", d => path.centroid(d)[0])
+          .attr("y", d => path.centroid(d)[1])
+          .text(d => FIPS_TO_ABBR[String(d.id).padStart(2, "0")] || "")
+          .style("display", d => {
+            const abbr = FIPS_TO_ABBR[String(d.id).padStart(2, "0")];
+            return ["RI","DE","CT","NJ","MD","MA","DC"].includes(abbr) ? "none" : "block";
+          });
+        renderState("TX");
+      }).catch(() => {
+        selectedStateEl.textContent = "Map unavailable";
+        panelCopyEl.textContent = "The map data could not load. Please refresh the page.";
+        baseListEl.innerHTML = "";
+      });
+    })();
+  </script>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div fade-in="true" class="slide-nav-2 w-slider-nav"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <div class="wing-back-hero bakdrop"></div>
       <div data-w-id="504754d4-8dd6-99dc-bcfe-29ea9c1d3594" style="opacity:0" class="v2-base-demo base-demo-2">
         <div class="w-layout-blockcontainer container-64 w-container">
           <div class="home1_hero_info">
@@ -1895,7 +2342,6 @@
           </div>
         </div>
       </div>
-      <div class="wing-back-hero bakdrop"></div>
       <div class="sliderinblack">
         <div data-w-id="df371b8d-d86a-2b12-5a36-08096db0c8ab" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
@@ -4506,7 +4952,7 @@
     <footer id="w-node-_087b196d-b026-a298-5d40-c324b41ad796-b41ad796" class="footer footer-2">
       <div class="footer-content-wrapper">
         <div class="footer_banners">
-          <div class="footer_buy"><img src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="100vw" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="logo-footer">
+          <div class="footer_buy">
             <div class="heading-style-h4-3 text-align-center"><em>Built for service members, veterans, and military families who need clearer PCS, housing, pay, and financial readiness decisions before the move gets expensive.</em></div>
           </div><img src="images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="100vw" srcset="images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
@@ -4518,6 +4964,7 @@
               <a href="air-force/resources.html" target="_blank" class="footer-link">Resources</a>
               <a href="about-us.html" target="_blank" class="footer-link">About Us</a>
               <a href="blog-v1.html" target="_blank" class="footer-link">Blog</a>
+              <a href="air-force/resources.html" target="_blank" class="footer-link">Privacy Policy</a>
             </div>
             <div class="footer-links-text">
               <div class="footer-links-title">Tools</div>
@@ -4525,6 +4972,8 @@
               <a href="air-force/housing-quiz.html" target="_blank" class="footer-link">Home Quiz</a>
               <a href="air-force/bah-base-pay-calculator.html" target="_blank" class="footer-link">BAH Calculator</a>
               <a href="air-force/va-calculator.html" target="_blank" class="footer-link">VA Calculator</a>
+              <a href="blog-v1.html" target="_blank" class="footer-link">Disclamer</a>
+              <a href="about-us.html" target="_blank" class="footer-link">Terms of Use</a>
             </div>
             <div class="footer-links-text">
               <div class="footer-links-title">Official Sources</div>
@@ -4532,12 +4981,6 @@
               <a href="https://www.militaryonesource.mil/" target="_blank" class="footer-link">Military OneSource</a>
               <a href="https://www.va.gov/housing-assistance/" target="_blank" class="footer-link">VA Housing Assistance</a>
               <a href="https://www.dfas.mil/MilitaryMembers/payentitlements/Pay-Tables/Basic-Pay/EM/" target="_blank" class="footer-link">DFAS Pay Entitlements</a>
-            </div>
-            <div class="footer-links-text">
-              <div class="footer-links-title">Legal / Trust</div>
-              <a href="air-force/resources.html" target="_blank" class="footer-link">Privacy Policy</a>
-              <a href="about-us.html" target="_blank" class="footer-link">Terms of Use</a>
-              <a href="blog-v1.html" target="_blank" class="footer-link">Disclamer</a>
             </div>
           </div>
         </div>

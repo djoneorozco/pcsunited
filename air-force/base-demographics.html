@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed May 20 2026 04:07:17 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu May 21 2026 04:39:48 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e1a06" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -28,6 +28,712 @@
       <div class="navbar-wrapper-12">
         <a href="../index.html" class="link-block-7 w-inline-block"><img src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="image-130"></a>
         <div class="navbar-wrapper-11">
+          <div class="code-embed-52 w-embed w-script"><!--  =========================================================
+  PCSUnited • Header Market Data Strip
+  v1.0.0 • BASICBRAIN → CITIES.JSON FLOW
+  PURPOSE
+  - Header-friendly market strip
+  - Same visual language as Header Compensation Strip
+  - Listens to BasicBrain Input
+  - Reads selected base
+  - Loads matching cities JSON
+  - Shows:
+      Market Pressure
+      Avg Rent
+      Avg Mortgage
+      Equity Potential
+  PRIMARY SOURCE:
+  - localStorage["pcsunited.basicbrain.v1"]
+  - localStorage["pcsunited.selectedBase.v1"]
+  FALLBACK SOURCES:
+  - localStorage["pcsunited.profile.v1"]
+  - localStorage["pcsunited.bridge.v1"]
+  EVENTS LISTENED:
+  - pcsunited:basicbrain-updated
+  - pcsunited:profile-ready
+  - pcsunited:bridge-ready
+  - pcsu:base-selected
+  - storage
+  WRITES:
+  - localStorage["pcsunited.market_header.v1"]
+  - localStorage["pcsunited.market_context.v1"]
+  NOTE
+  - Assumes city JSON files live at:
+    https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/{CityKey}.json
+=========================================================  -->
+            <div id="pcsu-header-market-basicbrain" style="all:initial;">
+              <link rel="preconnect" href="https://fonts.googleapis.com">
+              <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+              <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+              <style>
+    #pcsu-header-market-basicbrain,
+    #pcsu-header-market-basicbrain *{
+      box-sizing:border-box;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    #pcsu-header-market-basicbrain{
+      display:block;
+      width:100%;
+      color:#f5f5f5;
+      background:transparent !important;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-wrap{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:transparent !important;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(92px, 1fr));
+      gap:8px;
+      width:min(520px, 100%);
+      background:transparent !important;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-tile{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:999px;
+      padding:7px 13px 8px;
+      min-height:34px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.88), rgba(238,241,248,.76));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        0 8px 18px rgba(0,0,0,.18);
+      backdrop-filter:blur(10px) saturate(135%);
+      -webkit-backdrop-filter:blur(10px) saturate(135%);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-tile::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(199,156,79,.32),
+        rgba(106,167,255,.16),
+        transparent
+      );
+      pointer-events:none;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-label{
+      display:block;
+      margin-bottom:2px;
+      color:rgba(18,24,38,.58);
+      font-size:8px;
+      line-height:1;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      white-space:nowrap;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-value{
+      display:block;
+      color:#101728;
+      font-size:13px;
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-.03em;
+      white-space:nowrap;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-value.is-good{
+      color:#16805b;
+      font-weight:900;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-value.is-warn{
+      color:#9b7939;
+      font-weight:900;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-value.is-risk{
+      color:#9b3d35;
+      font-weight:900;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-tile.is-loading .pcsu-header-market-value{
+      opacity:.60;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-tile.is-missing{
+      opacity:.58;
+    }
+    #pcsu-header-market-basicbrain .pcsu-header-market-foot{
+      display:none;
+    }
+    @media(max-width:760px){
+      #pcsu-header-market-basicbrain .pcsu-header-market-grid{
+        grid-template-columns:repeat(2, minmax(110px, 1fr));
+        width:100%;
+      }
+      #pcsu-header-market-basicbrain .pcsu-header-market-tile{
+        border-radius:12px;
+        min-height:44px;
+      }
+      #pcsu-header-market-basicbrain .pcsu-header-market-label{
+        font-size:9px;
+      }
+      #pcsu-header-market-basicbrain .pcsu-header-market-value{
+        font-size:15px;
+      }
+    }
+  </style>
+              <div class="pcsu-header-market-wrap" aria-label="Current market intelligence">
+                <div style="width:100%;">
+                  <div class="pcsu-header-market-grid">
+                    <div class="pcsu-header-market-tile is-loading">
+                      <span class="pcsu-header-market-label">Market Pressure</span>
+                      <span class="pcsu-header-market-value is-warn" id="bb-market-pressure">—</span>
+                    </div>
+                    <div class="pcsu-header-market-tile is-loading">
+                      <span class="pcsu-header-market-label">Avg Rent</span>
+                      <span class="pcsu-header-market-value" id="bb-market-rent">$0</span>
+                    </div>
+                    <div class="pcsu-header-market-tile is-loading">
+                      <span class="pcsu-header-market-label">Avg Mortgage</span>
+                      <span class="pcsu-header-market-value" id="bb-market-mortgage">$0</span>
+                    </div>
+                    <div class="pcsu-header-market-tile is-loading">
+                      <span class="pcsu-header-market-label">Equity Potential</span>
+                      <span class="pcsu-header-market-value is-good" id="bb-market-equity">—</span>
+                    </div>
+                  </div>
+                  <div class="pcsu-header-market-foot" id="bb-market-foot">
+                    Loading market data...
+                  </div>
+                </div>
+              </div>
+              <script>
+    (function(){
+      "use strict";
+      function initBasicBrainMarketHeader(){
+        const root = document.getElementById("pcsu-header-market-basicbrain");
+        if(!root) return;
+        if(root.dataset.mounted === "true") return;
+        root.dataset.mounted = "true";
+        const els = {
+          pressure: root.querySelector("#bb-market-pressure"),
+          rent: root.querySelector("#bb-market-rent"),
+          mortgage: root.querySelector("#bb-market-mortgage"),
+          equity: root.querySelector("#bb-market-equity"),
+          foot: root.querySelector("#bb-market-foot")
+        };
+        const tiles = Array.from(root.querySelectorAll(".pcsu-header-market-tile"));
+        if(!els.pressure || !els.rent || !els.mortgage || !els.equity) return;
+        /* ============================================================
+           #1 CONFIG
+        ============================================================ */
+        const VERSION = "1.0.0";
+        const STORAGE = {
+          basicbrain: "pcsunited.basicbrain.v1",
+          profile: "pcsunited.profile.v1",
+          bridge: "pcsunited.bridge.v1",
+          selectedBase: "pcsunited.selectedBase.v1",
+          marketHeader: "pcsunited.market_header.v1",
+          marketContext: "pcsunited.market_context.v1"
+        };
+        const CITY_BASE_URL = "https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/";
+        const BASE_TO_CITY_FILE = {
+          "Andrews AFB": "Andrews.json",
+          "Barksdale AFB": "Barksdale.json",
+          "Beale AFB": "Beale.json",
+          "Cannon AFB": "Cannon.json",
+          "Charleston AFB": "Charleston.json",
+          "Davis-Monthan AFB": "DavisMonthan.json",
+          "Davis Monthan AFB": "DavisMonthan.json",
+          "Dover AFB": "Dover.json",
+          "Dyess AFB": "Dyess.json",
+          "Eglin AFB": "Eglin.json",
+          "Elmendorf AFB": "Elmendorf.json",
+          "F.E-Warren AFB": "FEWarren.json",
+          "F.E Warren AFB": "FEWarren.json",
+          "Fairchild AFB": "Fairchild.json",
+          "Fort-Sam-Houston AFB": "FortSamHouston.json",
+          "Fort Sam Houston AFB": "FortSamHouston.json",
+          "Holloman AFB": "Holloman.json",
+          "Hurlburt AFB": "Hurlburt.json",
+          "Keesler AFB": "Keesler.json",
+          "Kirtland AFB": "Kirtland.json",
+          "Lackland AFB": "Lackland.json",
+          "Langley AFB": "Langley.json",
+          "Laughlin AFB": "Laughlin.json",
+          "Little-Rock AFB": "LittleRock.json",
+          "Little Rock AFB": "LittleRock.json",
+          "Luke AFB": "Luke.json",
+          "MacDill AFB": "MacDill.json",
+          "Malmstrom AFB": "Malmstrom.json",
+          "Maxwell AFB": "Maxwell.json",
+          "McConnell AFB": "McConnell.json",
+          "McGuire AFB": "McGuire.json",
+          "Minot AFB": "Minot.json",
+          "Moody AFB": "Moody.json",
+          "Mountain-Home AFB": "MountainHome.json",
+          "Mountain Home AFB": "MountainHome.json",
+          "Nellis AFB": "Nellis.json",
+          "Offutt AFB": "Offutt.json",
+          "Peterson AFB": "Peterson.json",
+          "Randolph AFB": "Randolph.json",
+          "Robins AFB": "Robins.json",
+          "Scott AFB": "Scott.json",
+          "Seymour-Johnson AFB": "SeymourJohnson.json",
+          "Seymour Johnson AFB": "SeymourJohnson.json",
+          "Shaw AFB": "Shaw.json",
+          "Sheppard AFB": "Sheppard.json",
+          "Tinker AFB": "Tinker.json",
+          "Travis AFB": "Travis.json",
+          "Tyndall AFB": "Tyndall.json",
+          "Whiteman AFB": "Whiteman.json",
+          "Wright-Patterson AFB": "WrightPatterson.json",
+          "Wright Patterson AFB": "WrightPatterson.json",
+          "Joint Base San Antonio": "Lackland.json"
+        };
+        let requestSeq = 0;
+        let runTimer = null;
+        const cityCache = new Map();
+        /* ============================================================
+           #2 HELPERS
+        ============================================================ */
+        function setLoading(isLoading){
+          tiles.forEach(function(tile){
+            tile.classList.toggle("is-loading", !!isLoading);
+          });
+        }
+        function setMissing(isMissing){
+          tiles.forEach(function(tile){
+            tile.classList.toggle("is-missing", !!isMissing);
+          });
+        }
+        function clean(value){
+          return value === undefined || value === null ? "" : String(value).trim();
+        }
+        function num(value, fallback){
+          if(fallback === undefined) fallback = 0;
+          const n = Number(String(value ?? "").replace(/[$,%]/g,"").replaceAll(",",""));
+          return Number.isFinite(n) ? n : fallback;
+        }
+        function money(value){
+          const n = Number(value || 0);
+          if(!Number.isFinite(n) || n <= 0) return "$0";
+          return "$" + n.toLocaleString("en-US", { maximumFractionDigits:0 });
+        }
+        function readJson(key, fallback){
+          try{
+            const localRaw = localStorage.getItem(key);
+            if(localRaw) return JSON.parse(localRaw);
+            const sessionRaw = sessionStorage.getItem(key);
+            if(sessionRaw) return JSON.parse(sessionRaw);
+            return fallback;
+          }catch(_){
+            return fallback;
+          }
+        }
+        function writeJson(key, value){
+          try{
+            localStorage.setItem(key, JSON.stringify(value));
+          }catch(_){}
+        }
+        function normalizeBaseName(value){
+          return clean(value)
+            .replace(/\s+/g," ")
+            .replace("Davis Monthan", "Davis-Monthan")
+            .replace("Little Rock", "Little-Rock")
+            .replace("Mountain Home", "Mountain-Home")
+            .replace("Seymour Johnson", "Seymour-Johnson")
+            .replace("Wright Patterson", "Wright-Patterson")
+            .replace("F.E Warren", "F.E-Warren");
+        }
+        function titleCasePressure(value){
+          const raw = clean(value);
+          if(!raw) return "—";
+          const lower = raw.toLowerCase();
+          if(lower.includes("high") || lower.includes("hot") || lower.includes("tight") || lower.includes("elevated")) {
+            return "High";
+          }
+          if(lower.includes("medium") || lower.includes("moderate") || lower.includes("balanced")) {
+            return "Medium";
+          }
+          if(lower.includes("low") || lower.includes("soft") || lower.includes("stable")) {
+            return "Low";
+          }
+          return raw.length > 12 ? raw.slice(0, 12) : raw;
+        }
+        function pressureClass(value){
+          const lower = clean(value).toLowerCase();
+          if(lower.includes("high") || lower.includes("hot") || lower.includes("tight") || lower.includes("elevated")) {
+            return "is-risk";
+          }
+          if(lower.includes("medium") || lower.includes("moderate") || lower.includes("balanced")) {
+            return "is-warn";
+          }
+          if(lower.includes("low") || lower.includes("soft") || lower.includes("stable")) {
+            return "is-good";
+          }
+          return "is-warn";
+        }
+        function equityClass(value){
+          const lower = clean(value).toLowerCase();
+          if(lower.includes("high") || lower.includes("strong") || lower.includes("good")) {
+            return "is-good";
+          }
+          if(lower.includes("medium") || lower.includes("moderate")) {
+            return "is-warn";
+          }
+          if(lower.includes("low") || lower.includes("weak")) {
+            return "is-risk";
+          }
+          return "is-good";
+        }
+        function setValueClass(el, className){
+          if(!el) return;
+          el.classList.remove("is-good", "is-warn", "is-risk");
+          if(className) el.classList.add(className);
+        }
+        /* ============================================================
+           #3 BASICBRAIN / BASE RESOLUTION
+        ============================================================ */
+        function readBasicBrainContext(){
+          const bb = readJson(STORAGE.basicbrain, null);
+          const profile = readJson(STORAGE.profile, null);
+          const bridge = readJson(STORAGE.bridge, null);
+          const selectedBase = readJson(STORAGE.selectedBase, null);
+          const merged = {
+            ...(bridge && typeof bridge === "object" ? bridge : {}),
+            ...(profile && typeof profile === "object" ? profile : {}),
+            ...(bb && bb.bridge && typeof bb.bridge === "object" ? bb.bridge : {}),
+            ...(bb && bb.profile && typeof bb.profile === "object" ? bb.profile : {}),
+            ...(bb && typeof bb === "object" ? bb : {})
+          };
+          if(selectedBase && typeof selectedBase === "object"){
+            merged.base = merged.base || selectedBase.base || selectedBase.name || selectedBase.label || "";
+            merged.base_label = merged.base_label || selectedBase.label || selectedBase.base || selectedBase.name || "";
+            merged.cityKey = merged.cityKey || selectedBase.cityKey || "";
+            merged.market = merged.market || selectedBase.market || "";
+            merged.state = merged.state || selectedBase.state || "";
+            merged.jsonUrl = merged.jsonUrl || selectedBase.jsonUrl || selectedBase.selectedCityJsonUrl || "";
+          }
+          const base = normalizeBaseName(
+            merged.base ||
+            merged.current_base ||
+            merged.currentBase ||
+            merged.selected_base ||
+            merged.selectedBase ||
+            ""
+          );
+          return {
+            raw: merged,
+            base,
+            base_label: clean(merged.base_label || base),
+            cityKey: clean(merged.cityKey || ""),
+            market: clean(merged.market || ""),
+            state: clean(merged.state || ""),
+            jsonUrl: clean(merged.jsonUrl || merged.selectedCityJsonUrl || merged.selected_city_json_url || "")
+          };
+        }
+        function resolveCityJsonUrl(context){
+          if(context && context.jsonUrl) return context.jsonUrl;
+          const base = context ? normalizeBaseName(context.base) : "";
+          const mapped = BASE_TO_CITY_FILE[base];
+          if(mapped) return CITY_BASE_URL + mapped;
+          if(context && context.cityKey){
+            return CITY_BASE_URL + context.cityKey + ".json";
+          }
+          return "";
+        }
+        /* ============================================================
+           #4 CITY JSON EXTRACTION
+        ============================================================ */
+        async function fetchCityJson(url){
+          if(!url) return null;
+          if(cityCache.has(url)){
+            return cityCache.get(url);
+          }
+          const res = await fetch(url + "?t=" + Date.now(), {
+            method:"GET",
+            cache:"no-store"
+          });
+          if(!res.ok){
+            throw new Error("City JSON failed: HTTP " + res.status);
+          }
+          const data = await res.json();
+          cityCache.set(url, data);
+          return data;
+        }
+        function firstDefined(){
+          for(let i = 0; i < arguments.length; i++){
+            const v = arguments[i];
+            if(v !== undefined && v !== null && v !== "") return v;
+          }
+          return null;
+        }
+        function getDefaultBedroomKey(data){
+          if(data && data.by_bedroom){
+            if(data.by_bedroom["3"]) return "3";
+            if(data.by_bedroom["2"]) return "2";
+            if(data.by_bedroom["4"]) return "4";
+            const keys = Object.keys(data.by_bedroom);
+            if(keys.length) return keys[0];
+          }
+          return "3";
+        }
+        function extractAvgRent(data){
+          const bedKey = getDefaultBedroomKey(data);
+          const bed = data && data.by_bedroom ? data.by_bedroom[bedKey] : null;
+          return num(firstDefined(
+            bed && bed.rent_monthly && bed.rent_monthly.avg,
+            data && data.metrics && data.metrics.median_rent,
+            data && data.rental_metrics && data.rental_metrics.median_rent,
+            data && data.avg_rent,
+            data && data.median_rent
+          ), 0);
+        }
+        function extractAvgMortgage(data){
+          const bedKey = getDefaultBedroomKey(data);
+          const bed = data && data.by_bedroom ? data.by_bedroom[bedKey] : null;
+          return num(firstDefined(
+            bed && bed.mortgage_monthly && bed.mortgage_monthly.avg,
+            data && data.avg_home_mortgage_monthly && data.avg_home_mortgage_monthly.avg,
+            data && data.metrics && data.metrics.avg_mortgage,
+            data && data.market_metrics && data.market_metrics.avg_mortgage,
+            data && data.avg_mortgage
+          ), 0);
+        }
+        function extractMarketPressure(data){
+          const raw = firstDefined(
+            data && data.market_bluf && data.market_bluf.status,
+            data && data.market_bluf && data.market_bluf.market_pressure,
+            data && data.market_bluf && data.market_bluf.inventory_trend,
+            data && data.scorecard && data.scorecard.market_pressure,
+            data && data.market_pressure,
+            data && data.base_profile && data.base_profile.bah_market_reality && data.base_profile.bah_market_reality.housing_pressure,
+            data && data.base_profile && data.base_profile.bah_market_reality && data.base_profile.bah_market_reality.market_pressure
+          );
+          const text = clean(raw).toLowerCase();
+          if(text.includes("seller") || text.includes("hot") || text.includes("tight") || text.includes("limited") || text.includes("high")) {
+            return "High";
+          }
+          if(text.includes("balanced") || text.includes("moderate") || text.includes("medium") || text.includes("caution")) {
+            return "Medium";
+          }
+          if(text.includes("buyer") || text.includes("soft") || text.includes("stable") || text.includes("low")) {
+            return "Low";
+          }
+          const dom = num(data && data.metrics && data.metrics.days_on_market, 0);
+          const listings = num(data && data.metrics && data.metrics.active_listings_total, 0);
+          if(dom && dom <= 25) return "High";
+          if(dom && dom <= 55) return "Medium";
+          if(dom && dom > 55) return "Low";
+          if(listings && listings < 400) return "High";
+          if(listings && listings < 1200) return "Medium";
+          if(listings >= 1200) return "Low";
+          return raw ? titleCasePressure(raw) : "Medium";
+        }
+        function extractEquityPotential(data){
+          const raw = firstDefined(
+            data && data.scorecard && data.scorecard.equity_potential,
+            data && data.market_bluf && data.market_bluf.equity_potential,
+            data && data.market_bluf && data.market_bluf.growth_signal,
+            data && data.market_bluf && data.market_bluf.bluf_headline,
+            data && data.investor_angle,
+            data && data.investor_angles && data.investor_angles[0],
+            data && data.opportunities && data.opportunities[0]
+          );
+          const growth = num(data && data.scorecard && data.scorecard.growth_score, 0);
+          const stability = num(data && data.scorecard && data.scorecard.stability_score, 0);
+          const overall = num(data && data.scorecard && data.scorecard.overall_score, 0);
+          const combined = Math.round((growth + stability + overall) / 3);
+          if(growth || stability || overall){
+            if(combined >= 75) return "High";
+            if(combined >= 55) return "Medium";
+            return "Low";
+          }
+          const text = clean(raw).toLowerCase();
+          if(text.includes("strong") || text.includes("high") || text.includes("growth") || text.includes("opportunity")) {
+            return "High";
+          }
+          if(text.includes("moderate") || text.includes("stable") || text.includes("steady")) {
+            return "Medium";
+          }
+          if(text.includes("low") || text.includes("weak") || text.includes("limited")) {
+            return "Low";
+          }
+          return "Medium";
+        }
+        function extractMarketContext(data, context, jsonUrl){
+          const pressure = extractMarketPressure(data);
+          const rent = extractAvgRent(data);
+          const mortgage = extractAvgMortgage(data);
+          const equity = extractEquityPotential(data);
+          return {
+            source: "pcsunited.header.market.basicbrain.v1",
+            version: VERSION,
+            updated_at: new Date().toISOString(),
+            base: context.base,
+            base_label: context.base_label,
+            cityKey: context.cityKey,
+            market: context.market || clean(data && (data.market_label || data.city || data.name)),
+            state: context.state || clean(data && (data.state_code || data.state)),
+            jsonUrl,
+            market_pressure: pressure,
+            avg_rent: rent,
+            avg_mortgage: mortgage,
+            equity_potential: equity,
+            raw_city_name: clean(data && (data.name || data.city || "")),
+            raw_market_label: clean(data && data.market_label || "")
+          };
+        }
+        /* ============================================================
+           #5 PAINT + SAVE
+        ============================================================ */
+        function paintEmpty(){
+          els.pressure.textContent = "—";
+          els.rent.textContent = "$0";
+          els.mortgage.textContent = "$0";
+          els.equity.textContent = "—";
+          setValueClass(els.pressure, "is-warn");
+          setValueClass(els.equity, "is-good");
+          setLoading(false);
+          setMissing(true);
+        }
+        function paintLoading(){
+          setLoading(true);
+          setMissing(false);
+        }
+        function paintMarket(ctx){
+          els.pressure.textContent = ctx.market_pressure || "—";
+          els.rent.textContent = money(ctx.avg_rent);
+          els.mortgage.textContent = money(ctx.avg_mortgage);
+          els.equity.textContent = ctx.equity_potential || "—";
+          setValueClass(els.pressure, pressureClass(ctx.market_pressure));
+          setValueClass(els.equity, equityClass(ctx.equity_potential));
+          setLoading(false);
+          setMissing(false);
+        }
+        function saveMarket(ctx){
+          writeJson(STORAGE.marketHeader, ctx);
+          writeJson(STORAGE.marketContext, ctx);
+          const bridge = readJson(STORAGE.bridge, {}) || {};
+          writeJson(STORAGE.bridge, {
+            ...bridge,
+            market_pressure: ctx.market_pressure,
+            avg_rent: ctx.avg_rent,
+            avg_mortgage: ctx.avg_mortgage,
+            equity_potential: ctx.equity_potential,
+            market_context_updated_at: ctx.updated_at
+          });
+          try{
+            window.dispatchEvent(new CustomEvent("pcsunited:market-ready", {
+              detail: ctx
+            }));
+          }catch(_){}
+        }
+        /* ============================================================
+           #6 MAIN RUNNER
+        ============================================================ */
+        async function run(reason){
+          const seq = ++requestSeq;
+          const context = readBasicBrainContext();
+          if(!context || !context.base){
+            paintEmpty();
+            return false;
+          }
+          const jsonUrl = resolveCityJsonUrl(context);
+          if(!jsonUrl){
+            paintEmpty();
+            return false;
+          }
+          paintLoading();
+          try{
+            const data = await fetchCityJson(jsonUrl);
+            if(seq !== requestSeq) return true;
+            const marketContext = extractMarketContext(data, context, jsonUrl);
+            paintMarket(marketContext);
+            saveMarket(marketContext);
+            return true;
+          }catch(err){
+            if(seq === requestSeq){
+              console.warn("PCSU Market Header load failed:", err);
+              paintEmpty();
+            }
+            return false;
+          }
+        }
+        function scheduleRun(reason, delay){
+          clearTimeout(runTimer);
+          runTimer = setTimeout(function(){
+            run(reason || "scheduled");
+          }, typeof delay === "number" ? delay : 120);
+        }
+        /* ============================================================
+           #7 EVENTS
+        ============================================================ */
+        run("initial");
+        window.addEventListener("pcsunited:basicbrain-updated", function(){
+          scheduleRun("basicbrain-updated", 80);
+        });
+        window.addEventListener("pcsunited:profile-ready", function(){
+          scheduleRun("profile-ready", 100);
+        });
+        window.addEventListener("pcsunited:bridge-ready", function(){
+          scheduleRun("bridge-ready", 100);
+        });
+        window.addEventListener("pcsu:base-selected", function(){
+          scheduleRun("base-selected", 100);
+        });
+        window.addEventListener("pcsunited:compensation-ready", function(){
+          scheduleRun("compensation-ready", 140);
+        });
+        window.addEventListener("storage", function(event){
+          if(!event) return;
+          if(
+            event.key === STORAGE.basicbrain ||
+            event.key === STORAGE.profile ||
+            event.key === STORAGE.bridge ||
+            event.key === STORAGE.selectedBase
+          ){
+            scheduleRun("storage", 120);
+          }
+        });
+        window.addEventListener("message", function(event){
+          const data = event && event.data;
+          if(!data || typeof data !== "object") return;
+          if(
+            data.type === "pcsunited-basicbrain" ||
+            data.type === "pcsunited-bridge" ||
+            data.type === "pcsunited-profile" ||
+            data.source === "pcsunited.basicbrain.input"
+          ){
+            scheduleRun("message", 100);
+          }
+        });
+        window.PCSU_HEADER_MARKET_BASICBRAIN = {
+          version: VERSION,
+          run,
+          refresh: function(){
+            return run("manual-refresh");
+          },
+          getContext: readBasicBrainContext,
+          resolveCityJsonUrl: function(){
+            return resolveCityJsonUrl(readBasicBrainContext());
+          },
+          getMarket: function(){
+            return readJson(STORAGE.marketHeader, {});
+          }
+        };
+      }
+      if(document.readyState === "loading"){
+        document.addEventListener("DOMContentLoaded", initBasicBrainMarketHeader);
+      }else{
+        initBasicBrainMarketHeader();
+      }
+    })();
+  </script>
+            </div>
+          </div>
           <div class="style-three-nav-brand">
             <a href="#" role="link" class="home-three-nav-menu-brand rezoid w-nav-brand"></a>
           </div>

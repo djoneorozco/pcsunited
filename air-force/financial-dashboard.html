@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed May 20 2026 04:07:17 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu May 21 2026 04:39:48 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f84c86f4ec08e028cf0227" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -180,6 +180,790 @@
 </head>
 <body>
   <section>
+    <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="resources-header header-resources w-nav">
+      <div class="head-for-resources">
+        <a href="../index.html" class="code-2 w-inline-block"><img src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="image-130"></a>
+        <div class="code-2-b w-embed w-script"><!--  =========================================================
+  PCSUnited • Header Financial Intake / FAD Strip
+  v1.0.0 • FINANCIAL INTAKE → FAD FLOW
+  PURPOSE
+  - Header-friendly FAD completed strip
+  - Same exact visual language as BasicBrain Header Strips
+  - Reads Financial Intake + BasicBrain + Compensation
+  - Shows:
+      Total Comp
+      Est. Mortgage
+      Residual Income
+      Readiness
+  READS:
+  - localStorage["pcsunited.financial.intake.v1"]
+  - localStorage["pcsunited.financial_intake.v1"]
+  - localStorage["pcsunited.kpi_overrides.v1"]
+  - localStorage["pcsunited.bridge.v1"]
+  - localStorage["pcsunited.profile.v1"]
+  - localStorage["pcsunited.compensation.v1"]
+  - localStorage["pcsunited.basicbrain.v1"]
+  - localStorage["pcsunited.open_flow_ready.v1"]
+  EVENTS LISTENED:
+  - pcsunited:financial-intake-ready
+  - pcsunited:financial-intake-saved
+  - pcsunited:compensation-ready
+  - pcsunited:basicbrain-updated
+  - pcsunited:bridge-ready
+  - pcsunited:profile-ready
+  - storage
+  WRITES:
+  - localStorage["pcsunited.fad_header.v1"]
+=========================================================  -->
+          <div id="pcsu-header-fad-basicbrain" style="all:initial;">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+            <style>
+    #pcsu-header-fad-basicbrain,
+    #pcsu-header-fad-basicbrain *{
+      box-sizing:border-box;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    #pcsu-header-fad-basicbrain{
+      display:block;
+      width:100%;
+      color:#f5f5f5;
+      background:transparent !important;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-wrap{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:transparent !important;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(92px, 1fr));
+      gap:8px;
+      width:min(520px, 100%);
+      background:transparent !important;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-tile{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:999px;
+      padding:7px 13px 8px;
+      min-height:34px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.88), rgba(238,241,248,.76));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        0 8px 18px rgba(0,0,0,.18);
+      backdrop-filter:blur(10px) saturate(135%);
+      -webkit-backdrop-filter:blur(10px) saturate(135%);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-tile::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(199,156,79,.32),
+        rgba(106,167,255,.16),
+        transparent
+      );
+      pointer-events:none;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-label{
+      display:block;
+      margin-bottom:2px;
+      color:rgba(18,24,38,.58);
+      font-size:8px;
+      line-height:1;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      white-space:nowrap;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-value{
+      display:block;
+      color:#101728;
+      font-size:13px;
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-.03em;
+      white-space:nowrap;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-value.is-good{
+      color:#16805b;
+      font-weight:900;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-value.is-warn{
+      color:#9b7939;
+      font-weight:900;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-value.is-risk{
+      color:#9b3d35;
+      font-weight:900;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-value.is-total{
+      color:#9b7939;
+      font-weight:900;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-tile.is-loading .pcsu-header-fad-value{
+      opacity:.60;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-tile.is-missing{
+      opacity:.58;
+    }
+    #pcsu-header-fad-basicbrain .pcsu-header-fad-foot{
+      display:none;
+    }
+    @media(max-width:760px){
+      #pcsu-header-fad-basicbrain .pcsu-header-fad-grid{
+        grid-template-columns:repeat(2, minmax(110px, 1fr));
+        width:100%;
+      }
+      #pcsu-header-fad-basicbrain .pcsu-header-fad-tile{
+        border-radius:12px;
+        min-height:44px;
+      }
+      #pcsu-header-fad-basicbrain .pcsu-header-fad-label{
+        font-size:9px;
+      }
+      #pcsu-header-fad-basicbrain .pcsu-header-fad-value{
+        font-size:15px;
+      }
+    }
+  </style>
+            <div class="pcsu-header-fad-wrap" aria-label="Financial readiness header">
+              <div style="width:100%;">
+                <div class="pcsu-header-fad-grid">
+                  <div class="pcsu-header-fad-tile is-loading">
+                    <span class="pcsu-header-fad-label">Total Comp</span>
+                    <span class="pcsu-header-fad-value is-total" id="bb-fad-income">$0</span>
+                  </div>
+                  <div class="pcsu-header-fad-tile is-loading">
+                    <span class="pcsu-header-fad-label">Est. Mortgage</span>
+                    <span class="pcsu-header-fad-value" id="bb-fad-mortgage">$0</span>
+                  </div>
+                  <div class="pcsu-header-fad-tile is-loading">
+                    <span class="pcsu-header-fad-label">Residual Income</span>
+                    <span class="pcsu-header-fad-value is-good" id="bb-fad-residual">$0</span>
+                  </div>
+                  <div class="pcsu-header-fad-tile is-loading">
+                    <span class="pcsu-header-fad-label">Readiness</span>
+                    <span class="pcsu-header-fad-value is-good" id="bb-fad-readiness">—</span>
+                  </div>
+                </div>
+                <div class="pcsu-header-fad-foot" id="bb-fad-foot">
+                  Loading FAD context...
+                </div>
+              </div>
+            </div>
+            <script>
+    (function(){
+      "use strict";
+      function initFadHeaderStrip(){
+        const root = document.getElementById("pcsu-header-fad-basicbrain");
+        if(!root) return;
+        if(root.dataset.mounted === "true") return;
+        root.dataset.mounted = "true";
+        const els = {
+          income: root.querySelector("#bb-fad-income"),
+          mortgage: root.querySelector("#bb-fad-mortgage"),
+          residual: root.querySelector("#bb-fad-residual"),
+          readiness: root.querySelector("#bb-fad-readiness"),
+          foot: root.querySelector("#bb-fad-foot")
+        };
+        const tiles = Array.from(root.querySelectorAll(".pcsu-header-fad-tile"));
+        if(!els.income || !els.mortgage || !els.residual || !els.readiness) return;
+        /* ============================================================
+           #1 CONFIG
+        ============================================================ */
+        const VERSION = "1.0.0";
+        const STORAGE = {
+          fadHeader: "pcsunited.fad_header.v1",
+          intake: "pcsunited.financial.intake.v1",
+          intakeLegacy: "pcsunited.financial_intake.v1",
+          overrides: "pcsunited.kpi_overrides.v1",
+          bridge: "pcsunited.bridge.v1",
+          bridgeLegacy: "pcsunited.bridge",
+          realtyBridge: "realtysass.bridge",
+          profile: "pcsunited.profile.v1",
+          basicbrain: "pcsunited.basicbrain.v1",
+          compensation: "pcsunited.compensation.v1",
+          openFlow: "pcsunited.open_flow_ready.v1",
+          mortgageCache: "realtysass.mortgage_cache.v1",
+          housingDerived: "realtysass.derived.housing_monthly.v1",
+          feasibility: "realtysass.feasibility.v1",
+          verdict: "pcsunited.ec_verdict.v1",
+          verdictLegacy: "realtysass.ec_verdict.v1"
+        };
+        let runTimer = null;
+        /* ============================================================
+           #2 HELPERS
+        ============================================================ */
+        function readJson(key, fallback){
+          try{
+            const localRaw = localStorage.getItem(key);
+            if(localRaw) return JSON.parse(localRaw);
+            const sessionRaw = sessionStorage.getItem(key);
+            if(sessionRaw) return JSON.parse(sessionRaw);
+            return fallback;
+          }catch(_){
+            return fallback;
+          }
+        }
+        function writeJson(key, value){
+          try{
+            localStorage.setItem(key, JSON.stringify(value));
+          }catch(_){}
+        }
+        function clean(value){
+          return value === undefined || value === null ? "" : String(value).trim();
+        }
+        function num(value, fallback){
+          if(fallback === undefined) fallback = 0;
+          const n = Number(String(value ?? "").replace(/[$,%]/g,"").replaceAll(",",""));
+          return Number.isFinite(n) ? n : fallback;
+        }
+        function money(value){
+          const n = Number(value || 0);
+          if(!Number.isFinite(n)) return "$0";
+          return "$" + n.toLocaleString("en-US", { maximumFractionDigits:0 });
+        }
+        function setLoading(isLoading){
+          tiles.forEach(function(tile){
+            tile.classList.toggle("is-loading", !!isLoading);
+          });
+        }
+        function setMissing(isMissing){
+          tiles.forEach(function(tile){
+            tile.classList.toggle("is-missing", !!isMissing);
+          });
+        }
+        function setValueClass(el, className){
+          if(!el) return;
+          el.classList.remove("is-good", "is-warn", "is-risk", "is-total");
+          if(className) el.classList.add(className);
+        }
+        function firstDefined(){
+          for(let i = 0; i < arguments.length; i++){
+            const value = arguments[i];
+            if(value !== undefined && value !== null && value !== "") return value;
+          }
+          return null;
+        }
+        function scoreApr(score){
+          score = Number(score) || 720;
+          if(score >= 780) return 6.50;
+          if(score >= 760) return 6.75;
+          if(score >= 720) return 7.00;
+          if(score >= 700) return 7.20;
+          if(score >= 680) return 7.35;
+          if(score >= 660) return 7.85;
+          if(score >= 640) return 8.25;
+          if(score >= 620) return 9.25;
+          return 9.95;
+        }
+        function pmtPI(loanAmount, aprPct, years){
+          const principal = Math.max(0, Number(loanAmount || 0));
+          const annual = Number(aprPct || 0) / 100;
+          const months = Math.max(1, Number(years || 30) * 12);
+          if(principal <= 0) return 0;
+          if(annual <= 0){
+            return principal / months;
+          }
+          const r = annual / 12;
+          return principal * (r * Math.pow(1 + r, months)) / (Math.pow(1 + r, months) - 1);
+        }
+        function clamp(n, min, max){
+          return Math.max(min, Math.min(max, n));
+        }
+        /* ============================================================
+           #3 READ CONTEXT
+        ============================================================ */
+        function readAllContext(){
+          const intake = readJson(STORAGE.intake, {}) || {};
+          const intakeLegacy = readJson(STORAGE.intakeLegacy, {}) || {};
+          const overrides = readJson(STORAGE.overrides, {}) || {};
+          const bridge = readJson(STORAGE.bridge, {}) || {};
+          const bridgeLegacy = readJson(STORAGE.bridgeLegacy, {}) || {};
+          const realtyBridge = readJson(STORAGE.realtyBridge, {}) || {};
+          const profile = readJson(STORAGE.profile, {}) || {};
+          const basicbrain = readJson(STORAGE.basicbrain, {}) || {};
+          const compensation = readJson(STORAGE.compensation, {}) || {};
+          const openFlow = readJson(STORAGE.openFlow, {}) || {};
+          const mortgageCache = readJson(STORAGE.mortgageCache, {}) || {};
+          const feasibility = readJson(STORAGE.feasibility, {}) || {};
+          const verdict = readJson(STORAGE.verdict, {}) || readJson(STORAGE.verdictLegacy, {}) || {};
+          const merged = {
+            ...bridgeLegacy,
+            ...realtyBridge,
+            ...bridge,
+            ...(basicbrain.bridge || {}),
+            ...(basicbrain.profile || {}),
+            ...basicbrain,
+            ...profile,
+            ...compensation,
+            ...intakeLegacy,
+            ...intake,
+            ...overrides
+          };
+          return {
+            intake,
+            intakeLegacy,
+            overrides,
+            bridge,
+            profile,
+            basicbrain,
+            compensation,
+            openFlow,
+            mortgageCache,
+            feasibility,
+            verdict,
+            merged
+          };
+        }
+        function resolveIncome(ctx){
+          const m = ctx.merged || {};
+          const comp = ctx.compensation || {};
+          const bridge = ctx.bridge || {};
+          return num(firstDefined(
+            comp.totalMonthlyCompensation,
+            comp.totalMonthly,
+            comp.total,
+            m.totalMonthlyCompensation,
+            m.totalMonthly,
+            m.total,
+            bridge.totalMonthlyCompensation,
+            bridge.totalMonthly,
+            bridge.income,
+            m.monthly_income,
+            m.income
+          ), 0);
+        }
+        function resolveExpenses(ctx){
+          const m = ctx.merged || {};
+          const ov = ctx.overrides || {};
+          const intake = ctx.intake || {};
+          const legacy = ctx.intakeLegacy || {};
+          const profile = ctx.profile || {};
+          const bridge = ctx.bridge || {};
+          return num(firstDefined(
+            ov.expensesOverride,
+            ov.monthly_expenses,
+            ov.expenses,
+            intake.monthly_expenses,
+            intake.monthlyExpenses,
+            intake.expenses,
+            legacy.monthly_expenses,
+            legacy.monthlyExpenses,
+            legacy.expenses,
+            bridge.monthly_expenses,
+            bridge.monthlyExpenses,
+            bridge.expenses,
+            profile.monthly_expenses,
+            profile.monthlyExpenses,
+            profile.expenses,
+            m.monthly_expenses,
+            m.monthlyExpenses,
+            m.expenses
+          ), 0);
+        }
+        function resolvePrice(ctx){
+          const m = ctx.merged || {};
+          const ov = ctx.overrides || {};
+          const intake = ctx.intake || {};
+          const legacy = ctx.intakeLegacy || {};
+          const profile = ctx.profile || {};
+          const bridge = ctx.bridge || {};
+          return num(firstDefined(
+            ov.projected_home_price,
+            ov.housingOverride,
+            ov.price,
+            intake.projected_home_price,
+            intake.projectedHomePrice,
+            intake.homePrice,
+            intake.price,
+            intake.housing,
+            legacy.projected_home_price,
+            legacy.projectedHomePrice,
+            legacy.homePrice,
+            legacy.price,
+            legacy.housing,
+            bridge.projected_home_price,
+            bridge.projectedHomePrice,
+            bridge.homePrice,
+            bridge.price,
+            bridge.housing,
+            profile.projected_home_price,
+            profile.projectedHomePrice,
+            profile.homePrice,
+            profile.price,
+            m.projected_home_price,
+            m.projectedHomePrice,
+            m.homePrice,
+            m.price,
+            m.housing
+          ), 0);
+        }
+        function resolveDownpayment(ctx, price){
+          const m = ctx.merged || {};
+          const ov = ctx.overrides || {};
+          const intake = ctx.intake || {};
+          const legacy = ctx.intakeLegacy || {};
+          const profile = ctx.profile || {};
+          const bridge = ctx.bridge || {};
+          const direct = num(firstDefined(
+            ov.downpayment,
+            ov.savingsOverride,
+            ov.dpAmt,
+            intake.downpayment,
+            intake.downPayment,
+            intake.dpAmt,
+            legacy.downpayment,
+            legacy.downPayment,
+            legacy.dpAmt,
+            bridge.downpayment,
+            bridge.downPayment,
+            bridge.dpAmt,
+            profile.downpayment,
+            profile.downPayment,
+            profile.dpAmt,
+            m.downpayment,
+            m.downPayment,
+            m.dpAmt
+          ), 0);
+          if(direct > 0) return direct;
+          const pct = num(firstDefined(
+            intake.downpayment_percent,
+            intake.downpaymentPercent,
+            legacy.downpayment_percent,
+            legacy.downpaymentPercent,
+            ov.downpayment_percent,
+            ov.downpaymentPercent,
+            m.downpayment_percent,
+            m.downpaymentPercent
+          ), 0);
+          if(price > 0 && pct > 0) return Math.round(price * (pct / 100));
+          return 0;
+        }
+        function resolveCreditScore(ctx){
+          const m = ctx.merged || {};
+          const ov = ctx.overrides || {};
+          const intake = ctx.intake || {};
+          const legacy = ctx.intakeLegacy || {};
+          const profile = ctx.profile || {};
+          const bridge = ctx.bridge || {};
+          return clamp(num(firstDefined(
+            ov.credit_score,
+            ov.creditScore,
+            intake.credit_score,
+            intake.creditScore,
+            intake.fico,
+            legacy.credit_score,
+            legacy.creditScore,
+            legacy.fico,
+            bridge.credit_score,
+            bridge.creditScore,
+            bridge.fico,
+            profile.credit_score,
+            profile.creditScore,
+            m.credit_score,
+            m.creditScore,
+            m.fico
+          ), 720), 300, 850);
+        }
+        function resolveApr(ctx, score){
+          const m = ctx.merged || {};
+          const intake = ctx.intake || {};
+          const legacy = ctx.intakeLegacy || {};
+          return num(firstDefined(
+            intake.estimated_apr,
+            intake.estimatedApr,
+            legacy.estimated_apr,
+            legacy.estimatedApr,
+            m.estimated_apr,
+            m.estimatedApr,
+            m.apr
+          ), scoreApr(score));
+        }
+        function resolveMortgageFromCache(ctx){
+          const cache = ctx.mortgageCache || {};
+          const f = ctx.feasibility || {};
+          const m = ctx.merged || {};
+          return num(firstDefined(
+            cache.allIn,
+            cache.all_in,
+            cache.monthly,
+            cache.payment,
+            cache.total,
+            cache.result && cache.result.allIn,
+            cache.result && cache.result.monthly,
+            f.monthlyMortgage,
+            f.housing_monthly,
+            f.projectedMortgage,
+            m.projected_mortgage,
+            m.projectedMortgage,
+            m.monthly_mortgage,
+            m.monthlyMortgage,
+            m.housing_monthly,
+            m.housingMonthly
+          ), 0);
+        }
+        function estimateMortgage(ctx){
+          const cached = resolveMortgageFromCache(ctx);
+          if(cached > 0) return Math.round(cached);
+          const price = resolvePrice(ctx);
+          const down = resolveDownpayment(ctx, price);
+          const score = resolveCreditScore(ctx);
+          const apr = resolveApr(ctx, score);
+          if(price <= 0) return 0;
+          const loan = Math.max(0, price - down);
+          const pi = pmtPI(loan, apr, 30);
+          const taxAnnual = price * 0.0125;
+          const insAnnual = price * 0.0035;
+          const hoa = 0;
+          const downPct = price > 0 ? down / price : 0;
+          const pmi = downPct < 0.20 ? Math.max(0, loan * 0.0055 / 12) : 0;
+          return Math.round(pi + (taxAnnual / 12) + (insAnnual / 12) + hoa + pmi);
+        }
+        function readinessGrade(score){
+          if(score >= 86) return "A";
+          if(score >= 76) return "B";
+          if(score >= 66) return "C";
+          if(score >= 56) return "D";
+          return "F";
+        }
+        function readinessClass(score){
+          if(score >= 76) return "is-good";
+          if(score >= 56) return "is-warn";
+          return "is-risk";
+        }
+        function residualClass(value){
+          if(value >= 2500) return "is-good";
+          if(value >= 1000) return "is-warn";
+          return "is-risk";
+        }
+        function computeReadiness(income, expenses, mortgage, score){
+          if(income <= 0) return 0;
+          const totalOutflow = expenses + mortgage;
+          const residual = income - totalOutflow;
+          const backendRatio = totalOutflow / income;
+          const housingRatio = mortgage / income;
+          const expenseRatio = expenses / income;
+          let readiness = 100;
+          readiness -= Math.max(0, (backendRatio - 0.45) * 120);
+          readiness -= Math.max(0, (housingRatio - 0.32) * 90);
+          readiness -= Math.max(0, (expenseRatio - 0.38) * 70);
+          if(residual < 0) readiness -= 30;
+          else if(residual < 750) readiness -= 18;
+          else if(residual < 1500) readiness -= 8;
+          if(score < 620) readiness -= 20;
+          else if(score < 680) readiness -= 10;
+          else if(score >= 760) readiness += 4;
+          return Math.round(clamp(readiness, 0, 100));
+        }
+        function getSavedReadiness(ctx){
+          const verdict = ctx.verdict || {};
+          const f = ctx.feasibility || {};
+          const m = ctx.merged || {};
+          const saved = firstDefined(
+            verdict.score,
+            verdict.readiness_score,
+            verdict.readinessScore,
+            verdict.percent,
+            f.score,
+            f.readiness_score,
+            f.readinessScore,
+            m.readiness_score,
+            m.readinessScore,
+            m.financial_readiness,
+            m.financialReadiness
+          );
+          return saved === null ? null : num(saved, null);
+        }
+        function buildHeaderContext(){
+          const ctx = readAllContext();
+          const income = resolveIncome(ctx);
+          const expenses = resolveExpenses(ctx);
+          const mortgage = estimateMortgage(ctx);
+          const score = resolveCreditScore(ctx);
+          const residual = Math.round(income - expenses - mortgage);
+          const savedReadiness = getSavedReadiness(ctx);
+          const readinessScore = Number.isFinite(Number(savedReadiness))
+            ? Math.round(Number(savedReadiness))
+            : computeReadiness(income, expenses, mortgage, score);
+          const grade = readinessGrade(readinessScore);
+          return {
+            source: "pcsunited.header.fad.v1",
+            version: VERSION,
+            updated_at: new Date().toISOString(),
+            income,
+            expenses,
+            mortgage,
+            residual,
+            credit_score: score,
+            readiness_score: readinessScore,
+            readiness_grade: grade,
+            readiness_label: grade + " " + readinessScore + "%",
+            has_financial_intake:
+              !!Object.keys(ctx.intake || {}).length ||
+              !!Object.keys(ctx.intakeLegacy || {}).length ||
+              !!Object.keys(ctx.overrides || {}).length ||
+              !!(ctx.openFlow && ctx.openFlow.ready)
+          };
+        }
+        /* ============================================================
+           #4 PAINT + SAVE
+        ============================================================ */
+        function paintEmpty(){
+          els.income.textContent = "$0";
+          els.mortgage.textContent = "$0";
+          els.residual.textContent = "$0";
+          els.readiness.textContent = "—";
+          setValueClass(els.income, "is-total");
+          setValueClass(els.residual, "is-warn");
+          setValueClass(els.readiness, "is-warn");
+          setLoading(false);
+          setMissing(true);
+        }
+        function paintHeader(data){
+          els.income.textContent = money(data.income);
+          els.mortgage.textContent = money(data.mortgage);
+          els.residual.textContent = money(data.residual);
+          els.readiness.textContent = data.readiness_label || "—";
+          setValueClass(els.income, "is-total");
+          setValueClass(els.residual, residualClass(data.residual));
+          setValueClass(els.readiness, readinessClass(data.readiness_score));
+          setLoading(false);
+          setMissing(false);
+        }
+        function saveHeader(data){
+          writeJson(STORAGE.fadHeader, data);
+          try{
+            window.dispatchEvent(new CustomEvent("pcsunited:fad-header-ready", {
+              detail: data
+            }));
+          }catch(_){}
+        }
+        /* ============================================================
+           #5 MAIN RUNNER
+        ============================================================ */
+        function run(reason){
+          setLoading(true);
+          const data = buildHeaderContext();
+          if(!data.has_financial_intake && data.income <= 0 && data.mortgage <= 0){
+            paintEmpty();
+            saveHeader(data);
+            return false;
+          }
+          paintHeader(data);
+          saveHeader(data);
+          return true;
+        }
+        function scheduleRun(reason, delay){
+          clearTimeout(runTimer);
+          runTimer = setTimeout(function(){
+            run(reason || "scheduled");
+          }, typeof delay === "number" ? delay : 120);
+        }
+        /* ============================================================
+           #6 EVENTS
+        ============================================================ */
+        run("initial");
+        window.addEventListener("pcsunited:financial-intake-ready", function(){
+          scheduleRun("financial-intake-ready", 80);
+        });
+        window.addEventListener("pcsunited:financial-intake-saved", function(){
+          scheduleRun("financial-intake-saved", 80);
+        });
+        window.addEventListener("pcsunited:compensation-ready", function(){
+          scheduleRun("compensation-ready", 100);
+        });
+        window.addEventListener("pcsunited:basicbrain-updated", function(){
+          scheduleRun("basicbrain-updated", 120);
+        });
+        window.addEventListener("pcsunited:profile-ready", function(){
+          scheduleRun("profile-ready", 120);
+        });
+        window.addEventListener("pcsunited:bridge-ready", function(){
+          scheduleRun("bridge-ready", 120);
+        });
+        window.addEventListener("pcsunited:market-ready", function(){
+          scheduleRun("market-ready", 140);
+        });
+        window.addEventListener("storage", function(event){
+          if(!event) return;
+          const watched = [
+            STORAGE.intake,
+            STORAGE.intakeLegacy,
+            STORAGE.overrides,
+            STORAGE.bridge,
+            STORAGE.bridgeLegacy,
+            STORAGE.realtyBridge,
+            STORAGE.profile,
+            STORAGE.basicbrain,
+            STORAGE.compensation,
+            STORAGE.openFlow,
+            STORAGE.mortgageCache,
+            STORAGE.housingDerived,
+            STORAGE.feasibility,
+            STORAGE.verdict,
+            STORAGE.verdictLegacy
+          ];
+          if(watched.includes(event.key)){
+            scheduleRun("storage", 120);
+          }
+        });
+        window.addEventListener("message", function(event){
+          const data = event && event.data;
+          if(!data || typeof data !== "object") return;
+          if(
+            data.type === "pcsunited-bridge" ||
+            data.type === "pcsunited-profile" ||
+            data.type === "pcsunited-basicbrain" ||
+            data.source === "pcsunited.financial.intake.v2.3.thewing" ||
+            data.source === "pcsunited.basicbrain.input"
+          ){
+            scheduleRun("message", 100);
+          }
+        });
+        window.PCSU_HEADER_FAD = {
+          version: VERSION,
+          run,
+          refresh: function(){
+            return run("manual-refresh");
+          },
+          getHeader: function(){
+            return readJson(STORAGE.fadHeader, {});
+          },
+          buildHeaderContext
+        };
+      }
+      if(document.readyState === "loading"){
+        document.addEventListener("DOMContentLoaded", initFadHeaderStrip);
+      }else{
+        initFadHeaderStrip();
+      }
+    })();
+  </script>
+          </div>
+        </div>
+        <div class="navbar-wrapper-11">
+          <div class="style-three-nav-brand">
+            <a href="#" role="link" class="home-three-nav-menu-brand rezoid w-nav-brand"></a>
+          </div>
+        </div>
+      </div>
+    </div>
     <div class="w-embed w-script"><!--  =========================================================
   PCSUnited • OPEN DASHBOARD BOOTSTRAP + FAD HYDRATION
   v1.0.0 — FULL REPLACEMENT FOR LOGIN LOCK + 1A + 1B
@@ -9853,9 +10637,9 @@ PURPOSE
             <h2 class="heading-75">Don&#x27;t Miss on Revelant News &amp; Updates</h2>
             <div class="spacer-xsmall-4"></div>
             <div class="text-style-muted80-5">Learn the newest updates and resources for the Military Community. Understand the best path forward for your family. Receive monthly blogs, updates and relevant information. </div>
-            <div class="about-image-block"><img sizes="100vw" srcset="../images/about-img_1about-img.avif 500w, ../images/about-img_1about-img.avif 1114w" alt="Office image" src="../images/about-img_1about-img.avif" loading="lazy" class="about-image"><img sizes="100vw" srcset="../images/about-image-mobile_1about-image-mobile.avif 500w, ../images/about-image-mobile_1about-image-mobile.avif 1114w" alt="Office image" src="../images/about-image-mobile_1about-image-mobile.avif" loading="lazy" class="about-image for-mobile">
+            <div class="about-image-block"><img sizes="(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px" srcset="../images/about-img_1about-img.avif 500w, ../images/about-img_1about-img.avif 1114w" alt="Office image" src="../images/about-img_1about-img.avif" loading="lazy" class="about-image"><img sizes="(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px" srcset="../images/about-image-mobile_1about-image-mobile.avif 500w, ../images/about-image-mobile_1about-image-mobile.avif 1114w" alt="Office image" src="../images/about-image-mobile_1about-image-mobile.avif" loading="lazy" class="about-image for-mobile">
               <div class="about-graph-icon-block"><img loading="lazy" src="../images/about-graph-icon.svg" alt="Graph icon"></div>
-              <div class="about-avatar-block"><img sizes="100vw" srcset="../images/d9299384e6a8fd22a9e2eb98c5834de5_403B3DAD-CC69-4729-9C8F-A0AD249B5F6A-p-500.png 500w, ../images/d9299384e6a8fd22a9e2eb98c5834de5_403B3DAD-CC69-4729-9C8F-A0AD249B5F6A-p-800.png 800w, ../images/d9299384e6a8fd22a9e2eb98c5834de5_403B3DAD-CC69-4729-9C8F-A0AD249B5F6A-p-1080.png 1080w, ../images/403B3DAD-CC69-4729-9C8F-A0AD249B5F6A.png 1404w" alt="Person image" src="../images/403B3DAD-CC69-4729-9C8F-A0AD249B5F6A.png" loading="lazy" class="about-avatar-image"><img loading="lazy" src="../images/about-avatar-02_1about-avatar-02.avif" alt="Person image" class="about-avatar-image margin-right--10px"><img loading="lazy" src="../images/about-avatar-03_1about-avatar-03.avif" alt="Person image" class="about-avatar-image margin-right--10px"></div>
+              <div class="about-avatar-block"><img sizes="(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px" srcset="../images/d9299384e6a8fd22a9e2eb98c5834de5_403B3DAD-CC69-4729-9C8F-A0AD249B5F6A-p-500.png 500w, ../images/d9299384e6a8fd22a9e2eb98c5834de5_403B3DAD-CC69-4729-9C8F-A0AD249B5F6A-p-800.png 800w, ../images/d9299384e6a8fd22a9e2eb98c5834de5_403B3DAD-CC69-4729-9C8F-A0AD249B5F6A-p-1080.png 1080w, ../images/403B3DAD-CC69-4729-9C8F-A0AD249B5F6A.png 1404w" alt="Person image" src="../images/403B3DAD-CC69-4729-9C8F-A0AD249B5F6A.png" loading="lazy" class="about-avatar-image"><img loading="lazy" src="../images/about-avatar-02_1about-avatar-02.avif" alt="Person image" class="about-avatar-image margin-right--10px"><img loading="lazy" src="../images/about-avatar-03_1about-avatar-03.avif" alt="Person image" class="about-avatar-image margin-right--10px"></div>
             </div>
             <div class="code-embed-40 w-embed"><!--  =========================================================
   PCS UNITED • Premium Account Button (Redirect) v1.0.0

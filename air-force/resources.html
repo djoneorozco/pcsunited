@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed May 20 2026 04:07:17 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu May 21 2026 04:39:48 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f6df2366c61b76c85e09e0" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -297,1531 +297,1420 @@
 </head>
 <body>
   <div class="page-wrapper">
-    <div class="navigation">
-      <div data-animation="default" data-collapse="medium" data-duration="400" data-easing="ease" data-easing2="ease-in-out-quad" role="banner" class="navbar w-nav">
-        <div class="nav-wrapper">
-          <div class="nav-container">
-            <div class="nav-left">
-              <a aria-label="Yeyeyeah" href="../user-dashboard.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 479px) 98vw, (max-width: 767px) 99vw, (max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
-            </div>
-            <nav role="navigation" id="w-node-a20e7068-528c-2165-b385-785e4c45ca5e-4c45ca57" class="nav-menu w-nav-menu">
-              <div class="default-nav-links big-menu">
-                <a href="../index.html" class="nav-link w-nav-link">Home Page</a>
-                <a href="../about-us.html" class="nav-link w-nav-link">About Us</a>
-                <a href="../air-force/resources.html" aria-current="page" class="nav-link w-nav-link w--current">Resources</a>
-                <a href="../blog-v1.html" class="nav-link w-nav-link">Blog</a>
-              </div>
-              <div class="nav-mobile-social">
-                <div line-split="intro" class="fsize-body-large primary-color-emphasis all-caps">Connect</div>
-              </div>
-              <div class="mobile-sign-cta">
-                <div class="sign-cta-navwrap">
-                  <div class="nav-btn-wrapper">
-                    <a aria-label="Start for Free" href="../air-force/account.html" target="_blank" class="btn-menu">Create Account</a>
-                  </div>
-                </div>
-              </div>
-            </nav>
-            <div id="w-node-_250c14b8-4215-eefa-17ad-f687c748e030-4c45ca57" class="nav-right">
-              <div class="nav-right-sign-cta-wrap">
-                <div class="sign-cta-navwrap">
-                  <div class="nav-btn-wrapper">
-                    <a aria-label="Start for Free" href="../user-dashboard.html" target="_blank" class="btn-menu">   Log In   </a>
-                  </div>
-                </div>
-              </div>
-              <div class="burger w-nav-button">
-                <div class="icon-wrapper">
-                  <div class="burger-icon">
-                    <div class="line1"></div>
-                    <div class="line2"></div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="code-embed-49 w-embed w-script"><!--  =========================================================
-  RealtySaSS • Frosted Glass Login Lock (Email + Password)
-  - Uses /api/login (Supabase Auth check)
-  - After success:
-      • Unlocks page
-      • Stores login email/profile in localStorage for dashboards
+    <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="resources-header header-resources w-nav">
+      <div class="head-for-resources">
+        <a href="../index.html" class="code-2 w-inline-block"><img src="../images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" sizes="(max-width: 1368px) 100vw, 1368px" srcset="../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, ../images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, ../images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" class="image-130"></a>
+        <div class="code-2-b w-embed w-script"><!--  =========================================================
+  PCSUnited • Header Compensation Strip
+  v2.1.0 • BASICBRAIN LISTENER FLOW
+  PURPOSE
+  - Header-friendly compensation strip
+  - Listens to BasicBrain Input
+  - Reads BasicBrain first, then profile/bridge fallback
+  - Shows:
+      Base Pay
+      BAS
+      BAH
+      Total Monthly
+  PRIMARY SOURCE:
+  - localStorage["pcsunited.basicbrain.v1"]
+  FALLBACK SOURCES:
+  - localStorage["pcsunited.profile.v1"]
+  - localStorage["pcsunited.bridge.v1"]
+  - localStorage["pcsunited.selectedBase.v1"]
+  EVENTS LISTENED:
+  - pcsunited:basicbrain-updated
+  - pcsunited:profile-ready
+  - pcsunited:bridge-ready
+  - pcsu:base-selected
+  BACKEND:
+  - https://thewing.netlify.app/api/opensource-brain
+  - https://thewing.netlify.app/api/pay-tables
 =========================================================  -->
-        <div id="rs-lock-overlay" aria-hidden="true" style="visibility:hidden; opacity:0;">
-          <div class="rs-lock-centered" role="dialog" aria-labelledby="rs-lock-title" aria-modal="true">
-            <div class="rs-lock-card" id="rs-lock-card">
-              <h1 id="rs-lock-title">Sign In to Continue</h1>
-              <p class="rs-lock-sub">This page is private — please enter your credentials.</p>
-              <div class="rs-field">
-                <input id="rs-email-input" type="email" placeholder="Email Address" autocomplete="email">
+          <div id="pcsu-header-comp-basicbrain" style="all:initial;">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+            <style>
+    #pcsu-header-comp-basicbrain,
+    #pcsu-header-comp-basicbrain *{
+      box-sizing:border-box;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    #pcsu-header-comp-basicbrain{
+      display:block;
+      width:100%;
+      color:#f5f5f5;
+      background:transparent !important;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-wrap{
+      width:100%;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      background:transparent !important;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-grid{
+      display:grid;
+      grid-template-columns:repeat(4, minmax(92px, 1fr));
+      gap:8px;
+      width:min(430px, 100%);
+      background:transparent !important;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile{
+      position:relative;
+      overflow:hidden;
+      border:1px solid rgba(255,255,255,.16);
+      border-radius:999px;
+      padding:7px 13px 8px;
+      min-height:34px;
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.88), rgba(238,241,248,.76));
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        0 8px 18px rgba(0,0,0,.18);
+      backdrop-filter:blur(10px) saturate(135%);
+      -webkit-backdrop-filter:blur(10px) saturate(135%);
+      display:flex;
+      flex-direction:column;
+      justify-content:center;
+      align-items:center;
+      text-align:center;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile::before{
+      content:"";
+      position:absolute;
+      inset:0 0 auto 0;
+      height:1px;
+      background:linear-gradient(
+        90deg,
+        transparent,
+        rgba(199,156,79,.32),
+        rgba(106,167,255,.16),
+        transparent
+      );
+      pointer-events:none;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-label{
+      display:block;
+      margin-bottom:2px;
+      color:rgba(18,24,38,.58);
+      font-size:8px;
+      line-height:1;
+      font-weight:900;
+      text-transform:uppercase;
+      letter-spacing:.12em;
+      white-space:nowrap;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value{
+      display:block;
+      color:#101728;
+      font-size:13px;
+      line-height:1.05;
+      font-weight:900;
+      letter-spacing:-.03em;
+      white-space:nowrap;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-total{
+      color:#9b7939;
+      font-weight:900;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-loading .pcsu-header-comp-value{
+      opacity:.60;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-missing{
+      opacity:.58;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-foot{
+      display:none;
+    }
+    @media(max-width:760px){
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-grid{
+        grid-template-columns:repeat(2, minmax(110px, 1fr));
+        width:100%;
+      }
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-tile{
+        border-radius:12px;
+        min-height:44px;
+      }
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-label{
+        font-size:9px;
+      }
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-value{
+        font-size:15px;
+      }
+    }
+  </style>
+            <div class="pcsu-header-comp-wrap" aria-label="Current monthly compensation">
+              <div style="width:100%;">
+                <div class="pcsu-header-comp-grid">
+                  <div class="pcsu-header-comp-tile is-loading">
+                    <span class="pcsu-header-comp-label">Base Pay</span>
+                    <span class="pcsu-header-comp-value" id="bb-header-basepay">$0</span>
+                  </div>
+                  <div class="pcsu-header-comp-tile is-loading">
+                    <span class="pcsu-header-comp-label">BAS</span>
+                    <span class="pcsu-header-comp-value" id="bb-header-bas">$0</span>
+                  </div>
+                  <div class="pcsu-header-comp-tile is-loading">
+                    <span class="pcsu-header-comp-label">BAH</span>
+                    <span class="pcsu-header-comp-value" id="bb-header-bah">$0</span>
+                  </div>
+                  <div class="pcsu-header-comp-tile is-loading">
+                    <span class="pcsu-header-comp-label">Total</span>
+                    <span class="pcsu-header-comp-value is-total" id="bb-header-total">$0</span>
+                  </div>
+                </div>
+                <div class="pcsu-header-comp-foot" id="bb-header-foot">
+                  Loading BasicBrain compensation profile...
+                </div>
               </div>
-              <div class="rs-field">
-                <input id="rs-pass-input" type="password" placeholder="Password" minlength="8" autocomplete="current-password">
-              </div>
-              <div class="rs-login-row">
-                <button id="rs-login-btn" type="button">Log In</button>
-              </div>
-              <!--  SIGN UP BLOCK  -->
-              <div class="rs-signup-row">
-                <p class="rs-signup-text">Not a Prime Member yet?</p>
-                <a class="rs-signup-btn" href="https://new-real-estate-purchase.webflow.io/user-profile">
-                  Sign Up
-                </a>
-              </div>
-              <p id="rs-lock-msg" class="rs-lock-msg" aria-live="polite"></p>
             </div>
+            <script>
+    (function () {
+      "use strict";
+      function initBasicBrainHeaderComp() {
+        const root = document.getElementById("pcsu-header-comp-basicbrain");
+        if (!root) return;
+        if (root.dataset.mounted === "true") return;
+        root.dataset.mounted = "true";
+        const els = {
+          basepay: root.querySelector("#bb-header-basepay"),
+          bas: root.querySelector("#bb-header-bas"),
+          bah: root.querySelector("#bb-header-bah"),
+          total: root.querySelector("#bb-header-total"),
+          foot: root.querySelector("#bb-header-foot")
+        };
+        const tiles = Array.from(root.querySelectorAll(".pcsu-header-comp-tile"));
+        if (!els.basepay || !els.bas || !els.bah || !els.total) return;
+        /* ============================================================
+           #1 STORAGE + API
+        ============================================================ */
+        const BASICBRAIN_KEY = "pcsunited.basicbrain.v1";
+        const PROFILE_KEY = "pcsunited.profile.v1";
+        const BRIDGE_KEY = "pcsunited.bridge.v1";
+        const ID_KEY = "pcsunited.identity.v1";
+        const SELECTED_BASE_KEY = "pcsunited.selectedBase.v1";
+        const LEGACY_BRIDGE_KEY = "realtysass.bridge";
+        const COMP_KEY = "pcsunited.compensation.v1";
+        const API_BASE = "https://thewing.netlify.app/api";
+        const OPEN_SOURCE_ENDPOINT = API_BASE + "/opensource-brain";
+        const PAY_TABLES_ENDPOINT = API_BASE + "/pay-tables";
+        let requestSeq = 0;
+        let runTimer = null;
+        /* ============================================================
+           #2 FALLBACK DATA
+           Backend should be source of truth.
+           This only prevents blank values if endpoint is unavailable.
+        ============================================================ */
+        const FALLBACK_BASE_PAY = {
+          "E-1": { 2: 2017, 4: 2017, 6: 2017, 8: 2017, 10: 2017, 12: 2017, 14: 2017, 16: 2017, 18: 2017, 20: 2017, 22: 2017, 24: 2017, 26: 2017, 28: 2017, 30: 2017 },
+          "E-2": { 2: 2261, 4: 2261, 6: 2261, 8: 2261, 10: 2261, 12: 2261, 14: 2261, 16: 2261, 18: 2261, 20: 2261, 22: 2261, 24: 2261, 26: 2261, 28: 2261, 30: 2261 },
+          "E-3": { 2: 2378, 4: 2680, 6: 2840, 8: 2840, 10: 2840, 12: 2840, 14: 2840, 16: 2840, 18: 2840, 20: 2840, 22: 2840, 24: 2840, 26: 2840, 28: 2840, 30: 2840 },
+          "E-4": { 2: 2634, 4: 3197, 6: 3364, 8: 3364, 10: 3364, 12: 3364, 14: 3364, 16: 3364, 18: 3364, 20: 3364, 22: 3364, 24: 3364, 26: 3364, 28: 3364, 30: 3364 },
+          "E-5": { 2: 2872, 4: 3435, 6: 4134, 8: 4412, 10: 4646, 12: 4893, 14: 4893, 16: 4893, 18: 4893, 20: 4893, 22: 4893, 24: 4893, 26: 4893, 28: 4893, 30: 4893 },
+          "E-6": { 2: 3135, 4: 3864, 6: 4573, 8: 4776, 10: 5052, 12: 5352, 14: 5445, 16: 5512, 18: 5590, 20: 5590, 22: 5590, 24: 5590, 26: 5590, 28: 5590, 30: 5590 },
+          "E-7": { 2: 3625, 4: 4412, 6: 4564, 8: 4785, 10: 5138, 12: 5410, 14: 5689, 16: 5853, 18: 6025, 20: 6209, 22: 6437, 24: 6559, 26: 6559, 28: 6559, 30: 6559 },
+          "E-8": { 8: 5215, 10: 5445, 12: 5588, 14: 5759, 16: 5944, 18: 6278, 20: 6448, 22: 6736, 24: 6895, 26: 7053, 28: 7053, 30: 7053 },
+          "E-9": { 10: 6371, 12: 6516, 14: 6698, 16: 6912, 18: 7129, 20: 7474, 22: 7767, 24: 8075, 26: 8545, 28: 8545, 30: 8972 },
+          "O-1": { 2: 3826, 4: 4787, 6: 4787, 8: 4787, 10: 4787, 12: 4787, 14: 4787, 16: 4787, 18: 4787, 20: 4787, 22: 4787, 24: 4787, 26: 4787, 28: 4787, 30: 4787 },
+          "O-2": { 2: 4418, 4: 5991, 6: 6114, 8: 6114, 10: 6114, 12: 6114, 14: 6114, 16: 6114, 18: 6114, 20: 6114, 22: 6114, 24: 6114, 26: 6114, 28: 6114, 30: 6114 },
+          "O-3": { 2: 5102, 4: 6819, 6: 7753, 8: 8144, 10: 8395, 12: 8808, 14: 9024, 16: 9024, 18: 9024, 20: 9024, 22: 9024, 24: 9024, 26: 9024, 28: 9024, 30: 9024 },
+          "O-4": { 2: 5803, 4: 7834, 6: 8296, 8: 8752, 10: 9321, 12: 9746, 14: 10067, 16: 10325, 18: 10509, 20: 10509, 22: 10509, 24: 10509, 26: 10509, 28: 10509, 30: 10509 },
+          "O-5": { 2: 6715, 4: 8510, 6: 9098, 8: 9537, 10: 10093, 12: 10441, 14: 10809, 16: 11490, 18: 11815, 20: 12138, 22: 12502, 24: 12502, 26: 12502, 28: 12502, 30: 12502 },
+          "O-6": { 2: 8053, 4: 9954, 6: 10607, 8: 11261, 10: 11914, 12: 12568, 14: 13221, 16: 13874, 18: 14528, 20: 15181, 22: 15578, 24: 15983, 26: 15983, 28: 15983, 30: 15983 }
+        };
+        const FALLBACK_BAH = {
+          "Lackland AFB": { with: 1845, without: 1536 },
+          "Randolph AFB": { with: 1845, without: 1536 },
+          "Fort-Sam-Houston AFB": { with: 1845, without: 1536 },
+          "Nellis AFB": { with: 2196, without: 1830 },
+          "Andrews AFB": { with: 3039, without: 2526 },
+          "Eglin AFB": { with: 2187, without: 1824 },
+          "Travis AFB": { with: 3006, without: 2505 },
+          "Wright-Patterson AFB": { with: 1656, without: 1380 },
+          "Kirtland AFB": { with: 1905, without: 1587 },
+          "Luke AFB": { with: 2307, without: 1923 },
+          "MacDill AFB": { with: 2610, without: 2175 },
+          "Peterson AFB": { with: 2406, without: 2004 },
+          "Dover AFB": { with: 1950, without: 1626 },
+          "Dyess AFB": { with: 1650, without: 1374 },
+          "Barksdale AFB": { with: 1575, without: 1314 },
+          "Beale AFB": { with: 2448, without: 2040 },
+          "Cannon AFB": { with: 1470, without: 1224 },
+          "Charleston AFB": { with: 2400, without: 1998 },
+          "Davis-Monthan AFB": { with: 1830, without: 1524 },
+          "Fairchild AFB": { with: 2055, without: 1710 },
+          "Holloman AFB": { with: 1350, without: 1125 },
+          "Hurlburt AFB": { with: 2187, without: 1824 },
+          "Keesler AFB": { with: 1710, without: 1425 },
+          "Langley AFB": { with: 2340, without: 1950 },
+          "Little-Rock AFB": { with: 1530, without: 1275 },
+          "McGuire AFB": { with: 2460, without: 2050 },
+          "Minot AFB": { with: 1500, without: 1250 },
+          "Moody AFB": { with: 1530, without: 1275 },
+          "Mountain-Home AFB": { with: 1620, without: 1350 },
+          "Offutt AFB": { with: 1770, without: 1475 },
+          "Robins AFB": { with: 1650, without: 1375 },
+          "Scott AFB": { with: 1770, without: 1475 },
+          "Seymour-Johnson AFB": { with: 1590, without: 1325 },
+          "Shaw AFB": { with: 1560, without: 1300 },
+          "Sheppard AFB": { with: 1470, without: 1225 },
+          "Tinker AFB": { with: 1680, without: 1400 },
+          "Tyndall AFB": { with: 1830, without: 1525 },
+          "Whiteman AFB": { with: 1440, without: 1200 }
+        };
+        /* ============================================================
+           #3 HELPERS
+        ============================================================ */
+        function setLoading(isLoading) {
+          tiles.forEach(function(tile){
+            tile.classList.toggle("is-loading", !!isLoading);
+          });
+        }
+        function setMissing(isMissing) {
+          tiles.forEach(function(tile){
+            tile.classList.toggle("is-missing", !!isMissing);
+          });
+        }
+        function money(n) {
+          return "$" + Number(n || 0).toLocaleString("en-US", {
+            maximumFractionDigits: 0
+          });
+        }
+        function num(value, fallback) {
+          if (fallback === undefined) fallback = 0;
+          const n = Number(String(value ?? "").replace(/[$,]/g, ""));
+          return Number.isFinite(n) ? n : fallback;
+        }
+        function clean(value) {
+          return value === undefined || value === null ? "" : String(value).trim();
+        }
+        function normalizeRank(value) {
+          const raw = clean(value).toUpperCase().replace(/\s+/g, "").replace("–", "-").replace("—", "-");
+          if (!raw) return "";
+          if (/^[EOW]-\d{1,2}$/.test(raw)) return raw;
+          if (/^[EOW]\d{1,2}$/.test(raw)) return raw.charAt(0) + "-" + raw.slice(1);
+          return raw;
+        }
+        function isOfficer(rank) {
+          return normalizeRank(rank).startsWith("O-");
+        }
+        function readJson(key, fallback) {
+          try {
+            const localRaw = localStorage.getItem(key);
+            if (localRaw) return JSON.parse(localRaw);
+            const sessionRaw = sessionStorage.getItem(key);
+            if (sessionRaw) return JSON.parse(sessionRaw);
+            return fallback;
+          } catch (_e) {
+            return fallback;
+          }
+        }
+        function writeJson(key, value) {
+          try {
+            localStorage.setItem(key, JSON.stringify(value));
+          } catch (_e) {}
+        }
+        function nearestYosBucket(yos, table) {
+          const y = Number(yos || 0);
+          const keys = Object.keys(table || {})
+            .map(Number)
+            .filter(Boolean)
+            .sort(function(a,b){ return a - b; });
+          if (!keys.length) return null;
+          let best = keys[0];
+          keys.forEach(function(k){
+            if (k <= y) best = k;
+          });
+          return best;
+        }
+        function fallbackBasePay(rank, yos) {
+          const r = normalizeRank(rank);
+          const table = FALLBACK_BASE_PAY[r];
+          if (!table) return 0;
+          const bucket = nearestYosBucket(yos, table);
+          return bucket ? num(table[bucket], 0) : 0;
+        }
+        function fallbackBah(base, hasDependents) {
+          const record = FALLBACK_BAH[clean(base)] || FALLBACK_BAH["Lackland AFB"];
+          return hasDependents ? num(record.with, 0) : num(record.without, 0);
+        }
+        function fallbackBas(rank) {
+          return isOfficer(rank) ? 320 : 586;
+        }
+        function hasAnyComp(comp) {
+          return !!(
+            num(comp && comp.basePay, 0) ||
+            num(comp && comp.bas, 0) ||
+            num(comp && comp.bah, 0) ||
+            num(comp && comp.total, 0)
+          );
+        }
+        /* ============================================================
+           #4 READ BASICBRAIN PROFILE FIRST
+        ============================================================ */
+        function readBasicBrainProfile() {
+          const bb = readJson(BASICBRAIN_KEY, null);
+          const profile = readJson(PROFILE_KEY, null);
+          const bridge = readJson(BRIDGE_KEY, null);
+          const identity = readJson(ID_KEY, null);
+          const selectedBase = readJson(SELECTED_BASE_KEY, null);
+          const legacyBridge = readJson(LEGACY_BRIDGE_KEY, null);
+          const merged = {
+            ...(legacyBridge && typeof legacyBridge === "object" ? legacyBridge : {}),
+            ...(bridge && typeof bridge === "object" ? bridge : {}),
+            ...(identity && typeof identity === "object" ? identity : {}),
+            ...(profile && typeof profile === "object" ? profile : {}),
+            ...(bb && bb.bridge && typeof bb.bridge === "object" ? bb.bridge : {}),
+            ...(bb && bb.profile && typeof bb.profile === "object" ? bb.profile : {}),
+            ...(bb && typeof bb === "object" ? bb : {})
+          };
+          if (selectedBase && typeof selectedBase === "object") {
+            merged.base = merged.base || selectedBase.base || selectedBase.name || selectedBase.label || "";
+            merged.base_label = merged.base_label || selectedBase.label || selectedBase.base || selectedBase.name || "";
+            merged.selectedBase = merged.selectedBase || selectedBase.base || selectedBase.name || "";
+            merged.market = merged.market || selectedBase.market || "";
+            merged.state = merged.state || selectedBase.state || "";
+            merged.cityKey = merged.cityKey || selectedBase.cityKey || "";
+          }
+          if (!Object.keys(merged).length) return null;
+          return {
+            raw: merged,
+            rank: normalizeRank(merged.rank_paygrade || merged.rank || merged.paygrade || ""),
+            yos: num(merged.yos ?? merged.years_of_service ?? merged.yearsOfService, 0),
+            dependents: num(merged.dependents ?? merged.dependents_count ?? merged.dependentsCount, 0),
+            family: Boolean(
+              merged.family === true ||
+              merged.has_dependents === true ||
+              merged.hasDependents === true ||
+              num(merged.dependents, 0) > 0 ||
+              clean(merged.dependents).toLowerCase() === "yes"
+            ),
+            base: clean(
+              merged.base ||
+              merged.current_base ||
+              merged.currentBase ||
+              merged.selected_base ||
+              merged.selectedBase ||
+              ""
+            ),
+            base_label: clean(merged.base_label || merged.baseLabel || merged.base || merged.selectedBase || ""),
+            mode: clean(merged.mode || "active_duty"),
+            email: clean(merged.email || "")
+          };
+        }
+        function buildInput(profile) {
+          return {
+            source: "pcsunited.header.comp.basicbrain.v2.1",
+            mode: profile.mode || "active_duty",
+            rank: profile.rank,
+            rank_paygrade: profile.rank,
+            rankPaygrade: profile.rank,
+            yos: profile.yos,
+            years_of_service: profile.yos,
+            dependents: profile.family ? "yes" : "no",
+            dependents_count: profile.dependents,
+            family: profile.dependents || (profile.family ? 2 : 1),
+            has_dependents: profile.family,
+            hasDependents: profile.family,
+            base: profile.base,
+            current_base: profile.base,
+            currentBase: profile.base,
+            selected_base: profile.base,
+            selectedBase: profile.base,
+            email: profile.email || ""
+          };
+        }
+        /* ============================================================
+           #5 BACKEND NORMALIZERS
+        ============================================================ */
+        function extractOpenSourceMonthly(data) {
+          const payload = data && (data.payload || data.data || data) || {};
+          const c = payload.compensation || payload.comp || payload.pay || {};
+          const m = c.monthly || payload.monthly || c || {};
+          const basePay =
+            m.basicPay ??
+            m.basePay ??
+            m.base_pay ??
+            m.BASEPAY ??
+            m.base ??
+            payload.basePay ??
+            payload.base_pay ??
+            0;
+          const bas =
+            m.bas ??
+            m.BAS ??
+            m.basMonthly ??
+            payload.bas ??
+            payload.BAS ??
+            0;
+          const bah =
+            m.bah ??
+            m.BAH ??
+            m.bahMonthly ??
+            payload.bah ??
+            payload.BAH ??
+            0;
+          const total =
+            m.grossMonthlyComp ??
+            m.combinedMonthlyGross ??
+            m.totalMonthly ??
+            m.total_monthly ??
+            m.total ??
+            payload.total ??
+            payload.totalMonthly ??
+            payload.total_monthly ??
+            0;
+          return {
+            basePay: num(basePay, 0),
+            bas: num(bas, 0),
+            bah: num(bah, 0),
+            total: num(total, 0)
+          };
+        }
+        async function callOpenSourceBrain(input) {
+          const bodies = [
+            { tool: "PCS_SNAPSHOT", input: input },
+            { type: "PCS_SNAPSHOT", input: input },
+            input
+          ];
+          for (let i = 0; i < bodies.length; i++) {
+            try {
+              const res = await fetch(OPEN_SOURCE_ENDPOINT + "?t=" + Date.now(), {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                cache: "no-store",
+                body: JSON.stringify(bodies[i])
+              });
+              const data = await res.json().catch(function(){ return {}; });
+              if (!res.ok || data.ok === false) continue;
+              const comp = extractOpenSourceMonthly(data);
+              if (hasAnyComp(comp)) return comp;
+            } catch (_e) {}
+          }
+          return null;
+        }
+        async function callPayTables(input) {
+          if (!input.rank) return null;
+          try {
+            const res = await fetch(PAY_TABLES_ENDPOINT + "?t=" + Date.now(), {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              cache: "no-store",
+              body: JSON.stringify(input)
+            });
+            const data = await res.json().catch(function(){ return {}; });
+            if (!res.ok || data.ok === false) return null;
+            return {
+              basePay: num(data.basePay ?? data.base_pay, 0),
+              bas: num(data.bas ?? data.BAS, 0),
+              bah: num(data.bah ?? data.BAH, 0),
+              total: num(data.total ?? data.totalMonthly ?? data.total_monthly, 0)
+            };
+          } catch (_e) {
+            return null;
+          }
+        }
+        function buildFallbackComp(profile) {
+          const basePay = fallbackBasePay(profile.rank, profile.yos);
+          const bas = fallbackBas(profile.rank);
+          const bah = fallbackBah(profile.base, profile.family);
+          const total = basePay + bas + bah;
+          return {
+            basePay: basePay,
+            bas: bas,
+            bah: bah,
+            total: total,
+            source: "local_fallback"
+          };
+        }
+        function mergeComp(openSourceComp, payTableComp, fallbackComp) {
+          const open = openSourceComp || {};
+          const pay = payTableComp || {};
+          const fallback = fallbackComp || {};
+          const basePay =
+            num(open.basePay, 0) ||
+            num(pay.basePay, 0) ||
+            num(fallback.basePay, 0);
+          const bas =
+            num(open.bas, 0) ||
+            num(pay.bas, 0) ||
+            num(fallback.bas, 0);
+          const bah =
+            num(open.bah, 0) ||
+            num(pay.bah, 0) ||
+            num(fallback.bah, 0);
+          const total =
+            basePay + bas + bah ||
+            num(open.total, 0) ||
+            num(pay.total, 0) ||
+            num(fallback.total, 0);
+          return {
+            basePay: basePay,
+            bas: bas,
+            bah: bah,
+            total: total
+          };
+        }
+        /* ============================================================
+           #6 PAINT + SAVE
+        ============================================================ */
+        function paintEmpty() {
+          els.basepay.textContent = "$0";
+          els.bas.textContent = "$0";
+          els.bah.textContent = "$0";
+          els.total.textContent = "$0";
+          setLoading(false);
+          setMissing(true);
+        }
+        function paintComp(comp) {
+          els.basepay.textContent = money(comp.basePay);
+          els.bas.textContent = money(comp.bas);
+          els.bah.textContent = money(comp.bah);
+          els.total.textContent = money(comp.total);
+          setLoading(false);
+          setMissing(false);
+        }
+        function saveComp(profile, comp) {
+          const now = new Date().toISOString();
+          const payload = {
+            source: "pcsunited.header.comp.basicbrain.v2.1",
+            updated_at: now,
+            rank: profile.rank,
+            rank_paygrade: profile.rank,
+            yos: profile.yos,
+            dependents: profile.dependents,
+            family: profile.family,
+            base: profile.base,
+            base_label: profile.base_label,
+            basePay: num(comp.basePay, 0),
+            bas: num(comp.bas, 0),
+            bah: num(comp.bah, 0),
+            total: num(comp.total, 0),
+            totalMonthly: num(comp.total, 0),
+            totalMonthlyCompensation: num(comp.total, 0)
+          };
+          writeJson(COMP_KEY, payload);
+          const bridge = readJson(BRIDGE_KEY, {}) || {};
+          writeJson(BRIDGE_KEY, {
+            ...bridge,
+            basePay: payload.basePay,
+            bas: payload.bas,
+            bah: payload.bah,
+            totalMonthlyCompensation: payload.totalMonthlyCompensation,
+            compensation_updated_at: now
+          });
+          try {
+            window.dispatchEvent(new CustomEvent("pcsunited:compensation-ready", {
+              detail: payload
+            }));
+          } catch (_e) {}
+        }
+        /* ============================================================
+           #7 MAIN RUNNER
+        ============================================================ */
+        async function run(reason) {
+          const seq = ++requestSeq;
+          const profile = readBasicBrainProfile();
+          if (!profile || !profile.rank) {
+            paintEmpty();
+            return false;
+          }
+          const input = buildInput(profile);
+          const fallbackComp = buildFallbackComp(profile);
+          paintComp(fallbackComp);
+          saveComp(profile, fallbackComp);
+          setLoading(true);
+          let openSourceComp = null;
+          let payTableComp = null;
+          try {
+            openSourceComp = await callOpenSourceBrain(input);
+          } catch (_e) {
+            openSourceComp = null;
+          }
+          try {
+            payTableComp = await callPayTables(input);
+          } catch (_e) {
+            payTableComp = null;
+          }
+          if (seq !== requestSeq) return true;
+          const finalComp = mergeComp(openSourceComp, payTableComp, fallbackComp);
+          paintComp(finalComp);
+          saveComp(profile, finalComp);
+          return true;
+        }
+        function scheduleRun(reason, delay) {
+          clearTimeout(runTimer);
+          runTimer = setTimeout(function(){
+            run(reason || "scheduled");
+          }, typeof delay === "number" ? delay : 120);
+        }
+        /* ============================================================
+           #8 EVENTS
+        ============================================================ */
+        run("initial");
+        window.addEventListener("pcsunited:basicbrain-updated", function(){
+          scheduleRun("basicbrain-updated", 80);
+        });
+        window.addEventListener("pcsunited:profile-ready", function(){
+          scheduleRun("profile-ready", 100);
+        });
+        window.addEventListener("pcsunited:bridge-ready", function(){
+          scheduleRun("bridge-ready", 100);
+        });
+        window.addEventListener("pcsu:base-selected", function(){
+          scheduleRun("base-selected", 100);
+        });
+        window.addEventListener("pcsunited:logged-in", function(){
+          scheduleRun("logged-in", 120);
+        });
+        window.addEventListener("storage", function(event){
+          if (!event) return;
+          if (
+            event.key === BASICBRAIN_KEY ||
+            event.key === PROFILE_KEY ||
+            event.key === BRIDGE_KEY ||
+            event.key === ID_KEY ||
+            event.key === SELECTED_BASE_KEY ||
+            event.key === LEGACY_BRIDGE_KEY
+          ) {
+            scheduleRun("storage", 120);
+          }
+        });
+        window.addEventListener("message", function(event){
+          const data = event && event.data;
+          if (!data || typeof data !== "object") return;
+          if (
+            data.type === "pcsunited-basicbrain" ||
+            data.type === "pcsunited-bridge" ||
+            data.type === "pcsunited-profile" ||
+            data.source === "pcsunited.basicbrain.input"
+          ) {
+            scheduleRun("message", 100);
+          }
+        });
+        window.PCSU_HEADER_COMP_BASICBRAIN = {
+          version: "2.1.0",
+          run: run,
+          refresh: function(){
+            return run("manual-refresh");
+          },
+          getProfile: readBasicBrainProfile,
+          buildInput: function(){
+            const profile = readBasicBrainProfile();
+            return profile ? buildInput(profile) : null;
+          }
+        };
+      }
+      if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initBasicBrainHeaderComp);
+      } else {
+        initBasicBrainHeaderComp();
+      }
+    })();
+  </script>
           </div>
         </div>
-        <style>
-  :root{
-    --rs-overlay-bg: rgba(6,10,18,0.55);
-    --rs-accent: #8ef3c5;
-    --rs-ink: #e9ecff;
-    --rs-muted: #a8b0d6;
-    --rs-radius: 14px;
-  }
-  #rs-lock-overlay{
-    position:fixed; inset:0; width:100%; height:100%;
-    z-index:99999; display:flex; align-items:center; justify-content:center;
-    background:var(--rs-overlay-bg);
-    backdrop-filter:blur(10px) saturate(120%);
-    -webkit-backdrop-filter:blur(10px) saturate(120%);
-    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    transition:opacity .25s ease, visibility .25s ease;
-  }
-  #rs-lock-overlay.rs-hidden{
-    opacity:0; pointer-events:none; visibility:hidden;
-  }
-  .rs-lock-centered{
-    width:100%; max-width:520px; padding:20px;
-  }
-  .rs-lock-card{
-    background:rgba(255,255,255,0.03);
-    border-radius:var(--rs-radius);
-    border:1px solid rgba(255,255,255,0.06);
-    box-shadow:0 8px 30px rgba(3,6,15,0.6);
-    padding:28px 24px; color:var(--rs-ink);
-  }
-  .rs-lock-card h1{
-    margin:0 0 8px; font-size:20px; font-weight:700;
-  }
-  .rs-lock-sub{
-    margin:0 0 18px; color:var(--rs-muted); font-size:13px;
-  }
-  .rs-field{
-    margin-bottom:14px;
-  }
-  #rs-email-input,
-  #rs-pass-input{
-    width:100%;
-    padding:12px 14px;
-    border-radius:10px;
-    border:1px solid rgba(255,255,255,0.06);
-    background:rgba(255,255,255,0.02);
-    color:var(--rs-ink); 
-    font-size:16px;
-    outline:none;
-  }
-  #rs-email-input::placeholder,
-  #rs-pass-input::placeholder{
-    color:var(--rs-muted);
-  }
-  #rs-login-btn{
-    width:100%;
-    padding:12px 16px;
-    border-radius:10px;
-    border:none;
-    background:linear-gradient(180deg,var(--rs-accent),rgba(100,230,190,0.85));
-    color:#02110b; font-weight:700; cursor:pointer; font-size:15px;
-  }
-  .rs-lock-msg{
-    margin-top:12px; 
-    color:var(--rs-muted); 
-    font-size:13px; 
-    min-height:18px;
-  }
-  /* NEW: Sign Up area */
-  .rs-signup-row{
-    margin-top:18px;
-    padding-top:14px;
-    border-top:1px solid rgba(255,255,255,0.05);
-    text-align:center;
-  }
-  .rs-signup-text{
-    margin:0 0 8px;
-    font-size:13px;
-    color:var(--rs-muted);
-  }
-  .rs-signup-btn{
-    display:inline-block;
-    padding:8px 16px;
-    border-radius:999px;
-    border:1px solid rgba(142,243,197,0.65);
-    background:rgba(255,255,255,0.02);
-    color:var(--rs-accent);
-    font-size:13px;
-    font-weight:700;
-    text-decoration:none;
-    transition:background .2s ease, box-shadow .2s ease, transform .2s ease;
-  }
-  .rs-signup-btn:hover{
-    background:rgba(142,243,197,0.10);
-    box-shadow:0 8px 20px rgba(0,0,0,0.7);
-    transform:translateY(-1px);
-  }
-</style>
-        <script>
-(function(){
-  "use strict";
-  const API_BASE = "https://theorozcorealty.netlify.app/api";
-  // Which pages should be locked
-  const ALLOW_PATHS = [
-    /\/realtysass(?:\.html)?$/i,
-  ];
-  const path = (location.pathname || "/").toLowerCase();
-  const shouldLock = ALLOW_PATHS.some(re => re.test(path));
-  if (!shouldLock){
-    document.querySelectorAll('#rs-lock-overlay').forEach(el => el.remove());
-    return;
-  }
-  const overlay  = document.getElementById('rs-lock-overlay');
-  const msg      = document.getElementById('rs-lock-msg');
-  const emailInp = document.getElementById('rs-email-input');
-  const passInp  = document.getElementById('rs-pass-input');
-  const loginBtn = document.getElementById('rs-login-btn');
-  const card     = document.getElementById('rs-lock-card');
-  // Show overlay
-  overlay.classList.remove('rs-hidden');
-  overlay.style.visibility = 'visible';
-  overlay.style.opacity = '1';
-  // ARIA fix
-  overlay.removeAttribute("aria-hidden");
-  function showMsg(text, isError){
-    msg.textContent = text || '';
-    msg.style.color = isError ? '#ffb3b3' : 'var(--rs-muted)';
-  }
-  function unlock(){
-    document.querySelectorAll('#rs-lock-overlay').forEach(el=>{
-      el.classList.add('rs-hidden');
-      el.style.visibility = 'hidden';
-      el.style.opacity = '0';
-      el.setAttribute("aria-hidden","true");
-    });
-  }
-  async function loginWithServer(email, password){
-    const res = await fetch(`${API_BASE}/login`, {
-      method: "POST",
-      headers: {"Content-Type": "application/json"},
-      body: JSON.stringify({ email, password })
-    });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok || data.ok === false){
-      throw new Error(data.error || "Incorrect email or password.");
-    }
-    return data;
-  }
-  // NEW: remember who just logged in (for dashboards)
-  function rememberLogin(email, serverData){
-    try{
-      // core key the dashboards can read
-      localStorage.setItem("realtysass.loginEmail", email);
-      // optional identity blob
-      const existing = JSON.parse(localStorage.getItem("realtysass.identity") || "{}") || {};
-      existing.email = email;
-      // if the API happens to send a profile, lightly merge it
-      const profile = (serverData && (serverData.profile || serverData.user || {})) || {};
-      if (profile.full_name && !existing.name){
-        existing.name = profile.full_name;
-      }
-      if (profile.phone && !existing.phone){
-        existing.phone = profile.phone;
-      }
-      if (profile.rank && !existing.rankPaygrade){
-        existing.rankPaygrade = profile.rank;
-      }
-      if (profile.va_disability && !existing.vaDisability){
-        existing.vaDisability = profile.va_disability;
-      }
-      if (profile.years_of_service && !existing.yearsOfService){
-        existing.yearsOfService = profile.years_of_service;
-      }
-      if (profile.mode && !existing.mode){
-        existing.mode = profile.mode;
-      }
-      localStorage.setItem("realtysass.identity", JSON.stringify(existing));
-    }catch(e){
-      // fail silently; login still works
-    }
-  }
-  async function onLogin(){
-    const em = emailInp.value.trim().toLowerCase();
-    const pw = passInp.value.trim();
-    if (!em){
-      showMsg("Please enter your email.", true);
-      return;
-    }
-    if (pw.length < 8){
-      showMsg("Password must be at least 8 characters.", true);
-      return;
-    }
-    loginBtn.disabled = true;
-    showMsg("Checking credentials...");
-    try {
-      const data = await loginWithServer(em, pw);
-      // NEW: store email/profile locally for the Financial Dashboard
-      rememberLogin(em, data);
-      showMsg("");
-      unlock();
-    } catch (err){
-      showMsg(err.message || "Incorrect email or password.", true);
-      if(card && card.animate){
-        card.animate(
-          [
-            { transform:'translateX(-5px)' },
-            { transform:'translateX(5px)' },
-            { transform:'translateX(0)' }
-          ],
-          { duration:260 }
-        );
-      }
-    } finally {
-      loginBtn.disabled = false;
-    }
-  }
-  loginBtn.addEventListener("click", onLogin);
-  passInp.addEventListener("keydown", e=>{
-    if (e.key === "Enter") onLogin();
-  });
-  setTimeout(()=> emailInp.focus(), 0);
-})();
-</script>
+        <div class="navbar-wrapper-11">
+          <div class="style-three-nav-brand">
+            <a href="#" role="link" class="home-three-nav-menu-brand rezoid w-nav-brand"></a>
+          </div>
+        </div>
       </div>
     </div>
     <div class="main">
-      <section class="section-15 home-3-solutions">
-        <div class="w-layout-blockcontainer container-80 w-container">
-          <div data-poster-url="../videos/Basic-Flag-1_poster.0000000.jpg" data-video-urls="../videos/Basic-Flag-1_mp4.mp4,../videos/Basic-Flag-1_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="flag-for-resources w-background-video w-background-video-atom"><video id="ab6bc1c2-7476-6d55-b2b0-bbed56c29ecb-video" autoplay="" loop="" style="background-image:url(&quot;../videos/Basic-Flag-1_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
-              <source src="../videos/Basic-Flag-1_mp4.mp4" data-wf-ignore="true">
-              <source src="../videos/Basic-Flag-1_webm.webm" data-wf-ignore="true">
-            </video></div>
-        </div>
-        <h2 data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e56" style="opacity:0" class="text-center">Air Force Calculators &amp; Applications</h2>
-        <div class="w-layout-blockcontainer container-one w-container">
-          <div class="w-layout-vflex home-three-category-wrap">
-            <div class="overflow-none">
-              <p data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e59" style="opacity:0" class="home-three-category-paragraph text-center"> Our array of calculators and files are created I.A.W Air Force standards and regulations. For further details and exact regulation used please click on More Info tab on the bottom right corner of each Application.</p>
+      <section>
+        <div id="w-node-_602571a7-119d-57b9-021b-db818bfad936-c85e09e0" class="w-layout-layout quick-stack-2 wf-layout-layout">
+          <div class="w-layout-cell cell-4">
+            <div class="code-embed-51 w-embed w-script"><!--  ============================================================
+  PCSUNITED • BASICBRAIN INPUT
+  Shell + JS • Webflow Embed
+  v1.0.0
+  PURPOSE
+  - Compact “Start Your PCS Snapshot” page feature
+  - NO compensation cards in this embed
+  - Writes BasicBrain profile data to localStorage
+  - Dispatches events for Header Compensation Strip / other tools
+  WRITES:
+  - localStorage["pcsunited.basicbrain.v1"]
+  - localStorage["pcsunited.profile.v1"]
+  - localStorage["pcsunited.bridge.v1"]
+  - localStorage["pcsunited.selectedBase.v1"]
+  EVENTS:
+  - pcsunited:basicbrain-updated
+  - pcsunited:profile-ready
+  - pcsunited:bridge-ready
+===============================================================  -->
+              <div id="pcsu-basicbrain-input" style="all: initial;">
+                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+                <style>
+    #pcsu-basicbrain-input,
+    #pcsu-basicbrain-input *{
+      box-sizing:border-box;
+      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    }
+    #pcsu-basicbrain-input{
+      --bb-ink:#101728;
+      --bb-muted:#596274;
+      --bb-muted2:#7b8496;
+      --bb-gold:#9b7939;
+      --bb-gold2:#c79c4f;
+      --bb-gold-soft:#e4c071;
+      --bb-line:rgba(18,24,38,.10);
+      --bb-shadow:0 16px 34px rgba(18,24,38,.10);
+      display:block;
+      width:100%;
+      background:transparent !important;
+      color:var(--bb-ink);
+    }
+    #bb-input-shell{
+      width:100%;
+      max-width:390px;
+      margin:0 auto;
+      padding:0;
+      background:transparent !important;
+    }
+    #bb-setup{
+      width:100%;
+      min-width:0;
+      padding:18px 20px;
+      border-radius:22px;
+      background:
+        radial-gradient(420px 160px at 12% 0%, rgba(228,192,113,.10), transparent 62%),
+        linear-gradient(180deg,rgba(255,255,255,.82),rgba(241,244,250,.62));
+      border:1px solid rgba(18,24,38,.10);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.88),
+        var(--bb-shadow);
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+    }
+    .bb-setup-title{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin:0 0 15px;
+      color:#101728;
+      font-size:18px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+    .bb-setup-icon{
+      width:26px;
+      height:26px;
+      color:var(--bb-gold2);
+      flex:0 0 auto;
+    }
+    .bb-form{
+      display:grid;
+      gap:10px;
+    }
+    .bb-row{
+      display:grid;
+      grid-template-columns:32px 1fr 176px;
+      align-items:center;
+      gap:10px;
+      min-height:42px;
+    }
+    .bb-icon{
+      width:31px;
+      height:31px;
+      border-radius:11px;
+      display:grid;
+      place-items:center;
+      color:var(--bb-gold);
+      background:linear-gradient(180deg,rgba(255,255,255,.90),rgba(238,242,248,.72));
+      border:1px solid rgba(199,156,79,.18);
+      box-shadow:inset 0 1px 0 rgba(255,255,255,.92);
+    }
+    .bb-label{
+      color:#151b2c;
+      font-size:13px;
+      font-weight:900;
+      white-space:nowrap;
+    }
+    .bb-select-wrap{
+      position:relative;
+      min-width:0;
+    }
+    .bb-select-wrap::after{
+      content:"⌄";
+      position:absolute;
+      right:12px;
+      top:50%;
+      transform:translateY(-58%);
+      color:var(--bb-gold);
+      font-size:17px;
+      font-weight:900;
+      pointer-events:none;
+    }
+    .bb-select{
+      width:100%;
+      height:38px;
+      appearance:none;
+      -webkit-appearance:none;
+      border-radius:12px;
+      border:1px solid rgba(18,24,38,.11);
+      background:linear-gradient(180deg,rgba(255,255,255,.88),rgba(240,244,251,.74));
+      color:#172033;
+      font-size:13px;
+      font-weight:800;
+      padding:0 34px 0 12px;
+      outline:none;
+      cursor:pointer;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.92),
+        0 8px 18px rgba(18,24,38,.055);
+      transition:.16s ease;
+    }
+    .bb-select:hover{
+      border-color:rgba(199,156,79,.28);
+    }
+    .bb-select:focus{
+      border-color:rgba(199,156,79,.42);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.95),
+        0 0 0 4px rgba(199,156,79,.10);
+    }
+    .bb-private{
+      margin-top:13px;
+      padding-top:11px;
+      border-top:1px solid rgba(18,24,38,.08);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      gap:8px;
+      color:#6c7485;
+      font-size:12px;
+      font-weight:700;
+    }
+    .bb-private svg{
+      color:var(--bb-gold);
+      flex:0 0 auto;
+    }
+    @media(max-width:560px){
+      #bb-input-shell{
+        max-width:100%;
+      }
+      #bb-setup{
+        padding:16px;
+      }
+      .bb-row{
+        grid-template-columns:30px 1fr;
+        gap:8px;
+      }
+      .bb-select-wrap{
+        grid-column:1 / -1;
+      }
+    }
+  </style>
+                <div id="bb-input-shell">
+                  <section id="bb-setup" aria-label="PCSUnited Quick PCS Snapshot Input">
+                    <h3 class="bb-setup-title">
+                      <svg class="bb-setup-icon" viewbox="0 0 24 24" fill="none" aria-hidden="true">
+                        <path d="M4 15a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                        <path d="M12 15l4-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                        <path d="M5.7 15h.01M18.3 15h.01M7.6 10.2h.01M16.4 10.2h.01" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"></path>
+                      </svg>
+                      Start Your PCS Snapshot
+                    </h3>
+                    <div class="bb-form">
+                      <div class="bb-row">
+                        <div class="bb-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewbox="0 0 24 24" fill="none">
+                            <path d="M12 4l7 4v3l-7-4-7 4V8l7-4Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+                            <path d="M5 14l7-4 7 4v3l-7-4-7 4v-3Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+                            <path d="M5 20l7-4 7 4" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                          </svg>
+                        </div>
+                        <label class="bb-label" for="bb-rank">Rank</label>
+                        <div class="bb-select-wrap">
+                          <select id="bb-rank" class="bb-select">
+                            <option value="">Select Rank</option>
+                            <option value="E-1">E-1</option>
+                            <option value="E-2">E-2</option>
+                            <option value="E-3">E-3</option>
+                            <option value="E-4">E-4</option>
+                            <option value="E-5" selected="">E-5</option>
+                            <option value="E-6">E-6</option>
+                            <option value="E-7">E-7</option>
+                            <option value="E-8">E-8</option>
+                            <option value="E-9">E-9</option>
+                            <option value="O-1">O-1</option>
+                            <option value="O-2">O-2</option>
+                            <option value="O-3">O-3</option>
+                            <option value="O-4">O-4</option>
+                            <option value="O-5">O-5</option>
+                            <option value="O-6">O-6</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="bb-row">
+                        <div class="bb-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewbox="0 0 24 24" fill="none">
+                            <rect x="4" y="5.5" width="16" height="14" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
+                            <path d="M8 3.5v4M16 3.5v4M4 10h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                          </svg>
+                        </div>
+                        <label class="bb-label" for="bb-yos">Years of Service</label>
+                        <div class="bb-select-wrap">
+                          <select id="bb-yos" class="bb-select">
+                            <option value="">Select YoS</option>
+                            <option value="2">2 Years</option>
+                            <option value="4">4 Years</option>
+                            <option value="6" selected="">6 Years</option>
+                            <option value="8">8 Years</option>
+                            <option value="10">10 Years</option>
+                            <option value="12">12 Years</option>
+                            <option value="14">14 Years</option>
+                            <option value="16">16 Years</option>
+                            <option value="18">18 Years</option>
+                            <option value="20">20 Years</option>
+                            <option value="22">22 Years</option>
+                            <option value="24">24 Years</option>
+                            <option value="26">26 Years</option>
+                            <option value="28">28 Years</option>
+                            <option value="30">30 Years</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="bb-row">
+                        <div class="bb-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewbox="0 0 24 24" fill="none">
+                            <path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" stroke="currentColor" stroke-width="1.8"></path>
+                            <path d="M15.5 10a2.5 2.5 0 1 0 0-5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                            <path d="M3.8 19c.7-3.2 2.6-5 5.2-5s4.5 1.8 5.2 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                            <path d="M15.5 14c2.3.3 3.8 2 4.5 5" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                          </svg>
+                        </div>
+                        <label class="bb-label" for="bb-dependents">Dependents</label>
+                        <div class="bb-select-wrap">
+                          <select id="bb-dependents" class="bb-select">
+                            <option value="0">No Dependents</option>
+                            <option value="1">1 Dependent</option>
+                            <option value="2" selected="">2 Dependents</option>
+                            <option value="3">3 Dependents</option>
+                            <option value="4">4 Dependents</option>
+                            <option value="5">5 Dependents</option>
+                            <option value="6">6+ Dependents</option>
+                          </select>
+                        </div>
+                      </div>
+                      <div class="bb-row">
+                        <div class="bb-icon" aria-hidden="true">
+                          <svg width="18" height="18" viewbox="0 0 24 24" fill="none">
+                            <path d="M12 21s6-5.4 6-11a6 6 0 1 0-12 0c0 5.6 6 11 6 11Z" stroke="currentColor" stroke-width="1.8"></path>
+                            <circle cx="12" cy="10" r="2.1" stroke="currentColor" stroke-width="1.8"></circle>
+                          </svg>
+                        </div>
+                        <label class="bb-label" for="bb-base">Gaining Base</label>
+                        <div class="bb-select-wrap">
+                          <select id="bb-base" class="bb-select">
+                            <option value="">Select Base</option>
+                            <option value="Andrews AFB">Andrews AFB</option>
+                            <option value="Barksdale AFB">Barksdale AFB</option>
+                            <option value="Beale AFB">Beale AFB</option>
+                            <option value="Cannon AFB">Cannon AFB</option>
+                            <option value="Charleston AFB">Charleston AFB</option>
+                            <option value="Davis-Monthan AFB">Davis-Monthan AFB</option>
+                            <option value="Dover AFB">Dover AFB</option>
+                            <option value="Dyess AFB">Dyess AFB</option>
+                            <option value="Eglin AFB">Eglin AFB</option>
+                            <option value="Elmendorf AFB">Elmendorf AFB</option>
+                            <option value="F.E-Warren AFB">F.E-Warren AFB</option>
+                            <option value="Fairchild AFB">Fairchild AFB</option>
+                            <option value="Fort-Sam-Houston AFB">Fort-Sam-Houston AFB</option>
+                            <option value="Holloman AFB">Holloman AFB</option>
+                            <option value="Hurlburt AFB">Hurlburt AFB</option>
+                            <option value="Keesler AFB">Keesler AFB</option>
+                            <option value="Kirtland AFB">Kirtland AFB</option>
+                            <option value="Lackland AFB" selected="">Lackland AFB</option>
+                            <option value="Langley AFB">Langley AFB</option>
+                            <option value="Laughlin AFB">Laughlin AFB</option>
+                            <option value="Little-Rock AFB">Little-Rock AFB</option>
+                            <option value="Luke AFB">Luke AFB</option>
+                            <option value="MacDill AFB">MacDill AFB</option>
+                            <option value="Malmstrom AFB">Malmstrom AFB</option>
+                            <option value="Maxwell AFB">Maxwell AFB</option>
+                            <option value="McConnell AFB">McConnell AFB</option>
+                            <option value="McGuire AFB">McGuire AFB</option>
+                            <option value="Minot AFB">Minot AFB</option>
+                            <option value="Moody AFB">Moody AFB</option>
+                            <option value="Mountain-Home AFB">Mountain-Home AFB</option>
+                            <option value="Nellis AFB">Nellis AFB</option>
+                            <option value="Offutt AFB">Offutt AFB</option>
+                            <option value="Peterson AFB">Peterson AFB</option>
+                            <option value="Randolph AFB">Randolph AFB</option>
+                            <option value="Robins AFB">Robins AFB</option>
+                            <option value="Scott AFB">Scott AFB</option>
+                            <option value="Seymour-Johnson AFB">Seymour-Johnson AFB</option>
+                            <option value="Shaw AFB">Shaw AFB</option>
+                            <option value="Sheppard AFB">Sheppard AFB</option>
+                            <option value="Tinker AFB">Tinker AFB</option>
+                            <option value="Travis AFB">Travis AFB</option>
+                            <option value="Tyndall AFB">Tyndall AFB</option>
+                            <option value="Whiteman AFB">Whiteman AFB</option>
+                            <option value="Wright-Patterson AFB">Wright-Patterson AFB</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="bb-private">
+                      <svg width="14" height="14" viewbox="0 0 24 24" fill="none" aria-hidden="true">
+                        <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                      </svg>
+                      Private. Secure. No data stored.
+                    </div>
+                  </section>
+                </div>
+                <script>
+    (function(){
+      "use strict";
+      const ROOT_ID = "pcsu-basicbrain-input";
+      const VERSION = "1.0.0";
+      const STORAGE = {
+        basicbrain: "pcsunited.basicbrain.v1",
+        profile: "pcsunited.profile.v1",
+        bridge: "pcsunited.bridge.v1",
+        selectedBase: "pcsunited.selectedBase.v1",
+        baseline: "pcsunited.baseline.v1"
+      };
+      const IDS = {
+        rank: "bb-rank",
+        yos: "bb-yos",
+        dependents: "bb-dependents",
+        base: "bb-base"
+      };
+      const BASE_META = {
+        "Andrews AFB": { cityKey:"Andrews", state:"MD", market:"Washington DC Metro" },
+        "Barksdale AFB": { cityKey:"Barksdale", state:"LA", market:"Bossier City / Shreveport" },
+        "Beale AFB": { cityKey:"Beale", state:"CA", market:"Yuba City / Marysville" },
+        "Cannon AFB": { cityKey:"Cannon", state:"NM", market:"Clovis" },
+        "Charleston AFB": { cityKey:"Charleston", state:"SC", market:"Charleston" },
+        "Davis-Monthan AFB": { cityKey:"DavisMonthan", state:"AZ", market:"Tucson" },
+        "Dover AFB": { cityKey:"Dover", state:"DE", market:"Dover" },
+        "Dyess AFB": { cityKey:"Dyess", state:"TX", market:"Abilene" },
+        "Eglin AFB": { cityKey:"Eglin", state:"FL", market:"Fort Walton Beach / Destin" },
+        "Elmendorf AFB": { cityKey:"Elmendorf", state:"AK", market:"Anchorage" },
+        "F.E-Warren AFB": { cityKey:"FEWarren", state:"WY", market:"Cheyenne" },
+        "Fairchild AFB": { cityKey:"Fairchild", state:"WA", market:"Spokane" },
+        "Fort-Sam-Houston AFB": { cityKey:"FortSamHouston", state:"TX", market:"San Antonio" },
+        "Holloman AFB": { cityKey:"Holloman", state:"NM", market:"Alamogordo" },
+        "Hurlburt AFB": { cityKey:"Hurlburt", state:"FL", market:"Fort Walton Beach" },
+        "Keesler AFB": { cityKey:"Keesler", state:"MS", market:"Biloxi / Gulfport" },
+        "Kirtland AFB": { cityKey:"Kirtland", state:"NM", market:"Albuquerque" },
+        "Lackland AFB": { cityKey:"Lackland", state:"TX", market:"San Antonio" },
+        "Langley AFB": { cityKey:"Langley", state:"VA", market:"Hampton Roads" },
+        "Laughlin AFB": { cityKey:"Laughlin", state:"TX", market:"Del Rio" },
+        "Little-Rock AFB": { cityKey:"LittleRock", state:"AR", market:"Little Rock" },
+        "Luke AFB": { cityKey:"Luke", state:"AZ", market:"Phoenix / Glendale" },
+        "MacDill AFB": { cityKey:"MacDill", state:"FL", market:"Tampa" },
+        "Malmstrom AFB": { cityKey:"Malmstrom", state:"MT", market:"Great Falls" },
+        "Maxwell AFB": { cityKey:"Maxwell", state:"AL", market:"Montgomery" },
+        "McConnell AFB": { cityKey:"McConnell", state:"KS", market:"Wichita" },
+        "McGuire AFB": { cityKey:"McGuire", state:"NJ", market:"Joint Base McGuire-Dix-Lakehurst" },
+        "Minot AFB": { cityKey:"Minot", state:"ND", market:"Minot" },
+        "Moody AFB": { cityKey:"Moody", state:"GA", market:"Valdosta" },
+        "Mountain-Home AFB": { cityKey:"MountainHome", state:"ID", market:"Mountain Home / Boise" },
+        "Nellis AFB": { cityKey:"Nellis", state:"NV", market:"Las Vegas" },
+        "Offutt AFB": { cityKey:"Offutt", state:"NE", market:"Omaha" },
+        "Peterson AFB": { cityKey:"Peterson", state:"CO", market:"Colorado Springs" },
+        "Randolph AFB": { cityKey:"Randolph", state:"TX", market:"San Antonio" },
+        "Robins AFB": { cityKey:"Robins", state:"GA", market:"Warner Robins" },
+        "Scott AFB": { cityKey:"Scott", state:"IL", market:"St. Louis Metro" },
+        "Seymour-Johnson AFB": { cityKey:"SeymourJohnson", state:"NC", market:"Goldsboro" },
+        "Shaw AFB": { cityKey:"Shaw", state:"SC", market:"Sumter" },
+        "Sheppard AFB": { cityKey:"Sheppard", state:"TX", market:"Wichita Falls" },
+        "Tinker AFB": { cityKey:"Tinker", state:"OK", market:"Oklahoma City" },
+        "Travis AFB": { cityKey:"Travis", state:"CA", market:"Fairfield / Vacaville" },
+        "Tyndall AFB": { cityKey:"Tyndall", state:"FL", market:"Panama City" },
+        "Whiteman AFB": { cityKey:"Whiteman", state:"MO", market:"Knob Noster / Warrensburg" },
+        "Wright-Patterson AFB": { cityKey:"WrightPatterson", state:"OH", market:"Dayton" }
+      };
+      function $(id){
+        return document.getElementById(id);
+      }
+      function readJson(key, fallback){
+        try{
+          const raw = localStorage.getItem(key) || sessionStorage.getItem(key);
+          return raw ? JSON.parse(raw) : fallback;
+        }catch(_){
+          return fallback;
+        }
+      }
+      function writeJson(key, value){
+        try{
+          localStorage.setItem(key, JSON.stringify(value));
+        }catch(_){}
+      }
+      function clean(value){
+        return value === undefined || value === null ? "" : String(value).trim();
+      }
+      function selectedText(el){
+        if(!el || !el.options || el.selectedIndex < 0) return "";
+        return clean(el.options[el.selectedIndex].text);
+      }
+      function normalizeRank(rank){
+        const raw = clean(rank).toUpperCase().replace(/\s+/g,"");
+        if(!raw) return "";
+        if(/^[EOW]-\d{1,2}$/.test(raw)) return raw;
+        if(/^[EOW]\d{1,2}$/.test(raw)) return raw.charAt(0) + "-" + raw.slice(1);
+        return raw;
+      }
+      function getDependentsLabel(n){
+        const count = Number(n || 0);
+        if(count <= 0) return "No Dependents";
+        if(count === 1) return "1 Dependent";
+        if(count >= 6) return "6+ Dependents";
+        return count + " Dependents";
+      }
+      function getState(){
+        const rankEl = $(IDS.rank);
+        const yosEl = $(IDS.yos);
+        const depEl = $(IDS.dependents);
+        const baseEl = $(IDS.base);
+        const rank = normalizeRank(rankEl ? rankEl.value : "");
+        const yos = Number(yosEl ? yosEl.value : 0);
+        const dependents = Number(depEl ? depEl.value : 0);
+        const base = clean(baseEl ? baseEl.value : "");
+        const baseLabel = selectedText(baseEl) || base;
+        const meta = BASE_META[base] || {};
+        return {
+          source: "pcsunited.basicbrain.input",
+          version: VERSION,
+          updated_at: new Date().toISOString(),
+          mode: "active_duty",
+          rank,
+          rank_paygrade: rank,
+          yos,
+          years_of_service: yos,
+          dependents,
+          dependents_label: getDependentsLabel(dependents),
+          family: dependents > 0,
+          has_dependents: dependents > 0,
+          base,
+          base_label: baseLabel,
+          current_base: base,
+          selected_base: base,
+          selectedBase: base,
+          cityKey: meta.cityKey || "",
+          market: meta.market || "",
+          state: meta.state || "",
+          profile_status: "basicbrain_initialized"
+        };
+      }
+      function saveState(){
+        const now = new Date().toISOString();
+        const state = getState();
+        const existingProfile = readJson(STORAGE.profile, {}) || {};
+        const existingBridge = readJson(STORAGE.bridge, {}) || {};
+        const profile = {
+          ...existingProfile,
+          source: "basicbrain",
+          profile_status: "basicbrain_initialized",
+          initialized_at: existingProfile.initialized_at || now,
+          updated_at: now,
+          mode: state.mode,
+          rank: state.rank,
+          rank_paygrade: state.rank_paygrade,
+          yos: state.yos,
+          years_of_service: state.yos,
+          dependents: state.dependents,
+          family: state.family,
+          has_dependents: state.has_dependents,
+          base: state.base,
+          base_label: state.base_label,
+          current_base: state.current_base,
+          selected_base: state.selected_base,
+          selectedBase: state.selectedBase,
+          cityKey: state.cityKey,
+          market: state.market,
+          state: state.state
+        };
+        const bridge = {
+          ...existingBridge,
+          source: "basicbrain",
+          updated_at: now,
+          mode: state.mode,
+          rank: state.rank,
+          rank_paygrade: state.rank_paygrade,
+          yos: state.yos,
+          dependents: state.dependents,
+          family: state.family,
+          has_dependents: state.has_dependents,
+          base: state.base,
+          base_label: state.base_label,
+          current_base: state.current_base,
+          selected_base: state.selected_base,
+          selectedBase: state.selectedBase,
+          cityKey: state.cityKey,
+          market: state.market,
+          state: state.state
+        };
+        const basicbrain = {
+          ...state,
+          profile,
+          bridge,
+          completed_steps: [
+            state.rank ? "rank" : null,
+            state.yos ? "yos" : null,
+            state.dependents !== null && state.dependents !== undefined ? "dependents" : null,
+            state.base ? "base" : null
+          ].filter(Boolean),
+          readiness_level: state.base ? "base_initialized" : "identity_initialized"
+        };
+        const selectedBase = {
+          source: "basicbrain",
+          updated_at: now,
+          base: state.base,
+          label: state.base_label,
+          name: state.base,
+          cityKey: state.cityKey,
+          market: state.market,
+          state: state.state
+        };
+        writeJson(STORAGE.basicbrain, basicbrain);
+        writeJson(STORAGE.profile, profile);
+        writeJson(STORAGE.bridge, bridge);
+        writeJson(STORAGE.selectedBase, selectedBase);
+        window.dispatchEvent(new CustomEvent("pcsunited:basicbrain-updated", {
+          detail: { basicbrain, profile, bridge, selectedBase }
+        }));
+        window.dispatchEvent(new CustomEvent("pcsunited:profile-ready", {
+          detail: profile
+        }));
+        window.dispatchEvent(new CustomEvent("pcsunited:bridge-ready", {
+          detail: bridge
+        }));
+        window.dispatchEvent(new CustomEvent("pcsu:base-selected", {
+          detail: selectedBase
+        }));
+        try{
+          window.postMessage({
+            type:"pcsunited-basicbrain",
+            source:"pcsunited.basicbrain.input",
+            basicbrain,
+            profile,
+            bridge,
+            selectedBase
+          }, "*");
+        }catch(_){}
+        return basicbrain;
+      }
+      function hydrateSelect(id, value){
+        const el = $(id);
+        if(!el || value === undefined || value === null || value === "") return;
+        const cleanValue = clean(value).toLowerCase();
+        Array.from(el.options || []).some(function(opt){
+          if(clean(opt.value).toLowerCase() === cleanValue){
+            el.value = opt.value;
+            return true;
+          }
+          return false;
+        });
+      }
+      function hydrateFromStorage(){
+        const bb = readJson(STORAGE.basicbrain, {}) || {};
+        const profile = readJson(STORAGE.profile, {}) || {};
+        const bridge = readJson(STORAGE.bridge, {}) || {};
+        const merged = {
+          ...(bb.bridge || {}),
+          ...(bb.profile || {}),
+          ...bridge,
+          ...profile,
+          ...bb
+        };
+        hydrateSelect(IDS.rank, merged.rank_paygrade || merged.rank);
+        hydrateSelect(IDS.yos, merged.yos || merged.years_of_service);
+        hydrateSelect(IDS.dependents, merged.dependents);
+        hydrateSelect(IDS.base, merged.base || merged.selected_base || merged.selectedBase || merged.current_base);
+      }
+      function bind(){
+        [IDS.rank, IDS.yos, IDS.dependents, IDS.base].forEach(function(id){
+          const el = $(id);
+          if(!el) return;
+          el.addEventListener("change", saveState);
+          el.addEventListener("input", saveState);
+        });
+      }
+      function init(){
+        const root = document.getElementById(ROOT_ID);
+        if(!root) return;
+        if(root.dataset.mounted === "true") return;
+        root.dataset.mounted = "true";
+        const ready = [IDS.rank, IDS.yos, IDS.dependents, IDS.base].every(function(id){
+          return !!$(id);
+        });
+        if(!ready){
+          setTimeout(init, 150);
+          return;
+        }
+        hydrateFromStorage();
+        bind();
+        saveState();
+        window.PCSU_BASICBRAIN_INPUT = {
+          version: VERSION,
+          getState,
+          save: saveState,
+          hydrate: hydrateFromStorage,
+          storage: STORAGE
+        };
+      }
+      if(document.readyState === "loading"){
+        document.addEventListener("DOMContentLoaded", init);
+      }else{
+        init();
+      }
+    })();
+  </script>
+              </div>
             </div>
           </div>
-          <div class="w-layout-vflex home-three-category-main-block">
-            <div class="w-layout-hflex home-three-category-upper-box">
-              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e5d" class="w-layout-vflex home-three-category-card">
-                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-Icon-One.png" width="75" height="93" alt="Icon" style="opacity:1" sizes="75px" loading="lazy" srcset="../images/e545796eccdd08a3440ab132fe37b08f_Grey-Icon-One-p-500.png 500w, ../images/Grey-Icon-One.png 800w"><img class="home-three-category-orange-icon" src="../images/Icon-Orange-One.png" width="75" height="93" alt="Icon" style="opacity:0" sizes="75px" loading="lazy" srcset="../images/6a851f89299e7c091a68ac4e0c7270ce_Icon-Orange-One-p-500.png 500w, ../images/Icon-Orange-One.png 800w"></div>
-                <div class="heading-four text-center margin-top-thirty">BAH <br>Calculator</div>
-                <div class="home-three-category-card-bottom-text">Obtain your BAH &amp; Base Pay,</div>
+          <div class="w-layout-cell">
+            <h2 data-w-id="3ffbc219-8306-f4d1-2a21-64954e28c436" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="title-pcsu-flow">Flow our PCSUnited User Journey</h2>
+            <div class="services-h01-bg-content-2">
+              <div class="content-bg-block services">
+                <div class="align-left-5">
+                  <div class="su-form-button icon-block"><img src="../images/vitaly-gariev-Tn0fjekZemA-unsplash_1.png" loading="lazy" sizes="(max-width: 1600px) 100vw, 1600px" srcset="../images/vitaly-gariev-Tn0fjekZemA-unsplash_1-p-500.png 500w, ../images/vitaly-gariev-Tn0fjekZemA-unsplash_1-p-800.png 800w, ../images/vitaly-gariev-Tn0fjekZemA-unsplash_1-p-1080.png 1080w, ../images/vitaly-gariev-Tn0fjekZemA-unsplash_1.png 1600w" alt="Female doctor explaining an X-ray of a skull to an elderly male patient in a medical office."></div>
+                </div>
+                <div class="space-86"></div>
+                <div class="body-01---18px-semi-bold">1. Base Demo</div>
+                <div class="opacity-80-2">Turn your PCS orders into real-world intelligence.</div>
               </div>
-              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e67" class="w-layout-vflex home-three-category-card">
-                <div class="position-relative"><img width="93" height="93" alt="Icon" src="../images/Grey-icon-two.png" loading="lazy" srcset="../images/7cb63cf97f4d59d5905cfdd80da167f9_Grey-icon-two-p-500.png 500w, ../images/Grey-icon-two.png 800w" sizes="93px" class="home-three-category-grey-icon active"><img width="93" height="93" alt="Icon" src="../images/Orange-Icon-Seven.png" loading="lazy" srcset="../images/1dd6c29d74c387a704514a132d294b80_Orange-Icon-Seven-p-500.png 500w, ../images/1dd6c29d74c387a704514a132d294b80_Orange-Icon-Seven-p-800.png 800w, ../images/Orange-Icon-Seven.png 1024w" sizes="93px" class="home-three-category-orange-icon active"></div>
-                <div class="heading-four text-center margin-top-thirty">Disabiilty <br>Pay</div>
-                <div class="home-three-category-card-bottom-text">Obtain you Retirement &amp; Disability Pay. </div>
+              <div class="content-bg-block services">
+                <div class="align-left-5">
+                  <div class="su-form-button icon-block"><img src="../images/Orvimo-webflow-template.webp" loading="lazy" sizes="(max-width: 4000px) 100vw, 4000px" srcset="../images/4870dec94d71937a791b80022051a1c3_Orvimo-webflow-template-p-500.webp 500w, ../images/4870dec94d71937a791b80022051a1c3_Orvimo-webflow-template-p-800.webp 800w, ../images/4870dec94d71937a791b80022051a1c3_Orvimo-webflow-template-p-1080.webp 1080w, ../images/4870dec94d71937a791b80022051a1c3_Orvimo-webflow-template-p-1600.webp 1600w, ../images/4870dec94d71937a791b80022051a1c3_Orvimo-webflow-template-p-2000.webp 2000w, ../images/4870dec94d71937a791b80022051a1c3_Orvimo-webflow-template-p-2600.webp 2600w, ../images/4870dec94d71937a791b80022051a1c3_Orvimo-webflow-template-p-3200.webp 3200w, ../images/Orvimo-webflow-template.webp 4000w" alt="Orvimo overview pages - main image"></div>
+                </div>
+                <div class="space-86"></div>
+                <div class="body-01---18px-semi-bold">2. Housing Quiz</div>
+                <div class="opacity-80-2">Define what actually matters before you start searching.</div>
               </div>
-              <div class="home-three-category-vartical-devider"></div>
-              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e72" class="w-layout-vflex home-three-category-card">
-                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-icon-three.png" width="93" height="92" alt="Icon" style="opacity:1" sizes="93px" loading="lazy" srcset="../images/6b73b2ccd105e4ad2d3ae9605eb85cc6_Grey-icon-three-p-500.png 500w, ../images/Grey-icon-three.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-Icon-one.png" width="93" height="92" alt="Icon" style="opacity:0" sizes="93px" loading="lazy" srcset="../images/a0cae2de3044ed6dca5b1b99bacbd7da_Orange-Icon-one-p-500.png 500w, ../images/Orange-Icon-one.png 800w"></div>
-                <div class="heading-four text-center margin-top-thirty">Pt <br>Calculator</div>
-                <div class="home-three-category-card-bottom-text">Air Force Fitness Calculato<br>r</div>
+              <div class="content-bg-block services">
+                <div class="align-left-5">
+                  <div class="su-form-button icon-block"><img src="../images/Grey-icon-Four.png" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" srcset="../images/d10bf666b2a1882a6d3563f407f0837b_Grey-icon-Four-p-500.png 500w, ../images/Grey-icon-Four.png 800w" alt="Icon"></div>
+                </div>
+                <div class="space-86"></div>
+                <div class="body-01---18px-semi-bold">3. Financial Analysis</div>
+                <div class="opacity-80-2">Transform military compensation into actionable financial readiness.</div>
               </div>
-              <div class="home-three-category-vartical-devider"></div>
-              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e7f" class="w-layout-vflex home-three-category-card">
-                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-Icon-Five.png" width="93" height="92" alt="Icon" style="opacity:1" sizes="93px" loading="lazy" srcset="../images/471c3b279b8e77e4c775b9bb2a0d109d_Grey-Icon-Five-p-500.png 500w, ../images/Grey-Icon-Five.png 800w"><img class="home-three-category-orange-icon" src="../images/Icon-Orange-One_1.png" width="93" height="92" alt="Icon" style="opacity:0" sizes="93px" loading="lazy" srcset="../images/Icon-Orange-One_1-p-500.png 500w, ../images/Icon-Orange-One_1.png 800w"></div>
-                <div class="heading-four text-center margin-top-thirty">Mortgage Calculator</div>
-                <div class="home-three-category-card-bottom-text">Obtain projected Monthly Mortgage</div>
-              </div>
-            </div>
-            <div class="home-three-category-horizontal-devider"></div>
-            <div class="w-layout-hflex home-three-category-bottom-box">
-              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e89" class="w-layout-vflex home-three-category-card">
-                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-icon-Four.png" width="122" height="93" alt="Icon" style="opacity:1" sizes="122px" loading="lazy" srcset="../images/d10bf666b2a1882a6d3563f407f0837b_Grey-icon-Four-p-500.png 500w, ../images/Grey-icon-Four.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-icon-Three.png" width="122" height="93" alt="Icon" style="opacity:0" sizes="122px" loading="lazy" srcset="../images/fd322ea4cd63e0c8f42d289e718ab2cb_Orange-icon-Three-p-500.png 500w, ../images/Orange-icon-Three.png 800w"></div>
-                <div class="heading-four text-center margin-top-thirty">Monthly Expenses</div>
-                <div class="home-three-category-card-bottom-text">Monthly expenses breakdown.</div>
-              </div>
-              <div class="home-three-category-vartical-devider home-three-category-vartical-devider-revers"></div>
-              <div id="w-node-dea51de8-d2c4-d7a7-6c1c-c573dfbe5e92-c85e09e0" data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e92" class="w-layout-vflex home-three-category-card">
-                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-Icon-Five.png" width="89" height="93" alt="Icon" style="opacity:1" sizes="89px" loading="lazy" srcset="../images/471c3b279b8e77e4c775b9bb2a0d109d_Grey-Icon-Five-p-500.png 500w, ../images/Grey-Icon-Five.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-Icon-Four.png" width="89" height="93" alt="Icon" style="opacity:0" sizes="89px" loading="lazy" srcset="../images/94fb249e594b1a9ecbd9d8e02026faf8_Orange-Icon-Four-p-500.png 500w, ../images/94fb249e594b1a9ecbd9d8e02026faf8_Orange-Icon-Four-p-800.png 800w, ../images/Orange-Icon-Four.png 1024w"></div>
-                <div class="heading-four text-center margin-top-thirty">VA-Loan Calculator</div>
-                <div class="home-three-category-card-bottom-text">VA Home Loan Calculator</div>
-              </div>
-              <div class="home-three-category-vartical-devider home-three-category-vartical-devider-revers"></div>
-              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e9b" class="w-layout-vflex home-three-category-card">
-                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-icon-Seven.png" width="97" height="92" alt="Icon" style="opacity:1" sizes="97px" loading="lazy" srcset="../images/a083826c92e25ae9d031382455fd8ec9_Grey-icon-Seven-p-500.png 500w, ../images/Grey-icon-Seven.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-Icon.png" width="97" height="92" alt="" style="opacity:0" sizes="97px" loading="lazy" srcset="../images/883b36841623260cc46058dcc34e9226_Orange-Icon-p-500.png 500w, ../images/883b36841623260cc46058dcc34e9226_Orange-Icon-p-800.png 800w, ../images/Orange-Icon.png 1000w"></div>
-                <div class="heading-four text-center margin-top-thirty">TSP <br>Calculator</div>
-                <div class="home-three-category-card-bottom-text">TPS Calculator.</div>
-              </div>
-              <div class="home-three-category-vartical-devider home-three-category-vartical-devider-revers"></div>
-              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5ea6" class="w-layout-vflex home-three-category-card">
-                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-icon-Eight.png" width="71" height="93" alt="Icon" style="opacity:1" sizes="71px" loading="lazy" srcset="../images/5ee0c2c9c4f79f1de09d51fb83bcb5da_Grey-icon-Eight-p-500.png 500w, ../images/Grey-icon-Eight.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-Icon-Six.png" width="71" height="93" alt="Icon" style="opacity:0" sizes="71px" loading="lazy" srcset="../images/0c6233885a8a555c8f273c73dc57fed8_Orange-Icon-Six-p-500.png 500w, ../images/Orange-Icon-Six.png 800w"></div>
-                <div class="heading-four text-center margin-top-thirty">Promotion Calculator</div>
-                <div class="home-three-category-card-bottom-text">Air Force Promotion Calculator</div>
+              <div class="content-bg-block services">
+                <div class="align-left-5">
+                  <div class="su-form-button icon-block"><img src="../images/CF3F541E-292B-450C-B0F6-FE1FFC31B608.png" loading="lazy" sizes="(max-width: 1254px) 100vw, 1254px" srcset="../images/96E523BC-B5EC-42CA-A55D-BDCE7526DEA5-p-500.png 500w, ../images/96E523BC-B5EC-42CA-A55D-BDCE7526DEA5-p-800.png 800w, ../images/96E523BC-B5EC-42CA-A55D-BDCE7526DEA5-p-1080.png 1080w, ../images/CF3F541E-292B-450C-B0F6-FE1FFC31B608.png 1254w" alt=""></div>
+                </div>
+                <div class="space-86"></div>
+                <div class="body-01---18px-semi-bold">4.Decision Advisor</div>
+                <div class="opacity-80-2">Turn uncertainty into a clear PCS strategy.</div>
               </div>
             </div>
+            <p class="paragraph-26">PCSUnited was built to simplify one of the most stressful parts of military life: relocation decisions. Instead of jumping between random calculators, spreadsheets, and housing websites, PCSUnited creates a connected decision-first experience that helps military members understand their finances, evaluate their market, and confidently prepare for their next assignment.</p>
           </div>
         </div>
       </section>
       <div class="_1st-slider-in-resources">
         <div data-w-id="4a262289-c61c-7481-d7fc-c48302bb136f" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="wing-back-hero bakdrop"></div>
-      <div class="sliderinblack">
-        <div data-w-id="c42d35e1-6316-a5a1-093a-4550960735ff" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <section class="section home1-dev">
-        <div reveal-content="true" class="w-layout-grid title-for-dashboard">
-          <h2 data-w-id="15d696e3-b2f0-48ea-a72f-35cc86853b25" style="opacity:0" class="text-center">Housing Quiz</h2>
-          <h3 line-split="true" class="fsize-s">Discover Your Housing Preferrences<br> <span class="tertiary-color-emphasis">Take our 90second Quiz</span></h3>
-        </div>
-        <div class="w-layout-blockcontainer dashboard-promo w-container">
-          <div reveal-content="true" class="reveal-content-wrap">
-            <div fade-in="true" data-current="Market Insight" data-easing="ease-in-out" data-duration-in="300" data-duration-out="200" class="tabs w-tabs">
-              <div class="tabs-menu w-tab-menu">
-                <a data-w-tab="Market Insight" class="tab-link w-inline-block w-tab-link w--current">
-                  <div>Learn the Psychology behind Home Buying. </div>
-                </a>
-              </div>
-              <div class="tabs-content w-tab-content">
-                <div data-w-tab="Market Insight" class="tab-pane w-tab-pane w--tab-active">
-                  <div class="w-layout-grid tab-pane-grid">
-                    <div data-poster-url="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_poster.0000000.jpg" data-video-urls="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_mp4.mp4,https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="center-video w-background-video w-background-video-atom"><video id="738982aa-7029-afc1-0908-d766a276410c-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
-                        <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_mp4.mp4" data-wf-ignore="true">
-                        <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-wf-ignore="true">
-                      </video></div>
-                    <div id="w-node-_738982aa-7029-afc1-0908-d766a276410d-c85e09e0" class="tab-pane-text">
-                      <div tab-split-text="true" class="fsize-xxs">Take our Fun Housing Personality Quiz</div>
-                      <p tab-split-text="true" class="paragraph-14">Avg Utility Costs, Best Communities, Housing Trends, Base Specifics, Demographics and More. </p>
-                      <div class="code-embed-21-copy w-embed w-script"><!--  //#0 HOUSE OF SASS • PCS UNITED • FINANCIAL INTAKE
-     v2.3.0 • THEWING SUPABASE SAVE
-     INPUT → saves locally → POSTs to TheWing /api/financial-intake → redirects to FAD
-     ✅ Saves localStorage for instant dashboard handoff
-     ✅ Updates Supabase by email through TheWing
-     ✅ Uses logged-in profile email from PCSUnited login flow
-     ✅ Preserves transparent section / no page background
-     REQUIRED BACKEND:
-     - TheWing: netlify/functions/financial-intake.js
-     - Endpoint: https://thewing.netlify.app/api/financial-intake
- -->
-                        <div id="sass-mortgage-strip" style="all: initial;">
-                          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-                          <style>
-    #sass-mortgage-strip,
-    #sass-mortgage-strip *{
-      box-sizing:border-box;
-      font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-    }
-    #sass-mortgage-strip{
-      display:block;
-      width:100%;
-      background:transparent !important;
-      color:#171b2c;
-    }
-    #sass-shell{
-      width:100%;
-      max-width:980px;
-      margin:0 auto;
-      padding:18px 0 10px;
-      background:transparent !important;
-    }
-    #intent-row{
-      display:flex;
-      justify-content:center;
-      gap:14px;
-      margin-bottom:30px;
-      flex-wrap:wrap;
-      background:transparent !important;
-    }
-    .intent-btn{
-      appearance:none;
-      padding:10px 22px;
-      border-radius:999px;
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.09em;
-      text-transform:uppercase;
-      border:1px solid rgba(18,24,38,.14);
-      background:linear-gradient(180deg,#7b808a,#5d626e);
-      color:#f8f9fc;
-      cursor:pointer;
-      transition:.18s ease;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.20),
-        inset 0 -2px 4px rgba(0,0,0,.12),
-        0 10px 20px rgba(0,0,0,.16);
-    }
-    .intent-btn:hover{
-      transform:translateY(-1px);
-      filter:brightness(1.04);
-    }
-    .intent-btn.active{
-      background:linear-gradient(135deg,#8ef3c5 0%,#6aa7ff 100%);
-      color:#050712;
-      border-color:rgba(255,255,255,.38);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.55),
-        inset 0 -2px 8px rgba(33,95,170,.16),
-        0 14px 30px rgba(42,120,220,.22);
-    }
-    #sass-input-row{
-      display:grid;
-      grid-template-columns:repeat(4,minmax(0,1fr));
-      gap:22px;
-      align-items:start;
-      background:transparent !important;
-    }
-    @media(max-width:960px){
-      #sass-input-row{grid-template-columns:repeat(2,minmax(0,1fr));}
-    }
-    @media(max-width:620px){
-      #sass-input-row{grid-template-columns:1fr;}
-    }
-    .sass-card{
-      min-width:0;
-      padding:0;
-      background:transparent !important;
-      border:none !important;
-      box-shadow:none !important;
-    }
-    .sass-field-label{
-      display:block;
-      margin:0 0 8px;
-      font-size:11px;
-      line-height:1;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.115em;
-      color:#9aa7d8;
-      text-shadow:0 1px 0 rgba(255,255,255,.55);
-    }
-    .sass-topbox{
-      min-height:46px;
-      border-radius:13px;
-      border:1px solid rgba(18,24,38,.11);
-      background:
-        linear-gradient(180deg,rgba(255,255,255,.78),rgba(240,244,255,.58));
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.92),
-        inset 0 -1px 0 rgba(255,255,255,.36),
-        0 12px 26px rgba(18,24,38,.085);
-      padding:10px 12px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      overflow:hidden;
-      backdrop-filter:blur(9px);
-      -webkit-backdrop-filter:blur(9px);
-      transition:.18s ease;
-    }
-    .sass-topbox:hover{
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -1px 0 rgba(255,255,255,.42),
-        0 16px 32px rgba(18,24,38,.12);
-    }
-    .sass-money-input{
-      width:100%;
-      min-width:0;
-      border:0;
-      outline:0;
-      background:transparent;
-      color:#0f1629;
-      font-size:25px;
-      line-height:1;
-      font-weight:900;
-      letter-spacing:-.04em;
-      padding:0;
-      text-shadow:0 1px 0 rgba(255,255,255,.62);
-    }
-    .sass-money-input::placeholder{
-      color:rgba(15,22,41,.32);
-    }
-    .sass-value,
-    .sass-score-value{
-      font-size:25px;
-      line-height:1;
-      font-weight:900;
-      color:#0f1629;
-      letter-spacing:-.04em;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-      text-shadow:0 1px 0 rgba(255,255,255,.62);
-    }
-    .sass-pill-mini{
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
-      min-width:58px;
-      height:28px;
-      padding:0 11px;
-      border-radius:999px;
-      border:1px solid rgba(18,24,38,.10);
-      background:linear-gradient(180deg,rgba(255,255,255,.86),rgba(239,242,248,.76));
-      font-size:11px;
-      font-weight:900;
-      color:#343b52;
-      white-space:nowrap;
-      flex:0 0 auto;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.92),
-        0 5px 12px rgba(18,24,38,.06);
-    }
-    .sass-slider-wrap{
-      margin-top:17px;
-    }
-    .sass-slider-shell{
-      position:relative;
-      height:20px;
-      border-radius:999px;
-      background:transparent;
-    }
-    .sass-slider-shell::before{
-      content:"";
-      position:absolute;
-      left:0;
-      right:0;
-      top:50%;
-      height:7px;
-      transform:translateY(-50%);
-      border-radius:999px;
-      background:var(
-        --rail-bg,
-        linear-gradient(90deg,#8ef3c5 0%,#6aa7ff 60%,rgba(18,24,38,.18) 60%,rgba(18,24,38,.18) 100%)
-      );
-      box-shadow:
-        inset 0 1px 2px rgba(255,255,255,.62),
-        inset 0 -1px 2px rgba(18,24,38,.08),
-        0 7px 16px rgba(106,167,255,.18);
-      pointer-events:none;
-    }
-    .sass-range{
-      width:100%;
-      -webkit-appearance:none;
-      appearance:none;
-      background:transparent;
-      position:relative;
-      z-index:2;
-      height:20px;
-      margin:0;
-      cursor:pointer;
-    }
-    .sass-range:focus{outline:none;}
-    .sass-range::-webkit-slider-runnable-track{
-      height:20px;
-      background:transparent;
-      border:none;
-    }
-    .sass-range::-moz-range-track{
-      height:20px;
-      background:transparent;
-      border:none;
-    }
-    .sass-range::-webkit-slider-thumb{
-      -webkit-appearance:none;
-      appearance:none;
-      width:28px;
-      height:28px;
-      margin-top:-4px;
-      border-radius:999px;
-      background:linear-gradient(180deg,#ffffff,#e9eef6);
-      border:1px solid rgba(18,24,38,.13);
-      box-shadow:
-        0 10px 22px rgba(0,0,0,.24),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -2px 6px rgba(18,24,38,.08);
-      transition:.16s ease;
-    }
-    .sass-range:hover::-webkit-slider-thumb{
-      transform:scale(1.05);
-    }
-    .sass-range::-moz-range-thumb{
-      width:28px;
-      height:28px;
-      border-radius:999px;
-      background:linear-gradient(180deg,#ffffff,#e9eef6);
-      border:1px solid rgba(18,24,38,.13);
-      box-shadow:
-        0 10px 22px rgba(0,0,0,.24),
-        inset 0 1px 0 rgba(255,255,255,.95),
-        inset 0 -2px 6px rgba(18,24,38,.08);
-      cursor:pointer;
-      transition:.16s ease;
-    }
-    .sass-scale{
-      display:flex;
-      justify-content:space-between;
-      align-items:center;
-      gap:10px;
-      margin-top:10px;
-      font-size:11px;
-      font-weight:900;
-      color:#7280a5;
-      padding:0 2px;
-    }
-    .sass-help{
-      margin-top:16px;
-      font-size:13px;
-      color:#4f5a73;
-      line-height:1.45;
-    }
-    .sass-number{
-      display:none;
-    }
-    #sass-analyze-btn{
-      margin:34px auto 0;
-      display:block;
-      min-width:178px;
-      padding:14px 38px;
-      font-size:13px;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      border:none;
-      border-radius:999px;
-      background:linear-gradient(135deg,#8ef3c5 0%,#6aa7ff 100%);
-      color:#050712;
-      cursor:pointer;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.48),
-        inset 0 -2px 8px rgba(33,95,170,.16),
-        0 18px 38px rgba(0,0,0,.18);
-      transition:.18s ease;
-    }
-    #sass-analyze-btn:hover{
-      transform:translateY(-1px);
-      filter:brightness(1.035);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.55),
-        inset 0 -2px 8px rgba(33,95,170,.16),
-        0 22px 44px rgba(0,0,0,.21);
-    }
-    #sass-analyze-btn[disabled]{
-      opacity:.72;
-      cursor:not-allowed;
-      transform:none;
-      filter:none;
-    }
-    #sass-err{
-      margin:10px auto 0;
-      max-width:720px;
-      font-size:12px;
-      color:rgba(190,40,40,.95);
-      text-align:center;
-      display:none;
-      line-height:1.45;
-      font-weight:800;
-    }
-    #sass-save-status{
-      margin:12px auto 0;
-      max-width:760px;
-      display:none;
-      text-align:center;
-      font-size:11px;
-      font-weight:900;
-      line-height:1.45;
-      letter-spacing:.06em;
-      text-transform:uppercase;
-      color:#4f5a73;
-    }
-    #sass-save-status.ok{
-      color:#16805b;
-    }
-    #sass-save-status.warn{
-      color:#9a6b10;
-    }
-    #sass-save-status.err{
-      color:rgba(190,40,40,.95);
-    }
-  </style>
-                          <div id="sass-shell">
-                            <div id="intent-row">
-                              <button class="intent-btn active" data-mode="ready" type="button">Ready Now</button>
-                              <button class="intent-btn" data-mode="soon" type="button">Within 6 Months</button>
-                              <button class="intent-btn" data-mode="unsure" type="button">Unsure</button>
-                            </div>
-                            <div id="sass-input-row">
-                              <div class="sass-card">
-                                <label class="sass-field-label" for="rs-expenses">Monthly Expenses</label>
-                                <div class="sass-topbox">
-                                  <input class="sass-money-input" id="rs-expenses" type="text" inputmode="numeric" placeholder="$1,800">
-                                </div>
-                                <div class="sass-slider-wrap">
-                                  <div class="sass-slider-shell">
-                                    <input id="sass-expenses-range" class="sass-range" type="range" min="500" max="5000" step="100" value="1800">
-                                  </div>
-                                  <div class="sass-scale"><span>$500</span><span>$5,000+</span></div>
-                                </div>
-                                <div class="sass-help">All non-housing monthly spend.</div>
-                              </div>
-                              <div class="sass-card">
-                                <label class="sass-field-label" for="rs-price">Housing Cost</label>
-                                <div class="sass-topbox">
-                                  <input class="sass-money-input" id="rs-price" type="text" inputmode="numeric" placeholder="$350,000">
-                                </div>
-                                <div class="sass-slider-wrap">
-                                  <div class="sass-slider-shell">
-                                    <input id="sass-price-range" class="sass-range" type="range" min="150000" max="750000" step="5000" value="350000">
-                                  </div>
-                                  <div class="sass-scale"><span>$150K</span><span>$750K+</span></div>
-                                </div>
-                                <div class="sass-help">Target purchase price for mortgage estimate.</div>
-                              </div>
-                              <div class="sass-card">
-                                <label class="sass-field-label">Downpayment</label>
-                                <div class="sass-topbox">
-                                  <div class="sass-value" id="sass-down-amount">$17,500</div>
-                                  <div class="sass-pill-mini" id="sass-down-pill">5%</div>
-                                </div>
-                                <div class="sass-slider-wrap">
-                                  <div class="sass-slider-shell">
-                                    <input id="sass-down-range" class="sass-range" type="range" min="0" max="30" step="1" value="5">
-                                  </div>
-                                  <div class="sass-scale"><span>0%</span><span>15%</span><span>30%</span></div>
-                                </div>
-                                <div class="sass-help">From 0% to 30% of the home price.</div>
-                                <input class="sass-number" id="rs-down" type="hidden" inputmode="numeric" min="0" step="1" value="17500">
-                              </div>
-                              <div class="sass-card">
-                                <label class="sass-field-label">Credit Score</label>
-                                <div class="sass-topbox">
-                                  <div class="sass-score-value" id="sass-score-num">720</div>
-                                  <div class="sass-pill-mini">APR <span id="sass-score-apr" style="margin-left:4px;">7.00%</span></div>
-                                </div>
-                                <div class="sass-slider-wrap">
-                                  <div class="sass-slider-shell">
-                                    <input id="sass-score-range" class="sass-range" type="range" min="300" max="850" step="10" value="720">
-                                  </div>
-                                  <div class="sass-scale"><span>300</span><span>575</span><span>850</span></div>
-                                </div>
-                                <div class="sass-help">Affects your mortgage rate and loan options.</div>
-                                <input class="sass-number" id="rs-score" type="hidden" inputmode="numeric" min="300" max="850" step="1" value="720">
-                              </div>
-                            </div>
-                            <button id="sass-analyze-btn" type="button">Continue</button>
-                            <div id="sass-save-status"></div>
-                            <div id="sass-err"></div>
-                          </div>
-                          <script>
-    (function(){
-      "use strict";
-      const API_BASE = "https://thewing.netlify.app/api";
-      const FINANCIAL_INTAKE_ENDPOINT = API_BASE + "/financial-intake";
-      const DASHBOARD_URL = "https://pcsunited-com-28346d.webflow.io/air-force/financial-dashboard";
-      const OV_KEY               = "pcsunited.kpi_overrides.v1";
-      const BRIDGE_V1_KEY        = "pcsunited.bridge.v1";
-      const BRIDGE_KEY           = "pcsunited.bridge";
-      const REALTY_BRIDGE_KEY    = "realtysass.bridge";
-      /* Support both historic underscore key and newer dot key */
-      const INTAKE_KEY_LEGACY    = "pcsunited.financial_intake.v1";
-      const INTAKE_KEY           = "pcsunited.financial.intake.v1";
-      const OPEN_FLOW_MARKER_KEY = "pcsunited.open_flow_ready.v1";
-      const PROFILE_KEY          = "pcsunited.profile.v1";
-      const ID_KEY               = "pcsunited.identity.v1";
-      const SESSION_KEY          = "pcsunited.session.v1";
-      const AUTH_KEY             = "pcsunited.auth_ok.v1";
-      const SESSION_EMAIL_KEY    = "pcsunited.sessionEmail";
-      const LOGIN_EMAIL_KEY      = "pcsunited.loginEmail";
-      const AIOU_KEYS = [
-        "pcsunited.user_aiou_inputs.v1",
-        "pcsunited.aiou_inputs.v1",
-        "realtysass.user_aiou_inputs.v1",
-        "realtysass.aiou_inputs.v1"
-      ];
-      const root = document.getElementById("sass-mortgage-strip");
-      if (!root) return;
-      const buttons     = root.querySelectorAll(".intent-btn");
-      const continueBtn = document.getElementById("sass-analyze-btn");
-      const errEl       = document.getElementById("sass-err");
-      const statusEl    = document.getElementById("sass-save-status");
-      const elExpenses  = document.getElementById("rs-expenses");
-      const elPrice     = document.getElementById("rs-price");
-      const elDown      = document.getElementById("rs-down");
-      const elScore     = document.getElementById("rs-score");
-      const expensesRange = document.getElementById("sass-expenses-range");
-      const priceRange    = document.getElementById("sass-price-range");
-      const downRange     = document.getElementById("sass-down-range");
-      const downAmount    = document.getElementById("sass-down-amount");
-      const downPill      = document.getElementById("sass-down-pill");
-      const scoreRange    = document.getElementById("sass-score-range");
-      const scoreNum      = document.getElementById("sass-score-num");
-      const scoreApr      = document.getElementById("sass-score-apr");
-      function n0(v){
-        const n = Number(v);
-        return Number.isFinite(n) ? n : 0;
-      }
-      function clamp(n,min,max){
-        return Math.max(min,Math.min(max,n));
-      }
-      function digitsOnly(str){
-        return String(str || "").replace(/[^\d]/g,"");
-      }
-      function cur(n,d){
-        return (Number(n) || 0).toLocaleString("en-US",{
-          style:"currency",
-          currency:"USD",
-          minimumFractionDigits:d || 0,
-          maximumFractionDigits:d || 0
-        });
-      }
-      function cleanString(v){
-        return v === undefined || v === null ? "" : String(v).trim();
-      }
-      function cleanEmail(v){
-        return cleanString(v).toLowerCase();
-      }
-      function isValidEmail(email){
-        return /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(cleanString(email));
-      }
-      function readMoneyInput(el){
-        if(!el) return 0;
-        const raw = digitsOnly(el.value);
-        const n = Number(raw || 0);
-        return Number.isFinite(n) ? Math.max(0,n) : 0;
-      }
-      function writeMoneyInput(el,value){
-        if(!el) return;
-        const n = Number(value || 0);
-        el.value = n > 0 ? cur(n,0) : "";
-      }
-      function scoreAPR(s){
-        s = Number(s) || 720;
-        if(s >= 780) return 6.50;
-        if(s >= 760) return 6.75;
-        if(s >= 720) return 7.00;
-        if(s >= 700) return 7.20;
-        if(s >= 680) return 7.35;
-        if(s >= 660) return 7.85;
-        if(s >= 640) return 8.25;
-        if(s >= 620) return 9.25;
-        return 9.95;
-      }
-      function readJSON(key,fallback){
-        try{
-          const localRaw = localStorage.getItem(key);
-          if(localRaw) return JSON.parse(localRaw);
-          const sessionRaw = sessionStorage.getItem(key);
-          if(sessionRaw) return JSON.parse(sessionRaw);
-          return fallback;
-        }catch(_){
-          return fallback;
-        }
-      }
-      function writeJSON(key,val){
-        try{
-          localStorage.setItem(key,JSON.stringify(val));
-        }catch(_){}
-      }
-      function writeText(key,val){
-        try{
-          localStorage.setItem(key,String(val || ""));
-        }catch(_){}
-      }
-      function getActiveMode(){
-        const active = root.querySelector(".intent-btn.active");
-        return active ? String(active.dataset.mode || "ready") : "ready";
-      }
-      function setError(msg){
-        if(!errEl) return;
-        if(!msg){
-          errEl.style.display = "none";
-          errEl.textContent = "";
-          return;
-        }
-        errEl.style.display = "block";
-        errEl.textContent = msg;
-      }
-      function setStatus(msg,type){
-        if(!statusEl) return;
-        if(!msg){
-          statusEl.style.display = "none";
-          statusEl.textContent = "";
-          statusEl.className = "";
-          return;
-        }
-        statusEl.style.display = "block";
-        statusEl.textContent = msg;
-        statusEl.className = type || "";
-      }
-      function readAiouIfPresent(){
-        for(const key of AIOU_KEYS){
-          const value = readJSON(key,null);
-          if(value && typeof value === "object"){
-            return { key, data:value };
-          }
-        }
-        return null;
-      }
-      function dispatchEventSafe(name,detail){
-        try{
-          window.dispatchEvent(new CustomEvent(name,{ detail:detail || {} }));
-        }catch(_){}
-      }
-      function updateRangeFill(range){
-        if(!range) return;
-        const min = Number(range.min || 0);
-        const max = Number(range.max || 100);
-        const val = Number(range.value || min);
-        const pct = clamp(((val - min) / (max - min)) * 100,0,100);
-        const shell = range.closest(".sass-slider-shell");
-        if(!shell) return;
-        shell.style.setProperty(
-          "--rail-bg",
-          "linear-gradient(90deg,#8ef3c5 0%,#6aa7ff " + pct + "%,rgba(18,24,38,.18) " + pct + "%,rgba(18,24,38,.18) 100%)"
-        );
-      }
-      function getLoggedInProfile(){
-        const profile = readJSON(PROFILE_KEY,{}) || {};
-        const identity = readJSON(ID_KEY,{}) || {};
-        const bridge = readJSON(BRIDGE_V1_KEY,{}) || {};
-        const session = readJSON(SESSION_KEY,{}) || {};
-        const auth = readJSON(AUTH_KEY,{}) || {};
-        return {
-          ...bridge,
-          ...identity,
-          ...profile,
-          _session: session,
-          _auth: auth
-        };
-      }
-      function resolveEmail(){
-        const params = new URLSearchParams(window.location.search || "");
-        const profile = readJSON(PROFILE_KEY,{}) || {};
-        const identity = readJSON(ID_KEY,{}) || {};
-        const bridge = readJSON(BRIDGE_V1_KEY,{}) || {};
-        const session = readJSON(SESSION_KEY,{}) || {};
-        const auth = readJSON(AUTH_KEY,{}) || {};
-        const email = cleanEmail(
-          params.get("email") ||
-          profile.email ||
-          identity.email ||
-          bridge.email ||
-          session.email ||
-          session.user?.email ||
-          auth.email ||
-          localStorage.getItem(SESSION_EMAIL_KEY) ||
-          localStorage.getItem(LOGIN_EMAIL_KEY) ||
-          sessionStorage.getItem(SESSION_EMAIL_KEY) ||
-          sessionStorage.getItem(LOGIN_EMAIL_KEY)
-        );
-        return email;
-      }
-      function updateDownUI(){
-        const price = readMoneyInput(elPrice);
-        const pct = clamp(Number(downRange && downRange.value) || 0,0,30);
-        const amount = Math.round(price * (pct / 100));
-        if(downAmount) downAmount.textContent = cur(amount,0);
-        if(downPill) downPill.textContent = pct + "%";
-        if(elDown) elDown.value = String(amount);
-        updateRangeFill(downRange);
-      }
-      function updateScoreUI(){
-        const score = clamp(Number(scoreRange && scoreRange.value) || 720,300,850);
-        if(scoreNum) scoreNum.textContent = String(score);
-        if(scoreApr) scoreApr.textContent = scoreAPR(score).toFixed(2) + "%";
-        if(elScore) elScore.value = String(score);
-        updateRangeFill(scoreRange);
-      }
-      function updateExpensesFromRange(){
-        const v = Number(expensesRange && expensesRange.value) || 1800;
-        writeMoneyInput(elExpenses,v);
-        updateRangeFill(expensesRange);
-      }
-      function updatePriceFromRange(){
-        const v = Number(priceRange && priceRange.value) || 350000;
-        writeMoneyInput(elPrice,v);
-        updateRangeFill(priceRange);
-        updateDownUI();
-      }
-      function syncRangeFromMoney(el,range,min,max,step){
-        const value = readMoneyInput(el);
-        if(!range || !value) return;
-        const rounded = Math.round(value / step) * step;
-        range.value = String(clamp(rounded,min,max));
-        updateRangeFill(range);
-      }
-      function bindMoneyField(el,onBlurUpdate){
-        if(!el) return;
-        el.addEventListener("focus",function(){
-          const raw = digitsOnly(el.value);
-          el.value = raw ? Number(raw).toLocaleString("en-US") : "";
-        });
-        el.addEventListener("blur",function(){
-          const n = readMoneyInput(el);
-          el.value = n > 0 ? cur(n,0) : "";
-          if(typeof onBlurUpdate === "function") onBlurUpdate();
-        });
-      }
-      buttons.forEach(btn => {
-        btn.addEventListener("click",() => {
-          buttons.forEach(b => b.classList.remove("active"));
-          btn.classList.add("active");
-        });
-      });
-      bindMoneyField(elExpenses,function(){
-        syncRangeFromMoney(elExpenses,expensesRange,500,5000,100);
-      });
-      bindMoneyField(elPrice,function(){
-        syncRangeFromMoney(elPrice,priceRange,150000,750000,5000);
-        updateDownUI();
-      });
-      if(expensesRange){
-        expensesRange.addEventListener("input",updateExpensesFromRange);
-        expensesRange.addEventListener("change",updateExpensesFromRange);
-      }
-      if(priceRange){
-        priceRange.addEventListener("input",updatePriceFromRange);
-        priceRange.addEventListener("change",updatePriceFromRange);
-      }
-      if(downRange){
-        downRange.addEventListener("input",updateDownUI);
-        downRange.addEventListener("change",updateDownUI);
-      }
-      if(scoreRange){
-        scoreRange.addEventListener("input",updateScoreUI);
-        scoreRange.addEventListener("change",updateScoreUI);
-      }
-      async function postFinancialIntake(payload){
-        const response = await fetch(FINANCIAL_INTAKE_ENDPOINT, {
-          method:"POST",
-          headers:{
-            "Content-Type":"application/json"
-          },
-          body:JSON.stringify(payload)
-        });
-        const data = await response.json().catch(function(){ return {}; });
-        if(!response.ok || data.ok === false){
-          const err = new Error(data.error || "Financial intake could not be saved to Supabase.");
-          err.payload = data;
-          err.status = response.status;
-          throw err;
-        }
-        return data;
-      }
-      function mergeServerSaveResult(serverData, fallbackBridge){
-        if(!serverData || typeof serverData !== "object") return fallbackBridge;
-        const serverProfile = serverData.profile && typeof serverData.profile === "object"
-          ? serverData.profile
-          : null;
-        const serverBridge = serverData.bridge && typeof serverData.bridge === "object"
-          ? serverData.bridge
-          : null;
-        const latestMerged = serverData.latest?.merged_financial && typeof serverData.latest.merged_financial === "object"
-          ? serverData.latest.merged_financial
-          : null;
-        return {
-          ...(fallbackBridge || {}),
-          ...(latestMerged || {}),
-          ...(serverBridge || {}),
-          ...(serverProfile || {}),
-          _thewingSaved:true,
-          _thewingSavedAt:new Date().toISOString(),
-          _thewingFinancialIntakeVersion:serverData.version || ""
-        };
-      }
-      (function prefill(){
-        const ov = readJSON(OV_KEY,{}) || {};
-        const intakeLegacy = readJSON(INTAKE_KEY_LEGACY,{}) || {};
-        const intakeModern = readJSON(INTAKE_KEY,{}) || {};
-        const intake = {
-          ...intakeLegacy,
-          ...intakeModern
-        };
-        const bridge = readJSON(BRIDGE_V1_KEY,{}) || {};
-        const profile = getLoggedInProfile() || {};
-        const prevExpenses =
-          ov.expensesOverride ??
-          intake.expenses ??
-          intake.monthly_expenses ??
-          bridge.expenses ??
-          profile.monthly_expenses ??
-          profile.monthlyExpenses ??
-          profile.expenses ??
-          1800;
-        const prevPrice =
-          ov.projected_home_price ??
-          ov.housingOverride ??
-          intake.price ??
-          intake.projected_home_price ??
-          bridge.price ??
-          bridge.housing ??
-          profile.projected_home_price ??
-          profile.projectedHomePrice ??
-          profile.homePrice ??
-          profile.price ??
-          350000;
-        const prevDown =
-          ov.downpayment ??
-          ov.savingsOverride ??
-          intake.downpayment ??
-          bridge.dpAmt ??
-          profile.downpayment ??
-          profile.downPayment ??
-          profile.dpAmt ??
-          17500;
-        const prevScore =
-          ov.credit_score ??
-          ov.creditScore ??
-          intake.creditScore ??
-          intake.credit_score ??
-          bridge.creditScore ??
-          profile.credit_score ??
-          profile.creditScore ??
-          720;
-        writeMoneyInput(elExpenses,prevExpenses);
-        writeMoneyInput(elPrice,prevPrice);
-        if(expensesRange) expensesRange.value = String(clamp(Math.round(Number(prevExpenses || 1800) / 100) * 100,500,5000));
-        if(priceRange) priceRange.value = String(clamp(Math.round(Number(prevPrice || 350000) / 5000) * 5000,150000,750000));
-        const priceNum = Number(prevPrice || 0);
-        const downNum = Number(prevDown || 0);
-        if(downRange && priceNum > 0 && downNum >= 0){
-          const pct = clamp(Math.round((downNum / priceNum) * 100),0,30);
-          downRange.value = String(pct);
-        }
-        if(scoreRange && prevScore !== ""){
-          scoreRange.value = String(clamp(Math.round(Number(prevScore) || 720),300,850));
-        }
-        const intakeMode = intake.mode || "";
-        if(intakeMode){
-          buttons.forEach(btn => {
-            btn.classList.toggle("active",String(btn.dataset.mode || "") === String(intakeMode));
-          });
-        }
-        updateRangeFill(expensesRange);
-        updateRangeFill(priceRange);
-        updateDownUI();
-        updateScoreUI();
-      })();
-      continueBtn.addEventListener("click", async function(){
-        setError("");
-        setStatus("");
-        const email = resolveEmail();
-        const mode     = getActiveMode();
-        const expenses = Math.max(0,readMoneyInput(elExpenses));
-        const price    = Math.max(0,readMoneyInput(elPrice));
-        const down     = Math.max(0,n0(elDown && elDown.value));
-        let score      = Math.round(n0(elScore && elScore.value));
-        if(score <= 0) score = 720;
-        score = Math.max(300,Math.min(850,score));
-        if(price > 0 && down > price){
-          setError("Downpayment can’t be greater than the home price.");
-          return;
-        }
-        if(!email || !isValidEmail(email)){
-          setError("Please log in again before continuing. I need your account email to save this intake to Supabase.");
-          return;
-        }
-        const aiouWrap = readAiouIfPresent();
-        const profile = getLoggedInProfile() || {};
-        const savedAt = new Date().toISOString();
-        const downPct = Number(downRange && downRange.value) || 0;
-        const ov = readJSON(OV_KEY,{}) || {};
-        ov.expensesOverride      = expenses;
-        ov.housingOverride       = price;
-        ov.savingsOverride       = down;
-        ov.creditScore           = score;
-        ov.credit_score          = score;
-        ov.downpayment           = down;
-        ov.projected_home_price  = price;
-        ov.monthly_expenses      = expenses;
-        ov.expenses              = expenses;
-        ov.dpManual              = true;
-        ov._intakeTs             = Date.now();
-        ov._intakeMode           = mode;
-        ov._intakeSource         = "pcsunited.financial.intake.v2.3.thewing";
-        writeJSON(OV_KEY,ov);
-        const bridge = readJSON(BRIDGE_V1_KEY,{}) || {};
-        bridge.email                = bridge.email || email;
-        bridge.expenses             = expenses;
-        bridge.monthly_expenses     = expenses;
-        bridge.monthlyExpenses      = expenses;
-        bridge.housing              = price;
-        bridge.price                = price;
-        bridge.projected_home_price = price;
-        bridge.projectedHomePrice   = price;
-        bridge.homePrice            = price;
-        bridge.dpAmt                = down;
-        bridge.downpayment          = down;
-        bridge.downPayment          = down;
-        bridge.creditScore          = score;
-        bridge.credit_score         = score;
-        bridge.fico                 = score;
-        bridge._intakeMode          = mode;
-        bridge._intakeTs            = Date.now();
-        bridge._intakeSource        = "pcsunited.financial.intake.v2.3.thewing";
-        if(aiouWrap && aiouWrap.data){
-          bridge._aiou = aiouWrap.data;
-          bridge._aiouKey = aiouWrap.key;
-        }
-        const intakePayload = {
-          email:email,
-          mode:mode,
-          purchase_time:mode,
-          time_to_buy:mode,
-          expenses:expenses,
-          monthly_expenses:expenses,
-          monthlyExpenses:expenses,
-          price:price,
-          projected_home_price:price,
-          projectedHomePrice:price,
-          homePrice:price,
-          housing:price,
-          downpayment:down,
-          downPayment:down,
-          dpAmt:down,
-          creditScore:score,
-          credit_score:score,
-          fico:score,
-          estimated_apr:scoreAPR(score),
-          estimatedApr:scoreAPR(score),
-          downpayment_percent:downPct,
-          downpaymentPercent:downPct,
-          saved_at:savedAt,
-          source:"pcsunited.financial.intake.v2.3.thewing",
-          profile_context:{
-            email:email,
-            full_name:profile.full_name || profile.fullName || profile.name || "",
-            first_name:profile.first_name || profile.firstName || "",
-            last_name:profile.last_name || profile.lastName || "",
-            rank:profile.rank || profile.rank_paygrade || profile.rankPaygrade || "",
-            rank_paygrade:profile.rank_paygrade || profile.rankPaygrade || profile.rank || "",
-            yos:profile.yos ?? null,
-            family:profile.family ?? null,
-            base:profile.base || profile.pcsBase || profile.pcs_base || "",
-            mode:profile.mode || ""
-          },
-          aiou:aiouWrap ? aiouWrap.data : null,
-          aiou_key:aiouWrap ? aiouWrap.key : null
-        };
-        writeJSON(BRIDGE_V1_KEY,bridge);
-        writeJSON(BRIDGE_KEY,bridge);
-        writeJSON(REALTY_BRIDGE_KEY,bridge);
-        /* Write both keys for compatibility */
-        writeJSON(INTAKE_KEY,intakePayload);
-        writeJSON(INTAKE_KEY_LEGACY,intakePayload);
-        writeJSON(OPEN_FLOW_MARKER_KEY,{
-          ready:true,
-          ts:Date.now(),
-          source:"pcsunited.financial.intake.v2.3.thewing",
-          dashboard_url:DASHBOARD_URL,
-          email:email,
-          supabase_pending:true
-        });
-        dispatchEventSafe("pcsunited:financial-intake-ready",{
-          intake:intakePayload,
-          overrides:ov,
-          bridge:bridge,
-          email:email
-        });
-        dispatchEventSafe("pcsunited:bridge-ready",{
-          bridge:bridge,
-          email:email
-        });
-        continueBtn.disabled = true;
-        continueBtn.textContent = "Saving…";
-        setStatus("Saving to TheWing...", "");
-        try{
-          const serverData = await postFinancialIntake(intakePayload);
-          const mergedBridge = mergeServerSaveResult(serverData, bridge);
-          mergedBridge.email = mergedBridge.email || email;
-          mergedBridge._intakeMode = mode;
-          mergedBridge._intakeSource = "pcsunited.financial.intake.v2.3.thewing";
-          mergedBridge._intakeTs = Date.now();
-          writeJSON(BRIDGE_V1_KEY,mergedBridge);
-          writeJSON(BRIDGE_KEY,mergedBridge);
-          writeJSON(REALTY_BRIDGE_KEY,mergedBridge);
-          if(serverData && serverData.profile){
-            const currentProfile = readJSON(PROFILE_KEY,{}) || {};
-            writeJSON(PROFILE_KEY,{
-              ...currentProfile,
-              ...serverData.profile,
-              email:email,
-              loaded_at:new Date().toISOString(),
-              source:"pcsunited.financial.intake.v2.3.thewing"
-            });
-          }
-          writeJSON(OPEN_FLOW_MARKER_KEY,{
-            ready:true,
-            ts:Date.now(),
-            source:"pcsunited.financial.intake.v2.3.thewing",
-            dashboard_url:DASHBOARD_URL,
-            email:email,
-            supabase_saved:true,
-            intake_id:serverData.intake_id || null
-          });
-          writeText(SESSION_EMAIL_KEY,email);
-          writeText(LOGIN_EMAIL_KEY,email);
-          dispatchEventSafe("pcsunited:financial-intake-saved",{
-            intake:intakePayload,
-            server:serverData,
-            bridge:mergedBridge,
-            email:email
-          });
-          dispatchEventSafe("pcsunited:bridge-ready",{
-            bridge:mergedBridge,
-            email:email
-          });
-          setStatus("Saved to TheWing. Opening dashboard...", "ok");
-          continueBtn.textContent = "Opening…";
-          setTimeout(function(){
-            window.location.assign(DASHBOARD_URL.trim());
-          }, 300);
-        }catch(err){
-          console.error("TheWing financial intake save failed:", err);
-          const detail = err && err.payload && err.payload.error
-            ? err.payload.error
-            : err.message || "Supabase save failed.";
-          writeJSON(OPEN_FLOW_MARKER_KEY,{
-            ready:true,
-            ts:Date.now(),
-            source:"pcsunited.financial.intake.v2.3.thewing",
-            dashboard_url:DASHBOARD_URL,
-            email:email,
-            supabase_saved:false,
-            supabase_error:detail
-          });
-          setStatus("Cloud save failed. Local dashboard handoff is ready.", "warn");
-          setError("The intake was saved locally, but Supabase did not update: " + detail);
-          continueBtn.disabled = false;
-          continueBtn.textContent = "Continue Anyway";
-          /* Do NOT auto-redirect on failed cloud save. 
-             This protects you during testing so you can see the error. */
-        }
-      });
-      updateRangeFill(expensesRange);
-      updateRangeFill(priceRange);
-      updateDownUI();
-      updateScoreUI();
-      window.PCSU_FINANCIAL_INTAKE = {
-        version:"2.3.0-thewing",
-        endpoint:FINANCIAL_INTAKE_ENDPOINT,
-        resolveEmail:resolveEmail,
-        getProfile:getLoggedInProfile
-      };
-    })();
-  </script>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div class="sliderinblack">
-        <div data-w-id="2ab5ac2b-b424-ca81-27da-c23b834f134c" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="wing-back-hero bakdrop"></div>
-      <div class="sliderinblack">
-        <div data-w-id="9b176962-6ec6-ac6a-3218-48cf9c8a2538" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts">
               <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
@@ -2282,7 +2171,111 @@
             <div class="testimonial-card-wrapper">
               <div class="testimonial-card"></div>
             </div>
-            <h5 class="heading-106">Heading</h5>
+            <p class="paragraph-27">PCSUnited Base Demographics gives military members and families a decision-first look at their gaining base and surrounding city before making major housing or financial decisions. Instead of only showing raw market data, we combine housing trends, rent ranges, commute intelligence, neighborhood insights, local demographics, military lifestyle considerations, and base-specific guidance into one centralized experience designed specifically for PCS moves.<br><br>While PCSUnited helps simplify research and planning, members should still verify important information through official resources such as installation housing offices, base newcomer pages, school districts, local government websites, and trusted financial institutions before making final decisions.</p>
+          </div>
+        </div>
+      </section>
+      <div class="sliderinblack">
+        <div data-w-id="2ab5ac2b-b424-ca81-27da-c23b834f134c" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
+              </div>
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
+              </div>
+            </div>
+          </div>
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wing-back-hero bakdrop"></div>
+      <div class="sliderinblack">
+        <div data-w-id="9b176962-6ec6-ac6a-3218-48cf9c8a2538" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
+              </div>
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
+              </div>
+            </div>
+          </div>
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="section home1-dev">
+        <div reveal-content="true" class="w-layout-grid title-for-dashboard">
+          <h3 line-split="true" class="fsize-s">Discover Your Housing Preferrences<br> <span class="tertiary-color-emphasis">Take our 90second Quiz</span></h3>
+          <h2 data-w-id="15d696e3-b2f0-48ea-a72f-35cc86853b25" style="opacity:0" class="text-center">Housing Quiz</h2>
+        </div>
+        <div class="w-layout-blockcontainer dashboard-promo w-container">
+          <div reveal-content="true" class="reveal-content-wrap">
+            <div fade-in="true" data-current="Market Insight" data-easing="ease-in-out" data-duration-in="300" data-duration-out="200" class="tabs w-tabs">
+              <div class="tabs-menu w-tab-menu">
+                <a data-w-tab="Market Insight" class="tab-link w-inline-block w-tab-link w--current">
+                  <div>Learn the Psychology behind Home Buying. </div>
+                </a>
+              </div>
+              <div class="tabs-content w-tab-content">
+                <div data-w-tab="Market Insight" class="tab-pane w-tab-pane w--tab-active">
+                  <div class="w-layout-grid tab-pane-grid">
+                    <div data-poster-url="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_poster.0000000.jpg" data-video-urls="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_mp4.mp4,https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="center-video w-background-video w-background-video-atom"><video id="738982aa-7029-afc1-0908-d766a276410c-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
+                        <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_mp4.mp4" data-wf-ignore="true">
+                        <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-wf-ignore="true">
+                      </video></div>
+                    <div id="w-node-_738982aa-7029-afc1-0908-d766a276410d-c85e09e0" class="tab-pane-text">
+                      <div tab-split-text="true" class="fsize-xxs">Take our Fun Housing Personality Quiz</div>
+                      <p tab-split-text="true" class="paragraph-14">Avg Utility Costs, Best Communities, Housing Trends, Base Specifics, Demographics and More. </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -2359,22 +2352,9 @@
           </div>
         </div>
       </div>
-      <div class="citiestitle citiestitles">
-        <div class="home2_about_grid-2">
-          <div data-poster-url="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg" data-video-urls="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4,https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="home2_hero_image-3 w-background-video w-background-video-atom"><video id="8c71d620-36a1-956f-0a0e-7f8e97201415-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
-              <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4" data-wf-ignore="true">
-              <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-wf-ignore="true">
-            </video></div>
-          <div class="home2_about_content">
-            <h2 class="heading-style-h1"></h2>
-            <h1 class="frd-title">Specialized Mortgage Dashboard</h1>
-            <h6 class="heading-96">Market Analytics + Mortage Estimator + Financial Health</h6>
-            <div class="opensource-financial-cab">
-              <div class="text-block-21">Get a comprehensive Financial analysis based on your current status and projected home value. Our Financial dashboard provides unparallel data visualization that help understand your Financial Health. We provide insight on how your project mortgage cost affect your overall financial health. </div>
-              <div class="section_heading-3">
-                <div class="spacer-xsmall-2"></div>
-                <div class="spacer-small-3">
-                  <div class="code-embed-21-copy w-embed w-script"><!--  //#0 HOUSE OF SASS • PCS UNITED • FINANCIAL INTAKE
+      <section class="section hero-1">
+        <div class="hero-content">
+          <div class="code-embed-21-copy w-embed w-script"><!--  //#0 HOUSE OF SASS • PCS UNITED • FINANCIAL INTAKE
      v2.3.0 • THEWING SUPABASE SAVE
      INPUT → saves locally → POSTs to TheWing /api/financial-intake → redirects to FAD
      ✅ Saves localStorage for instant dashboard handoff
@@ -2385,9 +2365,9 @@
      - TheWing: netlify/functions/financial-intake.js
      - Endpoint: https://thewing.netlify.app/api/financial-intake
  -->
-                    <div id="sass-mortgage-strip" style="all: initial;">
-                      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-                      <style>
+            <div id="sass-mortgage-strip" style="all: initial;">
+              <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+              <style>
     #sass-mortgage-strip,
     #sass-mortgage-strip *{
       box-sizing:border-box;
@@ -2717,75 +2697,75 @@
       color:rgba(190,40,40,.95);
     }
   </style>
-                      <div id="sass-shell">
-                        <div id="intent-row">
-                          <button class="intent-btn active" data-mode="ready" type="button">Ready Now</button>
-                          <button class="intent-btn" data-mode="soon" type="button">Within 6 Months</button>
-                          <button class="intent-btn" data-mode="unsure" type="button">Unsure</button>
-                        </div>
-                        <div id="sass-input-row">
-                          <div class="sass-card">
-                            <label class="sass-field-label" for="rs-expenses">Monthly Expenses</label>
-                            <div class="sass-topbox">
-                              <input class="sass-money-input" id="rs-expenses" type="text" inputmode="numeric" placeholder="$1,800">
-                            </div>
-                            <div class="sass-slider-wrap">
-                              <div class="sass-slider-shell">
-                                <input id="sass-expenses-range" class="sass-range" type="range" min="500" max="5000" step="100" value="1800">
-                              </div>
-                              <div class="sass-scale"><span>$500</span><span>$5,000+</span></div>
-                            </div>
-                            <div class="sass-help">All non-housing monthly spend.</div>
-                          </div>
-                          <div class="sass-card">
-                            <label class="sass-field-label" for="rs-price">Housing Cost</label>
-                            <div class="sass-topbox">
-                              <input class="sass-money-input" id="rs-price" type="text" inputmode="numeric" placeholder="$350,000">
-                            </div>
-                            <div class="sass-slider-wrap">
-                              <div class="sass-slider-shell">
-                                <input id="sass-price-range" class="sass-range" type="range" min="150000" max="750000" step="5000" value="350000">
-                              </div>
-                              <div class="sass-scale"><span>$150K</span><span>$750K+</span></div>
-                            </div>
-                            <div class="sass-help">Target purchase price for mortgage estimate.</div>
-                          </div>
-                          <div class="sass-card">
-                            <label class="sass-field-label">Downpayment</label>
-                            <div class="sass-topbox">
-                              <div class="sass-value" id="sass-down-amount">$17,500</div>
-                              <div class="sass-pill-mini" id="sass-down-pill">5%</div>
-                            </div>
-                            <div class="sass-slider-wrap">
-                              <div class="sass-slider-shell">
-                                <input id="sass-down-range" class="sass-range" type="range" min="0" max="30" step="1" value="5">
-                              </div>
-                              <div class="sass-scale"><span>0%</span><span>15%</span><span>30%</span></div>
-                            </div>
-                            <div class="sass-help">From 0% to 30% of the home price.</div>
-                            <input class="sass-number" id="rs-down" type="hidden" inputmode="numeric" min="0" step="1" value="17500">
-                          </div>
-                          <div class="sass-card">
-                            <label class="sass-field-label">Credit Score</label>
-                            <div class="sass-topbox">
-                              <div class="sass-score-value" id="sass-score-num">720</div>
-                              <div class="sass-pill-mini">APR <span id="sass-score-apr" style="margin-left:4px;">7.00%</span></div>
-                            </div>
-                            <div class="sass-slider-wrap">
-                              <div class="sass-slider-shell">
-                                <input id="sass-score-range" class="sass-range" type="range" min="300" max="850" step="10" value="720">
-                              </div>
-                              <div class="sass-scale"><span>300</span><span>575</span><span>850</span></div>
-                            </div>
-                            <div class="sass-help">Affects your mortgage rate and loan options.</div>
-                            <input class="sass-number" id="rs-score" type="hidden" inputmode="numeric" min="300" max="850" step="1" value="720">
-                          </div>
-                        </div>
-                        <button id="sass-analyze-btn" type="button">Continue</button>
-                        <div id="sass-save-status"></div>
-                        <div id="sass-err"></div>
+              <div id="sass-shell">
+                <div id="intent-row">
+                  <button class="intent-btn active" data-mode="ready" type="button">Ready Now</button>
+                  <button class="intent-btn" data-mode="soon" type="button">Within 6 Months</button>
+                  <button class="intent-btn" data-mode="unsure" type="button">Unsure</button>
+                </div>
+                <div id="sass-input-row">
+                  <div class="sass-card">
+                    <label class="sass-field-label" for="rs-expenses">Monthly Expenses</label>
+                    <div class="sass-topbox">
+                      <input class="sass-money-input" id="rs-expenses" type="text" inputmode="numeric" placeholder="$1,800">
+                    </div>
+                    <div class="sass-slider-wrap">
+                      <div class="sass-slider-shell">
+                        <input id="sass-expenses-range" class="sass-range" type="range" min="500" max="5000" step="100" value="1800">
                       </div>
-                      <script>
+                      <div class="sass-scale"><span>$500</span><span>$5,000+</span></div>
+                    </div>
+                    <div class="sass-help">All non-housing monthly spend.</div>
+                  </div>
+                  <div class="sass-card">
+                    <label class="sass-field-label" for="rs-price">Housing Cost</label>
+                    <div class="sass-topbox">
+                      <input class="sass-money-input" id="rs-price" type="text" inputmode="numeric" placeholder="$350,000">
+                    </div>
+                    <div class="sass-slider-wrap">
+                      <div class="sass-slider-shell">
+                        <input id="sass-price-range" class="sass-range" type="range" min="150000" max="750000" step="5000" value="350000">
+                      </div>
+                      <div class="sass-scale"><span>$150K</span><span>$750K+</span></div>
+                    </div>
+                    <div class="sass-help">Target purchase price for mortgage estimate.</div>
+                  </div>
+                  <div class="sass-card">
+                    <label class="sass-field-label">Downpayment</label>
+                    <div class="sass-topbox">
+                      <div class="sass-value" id="sass-down-amount">$17,500</div>
+                      <div class="sass-pill-mini" id="sass-down-pill">5%</div>
+                    </div>
+                    <div class="sass-slider-wrap">
+                      <div class="sass-slider-shell">
+                        <input id="sass-down-range" class="sass-range" type="range" min="0" max="30" step="1" value="5">
+                      </div>
+                      <div class="sass-scale"><span>0%</span><span>15%</span><span>30%</span></div>
+                    </div>
+                    <div class="sass-help">From 0% to 30% of the home price.</div>
+                    <input class="sass-number" id="rs-down" type="hidden" inputmode="numeric" min="0" step="1" value="17500">
+                  </div>
+                  <div class="sass-card">
+                    <label class="sass-field-label">Credit Score</label>
+                    <div class="sass-topbox">
+                      <div class="sass-score-value" id="sass-score-num">720</div>
+                      <div class="sass-pill-mini">APR <span id="sass-score-apr" style="margin-left:4px;">7.00%</span></div>
+                    </div>
+                    <div class="sass-slider-wrap">
+                      <div class="sass-slider-shell">
+                        <input id="sass-score-range" class="sass-range" type="range" min="300" max="850" step="10" value="720">
+                      </div>
+                      <div class="sass-scale"><span>300</span><span>575</span><span>850</span></div>
+                    </div>
+                    <div class="sass-help">Affects your mortgage rate and loan options.</div>
+                    <input class="sass-number" id="rs-score" type="hidden" inputmode="numeric" min="300" max="850" step="1" value="720">
+                  </div>
+                </div>
+                <button id="sass-analyze-btn" type="button">Continue</button>
+                <div id="sass-save-status"></div>
+                <div id="sass-err"></div>
+              </div>
+              <script>
     (function(){
       "use strict";
       const API_BASE = "https://thewing.netlify.app/api";
@@ -3383,16 +3363,8 @@
       };
     })();
   </script>
-                    </div>
-                  </div>
-                </div>
-              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <section class="section hero-1">
-        <div class="hero-content">
           <div class="w-layout-grid hero1-grid">
             <div class="hero-text-wrap">
               <h1 hero-line-split="true" class="hero-heading">Military FinTech Solutions</h1>
@@ -3403,7 +3375,7 @@
                 <div gradient="true" class="yellow-gradient"></div>
                 <div gradient="true" class="blue-gradient"></div>
                 <div gradient="true" class="orange-gradient"></div>
-                <div gradient="true" class="light"></div><img src="../images/icon.png" loading="lazy" sizes="(max-width: 479px) 48vw, (max-width: 1439px) 49vw, 50vw" srcset="../images/icon-p-500.png 500w, ../images/icon-p-800.png 800w, ../images/icon-p-1080.png 1080w, ../images/icon.png 1122w" alt="" class="image-133">
+                <div gradient="true" class="light"></div><img src="../images/icon.png" loading="lazy" sizes="100vw" srcset="../images/icon-p-500.png 500w, ../images/icon-p-800.png 800w, ../images/icon-p-1080.png 1080w, ../images/icon.png 1122w" alt="" class="image-133">
               </div>
             </div>
           </div>
@@ -3446,6 +3418,74 @@
         </div>
       </div>
       <div class="wing-back-hero bakdrop"></div>
+      <section class="section-15 home-3-solutions">
+        <div class="w-layout-blockcontainer container-80 w-container">
+          <div data-poster-url="../videos/Basic-Flag-1_poster.0000000.jpg" data-video-urls="../videos/Basic-Flag-1_mp4.mp4,../videos/Basic-Flag-1_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="flag-for-resources w-background-video w-background-video-atom"><video id="ab6bc1c2-7476-6d55-b2b0-bbed56c29ecb-video" autoplay="" loop="" style="background-image:url(&quot;../videos/Basic-Flag-1_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
+              <source src="../videos/Basic-Flag-1_mp4.mp4" data-wf-ignore="true">
+              <source src="../videos/Basic-Flag-1_webm.webm" data-wf-ignore="true">
+            </video></div>
+        </div>
+        <h2 data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e56" style="opacity:0" class="text-center">Air Force Calculators &amp; Applications</h2>
+        <div class="w-layout-blockcontainer container-one w-container">
+          <div class="w-layout-vflex home-three-category-wrap">
+            <div class="overflow-none">
+              <p data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e59" style="opacity:0" class="home-three-category-paragraph text-center"> Our array of calculators and files are created I.A.W Air Force standards and regulations. For further details and exact regulation used please click on More Info tab on the bottom right corner of each Application.</p>
+            </div>
+          </div>
+          <div class="w-layout-vflex home-three-category-main-block">
+            <div class="w-layout-hflex home-three-category-upper-box">
+              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e5d" class="w-layout-vflex home-three-category-card">
+                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-Icon-One.png" width="75" height="93" alt="Icon" style="opacity:1" sizes="75px" loading="lazy" srcset="../images/e545796eccdd08a3440ab132fe37b08f_Grey-Icon-One-p-500.png 500w, ../images/Grey-Icon-One.png 800w"><img class="home-three-category-orange-icon" src="../images/Icon-Orange-One.png" width="75" height="93" alt="Icon" style="opacity:0" sizes="75px" loading="lazy" srcset="../images/6a851f89299e7c091a68ac4e0c7270ce_Icon-Orange-One-p-500.png 500w, ../images/Icon-Orange-One.png 800w"></div>
+                <div class="heading-four text-center margin-top-thirty">BAH <br>Calculator</div>
+                <div class="home-three-category-card-bottom-text">Obtain your BAH &amp; Base Pay,</div>
+              </div>
+              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e67" class="w-layout-vflex home-three-category-card">
+                <div class="position-relative"><img width="93" height="93" alt="Icon" src="../images/Grey-icon-two.png" loading="lazy" srcset="../images/7cb63cf97f4d59d5905cfdd80da167f9_Grey-icon-two-p-500.png 500w, ../images/Grey-icon-two.png 800w" sizes="93px" class="home-three-category-grey-icon active"><img width="93" height="93" alt="Icon" src="../images/Orange-Icon-Seven.png" loading="lazy" srcset="../images/1dd6c29d74c387a704514a132d294b80_Orange-Icon-Seven-p-500.png 500w, ../images/1dd6c29d74c387a704514a132d294b80_Orange-Icon-Seven-p-800.png 800w, ../images/Orange-Icon-Seven.png 1024w" sizes="93px" class="home-three-category-orange-icon active"></div>
+                <div class="heading-four text-center margin-top-thirty">Disabiilty <br>Pay</div>
+                <div class="home-three-category-card-bottom-text">Obtain you Retirement &amp; Disability Pay. </div>
+              </div>
+              <div class="home-three-category-vartical-devider"></div>
+              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e72" class="w-layout-vflex home-three-category-card">
+                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-icon-three.png" width="93" height="92" alt="Icon" style="opacity:1" sizes="93px" loading="lazy" srcset="../images/6b73b2ccd105e4ad2d3ae9605eb85cc6_Grey-icon-three-p-500.png 500w, ../images/Grey-icon-three.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-Icon-one.png" width="93" height="92" alt="Icon" style="opacity:0" sizes="93px" loading="lazy" srcset="../images/a0cae2de3044ed6dca5b1b99bacbd7da_Orange-Icon-one-p-500.png 500w, ../images/Orange-Icon-one.png 800w"></div>
+                <div class="heading-four text-center margin-top-thirty">Pt <br>Calculator</div>
+                <div class="home-three-category-card-bottom-text">Air Force Fitness Calculato<br>r</div>
+              </div>
+              <div class="home-three-category-vartical-devider"></div>
+              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e7f" class="w-layout-vflex home-three-category-card">
+                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-Icon-Five.png" width="93" height="92" alt="Icon" style="opacity:1" sizes="93px" loading="lazy" srcset="../images/471c3b279b8e77e4c775b9bb2a0d109d_Grey-Icon-Five-p-500.png 500w, ../images/Grey-Icon-Five.png 800w"><img class="home-three-category-orange-icon" src="../images/Icon-Orange-One_1.png" width="93" height="92" alt="Icon" style="opacity:0" sizes="93px" loading="lazy" srcset="../images/Icon-Orange-One_1-p-500.png 500w, ../images/Icon-Orange-One_1.png 800w"></div>
+                <div class="heading-four text-center margin-top-thirty">Mortgage Calculator</div>
+                <div class="home-three-category-card-bottom-text">Obtain projected Monthly Mortgage</div>
+              </div>
+            </div>
+            <div class="home-three-category-horizontal-devider"></div>
+            <div class="w-layout-hflex home-three-category-bottom-box">
+              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e89" class="w-layout-vflex home-three-category-card">
+                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-icon-Four.png" width="122" height="93" alt="Icon" style="opacity:1" sizes="122px" loading="lazy" srcset="../images/d10bf666b2a1882a6d3563f407f0837b_Grey-icon-Four-p-500.png 500w, ../images/Grey-icon-Four.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-icon-Three.png" width="122" height="93" alt="Icon" style="opacity:0" sizes="122px" loading="lazy" srcset="../images/fd322ea4cd63e0c8f42d289e718ab2cb_Orange-icon-Three-p-500.png 500w, ../images/Orange-icon-Three.png 800w"></div>
+                <div class="heading-four text-center margin-top-thirty">Monthly Expenses</div>
+                <div class="home-three-category-card-bottom-text">Monthly expenses breakdown.</div>
+              </div>
+              <div class="home-three-category-vartical-devider home-three-category-vartical-devider-revers"></div>
+              <div id="w-node-dea51de8-d2c4-d7a7-6c1c-c573dfbe5e92-c85e09e0" data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e92" class="w-layout-vflex home-three-category-card">
+                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-Icon-Five.png" width="89" height="93" alt="Icon" style="opacity:1" sizes="89px" loading="lazy" srcset="../images/471c3b279b8e77e4c775b9bb2a0d109d_Grey-Icon-Five-p-500.png 500w, ../images/Grey-Icon-Five.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-Icon-Four.png" width="89" height="93" alt="Icon" style="opacity:0" sizes="89px" loading="lazy" srcset="../images/94fb249e594b1a9ecbd9d8e02026faf8_Orange-Icon-Four-p-500.png 500w, ../images/94fb249e594b1a9ecbd9d8e02026faf8_Orange-Icon-Four-p-800.png 800w, ../images/Orange-Icon-Four.png 1024w"></div>
+                <div class="heading-four text-center margin-top-thirty">VA-Loan Calculator</div>
+                <div class="home-three-category-card-bottom-text">VA Home Loan Calculator</div>
+              </div>
+              <div class="home-three-category-vartical-devider home-three-category-vartical-devider-revers"></div>
+              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e9b" class="w-layout-vflex home-three-category-card">
+                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-icon-Seven.png" width="97" height="92" alt="Icon" style="opacity:1" sizes="97px" loading="lazy" srcset="../images/a083826c92e25ae9d031382455fd8ec9_Grey-icon-Seven-p-500.png 500w, ../images/Grey-icon-Seven.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-Icon.png" width="97" height="92" alt="" style="opacity:0" sizes="97px" loading="lazy" srcset="../images/883b36841623260cc46058dcc34e9226_Orange-Icon-p-500.png 500w, ../images/883b36841623260cc46058dcc34e9226_Orange-Icon-p-800.png 800w, ../images/Orange-Icon.png 1000w"></div>
+                <div class="heading-four text-center margin-top-thirty">TSP <br>Calculator</div>
+                <div class="home-three-category-card-bottom-text">TPS Calculator.</div>
+              </div>
+              <div class="home-three-category-vartical-devider home-three-category-vartical-devider-revers"></div>
+              <div data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5ea6" class="w-layout-vflex home-three-category-card">
+                <div class="position-relative"><img class="home-three-category-grey-icon" src="../images/Grey-icon-Eight.png" width="71" height="93" alt="Icon" style="opacity:1" sizes="71px" loading="lazy" srcset="../images/5ee0c2c9c4f79f1de09d51fb83bcb5da_Grey-icon-Eight-p-500.png 500w, ../images/Grey-icon-Eight.png 800w"><img class="home-three-category-orange-icon" src="../images/Orange-Icon-Six.png" width="71" height="93" alt="Icon" style="opacity:0" sizes="71px" loading="lazy" srcset="../images/0c6233885a8a555c8f273c73dc57fed8_Orange-Icon-Six-p-500.png 500w, ../images/Orange-Icon-Six.png 800w"></div>
+                <div class="heading-four text-center margin-top-thirty">Promotion Calculator</div>
+                <div class="home-three-category-card-bottom-text">Air Force Promotion Calculator</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
       <section class="section cta-v1">
         <div reveal-content="true" class="cta1-wrapper">
           <div class="w-layout-grid cta1-content">
@@ -3525,7 +3565,7 @@
               </div>
             </div>
           </div>
-          <div class="background-cta"><img class="cta-img-bg" src="../images/background_1background.avif" alt="" sizes="(max-width: 1808px) 100vw, 1808px" fade-in="y" loading="lazy" srcset="../images/background_1-p-500.png 500w, ../images/background_1-p-800.png 800w, ../images/background_1background.avif 1808w"></div>
+          <div class="background-cta"><img class="cta-img-bg" src="../images/background_1background.avif" alt="" sizes="100vw" fade-in="y" loading="lazy" srcset="../images/background_1-p-500.png 500w, ../images/background_1-p-800.png 800w, ../images/background_1background.avif 1808w"></div>
         </div>
       </section>
     </div>

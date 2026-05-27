@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu May 21 2026 06:24:18 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed May 27 2026 01:04:29 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f84d15e4fd726de58f7d1a" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -180,7 +180,7 @@
     }
   ]
 }
-</script><!--  //#0 A.I.O.U • Timed Buyer Psychology Test (Executive Theme v4 - auto report + Financial Dashboard Prefill + PENDING COMMIT)  -->
+</script><!--  //#0 A.I.O.U • Timed Buyer Psychology Test (Executive Theme v4.1 - Assumption Testing + auto report + Financial Dashboard Prefill + PENDING COMMIT)  -->
   <div id="aiou-shell" data-endpoint="https://theorozcorealty.netlify.app/.netlify/functions/aiou-report" style="all: initial;">
     <!--  Google Font  -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&display=swap" rel="stylesheet">
@@ -724,7 +724,7 @@
       if (window.__AIOU_MOUNTED__) return;
       window.__AIOU_MOUNTED__ = true;
       /* =========================================================
-         //#0A PCS UNITED • PENDING COMMIT KEYS (UNCHANGED)
+         //#0A PCS UNITED • PENDING COMMIT KEYS
          ========================================================= */
       const PENDING_KEY = "pcsunited.pending_intake.v1";
       const AIOU_LOCAL_KEY = "pcsunited.user_aiou_inputs.v1";
@@ -763,7 +763,7 @@
         const base = (existing && typeof existing === "object") ? existing : {
           attempt_id: makeAttemptId(),
           created_at: new Date().toISOString(),
-          source: "pcsunited.aiou.quiz.v3"
+          source: "pcsunited.aiou.quiz.v4.assumption_test"
         };
         const merged = {
           ...base,
@@ -788,15 +788,15 @@
         <div class="aiou-wrap">
           <div class="aiou-card" id="introCard">
             <div class="overallTimer">
-              <span class="hint">About <span id="overallHint">~3 min</span></span>
-              <span class="badge" id="overallClock">3:00</span>
+              <span class="hint">About <span id="overallHint">~4 min</span></span>
+              <span class="badge" id="overallClock">4:00</span>
             </div>
             <div class="aiou-title-block">
-              <h1>A.I.O.U • TIMED BUYER PSYCHOLOGY TEST</h1>
+              <h1>A.I.O.U • BUYER ASSUMPTION TEST</h1>
               <p class="aiou-desc">
                 Each question is timed (<b>10 seconds</b>). Choose from
                 <b>-5</b> to <b>+5</b>.
-                Some items repeat in different words to check consistency.
+                This test checks whether your housing preferences are consistent with your real tradeoffs.
               </p>
             </div>
             <div class="aiou-bar">
@@ -808,7 +808,7 @@
             <h2>Profile & Goals</h2>
             <p class="blurb">
               We use this context to generate your personalized Buyer Memo at the end.
-              (Auto-filled from your Financial Dashboard when possible.)
+              Auto-filled from your Financial Dashboard when possible.
             </p>
             <div class="aiou-grid">
               <div>
@@ -824,7 +824,7 @@
                 <input id="bedrooms" class="aiou-input" type="number" min="0" step="1" placeholder="e.g., 4">
               </div>
               <div>
-                <label class="aiou-label">Budget (max $)</label>
+                <label class="aiou-label">Budget max</label>
                 <input id="budget" class="aiou-input" type="number" min="0" step="1000" placeholder="e.g., 450000">
               </div>
               <div>
@@ -853,13 +853,13 @@
                 <figure>
                   <img id="vImgA"
                     src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/68f9a10aab47946a36f5c135_04d878cc02583fb9bfda33ddbd28d91a_MinorFixesHome.jpg"
-                    alt="May Require Fixes (Option A)">
+                    alt="May Require Fixes">
                   <figcaption>May Require Fixes</figcaption>
                 </figure>
                 <figure>
                   <img id="vImgB"
                     src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/68f9a113c4924ecebad2319a_a0cc3184b96f525ed5a278c3bac62891_BrandNewHome.jpg"
-                    alt="Brand New Home (Option B)">
+                    alt="Brand New Home">
                   <figcaption>Brand New Home</figcaption>
                 </figure>
                 <div class="sliderRow">
@@ -884,12 +884,12 @@
           </div>
           <div class="aiou-card fullrow hidden" id="resultsCard">
             <h2>Results</h2>
-            <p class="blurb">Your buyer psychology profile and personalized memo.</p>
+            <p class="blurb">Your buyer psychology profile, assumption check, and personalized memo.</p>
             <div class="kpi-row">
               <div class="kpi-chip"><h3>OPENNESS</h3><div id="kO">—</div></div>
-              <div class="kpi-chip"><h3>CONSCIENTIOUSNESS</h3><div id="kC">—</div></div>
-              <div class="kpi-chip"><h3>EXTRAVERSION</h3><div id="kE">—</div></div>
-              <div class="kpi-chip"><h3>AGREEABLENESS</h3><div id="kA">—</div></div>
+              <div class="kpi-chip"><h3>DISCIPLINE</h3><div id="kC">—</div></div>
+              <div class="kpi-chip"><h3>LIFESTYLE PULL</h3><div id="kE">—</div></div>
+              <div class="kpi-chip"><h3>FLEXIBILITY</h3><div id="kA">—</div></div>
               <div class="kpi-chip"><h3>RISK AVERSION</h3><div id="kN">—</div></div>
             </div>
             <div id="consistency" class="consistency-block"></div>
@@ -900,7 +900,7 @@
         </div>
       `;
       /* =========================================================
-         //#9.5 PREFILL FROM FINANCIAL DASHBOARD (UNCHANGED)
+         //#9.5 PREFILL FROM FINANCIAL DASHBOARD
          ========================================================= */
       function prefillFromFinancial(){
         const rsRoot = document.querySelector('#rs-shell');
@@ -922,35 +922,197 @@
         const aiouFirst = portal.querySelector('#firstName');
         const aiouLast  = portal.querySelector('#lastName');
         const aiouBudget= portal.querySelector('#budget');
-        if (aiouFirst && first && !aiouFirst.value) { aiouFirst.value = first; }
-        if (aiouLast  && last  && !aiouLast.value ) { aiouLast.value  = last;  }
-        if (aiouBudget&& price && !aiouBudget.value){ aiouBudget.value = price; }
+        if (aiouFirst && first && !aiouFirst.value) aiouFirst.value = first;
+        if (aiouLast  && last  && !aiouLast.value ) aiouLast.value  = last;
+        if (aiouBudget&& price && !aiouBudget.value) aiouBudget.value = price;
       }
       prefillFromFinancial();
       const $  = (sel)=>portal.querySelector(sel);
       const $$ = (sel)=>Array.from(portal.querySelectorAll(sel));
       /* =========================================================
-         //#11 QUESTIONS (UNCHANGED)
-         ========================================================= */
+         //#11 QUESTIONS • ASSUMPTION-TESTING VERSION
+         PURPOSE
+         - Tests whether buyer assumptions match actual tradeoff behavior
+         - Uses paired/reversed questions to detect contradictions
+         - Keeps existing scoring engine compatible
+         - Keeps visual home-condition question first
+      ========================================================= */
       const Q = [
-        { id:'V1', type:'visual', dim:'O', text:'Choose between Brand New Home vs May Require Fixes.', rev:false },
-        { id:'O1',  dim:'O', text:'I prefer a home that looks new or freshly renovated rather than plain but practical.', rev:false, ctrlPair:'O1b' },
-        { id:'O1b', dim:'O', text:'I’m fine with a simple, ordinary-looking home if it works.',                         rev:true,  ctrlPair:'O1'  },
-        { id:'O2',  dim:'O', text:'Special features (big windows, open kitchen, modern finishes) are worth paying more.', rev:false },
-        { id:'O3',  dim:'O', text:'I want a home that feels different from most homes I’ve seen.',                      rev:false },
-        { id:'C1',  dim:'C', text:'If a place is just above my budget, I would still try to get it.', rev:true,  ctrlPair:'C1b' },
-        { id:'C1b', dim:'C', text:'I will not go over my budget, even if I love the home.',          rev:false, ctrlPair:'C1'  },
-        { id:'C2',  dim:'C', text:'Lower monthly costs matter more to me than extra style.',          rev:false },
-        { id:'E1',  dim:'E', text:'I often picture hosting dinners, parties, or family gatherings at home.', rev:false, ctrlPair:'E1b' },
-        { id:'E1b', dim:'E', text:'I rarely imagine hosting people at my home.',                             rev:true,  ctrlPair:'E1'  },
-        { id:'E2',  dim:'E', text:'I would trade an extra bedroom for a bigger living room or outdoor area.', rev:false },
-        { id:'A1',  dim:'A', text:'I can be flexible on details if the main things are met.', rev:false, ctrlPair:'A1b' },
-        { id:'A1b', dim:'A', text:'Once I set my must-haves, I won’t bend on them.',          rev:true,  ctrlPair:'A1'  },
-        { id:'N1',  dim:'N', text:'Buying a home that needs repairs would stress me out.',         rev:false, ctrlPair:'N1b' },
-        { id:'N1b', dim:'N', text:'A home that needs repairs doesn’t worry me much.',              rev:true,  ctrlPair:'N1'  },
-        { id:'N2',  dim:'N', text:'I’d rather choose a 5–10 year-old home that’s already proven than brand-new.', rev:false },
-        { id:'N3',  dim:'N', text:'I prefer a quieter, safer area even if it’s farther from restaurants and events.', rev:false },
-        { id:'X1',  dim:'O', text:'If I must choose, I’ll pick style and layout over getting the lowest possible price.', rev:false }
+        {
+          id:'V1',
+          type:'visual',
+          dim:'O',
+          text:'Choose between Brand New Home vs May Require Fixes.',
+          rev:false
+        },
+        {
+          id:'O1',
+          dim:'O',
+          text:'I believe an updated, modern-looking home would make me happier long-term.',
+          rev:false,
+          ctrlPair:'O1b'
+        },
+        {
+          id:'O1b',
+          dim:'O',
+          text:'I would be satisfied with an older or plain-looking home if it gave me the right payment, location, and space.',
+          rev:true,
+          ctrlPair:'O1'
+        },
+        {
+          id:'O2',
+          dim:'O',
+          text:'I would pay more for features like newer finishes, open layout, natural light, or a better kitchen.',
+          rev:false,
+          ctrlPair:'O2b'
+        },
+        {
+          id:'O2b',
+          dim:'O',
+          text:'If the payment felt uncomfortable, I would quickly give up style and upgrades.',
+          rev:true,
+          ctrlPair:'O2'
+        },
+        {
+          id:'C1',
+          dim:'C',
+          text:'If I found a home I loved, I would be tempted to stretch above my planned budget.',
+          rev:true,
+          ctrlPair:'C1b'
+        },
+        {
+          id:'C1b',
+          dim:'C',
+          text:'Even if I loved the home, I would walk away if the numbers did not make sense.',
+          rev:false,
+          ctrlPair:'C1'
+        },
+        {
+          id:'C2',
+          dim:'C',
+          text:'My housing needs are clear enough that I can separate true must-haves from nice-to-haves.',
+          rev:false,
+          ctrlPair:'C2b'
+        },
+        {
+          id:'C2b',
+          dim:'C',
+          text:'When looking at homes, I often find myself changing what I thought mattered most.',
+          rev:true,
+          ctrlPair:'C2'
+        },
+        {
+          id:'C3',
+          dim:'C',
+          text:'I want enough space even if it means higher utilities, more maintenance, or a slightly higher payment.',
+          rev:true,
+          ctrlPair:'C3b'
+        },
+        {
+          id:'C3b',
+          dim:'C',
+          text:'I would rather choose a right-sized home than pay more for rooms I may not truly use.',
+          rev:false,
+          ctrlPair:'C3'
+        },
+        {
+          id:'E1',
+          dim:'E',
+          text:'I picture using my home for hosting, family gatherings, cookouts, or visiting relatives.',
+          rev:false,
+          ctrlPair:'E1b'
+        },
+        {
+          id:'E1b',
+          dim:'E',
+          text:'Most of the time, I prefer my home to feel private, quiet, and low-traffic.',
+          rev:true,
+          ctrlPair:'E1'
+        },
+        {
+          id:'E2',
+          dim:'E',
+          text:'I would accept a smaller or less impressive home if it placed me closer to work, school, base, or daily life.',
+          rev:false,
+          ctrlPair:'E2b'
+        },
+        {
+          id:'E2b',
+          dim:'E',
+          text:'I would rather drive farther if it means getting the home, space, or neighborhood I really want.',
+          rev:true,
+          ctrlPair:'E2'
+        },
+        {
+          id:'A1',
+          dim:'A',
+          text:'I can compromise on cosmetic details if the home solves the bigger picture.',
+          rev:false,
+          ctrlPair:'A1b'
+        },
+        {
+          id:'A1b',
+          dim:'A',
+          text:'If a home misses several details I care about, I usually struggle to see it as a real option.',
+          rev:true,
+          ctrlPair:'A1'
+        },
+        {
+          id:'N1',
+          dim:'N',
+          text:'A home needing repairs, updates, or unknown costs would make me anxious.',
+          rev:false,
+          ctrlPair:'N1b'
+        },
+        {
+          id:'N1b',
+          dim:'N',
+          text:'I am comfortable buying a home that needs work if the discount is strong enough.',
+          rev:true,
+          ctrlPair:'N1'
+        },
+        {
+          id:'N2',
+          dim:'N',
+          text:'I trust newer homes more because they feel cleaner, safer, and less risky.',
+          rev:false,
+          ctrlPair:'N2b'
+        },
+        {
+          id:'N2b',
+          dim:'N',
+          text:'I would trust an older home if inspection, maintenance history, and neighborhood quality were strong.',
+          rev:true,
+          ctrlPair:'N2'
+        },
+        {
+          id:'N3',
+          dim:'N',
+          text:'I would choose a quieter, safer-feeling area even if it meant being farther from restaurants, shopping, or events.',
+          rev:false,
+          ctrlPair:'N3b'
+        },
+        {
+          id:'N3b',
+          dim:'N',
+          text:'I would accept a busier area if it gave me better access to daily convenience and lifestyle.',
+          rev:true,
+          ctrlPair:'N3'
+        },
+        {
+          id:'X1',
+          dim:'O',
+          text:'If I had to choose, I would rather get the home that feels right than the lowest possible monthly payment.',
+          rev:false,
+          ctrlPair:'X1b'
+        },
+        {
+          id:'X1b',
+          dim:'C',
+          text:'If I had to choose, I would rather protect my monthly payment than get the home that feels emotionally perfect.',
+          rev:false,
+          ctrlPair:'X1'
+        }
       ];
       let answers = {};
       let idx = 0;
@@ -999,7 +1161,7 @@
       function renderQuestion(){
         const q = Q[idx];
         $('#qTitle').textContent = `Question ${idx+1} / ${Q.length}`;
-        $('#qText').textContent  =
+        $('#qText').textContent =
           (q.type==='visual'
             ? 'Where are you between these two options right now?'
             : q.text);
@@ -1064,11 +1226,11 @@
         const imgA= $('#vImgA');
         const imgB= $('#vImgB');
         function explain(v){
-          if (v <= -3) return "Prefers Needs Fixes strongly (Option A)";
-          if (v === -2 || v === -1) return "Leans Needs Fixes (Option A)";
+          if (v <= -3) return "Prefers Needs Fixes strongly";
+          if (v === -2 || v === -1) return "Leans Needs Fixes";
           if (v === 0) return "Neutral";
-          if (v === 1 || v === 2) return "Leans Brand New (Option B)";
-          return "Prefers Brand New strongly (Option B)";
+          if (v === 1 || v === 2) return "Leans Brand New";
+          return "Prefers Brand New strongly";
         }
         function update(){
           const val = Number(s.value||0);
@@ -1087,16 +1249,16 @@
           update();
         }
         if(imgA){
-          imgA.addEventListener('click', ()=>{
+          imgA.onclick = ()=>{
             s.value = Math.max(-5,(Number(s.value)||0)-1);
             s.dispatchEvent(new Event('input'));
-          });
+          };
         }
         if(imgB){
-          imgB.addEventListener('click', ()=>{
+          imgB.onclick = ()=>{
             s.value = Math.min(5,(Number(s.value)||0)+1);
             s.dispatchEvent(new Event('input'));
-          });
+          };
         }
       }
       function scoreAll(){
@@ -1126,7 +1288,7 @@
           if(q.ctrlPair && !handled.has(q.id)){
             const a=answers[q.id];
             const b=answers[q.ctrlPair];
-            if(a!=null && b!=null){
+            if(a!=null && b!=null && qMap[q.ctrlPair]){
               const aAdj=q.rev? -a:a;
               const bAdj=(qMap[q.ctrlPair].rev? -b:b);
               if(Math.abs(aAdj-bAdj)>=6){
@@ -1183,14 +1345,15 @@
           tf==='F'?dist(S.A,true):dist(S.A,false),
           jp==='J'?dist(S.C,true):dist(S.C,false)
         ];
-        const confidence=Math.max(0.35,
+        const confidence=Math.max(
+          0.35,
           +(parts.reduce((a,b)=>a+b,0)/4).toFixed(2)
         );
         return { type, confidence };
       }
       /* =========================================================
-         //#16A AIOU → HOME CONDITION MAPPING (UNCHANGED)
-         ========================================================= */
+         //#16A AIOU → HOME CONDITION MAPPING
+      ========================================================= */
       function mapHomeConditionFromSlider(v){
         const x = Number(v || 0);
         if (x >= 3) return "new";
@@ -1198,8 +1361,8 @@
         return "light";
       }
       /* =========================================================
-         //#16B SAVE AIOU INTO PENDING (UNCHANGED)
-         ========================================================= */
+         //#16B SAVE AIOU INTO PENDING
+      ========================================================= */
       function queueAiouPending(brief){
         const email = getAnyEmail() || "";
         const home_condition = mapHomeConditionFromSlider(brief?.visual?.styleVsPriceSlider);
@@ -1217,16 +1380,22 @@
           aiou_scores: brief?.scores || null,
           aiou_archetype: brief?.archetype || null,
           aiou_mbti: brief?.mbti || null,
-          source: "pcsunited.aiou.quiz.v3",
+          aiou_assumption_flags: brief?.psych?.inconsistencies || [],
+          source: "pcsunited.aiou.quiz.v4.assumption_test",
           saved_at: new Date().toISOString()
         };
         const pending = readJSON(PENDING_KEY, null) || {};
         const fin = readJSON("pcsunited.financial_intake.v1", null) || null;
+        const finModern = readJSON("pcsunited.financial.intake.v1", null) || null;
         const ov  = readJSON("pcsunited.kpi_overrides.v1", null) || null;
-        if (fin){
-          aiouRow.time_to_buy  = fin.mode || aiouRow.time_to_buy;
-          aiouRow.credit_score = Number(fin.creditScore || 0) || aiouRow.credit_score;
-          aiouRow.downpayment  = Number(fin.downpayment || 0) || aiouRow.downpayment;
+        const financial = {
+          ...(fin || {}),
+          ...(finModern || {})
+        };
+        if (financial){
+          aiouRow.time_to_buy  = financial.mode || financial.purchase_time || financial.time_to_buy || aiouRow.time_to_buy;
+          aiouRow.credit_score = Number(financial.creditScore || financial.credit_score || 0) || aiouRow.credit_score;
+          aiouRow.downpayment  = Number(financial.downpayment || financial.downPayment || financial.dpAmt || 0) || aiouRow.downpayment;
         }
         if (ov){
           const sc = Number(ov.credit_score ?? ov.creditScore ?? 0) || 0;
@@ -1255,12 +1424,14 @@
         $('#kA').textContent = scores.A.toFixed(2);
         $('#kN').textContent = scores.N.toFixed(2);
         const arch=(function(s){
-          const hi=v=>v>=4.0, lo=v=>v<=2.5;
-          if(hi(s.O)&&hi(s.E)) return 'Visionary Host';
-          if(hi(s.C)&&!hi(s.O)&&!hi(s.E)) return 'Steady Planner';
+          const hi=v=>v>=4.0;
+          const lo=v=>v<=2.5;
+          if(hi(s.O)&&hi(s.E)&&s.C<3.4) return 'Emotion-Led Dream Hunter';
+          if(hi(s.C)&&lo(s.O)&&!hi(s.E)) return 'Payment-Disciplined Planner';
           if(hi(s.N)&&lo(s.E)) return 'Risk-Guarded Nest-Builder';
-          if(hi(s.A)&&hi(s.C)) return 'Family-First Optimizer';
-          if(hi(s.O)&&s.N<3.3) return 'Design-Forward Adventurer';
+          if(hi(s.A)&&hi(s.C)) return 'Flexible Family Optimizer';
+          if(hi(s.O)&&s.N<3.3) return 'Design-Forward Value Seeker';
+          if(hi(s.C)&&hi(s.N)) return 'Protection-First Buyer';
           return 'Balanced Explorer';
         })(scores);
         $('#archetype').textContent = `Archetype: ${arch}`;
@@ -1272,10 +1443,10 @@
           `<span style="opacity:.7">(${(mb.confidence*100).toFixed(0)}% match)</span><br>` +
           `<span style="color:var(--muted);font-weight:400;">${blurb}</span>`;
         $('#consistency').innerHTML = inconsistencies.length
-          ? `<span class="flag">⚠ Consistency flags:</span> ${inconsistencies.join(', ')}`
-          : `<span class="ok">✓ Responses appear consistent across rephrased items.</span>`;
+          ? `<span class="flag">⚠ Assumption mismatch flags:</span> ${inconsistencies.join(', ')}<br><span style="color:var(--muted);font-weight:700;">These are not bad answers. They show where your stated preference may conflict with another tradeoff.</span>`
+          : `<span class="ok">✓ Your responses appear consistent across tradeoff checks.</span>`;
         const brief = {
-          version:'aiou.v3.timed',
+          version:'aiou.v4.assumption_test',
           ts:new Date().toISOString(),
           profile:{
             firstName: $('#firstName').value.trim(),
@@ -1290,18 +1461,21 @@
           mbti: mb,
           psych:{
             totalItems: Q.length,
-            inconsistencies
+            inconsistencies,
+            purpose:"Tests whether buyer assumptions match actual housing tradeoff behavior."
           },
           visual:{
-            styleVsPriceSlider: Number(window.__STYLE_V_PRICE ?? 0)
-          }
+            styleVsPriceSlider: Number(window.__STYLE_V_PRICE ?? 0),
+            homeCondition: mapHomeConditionFromSlider(Number(window.__STYLE_V_PRICE ?? 0))
+          },
+          answers
         };
         $('#resultsCard').classList.remove('hidden');
         queueAiouPending(brief);
         sendToLLM(brief);
       }
       /* =========================================================
-         //#17 CALL NETLIFY FUNCTION (UNCHANGED)
+         //#17 CALL NETLIFY FUNCTION
          ========================================================= */
       async function sendToLLM(brief){
         const ENDPOINT = (
@@ -1340,7 +1514,9 @@
          //#18 BUTTON HANDLERS
          ========================================================= */
       $('#startQuiz').addEventListener('click', startQuizFlow);
-      $('#skip').addEventListener('click', ()=>{ recordAnswer(null); });
+      $('#skip').addEventListener('click', ()=>{
+        recordAnswer(null);
+      });
       $('#reset').addEventListener('click', ()=>{
         if (overallTimer) clearInterval(overallTimer);
         startQuizFlow();
@@ -1348,6 +1524,7 @@
       $('#closePortal').addEventListener('click', ()=>{
         if (overallTimer) clearInterval(overallTimer);
         portal.remove();
+        window.__AIOU_MOUNTED__ = false;
       });
       $('#quizCard').classList.add('hidden');
       $('#resultsCard').classList.add('hidden');

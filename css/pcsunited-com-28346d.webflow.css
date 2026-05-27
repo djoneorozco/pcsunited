@@ -6,7 +6,7 @@
   --_textstyle---lineheight: 1.5;
   --_textstyle---fontweight: var(--fontweight--light);
   --_textstyle---letterspacing: 0em;
-  --spacing--1-5: 2rem;
+  --spacing--1-5: 0rem;
   --colors--dark-40: #6b6b6b;
   --spacing--1: 0px;
   --spacing--0-5: .5em;
@@ -40,7 +40,7 @@
   --_size---fonts--bodysmall: .875rem;
   --colors--light-80: #eaeaea;
   --_size---paddingsize--small: .5rem;
-  --_size---paddingsize--lar: var(--radius--xs);
+  --_size---paddingsize--lar: var(--iconsize--xl);
   --_size---paddingsize--none: 0rem;
   --colors--dark-60: #3f3f3f;
   --_size---site--sitepadding: 0px;
@@ -722,13 +722,13 @@ blockquote {
 }
 
 .default-nav-links.big-menu {
-  grid-column-gap: 0px;
-  grid-row-gap: 0px;
+  grid-column-gap: 7px;
+  grid-row-gap: 7px;
   color: var(--colors--light-90);
   justify-content: center;
   align-items: center;
   margin-top: 0;
-  margin-left: 0;
+  margin-left: 40px;
   font-size: 1.55rem;
   display: flex;
 }
@@ -2842,7 +2842,7 @@ blockquote {
 .top-section-pattern {
   z-index: 0;
   width: 100%;
-  height: 23rem;
+  height: auto;
   padding-top: var(--_size---paddingsize--lar);
   padding-bottom: var(--_size---paddingsize--small);
   -webkit-text-fill-color: inherit;
@@ -4761,6 +4761,17 @@ blockquote {
   box-shadow: 0 2px 5px #0000005c;
 }
 
+.img-editorial.parallax-copy {
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  padding-right: 0;
+  position: absolute;
+  inset: auto 0% 0%;
+  box-shadow: 0 2px 5px #0000005c;
+}
+
 .story-wrapper {
   padding-right: 20px;
   padding-bottom: var(--_size---paddingsize--extrasmall);
@@ -6345,8 +6356,8 @@ blockquote {
   padding: 0px var(--_size---site--sitepadding) 100px;
   background-color: #0006;
   background-image: url('../images/frontimage.jpg');
-  background-position: 50% 0;
-  background-size: cover;
+  background-position: 0%;
+  background-size: auto;
   border-radius: 0;
   flex-flow: column;
   justify-content: center;
@@ -7273,7 +7284,7 @@ blockquote {
 
 .tab-pane {
   border-radius: var(--radius--m);
-  height: 65vh;
+  height: auto;
   overflow: hidden;
 }
 
@@ -7286,7 +7297,8 @@ blockquote {
   background-size: auto;
   grid-template-rows: auto;
   grid-template-columns: .5fr 1fr;
-  height: 100%;
+  height: auto;
+  max-height: none;
   padding-bottom: 38px;
 }
 
@@ -12488,7 +12500,9 @@ blockquote {
 }
 
 .container-full.reviews-image.no-max-width {
-  background-image: linear-gradient(#0000, #0000), url('../images/AmyRedDress.jpg');
+  background-image: linear-gradient(#0000, #0000), url('../images/E8F37DCC-A2F8-407C-B393-E31343814BC4.png');
+  background-position: 0 0, 0 10%;
+  background-size: auto, cover;
 }
 
 .cta-wrapper {
@@ -12684,21 +12698,27 @@ blockquote {
 .finance-cal-title.slide-in-from-left-animation {
   color: #fff;
   letter-spacing: 0;
-  width: 650px;
+  width: auto;
   margin-top: 0;
   padding-left: 20px;
 }
 
 .cta-text-wrapper-2 {
   z-index: 100;
+  grid-column-gap: 16px;
   grid-row-gap: 16px;
   text-align: left;
   background-color: #111;
   flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
+  grid-template-rows: auto auto;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-columns: 1fr;
+  justify-content: flex-start;
+  align-items: center;
   width: 100%;
   height: 100%;
+  margin-top: 20px;
+  padding-top: 100px;
   padding-left: 0;
   display: flex;
   position: relative;
@@ -13246,7 +13266,7 @@ blockquote {
   grid-row-gap: 8px;
   text-align: left;
   background-color: #161615fa;
-  background-image: url('../images/Call-to-Action.png');
+  background-image: url('../images/Air-Force-Bases.jpg');
   background-position: 0 0;
   background-size: auto;
   border: 1px solid #525050;
@@ -15873,7 +15893,7 @@ blockquote {
 .image-2 {
   width: 100%;
   height: auto;
-  margin-top: 100px;
+  margin-top: 60px;
   margin-left: 0;
   transform: scale(1.2);
   box-shadow: 0 2px 5px #0000005e;
@@ -16498,7 +16518,8 @@ blockquote {
 .slide-in-from-left-animation-3 {
   color: #6b6b6b;
   width: 120%;
-  padding-left: 25px;
+  margin-left: -65px;
+  padding-left: 0;
 }
 
 .img-curtain-2 {
@@ -16624,12 +16645,13 @@ blockquote {
 }
 
 .icon-in-about-us-copy {
-  width: 100%;
-  max-width: 100px;
-  max-height: 80px;
-  margin-top: -25px;
+  width: auto;
+  max-width: 70px;
+  height: auto;
+  max-height: none;
+  margin-top: 100px;
   margin-bottom: 4px;
-  margin-left: 240px;
+  margin-left: 0;
   padding-left: 0;
   position: static;
   top: -10px;
@@ -16804,7 +16826,7 @@ blockquote {
   width: 100%;
   height: 100%;
   position: absolute;
-  inset: 0% auto auto 0%;
+  inset: -4% auto auto 0%;
 }
 
 .sub-heading-03---24px {
@@ -17271,7 +17293,7 @@ blockquote {
   width: 100%;
   margin-top: 100px;
   margin-left: 0;
-  padding-top: 100px;
+  padding-top: 20px;
 }
 
 .paragraph-23 {
@@ -17997,7 +18019,7 @@ blockquote {
   margin-top: 40px;
   margin-bottom: 140px;
   padding-top: 10px;
-  padding-bottom: 20px;
+  padding-bottom: 60px;
   display: flex;
 }
 
@@ -20005,12 +20027,76 @@ blockquote {
   align-items: center;
 }
 
-.code-embed-53 {
+.code-embed-53, .aiou-quiz, .houising-quiz-input {
   background-color: #ededed00;
   height: auto;
   max-height: none;
   margin-top: 0;
-  padding: 40px 20px 20px;
+  padding: 20px;
+}
+
+.body {
+  background-image: url('../images/Lackland.jpg');
+  background-position: 0 0;
+  background-size: cover;
+}
+
+.container-82 {
+  margin-top: 60px;
+}
+
+.blogs {
+  width: 100%;
+  height: 100%;
+  margin-top: 0;
+}
+
+.blog-image {
+  z-index: 99;
+  background-image: linear-gradient(90deg, #111, #0000 50%);
+  width: 100%;
+  height: 100%;
+  padding-top: 0;
+  padding-left: 0;
+  position: absolute;
+  inset: 0% auto auto 0%;
+}
+
+.aiou-wrapper-copy, .blog-for-ipuger {
+  height: 100%;
+  position: relative;
+  overflow: hidden;
+}
+
+.bloga-image {
+  z-index: 1;
+  object-fit: cover;
+  object-position: 100% 50%;
+  min-width: 100%;
+  max-width: 130%;
+  min-height: 89%;
+  max-height: 100%;
+  margin-top: 6px;
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+  position: relative;
+}
+
+.about-founder-img-wrapper-copy {
+  aspect-ratio: 2 / 3;
+  border-radius: var(--radius--s);
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  margin-top: 0;
+  margin-left: 10px;
+  display: block;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 2px 5px #00000047;
 }
 
 @media screen and (min-width: 1280px) {
@@ -20616,7 +20702,9 @@ blockquote {
   }
 
   .container-full.reviews-image.no-max-width {
-    background-image: linear-gradient(#0000, #0000), url('../images/AmyRedDress.jpg');
+    background-image: linear-gradient(#0000, #0000), url('../images/Use_avatar_upload_Create_image_Nano_Banana_Pro_52214.jpg');
+    background-position: 0 0, 50%;
+    background-size: auto, cover;
   }
 
   .financial-intro {
@@ -20639,6 +20727,7 @@ blockquote {
 
   .cta-text-wrapper-2 {
     background-color: #111;
+    padding-top: 140px;
     padding-left: 0;
   }
 
@@ -20936,7 +21025,8 @@ blockquote {
   }
 
   .image-2 {
-    margin-left: 100px;
+    margin-top: 40px;
+    margin-left: 0;
   }
 
   .heading-100 {
@@ -20956,7 +21046,7 @@ blockquote {
   }
 
   .section-15.slideshow {
-    background-image: url('../images/Call-to-Action.png');
+    background-image: url('../images/Air-Force-Bases.jpg');
   }
 
   .section-15.home-3-solutions {
@@ -21240,10 +21330,18 @@ blockquote {
     text-align: center;
   }
 
-  .code-embed-53 {
+  .code-embed-53, .aiou-quiz, .houising-quiz-input {
     padding-top: 10px;
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .blogs {
+    margin-top: -6px;
+  }
+
+  .bloga-image {
+    padding-right: 0;
   }
 }
 
@@ -21388,7 +21486,7 @@ blockquote {
     padding-right: 20px;
   }
 
-  .img-editorial.parallax {
+  .img-editorial.parallax, .img-editorial.parallax-copy {
     max-width: 100%;
     margin-top: 10px;
   }
@@ -22375,7 +22473,8 @@ blockquote {
   }
 
   .container-full.reviews-image.no-max-width {
-    background-image: linear-gradient(#0000, #0000), url('../images/AmyRedDress.jpg');
+    background-image: linear-gradient(#0000, #0000), url('../images/E8F37DCC-A2F8-407C-B393-E31343814BC4.png');
+    background-position: 0 0, 50% 0;
   }
 
   .button-yellow-2 {
@@ -22469,6 +22568,7 @@ blockquote {
 
   .cta-text-wrapper-2 {
     background-color: #111;
+    padding-top: 220px;
     padding-left: 100px;
   }
 
@@ -22686,7 +22786,7 @@ blockquote {
   .v2-base-demo.base-demo-2 {
     opacity: 1;
     text-align: center;
-    background-image: url('../images/Call-to-Action.png');
+    background-image: url('../images/Air-Force-Bases.jpg');
     background-position: 0 0;
     background-size: cover;
     border-style: none;
@@ -23084,7 +23184,9 @@ blockquote {
   }
 
   .image-2 {
-    margin-left: 100px;
+    margin-top: 20px;
+    margin-left: -8px;
+    margin-right: 40px;
   }
 
   .exaplin-about-us {
@@ -23717,10 +23819,35 @@ blockquote {
     padding-bottom: 220px;
   }
 
-  .code-embed-53 {
+  .code-embed-53, .aiou-quiz, .houising-quiz-input {
     background-color: #ededed00;
     margin-top: 0;
     margin-bottom: 0;
+  }
+
+  .blogs {
+    margin-top: 0;
+  }
+
+  .blog-image {
+    color: #161616;
+    background-color: #0000;
+    background-image: linear-gradient(96deg, #111 9%, #0000 53%);
+  }
+
+  .bloga-image {
+    color: #6b6b6b;
+    background-color: #000;
+    width: 77%;
+    min-width: 100%;
+    max-width: 77%;
+    min-height: 100%;
+    max-height: 77%;
+    margin-top: -32px;
+    margin-left: 71px;
+    padding-top: 162px;
+    padding-left: 0;
+    padding-right: 0;
   }
 }
 
@@ -24255,6 +24382,27 @@ blockquote {
 
   .resources-main-secgion.pcssnapshot {
     margin-top: -35px;
+  }
+
+  .houising-quiz-input {
+    padding-bottom: 40px;
+  }
+
+  .blogs {
+    height: 100%;
+    margin-top: 75px;
+  }
+
+  .blog-image {
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    margin-left: 0;
+    padding-top: 0;
+    display: flex;
+  }
+
+  .bloga-image {
+    padding-right: 0;
   }
 }
 
@@ -26842,6 +26990,15 @@ blockquote {
     padding-top: var(--_size---paddingsize--medium);
     padding-bottom: var(--_size---paddingsize--medium);
   }
+
+  .aiou-wrapper-copy, .blog-for-ipuger {
+    width: 100%;
+  }
+
+  .bloga-image {
+    min-width: 100%;
+    max-width: 100%;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -26853,7 +27010,7 @@ blockquote {
     --_size---paddingsize--minimum: var(--iconsize--xs);
     --_size---fonts--bodysmall: .8rem;
     --_size---paddingsize--small: .5rem;
-    --_size---paddingsize--lar: var(--radius--xs);
+    --_size---paddingsize--lar: var(--iconsize--xl);
     --_size---paddingsize--none: 0rem;
     --_size---site--sitepadding: 1rem;
     --_size---paddingsize--medium: var(--radius--xl);
@@ -28108,6 +28265,11 @@ blockquote {
     padding-top: var(--_size---paddingsize--medium);
     padding-bottom: var(--_size---paddingsize--extrasmall);
   }
+
+  .bloga-image {
+    min-height: 480px;
+    max-height: 480px;
+  }
 }
 
 @media screen and (max-width: 479px) {
@@ -28877,6 +29039,10 @@ blockquote {
 
   .home3-grid-testimonials {
     padding-top: var(--_size---paddingsize--tin);
+  }
+
+  .gradient-wrapper {
+    background-color: #1c1c1c00;
   }
 
   .gradiant-wrapper {
@@ -30724,7 +30890,7 @@ blockquote {
 
   .image-2 {
     margin-top: 40px;
-    margin-left: 83px;
+    margin-left: 14px;
     transform: scale(1.6);
   }
 
@@ -31541,6 +31707,23 @@ blockquote {
   .resources-main-secgion.main-section-for-resources {
     margin-top: 57px;
   }
+
+  .blogs {
+    overflow: hidden;
+  }
+
+  .blog-image {
+    height: 120%;
+  }
+
+  .bloga-image {
+    min-height: 360px;
+    max-height: 100%;
+    margin-top: 1px;
+    margin-bottom: -62px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
 }
 
 #w-node-a20e7068-528c-2165-b385-785e4c45ca5e-4c45ca57 {
@@ -31579,6 +31762,10 @@ blockquote {
   place-self: stretch stretch;
 }
 
+#w-node-_7f1f7910-619c-a260-2cd2-5c70d04471d3-0e0e19f9 {
+  grid-area: span 1 / span 1 / span 1 / span 1;
+}
+
 #w-node-a6f44a6f-e293-192f-2013-9fa0217c4d48-0e0e19fd {
   justify-self: auto;
 }
@@ -31591,7 +31778,7 @@ blockquote {
   grid-area: span 1 / span 3 / span 1 / span 3;
 }
 
-#w-node-_0a0edd1a-d705-92aa-1f9c-5331c53109da-0e0e1a08, #w-node-_0a0edd1a-d705-92aa-1f9c-5331c53109e8-0e0e1a08 {
+#w-node-_0a0edd1a-d705-92aa-1f9c-5331c53109da-0e0e1a08, #w-node-_0a0edd1a-d705-92aa-1f9c-5331c53109db-0e0e1a08, #w-node-_0a0edd1a-d705-92aa-1f9c-5331c53109e8-0e0e1a08 {
   grid-area: span 1 / span 1 / span 1 / span 1;
 }
 
@@ -31700,21 +31887,21 @@ blockquote {
   align-self: start;
 }
 
-#w-node-_7f3315a2-61af-a7ea-149b-d4fd1d3ab62c-a2419193 {
+#w-node-_0a31f909-f83f-a6cb-1390-a95dddca87b1-e437b419 {
   grid-template-rows: auto;
   grid-template-columns: 1fr 1fr;
 }
 
-#w-node-_738982aa-7029-afc1-0908-d766a276410d-a2419193 {
+#w-node-_738982aa-7029-afc1-0908-d766a276410d-e437b419 {
   align-self: start;
 }
 
-#w-node-_336f9c6a-a9fd-7777-5a12-e6622983d64a-a2419193 {
+#w-node-_336f9c6a-a9fd-7777-5a12-e6622983d64a-e437b419 {
   justify-self: center;
 }
 
 @media screen and (min-width: 1280px) {
-  #w-node-_175fe8c3-92e9-fc3a-73b6-f87618afdb8b-c85e09e0, #w-node-_175fe8c3-92e9-fc3a-73b6-f87618afdb8b-a2419193 {
+  #w-node-_175fe8c3-92e9-fc3a-73b6-f87618afdb8b-c85e09e0, #w-node-_175fe8c3-92e9-fc3a-73b6-f87618afdb8b-e437b419 {
     grid-area: span 1 / span 1 / span 1 / span 1;
   }
 }
@@ -31865,7 +32052,7 @@ blockquote {
     grid-area: span 1 / span 1 / span 1 / span 1;
   }
 
-  #w-node-dea51de8-d2c4-d7a7-6c1c-c573dfbe5e92-c85e09e0, #w-node-dea51de8-d2c4-d7a7-6c1c-c573dfbe5e92-a2419193 {
+  #w-node-dea51de8-d2c4-d7a7-6c1c-c573dfbe5e92-c85e09e0, #w-node-dea51de8-d2c4-d7a7-6c1c-c573dfbe5e92-e437b419 {
     justify-self: start;
   }
 }

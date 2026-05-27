@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed May 27 2026 01:04:29 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed May 27 2026 10:32:43 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f6df2366c61b76c85e09e0" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -6,7 +6,7 @@
   <meta content="Explore PCSUnited’s military-first calculators and financial readiness tools for BAH, military pay, retirement, VA disability, fitness, PCS planning, and homebuying decisions." name="description">
   <meta content="Military FinTech Resources | PCSUnited" property="og:title">
   <meta content="Plan your next move with military-first tools for BAH, pay, retirement, VA disability, fitness, PCS planning, and smarter homebuying decisions." property="og:description">
-  <meta content="https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/69f1786791ebcdddcdb6b68f_D11B76B2-958B-4871-B121-30BA68667423.png" property="og:image">
+  <meta content="https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a0bdd9ce81b2373c7511aec_c0deff88448595270fbed9c6ee8122f6_A1EB3C65-A1E3-4A1E-99A7-D2A4F508CD2E.jpg" property="og:image">
   <meta content="Military FinTech Resources | PCSUnited" name="twitter:title">
   <meta content="Plan your next move with military-first tools for BAH, pay, retirement, VA disability, fitness, PCS planning, and smarter homebuying decisions." name="twitter:description">
   <meta property="og:type" content="website">
@@ -4114,21 +4114,16 @@
                         <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-wf-ignore="true">
                       </video></div>
                     <div id="w-node-_738982aa-7029-afc1-0908-d766a276410d-c85e09e0" class="tab-pane-text">
-                      <div class="code-embed-53 w-embed w-script"><!--  =========================================================
+                      <div class="houising-quiz-input w-embed w-script"><!--  =========================================================
   PCSUnited • Housing Quiz Intake
   FULL SINGLE EMBED
-  v1.6.3 • BASELINE PROFILE RESULTS
+  v1.6.4 • BASELINE PROFILE RESULTS + 2 SECOND AIOU REDIRECT
   UPDATES
-  - Question 1 replaced with stronger Home Identity question
-  - Question 3 replaced with Market Compromise / Protect First question
-  - Questions 2, 4, and 5 preserved
-  - Baseline Profile scores added at finish:
-      Openness
-      Discipline
-      Lifestyle Pull
-      Flexibility
-      Risk Aversion
-  - Transparent/no-background UX preserved
+  - Keeps 5-question Housing Quiz Intake on Resources page
+  - Saves baseline profile to localStorage["pcsunited.housing_quiz.v1"]
+  - Displays baseline results
+  - Redirects after 2 seconds to:
+    https://pcsunited-com-28346d.webflow.io/air-force/housing-quiz
   STORAGE
   localStorage["pcsunited.housing_quiz.v1"]
 =========================================================  -->
@@ -4805,7 +4800,7 @@
                                     </div>
                                   </div>
                                   <div id="hq-baseline-summary">
-                                    This is your first-pass housing baseline. The deeper AIOU Psychology Quiz can later test whether these early preferences stay consistent under pressure, budget tradeoffs, repairs, commute, and lifestyle compromises.
+                                    This is your first-pass housing baseline. Redirecting you to the A.I.O.U Assumption Test...
                                   </div>
                                 </div>
                               </div>
@@ -4815,6 +4810,8 @@
 (function(){
 "use strict";
 const STORAGE_KEY = "pcsunited.housing_quiz.v1";
+const REDIRECT_URL = "https://pcsunited-com-28346d.webflow.io/air-force/housing-quiz";
+const REDIRECT_DELAY_MS = 2000;
 const questions = [
 {
   id:"homeStyle",
@@ -4931,6 +4928,7 @@ const questions = [
 }
 ];
 let current = 0;
+let redirectTimer = null;
 const answers = {};
 const kickerEl          = document.getElementById("hq-kicker");
 const questionEl        = document.getElementById("hq-question");
@@ -5340,6 +5338,11 @@ function finishQuiz(){
       lifestylePull:"Lifestyle Pull",
       flexibility:"Flexibility",
       riskAversion:"Risk Aversion"
+    },
+    nextStep:{
+      label:"A.I.O.U Assumption Test",
+      redirectUrl:REDIRECT_URL,
+      redirectDelayMs:REDIRECT_DELAY_MS
     }
   };
   localStorage.setItem(
@@ -5368,6 +5371,12 @@ function finishQuiz(){
       )
     );
   }catch(err){}
+  if(redirectTimer){
+    clearTimeout(redirectTimer);
+  }
+  redirectTimer = setTimeout(function(){
+    window.location.href = REDIRECT_URL;
+  },REDIRECT_DELAY_MS);
 }
 if(bedroomsRange){
   bedroomsRange.addEventListener("input",updateBedBathAnswer);

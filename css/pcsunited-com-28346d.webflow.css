@@ -6,7 +6,7 @@
   --_textstyle---lineheight: 1.5;
   --_textstyle---fontweight: var(--fontweight--light);
   --_textstyle---letterspacing: 0em;
-  --spacing--1-5: 2rem;
+  --spacing--1-5: 0rem;
   --colors--dark-40: #6b6b6b;
   --spacing--1: 20px;
   --spacing--0-5: .5em;
@@ -15607,6 +15607,20 @@ blockquote {
   max-width: 680px;
 }
 
+.heading-block.about-hero {
+  max-width: 675px;
+}
+
+.heading-block.office-location {
+  grid-column-gap: 16px;
+  grid-row-gap: 16px;
+  flex-flow: column;
+  justify-content: flex-start;
+  align-items: center;
+  max-width: 540px;
+  display: flex;
+}
+
 .card-text-content-home1-2 {
   text-align: center;
   padding-top: 1rem;
@@ -16230,7 +16244,7 @@ blockquote {
   --_theme---textcolor--tertiarytext: var(--colors--dark-30);
   text-align: center;
   background-color: #fff;
-  background-image: url('../images/Call-to-Action.png');
+  background-image: url('../images/Air-Foce-Base-Map-2026.png');
   background-position: 0 0;
   background-size: cover;
   border-radius: 0;
@@ -18040,7 +18054,12 @@ blockquote {
 }
 
 .opacity-80-2.hero-h01 {
-  max-width: 610px;
+  width: 150%;
+  max-width: 150%;
+}
+
+.opacity-80-2.about-hero {
+  max-width: 565px;
 }
 
 .heading-02 {
@@ -20391,6 +20410,11 @@ blockquote {
   background-color: #f5f5f5;
 }
 
+.rtb {
+  margin-bottom: 220px;
+  padding-bottom: 220px;
+}
+
 .space {
   min-height: 64px;
   margin-top: 0;
@@ -20691,6 +20715,10 @@ blockquote {
   display: block;
 }
 
+.heading-122 {
+  color: var(--colors--01-accent);
+}
+
 .background-video-7 {
   width: 100%;
   max-width: 100.004%;
@@ -20789,6 +20817,7 @@ blockquote {
 
 .image-168 {
   margin-bottom: -44px;
+  box-shadow: 0 2px 5px #0000005e;
 }
 
 .paragraph-31 {
@@ -20887,6 +20916,7 @@ blockquote {
 .center-wrap-3 {
   justify-content: center;
   align-items: center;
+  width: 100%;
   display: flex;
 }
 
@@ -21320,7 +21350,7 @@ blockquote {
 }
 
 .support-heading-content {
-  background-image: url('../images/Support-Text-Icon.svg');
+  background-image: url('../images/Air-Force-PT-Fitness.png');
   background-position: 50% 80%;
   background-repeat: no-repeat;
   background-size: contain;
@@ -21508,7 +21538,7 @@ blockquote {
 }
 
 .hero-bg-wrap {
-  background-image: url('../images/Hero-Under-Flowers-Line.svg'), url('../images/Hero-BG-Image_1Hero BG Image.avif');
+  background-image: url('../images/Hero-Under-Flowers-Line.png'), url('../images/Hero-BG-Image_1Hero BG Image.avif');
   background-position: 0 100%, 50% 0;
   background-repeat: no-repeat, no-repeat;
   background-size: auto, contain;
@@ -21626,6 +21656,169 @@ blockquote {
 
 .button-large-2:hover {
   background-color: #eaeaea;
+}
+
+.image-172 {
+  opacity: .06;
+}
+
+.body-2 {
+  -webkit-text-fill-color: inherit;
+  mix-blend-mode: normal;
+  background-clip: border-box;
+}
+
+.link-block-8 {
+  color: var(--_theme---textcolor--primarytext);
+}
+
+.image-173 {
+  opacity: .03;
+  mix-blend-mode: hard-light;
+}
+
+.paragraph-34 {
+  margin-top: -29px;
+}
+
+.heading-139 {
+  color: var(--colors--dark-40);
+  -webkit-text-stroke-color: var(--colors--dark-50);
+}
+
+.container-86 {
+  flex: 1;
+  max-width: 1160px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.space-100 {
+  width: 100%;
+  padding-top: 24px;
+}
+
+.content-10 {
+  grid-column-gap: 64px;
+  grid-row-gap: 64px;
+  flex-flow: column;
+  display: flex;
+}
+
+.section-29 {
+  justify-content: center;
+  align-items: center;
+  padding-top: 160px;
+  display: flex;
+}
+
+.section-29.hero {
+  margin-top: 62px;
+  padding-top: 88px;
+}
+
+.center-wrap-10 {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+
+.heading-140 {
+  letter-spacing: -4px;
+  font-size: 64px;
+  font-weight: 600;
+  line-height: 72px;
+}
+
+.space-101 {
+  width: 100%;
+  padding-top: 40px;
+}
+
+.space-102 {
+  width: 100%;
+  padding-top: 12px;
+}
+
+.office-image-wrap {
+  border-radius: 24px;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  position: relative;
+  overflow: clip;
+}
+
+.office-bg-wrap {
+  background-color: #f4f4f4;
+  border: 1px solid #fff;
+  border-radius: 32px;
+  padding: 8px 8px 40px;
+}
+
+.office-bg-content {
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+  position: absolute;
+  inset: 0%;
+}
+
+.container-87 {
+  flex: 1;
+  max-width: 1160px;
+  margin-left: 40px;
+  margin-right: 40px;
+}
+
+.office-wrap {
+  max-width: 210px;
+}
+
+.space-103 {
+  width: 100%;
+  padding-top: 24px;
+}
+
+.office-bg-block {
+  grid-column-gap: 40px;
+  grid-row-gap: 40px;
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  background-color: #fff6;
+  border: 1px solid #fff6;
+  border-top-right-radius: 24px;
+  border-bottom-right-radius: 24px;
+  flex: 1;
+  justify-content: space-between;
+  max-width: 570px;
+  padding: 48px 56px;
+  font-size: 16px;
+  line-height: 24px;
+  display: flex;
+}
+
+.heading-141 {
+  letter-spacing: -2px;
+}
+
+.content-11 {
+  grid-column-gap: 64px;
+  grid-row-gap: 64px;
+  flex-flow: column;
+  display: flex;
+}
+
+.align-left-8 {
+  justify-content: flex-start;
+  align-items: center;
+  display: flex;
+}
+
+.center-wrap-11 {
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 
 @media screen and (min-width: 1280px) {
@@ -22945,6 +23138,14 @@ blockquote {
     max-height: none;
   }
 
+  .content-7 {
+    margin-left: 0;
+  }
+
+  .center-wrap-4 {
+    margin-left: 60px;
+  }
+
   .hero-heading-bg-wrap {
     width: 100%;
     max-width: 100%;
@@ -23204,7 +23405,7 @@ blockquote {
 
   .testimonial-card {
     background-color: var(--colors--dark-30);
-    background-image: url('../images/Card2-orvimo.jpg');
+    background-image: url('../images/PCS-Resources.jpg');
     background-position: 50%;
     background-size: cover;
     box-shadow: 0 2px 5px #00000045;
@@ -24905,7 +25106,7 @@ blockquote {
   }
 
   .section-15.slideshow {
-    background-image: url('../images/Call-to-Action.png');
+    background-image: url('../images/Air-Foce-Base-Map-2026.png');
   }
 
   .section-15.home-3-solutions {
@@ -25240,6 +25441,10 @@ blockquote {
 
   .fsize-body-large-3 {
     padding-right: 20px;
+  }
+
+  .opacity-80-2.hero-h01 {
+    margin-top: 0;
   }
 
   .heading-112 {
@@ -25590,6 +25795,10 @@ blockquote {
     letter-spacing: 1px;
   }
 
+  .section-6.hero {
+    margin-top: 20px;
+  }
+
   .container-83 {
     width: 100%;
     max-width: 100%;
@@ -25610,6 +25819,17 @@ blockquote {
 
   .content-7 {
     width: 100%;
+  }
+
+  .slider-bg-wrap {
+    grid-column-gap: 0px;
+    grid-row-gap: 0px;
+    margin-right: 220px;
+    padding-right: 0;
+  }
+
+  .image-170 {
+    margin-left: -74px;
   }
 
   .hero-heading-bg-wrap {
@@ -25637,7 +25857,13 @@ blockquote {
     padding-left: 0;
   }
 
-  .heading-129, .text-block-41 {
+  .heading-129 {
+    width: 99.9999%;
+    max-width: 99.9973%;
+    margin-left: 0;
+  }
+
+  .text-block-41 {
     width: 99.9999%;
     max-width: 99.9973%;
   }
@@ -25694,6 +25920,10 @@ blockquote {
 
   ._2nd {
     height: auto;
+  }
+
+  .heading-138 {
+    margin-top: -39px;
   }
 }
 
@@ -30381,8 +30611,25 @@ blockquote {
     padding-bottom: 140px;
   }
 
-  .heading-137 {
+  .heading-137, .heading-140 {
     letter-spacing: -2px;
+  }
+
+  .office-image-wrap {
+    height: 100%;
+  }
+
+  .office-bg-wrap {
+    height: 420px;
+  }
+
+  .office-bg-block {
+    margin-right: 30px;
+    padding: 30px 28px;
+  }
+
+  .office-bg-image {
+    height: 100%;
   }
 }
 
@@ -34019,6 +34266,14 @@ blockquote {
 
   .button-large-2:hover {
     font-variation-settings: "wght" 600, "wdth" 100;
+  }
+
+  .office-bg-wrap {
+    height: 480px;
+  }
+
+  .office-bg-block {
+    flex-flow: column;
   }
 }
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun May 31 2026 09:12:28 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun May 31 2026 23:29:57 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e1a1a" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -222,7 +222,7 @@
         <div class="nav-wrapper">
           <div class="nav-container">
             <div class="nav-left">
-              <a aria-label="Yeyeyeah" href="user-dashboard.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 479px) 98vw, (max-width: 767px) 99vw, (max-width: 1368px) 100vw, 1368px" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
+              <a aria-label="Yeyeyeah" href="user-dashboard.html" class="brand-logo w-nav-brand"><img sizes="100vw" srcset="images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/56d386432738ab98110c1df2790e6cea_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1368w" alt="" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
             </div>
             <nav role="navigation" id="w-node-a20e7068-528c-2165-b385-785e4c45ca5e-4c45ca57" class="nav-menu w-nav-menu">
               <div class="default-nav-links big-menu">
@@ -838,8 +838,8 @@
                 <script>
     (function() {
       "use strict";
-      const SNAPSHOT_BASE_URL = "https://pcsunited.netlify.app/snapshot/";
-      const BASES = [
+      var SNAPSHOT_BASE_URL = "https://pcsunited-com-28346d.webflow.io/air-force/pcs-snapshot";
+      var BASES = [
         { value: "Andrews AFB",          fileKey: "Andrews",          zip: "20762" },
         { value: "Barksdale AFB",        fileKey: "Barksdale",        zip: "71110" },
         { value: "Beale AFB",            fileKey: "Beale",            zip: "95903" },
@@ -885,7 +885,7 @@
         { value: "Whiteman AFB",         fileKey: "Whiteman",         zip: "65305" },
         { value: "Wright-Patterson AFB", fileKey: "Wright-Patterson", zip: "45433" }
       ];
-      const BASE_META = Object.create(null);
+      var BASE_META = Object.create(null);
       BASES.forEach(function(base) {
         BASE_META[base.value] = {
           label: base.value,
@@ -893,7 +893,7 @@
           zip: base.zip
         };
       });
-      const BASE_ALIASES = {
+      var BASE_ALIASES = {
         "Andrews": "Andrews AFB",
         "AndrewsAFB": "Andrews AFB",
         "Joint Base Andrews": "Andrews AFB",
@@ -1023,17 +1023,17 @@
         "WPAFB": "Wright-Patterson AFB"
       };
       function canonicalBaseName(raw) {
-        const s = String(raw || "").trim();
+        var s = String(raw || "").trim();
         if (!s) return "";
         if (BASE_META[s]) return s;
         return BASE_ALIASES[s] || s;
       }
       function fileKeyFromBase(raw) {
-        const canonical = canonicalBaseName(raw);
+        var canonical = canonicalBaseName(raw);
         return (BASE_META[canonical] && BASE_META[canonical].fileKey) || "Lackland";
       }
       function zipFromBase(raw) {
-        const canonical = canonicalBaseName(raw);
+        var canonical = canonicalBaseName(raw);
         return (BASE_META[canonical] && BASE_META[canonical].zip) || "78236";
       }
       function escapeHtml(str) {
@@ -1046,7 +1046,7 @@
       }
       function populateBaseSelect(selectEl, includePlaceholder) {
         if (!selectEl) return;
-        let html = "";
+        var html = "";
         if (includePlaceholder) {
           html += '<option value="" selected>Current Duty Station</option>';
         }
@@ -1055,71 +1055,79 @@
         });
         selectEl.innerHTML = html;
       }
-      const dutySel = document.getElementById("sass-duty-select");
-      const dutyText = document.getElementById("sass-duty-text");
-      const newBaseSel = document.getElementById("sass-base");
-      const btn = document.getElementById("sass-analyze-btn");
+      var dutySel = document.getElementById("sass-duty-select");
+      var dutyText = document.getElementById("sass-duty-text");
+      var newBaseSel = document.getElementById("sass-base");
+      var btn = document.getElementById("sass-analyze-btn");
       populateBaseSelect(dutySel, true);
       populateBaseSelect(newBaseSel, false);
-      newBaseSel.value = "Lackland AFB";
-      function syncDutyText() {
-        const val = String(dutySel.value || "").trim();
-        dutyText.textContent = val ? val : "Current Duty Station";
+      if (newBaseSel) {
+        newBaseSel.value = "Lackland AFB";
       }
-      dutySel.addEventListener("change", syncDutyText);
+      function syncDutyText() {
+        var val = String(dutySel && dutySel.value ? dutySel.value : "").trim();
+        if (dutyText) {
+          dutyText.textContent = val ? val : "Current Duty Station";
+        }
+      }
+      if (dutySel) {
+        dutySel.addEventListener("change", syncDutyText);
+      }
       syncDutyText();
-      btn.addEventListener("click", function() {
-        const rank = String(document.getElementById("sass-rank").value || "").trim();
-        const yos = String(document.getElementById("sass-yos").value || "").trim();
-        const fam = String(document.getElementById("sass-family").value || "").trim();
-        const curBaseRaw = String(dutySel.value || "").trim();
-        const newBaseRaw = String(newBaseSel.value || "").trim();
-        if (!curBaseRaw) {
-          alert("Please select your Current Duty Station.");
-          dutySel.focus();
-          return;
-        }
-        if (!newBaseRaw) {
-          alert("Please select your New Base Location.");
-          newBaseSel.focus();
-          return;
-        }
-        const curBase = canonicalBaseName(curBaseRaw);
-        const newBase = canonicalBaseName(newBaseRaw);
-        const curFileKey = fileKeyFromBase(curBase);
-        const newFileKey = fileKeyFromBase(newBase);
-        const curZip = zipFromBase(curBase);
-        const newZip = zipFromBase(newBase);
-        try {
-          sessionStorage.setItem("pcs_rank", rank);
-          sessionStorage.setItem("pcs_yos", yos);
-          sessionStorage.setItem("pcs_family", fam);
-          sessionStorage.setItem("pcs_current_base", curBase);
-          sessionStorage.setItem("pcs_current_cityKey", curFileKey);
-          sessionStorage.setItem("pcs_current_fileKey", curFileKey);
-          sessionStorage.setItem("pcs_current_zip", curZip);
-          sessionStorage.setItem("pcs_new_base", newBase);
-          sessionStorage.setItem("pcs_new_cityKey", newFileKey);
-          sessionStorage.setItem("pcs_new_fileKey", newFileKey);
-          sessionStorage.setItem("pcs_new_zip", newZip);
-        } catch (e) {}
-        const params = new URLSearchParams();
-        params.set("type", "ad");
-        params.set("rank", rank);
-        params.set("yos", yos);
-        params.set("family", fam);
-        params.set("base", newBase);
-        params.set("cityKey", newFileKey);
-        params.set("curBase", curBase);
-        params.set("newBase", newBase);
-        params.set("curCityKey", curFileKey);
-        params.set("newCityKey", newFileKey);
-        params.set("curFileKey", curFileKey);
-        params.set("newFileKey", newFileKey);
-        params.set("curZip", curZip);
-        params.set("newZip", newZip);
-        window.location.href = SNAPSHOT_BASE_URL + "?" + params.toString();
-      });
+      if (btn) {
+        btn.addEventListener("click", function() {
+          var rank = String(document.getElementById("sass-rank").value || "").trim();
+          var yos = String(document.getElementById("sass-yos").value || "").trim();
+          var fam = String(document.getElementById("sass-family").value || "").trim();
+          var curBaseRaw = String(dutySel && dutySel.value ? dutySel.value : "").trim();
+          var newBaseRaw = String(newBaseSel && newBaseSel.value ? newBaseSel.value : "").trim();
+          if (!curBaseRaw) {
+            alert("Please select your Current Duty Station.");
+            dutySel.focus();
+            return;
+          }
+          if (!newBaseRaw) {
+            alert("Please select your New Base Location.");
+            newBaseSel.focus();
+            return;
+          }
+          var curBase = canonicalBaseName(curBaseRaw);
+          var newBase = canonicalBaseName(newBaseRaw);
+          var curFileKey = fileKeyFromBase(curBase);
+          var newFileKey = fileKeyFromBase(newBase);
+          var curZip = zipFromBase(curBase);
+          var newZip = zipFromBase(newBase);
+          try {
+            sessionStorage.setItem("pcs_rank", rank);
+            sessionStorage.setItem("pcs_yos", yos);
+            sessionStorage.setItem("pcs_family", fam);
+            sessionStorage.setItem("pcs_current_base", curBase);
+            sessionStorage.setItem("pcs_current_cityKey", curFileKey);
+            sessionStorage.setItem("pcs_current_fileKey", curFileKey);
+            sessionStorage.setItem("pcs_current_zip", curZip);
+            sessionStorage.setItem("pcs_new_base", newBase);
+            sessionStorage.setItem("pcs_new_cityKey", newFileKey);
+            sessionStorage.setItem("pcs_new_fileKey", newFileKey);
+            sessionStorage.setItem("pcs_new_zip", newZip);
+          } catch (e) {}
+          var params = new URLSearchParams();
+          params.set("type", "ad");
+          params.set("rank", rank);
+          params.set("yos", yos);
+          params.set("family", fam);
+          params.set("base", newBase);
+          params.set("cityKey", newFileKey);
+          params.set("curBase", curBase);
+          params.set("newBase", newBase);
+          params.set("curCityKey", curFileKey);
+          params.set("newCityKey", newFileKey);
+          params.set("curFileKey", curFileKey);
+          params.set("newFileKey", newFileKey);
+          params.set("curZip", curZip);
+          params.set("newZip", newZip);
+          window.location.href = SNAPSHOT_BASE_URL + "?" + params.toString();
+        });
+      }
     })();
   </script>
               </div>
@@ -1205,7 +1213,7 @@
                 </div>
               </div>
             </div>
-          </div><img src="images/cadde6b11c41871bcfcaa77aebe5fbb7_a-modern-living-room-with-a-large-window-p-800.jpg" loading="lazy" sizes="(max-width: 767px) 48vw, (max-width: 991px) 47vw, 462px" srcset="images/f53f6dc4eb475d0591991bc4c4642ed6_cadde6b11c41871bcfcaa77aebe5fbb7_a-modern-living-room-with-a-large-window-p-800-p-500.jpg 500w, images/f53f6dc4eb475d0591991bc4c4642ed6_cadde6b11c41871bcfcaa77aebe5fbb7_a-modern-living-room-with-a-large-window-p-800-p-800.jpg 800w, images/f53f6dc4eb475d0591991bc4c4642ed6_cadde6b11c41871bcfcaa77aebe5fbb7_a-modern-living-room-with-a-large-window-p-800-p-1080.jpg 1080w, images/cadde6b11c41871bcfcaa77aebe5fbb7_a-modern-living-room-with-a-large-window-p-800.jpg 1536w" alt="" class="image-2">
+          </div><img src="images/forest-river.jpeg" loading="lazy" sizes="(max-width: 767px) 48vw, (max-width: 991px) 47vw, 462px" srcset="images/05d9bbd933c2ac83a7ab4e17664c3a38_forest-river-p-500.jpeg 500w, images/05d9bbd933c2ac83a7ab4e17664c3a38_forest-river-p-800.jpeg 800w, images/05d9bbd933c2ac83a7ab4e17664c3a38_forest-river-p-1080.jpeg 1080w, images/05d9bbd933c2ac83a7ab4e17664c3a38_forest-river-p-1600.jpeg 1600w, images/05d9bbd933c2ac83a7ab4e17664c3a38_forest-river-p-2000.jpeg 2000w, images/05d9bbd933c2ac83a7ab4e17664c3a38_forest-river-p-2600.jpeg 2600w, images/05d9bbd933c2ac83a7ab4e17664c3a38_forest-river-p-3200.jpeg 3200w, images/forest-river.jpeg 6644w" alt="" class="image-2">
         </div>
       </div>
       <section class="section-4">
@@ -1565,7 +1573,7 @@
               </div>
               <div class="team-bg-wrap">
                 <div class="team-image-wrap">
-                  <a href="air-force-blogs/blog-a-i--influence-real-estate-military-home-buyers.html" class="w-inline-block"><img src="images/AmyProfilePic.jpg" loading="lazy" sizes="(max-width: 1000px) 100vw, 1000px" srcset="images/AmyProfilePic-p-500.jpg 500w, images/AmyProfilePic-p-800.jpg 800w, images/AmyProfilePic.jpg 1000w" alt="Amy the A.I. Concierge from PCSUnited.com" class="image-160"></a>
+                  <a href="air-force-blogs/blog-a-i--influence-real-estate-military-home-buyers.html" class="w-inline-block"><img src="images/Hero-Tag-Wrap.jpg" loading="lazy" sizes="(max-width: 1122px) 100vw, 1122px" srcset="images/81bea542c339fbac3cbd627c238e469b_Hero-Tag-Wrap-p-500.jpg 500w, images/81bea542c339fbac3cbd627c238e469b_Hero-Tag-Wrap-p-800.jpg 800w, images/81bea542c339fbac3cbd627c238e469b_Hero-Tag-Wrap-p-1080.jpg 1080w, images/Hero-Tag-Wrap.jpg 1122w" alt="" class="image-160"></a>
                 </div>
                 <div class="team-wrap">
                   <div class="team-content">
@@ -1591,10 +1599,10 @@
               </a>
               <a href="air-force-blogs/blog-military-realtors.html" class="w-inline-block">
                 <div class="team-bg-wrap">
-                  <div class="team-image-wrap"><img src="images/AmyBludePants.jpg" loading="lazy" sizes="(max-width: 1023px) 100vw, 1023px" srcset="images/cec911aebf838910d3f1c78f5721e77a_office-guy-p-500.jpg 500w, images/cec911aebf838910d3f1c78f5721e77a_office-guy-p-800.jpg 800w, images/AmyBludePants.jpg 1023w" alt="office guy" class="image-159"></div>
+                  <div class="team-image-wrap"><img src="images/DA796318-9D2C-4CC9-BF69-8457EA461D3A.png" loading="lazy" sizes="(max-width: 1254px) 100vw, 1254px" srcset="images/DA796318-9D2C-4CC9-BF69-8457EA461D3A-p-500.png 500w, images/DA796318-9D2C-4CC9-BF69-8457EA461D3A-p-800.png 800w, images/DA796318-9D2C-4CC9-BF69-8457EA461D3A-p-1080.png 1080w, images/DA796318-9D2C-4CC9-BF69-8457EA461D3A.png 1254w" alt="" class="image-159"></div>
                   <div class="team-wrap">
                     <div class="team-content">
-                      <div class="sub-heading-03---24px">Realtors: The Good, Bad, &amp; The Military</div>
+                      <div class="sub-heading-03---24px-copy">Realtors: The Good, Bad, &amp; The Military</div>
                       <div class="opacity-80-2">Learn how to use the App to its fullest. Discover how the data analytics and demographics serve your Home vs Rent decision making. </div>
                     </div>
                   </div>

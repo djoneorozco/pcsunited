@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun May 31 2026 09:12:28 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun May 31 2026 23:29:57 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f8b4b7949a3ce5138a6d3f" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -121,11 +121,24 @@
     }
   ]
 }
-</script>
-  <div style="width:100%; height:100vh; overflow:hidden;">
-    <iframe src="https://pcsunited.netlify.app/snapshot" style="width:100%; height:100%; border:none;">
+</script><!--  PCSUnited • PCS Snapshot Iframe Loader  -->
+  <div id="pcsu-snapshot-shell" style="width:100%; height:100vh; overflow:hidden;">
+    <iframe id="pcsu-snapshot-frame" title="PCSUnited PCS Snapshot" style="width:100%; height:100%; border:none; display:block;" loading="eager" allow="clipboard-read; clipboard-write">
     </iframe>
   </div>
+  <script>
+  (function () {
+    "use strict";
+    var iframe = document.getElementById("pcsu-snapshot-frame");
+    if (!iframe) {
+      console.error("PCS Snapshot iframe not found.");
+      return;
+    }
+    var baseIframeUrl = "https://thewing.netlify.app/pcs-snapshot/";
+    var queryString = window.location.search || "";
+    iframe.src = baseIframeUrl + queryString;
+  })();
+</script>
 </head>
 <body>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69eb162337c57d450e0e19a3" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Jun 05 2026 01:42:51 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Jun 05 2026 05:22:31 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6a213379d6767da2cb2a45b0" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -313,13 +313,460 @@
     <div class="w-embed"><!--  =========================================================
   PCSUNITED • LIGHTWEIGHT FAD / MORTGAGE HEALTH DASHBOARD
   WEBFLOW DIRECT SHELL EMBED
-  v1.1.2 • WEBFLOW CONFLICT FIXED
-  FIX
-  - Fully scopes styles inside #pcsu-mortgage-shell
-  - Prevents Webflow .title / .topbar / .panel conflicts
-  - Fixes Financial Health Snapshot floating into middle
-  - Keeps hero health ring contained
-  - Keeps old FAQ removed
+  EMBED 1 OF 2 — SHELL ONLY
+  v1.1.5 • BUYER COMFORT RANGE SHELL
+  UPDATE
+  - Removed duplicate lower healthNote panel
+  - Kept Buyer Comfort Range note only
+  - Kept all JS target IDs intact:
+    buyerRangeTarget
+    buyerRangeMin
+    buyerRangeMax
+    buyerRangeFill
+    buyerRangeNote
+=========================================================  -->
+      <div id="pcsu-mortgage-shell">
+        <div class="pcsu-stage">
+          <main class="app">
+            <!--  =====================================================
+        TOPBAR / HEALTH-FIRST HERO
+      ======================================================  -->
+            <header class="topbar">
+              <div class="title-wrap">
+                <div class="brand-kicker">AF Mortgage Calculator</div>
+                <h1 class="title">Financial Health Snapshot</h1>
+                <div class="subtitle">
+                  A lightweight FAD that turns mortgage inputs, military compensation, and monthly obligations into a clear residual-income readiness signal.
+                </div>
+              </div>
+              <section class="hero-card glass health-hero-card" aria-label="Financial health summary">
+                <div class="health-hero-copy">
+                  <div class="mini-label">Financial Health</div>
+                  <div class="hero-value" id="hero-health">
+                    Needs Inputs
+                  </div>
+                  <div class="hero-sub" id="hero-health-note">
+                    Calculate mortgage health to generate your snapshot.
+                  </div>
+                </div>
+                <div class="hero-ring-wrap">
+                  <div id="healthRing" class="score-ring hero-score-ring" style="--pct:0;--ring-color:var(--mint);">
+                    <div class="score-center">
+                      <div id="residualPercent" class="score-number">—</div>
+                      <div class="score-label">Residual %</div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+            </header>
+            <div class="divider"></div>
+            <!--  =====================================================
+        ABOUT / BUYER COMFORT RANGE
+      ======================================================  -->
+            <section class="seo-copy glass" aria-label="About this mortgage dashboard">
+              <div class="about-layout">
+                <div class="about-copy">
+                  <h2 class="panel-title">About the PCSUnited Financial Health Snapshot</h2>
+                  <div class="panel-rule"></div>
+                  <p>
+                    PCSUnited’s Financial Health Snapshot helps military users estimate mortgage payment pressure before moving into a deeper financial dashboard. It reads Financial Intake data when available, estimates monthly mortgage cost, and optionally uses TheWing.ai to calculate military compensation.
+                  </p>
+                  <p>
+                    The core output is simple: total income minus mortgage payment and monthly obligations equals residual income. That residual margin becomes a lightweight financial health signal designed for fast PCS and home-buying decisions.
+                  </p>
+                </div>
+                <div class="about-health-comment">
+                  <!--  =================================================
+              BUYER COMFORT RANGE / HOUSING RANGE
+              JS target IDs:
+              - buyerRangeTarget
+              - buyerRangeMin
+              - buyerRangeMax
+              - buyerRangeFill
+              - buyerRangeNote
+            ==================================================  -->
+                  <div class="housing-range-card" aria-label="Buyer comfort range">
+                    <div class="housing-range-top">
+                      <div>
+                        <span class="housing-range-label">Buyer Comfort Range</span>
+                        <span class="housing-range-title">Recommended Shopping Lane</span>
+                      </div>
+                    </div>
+                    <div class="housing-range-target-center">
+                      <small>Preferred Target</small>
+                      <b id="buyerRangeTarget">$—</b>
+                    </div>
+                    <div class="housing-range-track-wrap">
+                      <div class="housing-range-scale">
+                        <span id="buyerRangeMin">$—</span>
+                        <span id="buyerRangeMax">$—</span>
+                      </div>
+                      <div class="housing-range-track">
+                        <div id="buyerRangeFill" class="housing-range-fill"></div>
+                      </div>
+                    </div>
+                    <div id="buyerRangeNote" class="housing-range-note">
+                      Enter your income, obligations, and home price to generate a smarter purchase range.
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+            <!--  =====================================================
+        PRIMARY METRICS
+      ======================================================  -->
+            <section class="summary-grid hero-metrics" aria-label="Snapshot metrics">
+              <div class="mini-card glass">
+                <div class="mini-label">Total Income</div>
+                <div class="metric-value" id="hero-income">$—</div>
+                <div class="metric-caption">Military compensation + additional income</div>
+              </div>
+              <div class="mini-card glass">
+                <div class="mini-label">Total Monthly Obligations</div>
+                <div class="metric-value" id="healthObligations">$—</div>
+                <div class="metric-caption">Utilities, debts, credit cards, car payments</div>
+              </div>
+              <div class="mini-card glass">
+                <div class="mini-label">All-In Mortgage</div>
+                <div class="metric-value" id="hero-payment">$—</div>
+                <div class="metric-caption">P&I + taxes + insurance + HOA + PMI</div>
+              </div>
+              <div class="mini-card glass">
+                <div class="mini-label">Residual Income</div>
+                <div class="metric-value" id="hero-residual">$—</div>
+                <div class="metric-caption">Income left after mortgage and obligations</div>
+              </div>
+              <div class="mini-card glass metric-hidden-compat">
+                <div class="mini-label">Residual Margin</div>
+                <div class="metric-value" id="hero-residual-pct">—</div>
+                <div class="metric-caption">Residual income ÷ total income</div>
+              </div>
+            </section>
+            <!--  =====================================================
+        MAIN GRID
+      ======================================================  -->
+            <section class="main-grid">
+              <!--  ===================================================
+          LEFT PANEL: OPTIONAL MILITARY INPUTS
+        ====================================================  -->
+              <aside class="panel glass">
+                <div class="panel-head">
+                  <div>
+                    <h2 class="panel-title">(Optional) Military Pay</h2>
+                    <div class="panel-subtitle">Use TheWing.ai to estimate compensation.</div>
+                  </div>
+                  <button id="btn-clear" class="small-ghost-btn" type="button">
+                    Clear
+                  </button>
+                </div>
+                <div class="panel-rule"></div>
+                <div class="input-group">
+                  <label class="row-label" for="rank">Rank</label>
+                  <div class="select-wrap">
+                    <select id="rank">
+                      <option value="">Select rank</option>
+                      <optgroup label="Enlisted">
+                        <option value="E-1">E-1 • Airman Basic</option>
+                        <option value="E-2">E-2 • Airman</option>
+                        <option value="E-3">E-3 • Airman First Class</option>
+                        <option value="E-4">E-4 • Senior Airman</option>
+                        <option value="E-5" selected="">E-5 • Staff Sergeant</option>
+                        <option value="E-6">E-6 • Technical Sergeant</option>
+                        <option value="E-7">E-7 • Master Sergeant</option>
+                        <option value="E-8">E-8 • Senior Master Sergeant</option>
+                        <option value="E-9">E-9 • Chief Master Sergeant</option>
+                      </optgroup>
+                      <optgroup label="Officer">
+                        <option value="O-1">O-1 • Second Lieutenant</option>
+                        <option value="O-2">O-2 • First Lieutenant</option>
+                        <option value="O-3">O-3 • Captain</option>
+                        <option value="O-4">O-4 • Major</option>
+                        <option value="O-5">O-5 • Lieutenant Colonel</option>
+                        <option value="O-6">O-6 • Colonel</option>
+                        <option value="O-7">O-7 • Brigadier General</option>
+                        <option value="O-8">O-8 • Major General</option>
+                        <option value="O-9">O-9 • Lieutenant General</option>
+                        <option value="O-10">O-10 • General</option>
+                      </optgroup>
+                    </select>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="row-label" for="yos">Years of Service</label>
+                  <div class="select-wrap">
+                    <select id="yos">
+                      <option value="">Select years</option>
+                      <option value="2">2 Years</option>
+                      <option value="4">4 Years</option>
+                      <option value="6" selected="">6 Years</option>
+                      <option value="8">8 Years</option>
+                      <option value="10">10 Years</option>
+                      <option value="12">12 Years</option>
+                      <option value="14">14 Years</option>
+                      <option value="16">16 Years</option>
+                      <option value="18">18 Years</option>
+                      <option value="20">20 Years</option>
+                      <option value="22">22 Years</option>
+                      <option value="24">24 Years</option>
+                      <option value="26">26 Years</option>
+                      <option value="28">28 Years</option>
+                      <option value="30">30 Years</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="row-label" for="base">Base</label>
+                  <div class="select-wrap">
+                    <select id="base">
+                      <option value="">Select base</option>
+                      <option value="Andrews AFB">Andrews AFB</option>
+                      <option value="Barksdale AFB">Barksdale AFB</option>
+                      <option value="Beale AFB">Beale AFB</option>
+                      <option value="Cannon AFB">Cannon AFB</option>
+                      <option value="Charleston AFB">Charleston AFB</option>
+                      <option value="Davis-Monthan AFB">Davis-Monthan AFB</option>
+                      <option value="Dover AFB">Dover AFB</option>
+                      <option value="Dyess AFB">Dyess AFB</option>
+                      <option value="Eglin AFB">Eglin AFB</option>
+                      <option value="Fairchild AFB">Fairchild AFB</option>
+                      <option value="FE Warren AFB">FE Warren AFB</option>
+                      <option value="Holloman AFB">Holloman AFB</option>
+                      <option value="Hurlburt Field">Hurlburt Field</option>
+                      <option value="JBSA Fort Sam Houston">JBSA Fort Sam Houston</option>
+                      <option value="JBSA Lackland" selected="">JBSA Lackland</option>
+                      <option value="JBSA Randolph">JBSA Randolph</option>
+                      <option value="Keesler AFB">Keesler AFB</option>
+                      <option value="Kirtland AFB">Kirtland AFB</option>
+                      <option value="Langley AFB">Langley AFB</option>
+                      <option value="Laughlin AFB">Laughlin AFB</option>
+                      <option value="Little Rock AFB">Little Rock AFB</option>
+                      <option value="Luke AFB">Luke AFB</option>
+                      <option value="MacDill AFB">MacDill AFB</option>
+                      <option value="Malmstrom AFB">Malmstrom AFB</option>
+                      <option value="Maxwell AFB">Maxwell AFB</option>
+                      <option value="McConnell AFB">McConnell AFB</option>
+                      <option value="McGuire AFB">McGuire AFB</option>
+                      <option value="Minot AFB">Minot AFB</option>
+                      <option value="Moody AFB">Moody AFB</option>
+                      <option value="Mountain Home AFB">Mountain Home AFB</option>
+                      <option value="Nellis AFB">Nellis AFB</option>
+                      <option value="Offutt AFB">Offutt AFB</option>
+                      <option value="Patrick SFB">Patrick SFB</option>
+                      <option value="Peterson SFB">Peterson SFB</option>
+                      <option value="Robins AFB">Robins AFB</option>
+                      <option value="Scott AFB">Scott AFB</option>
+                      <option value="Seymour Johnson AFB">Seymour Johnson AFB</option>
+                      <option value="Shaw AFB">Shaw AFB</option>
+                      <option value="Sheppard AFB">Sheppard AFB</option>
+                      <option value="Tinker AFB">Tinker AFB</option>
+                      <option value="Travis AFB">Travis AFB</option>
+                      <option value="Tyndall AFB">Tyndall AFB</option>
+                      <option value="Vance AFB">Vance AFB</option>
+                      <option value="Vandenberg SFB">Vandenberg SFB</option>
+                      <option value="Whiteman AFB">Whiteman AFB</option>
+                      <option value="Wright-Patterson AFB">Wright-Patterson AFB</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="row-label" for="dependents">Dependents</label>
+                  <div class="select-wrap">
+                    <select id="dependents">
+                      <option value="without">Without Dependents</option>
+                      <option value="with" selected="">With Dependents</option>
+                    </select>
+                  </div>
+                </div>
+                <div class="input-group">
+                  <label class="row-label" for="additionalIncome">Additional Income / Month</label>
+                  <input id="additionalIncome" class="field-input" type="number" min="0" step="100" value="0" placeholder="e.g., 500">
+                </div>
+                <div class="input-group">
+                  <label class="row-label" for="monthlyObligations">Monthly Obligations</label>
+                  <input id="monthlyObligations" class="field-input" type="number" min="0" step="1" placeholder="e.g., 1200">
+                  <div class="range-meta">
+                    Use this for utilities, debts, credit cards, car payments, or recurring obligations not included in the mortgage.
+                  </div>
+                </div>
+                <button id="btn-fetch-pay" class="primary-btn" type="button">
+                  Get Military Pay
+                </button>
+                <div id="profilePills" class="pill-row"></div>
+                <div class="note-box">
+                  Military inputs are optional, but they turn the mortgage estimate into a true lightweight financial health snapshot.
+                </div>
+                <div id="errorBox" class="error-box"></div>
+              </aside>
+              <!--  ===================================================
+          RIGHT SIDE
+        ====================================================  -->
+              <section class="dashboard-stack">
+                <!--  MORTGAGE INPUTS  -->
+                <section class="panel glass">
+                  <div class="panel-head">
+                    <div>
+                      <h2 class="panel-title">Mortgage Inputs</h2>
+                      <div class="panel-subtitle" id="rateLine">TheWing mortgage engine</div>
+                    </div>
+                    <div id="statusPill" class="status-pill">
+                      <span class="dot"></span>
+                      <span id="statusText">Ready</span>
+                    </div>
+                  </div>
+                  <div class="panel-rule"></div>
+                  <div class="form-grid">
+                    <div class="input-group">
+                      <label class="row-label" for="homePrice">Home Price</label>
+                      <input id="homePrice" class="field-input" type="number" min="0" step="100" value="450000">
+                    </div>
+                    <div class="input-group">
+                      <label class="row-label" for="downPayment">Down Payment</label>
+                      <input id="downPayment" class="field-input" type="number" min="0" step="100" value="22500">
+                    </div>
+                    <div class="input-group">
+                      <label class="row-label" for="creditScore">Credit Score</label>
+                      <input id="creditScore" class="field-input" type="number" min="300" max="850" step="1" value="720">
+                    </div>
+                    <div class="input-group">
+                      <label class="row-label" for="loanType">Loan Type</label>
+                      <div class="select-wrap">
+                        <select id="loanType">
+                          <option value="va" selected="">VA Loan</option>
+                          <option value="conventional">Conventional</option>
+                        </select>
+                      </div>
+                    </div>
+                    <div class="input-group">
+                      <label class="row-label" for="taxRate">Property Tax % / Year</label>
+                      <input id="taxRate" class="field-input" type="number" min="0" step="0.01" value="2.10">
+                    </div>
+                    <div class="input-group">
+                      <label class="row-label" for="insuranceMonthly">Insurance / Month</label>
+                      <input id="insuranceMonthly" class="field-input" type="number" min="0" step="1" value="180">
+                    </div>
+                    <div class="input-group">
+                      <label class="row-label" for="hoaMonthly">HOA / Month</label>
+                      <input id="hoaMonthly" class="field-input" type="number" min="0" step="1" value="0">
+                    </div>
+                    <div class="input-group">
+                      <label class="row-label" for="pmiMonthly">PMI / Month</label>
+                      <input id="pmiMonthly" class="field-input" type="number" min="0" step="1" value="0">
+                    </div>
+                  </div>
+                  <button id="btn-calc" class="primary-btn wide-action" type="button">
+                    Calculate Mortgage Health
+                  </button>
+                  <div class="note-box">
+                    Financial Health uses this formula:
+                    <strong>Total Income - Mortgage Payment - Monthly Obligations = Residual Income.</strong>
+                  </div>
+                </section>
+                <!--  PAYMENT + INCOME  -->
+                <section class="split-grid">
+                  <!--  PAYMENT BREAKDOWN  -->
+                  <section class="panel glass">
+                    <h2 class="panel-title">Payment Breakdown</h2>
+                    <div class="panel-rule"></div>
+                    <div class="calc-card">
+                      <div class="calc-left">
+                        <div class="calc-title">All-In Payment / Month</div>
+                        <div class="calc-sub">Estimated mortgage carrying cost</div>
+                      </div>
+                      <div class="calc-right">
+                        <div class="calc-main" id="allInPayment">$—</div>
+                        <div class="calc-mini" id="loanAmount">$— loan</div>
+                      </div>
+                    </div>
+                    <div class="kv-table">
+                      <div class="kv-row">
+                        <div class="kv-key">Principal + Interest</div>
+                        <div class="kv-val" id="piPayment">$—</div>
+                      </div>
+                      <div class="kv-row">
+                        <div class="kv-key">Property Tax</div>
+                        <div class="kv-val" id="taxMonthly">$—</div>
+                      </div>
+                      <div class="kv-row">
+                        <div class="kv-key">Insurance</div>
+                        <div class="kv-val" id="insuranceOut">$—</div>
+                      </div>
+                      <div class="kv-row">
+                        <div class="kv-key">HOA</div>
+                        <div class="kv-val" id="hoaOut">$—</div>
+                      </div>
+                      <div class="kv-row">
+                        <div class="kv-key">PMI</div>
+                        <div class="kv-val" id="pmiOut">$—</div>
+                      </div>
+                    </div>
+                    <div class="range-meta" id="mortgageSource">
+                      Mortgage math will use TheWing.ai when available, with local fallback.
+                    </div>
+                  </section>
+                  <!--  INCOME BREAKDOWN  -->
+                  <section class="panel glass">
+                    <h2 class="panel-title">Income Breakdown</h2>
+                    <div class="panel-rule"></div>
+                    <div class="calc-card">
+                      <div class="calc-left">
+                        <div class="calc-title">Total Income / Month</div>
+                        <div class="calc-sub">Military compensation + extra income</div>
+                      </div>
+                      <div class="calc-right">
+                        <div class="calc-main" id="totalIncome">$—</div>
+                        <div class="calc-mini" id="housingRatio">— housing ratio</div>
+                      </div>
+                    </div>
+                    <div class="kv-table">
+                      <div class="kv-row">
+                        <div class="kv-key">Base Pay</div>
+                        <div class="kv-val" id="basePay">$—</div>
+                      </div>
+                      <div class="kv-row">
+                        <div class="kv-key">BAH</div>
+                        <div class="kv-val" id="bah">$—</div>
+                      </div>
+                      <div class="kv-row">
+                        <div class="kv-key">BAS</div>
+                        <div class="kv-val" id="bas">$—</div>
+                      </div>
+                      <div class="kv-row">
+                        <div class="kv-key">Additional Income</div>
+                        <div class="kv-val" id="additionalIncomeOut">$—</div>
+                      </div>
+                      <div class="kv-row">
+                        <div class="kv-key">Comp Source</div>
+                        <div class="kv-val" id="compSource">—</div>
+                      </div>
+                    </div>
+                    <div class="note-box" id="verdictBox">
+                      Verdict: Need income data. Use optional military inputs and fetch TheWing pay.
+                    </div>
+                  </section>
+                </section>
+                <!--  Hidden compatibility nodes for mortgage.js  -->
+                <div class="compat-hidden" aria-hidden="true">
+                  <span id="healthIncome">$—</span>
+                  <span id="healthMortgage">$—</span>
+                  <span id="healthOutflow">$—</span>
+                  <span id="healthResidual">$—</span>
+                </div>
+              </section>
+            </section>
+            <div class="footer-note">
+              Powered by PCSUnited and TheWing.ai. Planning estimate only.
+            </div>
+          </main>
+        </div>
+      </div>
+    </div>
+    <div class="w-embed"><!--  =========================================================
+  PCSUNITED • LIGHTWEIGHT FAD / MORTGAGE HEALTH DASHBOARD
+  EMBED 2 OF 2 — CSS ONLY
+  v1.1.4 • BUYER COMFORT RANGE CENTER-BAR FIX
+  Paste this in:
+  Option A: Webflow Page Settings > Custom Code > Head
+  Option B: Separate Webflow Embed above the Shell
 =========================================================  -->
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
@@ -382,7 +829,8 @@
 #pcsu-mortgage-shell .main-grid,
 #pcsu-mortgage-shell .dashboard-stack,
 #pcsu-mortgage-shell .panel,
-#pcsu-mortgage-shell .split-grid{
+#pcsu-mortgage-shell .split-grid,
+#pcsu-mortgage-shell .housing-range-card{
   position:relative !important;
   inset:auto !important;
   top:auto !important;
@@ -587,8 +1035,7 @@
   justify-content:center !important;
 }
 #pcsu-mortgage-shell .compact-health-bar{
-  margin-top:0 !important;
-  margin-bottom:12px !important;
+  display:none !important;
 }
 #pcsu-mortgage-shell .seo-copy p{
   margin:0 0 12px !important;
@@ -598,6 +1045,146 @@
 }
 #pcsu-mortgage-shell .seo-copy p:last-child{
   margin-bottom:0 !important;
+}
+/* =========================================================
+  BUYER COMFORT RANGE / HOUSING RANGE
+  v1.1.4 CENTER BAR
+========================================================= */
+#pcsu-mortgage-shell .housing-range-card{
+  width:100% !important;
+  margin:0 0 14px !important;
+  padding:14px 14px 13px !important;
+  border-radius:18px !important;
+  border:1px solid rgba(255,255,255,.10) !important;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(142,243,197,.09), transparent 36%),
+    radial-gradient(circle at 85% 0%, rgba(106,167,255,.08), transparent 38%),
+    rgba(255,255,255,.035) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04) !important;
+  overflow:hidden !important;
+}
+#pcsu-mortgage-shell .housing-range-top{
+  display:flex !important;
+  align-items:flex-start !important;
+  justify-content:flex-start !important;
+  gap:12px !important;
+  margin:0 0 8px !important;
+}
+#pcsu-mortgage-shell .housing-range-label{
+  display:block !important;
+  color:var(--muted2) !important;
+  font-size:10px !important;
+  font-weight:900 !important;
+  letter-spacing:.13em !important;
+  text-transform:uppercase !important;
+}
+#pcsu-mortgage-shell .housing-range-title{
+  display:block !important;
+  margin-top:4px !important;
+  color:var(--ink) !important;
+  font-size:15px !important;
+  line-height:1.1 !important;
+  font-weight:900 !important;
+  letter-spacing:-.02em !important;
+}
+/* New Shell target class */
+#pcsu-mortgage-shell .housing-range-target-center{
+  width:100% !important;
+  margin:6px 0 8px !important;
+  text-align:center !important;
+}
+#pcsu-mortgage-shell .housing-range-target-center small{
+  display:block !important;
+  color:var(--muted2) !important;
+  font-size:10px !important;
+  font-weight:900 !important;
+  letter-spacing:.11em !important;
+  text-transform:uppercase !important;
+}
+#pcsu-mortgage-shell .housing-range-target-center b{
+  display:block !important;
+  margin-top:4px !important;
+  color:var(--ink) !important;
+  font-size:30px !important;
+  line-height:1 !important;
+  font-weight:900 !important;
+  letter-spacing:-.05em !important;
+}
+/* Old target class hidden safely */
+#pcsu-mortgage-shell .housing-range-target{
+  display:none !important;
+}
+#pcsu-mortgage-shell .housing-range-track-wrap{
+  width:100% !important;
+  margin-top:8px !important;
+}
+#pcsu-mortgage-shell .housing-range-scale{
+  display:flex !important;
+  align-items:center !important;
+  justify-content:space-between !important;
+  gap:10px !important;
+  margin:0 0 6px !important;
+  color:var(--muted2) !important;
+  font-size:11px !important;
+  font-weight:800 !important;
+}
+#pcsu-mortgage-shell .housing-range-track{
+  position:relative !important;
+  width:100% !important;
+  height:12px !important;
+  border-radius:999px !important;
+  overflow:hidden !important;
+  background:rgba(255,255,255,.08) !important;
+  border:1px solid rgba(255,255,255,.08) !important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.04) !important;
+}
+/*
+  JS controls:
+  --buyer-fill-left
+  --buyer-fill-width
+  This lets the fill start near the middle, then move left/right and expand/shrink.
+*/
+#pcsu-mortgage-shell .housing-range-fill{
+  position:absolute !important;
+  top:0 !important;
+  bottom:0 !important;
+  left:var(--buyer-fill-left,50%) !important;
+  width:var(--buyer-fill-width,0%) !important;
+  min-width:6px !important;
+  border-radius:999px !important;
+  background:linear-gradient(90deg,var(--mint),var(--blue)) !important;
+  box-shadow:0 0 18px rgba(142,243,197,.16) !important;
+  transition:
+    left .24s ease,
+    width .24s ease,
+    background .24s ease !important;
+}
+#pcsu-mortgage-shell .housing-range-fill.warn{
+  background:linear-gradient(90deg,var(--gold),var(--blue)) !important;
+}
+#pcsu-mortgage-shell .housing-range-fill.bad{
+  background:linear-gradient(90deg,var(--danger),var(--gold)) !important;
+}
+#pcsu-mortgage-shell .housing-range-note{
+  margin-top:10px !important;
+  padding:10px 11px !important;
+  border-radius:14px !important;
+  border:1px solid rgba(142,243,197,.18) !important;
+  background:rgba(142,243,197,.055) !important;
+  color:var(--mint) !important;
+  font-size:12px !important;
+  line-height:1.45 !important;
+  font-weight:800 !important;
+}
+#pcsu-mortgage-shell .housing-range-note.warn{
+  color:var(--gold) !important;
+  border-color:rgba(255,213,142,.25) !important;
+  background:rgba(255,213,142,.065) !important;
+}
+#pcsu-mortgage-shell .housing-range-note.bad{
+  color:var(--danger) !important;
+  border-color:rgba(255,135,135,.25) !important;
+  background:rgba(255,135,135,.065) !important;
 }
 /* =========================================================
   METRICS
@@ -1102,6 +1689,12 @@
   #pcsu-mortgage-shell .form-grid{
     grid-template-columns:1fr !important;
   }
+  #pcsu-mortgage-shell .housing-range-top{
+    flex-direction:column !important;
+  }
+  #pcsu-mortgage-shell .housing-range-target-center{
+    text-align:center !important;
+  }
 }
 @media(max-width:560px){
   #pcsu-mortgage-shell .pcsu-stage{
@@ -1162,610 +1755,229 @@
   #pcsu-mortgage-shell .status-pill{
     align-self:flex-start !important;
   }
+  #pcsu-mortgage-shell .housing-range-target-center b{
+    font-size:25px !important;
+  }
 }
 </style>
-      <div id="pcsu-mortgage-shell">
-        <div class="pcsu-stage">
-          <main class="app">
-            <!--  =====================================================
-        TOPBAR / HEALTH-FIRST HERO
-      ======================================================  -->
-            <header class="topbar">
-              <div class="title-wrap">
-                <div class="brand-kicker">AF Mortgage Calculator</div>
-                <h1 class="title">Financial Health Snapshot</h1>
-                <div class="subtitle">
-                  A lightweight FAD that turns mortgage inputs, military compensation, and monthly obligations into a clear residual-income readiness signal.
-                </div>
-              </div>
-              <section class="hero-card glass health-hero-card" aria-label="Financial health summary">
-                <div class="health-hero-copy">
-                  <div class="mini-label">Financial Health</div>
-                  <div class="hero-value" id="hero-health">Needs Inputs</div>
-                  <div class="hero-sub" id="hero-health-note">
-                    Calculate mortgage health to generate your snapshot.
-                  </div>
-                </div>
-                <div class="hero-ring-wrap">
-                  <div id="healthRing" class="score-ring hero-score-ring" style="--pct:0;--ring-color:var(--mint);">
-                    <div class="score-center">
-                      <div id="residualPercent" class="score-number">—</div>
-                      <div class="score-label">Residual %</div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-            </header>
-            <div class="divider"></div>
-            <!--  =====================================================
-        ABOUT / BLUF HEALTH COMMENT
-      ======================================================  -->
-            <section class="seo-copy glass" aria-label="About this mortgage dashboard">
-              <div class="about-layout">
-                <div class="about-copy">
-                  <h2 class="panel-title">About the PCSUnited Financial Health Snapshot</h2>
-                  <div class="panel-rule"></div>
-                  <p>
-                    PCSUnited’s Financial Health Snapshot helps military users estimate mortgage payment pressure before moving into a deeper financial dashboard. It reads Financial Intake data when available, estimates monthly mortgage cost, and optionally uses TheWing.ai to calculate military compensation.
-                  </p>
-                  <p>
-                    The core output is simple: total income minus mortgage payment and monthly obligations equals residual income. That residual margin becomes a lightweight financial health signal designed for fast PCS and home-buying decisions.
-                  </p>
-                </div>
-                <div class="about-health-comment">
-                  <div class="health-bar compact-health-bar">
-                    <div id="healthBarFill" class="health-bar-fill"></div>
-                  </div>
-                  <div class="note-box" id="healthNote">
-                    Add income data to generate a lightweight financial health signal.
-                  </div>
-                </div>
-              </div>
-            </section>
-            <!--  =====================================================
-        PRIMARY METRICS
-      ======================================================  -->
-            <section class="summary-grid hero-metrics" aria-label="Snapshot metrics">
-              <div class="mini-card glass">
-                <div class="mini-label">Total Income</div>
-                <div class="metric-value" id="hero-income">$—</div>
-                <div class="metric-caption">Military compensation + additional income</div>
-              </div>
-              <div class="mini-card glass">
-                <div class="mini-label">Total Monthly Obligations</div>
-                <div class="metric-value" id="healthObligations">$—</div>
-                <div class="metric-caption">Utilities, debts, credit cards, car payments</div>
-              </div>
-              <div class="mini-card glass">
-                <div class="mini-label">All-In Mortgage</div>
-                <div class="metric-value" id="hero-payment">$—</div>
-                <div class="metric-caption">P&I + taxes + insurance + HOA + PMI</div>
-              </div>
-              <div class="mini-card glass">
-                <div class="mini-label">Residual Income</div>
-                <div class="metric-value" id="hero-residual">$—</div>
-                <div class="metric-caption">Income left after mortgage and obligations</div>
-              </div>
-              <div class="mini-card glass metric-hidden-compat">
-                <div class="mini-label">Residual Margin</div>
-                <div class="metric-value" id="hero-residual-pct">—</div>
-                <div class="metric-caption">Residual income ÷ total income</div>
-              </div>
-            </section>
-            <!--  =====================================================
-        MAIN GRID
-      ======================================================  -->
-            <section class="main-grid">
-              <!--  ===================================================
-          LEFT PANEL: OPTIONAL MILITARY INPUTS
-        ====================================================  -->
-              <aside class="panel glass">
-                <div class="panel-head">
-                  <div>
-                    <h2 class="panel-title">Get Your Military Pay</h2>
-                    <div class="panel-subtitle">Use TheWing.ai to estimate compensation.</div>
-                  </div>
-                  <button id="btn-clear" class="small-ghost-btn" type="button">
-                    Clear
-                  </button>
-                </div>
-                <div class="panel-rule"></div>
-                <div class="input-group">
-                  <label class="row-label" for="rank">Rank</label>
-                  <div class="select-wrap">
-                    <select id="rank">
-                      <option value="">Select rank</option>
-                      <optgroup label="Enlisted">
-                        <option value="E-1">E-1 • Airman Basic</option>
-                        <option value="E-2">E-2 • Airman</option>
-                        <option value="E-3">E-3 • Airman First Class</option>
-                        <option value="E-4">E-4 • Senior Airman</option>
-                        <option value="E-5" selected="">E-5 • Staff Sergeant</option>
-                        <option value="E-6">E-6 • Technical Sergeant</option>
-                        <option value="E-7">E-7 • Master Sergeant</option>
-                        <option value="E-8">E-8 • Senior Master Sergeant</option>
-                        <option value="E-9">E-9 • Chief Master Sergeant</option>
-                      </optgroup>
-                      <optgroup label="Officer">
-                        <option value="O-1">O-1 • Second Lieutenant</option>
-                        <option value="O-2">O-2 • First Lieutenant</option>
-                        <option value="O-3">O-3 • Captain</option>
-                        <option value="O-4">O-4 • Major</option>
-                        <option value="O-5">O-5 • Lieutenant Colonel</option>
-                        <option value="O-6">O-6 • Colonel</option>
-                        <option value="O-7">O-7 • Brigadier General</option>
-                        <option value="O-8">O-8 • Major General</option>
-                        <option value="O-9">O-9 • Lieutenant General</option>
-                        <option value="O-10">O-10 • General</option>
-                      </optgroup>
-                    </select>
-                  </div>
-                </div>
-                <div class="input-group">
-                  <label class="row-label" for="yos">Years of Service</label>
-                  <div class="select-wrap">
-                    <select id="yos">
-                      <option value="">Select years</option>
-                      <option value="2">2 Years</option>
-                      <option value="4">4 Years</option>
-                      <option value="6" selected="">6 Years</option>
-                      <option value="8">8 Years</option>
-                      <option value="10">10 Years</option>
-                      <option value="12">12 Years</option>
-                      <option value="14">14 Years</option>
-                      <option value="16">16 Years</option>
-                      <option value="18">18 Years</option>
-                      <option value="20">20 Years</option>
-                      <option value="22">22 Years</option>
-                      <option value="24">24 Years</option>
-                      <option value="26">26 Years</option>
-                      <option value="28">28 Years</option>
-                      <option value="30">30 Years</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="input-group">
-                  <label class="row-label" for="base">Base</label>
-                  <div class="select-wrap">
-                    <select id="base">
-                      <option value="">Select base</option>
-                      <option value="Andrews AFB">Andrews AFB</option>
-                      <option value="Barksdale AFB">Barksdale AFB</option>
-                      <option value="Beale AFB">Beale AFB</option>
-                      <option value="Cannon AFB">Cannon AFB</option>
-                      <option value="Charleston AFB">Charleston AFB</option>
-                      <option value="Davis-Monthan AFB">Davis-Monthan AFB</option>
-                      <option value="Dover AFB">Dover AFB</option>
-                      <option value="Dyess AFB">Dyess AFB</option>
-                      <option value="Eglin AFB">Eglin AFB</option>
-                      <option value="Fairchild AFB">Fairchild AFB</option>
-                      <option value="FE Warren AFB">FE Warren AFB</option>
-                      <option value="Holloman AFB">Holloman AFB</option>
-                      <option value="Hurlburt Field">Hurlburt Field</option>
-                      <option value="JBSA Fort Sam Houston">JBSA Fort Sam Houston</option>
-                      <option value="JBSA Lackland" selected="">JBSA Lackland</option>
-                      <option value="JBSA Randolph">JBSA Randolph</option>
-                      <option value="Keesler AFB">Keesler AFB</option>
-                      <option value="Kirtland AFB">Kirtland AFB</option>
-                      <option value="Langley AFB">Langley AFB</option>
-                      <option value="Laughlin AFB">Laughlin AFB</option>
-                      <option value="Little Rock AFB">Little Rock AFB</option>
-                      <option value="Luke AFB">Luke AFB</option>
-                      <option value="MacDill AFB">MacDill AFB</option>
-                      <option value="Malmstrom AFB">Malmstrom AFB</option>
-                      <option value="Maxwell AFB">Maxwell AFB</option>
-                      <option value="McConnell AFB">McConnell AFB</option>
-                      <option value="McGuire AFB">McGuire AFB</option>
-                      <option value="Minot AFB">Minot AFB</option>
-                      <option value="Moody AFB">Moody AFB</option>
-                      <option value="Mountain Home AFB">Mountain Home AFB</option>
-                      <option value="Nellis AFB">Nellis AFB</option>
-                      <option value="Offutt AFB">Offutt AFB</option>
-                      <option value="Patrick SFB">Patrick SFB</option>
-                      <option value="Peterson SFB">Peterson SFB</option>
-                      <option value="Robins AFB">Robins AFB</option>
-                      <option value="Scott AFB">Scott AFB</option>
-                      <option value="Seymour Johnson AFB">Seymour Johnson AFB</option>
-                      <option value="Shaw AFB">Shaw AFB</option>
-                      <option value="Sheppard AFB">Sheppard AFB</option>
-                      <option value="Tinker AFB">Tinker AFB</option>
-                      <option value="Travis AFB">Travis AFB</option>
-                      <option value="Tyndall AFB">Tyndall AFB</option>
-                      <option value="Vance AFB">Vance AFB</option>
-                      <option value="Vandenberg SFB">Vandenberg SFB</option>
-                      <option value="Whiteman AFB">Whiteman AFB</option>
-                      <option value="Wright-Patterson AFB">Wright-Patterson AFB</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="input-group">
-                  <label class="row-label" for="dependents">Dependents</label>
-                  <div class="select-wrap">
-                    <select id="dependents">
-                      <option value="without">Without Dependents</option>
-                      <option value="with" selected="">With Dependents</option>
-                    </select>
-                  </div>
-                </div>
-                <div class="input-group">
-                  <label class="row-label" for="additionalIncome">Additional Income / Month</label>
-                  <input id="additionalIncome" class="field-input" type="number" min="0" step="100" value="0" placeholder="e.g., 500">
-                </div>
-                <div class="input-group">
-                  <label class="row-label" for="monthlyObligations">Monthly Obligations</label>
-                  <input id="monthlyObligations" class="field-input" type="number" min="0" step="1" placeholder="e.g., 1200">
-                  <div class="range-meta">
-                    Use this for utilities, debts, credit cards, car payments, or recurring obligations not included in the mortgage.
-                  </div>
-                </div>
-                <button id="btn-fetch-pay" class="primary-btn" type="button">
-                  Fetch TheWing Pay
-                </button>
-                <div id="profilePills" class="pill-row"></div>
-                <div class="note-box">
-                  Military inputs are optional, but they turn the mortgage estimate into a true lightweight financial health snapshot.
-                </div>
-                <div id="errorBox" class="error-box"></div>
-              </aside>
-              <!--  ===================================================
-          RIGHT SIDE
-        ====================================================  -->
-              <section class="dashboard-stack">
-                <!--  MORTGAGE INPUTS  -->
-                <section class="panel glass">
-                  <div class="panel-head">
-                    <div>
-                      <h2 class="panel-title">Mortgage Inputs</h2>
-                      <div class="panel-subtitle" id="rateLine">TheWing mortgage engine</div>
-                    </div>
-                    <div id="statusPill" class="status-pill">
-                      <span class="dot"></span>
-                      <span id="statusText">Ready</span>
-                    </div>
-                  </div>
-                  <div class="panel-rule"></div>
-                  <div class="form-grid">
-                    <div class="input-group">
-                      <label class="row-label" for="homePrice">Home Price</label>
-                      <input id="homePrice" class="field-input" type="number" min="0" step="100" value="450000">
-                    </div>
-                    <div class="input-group">
-                      <label class="row-label" for="downPayment">Down Payment</label>
-                      <input id="downPayment" class="field-input" type="number" min="0" step="100" value="22500">
-                    </div>
-                    <div class="input-group">
-                      <label class="row-label" for="creditScore">Credit Score</label>
-                      <input id="creditScore" class="field-input" type="number" min="300" max="850" step="1" value="720">
-                    </div>
-                    <div class="input-group">
-                      <label class="row-label" for="loanType">Loan Type</label>
-                      <div class="select-wrap">
-                        <select id="loanType">
-                          <option value="va" selected="">VA Loan</option>
-                          <option value="conventional">Conventional</option>
-                        </select>
-                      </div>
-                    </div>
-                    <div class="input-group">
-                      <label class="row-label" for="taxRate">Property Tax % / Year</label>
-                      <input id="taxRate" class="field-input" type="number" min="0" step="0.01" value="2.10">
-                    </div>
-                    <div class="input-group">
-                      <label class="row-label" for="insuranceMonthly">Insurance / Month</label>
-                      <input id="insuranceMonthly" class="field-input" type="number" min="0" step="1" value="180">
-                    </div>
-                    <div class="input-group">
-                      <label class="row-label" for="hoaMonthly">HOA / Month</label>
-                      <input id="hoaMonthly" class="field-input" type="number" min="0" step="1" value="0">
-                    </div>
-                    <div class="input-group">
-                      <label class="row-label" for="pmiMonthly">PMI / Month</label>
-                      <input id="pmiMonthly" class="field-input" type="number" min="0" step="1" value="0">
-                    </div>
-                  </div>
-                  <button id="btn-calc" class="primary-btn wide-action" type="button">
-                    Calculate Mortgage Health
-                  </button>
-                  <div class="note-box">
-                    Financial Health uses this formula:
-                    <strong>Total Income - Mortgage Payment - Monthly Obligations = Residual Income.</strong>
-                  </div>
-                </section>
-                <!--  PAYMENT + INCOME  -->
-                <section class="split-grid">
-                  <section class="panel glass">
-                    <h2 class="panel-title">Payment Breakdown</h2>
-                    <div class="panel-rule"></div>
-                    <div class="calc-card">
-                      <div class="calc-left">
-                        <div class="calc-title">All-In Payment / Month</div>
-                        <div class="calc-sub">Estimated mortgage carrying cost</div>
-                      </div>
-                      <div class="calc-right">
-                        <div class="calc-main" id="allInPayment">$—</div>
-                        <div class="calc-mini" id="loanAmount">$— loan</div>
-                      </div>
-                    </div>
-                    <div class="kv-table">
-                      <div class="kv-row">
-                        <div class="kv-key">Principal + Interest</div>
-                        <div class="kv-val" id="piPayment">$—</div>
-                      </div>
-                      <div class="kv-row">
-                        <div class="kv-key">Property Tax</div>
-                        <div class="kv-val" id="taxMonthly">$—</div>
-                      </div>
-                      <div class="kv-row">
-                        <div class="kv-key">Insurance</div>
-                        <div class="kv-val" id="insuranceOut">$—</div>
-                      </div>
-                      <div class="kv-row">
-                        <div class="kv-key">HOA</div>
-                        <div class="kv-val" id="hoaOut">$—</div>
-                      </div>
-                      <div class="kv-row">
-                        <div class="kv-key">PMI</div>
-                        <div class="kv-val" id="pmiOut">$—</div>
-                      </div>
-                    </div>
-                    <div class="range-meta" id="mortgageSource">
-                      Mortgage math will use TheWing.ai when available, with local fallback.
-                    </div>
-                  </section>
-                  <section class="panel glass">
-                    <h2 class="panel-title">Income Breakdown</h2>
-                    <div class="panel-rule"></div>
-                    <div class="calc-card">
-                      <div class="calc-left">
-                        <div class="calc-title">Total Income / Month</div>
-                        <div class="calc-sub">Military compensation + extra income</div>
-                      </div>
-                      <div class="calc-right">
-                        <div class="calc-main" id="totalIncome">$—</div>
-                        <div class="calc-mini" id="housingRatio">— housing ratio</div>
-                      </div>
-                    </div>
-                    <div class="kv-table">
-                      <div class="kv-row">
-                        <div class="kv-key">Base Pay</div>
-                        <div class="kv-val" id="basePay">$—</div>
-                      </div>
-                      <div class="kv-row">
-                        <div class="kv-key">BAH</div>
-                        <div class="kv-val" id="bah">$—</div>
-                      </div>
-                      <div class="kv-row">
-                        <div class="kv-key">BAS</div>
-                        <div class="kv-val" id="bas">$—</div>
-                      </div>
-                      <div class="kv-row">
-                        <div class="kv-key">Additional Income</div>
-                        <div class="kv-val" id="additionalIncomeOut">$—</div>
-                      </div>
-                      <div class="kv-row">
-                        <div class="kv-key">Comp Source</div>
-                        <div class="kv-val" id="compSource">—</div>
-                      </div>
-                    </div>
-                    <div class="note-box" id="verdictBox">
-                      Verdict: Need income data. Use optional military inputs and fetch TheWing pay.
-                    </div>
-                  </section>
-                </section>
-                <!--  Hidden compatibility nodes for mortgage.js  -->
-                <div class="compat-hidden" aria-hidden="true">
-                  <span id="healthIncome">$—</span>
-                  <span id="healthMortgage">$—</span>
-                  <span id="healthOutflow">$—</span>
-                  <span id="healthResidual">$—</span>
-                </div>
-              </section>
-            </section>
-            <div class="footer-note">
-              Powered by PCSUnited and TheWing.ai. Planning estimate only.
-            </div>
-          </main>
-        </div>
-      </div>
     </div>
-    <div class="w-embed w-script">
-      <script>
-/* =========================================================
+    <div class="w-embed w-script"><!--  =========================================================
   PCSUNITED • LIGHTWEIGHT FAD / MORTGAGE HEALTH DASHBOARD
-  WEBFLOW DIRECT JS EMBED
-  Embed 2 of 2
-  v1.0.0
-========================================================= */
+  EMBED 3 OF 3 — JS ONLY
+  v1.1.7 • FIXED USER TARGET + HEALTH-BASED RANGE LANE
+  Paste this AFTER the Shell embed.
+  UPDATE
+  - Preferred Target now ALWAYS equals user's Home Price input
+  - Bar expands/shrinks based on residual income strength
+  - Bar shifts right when user has strong upside room
+  - Bar shifts left when user is under pressure
+  - Range dollars are calculated around the user's selected target
+  - Added dynamic lane color behavior
+=========================================================  -->
+      <script>
 (function(){
   "use strict";
-  const VERSION = "1.0.0-webflow-direct";
+  /* =========================================================
+    //#1 CONFIG
+  ========================================================= */
   const API_BASE = "https://thewing.netlify.app/api";
-  const MORTGAGE_ENDPOINT = API_BASE + "/mortgage";
-  const BRAIN_ENDPOINT = API_BASE + "/opensource-brain";
-  const KEYS = {
-    OV: "pcsunited.kpi_overrides.v1",
-    BRIDGE_V1: "pcsunited.bridge.v1",
-    BRIDGE: "pcsunited.bridge",
-    REALTY_BRIDGE: "realtysass.bridge",
-    INTAKE_LEGACY: "pcsunited.financial_intake.v1",
-    INTAKE: "pcsunited.financial.intake.v1",
-    PROFILE: "pcsunited.profile.v1",
-    IDENTITY: "pcsunited.identity.v1",
-    SESSION: "pcsunited.session.v1"
-  };
-  const BASE_META = {
-    "Andrews AFB": { zip:"20762", cityKey:"Andrews", state:"MD", market:"Washington DC" },
-    "Barksdale AFB": { zip:"71110", cityKey:"Barksdale", state:"LA", market:"Bossier City" },
-    "Beale AFB": { zip:"95903", cityKey:"Beale", state:"CA", market:"Marysville" },
-    "Cannon AFB": { zip:"88103", cityKey:"Cannon", state:"NM", market:"Clovis" },
-    "Charleston AFB": { zip:"29404", cityKey:"Charleston", state:"SC", market:"Charleston" },
-    "Davis-Monthan AFB": { zip:"85707", cityKey:"DavisMonthan", state:"AZ", market:"Tucson" },
-    "Dover AFB": { zip:"19902", cityKey:"Dover", state:"DE", market:"Dover" },
-    "Dyess AFB": { zip:"79607", cityKey:"Dyess", state:"TX", market:"Abilene" },
-    "Eglin AFB": { zip:"32542", cityKey:"Eglin", state:"FL", market:"Fort Walton Beach" },
-    "Fairchild AFB": { zip:"99011", cityKey:"Fairchild", state:"WA", market:"Spokane" },
-    "FE Warren AFB": { zip:"82005", cityKey:"FEWarren", state:"WY", market:"Cheyenne" },
-    "Holloman AFB": { zip:"88330", cityKey:"Holloman", state:"NM", market:"Alamogordo" },
-    "Hurlburt Field": { zip:"32544", cityKey:"Hurlburt", state:"FL", market:"Fort Walton Beach" },
-    "JBSA Fort Sam Houston": { zip:"78234", cityKey:"FortSamHouston", state:"TX", market:"San Antonio" },
-    "JBSA Lackland": { zip:"78236", cityKey:"Lackland", state:"TX", market:"San Antonio" },
-    "JBSA Randolph": { zip:"78150", cityKey:"Randolph", state:"TX", market:"San Antonio" },
-    "Keesler AFB": { zip:"39534", cityKey:"Keesler", state:"MS", market:"Biloxi" },
-    "Kirtland AFB": { zip:"87117", cityKey:"Kirtland", state:"NM", market:"Albuquerque" },
-    "Langley AFB": { zip:"23665", cityKey:"Langley", state:"VA", market:"Hampton Roads" },
-    "Laughlin AFB": { zip:"78843", cityKey:"Laughlin", state:"TX", market:"Del Rio" },
-    "Little Rock AFB": { zip:"72099", cityKey:"LittleRock", state:"AR", market:"Little Rock" },
-    "Luke AFB": { zip:"85309", cityKey:"Luke", state:"AZ", market:"Phoenix" },
-    "MacDill AFB": { zip:"33621", cityKey:"MacDill", state:"FL", market:"Tampa" },
-    "Malmstrom AFB": { zip:"59402", cityKey:"Malmstrom", state:"MT", market:"Great Falls" },
-    "Maxwell AFB": { zip:"36112", cityKey:"Maxwell", state:"AL", market:"Montgomery" },
-    "McConnell AFB": { zip:"67221", cityKey:"McConnell", state:"KS", market:"Wichita" },
-    "McGuire AFB": { zip:"08641", cityKey:"McGuire", state:"NJ", market:"Joint Base MDL" },
-    "Minot AFB": { zip:"58705", cityKey:"Minot", state:"ND", market:"Minot" },
-    "Moody AFB": { zip:"31699", cityKey:"Moody", state:"GA", market:"Valdosta" },
-    "Mountain Home AFB": { zip:"83648", cityKey:"MountainHome", state:"ID", market:"Mountain Home" },
-    "Nellis AFB": { zip:"89191", cityKey:"Nellis", state:"NV", market:"Las Vegas" },
-    "Offutt AFB": { zip:"68113", cityKey:"Offutt", state:"NE", market:"Omaha" },
-    "Patrick SFB": { zip:"32925", cityKey:"Patrick", state:"FL", market:"Space Coast" },
-    "Peterson SFB": { zip:"80914", cityKey:"Peterson", state:"CO", market:"Colorado Springs" },
-    "Robins AFB": { zip:"31098", cityKey:"Robins", state:"GA", market:"Warner Robins" },
-    "Scott AFB": { zip:"62225", cityKey:"Scott", state:"IL", market:"St. Louis Metro" },
-    "Seymour Johnson AFB": { zip:"27531", cityKey:"SeymourJohnson", state:"NC", market:"Goldsboro" },
-    "Shaw AFB": { zip:"29152", cityKey:"Shaw", state:"SC", market:"Sumter" },
-    "Sheppard AFB": { zip:"76311", cityKey:"Sheppard", state:"TX", market:"Wichita Falls" },
-    "Tinker AFB": { zip:"73145", cityKey:"Tinker", state:"OK", market:"Oklahoma City" },
-    "Travis AFB": { zip:"94535", cityKey:"Travis", state:"CA", market:"Fairfield" },
-    "Tyndall AFB": { zip:"32403", cityKey:"Tyndall", state:"FL", market:"Panama City" },
-    "Vance AFB": { zip:"73705", cityKey:"Vance", state:"OK", market:"Enid" },
-    "Vandenberg SFB": { zip:"93437", cityKey:"Vandenberg", state:"CA", market:"Lompoc" },
-    "Whiteman AFB": { zip:"65305", cityKey:"Whiteman", state:"MO", market:"Knob Noster" },
-    "Wright-Patterson AFB": { zip:"45433", cityKey:"WrightPatterson", state:"OH", market:"Dayton" }
+  const EP_MORTGAGE = API_BASE + "/mortgage";
+  const EP_BRAIN = API_BASE + "/opensource-brain";
+  const DEFAULT_TERM_YEARS = 30;
+  const STORAGE_KEYS = {
+    intakeModern:"pcsunited.financial.intake.v1",
+    intakeLegacy:"pcsunited.financial_intake.v1",
+    bridgeV1:"pcsunited.bridge.v1",
+    bridge:"pcsunited.bridge",
+    realtyBridge:"realtysass.bridge",
+    profile:"pcsunited.profile.v1",
+    kpi:"pcsunited.kpi_overrides.v1",
+    openFlow:"pcsunited.open_flow_ready.v1",
+    mortgageResult:"pcsunited.mortgage_snapshot.v1",
+    mortgageMirror:"realtysass.mortgage_cache.v1"
   };
   const BAS = {
-    enlisted: 465.77,
-    officer: 320.78
+    enlisted:465.77,
+    officer:320.78
   };
-  const $ = (id) => document.getElementById(id);
-  const el = {
-    rank: $("rank"),
-    yos: $("yos"),
-    base: $("base"),
-    dependents: $("dependents"),
-    additionalIncome: $("additionalIncome"),
-    monthlyObligations: $("monthlyObligations"),
-    homePrice: $("homePrice"),
-    downPayment: $("downPayment"),
-    creditScore: $("creditScore"),
-    loanType: $("loanType"),
-    taxRate: $("taxRate"),
-    insuranceMonthly: $("insuranceMonthly"),
-    hoaMonthly: $("hoaMonthly"),
-    pmiMonthly: $("pmiMonthly"),
-    btnFetchPay: $("btn-fetch-pay"),
-    btnCalc: $("btn-calc"),
-    btnClear: $("btn-clear"),
-    statusPill: $("statusPill"),
-    statusText: $("statusText"),
-    errorBox: $("errorBox"),
-    profilePills: $("profilePills"),
-    heroHealth: $("hero-health"),
-    heroHealthNote: $("hero-health-note"),
-    heroIncome: $("hero-income"),
-    heroPayment: $("hero-payment"),
-    heroResidual: $("hero-residual"),
-    heroResidualPct: $("hero-residual-pct"),
-    healthRing: $("healthRing"),
-    residualPercent: $("residualPercent"),
-    healthBarFill: $("healthBarFill"),
-    healthNote: $("healthNote"),
-    healthObligations: $("healthObligations"),
-    healthIncome: $("healthIncome"),
-    healthMortgage: $("healthMortgage"),
-    healthOutflow: $("healthOutflow"),
-    healthResidual: $("healthResidual"),
-    rateLine: $("rateLine"),
-    mortgageSource: $("mortgageSource"),
-    allInPayment: $("allInPayment"),
-    loanAmount: $("loanAmount"),
-    piPayment: $("piPayment"),
-    taxMonthly: $("taxMonthly"),
-    insuranceOut: $("insuranceOut"),
-    hoaOut: $("hoaOut"),
-    pmiOut: $("pmiOut"),
-    totalIncome: $("totalIncome"),
-    housingRatio: $("housingRatio"),
-    basePay: $("basePay"),
-    bah: $("bah"),
-    bas: $("bas"),
-    additionalIncomeOut: $("additionalIncomeOut"),
-    compSource: $("compSource"),
-    verdictBox: $("verdictBox")
+  const BASE_META = {
+    "Andrews AFB": { zip:"20762", market:"Washington DC" },
+    "Barksdale AFB": { zip:"71110", market:"Bossier City" },
+    "Beale AFB": { zip:"95903", market:"Marysville" },
+    "Cannon AFB": { zip:"88103", market:"Clovis" },
+    "Charleston AFB": { zip:"29404", market:"Charleston" },
+    "Davis-Monthan AFB": { zip:"85707", market:"Tucson" },
+    "Dover AFB": { zip:"19902", market:"Dover" },
+    "Dyess AFB": { zip:"79607", market:"Abilene" },
+    "Eglin AFB": { zip:"32542", market:"Fort Walton Beach" },
+    "Fairchild AFB": { zip:"99011", market:"Spokane" },
+    "FE Warren AFB": { zip:"82005", market:"Cheyenne" },
+    "Holloman AFB": { zip:"88330", market:"Alamogordo" },
+    "Hurlburt Field": { zip:"32544", market:"Fort Walton Beach" },
+    "JBSA Fort Sam Houston": { zip:"78234", market:"San Antonio" },
+    "JBSA Lackland": { zip:"78236", market:"San Antonio" },
+    "JBSA Randolph": { zip:"78150", market:"San Antonio" },
+    "Keesler AFB": { zip:"39534", market:"Biloxi" },
+    "Kirtland AFB": { zip:"87117", market:"Albuquerque" },
+    "Langley AFB": { zip:"23665", market:"Hampton Roads" },
+    "Laughlin AFB": { zip:"78843", market:"Del Rio" },
+    "Little Rock AFB": { zip:"72099", market:"Little Rock" },
+    "Luke AFB": { zip:"85309", market:"Phoenix" },
+    "MacDill AFB": { zip:"33621", market:"Tampa" },
+    "Malmstrom AFB": { zip:"59402", market:"Great Falls" },
+    "Maxwell AFB": { zip:"36112", market:"Montgomery" },
+    "McConnell AFB": { zip:"67221", market:"Wichita" },
+    "McGuire AFB": { zip:"08641", market:"Joint Base MDL" },
+    "Minot AFB": { zip:"58705", market:"Minot" },
+    "Moody AFB": { zip:"31699", market:"Valdosta" },
+    "Mountain Home AFB": { zip:"83648", market:"Mountain Home" },
+    "Nellis AFB": { zip:"89191", market:"Las Vegas" },
+    "Offutt AFB": { zip:"68113", market:"Omaha" },
+    "Patrick SFB": { zip:"32925", market:"Space Coast" },
+    "Peterson SFB": { zip:"80914", market:"Colorado Springs" },
+    "Robins AFB": { zip:"31098", market:"Warner Robins" },
+    "Scott AFB": { zip:"62225", market:"St. Louis Metro" },
+    "Seymour Johnson AFB": { zip:"27531", market:"Goldsboro" },
+    "Shaw AFB": { zip:"29152", market:"Sumter" },
+    "Sheppard AFB": { zip:"76311", market:"Wichita Falls" },
+    "Tinker AFB": { zip:"73145", market:"Oklahoma City" },
+    "Travis AFB": { zip:"94535", market:"Fairfield" },
+    "Tyndall AFB": { zip:"32403", market:"Panama City" },
+    "Vance AFB": { zip:"73705", market:"Enid" },
+    "Vandenberg SFB": { zip:"93437", market:"Lompoc" },
+    "Whiteman AFB": { zip:"65305", market:"Knob Noster" },
+    "Wright-Patterson AFB": { zip:"45433", market:"Dayton" }
   };
-  if(!document.getElementById("pcsu-mortgage-shell")){
-    console.warn("PCSUnited Mortgage Shell not found.");
-    return;
-  }
   const state = {
-    comp: {
-      basePay: 0,
-      bah: 0,
-      bas: 0,
-      total: 0,
-      source: "none"
+    income:{
+      basePay:0,
+      bah:0,
+      bas:0,
+      additional:0,
+      total:0,
+      source:"Local"
     },
-    mortgage: {
-      loanAmount: 0,
-      principalInterest: 0,
-      taxMonthly: 0,
-      insuranceMonthly: 0,
-      hoaMonthly: 0,
-      pmiMonthly: 0,
-      allIn: 0,
-      apr: 6.65,
-      source: "local"
+    mortgage:{
+      homePrice:450000,
+      downPayment:22500,
+      creditScore:720,
+      loanType:"va",
+      apr:7.0,
+      termYears:30,
+      loanAmount:427500,
+      pi:0,
+      taxMonthly:0,
+      insuranceMonthly:180,
+      hoaMonthly:0,
+      pmiMonthly:0,
+      allIn:0,
+      source:"Local fallback"
     },
-    health: {
-      income: 0,
-      obligations: 0,
-      mortgage: 0,
-      outflow: 0,
-      residual: 0,
-      residualPct: 0,
-      grade: "Needs Inputs",
-      kind: "warn"
-    }
+    obligations:0,
+    residual:0,
+    residualPct:0,
+    health:"Needs Inputs",
+    healthKind:"warn"
   };
-  function num(value, fallback = 0){
-    const n = Number(String(value ?? "").replace(/[$,%]/g,"").replace(/,/g,""));
-    return Number.isFinite(n) ? n : fallback;
+  /* =========================================================
+    //#2 DOM
+  ========================================================= */
+  const root = document.getElementById("pcsu-mortgage-shell");
+  if(!root) return;
+  const $ = function(id){
+    return document.getElementById(id);
+  };
+  const el = {
+    rank:$("rank"),
+    yos:$("yos"),
+    base:$("base"),
+    dependents:$("dependents"),
+    additionalIncome:$("additionalIncome"),
+    monthlyObligations:$("monthlyObligations"),
+    btnFetchPay:$("btn-fetch-pay"),
+    btnCalc:$("btn-calc"),
+    btnClear:$("btn-clear"),
+    profilePills:$("profilePills"),
+    errorBox:$("errorBox"),
+    homePrice:$("homePrice"),
+    downPayment:$("downPayment"),
+    creditScore:$("creditScore"),
+    loanType:$("loanType"),
+    taxRate:$("taxRate"),
+    insuranceMonthly:$("insuranceMonthly"),
+    hoaMonthly:$("hoaMonthly"),
+    pmiMonthly:$("pmiMonthly"),
+    statusPill:$("statusPill"),
+    statusText:$("statusText"),
+    rateLine:$("rateLine"),
+    heroHealth:$("hero-health"),
+    heroHealthNote:$("hero-health-note"),
+    heroIncome:$("hero-income"),
+    heroPayment:$("hero-payment"),
+    heroResidual:$("hero-residual"),
+    heroResidualPct:$("hero-residual-pct"),
+    healthRing:$("healthRing"),
+    residualPercent:$("residualPercent"),
+    healthBarFill:$("healthBarFill"),
+    healthNote:$("healthNote"),
+    healthIncome:$("healthIncome"),
+    healthMortgage:$("healthMortgage"),
+    healthObligations:$("healthObligations"),
+    healthOutflow:$("healthOutflow"),
+    healthResidual:$("healthResidual"),
+    buyerRangeTarget:$("buyerRangeTarget"),
+    buyerRangeMin:$("buyerRangeMin"),
+    buyerRangeMax:$("buyerRangeMax"),
+    buyerRangeFill:$("buyerRangeFill"),
+    buyerRangeNote:$("buyerRangeNote"),
+    allInPayment:$("allInPayment"),
+    loanAmount:$("loanAmount"),
+    piPayment:$("piPayment"),
+    taxMonthly:$("taxMonthly"),
+    insuranceOut:$("insuranceOut"),
+    hoaOut:$("hoaOut"),
+    pmiOut:$("pmiOut"),
+    mortgageSource:$("mortgageSource"),
+    totalIncome:$("totalIncome"),
+    housingRatio:$("housingRatio"),
+    basePay:$("basePay"),
+    bah:$("bah"),
+    bas:$("bas"),
+    additionalIncomeOut:$("additionalIncomeOut"),
+    compSource:$("compSource"),
+    verdictBox:$("verdictBox")
+  };
+  /* =========================================================
+    //#3 UTILITIES
+  ========================================================= */
+  function n(v, fallback){
+    const x = Number(String(v ?? "").replace(/[$,%]/g,"").replace(/,/g,""));
+    return Number.isFinite(x) ? x : (fallback || 0);
   }
-  function clean(value){
-    return value === undefined || value === null ? "" : String(value).trim();
+  function clamp(value, min, max){
+    return Math.max(min, Math.min(max, value));
   }
-  function money(value, digits = 2){
-    const n = Number(value);
-    if(!Number.isFinite(n)) return "$—";
-    return n.toLocaleString("en-US", {
-      style: "currency",
-      currency: "USD",
-      minimumFractionDigits: digits,
-      maximumFractionDigits: digits
+  function money(value, decimals){
+    const x = Number(value);
+    if(!Number.isFinite(x)) return "$—";
+    return x.toLocaleString("en-US",{
+      style:"currency",
+      currency:"USD",
+      minimumFractionDigits:decimals || 0,
+      maximumFractionDigits:decimals || 0
     });
   }
-  function money0(value){
-    return money(value, 0);
+  function pct(value, decimals){
+    const x = Number(value);
+    if(!Number.isFinite(x)) return "—";
+    return x.toFixed(decimals ?? 1) + "%";
   }
-  function pct(value, digits = 1){
-    const n = Number(value);
-    if(!Number.isFinite(n)) return "—";
-    return n.toFixed(digits) + "%";
-  }
-  function readJSON(key, fallback = null){
+  function readJSON(key, fallback){
     try{
-      const local = localStorage.getItem(key);
-      if(local) return JSON.parse(local);
-      const session = sessionStorage.getItem(key);
-      if(session) return JSON.parse(session);
+      const rawLocal = localStorage.getItem(key);
+      if(rawLocal) return JSON.parse(rawLocal);
+      const rawSession = sessionStorage.getItem(key);
+      if(rawSession) return JSON.parse(rawSession);
       return fallback;
     }catch(_){
       return fallback;
@@ -1776,692 +1988,891 @@
       localStorage.setItem(key, JSON.stringify(value));
     }catch(_){}
   }
+  function dispatchSafe(name, detail){
+    try{
+      window.dispatchEvent(new CustomEvent(name,{ detail:detail || {} }));
+    }catch(_){}
+  }
   function setText(node, value){
     if(node) node.textContent = value;
   }
+  function setInputValue(node, value){
+    if(!node) return;
+    if(value === undefined || value === null || value === "") return;
+    node.value = String(value);
+  }
+  function setError(message){
+    if(!el.errorBox) return;
+    el.errorBox.textContent = message || "";
+  }
   function setStatus(kind, text){
-    if(!el.statusPill) return;
-    const dot = el.statusPill.querySelector(".dot");
-    if(dot){
-      dot.classList.remove("ok","warn","bad");
-      if(kind) dot.classList.add(kind);
+    if(el.statusPill){
+      const dot = el.statusPill.querySelector(".dot");
+      if(dot){
+        dot.classList.remove("ok","warn","bad");
+        if(kind) dot.classList.add(kind);
+      }
     }
     setText(el.statusText, text || "Ready");
   }
-  function setError(message){
-    setText(el.errorBox, message || "");
-  }
-  function setClassKind(node, kind){
+  function clearClasses(node){
     if(!node) return;
     node.classList.remove("ok","warn","bad");
+  }
+  function applyKind(node, kind){
+    if(!node) return;
+    clearClasses(node);
     if(kind) node.classList.add(kind);
   }
-  function normalizeRank(value){
-    const raw = clean(value).toUpperCase().replace(/\s+/g,"").replace("–","-").replace("—","-");
-    if(!raw) return "";
-    if(/^[EOW]-\d{1,2}$/.test(raw)) return raw;
-    if(/^[EOW]\d{1,2}$/.test(raw)) return raw.charAt(0) + "-" + raw.slice(1);
-    return raw;
+  function rankType(rank){
+    const r = String(rank || "").toUpperCase();
+    if(r.startsWith("O-") || r.startsWith("W-")) return "officer";
+    if(r.startsWith("E-")) return "enlisted";
+    return "enlisted";
   }
-  function calcBAS(rank){
-    const r = normalizeRank(rank);
-    if(r.startsWith("O-") || r.startsWith("W-")) return BAS.officer;
-    if(r.startsWith("E-")) return BAS.enlisted;
-    return 0;
+  function scoreAPR(score){
+    const s = Number(score) || 720;
+    if(s >= 780) return 6.50;
+    if(s >= 760) return 6.75;
+    if(s >= 720) return 7.00;
+    if(s >= 700) return 7.20;
+    if(s >= 680) return 7.35;
+    if(s >= 660) return 7.85;
+    if(s >= 640) return 8.25;
+    if(s >= 620) return 9.25;
+    return 9.95;
   }
-  function estimateAPR(score, loanType){
-    const s = num(score, 720);
-    const isVA = String(loanType || "").toLowerCase() === "va";
-    let apr = 7.35;
-    if(s >= 780) apr = 6.35;
-    else if(s >= 760) apr = 6.55;
-    else if(s >= 740) apr = 6.75;
-    else if(s >= 720) apr = 6.95;
-    else if(s >= 700) apr = 7.15;
-    else if(s >= 680) apr = 7.35;
-    else if(s >= 660) apr = 7.85;
-    else if(s >= 640) apr = 8.25;
-    else if(s >= 620) apr = 9.25;
-    else apr = 9.95;
-    if(isVA) apr = Math.max(5.95, apr - 0.30);
-    return apr;
-  }
-  function mortgagePI(loanAmount, apr, years){
-    const principal = Math.max(0, num(loanAmount, 0));
-    const rate = num(apr, 0) / 100 / 12;
-    const months = Math.max(1, Math.round(num(years, 30) * 12));
+  function mortgagePI(loanAmount, apr, termYears){
+    const principal = Math.max(0, n(loanAmount,0));
+    const monthlyRate = (Math.max(0, n(apr,0)) / 100) / 12;
+    const months = Math.max(1, Math.round(n(termYears, DEFAULT_TERM_YEARS) * 12));
     if(principal <= 0) return 0;
-    if(rate <= 0) return principal / months;
-    const pow = Math.pow(1 + rate, months);
-    return principal * (rate * pow) / (pow - 1);
+    if(monthlyRate <= 0) return principal / months;
+    const pow = Math.pow(1 + monthlyRate, months);
+    return principal * ((monthlyRate * pow) / (pow - 1));
   }
-  async function postJSON(url, body){
-    const response = await fetch(url + "?t=" + Date.now(), {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      cache: "no-store",
-      body: JSON.stringify(body || {})
-    });
-    const data = await response.json().catch(() => ({}));
-    if(!response.ok || data.ok === false){
-      const err = new Error(data.error || "HTTP " + response.status);
-      err.payload = data;
-      err.status = response.status;
-      throw err;
-    }
-    return data;
+  function estimateLocalBasePay(rank, yos){
+    const r = String(rank || "E-5").toUpperCase();
+    const y = Number(yos || 6);
+    const enlisted = {
+      "E-1": 2017, "E-2": 2261, "E-3": 2380, "E-4": 2634, "E-5": 3199,
+      "E-6": 3632, "E-7": 4625, "E-8": 5666, "E-9": 6949
+    };
+    const officer = {
+      "O-1": 3826, "O-2": 4410, "O-3": 5102, "O-4": 5803, "O-5": 6909,
+      "O-6": 8281, "O-7": 10339, "O-8": 12457, "O-9": 17715, "O-10": 18667
+    };
+    let base = enlisted[r] || officer[r] || 3199;
+    if(y >= 4) base *= 1.08;
+    if(y >= 8) base *= 1.16;
+    if(y >= 12) base *= 1.24;
+    if(y >= 16) base *= 1.33;
+    if(y >= 20) base *= 1.42;
+    if(y >= 24) base *= 1.50;
+    return Math.round(base);
   }
-  function readSavedFinancialContext(){
-    const ov = readJSON(KEYS.OV, {}) || {};
-    const bridgeV1 = readJSON(KEYS.BRIDGE_V1, {}) || {};
-    const bridge = readJSON(KEYS.BRIDGE, {}) || {};
-    const realtyBridge = readJSON(KEYS.REALTY_BRIDGE, {}) || {};
-    const intakeLegacy = readJSON(KEYS.INTAKE_LEGACY, {}) || {};
-    const intakeModern = readJSON(KEYS.INTAKE, {}) || {};
-    const profile = readJSON(KEYS.PROFILE, {}) || {};
-    const identity = readJSON(KEYS.IDENTITY, {}) || {};
+  function estimateLocalBAH(baseName, rank, dependents){
+    const meta = BASE_META[baseName] || BASE_META["JBSA Lackland"] || {};
+    const market = String(meta.market || "").toLowerCase();
+    const hasDeps = String(dependents || "with") === "with";
+    const r = String(rank || "E-5").toUpperCase();
+    let bah = 1850;
+    if(market.includes("san antonio")) bah = 1850;
+    else if(market.includes("las vegas")) bah = 2250;
+    else if(market.includes("phoenix")) bah = 2350;
+    else if(market.includes("tampa")) bah = 2550;
+    else if(market.includes("colorado springs")) bah = 2300;
+    else if(market.includes("washington")) bah = 3250;
+    else if(market.includes("fairfield")) bah = 3100;
+    else if(market.includes("space coast")) bah = 2400;
+    else if(market.includes("charleston")) bah = 2400;
+    else if(market.includes("hampton")) bah = 2250;
+    else if(market.includes("spokane")) bah = 1950;
+    else if(market.includes("albuquerque")) bah = 1900;
+    else if(market.includes("tucson")) bah = 1850;
+    else if(market.includes("omaha")) bah = 1750;
+    else if(market.includes("oklahoma")) bah = 1650;
+    else if(market.includes("biloxi")) bah = 1600;
+    else if(market.includes("wichita")) bah = 1500;
+    else if(market.includes("clovis")) bah = 1400;
+    if(hasDeps) bah += 220;
+    if(r.startsWith("O-")) bah += 450;
+    else if(["E-7","E-8","E-9"].includes(r)) bah += 250;
+    else if(["E-1","E-2","E-3","E-4"].includes(r)) bah -= 150;
+    return Math.max(950, Math.round(bah));
+  }
+  function collectInputs(){
     return {
-      ...identity,
-      ...profile,
+      rank:String(el.rank?.value || "E-5"),
+      yos:n(el.yos?.value,6),
+      base:String(el.base?.value || "JBSA Lackland"),
+      dependents:String(el.dependents?.value || "with"),
+      additionalIncome:Math.max(0,n(el.additionalIncome?.value,0)),
+      obligations:Math.max(0,n(el.monthlyObligations?.value,0)),
+      homePrice:Math.max(0,n(el.homePrice?.value,450000)),
+      downPayment:Math.max(0,n(el.downPayment?.value,22500)),
+      creditScore:clamp(Math.round(n(el.creditScore?.value,720)),300,850),
+      loanType:String(el.loanType?.value || "va"),
+      taxRate:Math.max(0,n(el.taxRate?.value,2.10)),
+      insuranceMonthly:Math.max(0,n(el.insuranceMonthly?.value,180)),
+      hoaMonthly:Math.max(0,n(el.hoaMonthly?.value,0)),
+      pmiMonthly:Math.max(0,n(el.pmiMonthly?.value,0))
+    };
+  }
+  /* =========================================================
+    //#4 LOCAL STORAGE PREFILL
+  ========================================================= */
+  function getMergedStoredContext(){
+    const intakeModern = readJSON(STORAGE_KEYS.intakeModern,{}) || {};
+    const intakeLegacy = readJSON(STORAGE_KEYS.intakeLegacy,{}) || {};
+    const bridgeV1 = readJSON(STORAGE_KEYS.bridgeV1,{}) || {};
+    const bridge = readJSON(STORAGE_KEYS.bridge,{}) || {};
+    const realtyBridge = readJSON(STORAGE_KEYS.realtyBridge,{}) || {};
+    const profile = readJSON(STORAGE_KEYS.profile,{}) || {};
+    const kpi = readJSON(STORAGE_KEYS.kpi,{}) || {};
+    return {
       ...realtyBridge,
       ...bridge,
       ...bridgeV1,
       ...intakeLegacy,
       ...intakeModern,
-      ...ov
+      ...profile,
+      ...kpi
     };
   }
-  function prefillFromIntake(){
-    const ctx = readSavedFinancialContext();
+  function prefillFromStorage(){
+    const data = getMergedStoredContext();
+    const expenses =
+      data.monthly_expenses ??
+      data.monthlyExpenses ??
+      data.expenses ??
+      data.expensesOverride ??
+      "";
     const price =
-      ctx.projected_home_price ??
-      ctx.projectedHomePrice ??
-      ctx.homePrice ??
-      ctx.housing ??
-      ctx.price ??
-      ctx.housingOverride ??
-      450000;
+      data.projected_home_price ??
+      data.projectedHomePrice ??
+      data.homePrice ??
+      data.price ??
+      data.housing ??
+      data.housingOverride ??
+      "";
     const down =
-      ctx.downpayment ??
-      ctx.downPayment ??
-      ctx.dpAmt ??
-      ctx.savingsOverride ??
-      22500;
-    const score =
-      ctx.credit_score ??
-      ctx.creditScore ??
-      ctx.fico ??
-      720;
-    const obligations =
-      ctx.expenses ??
-      ctx.monthly_expenses ??
-      ctx.monthlyExpenses ??
-      ctx.expensesOverride ??
+      data.downpayment ??
+      data.downPayment ??
+      data.dpAmt ??
+      data.savingsOverride ??
+      "";
+    const credit =
+      data.credit_score ??
+      data.creditScore ??
+      data.fico ??
       "";
     const rank =
-      ctx.rank_paygrade ??
-      ctx.rankPaygrade ??
-      ctx.rank ??
+      data.rank_paygrade ??
+      data.rankPaygrade ??
+      data.rank ??
       "";
     const yos =
-      ctx.yos ??
-      ctx.years_of_service ??
-      ctx.yearsOfService ??
-      "";
-    const family =
-      ctx.family ??
-      ctx.family_size ??
-      ctx.familySize ??
-      ctx.dependents_count ??
-      ctx.dependentsCount ??
+      data.yos ??
+      data.years_of_service ??
+      data.yearsOfService ??
       "";
     const base =
-      ctx.base ??
-      ctx.selected_base ??
-      ctx.selectedBase ??
-      ctx.pcs_base ??
-      ctx.pcsBase ??
+      data.base ??
+      data.selected_base ??
+      data.selectedBase ??
+      data.pcs_base ??
+      data.pcsBase ??
       "";
-    if(el.homePrice && price) el.homePrice.value = Math.round(num(price, 450000));
-    if(el.downPayment && down) el.downPayment.value = Math.round(num(down, 22500));
-    if(el.creditScore && score) el.creditScore.value = Math.round(num(score, 720));
-    if(el.monthlyObligations && obligations !== "") el.monthlyObligations.value = Math.round(num(obligations, 0));
-    if(el.rank && rank){
-      const r = normalizeRank(rank);
-      const exists = Array.from(el.rank.options).some(o => o.value === r);
-      if(exists) el.rank.value = r;
-    }
-    if(el.yos && yos){
-      const y = String(Math.round(num(yos, 0)));
-      const exists = Array.from(el.yos.options).some(o => o.value === y);
-      if(exists) el.yos.value = y;
-    }
-    if(el.base && base){
-      const exists = Array.from(el.base.options).some(o => o.value === base);
-      if(exists) el.base.value = base;
-    }
-    if(el.dependents && family !== ""){
-      const f = num(family, 0);
-      el.dependents.value = f > 1 ? "with" : "without";
-    }
-  }
-  function extractMortgage(data){
-    const payload = data && (data.payload || data.data || data.result || data) || {};
-    const m = payload.mortgage || payload.payment || payload.monthly || payload;
-    const loanAmount = num(
-      m.loanAmount ?? m.loan_amount ?? m.principal ?? payload.loanAmount ?? payload.loan_amount,
-      0
-    );
-    const principalInterest = num(
-      m.principalInterest ??
-      m.principal_interest ??
-      m.pi ??
-      m.monthlyPI ??
-      m.monthly_pi ??
-      m.payment ??
-      payload.principalInterest ??
-      payload.principal_interest,
-      0
-    );
-    const totalMonthly = num(
-      m.totalMonthly ??
-      m.total_monthly ??
-      m.allIn ??
-      m.all_in ??
-      m.allInMonthly ??
-      m.monthlyPayment ??
-      payload.totalMonthly ??
-      payload.total_monthly,
-      0
-    );
-    const apr = num(
-      m.apr ?? m.rate ?? payload.apr ?? payload.rate,
-      estimateAPR(el.creditScore ? el.creditScore.value : 720, el.loanType ? el.loanType.value : "va")
-    );
-    return {
-      loanAmount,
-      principalInterest,
-      totalMonthly,
-      apr
-    };
-  }
-  async function calculateMortgage(){
-    const price = Math.max(0, num(el.homePrice ? el.homePrice.value : 0, 0));
-    const down = Math.max(0, num(el.downPayment ? el.downPayment.value : 0, 0));
-    const score = Math.max(300, Math.min(850, num(el.creditScore ? el.creditScore.value : 720, 720)));
-    const loanType = clean(el.loanType ? el.loanType.value : "va") || "va";
-    const taxRate = Math.max(0, num(el.taxRate ? el.taxRate.value : 0, 0));
-    const insurance = Math.max(0, num(el.insuranceMonthly ? el.insuranceMonthly.value : 0, 0));
-    const hoa = Math.max(0, num(el.hoaMonthly ? el.hoaMonthly.value : 0, 0));
-    const pmi = Math.max(0, num(el.pmiMonthly ? el.pmiMonthly.value : 0, 0));
-    const loanAmountLocal = Math.max(0, price - down);
-    const aprLocal = estimateAPR(score, loanType);
-    const piLocal = mortgagePI(loanAmountLocal, aprLocal, 30);
-    const taxMonthly = (price * (taxRate / 100)) / 12;
-    let finalLoan = loanAmountLocal;
-    let finalPI = piLocal;
-    let finalAPR = aprLocal;
-    let source = "Local fallback";
-    try{
-      const data = await postJSON(MORTGAGE_ENDPOINT, {
-        price,
-        homePrice: price,
-        projected_home_price: price,
-        downpayment: down,
-        downPayment: down,
-        credit_score: score,
-        creditScore: score,
-        fico: score,
-        termYears: 30,
-        term_years: 30,
-        loanType,
-        loan_type: loanType,
-        propertyTaxRate: taxRate,
-        property_tax_rate: taxRate,
-        insuranceMonthly: insurance,
-        insurance_monthly: insurance,
-        hoaMonthly: hoa,
-        hoa_monthly: hoa,
-        pmiMonthly: pmi,
-        pmi_monthly: pmi,
-        source: "pcsunited.mortgage.webflow.direct"
-      });
-      const remote = extractMortgage(data);
-      if(remote.principalInterest > 0){
-        finalLoan = remote.loanAmount || loanAmountLocal;
-        finalPI = remote.principalInterest;
-        finalAPR = remote.apr || aprLocal;
-        source = "TheWing.ai mortgage engine";
+    const family =
+      data.family ??
+      data.dependents_count ??
+      data.dependents ??
+      "";
+    if(rank) setInputValue(el.rank, normalizeRank(rank));
+    if(yos) setInputValue(el.yos, nearestYos(yos));
+    if(base) setSelectIfOptionExists(el.base, base);
+    if(family !== ""){
+      const familyNum = Number(family);
+      if(Number.isFinite(familyNum)){
+        setInputValue(el.dependents, familyNum > 1 ? "with" : "without");
       }
-    }catch(err){
-      console.warn("Mortgage endpoint fallback used:", err);
     }
-    const allIn = finalPI + taxMonthly + insurance + hoa + pmi;
-    state.mortgage = {
-      loanAmount: finalLoan,
-      principalInterest: finalPI,
-      taxMonthly,
-      insuranceMonthly: insurance,
-      hoaMonthly: hoa,
-      pmiMonthly: pmi,
-      allIn,
-      apr: finalAPR,
-      source
-    };
-    paintMortgage();
-    computeHealth();
-    saveSnapshot();
-    return state.mortgage;
+    setInputValue(el.monthlyObligations, expenses);
+    setInputValue(el.homePrice, price);
+    setInputValue(el.downPayment, down);
+    setInputValue(el.creditScore, credit);
+    if(!el.downPayment?.value && price){
+      setInputValue(el.downPayment, Math.round(Number(price) * 0.05));
+    }
   }
-  function extractComp(data, inputState){
-    const payload = data && (data.payload || data.data || data.result || data) || {};
-    const truth = payload.truth_packet || payload.truthPacket || data.truth_packet || data.truthPacket || {};
-    const comp = payload.compensation || payload.comp || payload.pay || truth.compensation || {};
-    const monthly = comp.monthly || payload.monthly || truth.monthly || comp;
-    const basePay = num(
-      monthly.basePay ??
-      monthly.base_pay ??
-      monthly.basicPay ??
-      monthly.basic_pay ??
-      payload.basePay ??
-      payload.base_pay ??
-      truth.basePay ??
-      truth.base_pay,
-      0
-    );
-    const bah = num(
-      monthly.bah ??
-      monthly.BAH ??
-      monthly.bahMonthly ??
-      payload.bah ??
-      payload.BAH ??
-      truth.bah,
-      0
-    );
-    const basRemote = num(
-      monthly.bas ??
-      monthly.BAS ??
-      monthly.basMonthly ??
-      payload.bas ??
-      payload.BAS ??
-      truth.bas,
-      0
-    );
-    const total = num(
-      monthly.total ??
-      monthly.totalMonthly ??
-      monthly.total_monthly ??
-      monthly.grossMonthlyComp ??
-      monthly.combinedMonthlyGross ??
-      payload.total ??
-      payload.totalMonthly ??
-      payload.total_monthly ??
-      truth.total ??
-      truth.totalMonthly ??
-      truth.total_monthly,
-      0
-    );
-    const bas = basRemote || calcBAS(inputState.rank);
-    const finalTotal = total || basePay + bah + bas;
-    return {
+  function normalizeRank(value){
+    const raw = String(value || "").toUpperCase();
+    const match = raw.match(/[EOW]-?\d{1,2}/);
+    if(!match) return raw;
+    return match[0].replace(/([EOW])(\d)/,"$1-$2");
+  }
+  function nearestYos(value){
+    const y = Number(value) || 6;
+    const allowed = [2,4,6,8,10,12,14,16,18,20,22,24,26,28,30];
+    let best = allowed[0];
+    let diff = Math.abs(y - best);
+    allowed.forEach(function(item){
+      const d = Math.abs(y - item);
+      if(d < diff){
+        best = item;
+        diff = d;
+      }
+    });
+    return String(best);
+  }
+  function setSelectIfOptionExists(select, value){
+    if(!select || !value) return;
+    const wanted = String(value).trim().toLowerCase();
+    const options = Array.from(select.options || []);
+    const exact = options.find(function(opt){
+      return String(opt.value || "").trim().toLowerCase() === wanted;
+    });
+    if(exact){
+      select.value = exact.value;
+      return;
+    }
+    const loose = options.find(function(opt){
+      return String(opt.value || "").trim().toLowerCase().includes(wanted) ||
+             wanted.includes(String(opt.value || "").trim().toLowerCase());
+    });
+    if(loose){
+      select.value = loose.value;
+    }
+  }
+  /* =========================================================
+    //#5 PAY ENGINE
+  ========================================================= */
+  function applyLocalPay(){
+    const input = collectInputs();
+    const type = rankType(input.rank);
+    const basePay = estimateLocalBasePay(input.rank, input.yos);
+    const bah = estimateLocalBAH(input.base, input.rank, input.dependents);
+    const bas = BAS[type] || BAS.enlisted;
+    const total = basePay + bah + bas + input.additionalIncome;
+    state.income = {
       basePay,
       bah,
       bas,
-      total: finalTotal,
-      source: "TheWing.ai"
+      additional:input.additionalIncome,
+      total,
+      source:"Local fallback"
     };
+    return state.income;
   }
-  async function fetchPay(){
+  async function fetchTheWingPay(){
+    const input = collectInputs();
+    const meta = BASE_META[input.base] || {};
     setError("");
-    setStatus("warn", "Fetching pay...");
+    setStatus("warn","Loading pay…");
     if(el.btnFetchPay) el.btnFetchPay.disabled = true;
-    const rank = normalizeRank(el.rank ? el.rank.value : "");
-    const yos = num(el.yos ? el.yos.value : 0, 0);
-    const base = clean(el.base ? el.base.value : "");
-    const depMode = clean(el.dependents ? el.dependents.value : "with");
-    const hasDependents = depMode === "with";
-    const dependentsCount = hasDependents ? 1 : 0;
-    const family = hasDependents ? 2 : 1;
-    const meta = BASE_META[base] || {};
-    if(!rank){
-      setStatus("bad", "Missing rank");
-      setError("Select a rank first.");
-      if(el.btnFetchPay) el.btnFetchPay.disabled = false;
-      return;
-    }
-    if(!yos){
-      setStatus("bad", "Missing YOS");
-      setError("Select years of service first.");
-      if(el.btnFetchPay) el.btnFetchPay.disabled = false;
-      return;
-    }
-    if(!base){
-      setStatus("bad", "Missing base");
-      setError("Select a base first.");
-      if(el.btnFetchPay) el.btnFetchPay.disabled = false;
-      return;
-    }
-    const input = {
-      source: "pcsunited.mortgage.webflow.direct",
-      mode: "active_duty",
-      type: "active_duty",
-      status: "active_duty",
-      rank,
-      rank_paygrade: rank,
-      rankPaygrade: rank,
-      yos,
-      years_of_service: yos,
-      yearsOfService: yos,
-      dependents: hasDependents ? "yes" : "no",
-      dependents_count: dependentsCount,
-      dependentsCount: dependentsCount,
-      family,
-      family_size: family,
-      familySize: family,
-      has_dependents: hasDependents,
-      hasDependents: hasDependents,
-      base,
-      selected_base: base,
-      selectedBase: base,
-      pcs_base: base,
-      pcsBase: base,
-      zip: meta.zip || "",
-      bah_zip: meta.zip || "",
-      bahZip: meta.zip || "",
-      cityKey: meta.cityKey || "",
-      market: meta.market || "",
-      state: meta.state || ""
-    };
     try{
-      const bodies = [
-        { tool: "PCS_SNAPSHOT", input },
-        { type: "PCS_SNAPSHOT", input },
-        input
-      ];
-      let comp = null;
-      for(const body of bodies){
-        try{
-          const data = await postJSON(BRAIN_ENDPOINT, body);
-          comp = extractComp(data, input);
-          if(comp && (comp.basePay || comp.bah || comp.bas || comp.total)) break;
-        }catch(_){}
-      }
-      if(!comp || !(comp.basePay || comp.bah || comp.bas || comp.total)){
-        throw new Error("TheWing did not return compensation for this selection.");
-      }
-      state.comp = comp;
-      setStatus("ok", "TheWing loaded");
-      paintIncome();
-      renderPills();
-      computeHealth();
-      saveSnapshot();
-    }catch(err){
-      console.warn("Compensation fetch failed:", err);
-      const bas = calcBAS(rank);
-      state.comp = {
-        basePay: 0,
-        bah: 0,
-        bas,
-        total: bas,
-        source: "BAS fallback only"
+      const payload = {
+        tool:"PCS_SNAPSHOT",
+        input:{
+          mode:"active_duty",
+          rank:input.rank,
+          rank_paygrade:input.rank,
+          yos:input.yos,
+          years_of_service:input.yos,
+          family:input.dependents === "with" ? 2 : 1,
+          dependents_count:input.dependents === "with" ? 1 : 0,
+          has_dependents:input.dependents === "with",
+          base:input.base,
+          selected_base:input.base,
+          pcs_base:input.base,
+          zip:meta.zip || "",
+          source:"pcsunited.mortgage.health.webflow.v1.1.7"
+        }
       };
-      setStatus("bad", "Pay issue");
-      setError("TheWing pay did not load. BAS fallback is shown, but Base Pay and BAH need TheWing data.");
-      paintIncome();
-      renderPills();
-      computeHealth();
+      const res = await fetch(EP_BRAIN,{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify(payload)
+      });
+      const data = await res.json().catch(function(){ return {}; });
+      if(!res.ok || data.ok === false){
+        throw new Error(data.error || "TheWing pay estimate failed.");
+      }
+      const comp = data.compensation || data.truth_packet?.compensation?.monthly || {};
+      const monthly = data.truth_packet?.compensation?.monthly || {};
+      const basePay = n(comp.basePay ?? comp.base_pay ?? monthly.basePay ?? monthly.base_pay,0);
+      const bah = n(comp.bah ?? comp.BAH ?? monthly.bah ?? monthly.BAH,0);
+      const bas = n(comp.bas ?? comp.BAS ?? monthly.bas ?? monthly.BAS,0) || BAS[rankType(input.rank)] || BAS.enlisted;
+      const additional = input.additionalIncome;
+      state.income = {
+        basePay,
+        bah,
+        bas,
+        additional,
+        total:basePay + bah + bas + additional,
+        source:"TheWing.ai"
+      };
+      setStatus("ok","Pay loaded");
+      renderAll();
       saveSnapshot();
+      return state.income;
+    }catch(err){
+      applyLocalPay();
+      setStatus("warn","Local pay");
+      setError("TheWing pay was unavailable, so I used a local planning estimate. " + (err?.message || ""));
+      renderAll();
+      saveSnapshot();
+      return state.income;
     }finally{
       if(el.btnFetchPay) el.btnFetchPay.disabled = false;
     }
   }
-  function computeHealth(){
-    const additional = Math.max(0, num(el.additionalIncome ? el.additionalIncome.value : 0, 0));
-    const obligations = Math.max(0, num(el.monthlyObligations ? el.monthlyObligations.value : 0, 0));
-    const totalIncome = Math.max(0, num(state.comp.total, 0) + additional);
-    const mortgage = Math.max(0, num(state.mortgage.allIn, 0));
-    const outflow = mortgage + obligations;
-    const residual = totalIncome - outflow;
-    const residualPct = totalIncome > 0 ? (residual / totalIncome) * 100 : 0;
-    const housingRatio = totalIncome > 0 ? (mortgage / totalIncome) * 100 : 0;
-    let grade = "Needs Inputs";
-    let kind = "warn";
-    let note = "Add income data to generate a lightweight financial health signal.";
-    if(totalIncome > 0){
-      if(residualPct >= 35){
-        grade = "Strong";
-        kind = "ok";
-        note = `Strong: Strong residual margin after mortgage and obligations. Residual margin is ${pct(residualPct)} of total monthly income.`;
-      }else if(residualPct >= 20){
-        grade = "Stable";
-        kind = "ok";
-        note = `Stable: Healthy residual margin after mortgage and obligations. Residual margin is ${pct(residualPct)} of total monthly income.`;
-      }else if(residualPct >= 10){
-        grade = "Stressed";
-        kind = "warn";
-        note = `Stressed: Residual margin is thin. Consider reducing price or obligations. Residual margin is ${pct(residualPct)} of total monthly income.`;
-      }else if(residualPct >= 0){
-        grade = "High Risk";
-        kind = "bad";
-        note = `High Risk: Very limited residual margin after mortgage and obligations. Residual margin is ${pct(residualPct)} of total monthly income.`;
-      }else{
-        grade = "No-Go";
-        kind = "bad";
-        note = `No-Go: Mortgage and obligations exceed total income. Reduce home price, debts, or wait before buying.`;
-      }
-    }
-    state.health = {
-      income: totalIncome,
-      obligations,
-      mortgage,
-      outflow,
-      residual,
-      residualPct,
-      housingRatio,
-      grade,
-      kind,
-      note
+  /* =========================================================
+    //#6 MORTGAGE ENGINE
+  ========================================================= */
+  function computeLocalMortgage(){
+    const input = collectInputs();
+    const homePrice = input.homePrice;
+    const downPayment = Math.min(input.downPayment, homePrice);
+    const loanAmount = Math.max(0, homePrice - downPayment);
+    const apr = scoreAPR(input.creditScore);
+    const pi = mortgagePI(loanAmount, apr, DEFAULT_TERM_YEARS);
+    const taxMonthly = (homePrice * (input.taxRate / 100)) / 12;
+    const insuranceMonthly = input.insuranceMonthly;
+    const hoaMonthly = input.hoaMonthly;
+    const pmiMonthly = input.loanType === "va" ? 0 : input.pmiMonthly;
+    const allIn = pi + taxMonthly + insuranceMonthly + hoaMonthly + pmiMonthly;
+    state.mortgage = {
+      homePrice,
+      downPayment,
+      creditScore:input.creditScore,
+      loanType:input.loanType,
+      apr,
+      termYears:DEFAULT_TERM_YEARS,
+      loanAmount,
+      pi,
+      taxMonthly,
+      insuranceMonthly,
+      hoaMonthly,
+      pmiMonthly,
+      allIn,
+      source:"Local fallback"
     };
-    paintHealth();
-    return state.health;
+    return state.mortgage;
   }
-  function paintMortgage(){
-    const m = state.mortgage;
-    setText(el.allInPayment, money(m.allIn));
-    setText(el.loanAmount, money0(m.loanAmount) + " loan");
-    setText(el.piPayment, money(m.principalInterest));
-    setText(el.taxMonthly, money(m.taxMonthly));
-    setText(el.insuranceOut, money(m.insuranceMonthly));
-    setText(el.hoaOut, money(m.hoaMonthly));
-    setText(el.pmiOut, money(m.pmiMonthly));
-    setText(el.heroPayment, money(m.allIn));
-    setText(el.healthMortgage, money(m.allIn));
-    setText(el.mortgageSource, "Mortgage source: " + m.source + ".");
-    setText(el.rateLine, `${num(m.apr, 0).toFixed(2)}% APR • 30 years`);
-  }
-  function paintIncome(){
-    const additional = Math.max(0, num(el.additionalIncome ? el.additionalIncome.value : 0, 0));
-    const total = Math.max(0, num(state.comp.total, 0) + additional);
-    setText(el.basePay, state.comp.basePay ? money(state.comp.basePay) : "$—");
-    setText(el.bah, state.comp.bah ? money(state.comp.bah) : "$—");
-    setText(el.bas, state.comp.bas ? money(state.comp.bas) : "$—");
-    setText(el.additionalIncomeOut, money(additional));
-    setText(el.compSource, state.comp.source || "—");
-    setText(el.totalIncome, money(total));
-    setText(el.heroIncome, money(total));
-    setText(el.healthIncome, money(total));
-  }
-  function paintHealth(){
-    const h = state.health;
-    setText(el.heroHealth, h.grade);
-    setText(el.heroHealthNote, h.income > 0 ? h.note.replace(/^Strong: |^Stable: |^Stressed: |^High Risk: |^No-Go: /, "") : "Calculate mortgage health to generate your snapshot.");
-    setText(el.heroIncome, money(h.income));
-    setText(el.heroPayment, money(h.mortgage));
-    setText(el.heroResidual, money(h.residual));
-    setText(el.heroResidualPct, h.income > 0 ? pct(h.residualPct) : "—");
-    setText(el.healthObligations, money(h.obligations));
-    setText(el.healthIncome, money(h.income));
-    setText(el.healthMortgage, money(h.mortgage));
-    setText(el.healthOutflow, money(h.outflow));
-    setText(el.healthResidual, money(h.residual));
-    setText(el.residualPercent, h.income > 0 ? pct(Math.max(0, h.residualPct)) : "—");
-    setText(el.healthNote, h.note);
-    setText(el.housingRatio, h.income > 0 ? pct(h.housingRatio) + " housing ratio" : "— housing ratio");
-    let verdict = "Verdict: Need income data. Use optional military inputs and fetch TheWing pay.";
-    if(h.income > 0){
-      verdict = `Verdict: ${h.grade}. Total income is ${money(h.income)}, mortgage is ${money(h.mortgage)}, obligations are ${money(h.obligations)}, and residual income is ${money(h.residual)}.`;
-    }
-    setText(el.verdictBox, verdict);
-    setClassKind(el.heroHealth, h.kind);
-    setClassKind(el.heroResidual, h.kind);
-    setClassKind(el.healthNote, h.kind);
-    setClassKind(el.verdictBox, h.kind);
-    if(el.healthRing){
-      const ringPct = Math.max(0, Math.min(100, h.residualPct || 0));
-      const color =
-        h.kind === "ok" ? "var(--pcsu-mint)" :
-        h.kind === "bad" ? "var(--pcsu-danger)" :
-        "var(--pcsu-gold)";
-      el.healthRing.style.setProperty("--pct", String(ringPct));
-      el.healthRing.style.setProperty("--ring-color", color);
-    }
-    if(el.healthBarFill){
-      const barPct = Math.max(0, Math.min(100, h.residualPct || 0));
-      el.healthBarFill.style.width = barPct + "%";
-      el.healthBarFill.classList.remove("ok","warn","bad");
-      if(h.kind) el.healthBarFill.classList.add(h.kind);
-    }
-  }
-  function renderPills(){
-    if(!el.profilePills) return;
-    const rank = normalizeRank(el.rank ? el.rank.value : "") || "—";
-    const yos = clean(el.yos ? el.yos.value : "") || "—";
-    const base = clean(el.base ? el.base.value : "") || "—";
-    const deps = clean(el.dependents ? el.dependents.value : "") === "with" ? "With" : "Without";
-    const extra = money0(num(el.additionalIncome ? el.additionalIncome.value : 0, 0));
-    const items = [
-      ["Rank", rank],
-      ["YOS", yos],
-      ["Base", base],
-      ["Deps", deps],
-      ["Extra", extra]
-    ];
-    el.profilePills.innerHTML = items.map(([k,v]) => (
-      `<div class="info-pill"><span>${k}:</span><b>${String(v)}</b></div>`
-    )).join("");
-  }
-  function saveSnapshot(){
-    const snapshot = {
-      version: VERSION,
-      source: "pcsunited.mortgage.webflow.direct",
-      updated_at: new Date().toISOString(),
-      inputs: {
-        rank: el.rank ? el.rank.value : "",
-        yos: el.yos ? el.yos.value : "",
-        base: el.base ? el.base.value : "",
-        dependents: el.dependents ? el.dependents.value : "",
-        additional_income: num(el.additionalIncome ? el.additionalIncome.value : 0, 0),
-        monthly_obligations: num(el.monthlyObligations ? el.monthlyObligations.value : 0, 0),
-        home_price: num(el.homePrice ? el.homePrice.value : 0, 0),
-        down_payment: num(el.downPayment ? el.downPayment.value : 0, 0),
-        credit_score: num(el.creditScore ? el.creditScore.value : 720, 720),
-        loan_type: el.loanType ? el.loanType.value : "va",
-        tax_rate: num(el.taxRate ? el.taxRate.value : 0, 0),
-        insurance_monthly: num(el.insuranceMonthly ? el.insuranceMonthly.value : 0, 0),
-        hoa_monthly: num(el.hoaMonthly ? el.hoaMonthly.value : 0, 0),
-        pmi_monthly: num(el.pmiMonthly ? el.pmiMonthly.value : 0, 0)
-      },
-      compensation: state.comp,
-      mortgage: state.mortgage,
-      health: state.health
-    };
-    writeJSON("pcsunited.mortgage_snapshot.v1", snapshot);
-    const bridge = readJSON(KEYS.BRIDGE_V1, {}) || {};
-    const mergedBridge = {
-      ...bridge,
-      projected_home_price: snapshot.inputs.home_price,
-      projectedHomePrice: snapshot.inputs.home_price,
-      homePrice: snapshot.inputs.home_price,
-      housing: snapshot.inputs.home_price,
-      downpayment: snapshot.inputs.down_payment,
-      downPayment: snapshot.inputs.down_payment,
-      dpAmt: snapshot.inputs.down_payment,
-      credit_score: snapshot.inputs.credit_score,
-      creditScore: snapshot.inputs.credit_score,
-      fico: snapshot.inputs.credit_score,
-      monthly_expenses: snapshot.inputs.monthly_obligations,
-      monthlyExpenses: snapshot.inputs.monthly_obligations,
-      expenses: snapshot.inputs.monthly_obligations,
-      mortgage_snapshot: snapshot,
-      mortgage_all_in: snapshot.mortgage.allIn,
-      residual_income: snapshot.health.residual,
-      residual_margin: snapshot.health.residualPct
-    };
-    writeJSON(KEYS.BRIDGE_V1, mergedBridge);
-    writeJSON(KEYS.BRIDGE, mergedBridge);
-    writeJSON(KEYS.REALTY_BRIDGE, mergedBridge);
-    try{
-      window.dispatchEvent(new CustomEvent("pcsunited:mortgage-snapshot-ready", {
-        detail: snapshot
-      }));
-    }catch(_){}
-  }
-  async function calculateAll(){
-    setError("");
-    setStatus("warn", "Calculating...");
+  async function fetchTheWingMortgage(){
+    const input = collectInputs();
+    setStatus("warn","Calculating…");
     if(el.btnCalc) el.btnCalc.disabled = true;
+    computeLocalMortgage();
     try{
-      await calculateMortgage();
-      paintIncome();
-      computeHealth();
-      renderPills();
-      setStatus("ok", "Ready");
+      const payload = {
+        price:input.homePrice,
+        homePrice:input.homePrice,
+        projected_home_price:input.homePrice,
+        downpayment:input.downPayment,
+        downPayment:input.downPayment,
+        credit_score:input.creditScore,
+        creditScore:input.creditScore,
+        termYears:DEFAULT_TERM_YEARS,
+        loanType:input.loanType,
+        taxRate:input.taxRate,
+        propertyTaxRate:input.taxRate,
+        insuranceMonthly:input.insuranceMonthly,
+        hoaMonthly:input.hoaMonthly,
+        pmiMonthly:input.pmiMonthly,
+        source:"pcsunited.mortgage.health.webflow.v1.1.7"
+      };
+      const res = await fetch(EP_MORTGAGE,{
+        method:"POST",
+        headers:{ "Content-Type":"application/json" },
+        body:JSON.stringify(payload)
+      });
+      const data = await res.json().catch(function(){ return {}; });
+      if(!res.ok || data.ok === false){
+        throw new Error(data.error || "TheWing mortgage estimate failed.");
+      }
+      const m = data.mortgage || data.result || data.payment || data;
+      const pi = n(m.principal_interest ?? m.principalAndInterest ?? m.pi ?? m.monthlyPI, state.mortgage.pi);
+      const taxMonthly = n(m.taxMonthly ?? m.taxes ?? m.propertyTaxMonthly, state.mortgage.taxMonthly);
+      const insuranceMonthly = n(m.insuranceMonthly ?? m.insurance ?? m.homeInsuranceMonthly, state.mortgage.insuranceMonthly);
+      const hoaMonthly = n(m.hoaMonthly ?? m.hoa, state.mortgage.hoaMonthly);
+      const pmiMonthly = input.loanType === "va" ? 0 : n(m.pmiMonthly ?? m.pmi, state.mortgage.pmiMonthly);
+      const allIn = n(m.allIn ?? m.allInMonthly ?? m.monthlyPayment ?? m.totalMonthly, pi + taxMonthly + insuranceMonthly + hoaMonthly + pmiMonthly);
+      const loanAmount = n(m.loanAmount ?? m.loan_amount, state.mortgage.loanAmount);
+      const apr = n(m.apr ?? m.rate ?? m.interestRate, state.mortgage.apr);
+      state.mortgage = {
+        ...state.mortgage,
+        apr,
+        loanAmount,
+        pi,
+        taxMonthly,
+        insuranceMonthly,
+        hoaMonthly,
+        pmiMonthly,
+        allIn,
+        source:"TheWing.ai"
+      };
+      setStatus("ok","Ready");
+      renderAll();
+      saveSnapshot();
+      return state.mortgage;
     }catch(err){
-      console.error("Mortgage health calculation failed:", err);
-      setStatus("bad", "Error");
-      setError(err.message || "Calculation failed.");
+      computeLocalMortgage();
+      setStatus("warn","Local estimate");
+      setError("TheWing mortgage engine was unavailable, so I used the local mortgage fallback. " + (err?.message || ""));
+      renderAll();
+      saveSnapshot();
+      return state.mortgage;
     }finally{
       if(el.btnCalc) el.btnCalc.disabled = false;
     }
   }
+  /* =========================================================
+    //#7 HEALTH + FIXED TARGET BUYER RANGE
+  ========================================================= */
+  function computeHealth(){
+    const input = collectInputs();
+    state.obligations = input.obligations;
+    state.income.additional = input.additionalIncome;
+    if(!state.income.basePay && !state.income.bah){
+      applyLocalPay();
+    }else{
+      state.income.total =
+        n(state.income.basePay,0) +
+        n(state.income.bah,0) +
+        n(state.income.bas,0) +
+        input.additionalIncome;
+      state.income.additional = input.additionalIncome;
+    }
+    computeLocalMortgage();
+    const totalIncome = n(state.income.total,0);
+    const allInMortgage = n(state.mortgage.allIn,0);
+    const obligations = n(state.obligations,0);
+    const residual = totalIncome - allInMortgage - obligations;
+    const residualPct = totalIncome > 0 ? (residual / totalIncome) * 100 : 0;
+    state.residual = residual;
+    state.residualPct = residualPct;
+    let health = "Needs Inputs";
+    let note = "Add income data to generate a lightweight financial health signal.";
+    let kind = "warn";
+    if(totalIncome <= 0){
+      health = "Needs Inputs";
+      kind = "warn";
+      note = "Add income data to generate a lightweight financial health signal.";
+    }else if(residualPct >= 35){
+      health = "Strong";
+      kind = "ok";
+      note = "Strong residual margin after mortgage and obligations.";
+    }else if(residualPct >= 20){
+      health = "Stable";
+      kind = "ok";
+      note = "Healthy residual margin. You still have meaningful breathing room after the mortgage.";
+    }else if(residualPct >= 10){
+      health = "Stressed";
+      kind = "warn";
+      note = "Residual margin is thin. Consider reducing price or obligations.";
+    }else if(residualPct >= 0){
+      health = "High Risk";
+      kind = "bad";
+      note = "Very limited residual margin after mortgage and obligations.";
+    }else{
+      health = "Not Ready";
+      kind = "bad";
+      note = "Projected outflow is higher than income. Lower price, reduce obligations, or increase income before buying.";
+    }
+    state.health = health;
+    state.healthKind = kind;
+    state.healthNote = note;
+    return {
+      totalIncome,
+      allInMortgage,
+      obligations,
+      residual,
+      residualPct,
+      health,
+      kind,
+      note
+    };
+  }
+  function computeBuyerRange(){
+    const health = computeHealth();
+    const currentPrice = Math.max(0, state.mortgage.homePrice);
+    const residualPct = Number(health.residualPct) || 0;
+    if(health.totalIncome <= 0 || currentPrice <= 0){
+      return {
+        min:0,
+        target:currentPrice,
+        max:0,
+        leftPct:47,
+        widthPct:6,
+        kind:"warn",
+        note:"Enter income, obligations, and home price to generate a smarter purchase range."
+      };
+    }
+    /*
+      Buyer Comfort Range v1.1.7
+      The user's selected Home Price is the fixed target.
+      Example:
+      - User enters $350,000
+      - Target remains $350,000
+      - Strong health may show $350,000 to $475,000
+      - Weak health may show $250,000 to $350,000
+      Visual logic:
+      - Target label stays centered by CSS.
+      - Bar is drawn around the visual center point of 50%.
+      - Strong user: little/no left room, large right room.
+      - Weak user: large left room, little/no right room.
+    */
+    let leftRoomPct = 8;
+    let rightRoomPct = 8;
+    let downsidePct = 0.08;
+    let upsidePct = 0.08;
+    if(residualPct >= 70){
+      leftRoomPct = 0;
+      rightRoomPct = 42;
+      downsidePct = 0.00;
+      upsidePct = 0.36;
+    }else if(residualPct >= 60){
+      leftRoomPct = 3;
+      rightRoomPct = 38;
+      downsidePct = 0.02;
+      upsidePct = 0.30;
+    }else if(residualPct >= 50){
+      leftRoomPct = 6;
+      rightRoomPct = 32;
+      downsidePct = 0.04;
+      upsidePct = 0.24;
+    }else if(residualPct >= 40){
+      leftRoomPct = 9;
+      rightRoomPct = 26;
+      downsidePct = 0.06;
+      upsidePct = 0.18;
+    }else if(residualPct >= 35){
+      leftRoomPct = 12;
+      rightRoomPct = 22;
+      downsidePct = 0.08;
+      upsidePct = 0.14;
+    }else if(residualPct >= 25){
+      leftRoomPct = 16;
+      rightRoomPct = 14;
+      downsidePct = 0.11;
+      upsidePct = 0.09;
+    }else if(residualPct >= 20){
+      leftRoomPct = 20;
+      rightRoomPct = 8;
+      downsidePct = 0.15;
+      upsidePct = 0.05;
+    }else if(residualPct >= 15){
+      leftRoomPct = 25;
+      rightRoomPct = 4;
+      downsidePct = 0.20;
+      upsidePct = 0.02;
+    }else if(residualPct >= 10){
+      leftRoomPct = 30;
+      rightRoomPct = 1;
+      downsidePct = 0.25;
+      upsidePct = 0.00;
+    }else if(residualPct >= 5){
+      leftRoomPct = 35;
+      rightRoomPct = 0;
+      downsidePct = 0.30;
+      upsidePct = 0.00;
+    }else if(residualPct >= 0){
+      leftRoomPct = 40;
+      rightRoomPct = 0;
+      downsidePct = 0.36;
+      upsidePct = 0.00;
+    }else{
+      leftRoomPct = 45;
+      rightRoomPct = 0;
+      downsidePct = 0.42;
+      upsidePct = 0.00;
+    }
+    const leftPct = clamp(50 - leftRoomPct, 0, 100);
+    const widthPct = clamp(leftRoomPct + rightRoomPct, 6, 92);
+    const targetPrice = currentPrice;
+    const minPrice = Math.max(0, Math.round((currentPrice * (1 - downsidePct)) / 1000) * 1000);
+    const maxPrice = Math.max(minPrice, Math.round((currentPrice * (1 + upsidePct)) / 1000) * 1000);
+    let kind = health.kind;
+    let note = "";
+    if(health.kind === "ok"){
+      if(upsidePct > 0){
+        note =
+          health.health +
+          ": Your selected " +
+          money(targetPrice,0) +
+          " target is within the green zone. You may have room up to " +
+          money(maxPrice,0) +
+          " if desired.";
+      }else{
+        note =
+          health.health +
+          ": Your selected " +
+          money(targetPrice,0) +
+          " target is within range.";
+      }
+    }else if(health.kind === "warn"){
+      note =
+        health.health +
+        ": Your selected " +
+        money(targetPrice,0) +
+        " target is workable but tight. Safer lane is " +
+        money(minPrice,0) +
+        " to " +
+        money(maxPrice,0) +
+        ".";
+    }else{
+      note =
+        health.health +
+        ": Your selected " +
+        money(targetPrice,0) +
+        " target is under pressure. Safer lane is closer to " +
+        money(minPrice,0) +
+        " to " +
+        money(maxPrice,0) +
+        ".";
+    }
+    return {
+      min:minPrice,
+      target:targetPrice,
+      max:maxPrice,
+      leftPct,
+      widthPct,
+      leftRoomPct,
+      rightRoomPct,
+      downsidePct,
+      upsidePct,
+      kind,
+      note
+    };
+  }
+  function paymentToPrice(targetPayment, downPayment, apr, taxRate, insurance, hoa, loanType){
+    const payment = Math.max(0, Number(targetPayment) || 0);
+    if(payment <= 0) return 0;
+    const fixedMonthly = insurance + hoa;
+    const availableForPIAndTax = Math.max(0, payment - fixedMonthly);
+    const taxMonthlyRate = (taxRate / 100) / 12;
+    let low = 0;
+    let high = 1500000;
+    for(let i = 0; i < 50; i++){
+      const mid = (low + high) / 2;
+      const loan = Math.max(0, mid - downPayment);
+      const pi = mortgagePI(loan, apr, DEFAULT_TERM_YEARS);
+      const tax = mid * taxMonthlyRate;
+      const pmi = loanType === "va" ? 0 : 0;
+      const total = pi + tax + pmi;
+      if(total <= availableForPIAndTax){
+        low = mid;
+      }else{
+        high = mid;
+      }
+    }
+    return Math.round(low / 1000) * 1000;
+  }
+  /* =========================================================
+    //#8 RENDER
+  ========================================================= */
+  function renderAll(){
+    const health = computeHealth();
+    const range = computeBuyerRange();
+    renderPills();
+    renderMortgage();
+    renderIncome();
+    renderHealth(health);
+    renderBuyerRange(range);
+    renderVerdict(health, range);
+  }
+  function renderPills(){
+    const input = collectInputs();
+    if(!el.profilePills) return;
+    const bits = [
+      ["Rank", input.rank || "—"],
+      ["YOS", input.yos || "—"],
+      ["Base", input.base || "—"],
+      ["Deps", input.dependents === "with" ? "With" : "Without"],
+      ["Extra", money(input.additionalIncome,0)]
+    ];
+    el.profilePills.innerHTML = bits.map(function(pair){
+      return '<div class="info-pill"><span>' + pair[0] + ':</span><b>' + pair[1] + '</b></div>';
+    }).join("");
+  }
+  function renderMortgage(){
+    const m = state.mortgage;
+    setText(el.heroPayment, money(m.allIn,2));
+    setText(el.allInPayment, money(m.allIn,2));
+    setText(el.loanAmount, money(m.loanAmount,0) + " loan");
+    setText(el.piPayment, money(m.pi,2));
+    setText(el.taxMonthly, money(m.taxMonthly,2));
+    setText(el.insuranceOut, money(m.insuranceMonthly,2));
+    setText(el.hoaOut, money(m.hoaMonthly,2));
+    setText(el.pmiOut, money(m.pmiMonthly,2));
+    setText(el.mortgageSource, "Mortgage source: " + (m.source || "Local fallback"));
+    setText(el.rateLine, (Number(m.apr || 0).toFixed(2)) + "% APR • " + DEFAULT_TERM_YEARS + " years");
+  }
+  function renderIncome(){
+    const i = state.income;
+    const housingRatio = i.total > 0 ? (state.mortgage.allIn / i.total) * 100 : 0;
+    setText(el.heroIncome, money(i.total,2));
+    setText(el.totalIncome, money(i.total,2));
+    setText(el.housingRatio, i.total > 0 ? pct(housingRatio,1) + " housing ratio" : "— housing ratio");
+    setText(el.basePay, money(i.basePay,2));
+    setText(el.bah, money(i.bah,2));
+    setText(el.bas, money(i.bas,2));
+    setText(el.additionalIncomeOut, money(i.additional,2));
+    setText(el.compSource, i.source || "—");
+    setText(el.healthIncome, money(i.total,2));
+  }
+  function renderHealth(health){
+    const ringPct = clamp(Math.max(0, health.residualPct),0,100);
+    setText(el.heroHealth, health.health);
+    setText(el.heroHealthNote, health.note + (health.totalIncome > 0 ? " Residual margin is " + pct(health.residualPct,1) + " of total monthly income." : ""));
+    setText(el.residualPercent, health.totalIncome > 0 ? pct(health.residualPct,1) : "—");
+    setText(el.heroResidual, money(health.residual,2));
+    setText(el.heroResidualPct, health.totalIncome > 0 ? pct(health.residualPct,1) : "—");
+    setText(el.healthObligations, money(health.obligations,2));
+    setText(el.healthMortgage, money(health.allInMortgage,2));
+    setText(el.healthOutflow, money(health.allInMortgage + health.obligations,2));
+    setText(el.healthResidual, money(health.residual,2));
+    applyKind(el.heroHealth, health.kind);
+    applyKind(el.heroResidual, health.kind);
+    applyKind(el.heroResidualPct, health.kind);
+    applyKind(el.healthNote, health.kind);
+    if(el.healthRing){
+      el.healthRing.style.setProperty("--pct", String(ringPct));
+      el.healthRing.style.setProperty(
+        "--ring-color",
+        health.kind === "ok" ? "var(--mint)" : health.kind === "bad" ? "var(--danger)" : "var(--gold)"
+      );
+    }
+    if(el.healthBarFill){
+      el.healthBarFill.style.width = ringPct + "%";
+      el.healthBarFill.classList.remove("warn","bad");
+      if(health.kind === "warn") el.healthBarFill.classList.add("warn");
+      if(health.kind === "bad") el.healthBarFill.classList.add("bad");
+    }
+    if(el.healthNote){
+      el.healthNote.textContent =
+        health.totalIncome > 0
+          ? health.health + ": " + health.note + " Residual margin is " + pct(health.residualPct,1) + " of total monthly income."
+          : "Add income data to generate a lightweight financial health signal.";
+    }
+  }
+  function renderBuyerRange(range){
+    setText(el.buyerRangeMin, range.min > 0 ? money(range.min,0) : "$—");
+    setText(el.buyerRangeTarget, range.target > 0 ? money(range.target,0) : "$—");
+    setText(el.buyerRangeMax, range.max > 0 ? money(range.max,0) : "$—");
+    if(el.buyerRangeFill){
+      el.buyerRangeFill.style.left = range.leftPct + "%";
+      el.buyerRangeFill.style.width = range.widthPct + "%";
+      el.buyerRangeFill.style.transform = "none";
+      el.buyerRangeFill.style.setProperty("--buyer-fill-left", range.leftPct + "%");
+      el.buyerRangeFill.style.setProperty("--buyer-fill-width", range.widthPct + "%");
+      if(range.kind === "ok"){
+        el.buyerRangeFill.style.background =
+          "linear-gradient(90deg,var(--mint) 0%,var(--mint) 58%,var(--blue) 100%)";
+      }else if(range.kind === "warn"){
+        el.buyerRangeFill.style.background =
+          "linear-gradient(90deg,var(--gold) 0%,var(--blue) 100%)";
+      }else{
+        el.buyerRangeFill.style.background =
+          "linear-gradient(90deg,var(--danger) 0%,var(--gold) 100%)";
+      }
+      el.buyerRangeFill.classList.remove("warn","bad");
+      if(range.kind === "warn") el.buyerRangeFill.classList.add("warn");
+      if(range.kind === "bad") el.buyerRangeFill.classList.add("bad");
+    }
+    if(el.buyerRangeNote){
+      el.buyerRangeNote.textContent = range.note;
+      el.buyerRangeNote.classList.remove("warn","bad");
+      if(range.kind === "warn") el.buyerRangeNote.classList.add("warn");
+      if(range.kind === "bad") el.buyerRangeNote.classList.add("bad");
+    }
+  }
+  function renderVerdict(health, range){
+    if(!el.verdictBox) return;
+    el.verdictBox.classList.remove("ok","warn","bad");
+    let message = "Verdict: Need income data. Use optional military inputs and fetch TheWing pay.";
+    if(health.totalIncome > 0){
+      message =
+        "Verdict: " +
+        health.health +
+        ". " +
+        health.note +
+        " Selected buyer target: " +
+        (range.target > 0 ? money(range.target,0) : "$—") +
+        ".";
+      el.verdictBox.classList.add(health.kind);
+    }
+    el.verdictBox.textContent = message;
+  }
+  /* =========================================================
+    //#9 SAVE SNAPSHOT
+  ========================================================= */
+  function saveSnapshot(){
+    const payload = {
+      source:"pcsunited.mortgage.health.webflow.v1.1.7",
+      saved_at:new Date().toISOString(),
+      inputs:collectInputs(),
+      income:state.income,
+      mortgage:state.mortgage,
+      obligations:state.obligations,
+      residual:state.residual,
+      residual_pct:state.residualPct,
+      health:state.health,
+      health_kind:state.healthKind,
+      buyer_range:computeBuyerRange()
+    };
+    writeJSON(STORAGE_KEYS.mortgageResult,payload);
+    writeJSON(STORAGE_KEYS.mortgageMirror,payload);
+    dispatchSafe("pcsunited:mortgage-health-ready",payload);
+  }
+  /* =========================================================
+    //#10 ACTIONS
+  ========================================================= */
   function clearAll(){
-    if(el.rank) el.rank.value = "E-5";
-    if(el.yos) el.yos.value = "6";
-    if(el.base) el.base.value = "JBSA Lackland";
-    if(el.dependents) el.dependents.value = "with";
-    if(el.additionalIncome) el.additionalIncome.value = "0";
-    if(el.monthlyObligations) el.monthlyObligations.value = "";
-    if(el.homePrice) el.homePrice.value = "450000";
-    if(el.downPayment) el.downPayment.value = "22500";
-    if(el.creditScore) el.creditScore.value = "720";
-    if(el.loanType) el.loanType.value = "va";
-    if(el.taxRate) el.taxRate.value = "2.10";
-    if(el.insuranceMonthly) el.insuranceMonthly.value = "180";
-    if(el.hoaMonthly) el.hoaMonthly.value = "0";
-    if(el.pmiMonthly) el.pmiMonthly.value = "0";
-    state.comp = { basePay:0, bah:0, bas:0, total:0, source:"none" };
-    state.mortgage = {
-      loanAmount:0,
-      principalInterest:0,
-      taxMonthly:0,
-      insuranceMonthly:0,
-      hoaMonthly:0,
-      pmiMonthly:0,
-      allIn:0,
-      apr:estimateAPR(720, "va"),
-      source:"local"
+    setInputValue(el.rank,"E-5");
+    setInputValue(el.yos,"6");
+    setInputValue(el.base,"JBSA Lackland");
+    setInputValue(el.dependents,"with");
+    setInputValue(el.additionalIncome,"0");
+    setInputValue(el.monthlyObligations,"");
+    setInputValue(el.homePrice,"450000");
+    setInputValue(el.downPayment,"22500");
+    setInputValue(el.creditScore,"720");
+    setInputValue(el.loanType,"va");
+    setInputValue(el.taxRate,"2.10");
+    setInputValue(el.insuranceMonthly,"180");
+    setInputValue(el.hoaMonthly,"0");
+    setInputValue(el.pmiMonthly,"0");
+    state.income = {
+      basePay:0,
+      bah:0,
+      bas:0,
+      additional:0,
+      total:0,
+      source:"Local"
     };
     setError("");
-    setStatus(null, "Ready");
-    renderPills();
-    paintIncome();
-    calculateAll();
+    setStatus(null,"Ready");
+    applyLocalPay();
+    computeLocalMortgage();
+    renderAll();
+    saveSnapshot();
   }
+  function handleInputChange(){
+    setError("");
+    applyLocalPay();
+    computeLocalMortgage();
+    renderAll();
+    saveSnapshot();
+  }
+  /* =========================================================
+    //#11 WIRE UP
+  ========================================================= */
   function bind(){
-    if(el.btnFetchPay) el.btnFetchPay.addEventListener("click", fetchPay);
-    if(el.btnCalc) el.btnCalc.addEventListener("click", calculateAll);
-    if(el.btnClear) el.btnClear.addEventListener("click", clearAll);
-    [
+    const liveInputs = [
       el.rank,
       el.yos,
       el.base,
@@ -2476,40 +2887,48 @@
       el.insuranceMonthly,
       el.hoaMonthly,
       el.pmiMonthly
-    ].forEach((node) => {
+    ];
+    liveInputs.forEach(function(node){
       if(!node) return;
-      node.addEventListener("input", function(){
-        paintIncome();
-        calculateMortgage();
-        renderPills();
-      });
-      node.addEventListener("change", function(){
-        paintIncome();
-        calculateMortgage();
-        renderPills();
-      });
+      node.addEventListener("input", handleInputChange);
+      node.addEventListener("change", handleInputChange);
     });
+    if(el.btnFetchPay){
+      el.btnFetchPay.addEventListener("click", function(){
+        fetchTheWingPay();
+      });
+    }
+    if(el.btnCalc){
+      el.btnCalc.addEventListener("click", function(){
+        fetchTheWingMortgage();
+      });
+    }
+    if(el.btnClear){
+      el.btnClear.addEventListener("click", clearAll);
+    }
   }
+  /* =========================================================
+    //#12 BOOT
+  ========================================================= */
   function boot(){
-    prefillFromIntake();
+    prefillFromStorage();
+    applyLocalPay();
+    computeLocalMortgage();
+    renderAll();
+    saveSnapshot();
     bind();
-    renderPills();
-    paintIncome();
-    calculateAll();
-    window.PCSU_MORTGAGE_SNAPSHOT = {
-      version: VERSION,
-      calculate: calculateAll,
-      fetchPay,
-      getState: function(){
-        return JSON.parse(JSON.stringify(state));
-      }
+    window.PCSU_MORTGAGE_HEALTH = {
+      version:"1.1.7-fixed-user-target-health-range-lane",
+      state:state,
+      computeHealth:computeHealth,
+      computeBuyerRange:computeBuyerRange,
+      renderAll:renderAll,
+      fetchTheWingPay:fetchTheWingPay,
+      fetchTheWingMortgage:fetchTheWingMortgage,
+      clearAll:clearAll
     };
   }
-  if(document.readyState === "loading"){
-    document.addEventListener("DOMContentLoaded", boot);
-  }else{
-    boot();
-  }
+  boot();
 })();
 </script>
     </div>

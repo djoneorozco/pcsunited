@@ -1,9 +1,9 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Jun 05 2026 05:22:31 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sat Jun 06 2026 16:24:34 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6a213379d6767da2cb2a45b0" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
   <title>Mortgage Calculator</title>
-  <meta content="Estimate your monthly military pay using rank, years of service, dependency status, BAH, BAS, and base pay. Built for PCS planning and housing decisions." name="description">
+  <meta content="Estimate mortgage pressure with PCSUnited&#x27;s Financial Health Snapshot. Calculate residual income using military pay, home price &amp; obligations for PCS moves." name="description">
   <meta content="Mortgage Calculator" property="og:title">
   <meta content="Estimate military base pay, BAH, and BAS by rank, years of service, dependency status, and duty location with PCSUnited’s military-first pay calculator." property="og:description">
   <meta content="https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/69f7ff1fe3226e43d89251e1_5d7bf57ed9c20d1884c11d7ad9a71882_BAHCalculator.png" property="og:image">
@@ -28,284 +28,55 @@
   <link href="../images/favicon-48.png" rel="icon" type="image/png" sizes="48x48">
   <link href="../images/webclip-180.png" rel="apple-touch-icon" sizes="180x180">
   <link href="../images/webclip-192.png" rel="icon" type="image/png" sizes="192x192">
-  <link href="../images/webclip.png" rel="icon" type="image/png" sizes="512x512"><!--  =========================================================
-  PCSUnited • BAH Base & Pay Calculator Page SEO Schema
-  JSON-LD Structured Data
-  Place inside the <head> custom code area of the calculator page
-=========================================================  -->
+  <link href="../images/webclip.png" rel="icon" type="image/png" sizes="512x512">
   <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@graph": [
+  "@type": "WebPage",
+  "name": "AF Mortgage Calculator",
+  "description": "Estimate your monthly military pay using rank, years of service, dependency status, BAH, BAS, and base pay. Built for PCS planning and housing decisions.",
+  "url": "/air-force/mortgage-calculator",
+  "inLanguage": "en",
+  "about": {
+    "@type": "SoftwareApplication",
+    "name": "PCSUnited Financial Health Snapshot",
+    "applicationCategory": "FinanceApplication",
+    "description": "A lightweight financial assessment tool that turns mortgage inputs, military compensation, and monthly obligations into a clear residual-income readiness signal for military users.",
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "featureList": [
+      "Military pay estimation using rank, years of service, and base location",
+      "Mortgage payment calculation including P&I, taxes, insurance, HOA, and PMI",
+      "Residual income analysis",
+      "Financial health snapshot for PCS and home-buying decisions",
+      "Integration with TheWing.ai for military compensation data"
+    ],
+    "audience": {
+      "@type": "Audience",
+      "audienceType": "Military personnel and Air Force members"
+    }
+  },
+  "provider": {
+    "@type": "Organization",
+    "name": "PCSUnited"
+  },
+  "mentions": [
     {
       "@type": "Organization",
-      "@id": "https://www.pcsunited.com/#organization",
-      "name": "PCSUnited",
-      "alternateName": [
-        "PCS United",
-        "PCSUnited Military FinTech",
-        "PCSUnited Military Financial Platform"
-      ],
-      "url": "https://www.pcsunited.com/",
-      "logo": {
-        "@type": "ImageObject",
-        "url": "https://www.pcsunited.com/path-to-your-logo.png",
-        "contentUrl": "https://www.pcsunited.com/path-to-your-logo.png"
-      },
-      "description": "PCSUnited is a military-first financial readiness, PCS relocation, and housing affordability platform built to help service members, veterans, and military families make smarter financial and homebuying decisions.",
-      "email": "support@pcsunited.com",
-      "areaServed": {
-        "@type": "Country",
-        "name": "United States"
-      },
-      "audience": [
-        {
-          "@type": "Audience",
-          "audienceType": "Active duty military members"
-        },
-        {
-          "@type": "Audience",
-          "audienceType": "Veterans"
-        },
-        {
-          "@type": "Audience",
-          "audienceType": "Military spouses"
-        },
-        {
-          "@type": "Audience",
-          "audienceType": "Military families"
-        }
-      ],
-      "knowsAbout": [
-        "Military base pay",
-        "Basic Allowance for Housing",
-        "BAH",
-        "Basic Allowance for Subsistence",
-        "BAS",
-        "Military compensation",
-        "Military pay tables",
-        "PCS relocation",
-        "Military housing affordability",
-        "VA loan readiness",
-        "Military financial readiness"
-      ]
-    },
-    {
-      "@type": "WebSite",
-      "@id": "https://www.pcsunited.com/#website",
-      "url": "https://www.pcsunited.com/",
-      "name": "PCSUnited",
-      "publisher": {
-        "@id": "https://www.pcsunited.com/#organization"
-      },
-      "inLanguage": "en-US"
-    },
-    {
-      "@type": [
-        "WebPage",
-        "SoftwareApplication"
-      ],
-      "@id": "https://www.pcsunited.com/resources/bah-base-pay-calculator#webpage",
-      "url": "https://www.pcsunited.com/resources/bah-base-pay-calculator",
-      "name": "BAH, Base Pay & BAS Calculator | PCSUnited",
-      "headline": "Military BAH, Base Pay and BAS Calculator",
-      "description": "Calculate military base pay, BAH, and BAS in one place. PCSUnited helps service members estimate monthly income by rank, years of service, dependents, and duty location.",
-      "isPartOf": {
-        "@id": "https://www.pcsunited.com/#website"
-      },
-      "publisher": {
-        "@id": "https://www.pcsunited.com/#organization"
-      },
-      "about": [
-        {
-          "@type": "Thing",
-          "name": "Basic Allowance for Housing"
-        },
-        {
-          "@type": "Thing",
-          "name": "Military base pay"
-        },
-        {
-          "@type": "Thing",
-          "name": "Basic Allowance for Subsistence"
-        },
-        {
-          "@type": "Thing",
-          "name": "Military compensation"
-        },
-        {
-          "@type": "Thing",
-          "name": "PCS relocation planning"
-        }
-      ],
-      "audience": [
-        {
-          "@type": "Audience",
-          "audienceType": "Active duty military service members"
-        },
-        {
-          "@type": "Audience",
-          "audienceType": "Military families"
-        },
-        {
-          "@type": "Audience",
-          "audienceType": "Military homebuyers"
-        },
-        {
-          "@type": "Audience",
-          "audienceType": "PCS movers"
-        }
-      ],
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Web",
-      "browserRequirements": "Requires JavaScript",
-      "featureList": [
-        "Military base pay estimate",
-        "BAH estimate by location",
-        "BAS estimate",
-        "Rank-based income calculation",
-        "Years-of-service pay adjustment",
-        "Dependency status adjustment",
-        "Monthly military income estimate",
-        "PCS affordability planning support"
-      ],
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock",
-        "category": "Free military pay calculator"
-      },
-      "inLanguage": "en-US",
-      "keywords": [
-        "BAH calculator",
-        "military pay calculator",
-        "base pay calculator",
-        "BAS calculator",
-        "military income calculator",
-        "Basic Allowance for Housing",
-        "military compensation calculator",
-        "PCS calculator",
-        "military housing allowance",
-        "active duty pay calculator"
-      ],
-      "mainEntity": {
-        "@id": "https://www.pcsunited.com/resources/bah-base-pay-calculator#calculator"
-      }
-    },
-    {
-      "@type": "SoftwareApplication",
-      "@id": "https://www.pcsunited.com/resources/bah-base-pay-calculator#calculator",
-      "name": "PCSUnited BAH, Base Pay and BAS Calculator",
-      "alternateName": [
-        "BAH Base and Pay Calculator",
-        "Military Pay Calculator",
-        "Military Income Calculator"
-      ],
-      "applicationCategory": "FinanceApplication",
-      "operatingSystem": "Web",
-      "url": "https://www.pcsunited.com/resources/bah-base-pay-calculator",
-      "description": "A web-based military pay calculator that estimates monthly military income using rank, years of service, dependency status, duty location, base pay, BAH, and BAS.",
-      "publisher": {
-        "@id": "https://www.pcsunited.com/#organization"
-      },
-      "audience": [
-        {
-          "@type": "Audience",
-          "audienceType": "Active duty military members"
-        },
-        {
-          "@type": "Audience",
-          "audienceType": "Military families"
-        },
-        {
-          "@type": "Audience",
-          "audienceType": "Military homebuyers"
-        }
-      ],
-      "featureList": [
-        "Estimate base pay by rank and years of service",
-        "Estimate BAH by duty location and dependency status",
-        "Estimate BAS as part of monthly military income",
-        "Combine military pay components into a monthly income view",
-        "Support PCS housing affordability planning"
-      ],
-      "softwareHelp": {
-        "@type": "CreativeWork",
-        "name": "How the PCSUnited BAH, Base Pay and BAS Calculator Works",
-        "description": "The calculator uses military pay inputs such as rank, years of service, duty location, and dependency status to estimate monthly income from base pay, BAH, and BAS."
-      },
-      "offers": {
-        "@type": "Offer",
-        "price": "0",
-        "priceCurrency": "USD",
-        "availability": "https://schema.org/InStock"
-      }
-    },
-    {
-      "@type": "FAQPage",
-      "@id": "https://www.pcsunited.com/resources/bah-base-pay-calculator#faq",
-      "mainEntity": [
-        {
-          "@type": "Question",
-          "name": "What does the PCSUnited BAH, Base Pay and BAS Calculator estimate?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The calculator estimates monthly military income using base pay, Basic Allowance for Housing, Basic Allowance for Subsistence, rank, years of service, dependency status, and duty location."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Who is this military pay calculator built for?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "The calculator is built for active duty military members, military families, PCS movers, and service members planning housing, budgeting, or homebuying decisions."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Can this calculator help with PCS housing decisions?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. By estimating monthly military income from base pay, BAH, and BAS, the calculator can help users understand potential housing affordability before or during a PCS move."
-          }
-        },
-        {
-          "@type": "Question",
-          "name": "Does BAH change by location and dependency status?",
-          "acceptedAnswer": {
-            "@type": "Answer",
-            "text": "Yes. Basic Allowance for Housing typically varies based on duty location, pay grade, and whether the service member has dependents."
-          }
-        }
-      ]
-    },
-    {
-      "@type": "BreadcrumbList",
-      "@id": "https://www.pcsunited.com/resources/bah-base-pay-calculator#breadcrumbs",
-      "itemListElement": [
-        {
-          "@type": "ListItem",
-          "position": 1,
-          "name": "PCSUnited",
-          "item": "https://www.pcsunited.com/"
-        },
-        {
-          "@type": "ListItem",
-          "position": 2,
-          "name": "Resources",
-          "item": "https://www.pcsunited.com/resources"
-        },
-        {
-          "@type": "ListItem",
-          "position": 3,
-          "name": "BAH, Base Pay and BAS Calculator",
-          "item": "https://www.pcsunited.com/resources/bah-base-pay-calculator"
-        }
-      ]
+      "name": "TheWing.ai"
     }
   ]
 }
+</script><!--  Google tag (gtag.js)  -->
+  <script async="" src="https://www.googletagmanager.com/gtag/js?id=AW-18091062804"></script>
+  <script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'AW-18091062804');
 </script>
 </head>
 <body>

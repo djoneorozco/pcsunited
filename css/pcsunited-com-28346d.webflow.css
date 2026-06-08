@@ -20856,8 +20856,8 @@ blockquote {
 }
 
 .section-6.hero {
-  background-image: url('../images/404.webp');
-  background-position: 50%;
+  background-image: url('../images/Lackland.jpg');
+  background-position: 100% 0;
   background-size: cover;
   justify-content: center;
   align-items: center;
@@ -21937,7 +21937,7 @@ blockquote {
 .global-section-2 {
   grid-column-gap: 16px;
   grid-row-gap: 16px;
-  background-color: #111;
+  background-color: #fff;
   grid-template-rows: auto auto;
   grid-template-columns: 1fr 1fr;
   grid-auto-columns: 1fr;
@@ -23976,7 +23976,7 @@ blockquote {
 @media screen and (min-width: 1440px) {
   h1 {
     color: var(--colors--dark-40);
-    text-align: center;
+    text-align: left;
   }
 
   .page-wrapper {
@@ -26590,6 +26590,11 @@ blockquote {
     text-align: center;
   }
 
+  .global-container {
+    text-align: left;
+    margin-bottom: 20px;
+  }
+
   .sg-brand-wrapper {
     margin-top: 99px;
     padding-top: 0;
@@ -26605,9 +26610,7 @@ blockquote {
   }
 
   .global-section {
-    background-color: #fff;
-    margin-top: -25px;
-    padding-bottom: 140px;
+    box-shadow: 0 2px 5px #00000080;
   }
 
   .heading-123 {
@@ -26619,8 +26622,8 @@ blockquote {
   }
 
   .form-block-2 {
-    width: 300%;
-    max-width: 200%;
+    width: 100%;
+    max-width: 40%;
   }
 
   .section-6.hero {
@@ -26973,6 +26976,10 @@ blockquote {
 
   .image-177 {
     height: 90px;
+  }
+
+  .form-3 {
+    width: 100%;
   }
 }
 
@@ -35482,6 +35489,7 @@ blockquote {
   }
 
   .resources-main-secgion.main-section-for-resources {
+    background-position: 50% 100%;
     margin-top: 93px;
   }
 
@@ -35607,6 +35615,12 @@ blockquote {
     margin-right: 0;
   }
 
+  .section-6.hero {
+    background-image: url('../images/frontimage.jpg');
+    background-position: 0 100%;
+    background-size: cover;
+  }
+
   .hero-h03-bg-wrap {
     margin-top: 40px;
     padding-top: 20px;
@@ -35614,6 +35628,10 @@ blockquote {
 
   .hero-h03-bg-image-linear {
     height: 100%;
+  }
+
+  .content-6._72px {
+    padding-bottom: 0;
   }
 
   .hero-h03-bg-image-wrap {
@@ -35738,8 +35756,13 @@ blockquote {
     font-variation-settings: "wght" 600, "wdth" 100;
   }
 
+  .office-image-wrap {
+    height: auto;
+  }
+
   .office-bg-wrap {
-    height: 480px;
+    height: auto;
+    padding-bottom: 13px;
   }
 
   .office-wrap {
@@ -35809,6 +35832,8 @@ blockquote {
   }
 
   .image-174 {
+    width: 55%;
+    height: auto;
     margin-top: -27px;
   }
 
@@ -35879,7 +35904,19 @@ blockquote {
     margin-left: -14px;
   }
 
-  .wrapper-full, .blogs-cabinest {
+  .wrapper-full {
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .sendcong-container {
+    justify-content: center;
+    align-items: center;
+    margin-left: -29px;
+    display: block;
+  }
+
+  .blogs-cabinest {
     padding-left: 0;
     padding-right: 0;
   }
@@ -35932,6 +35969,10 @@ blockquote {
 
   .heading-149, .paragraph-36 {
     text-align: center;
+  }
+
+  .form-block-4, .form-block-5, .form-block-6 {
+    margin-top: 40px;
   }
 }
 

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Jun 11 2026 08:24:10 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Jun 12 2026 08:03:14 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f6df2366c61b76c85e09e0" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -149,8 +149,8 @@
 <body>
   <div class="page-wrapper">
     <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="resources-header header-resources w-nav">
-      <div class="head-for-resources">
-        <div class="code-2-b w-embed w-script"><!--  =========================================================
+      <div class="head-for-resources"><img src="../images/Logo-3-white.png" loading="lazy" sizes="100vw" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
+        <div class="compensation-strip w-embed w-script"><!--  =========================================================
   PCSUnited • Header Compensation Strip
   v3.4.0 • THEWING ONLY / ACTIVE DUTY + VETERAN / NO STORAGE
   FIXES
@@ -1015,144 +1015,202 @@
     </div>
     <div class="main">
       <section class="resources-main-secgion main-section-for-resources">
-        <h1 hero-line-split="true" class="hero-heading">  Military Guidance</h1>
+        <h1 hero-line-split="true" class="hero-heading">Welcome to your<br>Resource Page</h1>
         <div id="w-node-_0a31f909-f83f-a6cb-1390-a95dddca87b1-c85e09e0" class="w-layout-layout quick-stack-3 wf-layout-layout">
           <div class="w-layout-cell cell-6">
-            <div class="code-embed-51 w-embed w-script"><!--  ============================================================
-  PCSUNITED • BASICBRAIN INPUT
-  FULL SINGLE EMBED
-  v5.0.0 • ACTIVE DUTY + VETERAN COMBINED FLOW
-  PURPOSE
-  - One BasicBrain input for Active Duty + Veteran
-  - Apple-keyboard-style physical toggle
-  - Calls ONLY https://thewing.netlify.app/api/opensource-brain
-  - No localStorage
-  - No sessionStorage
-  - No preloaded values
-  - Memory-only runtime
-  - Dispatches compensation-ready for Header Strip + Amy Guidance Panel
-  ACTIVE DUTY FLOW
-  - Rank
-  - Years of Service
-  - Dependents
-  - Gaining Base
-  - Returns Base Pay / BAS / BAH / Total
-  VETERAN FLOW
-  - Retired Rank
-  - Years of Service
-  - VA Disability
-  - Dependents
-  - No base / market required
-  - Returns Retirement / Disability / Other Pay / Total
-  EVENTS
-  - pcsunited:basicbrain-updated
-  - pcsunited:profile-ready
-  - pcsunited:bridge-ready
-  - pcsu:base-selected
-  - pcsunited:compensation-ready
+            <div class="code-embed-51 w-embed"><!--  ============================================================
+  PCSUNITED • BASICBRAIN + AMY GUIDANCE COMBINED SHELL
+  v6.0.0 • BASICBRAIN HANDOFF TO AMY PANEL
 ===============================================================  -->
-              <div id="pcsu-basicbrain-input" style="all:initial;">
+              <div id="pcsu-brain-amy-shell" style="all:initial;">
                 <link rel="preconnect" href="https://fonts.googleapis.com">
                 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-                <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+                <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
                 <style>
-#pcsu-basicbrain-input,
-#pcsu-basicbrain-input *{
+#pcsu-brain-amy-shell,
+#pcsu-brain-amy-shell *{
   box-sizing:border-box;
-  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+  font-family:"Barlow",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
-#pcsu-basicbrain-input{
-  --bb-ink:#101728;
-  --bb-muted:#667085;
-  --bb-muted2:#8a93a8;
-  --bb-gold:#9b7939;
-  --bb-gold2:#c79c4f;
-  --bb-line:rgba(18,24,38,.08);
-  --bb-shadow:0 18px 42px rgba(18,24,38,.12);
-  width:100%;
+#pcsu-brain-amy-shell{
+  --bg:#071018;
+  --bg2:#0b1621;
+  --bg3:#050912;
+  --stroke:rgba(216,184,122,.16);
+  --ink:#f3efe7;
+  --muted:#b8b0a4;
+  --gold:#d8b87a;
+  --gold2:#f6d06d;
+  --sapphire:#6aa7ff;
+  --mint:#8ef3c5;
+  --shadow:0 34px 90px rgba(0,0,0,.38);
   display:block;
-  color:var(--bb-ink);
-}
-#bb-input-shell{
-  width:100%;
-  max-width:400px;
+  width:min(760px,100%);
   margin:0 auto;
+  color:var(--ink);
 }
-#bb-setup{
+/* ============================================================
+  SHARED PANEL
+=============================================================== */
+.pcsu-panel{
   position:relative;
   overflow:hidden;
-  padding:20px;
-  border-radius:26px;
+  width:100%;
+  min-height:420px;
+  border-radius:30px;
   background:
-    radial-gradient(520px 220px at 0% 0%, rgba(228,192,113,.14), transparent 60%),
-    radial-gradient(380px 180px at 100% 100%, rgba(199,156,79,.08), transparent 60%),
-    linear-gradient(180deg,rgba(255,255,255,.84),rgba(243,246,252,.72));
-  border:1px solid rgba(18,24,38,.09);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.92),
-    inset 0 -1px 0 rgba(255,255,255,.18),
-    var(--bb-shadow);
-  backdrop-filter:blur(14px) saturate(145%);
-  -webkit-backdrop-filter:blur(14px) saturate(145%);
+    radial-gradient(circle at 8% 0%, rgba(216,184,122,.08), transparent 30%),
+    radial-gradient(circle at 92% 4%, rgba(111,143,183,.08), transparent 28%),
+    radial-gradient(circle at 50% 100%, rgba(142,243,197,.04), transparent 34%),
+    linear-gradient(180deg, rgba(7,16,24,.20), rgba(11,22,33,.20) 58%, rgba(5,9,18,.20));
+  border:1px solid rgba(216,184,122,.13);
+  box-shadow:var(--shadow);
+  backdrop-filter:blur(22px) saturate(145%);
+  -webkit-backdrop-filter:blur(22px) saturate(145%);
+  isolation:isolate;
 }
-#bb-setup::before{
+.pcsu-panel::before{
   content:"";
   position:absolute;
   inset:0;
+  z-index:0;
   pointer-events:none;
-  background:linear-gradient(135deg,rgba(255,255,255,.24),transparent 42%);
-  opacity:.75;
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.045), transparent 22%),
+    radial-gradient(circle at 20% 20%, rgba(216,184,122,.08), transparent 28%),
+    radial-gradient(circle at 88% 16%, rgba(106,167,255,.07), transparent 26%);
+  mix-blend-mode:screen;
+}
+.pcsu-panel::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  z-index:0;
+  pointer-events:none;
+  background:
+    linear-gradient(90deg, rgba(0,0,0,.10), transparent 44%, rgba(0,0,0,.10)),
+    linear-gradient(180deg, transparent 52%, rgba(0,0,0,.14));
+}
+/* ============================================================
+  STATE SWITCHING
+=============================================================== */
+#bb-stage,
+#ag-stage{
+  transition:opacity .24s ease, transform .24s ease;
+}
+#ag-stage{
+  display:none;
+}
+#pcsu-brain-amy-shell.is-guidance-ready #bb-stage{
+  display:none;
+}
+#pcsu-brain-amy-shell.is-guidance-ready #ag-stage{
+  display:block;
+}
+/* ============================================================
+  BASICBRAIN
+=============================================================== */
+#bb-stage{
+  padding:22px;
+}
+.bb-topbar,
+.bb-form,
+.bb-status,
+.bb-private{
+  position:relative;
+  z-index:2;
 }
 .bb-topbar{
-  position:relative;
   display:flex;
   align-items:flex-start;
   justify-content:space-between;
-  gap:14px;
-  margin:0 0 18px;
+  gap:16px;
+  padding-bottom:18px;
+  margin-bottom:18px;
 }
-.bb-setup-title{
-  display:flex;
+.bb-topbar::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  height:1px;
+  background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
+}
+.bb-heading-block{
+  min-width:0;
+}
+.bb-kicker,
+.ag-cover-kicker{
+  display:inline-flex;
   align-items:center;
-  gap:11px;
-  margin:0;
-  color:#101728;
-  font-size:19px;
-  line-height:1.1;
+  gap:8px;
+  margin:0 0 12px;
+  padding:8px 12px;
+  border-radius:999px;
+  border:1px solid rgba(216,184,122,.22);
+  background:rgba(216,184,122,.10);
+  color:var(--gold2);
+  text-transform:uppercase;
+  letter-spacing:.15em;
+  font-size:.70rem;
+  line-height:1;
   font-weight:900;
-  letter-spacing:-.03em;
 }
-.bb-setup-icon{
-  width:27px;
-  height:27px;
-  color:var(--bb-gold2);
+.bb-dot,
+.ag-dot,
+.ag-cover-dot{
+  width:7px;
+  height:7px;
+  border-radius:999px;
+  background:linear-gradient(180deg,var(--gold2),var(--gold));
+  box-shadow:0 0 16px rgba(216,184,122,.45);
   flex:0 0 auto;
 }
-/* ============================================================
-  APPLE KEYBOARD STYLE TOGGLE
-=============================================================== */
+.bb-title,
+.ag-cover-title,
+.ag-title{
+  margin:0;
+  font-family:"Gilda Display",serif;
+  font-weight:400;
+  color:#fbf4e7;
+}
+.bb-title{
+  margin-bottom:8px;
+  font-size:clamp(2rem,4vw,3rem);
+  line-height:.98;
+}
+.bb-subtitle{
+  margin:0;
+  max-width:560px;
+  font-size:1rem;
+  line-height:1.62;
+  font-weight:500;
+  color:#dcd4c8;
+}
+/* MODE TOGGLE */
 .bb-mode-control{
   position:relative;
   display:flex;
   flex-direction:column;
   align-items:flex-end;
-  gap:6px;
+  gap:7px;
   flex:0 0 auto;
   user-select:none;
 }
 .bb-mode-label{
-  font-size:8px;
+  font-size:.68rem;
   line-height:1;
   font-weight:900;
-  letter-spacing:.14em;
+  letter-spacing:.15em;
   text-transform:uppercase;
-  color:rgba(16,23,40,.48);
+  color:rgba(243,239,231,.58);
   white-space:nowrap;
 }
 .bb-apple-toggle{
   position:relative;
-  width:58px;
-  height:23px;
+  width:62px;
+  height:26px;
   border:none;
   outline:none;
   padding:0;
@@ -1166,193 +1224,185 @@
   inset:0;
   overflow:hidden;
   border-radius:999px;
-  background:
-    linear-gradient(180deg,rgba(239,242,247,.92),rgba(204,211,222,.92));
-  border:1px solid rgba(18,24,38,.16);
+  background:linear-gradient(180deg,rgba(12,18,28,.72),rgba(7,12,19,.62));
+  border:1px solid rgba(216,184,122,.17);
   box-shadow:
-    inset 0 1px 2px rgba(255,255,255,.88),
-    inset 0 -1px 2px rgba(18,24,38,.18),
-    0 7px 12px rgba(18,24,38,.10);
+    inset 0 1px 2px rgba(255,255,255,.10),
+    inset 0 -1px 2px rgba(0,0,0,.40),
+    0 12px 26px rgba(0,0,0,.24);
 }
 .bb-toggle-slot{
   position:absolute;
   left:5px;
-  top:5px;
-  width:24px;
-  height:13px;
+  top:6px;
+  width:25px;
+  height:14px;
   border-radius:999px;
-  background:
-    radial-gradient(circle at 26% 48%, rgba(186,226,82,.98), rgba(119,185,24,.94) 54%, rgba(78,132,12,.94));
-  box-shadow:
-    inset 0 1px 2px rgba(255,255,255,.42),
-    inset 0 -1px 2px rgba(0,0,0,.22),
-    0 0 10px rgba(126,190,29,.22);
+  background:radial-gradient(circle at 26% 48%, rgba(142,243,197,.98), rgba(69,190,140,.90) 54%, rgba(28,122,84,.92));
+  box-shadow:0 0 13px rgba(142,243,197,.28);
   transition:.26s cubic-bezier(.2,.8,.2,1);
 }
 .bb-toggle-knob{
   position:absolute;
-  top:2px;
-  left:25px;
-  width:19px;
-  height:19px;
+  top:3px;
+  left:28px;
+  width:20px;
+  height:20px;
   border-radius:999px;
-  background:
-    radial-gradient(circle at 35% 25%, #fff, #f0f1f4 46%, #c9ced8 100%);
-  border:1px solid rgba(18,24,38,.18);
+  background:radial-gradient(circle at 35% 25%, #fff, #efe7d7 48%, #b99d65 100%);
+  border:1px solid rgba(216,184,122,.30);
   box-shadow:
-    0 2px 5px rgba(18,24,38,.28),
-    inset 0 1px 1px rgba(255,255,255,.95),
-    inset 0 -1px 1px rgba(18,24,38,.18);
+    0 3px 8px rgba(0,0,0,.36),
+    inset 0 1px 1px rgba(255,255,255,.85),
+    inset 0 -1px 1px rgba(0,0,0,.20);
   transition:.26s cubic-bezier(.2,.8,.2,1);
 }
 .bb-apple-toggle.is-veteran .bb-toggle-slot{
-  left:29px;
-  background:
-    radial-gradient(circle at 26% 48%, rgba(228,192,113,.98), rgba(199,156,79,.94) 54%, rgba(133,96,39,.94));
-  box-shadow:
-    inset 0 1px 2px rgba(255,255,255,.42),
-    inset 0 -1px 2px rgba(0,0,0,.22),
-    0 0 10px rgba(199,156,79,.24);
+  left:32px;
+  background:radial-gradient(circle at 26% 48%, rgba(246,208,109,.98), rgba(216,184,122,.94) 54%, rgba(133,96,39,.94));
+  box-shadow:0 0 13px rgba(216,184,122,.34);
 }
 .bb-apple-toggle.is-veteran .bb-toggle-knob{
-  left:14px;
+  left:15px;
 }
 .bb-mode-text{
   display:flex;
   align-items:center;
-  gap:5px;
-  font-size:9px;
+  gap:6px;
+  font-size:.72rem;
   line-height:1;
   font-weight:900;
-  letter-spacing:.08em;
+  letter-spacing:.10em;
   text-transform:uppercase;
-  color:#667085;
+  color:#fff3dd;
   white-space:nowrap;
 }
 .bb-mode-dot{
-  width:6px;
-  height:6px;
+  width:7px;
+  height:7px;
   border-radius:999px;
-  background:linear-gradient(180deg,#8edb46,#5fa512);
-  box-shadow:0 0 10px rgba(126,190,29,.45);
+  background:linear-gradient(180deg,var(--mint),#45be8c);
+  box-shadow:0 0 12px rgba(142,243,197,.45);
 }
 .bb-mode-control.is-veteran .bb-mode-dot{
-  background:linear-gradient(180deg,var(--bb-gold2),var(--bb-gold));
-  box-shadow:0 0 10px rgba(199,156,79,.45);
+  background:linear-gradient(180deg,var(--gold2),var(--gold));
+  box-shadow:0 0 12px rgba(216,184,122,.45);
 }
-/* ============================================================
-  FORM
-=============================================================== */
+/* FORM */
 .bb-form{
-  position:relative;
   display:grid;
-  gap:11px;
+  grid-template-columns:repeat(2,1fr);
+  gap:12px;
 }
 .bb-row{
-  display:grid;
-  grid-template-columns:34px 1fr 182px;
-  align-items:center;
-  gap:11px;
+  position:relative;
+  overflow:hidden;
+  min-height:112px;
+  padding:15px;
+  border-radius:22px;
+  background:linear-gradient(180deg, rgba(12,18,28,.34), rgba(7,12,19,.28));
+  border:1px solid rgba(255,255,255,.075);
+  box-shadow:0 18px 44px rgba(0,0,0,.16);
+}
+.bb-row::before,
+.ag-pay-card::before,
+.ag-flow-card::before{
+  content:"";
+  position:absolute;
+  inset:0 0 auto 0;
+  height:1px;
+  background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
 }
 .bb-row.is-hidden{
   display:none;
 }
+.bb-row-head{
+  position:relative;
+  z-index:1;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  margin-bottom:13px;
+}
 .bb-icon{
-  width:33px;
-  height:33px;
-  border-radius:12px;
+  width:36px;
+  height:36px;
+  border-radius:14px;
   display:grid;
   place-items:center;
-  background:linear-gradient(180deg,rgba(255,255,255,.95),rgba(239,243,249,.78));
-  border:1px solid rgba(199,156,79,.18);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.95),
-    0 10px 18px rgba(18,24,38,.06);
-  font-size:14px;
+  background:linear-gradient(180deg, rgba(216,184,122,.12), rgba(255,255,255,.035));
+  border:1px solid rgba(216,184,122,.16);
+  box-shadow:0 14px 32px rgba(0,0,0,.20);
+  font-size:16px;
+  flex:0 0 auto;
 }
 .bb-label{
-  color:#202738;
-  font-size:13px;
-  line-height:1.1;
+  color:#fbf2e2;
+  font-size:.84rem;
+  line-height:1.15;
   font-weight:900;
-  letter-spacing:-.01em;
+  letter-spacing:.10em;
+  text-transform:uppercase;
 }
 .bb-select-wrap{
   position:relative;
+  z-index:1;
 }
 .bb-select-wrap::after{
   content:"⌄";
   position:absolute;
-  right:12px;
+  right:14px;
   top:50%;
   transform:translateY(-56%);
-  color:var(--bb-gold2);
-  font-size:17px;
+  color:var(--gold2);
+  font-size:18px;
   font-weight:900;
   pointer-events:none;
 }
 .bb-select{
   width:100%;
-  height:40px;
+  height:44px;
   appearance:none;
   -webkit-appearance:none;
-  border-radius:13px;
-  border:1px solid rgba(18,24,38,.10);
-  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(241,245,252,.82));
-  color:#172033;
-  font-size:13px;
+  border-radius:15px;
+  border:1px solid rgba(216,184,122,.13);
+  background:linear-gradient(180deg, rgba(17,24,34,.72), rgba(8,13,20,.64));
+  color:#f8f1e6;
+  font-size:.93rem;
   line-height:1;
   font-weight:800;
-  padding:0 38px 0 13px;
+  padding:0 40px 0 13px;
   outline:none;
-  transition:border-color .16s ease, box-shadow .16s ease;
+  transition:border-color .16s ease, box-shadow .16s ease, background .16s ease;
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.96),
-    0 8px 16px rgba(18,24,38,.05);
+    inset 0 1px 0 rgba(255,255,255,.06),
+    0 12px 24px rgba(0,0,0,.14);
 }
 .bb-select:hover{
-  border-color:rgba(199,156,79,.30);
+  border-color:rgba(216,184,122,.28);
+  background:linear-gradient(180deg, rgba(18,24,34,.82), rgba(8,13,20,.72));
 }
 .bb-select:focus{
-  border-color:rgba(199,156,79,.42);
+  border-color:rgba(216,184,122,.42);
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.98),
-    0 0 0 4px rgba(199,156,79,.10),
-    0 12px 20px rgba(18,24,38,.07);
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 0 0 4px rgba(216,184,122,.10),
+    0 14px 28px rgba(0,0,0,.20);
 }
-.bb-select option{
+.bb-select option,
+.bb-select optgroup{
   color:#172033;
-}
-.bb-private{
-  margin-top:14px;
-  padding-top:13px;
-  border-top:1px solid rgba(18,24,38,.08);
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  gap:8px;
-  color:#6b7488;
-  font-size:12px;
-  line-height:1.35;
-  font-weight:700;
-  text-align:center;
-}
-.bb-private-icon{
-  width:14px;
-  height:14px;
-  color:var(--bb-gold2);
-  flex:0 0 auto;
+  background:#fff;
 }
 .bb-status{
-  position:relative;
-  margin-top:12px;
-  padding:10px 12px;
-  border-radius:15px;
-  background:linear-gradient(180deg,rgba(255,255,255,.76),rgba(245,247,252,.56));
-  border:1px solid rgba(18,24,38,.07);
-  color:#667085;
-  font-size:11px;
-  line-height:1.4;
+  margin-top:14px;
+  padding:12px 14px;
+  border-radius:18px;
+  background:linear-gradient(180deg, rgba(216,184,122,.065), rgba(255,255,255,.025));
+  border:1px solid rgba(216,184,122,.13);
+  color:#ebe3d5;
+  font-size:.86rem;
+  line-height:1.45;
   font-weight:800;
   text-align:center;
   display:none;
@@ -1360,1247 +1410,44 @@
 .bb-status.show{
   display:block;
 }
-@media(max-width:560px){
-  #bb-input-shell{
-    max-width:100%;
-  }
-  #bb-setup{
-    padding:18px 16px;
-    border-radius:24px;
-  }
-  .bb-topbar{
-    align-items:flex-start;
-  }
-  .bb-setup-title{
-    font-size:18px;
-    max-width:230px;
-  }
-  .bb-row{
-    grid-template-columns:32px 1fr;
-    gap:8px;
-  }
-  .bb-select-wrap{
-    grid-column:1 / -1;
-  }
-  .bb-select{
-    height:42px;
-  }
-}
-</style>
-                <div id="bb-input-shell">
-                  <section id="bb-setup">
-                    <div class="bb-topbar">
-                      <h3 class="bb-setup-title">
-                        <svg class="bb-setup-icon" viewbox="0 0 24 24" fill="none">
-                          <path d="M4 15a8 8 0 0 1 16 0" stroke="currentColor" stroke-width="1.8"></path>
-                          <path d="M12 15l4-5" stroke="currentColor" stroke-width="1.8"></path>
-                        </svg>
-                        <span id="bb-title-text">Introduce Yourself</span>
-                      </h3>
-                      <div id="bb-mode-control" class="bb-mode-control">
-                        <div class="bb-mode-label">Mode</div>
-                        <button id="bb-mode-toggle" class="bb-apple-toggle" type="button" aria-label="Switch between Active Duty and Veteran">
-                          <span class="bb-toggle-track"></span>
-                          <span class="bb-toggle-slot"></span>
-                          <span class="bb-toggle-knob"></span>
-                        </button>
-                        <div class="bb-mode-text">
-                          <span class="bb-mode-dot"></span>
-                          <span id="bb-mode-text">Active Duty</span>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="bb-form">
-                      <div class="bb-row">
-                        <div class="bb-icon">🎖️</div>
-                        <label class="bb-label" id="bb-rank-label">Rank</label>
-                        <div class="bb-select-wrap">
-                          <select id="bb-rank" class="bb-select" autocomplete="off">
-                            <option value="">Select rank</option>
-                            <optgroup label="Enlisted">
-                              <option value="E-1">E-1 • Airman Basic</option>
-                              <option value="E-2">E-2 • Airman</option>
-                              <option value="E-3">E-3 • Airman First Class</option>
-                              <option value="E-4">E-4 • Senior Airman</option>
-                              <option value="E-5">E-5 • Staff Sergeant</option>
-                              <option value="E-6">E-6 • Technical Sergeant</option>
-                              <option value="E-7">E-7 • Master Sergeant</option>
-                              <option value="E-8">E-8 • Senior Master Sergeant</option>
-                              <option value="E-9">E-9 • Chief Master Sergeant</option>
-                            </optgroup>
-                            <optgroup label="Officer">
-                              <option value="O-1">O-1 • Second Lieutenant</option>
-                              <option value="O-2">O-2 • First Lieutenant</option>
-                              <option value="O-3">O-3 • Captain</option>
-                              <option value="O-4">O-4 • Major</option>
-                              <option value="O-5">O-5 • Lieutenant Colonel</option>
-                              <option value="O-6">O-6 • Colonel</option>
-                              <option value="O-7">O-7 • Brigadier General</option>
-                              <option value="O-8">O-8 • Major General</option>
-                              <option value="O-9">O-9 • Lieutenant General</option>
-                              <option value="O-10">O-10 • General</option>
-                            </optgroup>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="bb-row">
-                        <div class="bb-icon">⏱️</div>
-                        <label class="bb-label">Years of Service</label>
-                        <div class="bb-select-wrap">
-                          <select id="bb-yos" class="bb-select" autocomplete="off">
-                            <option value="">Select years</option>
-                            <option value="2">2 Years</option>
-                            <option value="4">4 Years</option>
-                            <option value="6">6 Years</option>
-                            <option value="8">8 Years</option>
-                            <option value="10">10 Years</option>
-                            <option value="12">12 Years</option>
-                            <option value="14">14 Years</option>
-                            <option value="16">16 Years</option>
-                            <option value="18">18 Years</option>
-                            <option value="20">20 Years</option>
-                            <option value="22">22 Years</option>
-                            <option value="24">24 Years</option>
-                            <option value="26">26 Years</option>
-                            <option value="28">28 Years</option>
-                            <option value="30">30 Years</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="bb-row" id="bb-va-row">
-                        <div class="bb-icon">🩺</div>
-                        <label class="bb-label">VA Disability</label>
-                        <div class="bb-select-wrap">
-                          <select id="bb-va" class="bb-select" autocomplete="off">
-                            <option value="">Select rating</option>
-                            <option value="0">0%</option>
-                            <option value="10">10%</option>
-                            <option value="20">20%</option>
-                            <option value="30">30%</option>
-                            <option value="40">40%</option>
-                            <option value="50">50%</option>
-                            <option value="60">60%</option>
-                            <option value="70">70%</option>
-                            <option value="80">80%</option>
-                            <option value="90">90%</option>
-                            <option value="100">100%</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="bb-row">
-                        <div class="bb-icon">👨‍👩‍👧</div>
-                        <label class="bb-label">Dependents</label>
-                        <div class="bb-select-wrap">
-                          <select id="bb-dependents" class="bb-select" autocomplete="off">
-                            <option value="">Select dependents</option>
-                            <option value="0">No Dependents</option>
-                            <option value="1">1 Dependent</option>
-                            <option value="2">2 Dependents</option>
-                            <option value="3">3 Dependents</option>
-                            <option value="4">4 Dependents</option>
-                            <option value="5">5 Dependents</option>
-                            <option value="6">6+ Dependents</option>
-                          </select>
-                        </div>
-                      </div>
-                      <div class="bb-row" id="bb-base-row">
-                        <div class="bb-icon">📍</div>
-                        <label class="bb-label">Gaining Base</label>
-                        <div class="bb-select-wrap">
-                          <select id="bb-base" class="bb-select" autocomplete="off">
-                            <option value="">Select gaining base</option>
-                            <option value="Andrews AFB">Andrews AFB</option>
-                            <option value="Aviano AB">Aviano AB</option>
-                            <option value="Barksdale AFB">Barksdale AFB</option>
-                            <option value="Beale AFB">Beale AFB</option>
-                            <option value="Buckley SFB">Buckley SFB</option>
-                            <option value="Cannon AFB">Cannon AFB</option>
-                            <option value="Charleston AFB">Charleston AFB</option>
-                            <option value="Columbus AFB">Columbus AFB</option>
-                            <option value="Creech AFB">Creech AFB</option>
-                            <option value="Davis-Monthan AFB">Davis-Monthan AFB</option>
-                            <option value="Dover AFB">Dover AFB</option>
-                            <option value="Dyess AFB">Dyess AFB</option>
-                            <option value="Edwards AFB">Edwards AFB</option>
-                            <option value="Eglin AFB">Eglin AFB</option>
-                            <option value="Ellsworth AFB">Ellsworth AFB</option>
-                            <option value="Fairchild AFB">Fairchild AFB</option>
-                            <option value="FE Warren AFB">FE Warren AFB</option>
-                            <option value="Grand Forks AFB">Grand Forks AFB</option>
-                            <option value="Hanscom AFB">Hanscom AFB</option>
-                            <option value="Hill AFB">Hill AFB</option>
-                            <option value="Holloman AFB">Holloman AFB</option>
-                            <option value="Hurlburt Field">Hurlburt Field</option>
-                            <option value="Incirlik AB">Incirlik AB</option>
-                            <option value="JBSA Fort Sam Houston">JBSA Fort Sam Houston</option>
-                            <option value="JBSA Lackland">JBSA Lackland</option>
-                            <option value="JBSA Randolph">JBSA Randolph</option>
-                            <option value="Kadena AB">Kadena AB</option>
-                            <option value="Keesler AFB">Keesler AFB</option>
-                            <option value="Kirtland AFB">Kirtland AFB</option>
-                            <option value="Langley AFB">Langley AFB</option>
-                            <option value="Laughlin AFB">Laughlin AFB</option>
-                            <option value="Little Rock AFB">Little Rock AFB</option>
-                            <option value="Luke AFB">Luke AFB</option>
-                            <option value="MacDill AFB">MacDill AFB</option>
-                            <option value="Malmstrom AFB">Malmstrom AFB</option>
-                            <option value="Maxwell AFB">Maxwell AFB</option>
-                            <option value="McConnell AFB">McConnell AFB</option>
-                            <option value="McGuire AFB">McGuire AFB</option>
-                            <option value="Minot AFB">Minot AFB</option>
-                            <option value="Misawa AB">Misawa AB</option>
-                            <option value="Moody AFB">Moody AFB</option>
-                            <option value="Mountain Home AFB">Mountain Home AFB</option>
-                            <option value="Nellis AFB">Nellis AFB</option>
-                            <option value="Offutt AFB">Offutt AFB</option>
-                            <option value="Osan AB">Osan AB</option>
-                            <option value="Patrick SFB">Patrick SFB</option>
-                            <option value="Peterson SFB">Peterson SFB</option>
-                            <option value="Ramstein AB">Ramstein AB</option>
-                            <option value="Robins AFB">Robins AFB</option>
-                            <option value="Scott AFB">Scott AFB</option>
-                            <option value="Seymour Johnson AFB">Seymour Johnson AFB</option>
-                            <option value="Shaw AFB">Shaw AFB</option>
-                            <option value="Sheppard AFB">Sheppard AFB</option>
-                            <option value="Spangdahlem AB">Spangdahlem AB</option>
-                            <option value="Tinker AFB">Tinker AFB</option>
-                            <option value="Travis AFB">Travis AFB</option>
-                            <option value="Tyndall AFB">Tyndall AFB</option>
-                            <option value="Vance AFB">Vance AFB</option>
-                            <option value="Vandenberg SFB">Vandenberg SFB</option>
-                            <option value="Whiteman AFB">Whiteman AFB</option>
-                            <option value="Wright-Patterson AFB">Wright-Patterson AFB</option>
-                          </select>
-                        </div>
-                      </div>
-                    </div>
-                    <div id="bb-status" class="bb-status">
-                      Waiting for PCS details.
-                    </div>
-                    <div class="bb-private">
-                      <svg class="bb-private-icon" viewbox="0 0 24 24" fill="none">
-                        <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
-                        <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
-                      </svg>
-                      Private. Secure. No data stored.
-                    </div>
-                  </section>
-                </div>
-                <script>
-(function(){
-  "use strict";
-  const VERSION = "5.0.0";
-  const API_BASE = "https://thewing.netlify.app/api";
-  const BRAIN_ENDPOINT = API_BASE + "/opensource-brain";
-  const root = document.getElementById("pcsu-basicbrain-input");
-  if(!root) return;
-  if(root.dataset.mounted === "true") return;
-  root.dataset.mounted = "true";
-  const els = {
-    titleText: document.getElementById("bb-title-text"),
-    modeControl: document.getElementById("bb-mode-control"),
-    modeToggle: document.getElementById("bb-mode-toggle"),
-    modeText: document.getElementById("bb-mode-text"),
-    rank: document.getElementById("bb-rank"),
-    rankLabel: document.getElementById("bb-rank-label"),
-    yos: document.getElementById("bb-yos"),
-    va: document.getElementById("bb-va"),
-    dependents: document.getElementById("bb-dependents"),
-    base: document.getElementById("bb-base"),
-    vaRow: document.getElementById("bb-va-row"),
-    baseRow: document.getElementById("bb-base-row"),
-    status: document.getElementById("bb-status")
-  };
-  const BASE_META = {
-    "Andrews AFB": { zip:"20762", cityKey:"Andrews", state:"MD", market:"Washington DC" },
-    "Barksdale AFB": { zip:"71110", cityKey:"Barksdale", state:"LA", market:"Bossier City" },
-    "Beale AFB": { zip:"95903", cityKey:"Beale", state:"CA", market:"Marysville" },
-    "Cannon AFB": { zip:"88103", cityKey:"Cannon", state:"NM", market:"Clovis" },
-    "Charleston AFB": { zip:"29404", cityKey:"Charleston", state:"SC", market:"Charleston" },
-    "Creech AFB": { zip:"89018", cityKey:"Creech", state:"NV", market:"Indian Springs / Las Vegas" },
-    "Davis-Monthan AFB": { zip:"85707", cityKey:"DavisMonthan", state:"AZ", market:"Tucson" },
-    "Dover AFB": { zip:"19902", cityKey:"Dover", state:"DE", market:"Dover" },
-    "Dyess AFB": { zip:"79607", cityKey:"Dyess", state:"TX", market:"Abilene" },
-    "Eglin AFB": { zip:"32542", cityKey:"Eglin", state:"FL", market:"Fort Walton Beach" },
-    "Fairchild AFB": { zip:"99011", cityKey:"Fairchild", state:"WA", market:"Spokane" },
-    "FE Warren AFB": { zip:"82005", cityKey:"FEWarren", state:"WY", market:"Cheyenne" },
-    "Holloman AFB": { zip:"88330", cityKey:"Holloman", state:"NM", market:"Alamogordo" },
-    "Hurlburt Field": { zip:"32544", cityKey:"Hurlburt", state:"FL", market:"Fort Walton Beach" },
-    "JBSA Fort Sam Houston": { zip:"78234", cityKey:"FortSamHouston", state:"TX", market:"San Antonio" },
-    "JBSA Lackland": { zip:"78236", cityKey:"Lackland", state:"TX", market:"San Antonio" },
-    "JBSA Randolph": { zip:"78150", cityKey:"Randolph", state:"TX", market:"San Antonio" },
-    "Keesler AFB": { zip:"39534", cityKey:"Keesler", state:"MS", market:"Biloxi" },
-    "Kirtland AFB": { zip:"87117", cityKey:"Kirtland", state:"NM", market:"Albuquerque" },
-    "Langley AFB": { zip:"23665", cityKey:"Langley", state:"VA", market:"Hampton Roads" },
-    "Laughlin AFB": { zip:"78843", cityKey:"Laughlin", state:"TX", market:"Del Rio" },
-    "Little Rock AFB": { zip:"72099", cityKey:"LittleRock", state:"AR", market:"Little Rock" },
-    "Luke AFB": { zip:"85309", cityKey:"Luke", state:"AZ", market:"Phoenix" },
-    "MacDill AFB": { zip:"33621", cityKey:"MacDill", state:"FL", market:"Tampa" },
-    "Malmstrom AFB": { zip:"59402", cityKey:"Malmstrom", state:"MT", market:"Great Falls" },
-    "Maxwell AFB": { zip:"36112", cityKey:"Maxwell", state:"AL", market:"Montgomery" },
-    "McConnell AFB": { zip:"67221", cityKey:"McConnell", state:"KS", market:"Wichita" },
-    "McGuire AFB": { zip:"08641", cityKey:"McGuire", state:"NJ", market:"Joint Base MDL" },
-    "Minot AFB": { zip:"58705", cityKey:"Minot", state:"ND", market:"Minot" },
-    "Moody AFB": { zip:"31699", cityKey:"Moody", state:"GA", market:"Valdosta" },
-    "Mountain Home AFB": { zip:"83648", cityKey:"MountainHome", state:"ID", market:"Mountain Home" },
-    "Nellis AFB": { zip:"89191", cityKey:"Nellis", state:"NV", market:"Las Vegas" },
-    "Offutt AFB": { zip:"68113", cityKey:"Offutt", state:"NE", market:"Omaha" },
-    "Patrick SFB": { zip:"32925", cityKey:"Patrick", state:"FL", market:"Space Coast" },
-    "Peterson SFB": { zip:"80914", cityKey:"Peterson", state:"CO", market:"Colorado Springs" },
-    "Robins AFB": { zip:"31098", cityKey:"Robins", state:"GA", market:"Warner Robins" },
-    "Scott AFB": { zip:"62225", cityKey:"Scott", state:"IL", market:"St. Louis Metro" },
-    "Seymour Johnson AFB": { zip:"27531", cityKey:"SeymourJohnson", state:"NC", market:"Goldsboro" },
-    "Shaw AFB": { zip:"29152", cityKey:"Shaw", state:"SC", market:"Sumter" },
-    "Sheppard AFB": { zip:"76311", cityKey:"Sheppard", state:"TX", market:"Wichita Falls" },
-    "Tinker AFB": { zip:"73145", cityKey:"Tinker", state:"OK", market:"Oklahoma City" },
-    "Travis AFB": { zip:"94535", cityKey:"Travis", state:"CA", market:"Fairfield" },
-    "Tyndall AFB": { zip:"32403", cityKey:"Tyndall", state:"FL", market:"Panama City" },
-    "Vance AFB": { zip:"73705", cityKey:"Vance", state:"OK", market:"Enid" },
-    "Vandenberg SFB": { zip:"93437", cityKey:"Vandenberg", state:"CA", market:"Lompoc" },
-    "Whiteman AFB": { zip:"65305", cityKey:"Whiteman", state:"MO", market:"Knob Noster" },
-    "Wright-Patterson AFB": { zip:"45433", cityKey:"WrightPatterson", state:"OH", market:"Dayton" }
-  };
-  let mode = "active_duty";
-  let runTimer = null;
-  let requestSeq = 0;
-  let lastGoodComp = null;
-  let lastGoodState = null;
-  function clean(value){
-    return value === undefined || value === null ? "" : String(value).trim();
-  }
-  function num(value, fallback){
-    const n = Number(String(value ?? "").replace(/[$,%]/g,"").replace(/,/g,""));
-    return Number.isFinite(n) ? n : (fallback || 0);
-  }
-  function normalizeRank(value){
-    const raw = clean(value)
-      .toUpperCase()
-      .replace(/\s+/g,"")
-      .replace("–","-")
-      .replace("—","-");
-    if(!raw) return "";
-    if(/^[EOW]-\d{1,2}$/.test(raw)) return raw;
-    if(/^[EOW]\d{1,2}$/.test(raw)) return raw.charAt(0) + "-" + raw.slice(1);
-    return raw;
-  }
-  function setStatus(text, show){
-    if(!els.status) return;
-    els.status.textContent = text || "";
-    els.status.classList.toggle("show", !!show);
-  }
-  function dispatchSafe(name, detail){
-    try{
-      window.dispatchEvent(new CustomEvent(name, { detail: detail || {} }));
-    }catch(_){}
-  }
-  function setMode(nextMode){
-    mode = nextMode === "veteran" ? "veteran" : "active_duty";
-    const isVet = mode === "veteran";
-    if(els.modeToggle){
-      els.modeToggle.classList.toggle("is-veteran", isVet);
-    }
-    if(els.modeControl){
-      els.modeControl.classList.toggle("is-veteran", isVet);
-    }
-    if(els.modeText){
-      els.modeText.textContent = isVet ? "Veteran" : "Active Duty";
-    }
-    if(els.titleText){
-      els.titleText.textContent = isVet
-        ? "Introduce Yourself Vet"
-        : "Introduce Yourself, ";
-    }
-    if(els.rankLabel){
-      els.rankLabel.textContent = isVet ? "Retired Rank" : "Rank";
-    }
-    if(els.vaRow){
-      els.vaRow.classList.toggle("is-hidden", !isVet);
-    }
-    if(els.baseRow){
-      els.baseRow.classList.toggle("is-hidden", isVet);
-    }
-    clearValues();
-    emitProfileOnly();
-  }
-  function getState(){
-    const rank = normalizeRank(els.rank ? els.rank.value : "");
-    const yos = num(els.yos ? els.yos.value : "", 0);
-    const depRaw = els.dependents ? els.dependents.value : "";
-    const dependents = depRaw === "" ? null : num(depRaw, 0);
-    const hasDependents = dependents !== null && dependents > 0;
-    const familyCount = dependents === null ? null : dependents + 1;
-    if(mode === "veteran"){
-      const vaRaw = els.va ? els.va.value : "";
-      const va = vaRaw === "" ? null : num(vaRaw, 0);
-      return {
-        source:"pcsunited.basicbrain.combined.v5.veteran",
-        version:VERSION,
-        stored:false,
-        updated_at:new Date().toISOString(),
-        mode:"veteran",
-        type:"veteran",
-        status:"veteran",
-        retired:true,
-        retirement_eligible:true,
-        retirementEligible:true,
-        rank,
-        rank_paygrade:rank,
-        rankPaygrade:rank,
-        yos,
-        years_of_service:yos,
-        yearsOfService:yos,
-        va_disability:va,
-        vaDisability:va,
-        disability_rating:va,
-        disabilityRating:va,
-        dependents:dependents === null ? "" : (hasDependents ? "yes" : "no"),
-        dependents_count:dependents,
-        dependentsCount:dependents,
-        family:familyCount,
-        family_size:familyCount,
-        familySize:familyCount,
-        has_dependents:hasDependents,
-        hasDependents:hasDependents,
-        base:"",
-        current_base:"",
-        currentBase:"",
-        selected_base:"",
-        selectedBase:"",
-        pcs_base:"",
-        pcsBase:"",
-        zip:"",
-        bah_zip:"",
-        bahZip:"",
-        current_zip:"",
-        currentZip:"",
-        cityKey:"",
-        market:"",
-        state:"",
-        compensation_only:true,
-        compensationOnly:true
-      };
-    }
-    const base = clean(els.base ? els.base.value : "");
-    const meta = BASE_META[base] || {};
-    return {
-      source:"pcsunited.basicbrain.combined.v5.active_duty",
-      version:VERSION,
-      stored:false,
-      updated_at:new Date().toISOString(),
-      mode:"active_duty",
-      type:"active_duty",
-      status:"active_duty",
-      rank,
-      rank_paygrade:rank,
-      rankPaygrade:rank,
-      yos,
-      years_of_service:yos,
-      yearsOfService:yos,
-      dependents:hasDependents ? "yes" : "no",
-      dependents_count:dependents,
-      dependentsCount:dependents,
-      family:familyCount,
-      family_size:familyCount,
-      familySize:familyCount,
-      has_dependents:hasDependents,
-      hasDependents:hasDependents,
-      base,
-      current_base:base,
-      currentBase:base,
-      selected_base:base,
-      selectedBase:base,
-      pcs_base:base,
-      pcsBase:base,
-      zip:meta.zip || "",
-      bah_zip:meta.zip || "",
-      bahZip:meta.zip || "",
-      current_zip:meta.zip || "",
-      currentZip:meta.zip || "",
-      cityKey:meta.cityKey || "",
-      market:meta.market || "",
-      state:meta.state || ""
-    };
-  }
-  function isComplete(state){
-    if(!state || !state.rank || !state.yos) return false;
-    if(mode === "veteran"){
-      return !!(
-        state.va_disability !== null &&
-        state.dependents_count !== null
-      );
-    }
-    return !!(
-      state.dependents_count !== null &&
-      state.base
-    );
-  }
-  function deepFindNumber(obj, names){
-    const wanted = names.map(function(name){
-      return String(name).toLowerCase();
-    });
-    const seen = new WeakSet();
-    function walk(node){
-      if(!node || typeof node !== "object") return 0;
-      if(seen.has(node)) return 0;
-      seen.add(node);
-      const keys = Object.keys(node);
-      for(let i = 0; i < keys.length; i++){
-        const key = keys[i];
-        const normalizedKey = key.toLowerCase();
-        if(wanted.includes(normalizedKey)){
-          const value = num(node[key], 0);
-          if(value) return value;
-        }
-      }
-      for(let j = 0; j < keys.length; j++){
-        const found = walk(node[keys[j]]);
-        if(found) return found;
-      }
-      return 0;
-    }
-    return walk(obj);
-  }
-  function extractActiveDutyComp(data){
-    const payload = data && (data.payload || data.data || data.result || data) || {};
-    const c = payload.compensation || payload.comp || payload.pay || payload.truth_packet?.pay || {};
-    const m = c.monthly || payload.monthly || c || {};
-    const basePay =
-      m.basicPay ??
-      m.basePay ??
-      m.base_pay ??
-      m.base_pay_monthly ??
-      payload.basePay ??
-      payload.base_pay ??
-      payload.truth_packet?.base_pay ??
-      0;
-    const bas =
-      m.bas ??
-      m.BAS ??
-      m.basMonthly ??
-      payload.bas ??
-      payload.BAS ??
-      payload.truth_packet?.bas ??
-      0;
-    const bah =
-      m.bah ??
-      m.BAH ??
-      m.bahMonthly ??
-      payload.bah ??
-      payload.BAH ??
-      payload.truth_packet?.bah ??
-      0;
-    const total =
-      m.grossMonthlyComp ??
-      m.combinedMonthlyGross ??
-      m.totalMonthly ??
-      m.total_monthly ??
-      m.total ??
-      payload.totalMonthly ??
-      payload.total_monthly ??
-      payload.total ??
-      payload.truth_packet?.total_monthly ??
-      0;
-    const finalBase = num(basePay,0);
-    const finalBas = num(bas,0);
-    const finalBah = num(bah,0);
-    const finalTotal = num(total,0) || finalBase + finalBas + finalBah;
-    return {
-      basePay:finalBase,
-      base_pay:finalBase,
-      bas:finalBas,
-      bah:finalBah,
-      total:finalTotal,
-      totalMonthly:finalTotal,
-      total_monthly:finalTotal,
-      source:"thewing.opensource-brain"
-    };
-  }
-  function estimateVaDisabilityMonthly(rating, dependentsCount){
-    const r = num(rating, 0);
-    const deps = Math.max(0, num(dependentsCount, 0));
-    const base = {
-      0:0,
-      10:175,
-      20:346,
-      30:537,
-      40:774,
-      50:1102,
-      60:1395,
-      70:1759,
-      80:2044,
-      90:2297,
-      100:3831
-    };
-    let value = base[r] || 0;
-    if(r >= 30 && deps > 0){
-      value += deps * 50;
-    }
-    return Math.round(value);
-  }
-  function estimateRetirementMonthly(rank, yos){
-    const r = normalizeRank(rank);
-    const y = num(yos, 20);
-    const estimatedFinalBasePay = {
-      "E-1":2200,
-      "E-2":2400,
-      "E-3":2850,
-      "E-4":3400,
-      "E-5":4300,
-      "E-6":5200,
-      "E-7":6700,
-      "E-8":7600,
-      "E-9":9100,
-      "O-1":4900,
-      "O-2":6200,
-      "O-3":9200,
-      "O-4":10800,
-      "O-5":12800,
-      "O-6":16100,
-      "O-7":17500,
-      "O-8":18500,
-      "O-9":19000,
-      "O-10":19500
-    };
-    const basePay = estimatedFinalBasePay[r] || 0;
-    const multiplier = Math.min(0.75, Math.max(0.50, y * 0.025));
-    return Math.round(basePay * multiplier);
-  }
-  function extractRawComp(data){
-    const payload = data && (data.payload || data.data || data.result || data) || {};
-    const truth = payload.truth_packet || payload.truthPacket || data.truth_packet || data.truthPacket || {};
-    const compRoot = payload.compensation || payload.comp || payload.pay || truth.compensation || {};
-    const monthly = compRoot.monthly || payload.monthly || truth.monthly || compRoot;
-    return {
-      ...data,
-      ...payload,
-      ...truth,
-      ...compRoot,
-      ...monthly
-    };
-  }
-  function normalizeVeteranComp(rawComp, state){
-    const c = rawComp && typeof rawComp === "object" ? rawComp : {};
-    let retirementPay = Math.round(num(
-      c.retirementPay ??
-      c.retirement_pay ??
-      c.retiredPay ??
-      c.retired_pay ??
-      c.retirementMonthly ??
-      c.retirement_monthly ??
-      c.militaryRetirement ??
-      c.military_retirement,
-      0
-    )) || deepFindNumber(c, [
-      "retirementPay",
-      "retirement_pay",
-      "retiredPay",
-      "retired_pay",
-      "retirementMonthly",
-      "retirement_monthly",
-      "militaryRetirement",
-      "military_retirement",
-      "monthly_retirement"
-    ]);
-    let disabilityPay = Math.round(num(
-      c.disabilityPay ??
-      c.disability_pay ??
-      c.vaDisabilityPay ??
-      c.va_disability_pay ??
-      c.vaCompensation ??
-      c.va_compensation ??
-      c.disabilityMonthly ??
-      c.disability_monthly ??
-      c.vaMonthly ??
-      c.va_monthly,
-      0
-    )) || deepFindNumber(c, [
-      "disabilityPay",
-      "disability_pay",
-      "vaDisabilityPay",
-      "va_disability_pay",
-      "vaCompensation",
-      "va_compensation",
-      "disabilityMonthly",
-      "disability_monthly",
-      "vaMonthly",
-      "va_monthly",
-      "monthly_disability",
-      "monthly_va"
-    ]);
-    let otherPay = Math.round(num(
-      c.otherPay ??
-      c.other_pay ??
-      c.otherMonthly ??
-      c.other_monthly,
-      0
-    )) || deepFindNumber(c, [
-      "otherPay",
-      "other_pay",
-      "otherMonthly",
-      "other_monthly"
-    ]);
-    let total = Math.round(num(
-      c.total ??
-      c.totalMonthly ??
-      c.total_monthly ??
-      c.totalMonthlyCompensation ??
-      c.total_monthly_compensation ??
-      c.grossMonthlyComp ??
-      c.combinedMonthlyGross,
-      0
-    )) || deepFindNumber(c, [
-      "total",
-      "totalMonthly",
-      "total_monthly",
-      "totalMonthlyCompensation",
-      "total_monthly_compensation",
-      "grossMonthlyComp",
-      "combinedMonthlyGross",
-      "monthly_total",
-      "total_compensation"
-    ]);
-    if(total && !disabilityPay){
-      disabilityPay = estimateVaDisabilityMonthly(
-        state.va_disability,
-        state.dependents_count
-      );
-    }
-    if(total && !retirementPay){
-      retirementPay = Math.max(0, total - disabilityPay - otherPay);
-    }
-    if(!retirementPay && !disabilityPay && !total){
-      disabilityPay = estimateVaDisabilityMonthly(
-        state.va_disability,
-        state.dependents_count
-      );
-      retirementPay = estimateRetirementMonthly(
-        state.rank,
-        state.yos
-      );
-      otherPay = 0;
-      total = retirementPay + disabilityPay + otherPay;
-    }
-    if(!total){
-      total = retirementPay + disabilityPay + otherPay;
-    }
-    return {
-      retirementPay:Math.round(num(retirementPay,0)),
-      retirement_pay:Math.round(num(retirementPay,0)),
-      disabilityPay:Math.round(num(disabilityPay,0)),
-      disability_pay:Math.round(num(disabilityPay,0)),
-      otherPay:Math.round(num(otherPay,0)),
-      other_pay:Math.round(num(otherPay,0)),
-      total:Math.round(num(total,0)),
-      totalMonthly:Math.round(num(total,0)),
-      total_monthly:Math.round(num(total,0)),
-      raw:c,
-      source:"thewing.opensource-brain"
-    };
-  }
-  function hasActiveDutyComp(comp){
-    return !!(
-      comp &&
-      (
-        num(comp.basePay,0) ||
-        num(comp.bas,0) ||
-        num(comp.bah,0) ||
-        num(comp.total,0)
-      )
-    );
-  }
-  function hasVeteranComp(comp){
-    return !!(
-      comp &&
-      (
-        num(comp.retirementPay,0) ||
-        num(comp.disabilityPay,0) ||
-        num(comp.otherPay,0) ||
-        num(comp.total,0)
-      )
-    );
-  }
-  async function callTheWing(state){
-    const input = {
-      ...state,
-      source:"pcsunited.basicbrain.combined.v5"
-    };
-    const bodies = [
-      { tool:"PCS_SNAPSHOT", input },
-      { type:"PCS_SNAPSHOT", input },
-      input
-    ];
-    for(let i = 0; i < bodies.length; i++){
-      try{
-        const res = await fetch(BRAIN_ENDPOINT + "?t=" + Date.now(), {
-          method:"POST",
-          headers:{ "Content-Type":"application/json" },
-          cache:"no-store",
-          body:JSON.stringify(bodies[i])
-        });
-        const data = await res.json().catch(function(){ return {}; });
-        if(!res.ok || data.ok === false){
-          continue;
-        }
-        if(mode === "veteran"){
-          const raw = extractRawComp(data);
-          const comp = normalizeVeteranComp(raw, state);
-          if(hasVeteranComp(comp)){
-            return comp;
-          }
-        }else{
-          const comp = extractActiveDutyComp(data);
-          if(hasActiveDutyComp(comp)){
-            return comp;
-          }
-        }
-      }catch(err){
-        console.warn("TheWing attempt failed:", err);
-      }
-    }
-    if(mode === "veteran"){
-      return normalizeVeteranComp({}, state);
-    }
-    return null;
-  }
-  function buildSelectedBase(state){
-    return {
-      source:"pcsunited.basicbrain.combined.v5",
-      stored:false,
-      base:state.base || "",
-      label:state.base || "",
-      name:state.base || "",
-      cityKey:state.cityKey || "",
-      market:state.market || "",
-      state:state.state || "",
-      zip:state.zip || ""
-    };
-  }
-  function emitProfileOnly(){
-    const state = getState();
-    const selectedBase = buildSelectedBase(state);
-    const profile = {
-      ...state,
-      profile_status:"preview_only"
-    };
-    const bridge = {
-      ...profile,
-      compensation:null
-    };
-    const basicbrain = {
-      ...state,
-      profile,
-      bridge,
-      selectedBase,
-      compensation:null,
-      calculated_comp:null
-    };
-    window.PCSU_BASICBRAIN_TEMP = basicbrain;
-    window.PCSU_BASICBRAIN_CURRENT = basicbrain;
-    dispatchSafe("pcsunited:basicbrain-updated", {
-      basicbrain,
-      profile,
-      bridge,
-      selectedBase,
-      compensation:null
-    });
-    dispatchSafe("pcsunited:profile-ready", profile);
-    dispatchSafe("pcsunited:bridge-ready", bridge);
-    if(mode === "active_duty"){
-      dispatchSafe("pcsu:base-selected", selectedBase);
-    }
-    try{
-      window.postMessage({
-        type:"pcsunited-basicbrain",
-        source:"pcsunited.basicbrain.combined.v5",
-        basicbrain,
-        profile,
-        bridge,
-        selectedBase,
-        compensation:null
-      }, "*");
-    }catch(_){}
-  }
-  function emitComp(state, comp){
-    const selectedBase = buildSelectedBase(state);
-    const profile = {
-      ...state,
-      profile_status:"preview_only"
-    };
-    const bridge = {
-      ...profile,
-      compensation:comp || null
-    };
-    if(mode === "veteran"){
-      bridge.retirementPay = comp ? comp.retirementPay : 0;
-      bridge.disabilityPay = comp ? comp.disabilityPay : 0;
-      bridge.otherPay = comp ? comp.otherPay : 0;
-      bridge.totalMonthlyCompensation = comp ? comp.total : 0;
-    }else{
-      bridge.basePay = comp ? comp.basePay : 0;
-      bridge.bas = comp ? comp.bas : 0;
-      bridge.bah = comp ? comp.bah : 0;
-      bridge.totalMonthlyCompensation = comp ? comp.total : 0;
-    }
-    const basicbrain = {
-      ...state,
-      profile,
-      bridge,
-      selectedBase,
-      compensation:comp || null,
-      calculated_comp:comp || null
-    };
-    window.PCSU_BASICBRAIN_TEMP = basicbrain;
-    window.PCSU_BASICBRAIN_CURRENT = basicbrain;
-    dispatchSafe("pcsunited:basicbrain-updated", {
-      basicbrain,
-      profile,
-      bridge,
-      selectedBase,
-      compensation:comp || null
-    });
-    dispatchSafe("pcsunited:profile-ready", profile);
-    dispatchSafe("pcsunited:bridge-ready", bridge);
-    if(mode === "active_duty"){
-      dispatchSafe("pcsu:base-selected", selectedBase);
-    }
-    if(comp){
-      if(mode === "veteran"){
-        dispatchSafe("pcsunited:compensation-ready", {
-          source:"pcsunited.basicbrain.combined.v5.veteran",
-          mode:"veteran",
-          profile,
-          bridge,
-          selectedBase,
-          compensation:comp,
-          retirementPay:comp.retirementPay,
-          retirement_pay:comp.retirementPay,
-          disabilityPay:comp.disabilityPay,
-          disability_pay:comp.disabilityPay,
-          otherPay:comp.otherPay,
-          other_pay:comp.otherPay,
-          total:comp.total,
-          totalMonthly:comp.total,
-          total_monthly:comp.total,
-          updated_at:new Date().toISOString()
-        });
-      }else{
-        dispatchSafe("pcsunited:compensation-ready", {
-          source:"pcsunited.basicbrain.combined.v5.active_duty",
-          mode:"active_duty",
-          profile,
-          bridge,
-          selectedBase,
-          compensation:comp,
-          basePay:comp.basePay,
-          base_pay:comp.basePay,
-          bas:comp.bas,
-          bah:comp.bah,
-          total:comp.total,
-          totalMonthly:comp.total,
-          total_monthly:comp.total,
-          updated_at:new Date().toISOString()
-        });
-      }
-    }
-    try{
-      window.postMessage({
-        type:"pcsunited-basicbrain",
-        source:"pcsunited.basicbrain.combined.v5",
-        basicbrain,
-        profile,
-        bridge,
-        selectedBase,
-        compensation:comp || null
-      }, "*");
-    }catch(_){}
-    lastGoodState = state;
-    lastGoodComp = comp;
-  }
-  async function runFlow(){
-    const seq = ++requestSeq;
-    const state = getState();
-    emitProfileOnly();
-    if(!isComplete(state)){
-      setStatus(
-        mode === "veteran"
-          ? "Waiting for veteran details."
-          : "Waiting for PCS details.",
-        false
-      );
-      return;
-    }
-    setStatus(
-      mode === "veteran"
-        ? "TheWing.ai is calculating your veteran compensation preview…"
-        : "TheWing.ai is calculating your PCS compensation preview…",
-      true
-    );
-    let comp = null;
-    try{
-      comp = await callTheWing(state);
-    }catch(err){
-      console.warn("BasicBrain combined flow failed:", err);
-      if(mode === "veteran"){
-        comp = normalizeVeteranComp({}, state);
-      }else{
-        comp = null;
-      }
-    }
-    if(seq !== requestSeq) return;
-    if(mode === "veteran"){
-      if(!comp || !hasVeteranComp(comp)){
-        setStatus("Unable to calculate veteran compensation right now.", true);
-        return;
-      }
-      emitComp(state, comp);
-      setStatus("", false);
-      return;
-    }
-    if(!comp || !hasActiveDutyComp(comp)){
-      setStatus("TheWing did not return compensation for this combination yet.", true);
-      return;
-    }
-    emitComp(state, comp);
-    setStatus("", false);
-  }
-  function scheduleRun(){
-    window.clearTimeout(runTimer);
-    runTimer = window.setTimeout(runFlow, 350);
-  }
-  function clearValues(){
-    [
-      els.rank,
-      els.yos,
-      els.va,
-      els.dependents,
-      els.base
-    ].forEach(function(el){
-      if(el) el.value = "";
-    });
-    lastGoodComp = null;
-    lastGoodState = null;
-    setStatus("", false);
-  }
-  [
-    els.rank,
-    els.yos,
-    els.va,
-    els.dependents,
-    els.base
-  ].forEach(function(el){
-    if(!el) return;
-    el.value = "";
-    el.addEventListener("change", scheduleRun);
-    el.addEventListener("input", scheduleRun);
-  });
-  if(els.modeToggle){
-    els.modeToggle.addEventListener("click", function(){
-      setMode(mode === "active_duty" ? "veteran" : "active_duty");
-    });
-  }
-  window.PCSU_BASICBRAIN = {
-    version:VERSION,
-    storage:"memory_only",
-    endpoint:BRAIN_ENDPOINT,
-    getMode:function(){
-      return mode;
-    },
-    setMode:function(nextMode){
-      setMode(nextMode);
-    },
-    getState:getState,
-    emit:runFlow,
-    getLastGood:function(){
-      return {
-        mode:mode,
-        state:lastGoodState,
-        compensation:lastGoodComp
-      };
-    },
-    clear:function(){
-      clearValues();
-      emitProfileOnly();
-    }
-  };
-  setMode("active_duty");
-})();
-</script>
-              </div>
-            </div>
-          </div>
-          <div class="w-layout-cell cell-7">
-            <div class="code-embed-51 w-embed w-script"><!--  PCSUNITED • AMY GUIDANCE PANEL v1.6.0 • BASE DEMO THEME • REFINED TYPOGRAPHY  -->
-              <div id="pcsu-amy-guide" style="all:initial;">
-                <link rel="preconnect" href="https://fonts.googleapis.com">
-                <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-                <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-                <style>
-#pcsu-amy-guide,
-#pcsu-amy-guide *{
-  box-sizing:border-box;
-  font-family:"Barlow",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-#pcsu-amy-guide{
-  --bg:#071018;
-  --bg2:#0b1621;
-  --bg3:#050912;
-  --stroke:rgba(216,184,122,.16);
-  --ink:#f3efe7;
-  --muted:#b8b0a4;
-  --gold:#d8b87a;
-  --gold2:#f6d06d;
-  --sapphire:#6aa7ff;
-  --mint2:#8ef3c5;
-  --shadow2:0 34px 90px rgba(0,0,0,.38);
-  display:block;
-  width:min(760px,100%);
-  margin:0 auto;
-  color:var(--ink);
-}
-#ag-panel{
-  position:relative;
-  overflow:hidden;
-  width:100%;
-  min-height:420px;
-  border-radius:30px;
-  background:
-    radial-gradient(circle at 8% 0%, rgba(216,184,122,.08), transparent 30%),
-    radial-gradient(circle at 92% 4%, rgba(111,143,183,.08), transparent 28%),
-    radial-gradient(circle at 50% 100%, rgba(142,243,197,.04), transparent 34%),
-    linear-gradient(180deg, rgba(7,16,24,.20), rgba(11,22,33,.20) 58%, rgba(5,9,18,.20));
-  border:1px solid rgba(216,184,122,.13);
-  box-shadow:var(--shadow2);
-  backdrop-filter:blur(22px) saturate(145%);
-  -webkit-backdrop-filter:blur(22px) saturate(145%);
-  isolation:isolate;
-}
-#ag-panel::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-  background:
-    linear-gradient(180deg, rgba(255,255,255,.045), transparent 22%),
-    radial-gradient(circle at 20% 20%, rgba(216,184,122,.08), transparent 28%),
-    radial-gradient(circle at 88% 16%, rgba(106,167,255,.07), transparent 26%);
-  mix-blend-mode:screen;
-}
-#ag-panel::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  z-index:0;
-  pointer-events:none;
-  background:
-    linear-gradient(90deg, rgba(0,0,0,.10), transparent 44%, rgba(0,0,0,.10)),
-    linear-gradient(180deg, transparent 52%, rgba(0,0,0,.14));
-}
-/* COVER */
-.ag-cover{
-  position:absolute;
-  inset:0;
-  z-index:2;
-  display:block;
-  overflow:hidden;
-  background:rgba(12,19,28,.20);
-}
-.ag-cover::before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(90deg, rgba(5,8,13,.42) 0%, rgba(8,12,18,.30) 36%, rgba(8,12,18,.16) 100%),
-    url("https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a1456c802c9d58b4baab422_frontimage.jpg");
-  background-size:cover;
-  background-position:center;
-  transform:scale(1.025);
-  filter:saturate(1.06) contrast(1.04);
-}
-.ag-cover::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    radial-gradient(circle at 22% 16%, rgba(216,184,122,.12), transparent 32%),
-    radial-gradient(circle at 86% 22%, rgba(106,167,255,.10), transparent 28%),
-    linear-gradient(180deg, transparent 38%, rgba(5,8,13,.34));
-  pointer-events:none;
-}
-.ag-cover-content{
-  position:absolute;
-  left:26px;
-  right:26px;
-  bottom:26px;
-  z-index:2;
-  color:#fff;
-}
-.ag-cover-kicker{
-  display:inline-flex;
-  margin:0 0 14px;
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid rgba(216,184,122,.22);
-  background:rgba(216,184,122,.10);
-  color:var(--gold2);
-  text-transform:uppercase;
-  letter-spacing:.15em;
-  font-size:.70rem;
-  line-height:1;
-  font-weight:900;
-}
-.ag-cover-title{
-  margin:0 0 10px;
-  font-family:"Gilda Display",serif;
-  font-size:clamp(2rem, 4vw, 3rem);
-  line-height:.98;
-  font-weight:400;
-  color:#fbf4e7;
-}
-.ag-cover-sub{
-  margin:0;
-  max-width:560px;
-  font-size:1rem;
-  line-height:1.72;
-  font-weight:500;
-  color:#e4dccf;
-}
-.ag-cover-pill{
-  margin-top:18px;
-  display:inline-flex;
+.bb-private{
+  margin-top:14px;
+  padding:16px 18px;
+  border-radius:18px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  display:flex;
   align-items:center;
+  justify-content:center;
   gap:8px;
-  min-height:36px;
-  padding:9px 13px;
-  border-radius:999px;
-  color:#fff3dd;
-  background:rgba(216,184,122,.10);
-  border:1px solid rgba(216,184,122,.17);
-  font-size:.72rem;
-  font-weight:900;
-  letter-spacing:.10em;
-  text-transform:uppercase;
+  color:var(--muted);
+  font-size:.82rem;
+  line-height:1.45;
+  font-weight:700;
+  text-align:center;
 }
-.ag-cover-dot,
-.ag-dot{
-  width:7px;
-  height:7px;
-  border-radius:999px;
-  background:linear-gradient(180deg,var(--gold2),var(--gold));
-  box-shadow:0 0 16px rgba(216,184,122,.45);
+.bb-private-icon{
+  width:15px;
+  height:15px;
+  color:var(--gold2);
+  flex:0 0 auto;
 }
-/* LIVE */
+/* ============================================================
+  AMY GUIDANCE PANEL
+=============================================================== */
+#ag-stage{
+  position:relative;
+  z-index:2;
+  min-height:420px;
+}
 .ag-live{
   position:relative;
   z-index:3;
-  display:none;
   min-height:420px;
   background:
     radial-gradient(circle at top left, rgba(216,184,122,.035), transparent 28%),
     linear-gradient(180deg, rgba(17,24,34,.20), rgba(8,13,20,.20));
 }
-#ag-panel.is-ready .ag-cover{ display:none; }
-#ag-panel.is-ready .ag-live{ display:block; }
 .ag-top{
   position:relative;
   display:flex;
@@ -2634,11 +1481,8 @@
 }
 .ag-title{
   margin:0 0 6px;
-  font-family:"Gilda Display",serif;
   font-size:clamp(1.7rem, 2.4vw, 2.1rem);
   line-height:1.04;
-  font-weight:400;
-  color:#fff6e7;
 }
 .ag-sub{
   margin:0;
@@ -2681,14 +1525,6 @@
 }
 .ag-pay-card{
   padding:15px;
-}
-.ag-pay-card::before,
-.ag-flow-card::before{
-  content:"";
-  position:absolute;
-  inset:0 0 auto 0;
-  height:1px;
-  background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
 }
 .ag-pay-label{
   position:relative;
@@ -2777,151 +1613,236 @@
   color:var(--muted);
 }
 @media(max-width:760px){
-  #pcsu-amy-guide{ width:100%; margin-top:18px; }
-  #ag-panel,.ag-live{ min-height:380px; }
+  #pcsu-brain-amy-shell{ width:100%; }
+  #bb-stage{ padding:20px; }
+  .bb-form{ grid-template-columns:1fr; }
+  .bb-title{ font-size:2.25rem; }
   .ag-flow{ grid-template-columns:repeat(2,1fr); }
   .ag-pay-grid{ grid-template-columns:1fr; }
 }
 @media(max-width:560px){
+  #bb-stage{ padding:18px 16px; }
+  .bb-topbar{ gap:12px; }
+  .bb-title{ font-size:2rem; }
+  .bb-subtitle{ font-size:.95rem; }
+  .bb-row{ min-height:105px; }
   .ag-flow{ grid-template-columns:1fr; }
-  .ag-cover-title{ font-size:2rem; }
   .ag-top{ align-items:flex-start; }
 }
 </style>
-                <div id="ag-panel">
-                  <div class="ag-cover">
-                    <div class="ag-cover-content">
-                      <p class="ag-cover-kicker">PCSUnited Mission Flow</p>
-                      <h3 class="ag-cover-title">
-                        Your PCS guidance panel is standing by.
-                      </h3>
-                      <p class="ag-cover-sub">
-                        Complete your PCS Snapshot and Amy will turn your basic inputs into a clear PCSUnited guidance flow.
-                      </p>
-                      <div class="ag-cover-pill">
-                        <span class="ag-cover-dot"></span>
-                        Waiting for BasicBrain
-                      </div>
-                    </div>
-                  </div>
-                  <div class="ag-live">
-                    <div class="ag-top">
-                      <div class="ag-avatar">
-                        <img src="../images/AmyProfilePic.jpg" alt="Amy">
-                      </div>
-                      <div class="ag-head">
-                        <h3 class="ag-title" id="ag-greeting">
-                          Amy • PCS Guidance
+                <div id="pcsu-combined-panel" class="pcsu-panel">
+                  <!--  BASICBRAIN STAGE  -->
+                  <section id="bb-stage">
+                    <div class="bb-topbar">
+                      <div class="bb-heading-block">
+                        <div class="bb-kicker">
+                          <span class="bb-dot"></span>
+                          BasicBrain Input
+                        </div>
+                        <h3 class="bb-title" id="bb-title-text">
+                          Start Your PCS Snapshot
                         </h3>
-                        <p class="ag-sub" id="ag-greeting-sub">
-                          Let’s explore your PCSUnited guidance flow and build a clearer PCS strategy together.
+                        <p class="bb-subtitle" id="bb-subtitle">
+                          Enter your basic profile so PCSUnited can prepare your compensation preview and guidance flow.
                         </p>
                       </div>
-                    </div>
-                    <div class="ag-body">
-                      <div class="ag-section">
-                        <div class="ag-section-title">
-                          <span class="ag-dot"></span>
-                          Your Basic Compensation Overview
+                      <div id="bb-mode-control" class="bb-mode-control">
+                        <div class="bb-mode-label">Mode</div>
+                        <button id="bb-mode-toggle" class="bb-apple-toggle" type="button" aria-label="Switch between Active Duty and Veteran">
+                          <span class="bb-toggle-track"></span>
+                          <span class="bb-toggle-slot"></span>
+                          <span class="bb-toggle-knob"></span>
+                        </button>
+                        <div class="bb-mode-text">
+                          <span class="bb-mode-dot"></span>
+                          <span id="bb-mode-text">Active Duty</span>
                         </div>
-                        <div class="ag-pay-grid">
-                          <div class="ag-pay-card">
-                            <div class="ag-pay-label" id="ag-label-basepay">
-                              Base Pay
-                            </div>
-                            <div class="ag-pay-value" id="ag-basepay">
-                              —
-                            </div>
-                          </div>
-                          <div class="ag-pay-card">
-                            <div class="ag-pay-label" id="ag-label-bah">
-                              BAH
-                            </div>
-                            <div class="ag-pay-value" id="ag-bah">
-                              —
-                            </div>
-                          </div>
-                          <div class="ag-pay-card">
-                            <div class="ag-pay-label">
-                              Total
-                            </div>
-                            <div class="ag-pay-value" id="ag-total">
-                              —
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="ag-section">
-                        <div class="ag-section-title">
-                          <span class="ag-dot"></span>
-                          Follow Our Recommended PCS Flow
-                        </div>
-                        <div class="ag-flow">
-                          <div class="ag-flow-card">
-                            <img class="ag-flow-img" src="../images/frontimage.jpg" alt="Base Demo">
-                            <h4 class="ag-flow-title">
-                              1. Base Demo
-                            </h4>
-                            <p class="ag-flow-sub">
-                              Turn your PCS orders into real-world market intelligence.
-                            </p>
-                          </div>
-                          <div class="ag-flow-card">
-                            <img class="ag-flow-img" src="https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a0bddd2f5a1f6381c1e8506_frontimage2.jpg" alt="Housing Quiz">
-                            <h4 class="ag-flow-title">
-                              2. Housing Quiz
-                            </h4>
-                            <p class="ag-flow-sub">
-                              Define what truly matters before you begin your housing search.
-                            </p>
-                          </div>
-                          <div class="ag-flow-card">
-                            <img class="ag-flow-img" src="../images/frontimage.jpg" alt="Financial Analysis">
-                            <h4 class="ag-flow-title">
-                              3. Financial Analysis
-                            </h4>
-                            <p class="ag-flow-sub">
-                              Transform military compensation into actionable financial readiness.
-                            </p>
-                          </div>
-                          <div class="ag-flow-card">
-                            <img class="ag-flow-img" src="../images/AmyProfilePic.jpg" alt="Decision Advisor">
-                            <h4 class="ag-flow-title">
-                              4. Decision Advisor
-                            </h4>
-                            <p class="ag-flow-sub">
-                              Turn uncertainty into a confident PCS strategy.
-                            </p>
-                          </div>
-                        </div>
-                        <div class="ag-page-copy">
-                          PCSUnited was built to simplify one of the most stressful parts of military life: relocation decisions. Instead of jumping between disconnected calculators, spreadsheets, and housing websites, PCSUnited creates a connected decision-first experience that helps military families understand affordability, evaluate local markets, and confidently prepare for their next assignment.
-                        </div>
-                      </div>
-                      <div class="ag-footer">
-                        PCSUnited uses TheWing.ai decision infrastructure to help military families understand affordability, housing pressure, and PCS readiness before making major financial decisions.
                       </div>
                     </div>
-                  </div>
+                    <div class="bb-form">
+                      <div class="bb-row">
+                        <div class="bb-row-head">
+                          <div class="bb-icon">🎖️</div>
+                          <label class="bb-label" id="bb-rank-label">Rank</label>
+                        </div>
+                        <div class="bb-select-wrap">
+                          <select id="bb-rank" class="bb-select" autocomplete="off"></select>
+                        </div>
+                      </div>
+                      <div class="bb-row">
+                        <div class="bb-row-head">
+                          <div class="bb-icon">⏱️</div>
+                          <label class="bb-label">Years of Service</label>
+                        </div>
+                        <div class="bb-select-wrap">
+                          <select id="bb-yos" class="bb-select" autocomplete="off"></select>
+                        </div>
+                      </div>
+                      <div class="bb-row" id="bb-va-row">
+                        <div class="bb-row-head">
+                          <div class="bb-icon">🩺</div>
+                          <label class="bb-label">VA Disability</label>
+                        </div>
+                        <div class="bb-select-wrap">
+                          <select id="bb-va" class="bb-select" autocomplete="off"></select>
+                        </div>
+                      </div>
+                      <div class="bb-row">
+                        <div class="bb-row-head">
+                          <div class="bb-icon">👨‍👩‍👧</div>
+                          <label class="bb-label">Dependents</label>
+                        </div>
+                        <div class="bb-select-wrap">
+                          <select id="bb-dependents" class="bb-select" autocomplete="off"></select>
+                        </div>
+                      </div>
+                      <div class="bb-row" id="bb-base-row">
+                        <div class="bb-row-head">
+                          <div class="bb-icon">📍</div>
+                          <label class="bb-label">Gaining Base</label>
+                        </div>
+                        <div class="bb-select-wrap">
+                          <select id="bb-base" class="bb-select" autocomplete="off"></select>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="bb-status" class="bb-status">
+                      Waiting for PCS details.
+                    </div>
+                    <div class="bb-private">
+                      <svg class="bb-private-icon" viewbox="0 0 24 24" fill="none">
+                        <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
+                        <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
+                      </svg>
+                      Private. Secure. No data stored.
+                    </div>
+                  </section>
+                  <!--  AMY GUIDANCE STAGE  -->
+                  <section id="ag-stage">
+                    <div class="ag-live">
+                      <div class="ag-top">
+                        <div class="ag-avatar">
+                          <img src="../images/AmyProfilePic.jpg" alt="Amy">
+                        </div>
+                        <div class="ag-head">
+                          <h3 class="ag-title" id="ag-greeting">
+                            Amy • PCS Guidance
+                          </h3>
+                          <p class="ag-sub" id="ag-greeting-sub">
+                            Let’s explore your PCSUnited guidance flow and build a clearer PCS strategy together.
+                          </p>
+                        </div>
+                      </div>
+                      <div class="ag-body">
+                        <div class="ag-section">
+                          <div class="ag-section-title">
+                            <span class="ag-dot"></span>
+                            Your Basic Compensation Overview
+                          </div>
+                          <div class="ag-pay-grid">
+                            <div class="ag-pay-card">
+                              <div class="ag-pay-label" id="ag-label-basepay">Base Pay</div>
+                              <div class="ag-pay-value" id="ag-basepay">—</div>
+                            </div>
+                            <div class="ag-pay-card">
+                              <div class="ag-pay-label" id="ag-label-bah">BAH</div>
+                              <div class="ag-pay-value" id="ag-bah">—</div>
+                            </div>
+                            <div class="ag-pay-card">
+                              <div class="ag-pay-label">Total</div>
+                              <div class="ag-pay-value" id="ag-total">—</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="ag-section">
+                          <div class="ag-section-title">
+                            <span class="ag-dot"></span>
+                            Follow Our Recommended PCS Flow
+                          </div>
+                          <div class="ag-flow">
+                            <div class="ag-flow-card">
+                              <img class="ag-flow-img" src="../images/frontimage.jpg" alt="Base Demo">
+                              <h4 class="ag-flow-title">1. Base Demo</h4>
+                              <p class="ag-flow-sub">Turn your PCS orders into real-world market intelligence.</p>
+                            </div>
+                            <div class="ag-flow-card">
+                              <img class="ag-flow-img" src="https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a0bddd2f5a1f6381c1e8506_frontimage2.jpg" alt="Housing Quiz">
+                              <h4 class="ag-flow-title">2. Housing Quiz</h4>
+                              <p class="ag-flow-sub">Define what truly matters before you begin your housing search.</p>
+                            </div>
+                            <div class="ag-flow-card">
+                              <img class="ag-flow-img" src="../images/frontimage.jpg" alt="Financial Analysis">
+                              <h4 class="ag-flow-title">3. Financial Analysis</h4>
+                              <p class="ag-flow-sub">Transform military compensation into actionable financial readiness.</p>
+                            </div>
+                            <div class="ag-flow-card">
+                              <img class="ag-flow-img" src="../images/AmyProfilePic.jpg" alt="Decision Advisor">
+                              <h4 class="ag-flow-title">4. Decision Advisor</h4>
+                              <p class="ag-flow-sub">Turn uncertainty into a confident PCS strategy.</p>
+                            </div>
+                          </div>
+                          <div class="ag-page-copy">
+                            PCSUnited was built to simplify one of the most stressful parts of military life: relocation decisions. Instead of jumping between disconnected calculators, spreadsheets, and housing websites, PCSUnited creates a connected decision-first experience that helps military families understand affordability, evaluate local markets, and confidently prepare for their next assignment.
+                          </div>
+                        </div>
+                        <div class="ag-footer">
+                          PCSUnited uses TheWing.ai decision infrastructure to help military families understand affordability, housing pressure, and PCS readiness before making major financial decisions.
+                        </div>
+                      </div>
+                    </div>
+                  </section>
                 </div>
-                <script>
+              </div>
+            </div>
+            <div class="code-embed-51 w-embed w-script"><!--  ============================================================
+  PCSUNITED • BASICBRAIN + AMY GUIDANCE COMBINED JS
+  v6.1.3 • RETIREMENT_VA + BASE DEMO HANDOFF FIX
+===============================================================  -->
+              <script>
 (function(){
   "use strict";
-  const panel = document.getElementById("ag-panel");
-  const greetingEl = document.getElementById("ag-greeting");
-  const greetingSubEl = document.getElementById("ag-greeting-sub");
-  const basePayEl = document.getElementById("ag-basepay");
-  const bahEl = document.getElementById("ag-bah");
-  const totalEl = document.getElementById("ag-total");
-  const basePayLabel = document.getElementById("ag-label-basepay");
-  const bahLabel = document.getElementById("ag-label-bah");
-  if(!panel) return;
+  const VERSION = "6.1.3";
+  const API_BASE = "https://thewing.netlify.app/api";
+  const BRAIN_ENDPOINT = API_BASE + "/opensource-brain";
+  const HANDOFF_KEY = "pcsunited.basicbrain.handoff.v1";
+  const root = document.getElementById("pcsu-brain-amy-shell");
+  if(!root) return;
+  if(root.dataset.mounted === "true") return;
+  root.dataset.mounted = "true";
+  const els = {
+    titleText:document.getElementById("bb-title-text"),
+    subtitle:document.getElementById("bb-subtitle"),
+    modeControl:document.getElementById("bb-mode-control"),
+    modeToggle:document.getElementById("bb-mode-toggle"),
+    modeText:document.getElementById("bb-mode-text"),
+    rank:document.getElementById("bb-rank"),
+    rankLabel:document.getElementById("bb-rank-label"),
+    yos:document.getElementById("bb-yos"),
+    va:document.getElementById("bb-va"),
+    dependents:document.getElementById("bb-dependents"),
+    base:document.getElementById("bb-base"),
+    vaRow:document.getElementById("bb-va-row"),
+    baseRow:document.getElementById("bb-base-row"),
+    dependentsRow:document.getElementById("bb-dependents-row"),
+    status:document.getElementById("bb-status"),
+    agGreeting:document.getElementById("ag-greeting"),
+    agGreetingSub:document.getElementById("ag-greeting-sub"),
+    agBasePay:document.getElementById("ag-basepay"),
+    agBah:document.getElementById("ag-bah"),
+    agTotal:document.getElementById("ag-total"),
+    agBasePayLabel:document.getElementById("ag-label-basepay"),
+    agBahLabel:document.getElementById("ag-label-bah"),
+    agAccuracyNote:document.getElementById("ag-accuracy-note")
+  };
+  function $(id){
+    return document.getElementById(id);
+  }
   function clean(value){
     return value === undefined || value === null ? "" : String(value).trim();
   }
-  function num(value){
-    const n = Number(String(value ?? "").replace(/[$,]/g,""));
-    return Number.isFinite(n) ? n : 0;
+  function num(value,fallback){
+    const n = Number(String(value ?? "").replace(/[$,%]/g,"").replace(/,/g,""));
+    return Number.isFinite(n) ? n : (fallback ?? 0);
   }
   function money(value){
     return Number(value || 0).toLocaleString("en-US",{
@@ -2929,6 +1850,27 @@
       currency:"USD",
       maximumFractionDigits:0
     });
+  }
+  function dispatchSafe(name,detail){
+    try{
+      window.dispatchEvent(new CustomEvent(name,{detail:detail || {}}));
+    }catch(_){}
+  }
+  function setStatus(text,show){
+    if(!els.status) return;
+    els.status.textContent = text || "";
+    els.status.classList.toggle("show",!!show);
+  }
+  function normalizeRank(value){
+    const raw = clean(value)
+      .toUpperCase()
+      .replace(/\s+/g,"")
+      .replace("–","-")
+      .replace("—","-");
+    if(!raw) return "";
+    if(/^[EOW]-\d{1,2}$/.test(raw)) return raw;
+    if(/^[EOW]\d{1,2}$/.test(raw)) return raw.charAt(0) + "-" + raw.slice(1);
+    return raw;
   }
   function rankTitle(rank){
     const r = clean(rank).toUpperCase();
@@ -2955,90 +1897,1025 @@
     };
     return map[r] || r || "Member";
   }
-  function extractProfile(detail){
-    const d = detail && typeof detail === "object" ? detail : {};
-    return d.profile || d.bridge || d.basicbrain || d.input || d;
+  const RANKS = [
+    ["","Select rank",""],
+    ["Enlisted","","group"],
+    ["E-1","E-1 • Airman Basic"],
+    ["E-2","E-2 • Airman"],
+    ["E-3","E-3 • Airman First Class"],
+    ["E-4","E-4 • Senior Airman"],
+    ["E-5","E-5 • Staff Sergeant"],
+    ["E-6","E-6 • Technical Sergeant"],
+    ["E-7","E-7 • Master Sergeant"],
+    ["E-8","E-8 • Senior Master Sergeant"],
+    ["E-9","E-9 • Chief Master Sergeant"],
+    ["Officer","","group"],
+    ["O-1","O-1 • Second Lieutenant"],
+    ["O-2","O-2 • First Lieutenant"],
+    ["O-3","O-3 • Captain"],
+    ["O-4","O-4 • Major"],
+    ["O-5","O-5 • Lieutenant Colonel"],
+    ["O-6","O-6 • Colonel"],
+    ["O-7","O-7 • Brigadier General"],
+    ["O-8","O-8 • Major General"]
+  ];
+  const BASE_META = {
+    "Andrews AFB":{zip:"20762",cityKey:"Andrews",state:"MD",market:"Washington DC"},
+    "Barksdale AFB":{zip:"71110",cityKey:"Barksdale",state:"LA",market:"Bossier City"},
+    "Beale AFB":{zip:"95903",cityKey:"Beale",state:"CA",market:"Marysville"},
+    "Cannon AFB":{zip:"88103",cityKey:"Cannon",state:"NM",market:"Clovis"},
+    "Charleston AFB":{zip:"29404",cityKey:"Charleston",state:"SC",market:"Charleston"},
+    "Creech AFB":{zip:"89018",cityKey:"Creech",state:"NV",market:"Indian Springs / Las Vegas"},
+    "Davis-Monthan AFB":{zip:"85707",cityKey:"DavisMonthan",state:"AZ",market:"Tucson"},
+    "Dover AFB":{zip:"19902",cityKey:"Dover",state:"DE",market:"Dover"},
+    "Dyess AFB":{zip:"79607",cityKey:"Dyess",state:"TX",market:"Abilene"},
+    "Eglin AFB":{zip:"32542",cityKey:"Eglin",state:"FL",market:"Fort Walton Beach"},
+    "Fairchild AFB":{zip:"99011",cityKey:"Fairchild",state:"WA",market:"Spokane"},
+    "FE Warren AFB":{zip:"82005",cityKey:"FEWarren",state:"WY",market:"Cheyenne"},
+    "Holloman AFB":{zip:"88330",cityKey:"Holloman",state:"NM",market:"Alamogordo"},
+    "Hurlburt Field":{zip:"32544",cityKey:"Hurlburt",state:"FL",market:"Fort Walton Beach"},
+    "JBSA Fort Sam Houston":{zip:"78234",cityKey:"FortSamHouston",state:"TX",market:"San Antonio"},
+    "JBSA Lackland":{zip:"78236",cityKey:"Lackland",state:"TX",market:"San Antonio"},
+    "JBSA Randolph":{zip:"78150",cityKey:"Randolph",state:"TX",market:"San Antonio"},
+    "Keesler AFB":{zip:"39534",cityKey:"Keesler",state:"MS",market:"Biloxi"},
+    "Kirtland AFB":{zip:"87117",cityKey:"Kirtland",state:"NM",market:"Albuquerque"},
+    "Langley AFB":{zip:"23665",cityKey:"Langley",state:"VA",market:"Hampton Roads"},
+    "Laughlin AFB":{zip:"78843",cityKey:"Laughlin",state:"TX",market:"Del Rio"},
+    "Little Rock AFB":{zip:"72099",cityKey:"LittleRock",state:"AR",market:"Little Rock"},
+    "Luke AFB":{zip:"85309",cityKey:"Luke",state:"AZ",market:"Phoenix"},
+    "MacDill AFB":{zip:"33621",cityKey:"MacDill",state:"FL",market:"Tampa"},
+    "Malmstrom AFB":{zip:"59402",cityKey:"Malmstrom",state:"MT",market:"Great Falls"},
+    "Maxwell AFB":{zip:"36112",cityKey:"Maxwell",state:"AL",market:"Montgomery"},
+    "McConnell AFB":{zip:"67221",cityKey:"McConnell",state:"KS",market:"Wichita"},
+    "McGuire AFB":{zip:"08641",cityKey:"McGuire",state:"NJ",market:"Joint Base MDL"},
+    "Minot AFB":{zip:"58705",cityKey:"Minot",state:"ND",market:"Minot"},
+    "Moody AFB":{zip:"31699",cityKey:"Moody",state:"GA",market:"Valdosta"},
+    "Mountain Home AFB":{zip:"83648",cityKey:"MountainHome",state:"ID",market:"Mountain Home"},
+    "Nellis AFB":{zip:"89191",cityKey:"Nellis",state:"NV",market:"Las Vegas"},
+    "Offutt AFB":{zip:"68113",cityKey:"Offutt",state:"NE",market:"Omaha"},
+    "Patrick SFB":{zip:"32925",cityKey:"Patrick",state:"FL",market:"Space Coast"},
+    "Peterson SFB":{zip:"80914",cityKey:"Peterson",state:"CO",market:"Colorado Springs"},
+    "Robins AFB":{zip:"31098",cityKey:"Robins",state:"GA",market:"Warner Robins"},
+    "Scott AFB":{zip:"62225",cityKey:"Scott",state:"IL",market:"St. Louis Metro"},
+    "Seymour Johnson AFB":{zip:"27531",cityKey:"SeymourJohnson",state:"NC",market:"Goldsboro"},
+    "Shaw AFB":{zip:"29152",cityKey:"Shaw",state:"SC",market:"Sumter"},
+    "Sheppard AFB":{zip:"76311",cityKey:"Sheppard",state:"TX",market:"Wichita Falls"},
+    "Tinker AFB":{zip:"73145",cityKey:"Tinker",state:"OK",market:"Oklahoma City"},
+    "Travis AFB":{zip:"94535",cityKey:"Travis",state:"CA",market:"Fairfield"},
+    "Tyndall AFB":{zip:"32403",cityKey:"Tyndall",state:"FL",market:"Panama City"},
+    "Vance AFB":{zip:"73705",cityKey:"Vance",state:"OK",market:"Enid"},
+    "Vandenberg SFB":{zip:"93437",cityKey:"Vandenberg",state:"CA",market:"Lompoc"},
+    "Whiteman AFB":{zip:"65305",cityKey:"Whiteman",state:"MO",market:"Knob Noster"},
+    "Wright-Patterson AFB":{zip:"45433",cityKey:"WrightPatterson",state:"OH",market:"Dayton"}
+  };
+  let mode = "active_duty";
+  let runTimer = null;
+  let requestSeq = 0;
+  let lastGoodState = null;
+  let lastGoodComp = null;
+  function makeOption(value,label){
+    const option = document.createElement("option");
+    option.value = value;
+    option.textContent = label;
+    return option;
   }
-  function isVeteran(profile){
-    const mode = clean(profile.mode || profile.type || profile.status).toLowerCase();
-    return mode === "veteran" || mode === "vet" || mode === "retired";
+  function fillSelect(select,items){
+    if(!select) return;
+    select.innerHTML = "";
+    let group = null;
+    items.forEach(function(item){
+      if(item[2] === "group"){
+        group = document.createElement("optgroup");
+        group.label = item[0];
+        select.appendChild(group);
+        return;
+      }
+      const option = makeOption(item[0],item[1]);
+      if(group){
+        group.appendChild(option);
+      }else{
+        select.appendChild(option);
+      }
+    });
   }
-  function paintReady(detail){
-    const profile = extractProfile(detail);
-    const comp = detail.compensation || detail || {};
-    const veteran = isVeteran(profile);
-    const rank =
-      clean(profile.rank_paygrade) ||
-      clean(profile.rankPaygrade) ||
-      clean(profile.rank) ||
-      "";
-    const title = rankTitle(rank);
-    if(greetingEl){
-      greetingEl.textContent = "Pleasure to Meet You, " + title;
+  function countOptions(label,max){
+    const items = [["",label]];
+    for(let i = 0; i <= max; i++){
+      items.push([String(i),String(i)]);
     }
-    if(greetingSubEl){
-      greetingSubEl.textContent = veteran
-        ? "Thank you for your service. Let’s explore your PCSUnited guidance flow and build a clearer strategy together."
+    return items;
+  }
+  function createRow(id,icon,label,selectId,afterNode){
+    if($(id)) return $(id);
+    const row = document.createElement("div");
+    row.className = "bb-row is-hidden";
+    row.id = id;
+    row.innerHTML =
+      '<div class="bb-row-head">' +
+        '<div class="bb-icon">' + icon + '</div>' +
+        '<label class="bb-label" for="' + selectId + '">' + label + '</label>' +
+      '</div>' +
+      '<div class="bb-select-wrap">' +
+        '<select id="' + selectId + '" class="bb-select" autocomplete="off"></select>' +
+      '</div>';
+    if(afterNode && afterNode.parentNode){
+      afterNode.parentNode.insertBefore(row,afterNode.nextSibling);
+    }
+    return row;
+  }
+  function ensureShellCompatibility(){
+    if(!els.dependentsRow && els.dependents){
+      els.dependentsRow = els.dependents.closest(".bb-row");
+      if(els.dependentsRow){
+        els.dependentsRow.id = "bb-dependents-row";
+      }
+    }
+    const insertAfter = els.vaRow || els.dependentsRow || els.baseRow;
+    els.marriedRow = $("bb-married-row") || createRow("bb-married-row","💍","Married?","bb-married",insertAfter);
+    els.married = $("bb-married");
+    els.childrenUnderRow = $("bb-children-under-row") || createRow("bb-children-under-row","👧","Children Under 18","bb-children-under",els.marriedRow);
+    els.childrenUnder = $("bb-children-under");
+    els.childrenSchoolRow = $("bb-children-school-row") || createRow("bb-children-school-row","🎓","Children In School 18+","bb-children-school",els.childrenUnderRow);
+    els.childrenSchool = $("bb-children-school");
+    els.parentsRow = $("bb-parents-row") || createRow("bb-parents-row","👵","Dependent Parents","bb-parents",els.childrenSchoolRow);
+    els.parents = $("bb-parents");
+    els.retirementRow = $("bb-retirement-row") || createRow("bb-retirement-row","🛡️","Retirement System","bb-retirement",els.parentsRow);
+    els.retirement = $("bb-retirement");
+    if(!els.agAccuracyNote){
+      const footer = document.querySelector("#pcsu-brain-amy-shell .ag-footer");
+      const note = document.createElement("div");
+      note.id = "ag-accuracy-note";
+      note.style.display = "none";
+      note.style.marginTop = "10px";
+      note.style.color = "var(--gold2)";
+      note.style.fontWeight = "900";
+      note.style.letterSpacing = ".08em";
+      note.style.textTransform = "uppercase";
+      note.style.fontSize = ".72rem";
+      if(footer){
+        footer.appendChild(note);
+      }
+      els.agAccuracyNote = note;
+    }
+  }
+  function populateSelects(){
+    fillSelect(els.rank,RANKS);
+    fillSelect(els.yos,[
+      ["","Select years"],
+      ["2","2 Years"],
+      ["4","4 Years"],
+      ["6","6 Years"],
+      ["8","8 Years"],
+      ["10","10 Years"],
+      ["12","12 Years"],
+      ["14","14 Years"],
+      ["16","16 Years"],
+      ["18","18 Years"],
+      ["20","20 Years"],
+      ["22","22 Years"],
+      ["24","24 Years"],
+      ["26","26 Years"],
+      ["28","28 Years"],
+      ["30","30 Years"]
+    ]);
+    fillSelect(els.va,[
+      ["","Select rating"],
+      ["0","0%"],
+      ["10","10%"],
+      ["20","20%"],
+      ["30","30%"],
+      ["40","40%"],
+      ["50","50%"],
+      ["60","60%"],
+      ["70","70%"],
+      ["80","80%"],
+      ["90","90%"],
+      ["100","100%"]
+    ]);
+    fillSelect(els.dependents,[
+      ["","Select dependents"],
+      ["0","No Dependents"],
+      ["1","1 Dependent"],
+      ["2","2 Dependents"],
+      ["3","3 Dependents"],
+      ["4","4 Dependents"],
+      ["5","5 Dependents"],
+      ["6","6+ Dependents"]
+    ]);
+    fillSelect(els.married,[
+      ["","Select"],
+      ["true","Yes"],
+      ["false","No"]
+    ]);
+    fillSelect(els.childrenUnder,countOptions("Select children",6));
+    fillSelect(els.childrenSchool,countOptions("Select children",4));
+    fillSelect(els.parents,countOptions("Select parents",2));
+    fillSelect(els.retirement,[
+      ["HIGH3","High-3"],
+      ["BRS","Blended Retirement System"]
+    ]);
+    const bases = Object.keys(BASE_META).sort().map(function(base){
+      return [base,base];
+    });
+    fillSelect(els.base,[["","Select gaining base"]].concat(bases));
+  }
+  function allFields(){
+    return [
+      els.rank,
+      els.yos,
+      els.va,
+      els.dependents,
+      els.base,
+      els.married,
+      els.childrenUnder,
+      els.childrenSchool,
+      els.parents,
+      els.retirement
+    ];
+  }
+  function clearHandoff(){
+    try{
+      localStorage.removeItem(HANDOFF_KEY);
+    }catch(err){
+      console.warn("BasicBrain handoff clear failed:",err);
+    }
+  }
+  function clearValues(){
+    allFields().forEach(function(el){
+      if(!el) return;
+      el.value = el === els.retirement ? "HIGH3" : "";
+    });
+    lastGoodState = null;
+    lastGoodComp = null;
+    root.classList.remove("is-guidance-ready");
+    setStatus("",false);
+    if(els.agAccuracyNote){
+      els.agAccuracyNote.textContent = "";
+      els.agAccuracyNote.style.display = "none";
+    }
+  }
+  function setVeteranRowsVisible(isVet){
+    if(els.vaRow) els.vaRow.classList.toggle("is-hidden",!isVet);
+    if(els.marriedRow) els.marriedRow.classList.toggle("is-hidden",!isVet);
+    if(els.childrenUnderRow) els.childrenUnderRow.classList.toggle("is-hidden",!isVet);
+    if(els.childrenSchoolRow) els.childrenSchoolRow.classList.toggle("is-hidden",!isVet);
+    if(els.parentsRow) els.parentsRow.classList.toggle("is-hidden",!isVet);
+    if(els.retirementRow) els.retirementRow.classList.toggle("is-hidden",!isVet);
+    if(els.baseRow) els.baseRow.classList.toggle("is-hidden",isVet);
+    if(els.dependentsRow) els.dependentsRow.classList.toggle("is-hidden",isVet);
+  }
+  function setMode(nextMode){
+    mode = nextMode === "veteran" ? "veteran" : "active_duty";
+    const isVet = mode === "veteran";
+    if(els.modeToggle) els.modeToggle.classList.toggle("is-veteran",isVet);
+    if(els.modeControl) els.modeControl.classList.toggle("is-veteran",isVet);
+    if(els.modeText) els.modeText.textContent = isVet ? "Veteran" : "Active Duty";
+    if(els.titleText){
+      els.titleText.textContent = isVet ? "Start Your Veteran Snapshot" : "Start Your PCS Snapshot";
+    }
+    if(els.subtitle){
+      els.subtitle.textContent = isVet
+        ? "Enter your retired profile so PCSUnited can prepare your veteran compensation from TheWing.ai."
+        : "Enter your basic profile so PCSUnited can prepare your compensation preview and guidance flow.";
+    }
+    if(els.rankLabel){
+      els.rankLabel.textContent = isVet ? "Retired Rank" : "Rank";
+    }
+    setVeteranRowsVisible(isVet);
+    clearValues();
+    emitProfileOnly({ save:false });
+  }
+  function parseBool(value){
+    if(value === true || value === "true") return true;
+    if(value === false || value === "false") return false;
+    return null;
+  }
+  function getState(){
+    const rank = normalizeRank(els.rank ? els.rank.value : "");
+    const yos = num(els.yos ? els.yos.value : "",0);
+    if(mode === "veteran"){
+      const vaRaw = els.va ? els.va.value : "";
+      const va = vaRaw === "" ? null : num(vaRaw,0);
+      const married = parseBool(els.married ? els.married.value : "");
+      const childrenUnder18 = els.childrenUnder && els.childrenUnder.value !== "" ? num(els.childrenUnder.value,0) : null;
+      const childrenInSchoolOver18 = els.childrenSchool && els.childrenSchool.value !== "" ? num(els.childrenSchool.value,0) : null;
+      const dependentParents = els.parents && els.parents.value !== "" ? num(els.parents.value,0) : null;
+      const retirementSystem = clean(els.retirement ? els.retirement.value : "") || "HIGH3";
+      const spouse = married === true;
+      const depCount =
+        (spouse ? 1 : 0) +
+        (childrenUnder18 || 0) +
+        (childrenInSchoolOver18 || 0) +
+        (dependentParents || 0);
+      return {
+        source:"pcsunited.basicbrain.combined.v6.1.3.veteran",
+        version:VERSION,
+        stored:false,
+        updated_at:new Date().toISOString(),
+        mode:"veteran",
+        type:"veteran",
+        status:"veteran",
+        retired:true,
+        retirement_eligible:true,
+        retirementEligible:true,
+        rank,
+        rank_paygrade:rank,
+        rankPaygrade:rank,
+        yos,
+        years_of_service:yos,
+        yearsOfService:yos,
+        va_disability:va,
+        vaDisability:va,
+        disability_rating:va,
+        disabilityRating:va,
+        vaRating:va,
+        married,
+        spouse,
+        childrenUnder18,
+        children_under_18:childrenUnder18,
+        childrenInSchoolOver18,
+        children_in_school_over_18:childrenInSchoolOver18,
+        dependentParents,
+        dependent_parents:dependentParents,
+        retirementSystem,
+        retirement_system:retirementSystem,
+        dependents_count:depCount,
+        dependentsCount:depCount,
+        family:depCount + 1,
+        family_size:depCount + 1,
+        familySize:depCount + 1,
+        has_dependents:depCount > 0,
+        hasDependents:depCount > 0,
+        base:"",
+        current_base:"",
+        currentBase:"",
+        selected_base:"",
+        selectedBase:"",
+        pcs_base:"",
+        pcsBase:"",
+        zip:"",
+        bah_zip:"",
+        bahZip:"",
+        current_zip:"",
+        currentZip:"",
+        cityKey:"",
+        market:"",
+        state:""
+      };
+    }
+    const depRaw = els.dependents ? els.dependents.value : "";
+    const dependents = depRaw === "" ? null : num(depRaw,0);
+    const hasDependents = dependents !== null && dependents > 0;
+    const familyCount = dependents === null ? null : dependents + 1;
+    const base = clean(els.base ? els.base.value : "");
+    const meta = BASE_META[base] || {};
+    return {
+      source:"pcsunited.basicbrain.combined.v6.1.3.active_duty",
+      version:VERSION,
+      stored:false,
+      updated_at:new Date().toISOString(),
+      mode:"active_duty",
+      type:"active_duty",
+      status:"active_duty",
+      rank,
+      rank_paygrade:rank,
+      rankPaygrade:rank,
+      yos,
+      years_of_service:yos,
+      yearsOfService:yos,
+      dependents:hasDependents ? "yes" : "no",
+      dependents_count:dependents,
+      dependentsCount:dependents,
+      family:familyCount,
+      family_size:familyCount,
+      familySize:familyCount,
+      has_dependents:hasDependents,
+      hasDependents:hasDependents,
+      base,
+      current_base:base,
+      currentBase:base,
+      selected_base:base,
+      selectedBase:base,
+      pcs_base:base,
+      pcsBase:base,
+      zip:meta.zip || "",
+      bah_zip:meta.zip || "",
+      bahZip:meta.zip || "",
+      current_zip:meta.zip || "",
+      currentZip:meta.zip || "",
+      cityKey:meta.cityKey || "",
+      market:meta.market || "",
+      state:meta.state || ""
+    };
+  }
+  function isComplete(state){
+    if(!state || !state.rank || !state.yos) return false;
+    if(mode === "veteran"){
+      return (
+        state.va_disability !== null &&
+        state.married !== null &&
+        state.childrenUnder18 !== null &&
+        state.childrenInSchoolOver18 !== null &&
+        state.dependentParents !== null &&
+        !!state.retirementSystem
+      );
+    }
+    return state.dependents_count !== null && !!state.base;
+  }
+  function shouldSaveHandoff(profile,selectedBase,comp){
+    if(comp){
+      return true;
+    }
+    if(!profile || !profile.rank || !profile.yos){
+      return false;
+    }
+    if(profile.mode === "veteran"){
+      return (
+        profile.va_disability !== null &&
+        profile.married !== null &&
+        profile.childrenUnder18 !== null &&
+        profile.childrenInSchoolOver18 !== null &&
+        profile.dependentParents !== null
+      );
+    }
+    return !!(
+      profile.base &&
+      selectedBase &&
+      selectedBase.base &&
+      profile.dependents_count !== null
+    );
+  }
+  function buildActiveDutyApiInput(state){
+    return {
+      mode:"active_duty",
+      rank:state.rank,
+      rank_paygrade:state.rank,
+      rankPaygrade:state.rank,
+      yos:state.yos,
+      years_of_service:state.yos,
+      yearsOfService:state.yos,
+      dependents:state.dependents,
+      dependents_count:state.dependents_count,
+      dependentsCount:state.dependents_count,
+      has_dependents:state.has_dependents,
+      hasDependents:state.has_dependents,
+      family:state.family,
+      family_size:state.family_size,
+      familySize:state.family_size,
+      base:state.base,
+      current_base:state.base,
+      currentBase:state.base,
+      selected_base:state.base,
+      selectedBase:state.base,
+      pcs_base:state.base,
+      pcsBase:state.base,
+      zip:state.zip,
+      bah_zip:state.bah_zip,
+      bahZip:state.bah_zip,
+      cityKey:state.cityKey,
+      market:state.market,
+      state:state.state,
+      source:"pcsunited.basicbrain.combined.v6.1.3"
+    };
+  }
+  function buildVeteranApiInput(state){
+    return {
+      rank:state.rank,
+      rank_paygrade:state.rank,
+      rankPaygrade:state.rank,
+      yos:state.yos,
+      yearsOfService:state.yos,
+      years_of_service:state.yos,
+      retirementSystem:state.retirementSystem || "HIGH3",
+      retirement_system:state.retirementSystem || "HIGH3",
+      vaRating:state.va_disability,
+      va_disability:state.va_disability,
+      vaDisability:state.va_disability,
+      rating:state.va_disability,
+      spouse:state.spouse === true,
+      childrenUnder18:state.childrenUnder18 || 0,
+      children_under_18:state.childrenUnder18 || 0,
+      childrenInSchoolOver18:state.childrenInSchoolOver18 || 0,
+      children_in_school_over_18:state.childrenInSchoolOver18 || 0,
+      dependentParents:state.dependentParents || 0,
+      dependent_parents:state.dependentParents || 0,
+      source:"pcsunited.basicbrain.combined.v6.1.3"
+    };
+  }
+  function extractPayload(data){
+    return data && (data.payload || data.data || data.result || data) || {};
+  }
+  function extractActiveDutyComp(data){
+    const payload = extractPayload(data);
+    const c = payload.compensation || payload.comp || payload.pay || {};
+    const m = c.monthly || payload.monthly || c || {};
+    const basePay = num(
+      m.basicPay ??
+      m.basePay ??
+      m.base_pay ??
+      payload.basePay ??
+      payload.base_pay,
+      0
+    );
+    const bas = num(
+      m.bas ??
+      m.BAS ??
+      payload.bas ??
+      payload.BAS,
+      0
+    );
+    const bah = num(
+      m.bah ??
+      m.BAH ??
+      payload.bah ??
+      payload.BAH,
+      0
+    );
+    const total = num(
+      m.grossMonthlyComp ??
+      m.combinedMonthlyGross ??
+      m.totalMonthly ??
+      m.total_monthly ??
+      m.total ??
+      payload.totalMonthly ??
+      payload.total_monthly ??
+      payload.total,
+      0
+    ) || basePay + bas + bah;
+    return {
+      basePay,
+      base_pay:basePay,
+      bas,
+      bah,
+      total,
+      totalMonthly:total,
+      total_monthly:total,
+      source:"thewing.opensource-brain"
+    };
+  }
+  function extractVeteranComp(data){
+    const payload = extractPayload(data);
+    const compensation = payload.compensation || {};
+    const monthly = compensation.monthly || payload.monthly || {};
+    const detail = compensation.detail || {};
+    const summary = payload.summary || {};
+    const retirementPay = num(
+      monthly.retirementPay ??
+      monthly.retirement_pay ??
+      monthly.retiredPay ??
+      monthly.retired_pay ??
+      monthly.retiredPayGross ??
+      monthly.grossMonthlyRetiredPay ??
+      payload.calculator?.retirementPay,
+      0
+    );
+    const disabilityPay = num(
+      monthly.disabilityPay ??
+      monthly.disability_pay ??
+      monthly.vaDisabilityPay ??
+      monthly.va_disability_pay ??
+      monthly.vaCompensation ??
+      monthly.monthlyVA ??
+      monthly.vaMonthly ??
+      payload.calculator?.vaCompensation,
+      0
+    );
+    const total = num(
+      monthly.total ??
+      monthly.totalMonthly ??
+      monthly.total_monthly ??
+      monthly.combinedMonthlyGross ??
+      monthly.grossMonthlyComp ??
+      payload.calculator?.totalMonthly,
+      0
+    ) || retirementPay + disabilityPay;
+    return {
+      retirementPay,
+      retirement_pay:retirementPay,
+      disabilityPay,
+      disability_pay:disabilityPay,
+      otherPay:0,
+      other_pay:0,
+      total,
+      totalMonthly:total,
+      total_monthly:total,
+      compensationAccuracy:
+        detail.compensationAccuracy ||
+        payload.calculator?.compensationAccuracy ||
+        summary.compensationAccuracy ||
+        "",
+      retirementBaseMethod:
+        detail.retirementBaseMethod ||
+        payload.calculator?.retirementBaseMethod ||
+        summary.retirementBaseMethod ||
+        "",
+      retirementLabel:
+        detail.retirementLabel ||
+        payload.calculator?.retirementLabel ||
+        summary.retirementLabel ||
+        "",
+      headline:summary.headline || "",
+      source:"thewing.opensource-brain"
+    };
+  }
+  function hasActiveDutyComp(comp){
+    return !!(
+      comp &&
+      (
+        num(comp.basePay,0) ||
+        num(comp.bas,0) ||
+        num(comp.bah,0) ||
+        num(comp.total,0)
+      )
+    );
+  }
+  function hasVeteranComp(comp){
+    return !!(
+      comp &&
+      (
+        num(comp.retirementPay,0) ||
+        num(comp.disabilityPay,0) ||
+        num(comp.total,0)
+      )
+    );
+  }
+  async function callTheWing(state){
+    const body = mode === "veteran"
+      ? {
+          tool:"RETIREMENT_VA",
+          input:buildVeteranApiInput(state)
+        }
+      : {
+          tool:"PCS_SNAPSHOT",
+          input:buildActiveDutyApiInput(state)
+        };
+    try{
+      const res = await fetch(BRAIN_ENDPOINT + "?t=" + Date.now(),{
+        method:"POST",
+        headers:{
+          "Content-Type":"application/json"
+        },
+        cache:"no-store",
+        body:JSON.stringify(body)
+      });
+      const data = await res.json().catch(function(){
+        return {};
+      });
+      if(!res.ok || data.ok === false){
+        console.warn("TheWing returned error:",data);
+        return null;
+      }
+      const comp = mode === "veteran"
+        ? extractVeteranComp(data)
+        : extractActiveDutyComp(data);
+      if(mode === "veteran" && hasVeteranComp(comp)) return comp;
+      if(mode === "active_duty" && hasActiveDutyComp(comp)) return comp;
+      return null;
+    }catch(err){
+      console.warn("TheWing call failed:",err);
+      return null;
+    }
+  }
+  function buildSelectedBase(state){
+    return {
+      source:"pcsunited.basicbrain.combined.v6.1.3",
+      stored:false,
+      base:state.base || "",
+      label:state.base || "",
+      name:state.base || "",
+      cityKey:state.cityKey || "",
+      market:state.market || "",
+      state:state.state || "",
+      zip:state.zip || ""
+    };
+  }
+  function profileStatusFromComp(comp){
+    if(!comp) return "preview_only";
+    if(comp.compensationAccuracy) return comp.compensationAccuracy;
+    if(mode === "active_duty" && comp.total > 0) return "official_active_duty";
+    return "preview_only";
+  }
+  function saveHandoff(profile,bridge,selectedBase,comp,basicbrain){
+    if(!shouldSaveHandoff(profile,selectedBase,comp)){
+      return;
+    }
+    try{
+      localStorage.setItem(
+        HANDOFF_KEY,
+        JSON.stringify({
+          source:"pcsunited.basicbrain.combined.v6.1.3",
+          version:VERSION,
+          mode,
+          profile,
+          bridge,
+          selectedBase,
+          compensation:comp || null,
+          calculated_comp:comp || null,
+          basicbrain,
+          updated_at:new Date().toISOString()
+        })
+      );
+    }catch(err){
+      console.warn("BasicBrain handoff save failed:",err);
+    }
+  }
+  function emitProfileOnly(options){
+    const shouldSave =
+      options && options.save === false
+        ? false
+        : true;
+    const state = getState();
+    const selectedBase = buildSelectedBase(state);
+    const profile = {
+      ...state,
+      profile_status:"preview_only"
+    };
+    const bridge = {
+      ...profile,
+      compensation:null
+    };
+    const basicbrain = {
+      ...state,
+      profile,
+      bridge,
+      selectedBase,
+      compensation:null,
+      calculated_comp:null
+    };
+    window.PCSU_BASICBRAIN_TEMP = basicbrain;
+    window.PCSU_BASICBRAIN_CURRENT = basicbrain;
+    if(shouldSave){
+      saveHandoff(profile,bridge,selectedBase,null,basicbrain);
+    }
+    dispatchSafe("pcsunited:basicbrain-updated",{
+      basicbrain,
+      profile,
+      bridge,
+      selectedBase,
+      compensation:null
+    });
+    dispatchSafe("pcsunited:profile-ready",profile);
+    dispatchSafe("pcsunited:bridge-ready",bridge);
+    if(mode === "active_duty"){
+      dispatchSafe("pcsu:base-selected",selectedBase);
+    }
+    try{
+      window.postMessage({
+        type:"pcsunited-basicbrain",
+        source:"pcsunited.basicbrain.combined.v6.1.3",
+        basicbrain,
+        profile,
+        bridge,
+        selectedBase,
+        compensation:null
+      },"*");
+    }catch(_){}
+  }
+  function accuracyNoteText(comp){
+    if(!comp || !comp.compensationAccuracy) return "";
+    if(comp.compensationAccuracy === "official_va_and_high36_retirement"){
+      return "Official VA + High-3 retirement";
+    }
+    if(comp.compensationAccuracy === "official_va_and_retirement_estimate"){
+      return "Official VA + retirement estimate";
+    }
+    return comp.compensationAccuracy.replace(/_/g," ");
+  }
+  function paintAmyGuidance(state,comp){
+    const veteran = state.mode === "veteran";
+    const title = rankTitle(state.rank);
+    if(els.agGreeting){
+      els.agGreeting.textContent = "Pleasure to Meet You, " + title;
+    }
+    if(els.agGreetingSub){
+      els.agGreetingSub.textContent = veteran
+        ? (comp.headline || "Thank you for your service. Let’s explore your PCSUnited guidance flow and build a clearer strategy together.")
         : "Let’s explore your PCSUnited guidance flow and build a clearer PCS strategy together.";
     }
-    const basePay =
-      num(comp.basePay) ||
-      num(comp.base_pay) ||
-      num(comp.basicPay) ||
-      num(detail.basePay) ||
-      0;
-    const bah =
-      num(comp.bah) ||
-      num(comp.BAH) ||
-      num(detail.bah) ||
-      0;
-    const retirement =
-      num(comp.retirementPay) ||
-      num(comp.retirement_pay) ||
-      num(comp.retiredPay) ||
-      num(comp.retired_pay) ||
-      num(detail.retirementPay) ||
-      0;
-    const disability =
-      num(comp.disabilityPay) ||
-      num(comp.disability_pay) ||
-      num(comp.vaDisabilityPay) ||
-      num(comp.va_disability_pay) ||
-      num(detail.disabilityPay) ||
-      0;
-    const total =
-      num(comp.total) ||
-      num(comp.totalMonthly) ||
-      num(comp.total_monthly) ||
-      num(detail.total) ||
-      num(detail.totalMonthly) ||
-      (veteran ? retirement + disability : basePay + bah);
     if(veteran){
-      if(basePayLabel) basePayLabel.textContent = "Retirement";
-      if(bahLabel) bahLabel.textContent = "Disability";
-      if(basePayEl) basePayEl.textContent = money(retirement);
-      if(bahEl) bahEl.textContent = money(disability);
-      if(totalEl) totalEl.textContent = money(total);
+      if(els.agBasePayLabel) els.agBasePayLabel.textContent = "Retirement";
+      if(els.agBahLabel) els.agBahLabel.textContent = "Disability";
+      if(els.agBasePay) els.agBasePay.textContent = money(comp.retirementPay);
+      if(els.agBah) els.agBah.textContent = money(comp.disabilityPay);
+      if(els.agTotal) els.agTotal.textContent = money(comp.total);
     }else{
-      if(basePayLabel) basePayLabel.textContent = "Base Pay";
-      if(bahLabel) bahLabel.textContent = "BAH";
-      if(basePayEl) basePayEl.textContent = money(basePay);
-      if(bahEl) bahEl.textContent = money(bah);
-      if(totalEl) totalEl.textContent = money(total);
+      if(els.agBasePayLabel) els.agBasePayLabel.textContent = "Base Pay";
+      if(els.agBahLabel) els.agBahLabel.textContent = "BAH";
+      if(els.agBasePay) els.agBasePay.textContent = money(comp.basePay);
+      if(els.agBah) els.agBah.textContent = money(comp.bah);
+      if(els.agTotal) els.agTotal.textContent = money(comp.total);
     }
-    panel.classList.add("is-ready");
+    if(els.agAccuracyNote){
+      const note = veteran ? accuracyNoteText(comp) : "";
+      els.agAccuracyNote.textContent = note;
+      els.agAccuracyNote.style.display = note ? "block" : "none";
+    }
+    root.classList.add("is-guidance-ready");
   }
-  window.addEventListener("pcsunited:compensation-ready", function(event){
-    paintReady(event.detail || {});
+  function emitComp(state,comp){
+    const selectedBase = buildSelectedBase(state);
+    const profileStatus = profileStatusFromComp(comp);
+    const profile = {
+      ...state,
+      profile_status:profileStatus
+    };
+    const bridge = {
+      ...profile,
+      compensation:comp || null
+    };
+    if(mode === "veteran"){
+      bridge.retirementPay = comp ? comp.retirementPay : 0;
+      bridge.disabilityPay = comp ? comp.disabilityPay : 0;
+      bridge.otherPay = comp ? (comp.otherPay || 0) : 0;
+      bridge.totalMonthlyCompensation = comp ? comp.total : 0;
+      bridge.compensationAccuracy = comp ? comp.compensationAccuracy : "";
+      bridge.retirementBaseMethod = comp ? comp.retirementBaseMethod : "";
+    }else{
+      bridge.basePay = comp ? comp.basePay : 0;
+      bridge.bas = comp ? comp.bas : 0;
+      bridge.bah = comp ? comp.bah : 0;
+      bridge.totalMonthlyCompensation = comp ? comp.total : 0;
+    }
+    const basicbrain = {
+      ...state,
+      profile,
+      bridge,
+      selectedBase,
+      compensation:comp || null,
+      calculated_comp:comp || null
+    };
+    window.PCSU_BASICBRAIN_TEMP = basicbrain;
+    window.PCSU_BASICBRAIN_CURRENT = basicbrain;
+    saveHandoff(profile,bridge,selectedBase,comp,basicbrain);
+    dispatchSafe("pcsunited:basicbrain-updated",{
+      basicbrain,
+      profile,
+      bridge,
+      selectedBase,
+      compensation:comp || null
+    });
+    dispatchSafe("pcsunited:profile-ready",profile);
+    dispatchSafe("pcsunited:bridge-ready",bridge);
+    if(mode === "active_duty"){
+      dispatchSafe("pcsu:base-selected",selectedBase);
+    }
+    if(comp){
+      if(mode === "veteran"){
+        dispatchSafe("pcsunited:compensation-ready",{
+          source:"pcsunited.basicbrain.combined.v6.1.3.veteran",
+          mode:"veteran",
+          profile,
+          bridge,
+          selectedBase,
+          compensation:comp,
+          retirementPay:comp.retirementPay,
+          retirement_pay:comp.retirementPay,
+          disabilityPay:comp.disabilityPay,
+          disability_pay:comp.disabilityPay,
+          otherPay:comp.otherPay || 0,
+          other_pay:comp.otherPay || 0,
+          total:comp.total,
+          totalMonthly:comp.total,
+          total_monthly:comp.total,
+          compensationAccuracy:comp.compensationAccuracy,
+          retirementBaseMethod:comp.retirementBaseMethod,
+          headline:comp.headline,
+          updated_at:new Date().toISOString()
+        });
+      }else{
+        dispatchSafe("pcsunited:compensation-ready",{
+          source:"pcsunited.basicbrain.combined.v6.1.3.active_duty",
+          mode:"active_duty",
+          profile,
+          bridge,
+          selectedBase,
+          compensation:comp,
+          basePay:comp.basePay,
+          base_pay:comp.basePay,
+          bas:comp.bas,
+          bah:comp.bah,
+          total:comp.total,
+          totalMonthly:comp.total,
+          total_monthly:comp.total,
+          updated_at:new Date().toISOString()
+        });
+      }
+      paintAmyGuidance(state,comp);
+    }
+    try{
+      window.postMessage({
+        type:"pcsunited-basicbrain",
+        source:"pcsunited.basicbrain.combined.v6.1.3",
+        basicbrain,
+        profile,
+        bridge,
+        selectedBase,
+        compensation:comp || null
+      },"*");
+    }catch(_){}
+    lastGoodState = state;
+    lastGoodComp = comp;
+  }
+  async function runFlow(){
+    const seq = ++requestSeq;
+    const state = getState();
+    root.classList.remove("is-guidance-ready");
+    emitProfileOnly({ save:true });
+    if(!isComplete(state)){
+      setStatus(
+        mode === "veteran"
+          ? "Complete all veteran fields to calculate compensation."
+          : "Complete all PCS fields to calculate compensation.",
+        true
+      );
+      return;
+    }
+    setStatus(
+      mode === "veteran"
+        ? "TheWing.ai is calculating your veteran compensation..."
+        : "TheWing.ai is calculating your PCS compensation preview...",
+      true
+    );
+    let comp = null;
+    try{
+      comp = await callTheWing(state);
+    }catch(err){
+      console.warn("BasicBrain flow failed:",err);
+      comp = null;
+    }
+    if(seq !== requestSeq) return;
+    if(mode === "veteran"){
+      if(!comp || !hasVeteranComp(comp)){
+        setStatus("Unable to calculate veteran compensation right now.",true);
+        return;
+      }
+      emitComp(state,comp);
+      setStatus("",false);
+      return;
+    }
+    if(!comp || !hasActiveDutyComp(comp)){
+      setStatus("TheWing did not return compensation for this combination yet.",true);
+      return;
+    }
+    emitComp(state,comp);
+    setStatus("",false);
+  }
+  function scheduleRun(){
+    window.clearTimeout(runTimer);
+    runTimer = window.setTimeout(runFlow,350);
+  }
+  ensureShellCompatibility();
+  populateSelects();
+  allFields().forEach(function(el){
+    if(!el) return;
+    el.value = el === els.retirement ? "HIGH3" : "";
+    el.addEventListener("change",scheduleRun);
+    el.addEventListener("input",scheduleRun);
   });
-  window.addEventListener("pcsunited:compensation-preview-ready", function(event){
-    paintReady(event.detail || {});
-  });
+  if(els.modeToggle){
+    els.modeToggle.addEventListener("click",function(){
+      setMode(mode === "active_duty" ? "veteran" : "active_duty");
+    });
+  }
+  window.PCSU_BASICBRAIN = {
+    version:VERSION,
+    storage:"memory_only_with_page_handoff",
+    endpoint:BRAIN_ENDPOINT,
+    getMode:function(){
+      return mode;
+    },
+    setMode:function(nextMode){
+      setMode(nextMode);
+    },
+    getState:getState,
+    emit:runFlow,
+    showInput:function(){
+      root.classList.remove("is-guidance-ready");
+    },
+    showGuidance:function(){
+      if(lastGoodState && lastGoodComp){
+        paintAmyGuidance(lastGoodState,lastGoodComp);
+      }
+    },
+    getLastGood:function(){
+      return {
+        mode,
+        state:lastGoodState,
+        compensation:lastGoodComp
+      };
+    },
+    clear:function(){
+      clearValues();
+      clearHandoff();
+      emitProfileOnly({ save:false });
+    }
+  };
+  setMode("active_duty");
 })();
 </script>
-              </div>
             </div>
           </div>
+          <div class="w-layout-cell cell-7"></div>
         </div>
       </section>
       <div class="_1st-slider-in-resources">
@@ -3088,20 +2965,16 @@
             <div data-delay="3000" data-animation="over" class="slider-3 w-slider" data-autoplay="true" data-easing="ease-in-out-circ" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="10" data-duration="700" data-infinite="true">
               <div class="mask-3 w-slider-mask">
                 <div class="slide-4 w-slide">
-                  <div class="code-embed-50 w-embed w-script"><!--  =========================================================
+                  <div class="interactive-base-map w-embed w-script"><!--  =========================================================
   PCSUnited • Real Interactive U.S. Base Demographics Map
-  v3.0.1 • EXECUTIVE AURORA ENHANCED • FULL CODE
-  ENHANCEMENTS
-  - Executive Aurora glass styling
-  - FULL Air Force base registry restored
-  - Sharper typography hierarchy
-  - Better spacing rhythm
-  - Softer premium depth
-  - Improved map readability
-  - Luxury floating base cards
-  - Apple/Rivian inspired motion
-  - Cleaner lighting behavior
-  - SAME LOGIC / SAME DATA / SAME FLOW
+  v3.0.4 • BASICBRAIN STATE + BASE + CITY MARKER PRESELECT • FULL CODE
+  UPDATE v3.0.4
+  - Listens for BasicBrain / selected base events
+  - Auto-selects state from BasicBrain gaining base
+  - Highlights the matching base card from BasicBrain
+  - Adds city/base marker dot on the map
+  - Keeps Texas default if no BasicBrain state/base exists
+  - Same map opening flow
 =========================================================  -->
                     <div id="pcsu-real-us-map">
                       <style>
@@ -3270,6 +3143,66 @@
       pointer-events:none;
       text-anchor:middle;
     }
+    #pcsu-base-marker-layer{
+      pointer-events:none;
+    }
+    .pcsu-base-marker-ring{
+      fill:none;
+      stroke:#8ef3c5;
+      stroke-width:2;
+      opacity:.72;
+      filter:drop-shadow(0 0 10px rgba(142,243,197,.85));
+      animation:pcsuBasePulse 1.9s ease-out infinite;
+    }
+    .pcsu-base-marker-dot{
+      fill:#8ef3c5;
+      stroke:#ffffff;
+      stroke-width:1.4;
+      filter:
+        drop-shadow(0 0 10px rgba(142,243,197,.95))
+        drop-shadow(0 0 20px rgba(142,243,197,.55));
+    }
+    .pcsu-base-marker-pin{
+      fill:#f6d06d;
+      stroke:#ffffff;
+      stroke-width:1.1;
+      filter:
+        drop-shadow(0 0 10px rgba(246,208,109,.75))
+        drop-shadow(0 0 18px rgba(142,243,197,.45));
+    }
+    .pcsu-base-marker-label-bg{
+      fill:rgba(7,12,24,.92);
+      stroke:rgba(142,243,197,.32);
+      stroke-width:1;
+      rx:10;
+      ry:10;
+      filter:drop-shadow(0 10px 22px rgba(0,0,0,.35));
+    }
+    .pcsu-base-marker-label{
+      fill:#ffffff;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+    .pcsu-base-marker-sub{
+      fill:#a8b0d6;
+      font-size:9px;
+      font-weight:800;
+    }
+    @keyframes pcsuBasePulse{
+      0%{
+        r:5;
+        opacity:.9;
+      }
+      70%{
+        r:20;
+        opacity:0;
+      }
+      100%{
+        r:22;
+        opacity:0;
+      }
+    }
     #pcsu-base-panel{
       position:relative;
       padding:26px;
@@ -3405,6 +3338,38 @@
         inset 0 1px 0 rgba(255,255,255,.08),
         0 24px 42px rgba(0,0,0,.18);
     }
+    .pcsu-base-btn.is-selected{
+      border-color:rgba(142,243,197,.62);
+      background:
+        linear-gradient(
+          180deg,
+          rgba(142,243,197,.16),
+          rgba(106,167,255,.08)
+        );
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.10),
+        0 0 0 1px rgba(142,243,197,.12),
+        0 24px 44px rgba(0,0,0,.22),
+        0 0 28px rgba(142,243,197,.20);
+    }
+    .pcsu-base-btn.is-selected::after{
+      content:"Selected from BasicBrain";
+      position:absolute;
+      right:14px;
+      top:14px;
+      padding:5px 8px;
+      border-radius:999px;
+      background:rgba(142,243,197,.12);
+      border:1px solid rgba(142,243,197,.22);
+      color:#8ef3c5;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .pcsu-base-btn.is-selected .pcsu-base-name{
+      color:#8ef3c5;
+    }
     .pcsu-base-name{
       display:block;
       font-size:16px;
@@ -3456,6 +3421,13 @@
       .pcsu-base-btn{
         border-radius:18px;
       }
+      .pcsu-base-btn.is-selected::after{
+        position:relative;
+        display:inline-flex;
+        right:auto;
+        top:auto;
+        margin-top:10px;
+      }
     }
   </style>
                       <div id="pcsu-map-card">
@@ -3491,9 +3463,9 @@
                       <script>
     (() => {
       "use strict";
-      if(window.PCSU_US_BASE_MAP?.__mounted_v301) return;
+      if(window.PCSU_US_BASE_MAP?.__mounted_v304) return;
       window.PCSU_US_BASE_MAP = {
-        __mounted_v301:true
+        __mounted_v304:true
       };
       const STORAGE_KEY =
         "pcsunited.selectedBase.v1";
@@ -3504,6 +3476,8 @@
       const JSON_BASE_URL =
         window.PCSU_CITIES_BASE_URL ||
         "https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/";
+      const DEFAULT_STATE =
+        "TX";
       const FIPS_TO_ABBR = {
         "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC",
         "12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY",
@@ -3523,128 +3497,194 @@
       };
       const BASE_REGISTRY = {
         AK:[
-          ["Joint Base Elmendorf-Richardson","Elmendorf.json","Anchorage, AK"],
-          ["Eielson AFB","Eielson.json","Fairbanks, AK"]
+          ["Joint Base Elmendorf-Richardson","Elmendorf.json","Anchorage, AK",61.2500,-149.8065],
+          ["Eielson AFB","Eielson.json","Fairbanks, AK",64.6657,-147.1015]
         ],
         AL:[
-          ["Maxwell AFB","Maxwell.json","Montgomery, AL"]
+          ["Maxwell AFB","Maxwell.json","Montgomery, AL",32.3829,-86.3658]
         ],
         AZ:[
-          ["Davis-Monthan AFB","Davis-Monthan.json","Tucson, AZ"],
-          ["Luke AFB","Luke.json","Glendale, AZ"]
+          ["Davis-Monthan AFB","Davis-Monthan.json","Tucson, AZ",32.1665,-110.8832],
+          ["Luke AFB","Luke.json","Glendale, AZ",33.5350,-112.3832]
         ],
         CA:[
-          ["Beale AFB","Beale.json","Marysville, CA"],
-          ["Edwards AFB","Edwards.json","Edwards, CA"],
-          ["Los Angeles AFB","Los-Angeles.json","El Segundo, CA"],
-          ["Travis AFB","Travis.json","Fairfield, CA"],
-          ["Vandenberg SFB","Vandenberg.json","Lompoc, CA"]
+          ["Beale AFB","Beale.json","Marysville, CA",39.1361,-121.4366],
+          ["Edwards AFB","Edwards.json","Edwards, CA",34.9054,-117.8837],
+          ["Los Angeles AFB","Los-Angeles.json","El Segundo, CA",33.9189,-118.3807],
+          ["Travis AFB","Travis.json","Fairfield, CA",38.2627,-121.9275],
+          ["Vandenberg SFB","Vandenberg.json","Lompoc, CA",34.7420,-120.5724]
         ],
         CO:[
-          ["Peterson SFB","Peterson.json","Colorado Springs, CO"],
-          ["Schriever SFB","Schriever.json","Colorado Springs, CO"],
-          ["U.S. Air Force Academy","Air-Force-Academy.json","Colorado Springs, CO"]
+          ["Peterson SFB","Peterson.json","Colorado Springs, CO",38.8236,-104.7006],
+          ["Schriever SFB","Schriever.json","Colorado Springs, CO",38.8030,-104.5255],
+          ["U.S. Air Force Academy","Air-Force-Academy.json","Colorado Springs, CO",39.0088,-104.8911]
         ],
         DE:[
-          ["Dover AFB","Dover.json","Dover, DE"]
+          ["Dover AFB","Dover.json","Dover, DE",39.1295,-75.4660]
         ],
         FL:[
-          ["Eglin AFB","Eglin.json","Valparaiso, FL"],
-          ["Hurlburt Field","Hurlburt.json","Mary Esther, FL"],
-          ["MacDill AFB","MacDill.json","Tampa, FL"],
-          ["Patrick SFB","Patrick.json","Cocoa Beach, FL"],
-          ["Tyndall AFB","Tyndall.json","Panama City, FL"]
+          ["Eglin AFB","Eglin.json","Valparaiso, FL",30.4832,-86.5254],
+          ["Hurlburt Field","Hurlburt.json","Mary Esther, FL",30.4278,-86.6893],
+          ["MacDill AFB","MacDill.json","Tampa, FL",27.8493,-82.5212],
+          ["Patrick SFB","Patrick.json","Cocoa Beach, FL",28.2349,-80.6101],
+          ["Tyndall AFB","Tyndall.json","Panama City, FL",30.0696,-85.5754]
         ],
         GA:[
-          ["Moody AFB","Moody.json","Valdosta, GA"],
-          ["Robins AFB","Robins.json","Warner Robins, GA"]
+          ["Moody AFB","Moody.json","Valdosta, GA",30.9678,-83.1930],
+          ["Robins AFB","Robins.json","Warner Robins, GA",32.6401,-83.5919]
         ],
         HI:[
-          ["Joint Base Pearl Harbor-Hickam","Hickam.json","Honolulu, HI"]
+          ["Joint Base Pearl Harbor-Hickam","Hickam.json","Honolulu, HI",21.3187,-157.9224]
         ],
         ID:[
-          ["Mountain Home AFB","Mountain-Home.json","Mountain Home, ID"]
+          ["Mountain Home AFB","Mountain-Home.json","Mountain Home, ID",43.0436,-115.8724]
         ],
         IL:[
-          ["Scott AFB","Scott.json","Belleville, IL"]
+          ["Scott AFB","Scott.json","Belleville, IL",38.5452,-89.8352]
         ],
         KS:[
-          ["McConnell AFB","McConnell.json","Wichita, KS"]
+          ["McConnell AFB","McConnell.json","Wichita, KS",37.6231,-97.2672]
         ],
         LA:[
-          ["Barksdale AFB","Barksdale.json","Bossier City, LA"]
+          ["Barksdale AFB","Barksdale.json","Bossier City, LA",32.5018,-93.6627]
         ],
         MA:[
-          ["Hanscom AFB","Hanscom.json","Bedford, MA"]
+          ["Hanscom AFB","Hanscom.json","Bedford, MA",42.4699,-71.2890]
         ],
         MD:[
-          ["Joint Base Andrews","Andrews.json","Camp Springs, MD"]
+          ["Joint Base Andrews","Andrews.json","Camp Springs, MD",38.8108,-76.8669]
         ],
         MS:[
-          ["Columbus AFB","Columbus.json","Columbus, MS"],
-          ["Keesler AFB","Keesler.json","Biloxi, MS"]
+          ["Columbus AFB","Columbus.json","Columbus, MS",33.6438,-88.4438],
+          ["Keesler AFB","Keesler.json","Biloxi, MS",30.4104,-88.9244]
         ],
         MT:[
-          ["Malmstrom AFB","Malmstrom.json","Great Falls, MT"]
+          ["Malmstrom AFB","Malmstrom.json","Great Falls, MT",47.5053,-111.1873]
         ],
         NC:[
-          ["Seymour Johnson AFB","Seymour-Johnson.json","Goldsboro, NC"]
+          ["Seymour Johnson AFB","Seymour-Johnson.json","Goldsboro, NC",35.3394,-77.9606]
         ],
         ND:[
-          ["Grand Forks AFB","Grand-Forks.json","Grand Forks, ND"],
-          ["Minot AFB","Minot.json","Minot, ND"]
+          ["Grand Forks AFB","Grand-Forks.json","Grand Forks, ND",47.9611,-97.4012],
+          ["Minot AFB","Minot.json","Minot, ND",48.4158,-101.3580]
         ],
         NE:[
-          ["Offutt AFB","Offutt.json","Bellevue, NE"]
+          ["Offutt AFB","Offutt.json","Bellevue, NE",41.1183,-95.9125]
         ],
         NJ:[
-          ["Joint Base McGuire-Dix-Lakehurst","McGuire.json","Wrightstown, NJ"]
+          ["Joint Base McGuire-Dix-Lakehurst","McGuire.json","Wrightstown, NJ",40.0156,-74.5917]
         ],
         NM:[
-          ["Cannon AFB","Cannon.json","Clovis, NM"],
-          ["Holloman AFB","Holloman.json","Alamogordo, NM"],
-          ["Kirtland AFB","Kirtland.json","Albuquerque, NM"]
+          ["Cannon AFB","Cannon.json","Clovis, NM",34.3828,-103.3221],
+          ["Holloman AFB","Holloman.json","Alamogordo, NM",32.8525,-106.1065],
+          ["Kirtland AFB","Kirtland.json","Albuquerque, NM",35.0402,-106.6092]
         ],
         NV:[
-          ["Creech AFB","Creech.json","Indian Springs, NV"],
-          ["Nellis AFB","Nellis.json","Las Vegas, NV"]
+          ["Creech AFB","Creech.json","Indian Springs, NV",36.5872,-115.6734],
+          ["Nellis AFB","Nellis.json","Las Vegas, NV",36.2362,-115.0343]
         ],
         OH:[
-          ["Wright-Patterson AFB","Wright-Patterson.json","Dayton, OH"]
+          ["Wright-Patterson AFB","Wright-Patterson.json","Dayton, OH",39.8261,-84.0483]
         ],
         OK:[
-          ["Altus AFB","Altus.json","Altus, OK"],
-          ["Tinker AFB","Tinker.json","Oklahoma City, OK"],
-          ["Vance AFB","Vance.json","Enid, OK"]
+          ["Altus AFB","Altus.json","Altus, OK",34.6671,-99.2667],
+          ["Tinker AFB","Tinker.json","Oklahoma City, OK",35.4147,-97.3866],
+          ["Vance AFB","Vance.json","Enid, OK",36.3392,-97.9165]
         ],
         SC:[
-          ["Joint Base Charleston","Charleston.json","Charleston, SC"],
-          ["Shaw AFB","Shaw.json","Sumter, SC"]
+          ["Joint Base Charleston","Charleston.json","Charleston, SC",32.8986,-80.0405],
+          ["Shaw AFB","Shaw.json","Sumter, SC",33.9727,-80.4706]
         ],
         SD:[
-          ["Ellsworth AFB","Ellsworth.json","Rapid City, SD"]
+          ["Ellsworth AFB","Ellsworth.json","Rapid City, SD",44.1450,-103.1036]
         ],
         TX:[
-          ["Dyess AFB","Dyess.json","Abilene, TX"],
-          ["Goodfellow AFB","Goodfellow.json","San Angelo, TX"],
-          ["Joint Base San Antonio-Lackland","Lackland.json","San Antonio, TX"],
-          ["Laughlin AFB","Laughlin.json","Del Rio, TX"],
-          ["Joint Base San Antonio-Randolph","Randolph.json","San Antonio, TX"],
-          ["Sheppard AFB","Sheppard.json","Wichita Falls, TX"]
+          ["Dyess AFB","Dyess.json","Abilene, TX",32.4208,-99.8546],
+          ["Goodfellow AFB","Goodfellow.json","San Angelo, TX",31.4343,-100.4027],
+          ["Joint Base San Antonio-Lackland","Lackland.json","San Antonio, TX",29.3842,-98.5811],
+          ["Laughlin AFB","Laughlin.json","Del Rio, TX",29.3595,-100.7780],
+          ["Joint Base San Antonio-Randolph","Randolph.json","San Antonio, TX",29.5297,-98.2789],
+          ["Sheppard AFB","Sheppard.json","Wichita Falls, TX",33.9888,-98.4919]
         ],
         UT:[
-          ["Hill AFB","Hill.json","Ogden, UT"]
+          ["Hill AFB","Hill.json","Ogden, UT",41.1240,-111.9730]
         ],
         VA:[
-          ["Joint Base Langley-Eustis","Langley.json","Hampton, VA"]
+          ["Joint Base Langley-Eustis","Langley.json","Hampton, VA",37.0838,-76.3605]
         ],
         WA:[
-          ["Fairchild AFB","Fairchild.json","Spokane, WA"],
-          ["Joint Base Lewis-McChord","McChord.json","Tacoma, WA"]
+          ["Fairchild AFB","Fairchild.json","Spokane, WA",47.6151,-117.6558],
+          ["Joint Base Lewis-McChord","McChord.json","Tacoma, WA",47.1339,-122.4916]
         ],
         WY:[
-          ["F. E. Warren AFB","F-E-Warren.json","Cheyenne, WY"]
+          ["F. E. Warren AFB","F-E-Warren.json","Cheyenne, WY",41.1339,-104.8660]
         ]
+      };
+      const BASICBRAIN_BASE_ALIASES = {
+        "Andrews AFB":"MD",
+        "Joint Base Andrews":"MD",
+        "Barksdale AFB":"LA",
+        "Beale AFB":"CA",
+        "Cannon AFB":"NM",
+        "Charleston AFB":"SC",
+        "Joint Base Charleston":"SC",
+        "Columbus AFB":"MS",
+        "Davis-Monthan AFB":"AZ",
+        "Dover AFB":"DE",
+        "Dyess AFB":"TX",
+        "Edwards AFB":"CA",
+        "Eglin AFB":"FL",
+        "Ellsworth AFB":"SD",
+        "Fairchild AFB":"WA",
+        "FE Warren AFB":"WY",
+        "F.E. Warren AFB":"WY",
+        "F. E. Warren AFB":"WY",
+        "Grand Forks AFB":"ND",
+        "Hanscom AFB":"MA",
+        "Hill AFB":"UT",
+        "Holloman AFB":"NM",
+        "Hurlburt Field":"FL",
+        "JBSA Fort Sam Houston":"TX",
+        "Fort Sam Houston":"TX",
+        "Joint Base San Antonio-Fort Sam Houston":"TX",
+        "JBSA Lackland":"TX",
+        "Lackland AFB":"TX",
+        "Joint Base San Antonio-Lackland":"TX",
+        "JBSA Randolph":"TX",
+        "Randolph AFB":"TX",
+        "Joint Base San Antonio-Randolph":"TX",
+        "Keesler AFB":"MS",
+        "Kirtland AFB":"NM",
+        "Langley AFB":"VA",
+        "Joint Base Langley-Eustis":"VA",
+        "Laughlin AFB":"TX",
+        "Little Rock AFB":"AR",
+        "Luke AFB":"AZ",
+        "MacDill AFB":"FL",
+        "Malmstrom AFB":"MT",
+        "Maxwell AFB":"AL",
+        "McConnell AFB":"KS",
+        "McGuire AFB":"NJ",
+        "Joint Base McGuire-Dix-Lakehurst":"NJ",
+        "Minot AFB":"ND",
+        "Moody AFB":"GA",
+        "Mountain Home AFB":"ID",
+        "Nellis AFB":"NV",
+        "Offutt AFB":"NE",
+        "Patrick SFB":"FL",
+        "Peterson SFB":"CO",
+        "Robins AFB":"GA",
+        "Scott AFB":"IL",
+        "Seymour Johnson AFB":"NC",
+        "Shaw AFB":"SC",
+        "Sheppard AFB":"TX",
+        "Tinker AFB":"OK",
+        "Travis AFB":"CA",
+        "Tyndall AFB":"FL",
+        "Vance AFB":"OK",
+        "Vandenberg SFB":"CA",
+        "Whiteman AFB":"MO",
+        "Wright-Patterson AFB":"OH"
       };
       const svg = d3.select("#pcsu-us-svg");
       const selectedStateEl =
@@ -3653,6 +3693,13 @@
         document.getElementById("pcsu-panel-copy");
       const baseListEl =
         document.getElementById("pcsu-base-list");
+      let mapReady = false;
+      let pendingStateCode = "";
+      let pendingBaseId = "";
+      let currentStateCode = "";
+      let currentBaseId = "";
+      let projection = null;
+      let markerLayer = null;
       function esc(str){
         return String(str ?? "")
           .replaceAll("&","&amp;")
@@ -3669,10 +3716,19 @@
           .replace(/[^a-z0-9]+/g, "-")
           .replace(/^-+|-+$/g, "");
       }
+      function normalizeKey(value){
+        return String(value || "")
+          .toLowerCase()
+          .replace(/jointbase/g, "jb")
+          .replace(/airforcebase/g, "afb")
+          .replace(/[^a-z0-9]/g, "");
+      }
       function makeBase(row, stateCode){
         const name     = row[0];
         const fileName = row[1];
         const city     = row[2];
+        const lat      = row[3];
+        const lng      = row[4];
         const id = slugify(fileName);
         return {
           id,
@@ -3683,6 +3739,8 @@
           name,
           city,
           state:stateCode,
+          lat,
+          lng,
           jsonUrl:JSON_BASE_URL + fileName
         };
       }
@@ -3692,6 +3750,29 @@
           rows.map(row => makeBase(row, stateCode))
         ])
       );
+      const BASE_TO_STATE = (() => {
+        const out = {};
+        Object.entries(STATE_BASES).forEach(([stateCode, bases]) => {
+          bases.forEach(base => {
+            [
+              base.base,
+              base.name,
+              base.label,
+              base.fileName,
+              base.id,
+              base.slug
+            ].forEach(value => {
+              const key = normalizeKey(value);
+              if(key) out[key] = stateCode;
+            });
+          });
+        });
+        Object.entries(BASICBRAIN_BASE_ALIASES).forEach(([baseName, stateCode]) => {
+          const key = normalizeKey(baseName);
+          if(key) out[key] = stateCode;
+        });
+        return out;
+      })();
       function getDestinationUrl(){
         return new URL(
           LIVE_BASE_DEMOGRAPHICS_PATH,
@@ -3723,14 +3804,108 @@
         url.searchParams.set("base", item.id);
         window.location.href = url.toString();
       }
-      function renderState(stateCode){
+      function clearBaseMarker(){
+        if(markerLayer){
+          markerLayer.selectAll("*").remove();
+        }
+      }
+      function drawBaseMarker(base){
+        clearBaseMarker();
+        if(!base || !markerLayer || !projection) return;
+        const lat =
+          Number(base.lat);
+        const lng =
+          Number(base.lng);
+        if(!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+        const point =
+          projection([lng, lat]);
+        if(!point) return;
+        const x = point[0];
+        const y = point[1];
+        const label =
+          base.base || "Selected Base";
+        const city =
+          base.city || "";
+        let labelX =
+          x + 18;
+        let labelY =
+          y - 18;
+        if(x > 760){
+          labelX = x - 190;
+        }
+        if(y < 70){
+          labelY = y + 18;
+        }
+        const labelWidth =
+          Math.max(126, Math.min(230, label.length * 7.2 + 26));
+        const group =
+          markerLayer
+            .append("g")
+            .attr("class","pcsu-base-marker")
+            .attr("transform",`translate(${x},${y})`);
+        group
+          .append("circle")
+          .attr("class","pcsu-base-marker-ring")
+          .attr("r",5);
+        group
+          .append("circle")
+          .attr("class","pcsu-base-marker-dot")
+          .attr("r",6);
+        group
+          .append("path")
+          .attr("class","pcsu-base-marker-pin")
+          .attr("d","M0,-14 C7,-14 12,-9 12,-2 C12,7 0,17 0,17 C0,17 -12,7 -12,-2 C-12,-9 -7,-14 0,-14 Z")
+          .attr("transform","translate(0,-12)");
+        group
+          .append("circle")
+          .attr("fill","#071018")
+          .attr("r",3.3)
+          .attr("transform","translate(0,-14)");
+        const labelGroup =
+          markerLayer
+            .append("g")
+            .attr("class","pcsu-base-marker-label-group")
+            .attr("transform",`translate(${labelX},${labelY})`);
+        labelGroup
+          .append("rect")
+          .attr("class","pcsu-base-marker-label-bg")
+          .attr("width",labelWidth)
+          .attr("height",42)
+          .attr("x",0)
+          .attr("y",0);
+        labelGroup
+          .append("text")
+          .attr("class","pcsu-base-marker-label")
+          .attr("x",12)
+          .attr("y",17)
+          .text(label);
+        labelGroup
+          .append("text")
+          .attr("class","pcsu-base-marker-sub")
+          .attr("x",12)
+          .attr("y",31)
+          .text(city);
+      }
+      function renderState(stateCode, selectedBaseId){
+        const safeState =
+          String(stateCode || "").toUpperCase();
+        const safeBaseId =
+          String(selectedBaseId || "").trim();
+        if(!safeState) return;
+        if(!mapReady){
+          pendingStateCode = safeState;
+          pendingBaseId = safeBaseId;
+          return;
+        }
         const bases =
-          STATE_BASES[stateCode] || [];
+          STATE_BASES[safeState] || [];
         const stateName =
-          STATE_NAMES[stateCode] || stateCode;
+          STATE_NAMES[safeState] || safeState;
+        currentStateCode = safeState;
+        currentBaseId = safeBaseId;
         d3.selectAll(".pcsu-state")
           .classed("is-active", false);
-        d3.select(`#state-${stateCode}`)
+        d3.select(`#state-${safeState}`)
           .classed("is-active", true);
         selectedStateEl.textContent =
           stateName;
@@ -3738,6 +3913,7 @@
           panelCopyEl.textContent =
             "PCSUnited does not have supported Base Demographics profiles for this state yet.";
           baseListEl.innerHTML = "";
+          clearBaseMarker();
           return;
         }
         panelCopyEl.textContent =
@@ -3745,7 +3921,7 @@
         baseListEl.innerHTML =
           bases.map(base => `
             <button
-              class="pcsu-base-btn"
+              class="pcsu-base-btn${base.id === currentBaseId ? " is-selected" : ""}"
               type="button"
               data-base-id="${esc(base.id)}">
               <span class="pcsu-base-name">
@@ -3767,7 +3943,179 @@
               if (selected) openBase(selected);
             });
           });
+        const selectedBase =
+          bases.find(base => base.id === currentBaseId);
+        if(selectedBase){
+          drawBaseMarker(selectedBase);
+        }else{
+          clearBaseMarker();
+        }
+        const selectedButton =
+          baseListEl.querySelector(".pcsu-base-btn.is-selected");
+        if(selectedButton){
+          selectedButton.scrollIntoView({
+            block:"nearest",
+            behavior:"smooth"
+          });
+        }
       }
+      function findStateFromBaseName(baseName){
+        const key = normalizeKey(baseName);
+        if(!key) return "";
+        if(BASE_TO_STATE[key]) return BASE_TO_STATE[key];
+        const foundKey =
+          Object.keys(BASE_TO_STATE).find(existingKey => {
+            return (
+              existingKey.includes(key) ||
+              key.includes(existingKey)
+            );
+          });
+        return foundKey ? BASE_TO_STATE[foundKey] : "";
+      }
+      function findBaseIdInState(stateCode, baseName){
+        const safeState =
+          String(stateCode || "").toUpperCase();
+        const bases =
+          STATE_BASES[safeState] || [];
+        const key =
+          normalizeKey(baseName);
+        if(!safeState || !key || !bases.length) return "";
+        const exact =
+          bases.find(base => {
+            return [
+              base.base,
+              base.name,
+              base.label,
+              base.fileName,
+              base.id,
+              base.slug
+            ].some(value => normalizeKey(value) === key);
+          });
+        if(exact) return exact.id;
+        const fuzzy =
+          bases.find(base => {
+            return [
+              base.base,
+              base.name,
+              base.label,
+              base.fileName,
+              base.id,
+              base.slug
+            ].some(value => {
+              const baseKey = normalizeKey(value);
+              return baseKey.includes(key) || key.includes(baseKey);
+            });
+          });
+        return fuzzy ? fuzzy.id : "";
+      }
+      function findSelectionFromDetail(detail){
+        const d =
+          detail && typeof detail === "object"
+            ? detail
+            : {};
+        const selectedBase =
+          d.selectedBase ||
+          d.baseSelection ||
+          d.base ||
+          {};
+        const profile =
+          d.profile ||
+          d.bridge ||
+          d.basicbrain ||
+          d.input ||
+          d.state ||
+          d;
+        const directState =
+          selectedBase.state ||
+          selectedBase.stateCode ||
+          profile.state ||
+          profile.stateCode ||
+          "";
+        const baseName =
+          selectedBase.base ||
+          selectedBase.name ||
+          selectedBase.label ||
+          profile.selected_base ||
+          profile.selectedBase ||
+          profile.pcs_base ||
+          profile.pcsBase ||
+          profile.current_base ||
+          profile.currentBase ||
+          profile.base ||
+          "";
+        let stateCode = "";
+        if(
+          directState &&
+          STATE_NAMES[String(directState).toUpperCase()]
+        ){
+          stateCode = String(directState).toUpperCase();
+        }else{
+          stateCode = findStateFromBaseName(baseName);
+        }
+        if(!stateCode){
+          return {
+            stateCode:"",
+            baseId:""
+          };
+        }
+        return {
+          stateCode,
+          baseId:findBaseIdInState(stateCode, baseName)
+        };
+      }
+      function preselectFromBasicBrain(detail){
+        const selection =
+          findSelectionFromDetail(detail);
+        if(!selection.stateCode) return false;
+        renderState(selection.stateCode, selection.baseId);
+        return true;
+      }
+      function preselectFromGlobals(){
+        const candidates = [
+          window.PCSU_BASICBRAIN_CURRENT,
+          window.PCSU_BASICBRAIN_TEMP,
+          window.PCSU_BASICBRAIN?.getLastGood?.(),
+          window.PCSU_BASICBRAIN?.getState?.()
+        ];
+        for(const item of candidates){
+          if(preselectFromBasicBrain(item)){
+            return true;
+          }
+        }
+        return false;
+      }
+      function bindBasicBrainEvents(){
+        [
+          "pcsunited:basicbrain-updated",
+          "pcsunited:profile-ready",
+          "pcsunited:bridge-ready",
+          "pcsunited:compensation-ready",
+          "pcsu:base-selected"
+        ].forEach(eventName => {
+          window.addEventListener(eventName, event => {
+            preselectFromBasicBrain(event.detail || {});
+          });
+        });
+        window.addEventListener("message", event => {
+          const data =
+            event && event.data && typeof event.data === "object"
+              ? event.data
+              : {};
+          if(data.type === "pcsunited-basicbrain"){
+            preselectFromBasicBrain(data);
+          }
+        });
+      }
+      window.PCSU_US_BASE_MAP.renderState = renderState;
+      window.PCSU_US_BASE_MAP.selectState = renderState;
+      window.PCSU_US_BASE_MAP.preselectFromBasicBrain = preselectFromBasicBrain;
+      window.PCSU_US_BASE_MAP.getCurrentState = function(){
+        return currentStateCode;
+      };
+      window.PCSU_US_BASE_MAP.getCurrentBase = function(){
+        return currentBaseId;
+      };
+      bindBasicBrainEvents();
       d3.json(
         "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
       ).then(us => {
@@ -3775,7 +4123,7 @@
           topojson
             .feature(us, us.objects.states)
             .features;
-        const projection =
+        projection =
           d3.geoAlbersUsa()
             .translate([480,300])
             .scale(1250);
@@ -3844,7 +4192,15 @@
               ? "none"
               : "block";
           });
-        renderState("TX");
+        markerLayer =
+          svg.append("g")
+            .attr("id","pcsu-base-marker-layer");
+        mapReady = true;
+        if(pendingStateCode){
+          renderState(pendingStateCode, pendingBaseId);
+        }else if(!preselectFromGlobals()){
+          renderState(DEFAULT_STATE);
+        }
       }).catch(() => {
         selectedStateEl.textContent =
           "Map unavailable";
@@ -3860,6 +4216,758 @@
               </div>
               <div fade-in="true" class="slide-nav-3 w-slider-nav"></div>
             </div>
+          </div>
+          <div class="interactive-base-map w-embed w-script">
+            <script>
+(() => {
+  "use strict";
+  if(window.PCSU_US_BASE_MAP?.__mounted_v304) return;
+  window.PCSU_US_BASE_MAP = {
+    __mounted_v304:true
+  };
+  const STORAGE_KEY =
+    "pcsunited.selectedBase.v1";
+  const JSON_URL_KEY =
+    "pcsunited.selectedCityJsonUrl.v1";
+  const LIVE_BASE_DEMOGRAPHICS_PATH =
+    "/air-force/base-demographics-air-force";
+  const JSON_BASE_URL =
+    window.PCSU_CITIES_BASE_URL ||
+    "https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/";
+  const DEFAULT_STATE =
+    "TX";
+  const FIPS_TO_ABBR = {
+    "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC",
+    "12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY",
+    "22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN","28":"MS","29":"MO","30":"MT",
+    "31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH",
+    "40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN","48":"TX","49":"UT",
+    "50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY"
+  };
+  const STATE_NAMES = {
+    AL:"Alabama", AK:"Alaska", AZ:"Arizona", CA:"California", CO:"Colorado",
+    DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho",
+    IL:"Illinois", KS:"Kansas", LA:"Louisiana", MA:"Massachusetts", MD:"Maryland",
+    MS:"Mississippi", MT:"Montana", NC:"North Carolina", ND:"North Dakota",
+    NE:"Nebraska", NJ:"New Jersey", NM:"New Mexico", NV:"Nevada", OH:"Ohio",
+    OK:"Oklahoma", SC:"South Carolina", SD:"South Dakota", TX:"Texas",
+    UT:"Utah", VA:"Virginia", WA:"Washington", WY:"Wyoming"
+  };
+  const BASE_REGISTRY = {
+    AK:[
+      ["Joint Base Elmendorf-Richardson","Elmendorf.json","Anchorage, AK",61.2500,-149.8065],
+      ["Eielson AFB","Eielson.json","Fairbanks, AK",64.6657,-147.1015]
+    ],
+    AL:[
+      ["Maxwell AFB","Maxwell.json","Montgomery, AL",32.3829,-86.3658]
+    ],
+    AZ:[
+      ["Davis-Monthan AFB","Davis-Monthan.json","Tucson, AZ",32.1665,-110.8832],
+      ["Luke AFB","Luke.json","Glendale, AZ",33.5350,-112.3832]
+    ],
+    CA:[
+      ["Beale AFB","Beale.json","Marysville, CA",39.1361,-121.4366],
+      ["Edwards AFB","Edwards.json","Edwards, CA",34.9054,-117.8837],
+      ["Los Angeles AFB","Los-Angeles.json","El Segundo, CA",33.9189,-118.3807],
+      ["Travis AFB","Travis.json","Fairfield, CA",38.2627,-121.9275],
+      ["Vandenberg SFB","Vandenberg.json","Lompoc, CA",34.7420,-120.5724]
+    ],
+    CO:[
+      ["Peterson SFB","Peterson.json","Colorado Springs, CO",38.8236,-104.7006],
+      ["Schriever SFB","Schriever.json","Colorado Springs, CO",38.8030,-104.5255],
+      ["U.S. Air Force Academy","Air-Force-Academy.json","Colorado Springs, CO",39.0088,-104.8911]
+    ],
+    DE:[
+      ["Dover AFB","Dover.json","Dover, DE",39.1295,-75.4660]
+    ],
+    FL:[
+      ["Eglin AFB","Eglin.json","Valparaiso, FL",30.4832,-86.5254],
+      ["Hurlburt Field","Hurlburt.json","Mary Esther, FL",30.4278,-86.6893],
+      ["MacDill AFB","MacDill.json","Tampa, FL",27.8493,-82.5212],
+      ["Patrick SFB","Patrick.json","Cocoa Beach, FL",28.2349,-80.6101],
+      ["Tyndall AFB","Tyndall.json","Panama City, FL",30.0696,-85.5754]
+    ],
+    GA:[
+      ["Moody AFB","Moody.json","Valdosta, GA",30.9678,-83.1930],
+      ["Robins AFB","Robins.json","Warner Robins, GA",32.6401,-83.5919]
+    ],
+    HI:[
+      ["Joint Base Pearl Harbor-Hickam","Hickam.json","Honolulu, HI",21.3187,-157.9224]
+    ],
+    ID:[
+      ["Mountain Home AFB","Mountain-Home.json","Mountain Home, ID",43.0436,-115.8724]
+    ],
+    IL:[
+      ["Scott AFB","Scott.json","Belleville, IL",38.5452,-89.8352]
+    ],
+    KS:[
+      ["McConnell AFB","McConnell.json","Wichita, KS",37.6231,-97.2672]
+    ],
+    LA:[
+      ["Barksdale AFB","Barksdale.json","Bossier City, LA",32.5018,-93.6627]
+    ],
+    MA:[
+      ["Hanscom AFB","Hanscom.json","Bedford, MA",42.4699,-71.2890]
+    ],
+    MD:[
+      ["Joint Base Andrews","Andrews.json","Camp Springs, MD",38.8108,-76.8669]
+    ],
+    MS:[
+      ["Columbus AFB","Columbus.json","Columbus, MS",33.6438,-88.4438],
+      ["Keesler AFB","Keesler.json","Biloxi, MS",30.4104,-88.9244]
+    ],
+    MT:[
+      ["Malmstrom AFB","Malmstrom.json","Great Falls, MT",47.5053,-111.1873]
+    ],
+    NC:[
+      ["Seymour Johnson AFB","Seymour-Johnson.json","Goldsboro, NC",35.3394,-77.9606]
+    ],
+    ND:[
+      ["Grand Forks AFB","Grand-Forks.json","Grand Forks, ND",47.9611,-97.4012],
+      ["Minot AFB","Minot.json","Minot, ND",48.4158,-101.3580]
+    ],
+    NE:[
+      ["Offutt AFB","Offutt.json","Bellevue, NE",41.1183,-95.9125]
+    ],
+    NJ:[
+      ["Joint Base McGuire-Dix-Lakehurst","McGuire.json","Wrightstown, NJ",40.0156,-74.5917]
+    ],
+    NM:[
+      ["Cannon AFB","Cannon.json","Clovis, NM",34.3828,-103.3221],
+      ["Holloman AFB","Holloman.json","Alamogordo, NM",32.8525,-106.1065],
+      ["Kirtland AFB","Kirtland.json","Albuquerque, NM",35.0402,-106.6092]
+    ],
+    NV:[
+      ["Creech AFB","Creech.json","Indian Springs, NV",36.5872,-115.6734],
+      ["Nellis AFB","Nellis.json","Las Vegas, NV",36.2362,-115.0343]
+    ],
+    OH:[
+      ["Wright-Patterson AFB","Wright-Patterson.json","Dayton, OH",39.8261,-84.0483]
+    ],
+    OK:[
+      ["Altus AFB","Altus.json","Altus, OK",34.6671,-99.2667],
+      ["Tinker AFB","Tinker.json","Oklahoma City, OK",35.4147,-97.3866],
+      ["Vance AFB","Vance.json","Enid, OK",36.3392,-97.9165]
+    ],
+    SC:[
+      ["Joint Base Charleston","Charleston.json","Charleston, SC",32.8986,-80.0405],
+      ["Shaw AFB","Shaw.json","Sumter, SC",33.9727,-80.4706]
+    ],
+    SD:[
+      ["Ellsworth AFB","Ellsworth.json","Rapid City, SD",44.1450,-103.1036]
+    ],
+    TX:[
+      ["Dyess AFB","Dyess.json","Abilene, TX",32.4208,-99.8546],
+      ["Goodfellow AFB","Goodfellow.json","San Angelo, TX",31.4343,-100.4027],
+      ["Joint Base San Antonio-Lackland","Lackland.json","San Antonio, TX",29.3842,-98.5811],
+      ["Laughlin AFB","Laughlin.json","Del Rio, TX",29.3595,-100.7780],
+      ["Joint Base San Antonio-Randolph","Randolph.json","San Antonio, TX",29.5297,-98.2789],
+      ["Sheppard AFB","Sheppard.json","Wichita Falls, TX",33.9888,-98.4919]
+    ],
+    UT:[
+      ["Hill AFB","Hill.json","Ogden, UT",41.1240,-111.9730]
+    ],
+    VA:[
+      ["Joint Base Langley-Eustis","Langley.json","Hampton, VA",37.0838,-76.3605]
+    ],
+    WA:[
+      ["Fairchild AFB","Fairchild.json","Spokane, WA",47.6151,-117.6558],
+      ["Joint Base Lewis-McChord","McChord.json","Tacoma, WA",47.1339,-122.4916]
+    ],
+    WY:[
+      ["F. E. Warren AFB","F-E-Warren.json","Cheyenne, WY",41.1339,-104.8660]
+    ]
+  };
+  const BASICBRAIN_BASE_ALIASES = {
+    "Andrews AFB":"MD",
+    "Joint Base Andrews":"MD",
+    "Barksdale AFB":"LA",
+    "Beale AFB":"CA",
+    "Cannon AFB":"NM",
+    "Charleston AFB":"SC",
+    "Joint Base Charleston":"SC",
+    "Columbus AFB":"MS",
+    "Davis-Monthan AFB":"AZ",
+    "Dover AFB":"DE",
+    "Dyess AFB":"TX",
+    "Edwards AFB":"CA",
+    "Eglin AFB":"FL",
+    "Ellsworth AFB":"SD",
+    "Fairchild AFB":"WA",
+    "FE Warren AFB":"WY",
+    "F.E. Warren AFB":"WY",
+    "F. E. Warren AFB":"WY",
+    "Grand Forks AFB":"ND",
+    "Hanscom AFB":"MA",
+    "Hill AFB":"UT",
+    "Holloman AFB":"NM",
+    "Hurlburt Field":"FL",
+    "JBSA Fort Sam Houston":"TX",
+    "Fort Sam Houston":"TX",
+    "Joint Base San Antonio-Fort Sam Houston":"TX",
+    "JBSA Lackland":"TX",
+    "Lackland AFB":"TX",
+    "Joint Base San Antonio-Lackland":"TX",
+    "JBSA Randolph":"TX",
+    "Randolph AFB":"TX",
+    "Joint Base San Antonio-Randolph":"TX",
+    "Keesler AFB":"MS",
+    "Kirtland AFB":"NM",
+    "Langley AFB":"VA",
+    "Joint Base Langley-Eustis":"VA",
+    "Laughlin AFB":"TX",
+    "Little Rock AFB":"AR",
+    "Luke AFB":"AZ",
+    "MacDill AFB":"FL",
+    "Malmstrom AFB":"MT",
+    "Maxwell AFB":"AL",
+    "McConnell AFB":"KS",
+    "McGuire AFB":"NJ",
+    "Joint Base McGuire-Dix-Lakehurst":"NJ",
+    "Minot AFB":"ND",
+    "Moody AFB":"GA",
+    "Mountain Home AFB":"ID",
+    "Nellis AFB":"NV",
+    "Offutt AFB":"NE",
+    "Patrick SFB":"FL",
+    "Peterson SFB":"CO",
+    "Robins AFB":"GA",
+    "Scott AFB":"IL",
+    "Seymour Johnson AFB":"NC",
+    "Shaw AFB":"SC",
+    "Sheppard AFB":"TX",
+    "Tinker AFB":"OK",
+    "Travis AFB":"CA",
+    "Tyndall AFB":"FL",
+    "Vance AFB":"OK",
+    "Vandenberg SFB":"CA",
+    "Whiteman AFB":"MO",
+    "Wright-Patterson AFB":"OH"
+  };
+  const svg = d3.select("#pcsu-us-svg");
+  const selectedStateEl =
+    document.getElementById("pcsu-selected-state");
+  const panelCopyEl =
+    document.getElementById("pcsu-panel-copy");
+  const baseListEl =
+    document.getElementById("pcsu-base-list");
+  let mapReady = false;
+  let pendingStateCode = "";
+  let pendingBaseId = "";
+  let currentStateCode = "";
+  let currentBaseId = "";
+  let projection = null;
+  let markerLayer = null;
+  function esc(str){
+    return String(str ?? "")
+      .replaceAll("&","&amp;")
+      .replaceAll("<","&lt;")
+      .replaceAll(">","&gt;")
+      .replaceAll('"',"&quot;")
+      .replaceAll("'","&#039;");
+  }
+  function slugify(fileName){
+    return String(fileName || "")
+      .replace(/\.json$/i, "")
+      .trim()
+      .toLowerCase()
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/^-+|-+$/g, "");
+  }
+  function normalizeKey(value){
+    return String(value || "")
+      .toLowerCase()
+      .replace(/jointbase/g, "jb")
+      .replace(/airforcebase/g, "afb")
+      .replace(/[^a-z0-9]/g, "");
+  }
+  function makeBase(row, stateCode){
+    const name     = row[0];
+    const fileName = row[1];
+    const city     = row[2];
+    const lat      = row[3];
+    const lng      = row[4];
+    const id = slugify(fileName);
+    return {
+      id,
+      slug:id,
+      fileName,
+      base:name,
+      label:name,
+      name,
+      city,
+      state:stateCode,
+      lat,
+      lng,
+      jsonUrl:JSON_BASE_URL + fileName
+    };
+  }
+  const STATE_BASES = Object.fromEntries(
+    Object.entries(BASE_REGISTRY).map(([stateCode, rows]) => [
+      stateCode,
+      rows.map(row => makeBase(row, stateCode))
+    ])
+  );
+  const BASE_TO_STATE = (() => {
+    const out = {};
+    Object.entries(STATE_BASES).forEach(([stateCode, bases]) => {
+      bases.forEach(base => {
+        [
+          base.base,
+          base.name,
+          base.label,
+          base.fileName,
+          base.id,
+          base.slug
+        ].forEach(value => {
+          const key = normalizeKey(value);
+          if(key) out[key] = stateCode;
+        });
+      });
+    });
+    Object.entries(BASICBRAIN_BASE_ALIASES).forEach(([baseName, stateCode]) => {
+      const key = normalizeKey(baseName);
+      if(key) out[key] = stateCode;
+    });
+    return out;
+  })();
+  function getDestinationUrl(){
+    return new URL(
+      LIVE_BASE_DEMOGRAPHICS_PATH,
+      window.location.origin
+    );
+  }
+  function saveSelection(item){
+    try{
+      localStorage.setItem(
+        STORAGE_KEY,
+        JSON.stringify(item)
+      );
+      localStorage.setItem(
+        JSON_URL_KEY,
+        item.jsonUrl || ""
+      );
+      localStorage.setItem(
+        "pcsunited.selectedBaseSlug.v1",
+        item.id || ""
+      );
+    }catch(err){
+      console.warn(err);
+    }
+  }
+  function openBase(item){
+    if (!item) return;
+    saveSelection(item);
+    const url = getDestinationUrl();
+    url.searchParams.set("base", item.id);
+    window.location.href = url.toString();
+  }
+  function clearBaseMarker(){
+    if(markerLayer){
+      markerLayer.selectAll("*").remove();
+    }
+  }
+  function drawBaseMarker(base){
+    clearBaseMarker();
+    if(!base || !markerLayer || !projection) return;
+    const lat =
+      Number(base.lat);
+    const lng =
+      Number(base.lng);
+    if(!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+    const point =
+      projection([lng, lat]);
+    if(!point) return;
+    const x = point[0];
+    const y = point[1];
+    const label =
+      base.base || "Selected Base";
+    const city =
+      base.city || "";
+    let labelX =
+      x + 18;
+    let labelY =
+      y - 18;
+    if(x > 760){
+      labelX = x - 190;
+    }
+    if(y < 70){
+      labelY = y + 18;
+    }
+    const labelWidth =
+      Math.max(126, Math.min(230, label.length * 7.2 + 26));
+    const group =
+      markerLayer
+        .append("g")
+        .attr("class","pcsu-base-marker")
+        .attr("transform",`translate(${x},${y})`);
+    group
+      .append("circle")
+      .attr("class","pcsu-base-marker-ring")
+      .attr("r",5);
+    group
+      .append("circle")
+      .attr("class","pcsu-base-marker-dot")
+      .attr("r",6);
+    group
+      .append("path")
+      .attr("class","pcsu-base-marker-pin")
+      .attr("d","M0,-14 C7,-14 12,-9 12,-2 C12,7 0,17 0,17 C0,17 -12,7 -12,-2 C-12,-9 -7,-14 0,-14 Z")
+      .attr("transform","translate(0,-12)");
+    group
+      .append("circle")
+      .attr("fill","#071018")
+      .attr("r",3.3)
+      .attr("transform","translate(0,-14)");
+    const labelGroup =
+      markerLayer
+        .append("g")
+        .attr("class","pcsu-base-marker-label-group")
+        .attr("transform",`translate(${labelX},${labelY})`);
+    labelGroup
+      .append("rect")
+      .attr("class","pcsu-base-marker-label-bg")
+      .attr("width",labelWidth)
+      .attr("height",42)
+      .attr("x",0)
+      .attr("y",0);
+    labelGroup
+      .append("text")
+      .attr("class","pcsu-base-marker-label")
+      .attr("x",12)
+      .attr("y",17)
+      .text(label);
+    labelGroup
+      .append("text")
+      .attr("class","pcsu-base-marker-sub")
+      .attr("x",12)
+      .attr("y",31)
+      .text(city);
+  }
+  function renderState(stateCode, selectedBaseId){
+    const safeState =
+      String(stateCode || "").toUpperCase();
+    const safeBaseId =
+      String(selectedBaseId || "").trim();
+    if(!safeState) return;
+    if(!mapReady){
+      pendingStateCode = safeState;
+      pendingBaseId = safeBaseId;
+      return;
+    }
+    const bases =
+      STATE_BASES[safeState] || [];
+    const stateName =
+      STATE_NAMES[safeState] || safeState;
+    currentStateCode = safeState;
+    currentBaseId = safeBaseId;
+    d3.selectAll(".pcsu-state")
+      .classed("is-active", false);
+    d3.select(`#state-${safeState}`)
+      .classed("is-active", true);
+    selectedStateEl.textContent =
+      stateName;
+    if (!bases.length){
+      panelCopyEl.textContent =
+        "PCSUnited does not have supported Base Demographics profiles for this state yet.";
+      baseListEl.innerHTML = "";
+      clearBaseMarker();
+      return;
+    }
+    panelCopyEl.textContent =
+      `${bases.length} supported base profile${bases.length > 1 ? "s" : ""} available.`;
+    baseListEl.innerHTML =
+      bases.map(base => `
+        <button
+          class="pcsu-base-btn${base.id === currentBaseId ? " is-selected" : ""}"
+          type="button"
+          data-base-id="${esc(base.id)}">
+          <span class="pcsu-base-name">
+            ${esc(base.base)}
+          </span>
+          <span class="pcsu-base-meta">
+            ${esc(base.city)} • ${esc(base.fileName)} • Open Base Demographics
+          </span>
+        </button>
+      `).join("");
+    baseListEl
+      .querySelectorAll(".pcsu-base-btn")
+      .forEach(button => {
+        button.addEventListener("click", () => {
+          const selected =
+            bases.find(base =>
+              base.id === button.dataset.baseId
+            );
+          if (selected) openBase(selected);
+        });
+      });
+    const selectedBase =
+      bases.find(base => base.id === currentBaseId);
+    if(selectedBase){
+      drawBaseMarker(selectedBase);
+    }else{
+      clearBaseMarker();
+    }
+    const selectedButton =
+      baseListEl.querySelector(".pcsu-base-btn.is-selected");
+    if(selectedButton){
+      selectedButton.scrollIntoView({
+        block:"nearest",
+        behavior:"smooth"
+      });
+    }
+  }
+  function findStateFromBaseName(baseName){
+    const key = normalizeKey(baseName);
+    if(!key) return "";
+    if(BASE_TO_STATE[key]) return BASE_TO_STATE[key];
+    const foundKey =
+      Object.keys(BASE_TO_STATE).find(existingKey => {
+        return (
+          existingKey.includes(key) ||
+          key.includes(existingKey)
+        );
+      });
+    return foundKey ? BASE_TO_STATE[foundKey] : "";
+  }
+  function findBaseIdInState(stateCode, baseName){
+    const safeState =
+      String(stateCode || "").toUpperCase();
+    const bases =
+      STATE_BASES[safeState] || [];
+    const key =
+      normalizeKey(baseName);
+    if(!safeState || !key || !bases.length) return "";
+    const exact =
+      bases.find(base => {
+        return [
+          base.base,
+          base.name,
+          base.label,
+          base.fileName,
+          base.id,
+          base.slug
+        ].some(value => normalizeKey(value) === key);
+      });
+    if(exact) return exact.id;
+    const fuzzy =
+      bases.find(base => {
+        return [
+          base.base,
+          base.name,
+          base.label,
+          base.fileName,
+          base.id,
+          base.slug
+        ].some(value => {
+          const baseKey = normalizeKey(value);
+          return baseKey.includes(key) || key.includes(baseKey);
+        });
+      });
+    return fuzzy ? fuzzy.id : "";
+  }
+  function findSelectionFromDetail(detail){
+    const d =
+      detail && typeof detail === "object"
+        ? detail
+        : {};
+    const selectedBase =
+      d.selectedBase ||
+      d.baseSelection ||
+      d.base ||
+      {};
+    const profile =
+      d.profile ||
+      d.bridge ||
+      d.basicbrain ||
+      d.input ||
+      d.state ||
+      d;
+    const directState =
+      selectedBase.state ||
+      selectedBase.stateCode ||
+      profile.state ||
+      profile.stateCode ||
+      "";
+    const baseName =
+      selectedBase.base ||
+      selectedBase.name ||
+      selectedBase.label ||
+      profile.selected_base ||
+      profile.selectedBase ||
+      profile.pcs_base ||
+      profile.pcsBase ||
+      profile.current_base ||
+      profile.currentBase ||
+      profile.base ||
+      "";
+    let stateCode = "";
+    if(
+      directState &&
+      STATE_NAMES[String(directState).toUpperCase()]
+    ){
+      stateCode = String(directState).toUpperCase();
+    }else{
+      stateCode = findStateFromBaseName(baseName);
+    }
+    if(!stateCode){
+      return {
+        stateCode:"",
+        baseId:""
+      };
+    }
+    return {
+      stateCode,
+      baseId:findBaseIdInState(stateCode, baseName)
+    };
+  }
+  function preselectFromBasicBrain(detail){
+    const selection =
+      findSelectionFromDetail(detail);
+    if(!selection.stateCode) return false;
+    renderState(selection.stateCode, selection.baseId);
+    return true;
+  }
+  function preselectFromGlobals(){
+    const candidates = [
+      window.PCSU_BASICBRAIN_CURRENT,
+      window.PCSU_BASICBRAIN_TEMP,
+      window.PCSU_BASICBRAIN?.getLastGood?.(),
+      window.PCSU_BASICBRAIN?.getState?.()
+    ];
+    for(const item of candidates){
+      if(preselectFromBasicBrain(item)){
+        return true;
+      }
+    }
+    return false;
+  }
+  function bindBasicBrainEvents(){
+    [
+      "pcsunited:basicbrain-updated",
+      "pcsunited:profile-ready",
+      "pcsunited:bridge-ready",
+      "pcsunited:compensation-ready",
+      "pcsu:base-selected"
+    ].forEach(eventName => {
+      window.addEventListener(eventName, event => {
+        preselectFromBasicBrain(event.detail || {});
+      });
+    });
+    window.addEventListener("message", event => {
+      const data =
+        event && event.data && typeof event.data === "object"
+          ? event.data
+          : {};
+      if(data.type === "pcsunited-basicbrain"){
+        preselectFromBasicBrain(data);
+      }
+    });
+  }
+  window.PCSU_US_BASE_MAP.renderState = renderState;
+  window.PCSU_US_BASE_MAP.selectState = renderState;
+  window.PCSU_US_BASE_MAP.preselectFromBasicBrain = preselectFromBasicBrain;
+  window.PCSU_US_BASE_MAP.getCurrentState = function(){
+    return currentStateCode;
+  };
+  window.PCSU_US_BASE_MAP.getCurrentBase = function(){
+    return currentBaseId;
+  };
+  bindBasicBrainEvents();
+  d3.json(
+    "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
+  ).then(us => {
+    const states =
+      topojson
+        .feature(us, us.objects.states)
+        .features;
+    projection =
+      d3.geoAlbersUsa()
+        .translate([480,300])
+        .scale(1250);
+    const path =
+      d3.geoPath(projection);
+    svg.append("g")
+      .selectAll("path")
+      .data(states)
+      .join("path")
+      .attr("class", d => {
+        const abbr =
+          FIPS_TO_ABBR[
+            String(d.id).padStart(2,"0")
+          ];
+        return STATE_BASES[abbr]
+          ? "pcsu-state has-bases"
+          : "pcsu-state";
+      })
+      .attr("id", d => {
+        const abbr =
+          FIPS_TO_ABBR[
+            String(d.id).padStart(2,"0")
+          ];
+        return `state-${abbr}`;
+      })
+      .attr("d", path)
+      .on("click", (event, d) => {
+        const abbr =
+          FIPS_TO_ABBR[
+            String(d.id).padStart(2,"0")
+          ];
+        renderState(abbr);
+      });
+    svg.append("path")
+      .datum(
+        topojson.mesh(
+          us,
+          us.objects.states,
+          (a,b) => a !== b
+        )
+      )
+      .attr("fill","none")
+      .attr("stroke","rgba(16,20,38,.75)")
+      .attr("stroke-width",1)
+      .attr("d", path);
+    svg.append("g")
+      .selectAll("text")
+      .data(states)
+      .join("text")
+      .attr("class","pcsu-state-label")
+      .attr("x", d => path.centroid(d)[0])
+      .attr("y", d => path.centroid(d)[1])
+      .text(d =>
+        FIPS_TO_ABBR[
+          String(d.id).padStart(2,"0")
+        ] || ""
+      )
+      .style("display", d => {
+        const abbr =
+          FIPS_TO_ABBR[
+            String(d.id).padStart(2,"0")
+          ];
+        return [
+          "RI","DE","CT","NJ","MD","MA","DC"
+        ].includes(abbr)
+          ? "none"
+          : "block";
+      });
+    markerLayer =
+      svg.append("g")
+        .attr("id","pcsu-base-marker-layer");
+    mapReady = true;
+    if(pendingStateCode){
+      renderState(pendingStateCode, pendingBaseId);
+    }else if(!preselectFromGlobals()){
+      renderState(DEFAULT_STATE);
+    }
+  }).catch(() => {
+    selectedStateEl.textContent =
+      "Map unavailable";
+    panelCopyEl.textContent =
+      "The map data could not load. Please refresh the page.";
+    baseListEl.innerHTML = "";
+  });
+})();
+</script>
           </div>
         </div>
       </section>
@@ -6404,7 +7512,7 @@ renderQuestion();
               <source src="../videos/Basic-Flag-1_mp4.mp4" data-wf-ignore="true">
               <source src="../videos/Basic-Flag-1_webm.webm" data-wf-ignore="true">
             </video></div>
-        </div><img src="../images/TheWingIcon.png" loading="lazy" sizes="(max-width: 1100px) 100vw, 1100px" srcset="../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, ../images/TheWingIcon.png 1100w" alt="Logo" class="image-178">
+        </div><img src="../images/TheWingIcon.png" loading="lazy" sizes="100vw" srcset="../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, ../images/TheWingIcon.png 1100w" alt="Logo" class="image-178">
         <h2 data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e56" style="opacity:0" class="text-center">Air Force Calculators &amp; Applications</h2>
         <div class="w-layout-blockcontainer container-one w-container">
           <div class="w-layout-vflex home-three-category-wrap">

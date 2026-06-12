@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Jun 11 2026 08:24:10 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Jun 12 2026 08:03:14 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e1a06" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -99,71 +99,58 @@
 <body>
   <div class="page-wrapper">
     <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="tormain tormainpage w-nav">
-      <div class="navbar-wrapper-12">
-        <div class="code-embed-52 w-embed w-script"><!--  =========================================================
-  PCSUnited • Header Market Data Strip
-  v1.0.0 • BASICBRAIN → CITIES.JSON FLOW
-  PURPOSE
-  - Header-friendly market strip
-  - Same visual language as Header Compensation Strip
-  - Listens to BasicBrain Input
-  - Reads selected base
-  - Loads matching cities JSON
-  - Shows:
-      Market Pressure
-      Avg Rent
-      Avg Mortgage
-      Equity Potential
-  PRIMARY SOURCE:
-  - localStorage["pcsunited.basicbrain.v1"]
-  - localStorage["pcsunited.selectedBase.v1"]
-  FALLBACK SOURCES:
-  - localStorage["pcsunited.profile.v1"]
-  - localStorage["pcsunited.bridge.v1"]
-  EVENTS LISTENED:
-  - pcsunited:basicbrain-updated
-  - pcsunited:profile-ready
-  - pcsunited:bridge-ready
-  - pcsu:base-selected
-  - storage
-  WRITES:
-  - localStorage["pcsunited.market_header.v1"]
-  - localStorage["pcsunited.market_context.v1"]
-  NOTE
-  - Assumes city JSON files live at:
-    https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/{CityKey}.json
+      <div class="navbar-wrapper-12"><img src="../images/Logo-3-white.png" loading="lazy" sizes="100vw" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
+        <div class="compenstation-strip-from-basic-brain w-embed w-script"><!--  =========================================================
+  PCSUnited • Header Affordability Strip
+  v3.6.0 • BASE DEMO CONTEXT / THEWING + LOCAL PAYMENT
+  UPDATE v3.6.0
+  - New strip logic:
+      1. Income
+      2. Local Payment
+      3. After Payment
+      4. Housing Ratio
+  - Reads BasicBrain handoff from:
+      pcsunited.basicbrain.handoff.v1
+  - Still listens to BasicBrain / compensation events
+  - Still calls TheWing when income is missing
+  - Reads local Base Demo payment from page text:
+      "EST. MONTHLY PAYMENT"
+  - Calculates:
+      After Payment = Income - Local Payment
+      Housing Ratio = Local Payment / Income
+  - Keeps Active Duty + Veteran compatibility
 =========================================================  -->
-          <div id="pcsu-header-market-basicbrain" style="all:initial;">
+          <div id="pcsu-header-comp-basicbrain" style="all:initial;">
             <link rel="preconnect" href="https://fonts.googleapis.com">
             <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
             <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
             <style>
-    #pcsu-header-market-basicbrain,
-    #pcsu-header-market-basicbrain *{
+    #pcsu-header-comp-basicbrain,
+    #pcsu-header-comp-basicbrain *{
       box-sizing:border-box;
       font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
     }
-    #pcsu-header-market-basicbrain{
+    #pcsu-header-comp-basicbrain{
       display:block;
       width:100%;
       color:#f5f5f5;
       background:transparent !important;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-wrap{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-wrap{
       width:100%;
       display:flex;
       align-items:center;
       justify-content:center;
       background:transparent !important;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-grid{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-grid{
       display:grid;
-      grid-template-columns:repeat(4, minmax(92px, 1fr));
+      grid-template-columns:repeat(4, minmax(98px, 1fr));
       gap:8px;
-      width:min(520px, 100%);
+      width:min(500px, 100%);
       background:transparent !important;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-tile{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile{
       position:relative;
       overflow:hidden;
       border:1px solid rgba(255,255,255,.16);
@@ -171,7 +158,11 @@
       padding:7px 13px 8px;
       min-height:34px;
       background:
-        linear-gradient(180deg, rgba(255,255,255,.88), rgba(238,241,248,.76));
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.88),
+          rgba(238,241,248,.76)
+        );
       box-shadow:
         inset 0 1px 0 rgba(255,255,255,.95),
         0 8px 18px rgba(0,0,0,.18);
@@ -183,7 +174,7 @@
       align-items:center;
       text-align:center;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-tile::before{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile::before{
       content:"";
       position:absolute;
       inset:0 0 auto 0;
@@ -197,7 +188,7 @@
       );
       pointer-events:none;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-label{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-label{
       display:block;
       margin-bottom:2px;
       color:rgba(18,24,38,.58);
@@ -208,7 +199,7 @@
       letter-spacing:.12em;
       white-space:nowrap;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-value{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value{
       display:block;
       color:#101728;
       font-size:13px;
@@ -217,593 +208,902 @@
       letter-spacing:-.03em;
       white-space:nowrap;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-value.is-good{
-      color:#16805b;
-      font-weight:900;
-    }
-    #pcsu-header-market-basicbrain .pcsu-header-market-value.is-warn{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-total{
       color:#9b7939;
       font-weight:900;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-value.is-risk{
-      color:#9b3d35;
-      font-weight:900;
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-good{
+      color:#26724d;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-tile.is-loading .pcsu-header-market-value{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-watch{
+      color:#9b7939;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-stretched{
+      color:#a33a3a;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-loading .pcsu-header-comp-value{
       opacity:.60;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-tile.is-missing{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-missing{
       opacity:.58;
     }
-    #pcsu-header-market-basicbrain .pcsu-header-market-foot{
-      display:none;
-    }
     @media(max-width:760px){
-      #pcsu-header-market-basicbrain .pcsu-header-market-grid{
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-grid{
         grid-template-columns:repeat(2, minmax(110px, 1fr));
         width:100%;
       }
-      #pcsu-header-market-basicbrain .pcsu-header-market-tile{
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-tile{
         border-radius:12px;
         min-height:44px;
       }
-      #pcsu-header-market-basicbrain .pcsu-header-market-label{
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-label{
         font-size:9px;
       }
-      #pcsu-header-market-basicbrain .pcsu-header-market-value{
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-value{
         font-size:15px;
       }
     }
   </style>
-            <div class="pcsu-header-market-wrap" aria-label="Current market intelligence">
+            <div class="pcsu-header-comp-wrap">
               <div style="width:100%;">
-                <div class="pcsu-header-market-grid">
-                  <div class="pcsu-header-market-tile is-loading">
-                    <span class="pcsu-header-market-label">Market Pressure</span>
-                    <span class="pcsu-header-market-value is-warn" id="bb-market-pressure">—</span>
+                <div class="pcsu-header-comp-grid">
+                  <div class="pcsu-header-comp-tile is-missing">
+                    <span class="pcsu-header-comp-label" id="bb-header-label-1">Income</span>
+                    <span class="pcsu-header-comp-value" id="bb-header-pay1">$0</span>
                   </div>
-                  <div class="pcsu-header-market-tile is-loading">
-                    <span class="pcsu-header-market-label">Avg Rent</span>
-                    <span class="pcsu-header-market-value" id="bb-market-rent">$0</span>
+                  <div class="pcsu-header-comp-tile is-missing">
+                    <span class="pcsu-header-comp-label" id="bb-header-label-2">Local Payment</span>
+                    <span class="pcsu-header-comp-value" id="bb-header-pay2">$0</span>
                   </div>
-                  <div class="pcsu-header-market-tile is-loading">
-                    <span class="pcsu-header-market-label">Avg Mortgage</span>
-                    <span class="pcsu-header-market-value" id="bb-market-mortgage">$0</span>
+                  <div class="pcsu-header-comp-tile is-missing">
+                    <span class="pcsu-header-comp-label" id="bb-header-label-3">After Payment</span>
+                    <span class="pcsu-header-comp-value" id="bb-header-pay3">$0</span>
                   </div>
-                  <div class="pcsu-header-market-tile is-loading">
-                    <span class="pcsu-header-market-label">Equity Potential</span>
-                    <span class="pcsu-header-market-value is-good" id="bb-market-equity">—</span>
+                  <div class="pcsu-header-comp-tile is-missing">
+                    <span class="pcsu-header-comp-label" id="bb-header-label-4">Housing Ratio</span>
+                    <span class="pcsu-header-comp-value is-total" id="bb-header-total">0%</span>
                   </div>
-                </div>
-                <div class="pcsu-header-market-foot" id="bb-market-foot">
-                  Loading market data...
                 </div>
               </div>
             </div>
             <script>
-    (function(){
-      "use strict";
-      function initBasicBrainMarketHeader(){
-        const root = document.getElementById("pcsu-header-market-basicbrain");
-        if(!root) return;
-        if(root.dataset.mounted === "true") return;
-        root.dataset.mounted = "true";
-        const els = {
-          pressure: root.querySelector("#bb-market-pressure"),
-          rent: root.querySelector("#bb-market-rent"),
-          mortgage: root.querySelector("#bb-market-mortgage"),
-          equity: root.querySelector("#bb-market-equity"),
-          foot: root.querySelector("#bb-market-foot")
-        };
-        const tiles = Array.from(root.querySelectorAll(".pcsu-header-market-tile"));
-        if(!els.pressure || !els.rent || !els.mortgage || !els.equity) return;
-        /* ============================================================
-           #1 CONFIG
-        ============================================================ */
-        const VERSION = "1.0.0";
-        const STORAGE = {
-          basicbrain: "pcsunited.basicbrain.v1",
-          profile: "pcsunited.profile.v1",
-          bridge: "pcsunited.bridge.v1",
-          selectedBase: "pcsunited.selectedBase.v1",
-          marketHeader: "pcsunited.market_header.v1",
-          marketContext: "pcsunited.market_context.v1"
-        };
-        const CITY_BASE_URL = "https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/";
-        const BASE_TO_CITY_FILE = {
-          "Andrews AFB": "Andrews.json",
-          "Barksdale AFB": "Barksdale.json",
-          "Beale AFB": "Beale.json",
-          "Cannon AFB": "Cannon.json",
-          "Charleston AFB": "Charleston.json",
-          "Davis-Monthan AFB": "DavisMonthan.json",
-          "Davis Monthan AFB": "DavisMonthan.json",
-          "Dover AFB": "Dover.json",
-          "Dyess AFB": "Dyess.json",
-          "Eglin AFB": "Eglin.json",
-          "Elmendorf AFB": "Elmendorf.json",
-          "F.E-Warren AFB": "FEWarren.json",
-          "F.E Warren AFB": "FEWarren.json",
-          "Fairchild AFB": "Fairchild.json",
-          "Fort-Sam-Houston AFB": "FortSamHouston.json",
-          "Fort Sam Houston AFB": "FortSamHouston.json",
-          "Holloman AFB": "Holloman.json",
-          "Hurlburt AFB": "Hurlburt.json",
-          "Keesler AFB": "Keesler.json",
-          "Kirtland AFB": "Kirtland.json",
-          "Lackland AFB": "Lackland.json",
-          "Langley AFB": "Langley.json",
-          "Laughlin AFB": "Laughlin.json",
-          "Little-Rock AFB": "LittleRock.json",
-          "Little Rock AFB": "LittleRock.json",
-          "Luke AFB": "Luke.json",
-          "MacDill AFB": "MacDill.json",
-          "Malmstrom AFB": "Malmstrom.json",
-          "Maxwell AFB": "Maxwell.json",
-          "McConnell AFB": "McConnell.json",
-          "McGuire AFB": "McGuire.json",
-          "Minot AFB": "Minot.json",
-          "Moody AFB": "Moody.json",
-          "Mountain-Home AFB": "MountainHome.json",
-          "Mountain Home AFB": "MountainHome.json",
-          "Nellis AFB": "Nellis.json",
-          "Offutt AFB": "Offutt.json",
-          "Peterson AFB": "Peterson.json",
-          "Randolph AFB": "Randolph.json",
-          "Robins AFB": "Robins.json",
-          "Scott AFB": "Scott.json",
-          "Seymour-Johnson AFB": "SeymourJohnson.json",
-          "Seymour Johnson AFB": "SeymourJohnson.json",
-          "Shaw AFB": "Shaw.json",
-          "Sheppard AFB": "Sheppard.json",
-          "Tinker AFB": "Tinker.json",
-          "Travis AFB": "Travis.json",
-          "Tyndall AFB": "Tyndall.json",
-          "Whiteman AFB": "Whiteman.json",
-          "Wright-Patterson AFB": "WrightPatterson.json",
-          "Wright Patterson AFB": "WrightPatterson.json",
-          "Joint Base San Antonio": "Lackland.json"
-        };
-        let requestSeq = 0;
-        let runTimer = null;
-        const cityCache = new Map();
-        /* ============================================================
-           #2 HELPERS
-        ============================================================ */
-        function setLoading(isLoading){
-          tiles.forEach(function(tile){
-            tile.classList.toggle("is-loading", !!isLoading);
-          });
+(function(){
+  "use strict";
+  const VERSION = "3.6.0";
+  const API_BASE = "https://thewing.netlify.app/api";
+  const BRAIN_ENDPOINT = API_BASE + "/opensource-brain";
+  const HANDOFF_KEY = "pcsunited.basicbrain.handoff.v1";
+  const root = document.getElementById("pcsu-header-comp-basicbrain");
+  if(!root) return;
+  if(root.dataset.mounted === "true") return;
+  root.dataset.mounted = "true";
+  const els = {
+    label1: root.querySelector("#bb-header-label-1"),
+    label2: root.querySelector("#bb-header-label-2"),
+    label3: root.querySelector("#bb-header-label-3"),
+    label4: root.querySelector("#bb-header-label-4"),
+    pay1: root.querySelector("#bb-header-pay1"),
+    pay2: root.querySelector("#bb-header-pay2"),
+    pay3: root.querySelector("#bb-header-pay3"),
+    total: root.querySelector("#bb-header-total")
+  };
+  const tiles = Array.from(root.querySelectorAll(".pcsu-header-comp-tile"));
+  let latestProfile = null;
+  let latestIncome = 0;
+  let latestLocalPayment = 0;
+  let runTimer = null;
+  let paymentTimer = null;
+  let requestSeq = 0;
+  function num(value, fallback){
+    if(fallback === undefined) fallback = 0;
+    const n = Number(
+      String(value ?? "")
+        .replace(/[$,%]/g,"")
+        .replace(/,/g,"")
+    );
+    return Number.isFinite(n) ? n : fallback;
+  }
+  function money(value){
+    return "$" + Number(num(value,0)).toLocaleString("en-US", {
+      maximumFractionDigits:0
+    });
+  }
+  function pct(value){
+    const n = num(value,0);
+    return Math.round(n) + "%";
+  }
+  function clean(value){
+    return value === undefined || value === null ? "" : String(value).trim();
+  }
+  function normalizeRank(value){
+    const raw = clean(value)
+      .toUpperCase()
+      .replace(/\s+/g,"")
+      .replace("–","-")
+      .replace("—","-");
+    if(!raw) return "";
+    if(/^[EOW]-\d{1,2}$/.test(raw)) return raw;
+    if(/^[EOW]\d{1,2}$/.test(raw)) return raw.charAt(0) + "-" + raw.slice(1);
+    return raw;
+  }
+  function normalizeMode(value){
+    const raw = clean(value).toLowerCase();
+    if(
+      raw === "veteran" ||
+      raw === "vet" ||
+      raw === "retired" ||
+      raw === "retiree"
+    ){
+      return "veteran";
+    }
+    return "active_duty";
+  }
+  function isVeteran(profile){
+    return normalizeMode(profile && (profile.mode || profile.type || profile.status)) === "veteran";
+  }
+  function setLoading(isLoading){
+    tiles.forEach(function(tile){
+      tile.classList.toggle("is-loading", !!isLoading);
+    });
+  }
+  function setMissing(isMissing){
+    tiles.forEach(function(tile){
+      tile.classList.toggle("is-missing", !!isMissing);
+    });
+  }
+  function setLabels(){
+    els.label1.textContent = "Income";
+    els.label2.textContent = "Local Payment";
+    els.label3.textContent = "After Payment";
+    els.label4.textContent = "Housing Ratio";
+  }
+  function setRatioClass(ratio){
+    els.total.classList.remove("is-good","is-watch","is-stretched");
+    if(!ratio){
+      return;
+    }
+    if(ratio <= 28){
+      els.total.classList.add("is-good");
+      return;
+    }
+    if(ratio <= 35){
+      els.total.classList.add("is-watch");
+      return;
+    }
+    els.total.classList.add("is-stretched");
+  }
+  function paintAffordability(){
+    setLabels();
+    const income = num(latestIncome,0);
+    const localPayment = num(latestLocalPayment,0);
+    const afterPayment = income - localPayment;
+    const ratio = income > 0 && localPayment > 0
+      ? (localPayment / income) * 100
+      : 0;
+    els.pay1.textContent = money(income);
+    els.pay2.textContent = money(localPayment);
+    els.pay3.textContent = money(afterPayment > 0 ? afterPayment : 0);
+    els.total.textContent = ratio ? pct(ratio) : "0%";
+    setRatioClass(ratio);
+    setLoading(false);
+    setMissing(!(income && localPayment));
+  }
+  function deepFindNumber(obj, names){
+    const wanted = names.map(function(name){
+      return String(name).toLowerCase();
+    });
+    const seen = new WeakSet();
+    function walk(node){
+      if(!node || typeof node !== "object") return 0;
+      if(seen.has(node)) return 0;
+      seen.add(node);
+      const keys = Object.keys(node);
+      for(let i = 0; i < keys.length; i++){
+        const key = keys[i];
+        const normalizedKey = key.toLowerCase();
+        if(wanted.includes(normalizedKey)){
+          const value = num(node[key], 0);
+          if(value) return value;
         }
-        function setMissing(isMissing){
-          tiles.forEach(function(tile){
-            tile.classList.toggle("is-missing", !!isMissing);
-          });
-        }
-        function clean(value){
-          return value === undefined || value === null ? "" : String(value).trim();
-        }
-        function num(value, fallback){
-          if(fallback === undefined) fallback = 0;
-          const n = Number(String(value ?? "").replace(/[$,%]/g,"").replaceAll(",",""));
-          return Number.isFinite(n) ? n : fallback;
-        }
-        function money(value){
-          const n = Number(value || 0);
-          if(!Number.isFinite(n) || n <= 0) return "$0";
-          return "$" + n.toLocaleString("en-US", { maximumFractionDigits:0 });
-        }
-        function readJson(key, fallback){
-          try{
-            const localRaw = localStorage.getItem(key);
-            if(localRaw) return JSON.parse(localRaw);
-            const sessionRaw = sessionStorage.getItem(key);
-            if(sessionRaw) return JSON.parse(sessionRaw);
-            return fallback;
-          }catch(_){
-            return fallback;
-          }
-        }
-        function writeJson(key, value){
-          try{
-            localStorage.setItem(key, JSON.stringify(value));
-          }catch(_){}
-        }
-        function normalizeBaseName(value){
-          return clean(value)
-            .replace(/\s+/g," ")
-            .replace("Davis Monthan", "Davis-Monthan")
-            .replace("Little Rock", "Little-Rock")
-            .replace("Mountain Home", "Mountain-Home")
-            .replace("Seymour Johnson", "Seymour-Johnson")
-            .replace("Wright Patterson", "Wright-Patterson")
-            .replace("F.E Warren", "F.E-Warren");
-        }
-        function titleCasePressure(value){
-          const raw = clean(value);
-          if(!raw) return "—";
-          const lower = raw.toLowerCase();
-          if(lower.includes("high") || lower.includes("hot") || lower.includes("tight") || lower.includes("elevated")) {
-            return "High";
-          }
-          if(lower.includes("medium") || lower.includes("moderate") || lower.includes("balanced")) {
-            return "Medium";
-          }
-          if(lower.includes("low") || lower.includes("soft") || lower.includes("stable")) {
-            return "Low";
-          }
-          return raw.length > 12 ? raw.slice(0, 12) : raw;
-        }
-        function pressureClass(value){
-          const lower = clean(value).toLowerCase();
-          if(lower.includes("high") || lower.includes("hot") || lower.includes("tight") || lower.includes("elevated")) {
-            return "is-risk";
-          }
-          if(lower.includes("medium") || lower.includes("moderate") || lower.includes("balanced")) {
-            return "is-warn";
-          }
-          if(lower.includes("low") || lower.includes("soft") || lower.includes("stable")) {
-            return "is-good";
-          }
-          return "is-warn";
-        }
-        function equityClass(value){
-          const lower = clean(value).toLowerCase();
-          if(lower.includes("high") || lower.includes("strong") || lower.includes("good")) {
-            return "is-good";
-          }
-          if(lower.includes("medium") || lower.includes("moderate")) {
-            return "is-warn";
-          }
-          if(lower.includes("low") || lower.includes("weak")) {
-            return "is-risk";
-          }
-          return "is-good";
-        }
-        function setValueClass(el, className){
-          if(!el) return;
-          el.classList.remove("is-good", "is-warn", "is-risk");
-          if(className) el.classList.add(className);
-        }
-        /* ============================================================
-           #3 BASICBRAIN / BASE RESOLUTION
-        ============================================================ */
-        function readBasicBrainContext(){
-          const bb = readJson(STORAGE.basicbrain, null);
-          const profile = readJson(STORAGE.profile, null);
-          const bridge = readJson(STORAGE.bridge, null);
-          const selectedBase = readJson(STORAGE.selectedBase, null);
-          const merged = {
-            ...(bridge && typeof bridge === "object" ? bridge : {}),
-            ...(profile && typeof profile === "object" ? profile : {}),
-            ...(bb && bb.bridge && typeof bb.bridge === "object" ? bb.bridge : {}),
-            ...(bb && bb.profile && typeof bb.profile === "object" ? bb.profile : {}),
-            ...(bb && typeof bb === "object" ? bb : {})
-          };
-          if(selectedBase && typeof selectedBase === "object"){
-            merged.base = merged.base || selectedBase.base || selectedBase.name || selectedBase.label || "";
-            merged.base_label = merged.base_label || selectedBase.label || selectedBase.base || selectedBase.name || "";
-            merged.cityKey = merged.cityKey || selectedBase.cityKey || "";
-            merged.market = merged.market || selectedBase.market || "";
-            merged.state = merged.state || selectedBase.state || "";
-            merged.jsonUrl = merged.jsonUrl || selectedBase.jsonUrl || selectedBase.selectedCityJsonUrl || "";
-          }
-          const base = normalizeBaseName(
-            merged.base ||
-            merged.current_base ||
-            merged.currentBase ||
-            merged.selected_base ||
-            merged.selectedBase ||
-            ""
-          );
-          return {
-            raw: merged,
-            base,
-            base_label: clean(merged.base_label || base),
-            cityKey: clean(merged.cityKey || ""),
-            market: clean(merged.market || ""),
-            state: clean(merged.state || ""),
-            jsonUrl: clean(merged.jsonUrl || merged.selectedCityJsonUrl || merged.selected_city_json_url || "")
-          };
-        }
-        function resolveCityJsonUrl(context){
-          if(context && context.jsonUrl) return context.jsonUrl;
-          const base = context ? normalizeBaseName(context.base) : "";
-          const mapped = BASE_TO_CITY_FILE[base];
-          if(mapped) return CITY_BASE_URL + mapped;
-          if(context && context.cityKey){
-            return CITY_BASE_URL + context.cityKey + ".json";
-          }
-          return "";
-        }
-        /* ============================================================
-           #4 CITY JSON EXTRACTION
-        ============================================================ */
-        async function fetchCityJson(url){
-          if(!url) return null;
-          if(cityCache.has(url)){
-            return cityCache.get(url);
-          }
-          const res = await fetch(url + "?t=" + Date.now(), {
-            method:"GET",
-            cache:"no-store"
-          });
-          if(!res.ok){
-            throw new Error("City JSON failed: HTTP " + res.status);
-          }
-          const data = await res.json();
-          cityCache.set(url, data);
-          return data;
-        }
-        function firstDefined(){
-          for(let i = 0; i < arguments.length; i++){
-            const v = arguments[i];
-            if(v !== undefined && v !== null && v !== "") return v;
-          }
-          return null;
-        }
-        function getDefaultBedroomKey(data){
-          if(data && data.by_bedroom){
-            if(data.by_bedroom["3"]) return "3";
-            if(data.by_bedroom["2"]) return "2";
-            if(data.by_bedroom["4"]) return "4";
-            const keys = Object.keys(data.by_bedroom);
-            if(keys.length) return keys[0];
-          }
-          return "3";
-        }
-        function extractAvgRent(data){
-          const bedKey = getDefaultBedroomKey(data);
-          const bed = data && data.by_bedroom ? data.by_bedroom[bedKey] : null;
-          return num(firstDefined(
-            bed && bed.rent_monthly && bed.rent_monthly.avg,
-            data && data.metrics && data.metrics.median_rent,
-            data && data.rental_metrics && data.rental_metrics.median_rent,
-            data && data.avg_rent,
-            data && data.median_rent
-          ), 0);
-        }
-        function extractAvgMortgage(data){
-          const bedKey = getDefaultBedroomKey(data);
-          const bed = data && data.by_bedroom ? data.by_bedroom[bedKey] : null;
-          return num(firstDefined(
-            bed && bed.mortgage_monthly && bed.mortgage_monthly.avg,
-            data && data.avg_home_mortgage_monthly && data.avg_home_mortgage_monthly.avg,
-            data && data.metrics && data.metrics.avg_mortgage,
-            data && data.market_metrics && data.market_metrics.avg_mortgage,
-            data && data.avg_mortgage
-          ), 0);
-        }
-        function extractMarketPressure(data){
-          const raw = firstDefined(
-            data && data.market_bluf && data.market_bluf.status,
-            data && data.market_bluf && data.market_bluf.market_pressure,
-            data && data.market_bluf && data.market_bluf.inventory_trend,
-            data && data.scorecard && data.scorecard.market_pressure,
-            data && data.market_pressure,
-            data && data.base_profile && data.base_profile.bah_market_reality && data.base_profile.bah_market_reality.housing_pressure,
-            data && data.base_profile && data.base_profile.bah_market_reality && data.base_profile.bah_market_reality.market_pressure
-          );
-          const text = clean(raw).toLowerCase();
-          if(text.includes("seller") || text.includes("hot") || text.includes("tight") || text.includes("limited") || text.includes("high")) {
-            return "High";
-          }
-          if(text.includes("balanced") || text.includes("moderate") || text.includes("medium") || text.includes("caution")) {
-            return "Medium";
-          }
-          if(text.includes("buyer") || text.includes("soft") || text.includes("stable") || text.includes("low")) {
-            return "Low";
-          }
-          const dom = num(data && data.metrics && data.metrics.days_on_market, 0);
-          const listings = num(data && data.metrics && data.metrics.active_listings_total, 0);
-          if(dom && dom <= 25) return "High";
-          if(dom && dom <= 55) return "Medium";
-          if(dom && dom > 55) return "Low";
-          if(listings && listings < 400) return "High";
-          if(listings && listings < 1200) return "Medium";
-          if(listings >= 1200) return "Low";
-          return raw ? titleCasePressure(raw) : "Medium";
-        }
-        function extractEquityPotential(data){
-          const raw = firstDefined(
-            data && data.scorecard && data.scorecard.equity_potential,
-            data && data.market_bluf && data.market_bluf.equity_potential,
-            data && data.market_bluf && data.market_bluf.growth_signal,
-            data && data.market_bluf && data.market_bluf.bluf_headline,
-            data && data.investor_angle,
-            data && data.investor_angles && data.investor_angles[0],
-            data && data.opportunities && data.opportunities[0]
-          );
-          const growth = num(data && data.scorecard && data.scorecard.growth_score, 0);
-          const stability = num(data && data.scorecard && data.scorecard.stability_score, 0);
-          const overall = num(data && data.scorecard && data.scorecard.overall_score, 0);
-          const combined = Math.round((growth + stability + overall) / 3);
-          if(growth || stability || overall){
-            if(combined >= 75) return "High";
-            if(combined >= 55) return "Medium";
-            return "Low";
-          }
-          const text = clean(raw).toLowerCase();
-          if(text.includes("strong") || text.includes("high") || text.includes("growth") || text.includes("opportunity")) {
-            return "High";
-          }
-          if(text.includes("moderate") || text.includes("stable") || text.includes("steady")) {
-            return "Medium";
-          }
-          if(text.includes("low") || text.includes("weak") || text.includes("limited")) {
-            return "Low";
-          }
-          return "Medium";
-        }
-        function extractMarketContext(data, context, jsonUrl){
-          const pressure = extractMarketPressure(data);
-          const rent = extractAvgRent(data);
-          const mortgage = extractAvgMortgage(data);
-          const equity = extractEquityPotential(data);
-          return {
-            source: "pcsunited.header.market.basicbrain.v1",
-            version: VERSION,
-            updated_at: new Date().toISOString(),
-            base: context.base,
-            base_label: context.base_label,
-            cityKey: context.cityKey,
-            market: context.market || clean(data && (data.market_label || data.city || data.name)),
-            state: context.state || clean(data && (data.state_code || data.state)),
-            jsonUrl,
-            market_pressure: pressure,
-            avg_rent: rent,
-            avg_mortgage: mortgage,
-            equity_potential: equity,
-            raw_city_name: clean(data && (data.name || data.city || "")),
-            raw_market_label: clean(data && data.market_label || "")
-          };
-        }
-        /* ============================================================
-           #5 PAINT + SAVE
-        ============================================================ */
-        function paintEmpty(){
-          els.pressure.textContent = "—";
-          els.rent.textContent = "$0";
-          els.mortgage.textContent = "$0";
-          els.equity.textContent = "—";
-          setValueClass(els.pressure, "is-warn");
-          setValueClass(els.equity, "is-good");
-          setLoading(false);
-          setMissing(true);
-        }
-        function paintLoading(){
-          setLoading(true);
-          setMissing(false);
-        }
-        function paintMarket(ctx){
-          els.pressure.textContent = ctx.market_pressure || "—";
-          els.rent.textContent = money(ctx.avg_rent);
-          els.mortgage.textContent = money(ctx.avg_mortgage);
-          els.equity.textContent = ctx.equity_potential || "—";
-          setValueClass(els.pressure, pressureClass(ctx.market_pressure));
-          setValueClass(els.equity, equityClass(ctx.equity_potential));
-          setLoading(false);
-          setMissing(false);
-        }
-        function saveMarket(ctx){
-          writeJson(STORAGE.marketHeader, ctx);
-          writeJson(STORAGE.marketContext, ctx);
-          const bridge = readJson(STORAGE.bridge, {}) || {};
-          writeJson(STORAGE.bridge, {
-            ...bridge,
-            market_pressure: ctx.market_pressure,
-            avg_rent: ctx.avg_rent,
-            avg_mortgage: ctx.avg_mortgage,
-            equity_potential: ctx.equity_potential,
-            market_context_updated_at: ctx.updated_at
-          });
-          try{
-            window.dispatchEvent(new CustomEvent("pcsunited:market-ready", {
-              detail: ctx
-            }));
-          }catch(_){}
-        }
-        /* ============================================================
-           #6 MAIN RUNNER
-        ============================================================ */
-        async function run(reason){
-          const seq = ++requestSeq;
-          const context = readBasicBrainContext();
-          if(!context || !context.base){
-            paintEmpty();
-            return false;
-          }
-          const jsonUrl = resolveCityJsonUrl(context);
-          if(!jsonUrl){
-            paintEmpty();
-            return false;
-          }
-          paintLoading();
-          try{
-            const data = await fetchCityJson(jsonUrl);
-            if(seq !== requestSeq) return true;
-            const marketContext = extractMarketContext(data, context, jsonUrl);
-            paintMarket(marketContext);
-            saveMarket(marketContext);
-            return true;
-          }catch(err){
-            if(seq === requestSeq){
-              console.warn("PCSU Market Header load failed:", err);
-              paintEmpty();
-            }
-            return false;
-          }
-        }
-        function scheduleRun(reason, delay){
-          clearTimeout(runTimer);
-          runTimer = setTimeout(function(){
-            run(reason || "scheduled");
-          }, typeof delay === "number" ? delay : 120);
-        }
-        /* ============================================================
-           #7 EVENTS
-        ============================================================ */
-        run("initial");
-        window.addEventListener("pcsunited:basicbrain-updated", function(){
-          scheduleRun("basicbrain-updated", 80);
-        });
-        window.addEventListener("pcsunited:profile-ready", function(){
-          scheduleRun("profile-ready", 100);
-        });
-        window.addEventListener("pcsunited:bridge-ready", function(){
-          scheduleRun("bridge-ready", 100);
-        });
-        window.addEventListener("pcsu:base-selected", function(){
-          scheduleRun("base-selected", 100);
-        });
-        window.addEventListener("pcsunited:compensation-ready", function(){
-          scheduleRun("compensation-ready", 140);
-        });
-        window.addEventListener("storage", function(event){
-          if(!event) return;
-          if(
-            event.key === STORAGE.basicbrain ||
-            event.key === STORAGE.profile ||
-            event.key === STORAGE.bridge ||
-            event.key === STORAGE.selectedBase
-          ){
-            scheduleRun("storage", 120);
-          }
-        });
-        window.addEventListener("message", function(event){
-          const data = event && event.data;
-          if(!data || typeof data !== "object") return;
-          if(
-            data.type === "pcsunited-basicbrain" ||
-            data.type === "pcsunited-bridge" ||
-            data.type === "pcsunited-profile" ||
-            data.source === "pcsunited.basicbrain.input"
-          ){
-            scheduleRun("message", 100);
-          }
-        });
-        window.PCSU_HEADER_MARKET_BASICBRAIN = {
-          version: VERSION,
-          run,
-          refresh: function(){
-            return run("manual-refresh");
-          },
-          getContext: readBasicBrainContext,
-          resolveCityJsonUrl: function(){
-            return resolveCityJsonUrl(readBasicBrainContext());
-          },
-          getMarket: function(){
-            return readJson(STORAGE.marketHeader, {});
-          }
+      }
+      for(let j = 0; j < keys.length; j++){
+        const child = node[keys[j]];
+        const found = walk(child);
+        if(found) return found;
+      }
+      return 0;
+    }
+    return walk(obj);
+  }
+  function extractIncome(profile, comp){
+    const c = comp && typeof comp === "object" ? comp : {};
+    if(isVeteran(profile)){
+      const retirement = num(
+        c.retirementPay ??
+        c.retirement_pay ??
+        c.retiredPay ??
+        c.retired_pay ??
+        c.retiredPayGross ??
+        c.grossMonthlyRetiredPay ??
+        c.monthlyRetirement ??
+        c.retirement ??
+        c.retirementMonthly ??
+        c.retirement_monthly ??
+        c.militaryRetirement ??
+        c.military_retirement,
+        0
+      ) || deepFindNumber(c, [
+        "retirementPay",
+        "retirement_pay",
+        "retiredPay",
+        "retired_pay",
+        "retiredPayGross",
+        "grossMonthlyRetiredPay",
+        "monthlyRetirement",
+        "retirement",
+        "retirementMonthly",
+        "retirement_monthly",
+        "militaryRetirement",
+        "military_retirement",
+        "retirement_pay_monthly",
+        "monthly_retirement"
+      ]);
+      const disability = num(
+        c.disabilityPay ??
+        c.disability_pay ??
+        c.vaDisabilityPay ??
+        c.va_disability_pay ??
+        c.vaCompensation ??
+        c.va_compensation ??
+        c.monthlyVA ??
+        c.vaMonthly ??
+        c.disability ??
+        c.disabilityMonthly ??
+        c.disability_monthly ??
+        c.va_monthly,
+        0
+      ) || deepFindNumber(c, [
+        "disabilityPay",
+        "disability_pay",
+        "vaDisabilityPay",
+        "va_disability_pay",
+        "vaCompensation",
+        "va_compensation",
+        "monthlyVA",
+        "vaMonthly",
+        "disability",
+        "disabilityMonthly",
+        "disability_monthly",
+        "vaMonthly",
+        "va_monthly",
+        "va_disability_monthly",
+        "monthly_va",
+        "monthly_disability"
+      ]);
+      const other = num(
+        c.otherPay ??
+        c.other_pay ??
+        c.other ??
+        c.otherMonthly ??
+        c.other_monthly,
+        0
+      ) || deepFindNumber(c, [
+        "otherPay",
+        "other_pay",
+        "other",
+        "otherMonthly",
+        "other_monthly"
+      ]);
+      const total = num(
+        c.total ??
+        c.totalMonthly ??
+        c.total_monthly ??
+        c.totalMonthlyCompensation ??
+        c.total_monthly_compensation ??
+        c.grossMonthlyComp ??
+        c.combinedMonthlyGross,
+        0
+      ) || deepFindNumber(c, [
+        "total",
+        "totalMonthly",
+        "total_monthly",
+        "totalMonthlyCompensation",
+        "total_monthly_compensation",
+        "grossMonthlyComp",
+        "combinedMonthlyGross",
+        "monthly_total",
+        "total_compensation"
+      ]);
+      return total || retirement + disability + other;
+    }
+    const basePay = num(
+      c.basePay ??
+      c.base_pay ??
+      c.basicPay ??
+      c.basic_pay,
+      0
+    ) || deepFindNumber(c, [
+      "basePay",
+      "base_pay",
+      "basicPay",
+      "basic_pay"
+    ]);
+    const bas = num(
+      c.bas ??
+      c.BAS,
+      0
+    ) || deepFindNumber(c, [
+      "bas",
+      "BAS",
+      "basMonthly",
+      "bas_monthly"
+    ]);
+    const bah = num(
+      c.bah ??
+      c.BAH,
+      0
+    ) || deepFindNumber(c, [
+      "bah",
+      "BAH",
+      "bahMonthly",
+      "bah_monthly"
+    ]);
+    const total = num(
+      c.total ??
+      c.totalMonthly ??
+      c.total_monthly ??
+      c.grossMonthlyComp ??
+      c.combinedMonthlyGross ??
+      c.totalMonthlyCompensation,
+      0
+    ) || deepFindNumber(c, [
+      "total",
+      "totalMonthly",
+      "total_monthly",
+      "grossMonthlyComp",
+      "combinedMonthlyGross",
+      "totalMonthlyCompensation"
+    ]);
+    return total || basePay + bas + bah;
+  }
+  function extractProfile(detail){
+    const d = detail && typeof detail === "object" ? detail : {};
+    const profile = d.profile || d.bridge || d.input || d.basicbrain || d.payload || d;
+    if(!profile || typeof profile !== "object") return null;
+    const mode = normalizeMode(profile.mode || profile.type || profile.status);
+    const rank = normalizeRank(
+      profile.rank_paygrade ||
+      profile.rankPaygrade ||
+      profile.rank ||
+      profile.paygrade ||
+      ""
+    );
+    const yos = num(
+      profile.yos ??
+      profile.years_of_service ??
+      profile.yearsOfService,
+      0
+    );
+    const depRaw =
+      profile.dependents_count ??
+      profile.dependentsCount ??
+      profile.dependents ??
+      "";
+    let dependentsCount = 0;
+    if(clean(depRaw).toLowerCase() === "yes"){
+      dependentsCount = 1;
+    }else if(clean(depRaw).toLowerCase() === "no"){
+      dependentsCount = 0;
+    }else{
+      dependentsCount = num(depRaw, 0);
+    }
+    const hasDependents =
+      profile.has_dependents === true ||
+      profile.hasDependents === true ||
+      profile.family === true ||
+      dependentsCount > 0 ||
+      clean(profile.dependents).toLowerCase() === "yes";
+    const family =
+      num(profile.family_size ?? profile.familySize ?? profile.family, 0) ||
+      (hasDependents ? Math.max(dependentsCount + 1, 2) : 1);
+    const base = clean(
+      profile.base ||
+      profile.current_base ||
+      profile.currentBase ||
+      profile.selected_base ||
+      profile.selectedBase ||
+      profile.pcs_base ||
+      profile.pcsBase ||
+      profile.market ||
+      profile.target_market ||
+      ""
+    );
+    const vaRatingRaw =
+      profile.vaRating ??
+      profile.va_rating ??
+      profile.va_disability ??
+      profile.vaDisability ??
+      profile.disability_rating ??
+      profile.disabilityRating;
+    const va = vaRatingRaw === null || vaRatingRaw === undefined || vaRatingRaw === ""
+      ? null
+      : num(vaRatingRaw, 0);
+    const spouse =
+      profile.spouse === true ||
+      profile.married === true ||
+      clean(profile.spouse).toLowerCase() === "true" ||
+      clean(profile.spouse).toLowerCase() === "yes" ||
+      clean(profile.married).toLowerCase() === "true" ||
+      clean(profile.married).toLowerCase() === "yes";
+    const childrenUnder18 = num(
+      profile.childrenUnder18 ??
+      profile.children_under_18,
+      0
+    );
+    const childrenInSchoolOver18 = num(
+      profile.childrenInSchoolOver18 ??
+      profile.children_in_school_over_18 ??
+      profile.childrenOver18School ??
+      profile.children_over_18_school,
+      0
+    );
+    const dependentParents = num(
+      profile.dependentParents ??
+      profile.dependent_parents,
+      0
+    );
+    const retirementSystem = clean(
+      profile.retirementSystem ||
+      profile.retirement_system ||
+      profile.system ||
+      "HIGH3"
+    ) || "HIGH3";
+    return {
+      source:"pcsunited.header.affordability.v3.6",
+      mode,
+      type:mode,
+      status:mode,
+      rank,
+      rank_paygrade:rank,
+      rankPaygrade:rank,
+      yos,
+      years_of_service:yos,
+      yearsOfService:yos,
+      dependents:hasDependents ? "yes" : "no",
+      dependents_count:dependentsCount,
+      dependentsCount:dependentsCount,
+      has_dependents:hasDependents,
+      hasDependents:hasDependents,
+      family,
+      family_size:family,
+      familySize:family,
+      base,
+      selected_base:base,
+      selectedBase:base,
+      pcs_base:base,
+      pcsBase:base,
+      vaRating:va,
+      va_disability:va,
+      vaDisability:va,
+      disability_rating:va,
+      disabilityRating:va,
+      spouse,
+      married:spouse,
+      childrenUnder18,
+      children_under_18:childrenUnder18,
+      childrenInSchoolOver18,
+      children_in_school_over_18:childrenInSchoolOver18,
+      dependentParents,
+      dependent_parents:dependentParents,
+      retirementSystem,
+      retirement_system:retirementSystem,
+      retired:profile.retired === false ? false : (mode === "veteran" ? true : !!profile.retired),
+      email:clean(profile.email || "")
+    };
+  }
+  function extractComp(detail){
+    const d = detail && typeof detail === "object" ? detail : {};
+    if(d.compensation && typeof d.compensation === "object"){
+      if(d.compensation.raw && typeof d.compensation.raw === "object"){
+        return {
+          ...d.compensation.raw,
+          ...d.compensation
         };
       }
-      if(document.readyState === "loading"){
-        document.addEventListener("DOMContentLoaded", initBasicBrainMarketHeader);
-      }else{
-        initBasicBrainMarketHeader();
+      return d.compensation;
+    }
+    if(d.comp && typeof d.comp === "object") return d.comp;
+    if(d.pay && typeof d.pay === "object") return d.pay;
+    const payload = d.payload || d.data || d.result || {};
+    const payloadComp = payload.compensation || payload.comp || payload.pay || {};
+    if(payloadComp.monthly){
+      return {
+        ...payloadComp,
+        ...payloadComp.monthly
+      };
+    }
+    if(Object.keys(payloadComp).length) return payloadComp;
+    const truth = d.truth_packet || d.truthPacket || payload.truth_packet || payload.truthPacket || {};
+    const compRoot = truth.compensation || {};
+    if(compRoot.monthly) return compRoot.monthly;
+    if(Object.keys(compRoot).length) return compRoot;
+    return d;
+  }
+  function extractCompFromTheWing(data){
+    const payload = data && (data.payload || data.data || data.result || data) || {};
+    const truth = payload.truth_packet || payload.truthPacket || data.truth_packet || data.truthPacket || {};
+    const compRoot = payload.compensation || payload.comp || payload.pay || truth.compensation || {};
+    const monthly = compRoot.monthly || payload.monthly || compRoot;
+    return {
+      ...data,
+      ...payload,
+      ...truth,
+      ...compRoot,
+      ...monthly
+    };
+  }
+  function isProfileComplete(profile){
+    if(!profile || !profile.rank || !profile.yos) return false;
+    if(isVeteran(profile)){
+      return profile.va_disability !== null;
+    }
+    return !!profile.base;
+  }
+  function buildActiveDutyInput(profile){
+    return {
+      ...profile,
+      mode:"active_duty",
+      rank:profile.rank,
+      rank_paygrade:profile.rank,
+      rankPaygrade:profile.rank,
+      yos:profile.yos,
+      years_of_service:profile.yos,
+      yearsOfService:profile.yos,
+      base:profile.base,
+      selected_base:profile.base,
+      selectedBase:profile.base,
+      pcs_base:profile.base,
+      pcsBase:profile.base,
+      dependents:profile.has_dependents ? "yes" : "no",
+      dependents_count:profile.dependents_count,
+      dependentsCount:profile.dependents_count,
+      has_dependents:profile.has_dependents,
+      hasDependents:profile.has_dependents,
+      family:profile.family,
+      family_size:profile.family,
+      familySize:profile.family,
+      source:"pcsunited.header.affordability.v3.6"
+    };
+  }
+  function buildVeteranInput(profile){
+    return {
+      rank:profile.rank,
+      rank_paygrade:profile.rank,
+      rankPaygrade:profile.rank,
+      yos:profile.yos,
+      yearsOfService:profile.yos,
+      years_of_service:profile.yos,
+      retirementSystem:profile.retirementSystem || "HIGH3",
+      retirement_system:profile.retirementSystem || "HIGH3",
+      vaRating:profile.va_disability,
+      va_disability:profile.va_disability,
+      vaDisability:profile.va_disability,
+      rating:profile.va_disability,
+      spouse:profile.spouse === true,
+      childrenUnder18:profile.childrenUnder18 || 0,
+      children_under_18:profile.childrenUnder18 || 0,
+      childrenInSchoolOver18:profile.childrenInSchoolOver18 || 0,
+      children_in_school_over_18:profile.childrenInSchoolOver18 || 0,
+      dependentParents:profile.dependentParents || 0,
+      dependent_parents:profile.dependentParents || 0,
+      source:"pcsunited.header.affordability.v3.6"
+    };
+  }
+  async function callTheWing(profile){
+    const veteran = isVeteran(profile);
+    const body = veteran
+      ? {
+          tool:"RETIREMENT_VA",
+          input:buildVeteranInput(profile)
+        }
+      : {
+          tool:"PCS_SNAPSHOT",
+          input:buildActiveDutyInput(profile)
+        };
+    const res = await fetch(BRAIN_ENDPOINT + "?t=" + Date.now(), {
+      method:"POST",
+      headers:{ "Content-Type":"application/json" },
+      cache:"no-store",
+      body:JSON.stringify(body)
+    });
+    const data = await res.json().catch(function(){ return {}; });
+    if(!res.ok || data.ok === false){
+      console.warn("Header affordability TheWing response:", data);
+      return null;
+    }
+    return extractCompFromTheWing(data);
+  }
+  function extractMoneyFromText(text){
+    const source = String(text || "");
+    const matches = source.match(/\$[\s]*[0-9][0-9,]*(?:\.\d{1,2})?/g);
+    if(!matches || !matches.length) return 0;
+    for(let i = 0; i < matches.length; i++){
+      const value = num(matches[i],0);
+      if(value >= 500 && value <= 15000){
+        return value;
       }
-    })();
-  </script>
+    }
+    return 0;
+  }
+  function findLocalPaymentFromDom(){
+    const bodyText = document.body ? document.body.innerText || "" : "";
+    const directMatch = bodyText.match(/EST\.?\s*MONTHLY\s*PAYMENT[\s\S]{0,120}?(\$[\s]*[0-9][0-9,]*(?:\.\d{1,2})?)/i);
+    if(directMatch && directMatch[1]){
+      const value = num(directMatch[1],0);
+      if(value) return value;
+    }
+    const elements = Array.from(document.querySelectorAll("body *"));
+    for(let i = 0; i < elements.length; i++){
+      const el = elements[i];
+      const text = clean(el.innerText || el.textContent || "");
+      if(!text) continue;
+      if(/EST\.?\s*MONTHLY\s*PAYMENT/i.test(text)){
+        const ownValue = extractMoneyFromText(text);
+        if(ownValue) return ownValue;
+        let node = el;
+        let container = el;
+        for(let depth = 0; depth < 4; depth++){
+          if(container && container.parentElement){
+            container = container.parentElement;
+            const containerValue = extractMoneyFromText(container.innerText || "");
+            if(containerValue) return containerValue;
+          }
+        }
+        const parent = node.parentElement;
+        if(parent){
+          const siblings = Array.from(parent.children);
+          const index = siblings.indexOf(node);
+          for(let j = Math.max(0,index - 2); j <= Math.min(siblings.length - 1,index + 4); j++){
+            const siblingValue = extractMoneyFromText(siblings[j].innerText || "");
+            if(siblingValue) return siblingValue;
+          }
+        }
+      }
+    }
+    return 0;
+  }
+  function refreshLocalPayment(){
+    const found = findLocalPaymentFromDom();
+    if(found){
+      latestLocalPayment = found;
+      paintAffordability();
+      return true;
+    }
+    paintAffordability();
+    return false;
+  }
+  function schedulePaymentRefresh(){
+    clearTimeout(paymentTimer);
+    paymentTimer = setTimeout(function(){
+      refreshLocalPayment();
+    }, 250);
+    setTimeout(refreshLocalPayment, 800);
+    setTimeout(refreshLocalPayment, 1600);
+    setTimeout(refreshLocalPayment, 3000);
+  }
+  function paintComp(profile, comp){
+    const income = extractIncome(profile, comp);
+    if(income){
+      latestIncome = income;
+    }
+    paintAffordability();
+  }
+  async function run(reason){
+    const seq = ++requestSeq;
+    const profile = latestProfile;
+    if(!isProfileComplete(profile)){
+      paintAffordability();
+      return false;
+    }
+    setLoading(true);
+    setMissing(false);
+    let comp = null;
+    try{
+      comp = await callTheWing(profile);
+    }catch(err){
+      console.warn("Header affordability failed:", err);
+    }
+    if(seq !== requestSeq) return true;
+    if(!comp){
+      paintAffordability();
+      return true;
+    }
+    paintComp(profile, comp);
+    try{
+      window.dispatchEvent(new CustomEvent("pcsunited:affordability-strip-ready", {
+        detail:{
+          source:"pcsunited.header.affordability.v3.6",
+          version:VERSION,
+          profile,
+          income:latestIncome,
+          localPayment:latestLocalPayment,
+          afterPayment:latestIncome - latestLocalPayment,
+          housingRatio:latestIncome > 0 && latestLocalPayment > 0 ? (latestLocalPayment / latestIncome) * 100 : 0,
+          updated_at:new Date().toISOString()
+        }
+      }));
+    }catch(_){}
+    return true;
+  }
+  function scheduleRun(reason, delay){
+    clearTimeout(runTimer);
+    runTimer = setTimeout(function(){
+      run(reason || "scheduled");
+    }, typeof delay === "number" ? delay : 140);
+  }
+  function receiveProfileEvent(event){
+    const detail = event && event.detail ? event.detail : {};
+    const profile = extractProfile(detail);
+    if(!profile) return;
+    latestProfile = profile;
+    const comp = extractComp(detail);
+    const income = extractIncome(profile, comp);
+    if(income){
+      latestIncome = income;
+      paintAffordability();
+      return;
+    }
+    scheduleRun("profile-event", 120);
+  }
+  function receiveCompEvent(event){
+    const detail = event && event.detail ? event.detail : {};
+    const profile = extractProfile(detail) || latestProfile || { mode:"active_duty" };
+    const comp = extractComp(detail);
+    const income = extractIncome(profile, comp);
+    latestProfile = profile;
+    if(income){
+      latestIncome = income;
+      paintAffordability();
+      return;
+    }
+    scheduleRun("comp-event-empty", 120);
+  }
+  function readHandoff(){
+    try{
+      const raw = localStorage.getItem(HANDOFF_KEY);
+      if(!raw) return null;
+      const parsed = JSON.parse(raw);
+      if(!parsed || typeof parsed !== "object") return null;
+      return parsed;
+    }catch(err){
+      console.warn("Header affordability handoff read failed:", err);
+      return null;
+    }
+  }
+  function tryHydrateFromHandoff(){
+    const item = readHandoff();
+    if(!item) return false;
+    const profile = extractProfile(item);
+    if(!profile) return false;
+    latestProfile = profile;
+    const comp = extractComp(item);
+    const income = extractIncome(profile, comp);
+    if(income){
+      latestIncome = income;
+      paintAffordability();
+      return true;
+    }
+    if(isProfileComplete(profile)){
+      scheduleRun("handoff-hydrate", 120);
+      return true;
+    }
+    return false;
+  }
+  function tryHydrateFromGlobals(){
+    const candidates = [
+      window.PCSU_BASICBRAIN_CURRENT,
+      window.PCSU_BASICBRAIN_TEMP,
+      window.PCSU_BASICBRAIN?.getLastGood?.(),
+      window.PCSU_BASICBRAIN?.getState?.()
+    ];
+    for(let i = 0; i < candidates.length; i++){
+      const item = candidates[i];
+      if(!item) continue;
+      const profile = extractProfile(item);
+      if(!profile) continue;
+      latestProfile = profile;
+      const comp = extractComp(item);
+      const income = extractIncome(profile, comp);
+      if(income){
+        latestIncome = income;
+        paintAffordability();
+        return true;
+      }
+      if(isProfileComplete(profile)){
+        scheduleRun("global-hydrate", 120);
+        return true;
+      }
+    }
+    return false;
+  }
+  function observeBaseDemoChanges(){
+    if(!document.body) return;
+    const observer = new MutationObserver(function(){
+      schedulePaymentRefresh();
+    });
+    observer.observe(document.body, {
+      childList:true,
+      subtree:true,
+      characterData:true
+    });
+  }
+  function init(){
+    paintAffordability();
+    window.addEventListener("pcsunited:compensation-ready", receiveCompEvent);
+    window.addEventListener("pcsunited:compensation-preview-ready", receiveCompEvent);
+    window.addEventListener("pcsunited:basicbrain-updated", receiveProfileEvent);
+    window.addEventListener("pcsunited:profile-ready", receiveProfileEvent);
+    window.addEventListener("pcsunited:bridge-ready", receiveProfileEvent);
+    window.addEventListener("storage", function(event){
+      if(event && event.key === HANDOFF_KEY){
+        tryHydrateFromHandoff();
+      }
+    });
+    window.addEventListener("message", function(event){
+      const data = event && event.data;
+      if(!data || typeof data !== "object") return;
+      if(
+        data.type === "pcsunited-basicbrain" ||
+        data.type === "pcsunited-profile" ||
+        data.type === "pcsunited-bridge" ||
+        data.source === "pcsunited.basicbrain.input"
+      ){
+        receiveProfileEvent({
+          detail:data.basicbrain || data.profile || data.bridge || data.payload || data
+        });
+      }
+    });
+    setTimeout(schedulePaymentRefresh, 100);
+    setTimeout(tryHydrateFromHandoff, 150);
+    setTimeout(tryHydrateFromGlobals, 300);
+    setTimeout(tryHydrateFromHandoff, 900);
+    setTimeout(tryHydrateFromGlobals, 1200);
+    observeBaseDemoChanges();
+    window.PCSU_HEADER_COMP_BASICBRAIN = {
+      version:VERSION,
+      endpoint:BRAIN_ENDPOINT,
+      refresh:function(){
+        schedulePaymentRefresh();
+        return run("manual-refresh");
+      },
+      setProfile:function(profile){
+        latestProfile = extractProfile(profile || {});
+        return run("manual-set-profile");
+      },
+      clear:function(){
+        latestProfile = null;
+        latestIncome = 0;
+        latestLocalPayment = 0;
+        paintAffordability();
+      },
+      getProfile:function(){
+        return latestProfile;
+      },
+      getValues:function(){
+        const income = num(latestIncome,0);
+        const localPayment = num(latestLocalPayment,0);
+        return {
+          income,
+          localPayment,
+          afterPayment:income - localPayment,
+          housingRatio:income > 0 && localPayment > 0 ? (localPayment / income) * 100 : 0
+        };
+      }
+    };
+  }
+  init();
+})();
+</script>
           </div>
         </div>
         <a href="../index.html" class="link-block-7 w-inline-block"></a>

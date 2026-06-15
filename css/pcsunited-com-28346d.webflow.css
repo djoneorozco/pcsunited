@@ -10801,7 +10801,7 @@ blockquote {
 
 .market-panel {
   background-color: #111;
-  margin-top: -12px;
+  margin-top: 0;
   padding-top: 76px;
 }
 
@@ -15269,7 +15269,7 @@ blockquote {
 .our-story-container {
   background-color: #f4f4f4;
   max-width: 2100px;
-  padding: 60px 4.5rem 100px 4rem;
+  padding: 60px 4.5rem 40px 4rem;
   position: relative;
   box-shadow: 0 2px 5px #00000054;
 }
@@ -15513,7 +15513,7 @@ blockquote {
 .section-14.carreer {
   margin-left: 5px;
   margin-right: 10px;
-  padding-top: 2.5rem;
+  padding-top: 4rem;
   padding-bottom: 0;
 }
 
@@ -20184,7 +20184,7 @@ blockquote {
   height: auto;
   max-height: none;
   margin-top: 0;
-  margin-bottom: 0;
+  margin-bottom: 10px;
   margin-left: 2px;
   padding: 0;
 }
@@ -23691,6 +23691,7 @@ blockquote {
 
   .market-panel {
     margin-top: -52px;
+    padding-top: 60px;
   }
 
   .code-embed-21-copy {
@@ -24106,6 +24107,7 @@ blockquote {
 
   .our-story-container {
     background-color: #f4f4f4;
+    padding-bottom: 100px;
     padding-right: 4.5rem;
   }
 
@@ -24135,6 +24137,10 @@ blockquote {
 
   .section-14.home3-bento-cards {
     padding-right: 0;
+  }
+
+  .section-14.carreer {
+    padding-bottom: .25rem;
   }
 
   .heading-block.hero-h01 {
@@ -24519,10 +24525,16 @@ blockquote {
     text-align: center;
   }
 
-  .code-embed-53, .aiou-quiz, .finance-input-code {
+  .code-embed-53, .aiou-quiz {
     padding-top: 10px;
     padding-left: 20px;
     padding-right: 20px;
+  }
+
+  .finance-input-code {
+    padding-top: 0;
+    padding-left: 0;
+    padding-right: 10px;
   }
 
   .blogs {
@@ -26591,6 +26603,10 @@ blockquote {
     background-color: var(--_theme---background--primarybackground);
   }
 
+  .section-14.carreer {
+    margin-bottom: 40px;
+  }
+
   .fsize-body-large-2 {
     padding-right: 20px;
   }
@@ -27373,7 +27389,9 @@ blockquote {
     margin-top: 0;
     margin-bottom: 0;
     margin-left: -104px;
+    padding-bottom: 0;
     padding-left: 0;
+    padding-right: 0;
   }
 
   .blogs {
@@ -28353,6 +28371,11 @@ blockquote {
     transform: scale(1.2);
   }
 
+  .section-14.carreer {
+    margin-top: 20px;
+    margin-bottom: 40px;
+  }
+
   .fsize-body-large-2 {
     padding-right: 20px;
   }
@@ -28487,7 +28510,7 @@ blockquote {
   }
 
   .finance-input-code {
-    padding-bottom: 40px;
+    padding-bottom: 10px;
   }
 
   .blogs {
@@ -37353,12 +37376,16 @@ blockquote {
   grid-template-columns: 1fr 1fr;
 }
 
-#w-node-_738982aa-7029-afc1-0908-d766a276410d-6972faff, #w-node-bc58f1fd-3133-3234-e9e4-594ab7ad0e16-6972faff {
+#w-node-_738982aa-7029-afc1-0908-d766a276410d-6972faff {
   align-self: start;
 }
 
 #w-node-_336f9c6a-a9fd-7777-5a12-e6622983d64a-6972faff {
   justify-self: center;
+}
+
+#w-node-_73f83f46-cd74-14f2-7399-4ca511e41d4a-17fa47f5 {
+  align-self: start;
 }
 
 @media screen and (min-width: 1280px) {
@@ -37440,7 +37467,7 @@ blockquote {
     grid-column: span 1 / span 1;
   }
 
-  #w-node-_0843b1d9-3394-c0f5-ecfc-c186feb5bb42-0e0e19f8, #w-node-_32bb5cd4-cfea-65b3-a0e5-eafd81a6cd8c-0e0e19fc, #w-node-_2bc1a546-c7ca-7ee2-26af-d16a9252ecc6-0e0e19fd, #w-node-_88188b50-bdd1-5a16-095a-dfdbf7ad915b-0e0e19fe, #w-node-bdee4e32-1034-9e73-b379-5b022c6e0aa6-0e0e1a01 {
+  #w-node-_0843b1d9-3394-c0f5-ecfc-c186feb5bb42-0e0e19f8, #w-node-_32bb5cd4-cfea-65b3-a0e5-eafd81a6cd8c-0e0e19fc, #w-node-_2bc1a546-c7ca-7ee2-26af-d16a9252ecc6-0e0e19fd, #w-node-bdee4e32-1034-9e73-b379-5b022c6e0aa6-0e0e1a01 {
     grid-area: span 1 / span 1 / span 1 / span 1;
   }
 

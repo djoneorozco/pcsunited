@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Jun 14 2026 15:02:32 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Jun 15 2026 13:56:19 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f6df2366c61b76c85e09e0" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -149,23 +149,31 @@
 <body>
   <div class="page-wrapper">
     <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="resources-header header-resources w-nav">
-      <div class="head-for-resources"><img src="../images/Logo-3-white.png" loading="lazy" sizes="100vw" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
+      <div class="head-for-resources"><img src="../images/Logo-3-white.png" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
         <div class="compensation-strip w-embed w-script"><!--  =========================================================
-  PCSUnited • Header Compensation Strip
-  v3.4.0 • THEWING ONLY / ACTIVE DUTY + VETERAN / NO STORAGE
-  FIXES
-  - Veteran-safe rendering
-  - Active Duty safe rendering
-  - No localStorage
-  - No sessionStorage
+  PCSUnited • Header Progressive Compensation / Financial Strip
+  v4.0.0 • BASICBRAIN + FINANCIAL SNAPSHOT MODE
+  PURPOSE
+  - Starts as BasicBrain compensation strip:
+      Active Duty: Base Pay / BAS / BAH / Total
+      Veteran: Retirement / Disability / Other Pay / Total
+  - After Financial Analysis Input updates:
+      Income / Payment / Debt / Ratio / Max Pay
+  LISTENS TO
+  - pcsunited:compensation-ready
+  - pcsunited:compensation-preview-ready
+  - pcsunited:basicbrain-updated
+  - pcsunited:profile-ready
+  - pcsunited:bridge-ready
+  - pcsunited:financial-input-updated
+  - pcsunited:run-financial-analysis
+  SAFETY
+  - Does not switch to financial mode unless total income > 0
+  - Keeps latest good compensation values
+  - Keeps latest good financial values once available
+  - No localStorage required
+  - No sessionStorage required
   - No frontend pay tables
-  - Listens to compensation-ready
-  - Also listens to profile/basicbrain events and calls TheWing when needed
-  - Uses { tool:"PCS_SNAPSHOT", input:{...} }
-  - Prevents NaN rendering
-  - Deep-searches TheWing response for Veteran Retirement + Disability fields
-  - Runtime-only sticky Veteran comp memory
-  - Prevents later incomplete events from wiping Retirement / Disability
 =========================================================  -->
           <div id="pcsu-header-comp-basicbrain" style="all:initial;">
             <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -192,9 +200,9 @@
     }
     #pcsu-header-comp-basicbrain .pcsu-header-comp-grid{
       display:grid;
-      grid-template-columns:repeat(4, minmax(92px, 1fr));
+      grid-template-columns:repeat(5, minmax(84px, 1fr));
       gap:8px;
-      width:min(430px, 100%);
+      width:min(560px, 100%);
       background:transparent !important;
     }
     #pcsu-header-comp-basicbrain .pcsu-header-comp-tile{
@@ -202,7 +210,7 @@
       overflow:hidden;
       border:1px solid rgba(255,255,255,.16);
       border-radius:999px;
-      padding:7px 13px 8px;
+      padding:7px 12px 8px;
       min-height:34px;
       background:
         linear-gradient(
@@ -220,6 +228,10 @@
       justify-content:center;
       align-items:center;
       text-align:center;
+      transition:
+        opacity .18s ease,
+        transform .18s ease,
+        filter .18s ease;
     }
     #pcsu-header-comp-basicbrain .pcsu-header-comp-tile::before{
       content:"";
@@ -239,7 +251,7 @@
       display:block;
       margin-bottom:2px;
       color:rgba(18,24,38,.58);
-      font-size:8px;
+      font-size:7.5px;
       line-height:1;
       font-weight:900;
       text-transform:uppercase;
@@ -249,14 +261,23 @@
     #pcsu-header-comp-basicbrain .pcsu-header-comp-value{
       display:block;
       color:#101728;
-      font-size:13px;
+      font-size:12.5px;
       line-height:1.05;
       font-weight:900;
       letter-spacing:-.03em;
       white-space:nowrap;
     }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-total{
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-total,
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-gold{
       color:#9b7939;
+      font-weight:900;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-green{
+      color:#16795a;
+      font-weight:900;
+    }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-danger{
+      color:#a23c5a;
       font-weight:900;
     }
     #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-loading .pcsu-header-comp-value{
@@ -265,8 +286,33 @@
     #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-missing{
       opacity:.58;
     }
+    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-hidden{
+      display:none;
+    }
+    #pcsu-header-comp-basicbrain.is-comp-mode .pcsu-header-comp-grid{
+      grid-template-columns:repeat(4, minmax(92px, 1fr));
+      width:min(430px, 100%);
+    }
+    #pcsu-header-comp-basicbrain.is-financial-mode .pcsu-header-comp-grid{
+      grid-template-columns:repeat(5, minmax(84px, 1fr));
+      width:min(560px, 100%);
+    }
+    @media(max-width:900px){
+      #pcsu-header-comp-basicbrain.is-financial-mode .pcsu-header-comp-grid{
+        width:min(520px, 100%);
+        gap:6px;
+      }
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-label{
+        font-size:7px;
+      }
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-value{
+        font-size:12px;
+      }
+    }
     @media(max-width:760px){
-      #pcsu-header-comp-basicbrain .pcsu-header-comp-grid{
+      #pcsu-header-comp-basicbrain .pcsu-header-comp-grid,
+      #pcsu-header-comp-basicbrain.is-comp-mode .pcsu-header-comp-grid,
+      #pcsu-header-comp-basicbrain.is-financial-mode .pcsu-header-comp-grid{
         grid-template-columns:repeat(2, minmax(110px, 1fr));
         width:100%;
       }
@@ -285,21 +331,25 @@
             <div class="pcsu-header-comp-wrap">
               <div style="width:100%;">
                 <div class="pcsu-header-comp-grid">
-                  <div class="pcsu-header-comp-tile is-missing">
+                  <div class="pcsu-header-comp-tile is-missing" id="bb-header-tile-1">
                     <span class="pcsu-header-comp-label" id="bb-header-label-1">Base Pay</span>
                     <span class="pcsu-header-comp-value" id="bb-header-pay1">$0</span>
                   </div>
-                  <div class="pcsu-header-comp-tile is-missing">
+                  <div class="pcsu-header-comp-tile is-missing" id="bb-header-tile-2">
                     <span class="pcsu-header-comp-label" id="bb-header-label-2">BAS</span>
                     <span class="pcsu-header-comp-value" id="bb-header-pay2">$0</span>
                   </div>
-                  <div class="pcsu-header-comp-tile is-missing">
+                  <div class="pcsu-header-comp-tile is-missing" id="bb-header-tile-3">
                     <span class="pcsu-header-comp-label" id="bb-header-label-3">BAH</span>
                     <span class="pcsu-header-comp-value" id="bb-header-pay3">$0</span>
                   </div>
-                  <div class="pcsu-header-comp-tile is-missing">
+                  <div class="pcsu-header-comp-tile is-missing" id="bb-header-tile-4">
                     <span class="pcsu-header-comp-label" id="bb-header-label-4">Total</span>
                     <span class="pcsu-header-comp-value is-total" id="bb-header-total">$0</span>
+                  </div>
+                  <div class="pcsu-header-comp-tile is-missing is-hidden" id="bb-header-tile-5">
+                    <span class="pcsu-header-comp-label" id="bb-header-label-5">Max Pay</span>
+                    <span class="pcsu-header-comp-value is-total" id="bb-header-pay5">$0</span>
                   </div>
                 </div>
               </div>
@@ -307,7 +357,7 @@
             <script>
 (function(){
   "use strict";
-  const VERSION = "3.4.0";
+  const VERSION = "4.0.0";
   const API_BASE = "https://thewing.netlify.app/api";
   const BRAIN_ENDPOINT = API_BASE + "/opensource-brain";
   const root = document.getElementById("pcsu-header-comp-basicbrain");
@@ -315,19 +365,34 @@
   if(root.dataset.mounted === "true") return;
   root.dataset.mounted = "true";
   const els = {
-    label1: root.querySelector("#bb-header-label-1"),
-    label2: root.querySelector("#bb-header-label-2"),
-    label3: root.querySelector("#bb-header-label-3"),
-    label4: root.querySelector("#bb-header-label-4"),
-    pay1: root.querySelector("#bb-header-pay1"),
-    pay2: root.querySelector("#bb-header-pay2"),
-    pay3: root.querySelector("#bb-header-pay3"),
-    total: root.querySelector("#bb-header-total")
+    tile1:root.querySelector("#bb-header-tile-1"),
+    tile2:root.querySelector("#bb-header-tile-2"),
+    tile3:root.querySelector("#bb-header-tile-3"),
+    tile4:root.querySelector("#bb-header-tile-4"),
+    tile5:root.querySelector("#bb-header-tile-5"),
+    label1:root.querySelector("#bb-header-label-1"),
+    label2:root.querySelector("#bb-header-label-2"),
+    label3:root.querySelector("#bb-header-label-3"),
+    label4:root.querySelector("#bb-header-label-4"),
+    label5:root.querySelector("#bb-header-label-5"),
+    pay1:root.querySelector("#bb-header-pay1"),
+    pay2:root.querySelector("#bb-header-pay2"),
+    pay3:root.querySelector("#bb-header-pay3"),
+    total:root.querySelector("#bb-header-total"),
+    pay5:root.querySelector("#bb-header-pay5")
   };
-  const tiles = Array.from(root.querySelectorAll(".pcsu-header-comp-tile"));
+  const tiles = [
+    els.tile1,
+    els.tile2,
+    els.tile3,
+    els.tile4,
+    els.tile5
+  ].filter(Boolean);
+  let currentStripMode = "compensation";
   let latestProfile = null;
   let latestGoodVeteranValues = null;
   let latestGoodActiveValues = null;
+  let latestGoodFinancialValues = null;
   let runTimer = null;
   let requestSeq = 0;
   function num(value, fallback){
@@ -340,9 +405,13 @@
     return Number.isFinite(n) ? n : fallback;
   }
   function money(value){
-    return "$" + Number(num(value,0)).toLocaleString("en-US", {
+    return "$" + Number(num(value,0)).toLocaleString("en-US",{
       maximumFractionDigits:0
     });
+  }
+  function pct(value){
+    const n = num(value,0);
+    return Math.round(n) + "%";
   }
   function clean(value){
     return value === undefined || value === null ? "" : String(value).trim();
@@ -375,15 +444,43 @@
   }
   function setLoading(isLoading){
     tiles.forEach(function(tile){
-      tile.classList.toggle("is-loading", !!isLoading);
+      tile.classList.toggle("is-loading",!!isLoading);
     });
   }
   function setMissing(isMissing){
     tiles.forEach(function(tile){
-      tile.classList.toggle("is-missing", !!isMissing);
+      tile.classList.toggle("is-missing",!!isMissing);
     });
   }
-  function setLabels(profile){
+  function setValueTone(el,tone){
+    if(!el) return;
+    el.classList.remove("is-total","is-gold","is-green","is-danger");
+    if(tone){
+      el.classList.add(tone);
+    }
+  }
+  function activateCompMode(){
+    currentStripMode = "compensation";
+    root.classList.add("is-comp-mode");
+    root.classList.remove("is-financial-mode");
+    if(els.tile5){
+      els.tile5.classList.add("is-hidden");
+    }
+    setValueTone(els.pay1,"");
+    setValueTone(els.pay2,"");
+    setValueTone(els.pay3,"");
+    setValueTone(els.total,"is-total");
+    setValueTone(els.pay5,"is-total");
+  }
+  function activateFinancialMode(){
+    currentStripMode = "financial";
+    root.classList.remove("is-comp-mode");
+    root.classList.add("is-financial-mode");
+    if(els.tile5){
+      els.tile5.classList.remove("is-hidden");
+    }
+  }
+  function setCompLabels(profile){
     if(isVeteran(profile)){
       els.label1.textContent = "Retirement";
       els.label2.textContent = "Disability";
@@ -396,44 +493,60 @@
     els.label3.textContent = "BAH";
     els.label4.textContent = "Total";
   }
-  function paintValues(profile, values, missing){
-    setLabels(profile || { mode:"active_duty" });
+  function paintCompValues(profile, values, missing){
+    activateCompMode();
+    setCompLabels(profile || { mode:"active_duty" });
     els.pay1.textContent = money(values.pay1);
     els.pay2.textContent = money(values.pay2);
     els.pay3.textContent = money(values.pay3);
     els.total.textContent = money(values.total);
     setLoading(false);
     setMissing(!!missing);
-    console.log("HEADER STRIP NOW:", {
-      mode: isVeteran(profile) ? "veteran" : "active_duty",
-      label1: els.label1.textContent,
-      pay1: els.pay1.textContent,
-      label2: els.label2.textContent,
-      pay2: els.pay2.textContent,
-      label3: els.label3.textContent,
-      pay3: els.pay3.textContent,
-      total: els.total.textContent,
-      values: values
-    });
   }
   function paintZero(profile){
     const veteran = isVeteran(profile);
-    if(veteran && latestGoodVeteranValues && hasAnyValues(latestGoodVeteranValues)){
-      paintValues(profile, latestGoodVeteranValues, false);
+    if(veteran && latestGoodVeteranValues && hasAnyCompValues(latestGoodVeteranValues)){
+      paintCompValues(profile,latestGoodVeteranValues,false);
       return;
     }
-    if(!veteran && latestGoodActiveValues && hasAnyValues(latestGoodActiveValues)){
-      paintValues(profile, latestGoodActiveValues, false);
+    if(!veteran && latestGoodActiveValues && hasAnyCompValues(latestGoodActiveValues)){
+      paintCompValues(profile,latestGoodActiveValues,false);
       return;
     }
-    paintValues(profile || { mode:"active_duty" }, {
+    paintCompValues(profile || { mode:"active_duty" },{
       pay1:0,
       pay2:0,
       pay3:0,
       total:0
-    }, true);
+    },true);
   }
-  function deepFindNumber(obj, names){
+  function paintFinancialValues(values){
+    activateFinancialMode();
+    els.label1.textContent = "Income";
+    els.label2.textContent = "Payment";
+    els.label3.textContent = "Debt";
+    els.label4.textContent = "Ratio";
+    els.label5.textContent = "Max Pay";
+    els.pay1.textContent = money(values.income);
+    els.pay2.textContent = money(values.payment);
+    els.pay3.textContent = money(values.debt);
+    els.total.textContent = pct(values.ratio);
+    els.pay5.textContent = money(values.maxPayment);
+    setValueTone(els.pay1,"is-green");
+    setValueTone(els.pay2,"is-gold");
+    setValueTone(els.pay3,"is-danger");
+    if(num(values.ratio,0) <= 25){
+      setValueTone(els.total,"is-green");
+    }else if(num(values.ratio,0) <= 30){
+      setValueTone(els.total,"is-gold");
+    }else{
+      setValueTone(els.total,"is-danger");
+    }
+    setValueTone(els.pay5,"is-total");
+    setLoading(false);
+    setMissing(false);
+  }
+  function deepFindNumber(obj,names){
     const wanted = names.map(function(name){
       return String(name).toLowerCase();
     });
@@ -447,20 +560,19 @@
         const key = keys[i];
         const normalizedKey = key.toLowerCase();
         if(wanted.includes(normalizedKey)){
-          const value = num(node[key], 0);
+          const value = num(node[key],0);
           if(value) return value;
         }
       }
       for(let j = 0; j < keys.length; j++){
-        const child = node[keys[j]];
-        const found = walk(child);
+        const found = walk(node[keys[j]]);
         if(found) return found;
       }
       return 0;
     }
     return walk(obj);
   }
-  function safeComp(profile, comp){
+  function safeComp(profile,comp){
     const c = comp && typeof comp === "object" ? comp : {};
     if(isVeteran(profile)){
       const retirement = num(
@@ -468,17 +580,23 @@
         c.retirement_pay ??
         c.retiredPay ??
         c.retired_pay ??
+        c.retiredPayGross ??
+        c.grossMonthlyRetiredPay ??
+        c.monthlyRetirement ??
         c.retirement ??
         c.retirementMonthly ??
         c.retirement_monthly ??
         c.militaryRetirement ??
         c.military_retirement,
         0
-      ) || deepFindNumber(c, [
+      ) || deepFindNumber(c,[
         "retirementPay",
         "retirement_pay",
         "retiredPay",
         "retired_pay",
+        "retiredPayGross",
+        "grossMonthlyRetiredPay",
+        "monthlyRetirement",
         "retirement",
         "retirementMonthly",
         "retirement_monthly",
@@ -494,23 +612,25 @@
         c.va_disability_pay ??
         c.vaCompensation ??
         c.va_compensation ??
+        c.monthlyVA ??
+        c.vaMonthly ??
         c.disability ??
         c.disabilityMonthly ??
         c.disability_monthly ??
-        c.vaMonthly ??
         c.va_monthly,
         0
-      ) || deepFindNumber(c, [
+      ) || deepFindNumber(c,[
         "disabilityPay",
         "disability_pay",
         "vaDisabilityPay",
         "va_disability_pay",
         "vaCompensation",
         "va_compensation",
+        "monthlyVA",
+        "vaMonthly",
         "disability",
         "disabilityMonthly",
         "disability_monthly",
-        "vaMonthly",
         "va_monthly",
         "va_disability_monthly",
         "monthly_va",
@@ -523,7 +643,7 @@
         c.otherMonthly ??
         c.other_monthly,
         0
-      ) || deepFindNumber(c, [
+      ) || deepFindNumber(c,[
         "otherPay",
         "other_pay",
         "other",
@@ -539,7 +659,7 @@
         c.grossMonthlyComp ??
         c.combinedMonthlyGross,
         0
-      ) || deepFindNumber(c, [
+      ) || deepFindNumber(c,[
         "total",
         "totalMonthly",
         "total_monthly",
@@ -556,11 +676,6 @@
         pay3:other,
         total:total
       };
-      /*
-        Sticky veteran protection:
-        If a later event only has total but loses retirement/disability,
-        keep the last valid veteran split values.
-      */
       if(latestGoodVeteranValues){
         const incomingHasSplit =
           num(safe.pay1,0) ||
@@ -570,17 +685,17 @@
           num(safe.total,0) && !incomingHasSplit;
         if(incomingOnlyTotal){
           safe = {
-            pay1: latestGoodVeteranValues.pay1,
-            pay2: latestGoodVeteranValues.pay2,
-            pay3: latestGoodVeteranValues.pay3,
-            total: safe.total || latestGoodVeteranValues.total
+            pay1:latestGoodVeteranValues.pay1,
+            pay2:latestGoodVeteranValues.pay2,
+            pay3:latestGoodVeteranValues.pay3,
+            total:safe.total || latestGoodVeteranValues.total
           };
         }else{
           safe = {
-            pay1: safe.pay1 || latestGoodVeteranValues.pay1 || 0,
-            pay2: safe.pay2 || latestGoodVeteranValues.pay2 || 0,
-            pay3: safe.pay3 || latestGoodVeteranValues.pay3 || 0,
-            total: safe.total || latestGoodVeteranValues.total || 0
+            pay1:safe.pay1 || latestGoodVeteranValues.pay1 || 0,
+            pay2:safe.pay2 || latestGoodVeteranValues.pay2 || 0,
+            pay3:safe.pay3 || latestGoodVeteranValues.pay3 || 0,
+            total:safe.total || latestGoodVeteranValues.total || 0
           };
         }
       }
@@ -592,7 +707,7 @@
       c.basicPay ??
       c.basic_pay,
       0
-    ) || deepFindNumber(c, [
+    ) || deepFindNumber(c,[
       "basePay",
       "base_pay",
       "basicPay",
@@ -602,7 +717,7 @@
       c.bas ??
       c.BAS,
       0
-    ) || deepFindNumber(c, [
+    ) || deepFindNumber(c,[
       "bas",
       "BAS",
       "basMonthly",
@@ -612,7 +727,7 @@
       c.bah ??
       c.BAH,
       0
-    ) || deepFindNumber(c, [
+    ) || deepFindNumber(c,[
       "bah",
       "BAH",
       "bahMonthly",
@@ -623,9 +738,10 @@
       c.totalMonthly ??
       c.total_monthly ??
       c.grossMonthlyComp ??
-      c.combinedMonthlyGross,
+      c.combinedMonthlyGross ??
+      c.totalMonthlyCompensation,
       0
-    ) || deepFindNumber(c, [
+    ) || deepFindNumber(c,[
       "total",
       "totalMonthly",
       "total_monthly",
@@ -648,23 +764,23 @@
         num(safe.total,0) && !incomingHasSplit;
       if(incomingOnlyTotal){
         safe = {
-          pay1: latestGoodActiveValues.pay1,
-          pay2: latestGoodActiveValues.pay2,
-          pay3: latestGoodActiveValues.pay3,
-          total: safe.total || latestGoodActiveValues.total
+          pay1:latestGoodActiveValues.pay1,
+          pay2:latestGoodActiveValues.pay2,
+          pay3:latestGoodActiveValues.pay3,
+          total:safe.total || latestGoodActiveValues.total
         };
       }else{
         safe = {
-          pay1: safe.pay1 || latestGoodActiveValues.pay1 || 0,
-          pay2: safe.pay2 || latestGoodActiveValues.pay2 || 0,
-          pay3: safe.pay3 || latestGoodActiveValues.pay3 || 0,
-          total: safe.total || latestGoodActiveValues.total || 0
+          pay1:safe.pay1 || latestGoodActiveValues.pay1 || 0,
+          pay2:safe.pay2 || latestGoodActiveValues.pay2 || 0,
+          pay3:safe.pay3 || latestGoodActiveValues.pay3 || 0,
+          total:safe.total || latestGoodActiveValues.total || 0
         };
       }
     }
     return safe;
   }
-  function hasAnyValues(values){
+  function hasAnyCompValues(values){
     return !!(
       values &&
       (
@@ -685,8 +801,8 @@
       )
     );
   }
-  function rememberGoodValues(profile, values){
-    if(!values || !hasAnyValues(values)) return;
+  function rememberGoodCompValues(profile,values){
+    if(!values || !hasAnyCompValues(values)) return;
     if(isVeteran(profile)){
       if(hasSplitValues(values)){
         latestGoodVeteranValues = {
@@ -736,7 +852,7 @@
     }else if(clean(depRaw).toLowerCase() === "no"){
       dependentsCount = 0;
     }else{
-      dependentsCount = num(depRaw, 0);
+      dependentsCount = num(depRaw,0);
     }
     const hasDependents =
       profile.has_dependents === true ||
@@ -745,8 +861,8 @@
       dependentsCount > 0 ||
       clean(profile.dependents).toLowerCase() === "yes";
     const family =
-      num(profile.family_size ?? profile.familySize ?? profile.family, 0) ||
-      (hasDependents ? Math.max(dependentsCount + 1, 2) : 1);
+      num(profile.family_size ?? profile.familySize ?? profile.family,0) ||
+      (hasDependents ? Math.max(dependentsCount + 1,2) : 1);
     const base = clean(
       profile.base ||
       profile.current_base ||
@@ -759,11 +875,48 @@
       profile.target_market ||
       ""
     );
-    const va = profile.va_disability === null || profile.va_disability === undefined
+    const vaRatingRaw =
+      profile.vaRating ??
+      profile.va_rating ??
+      profile.va_disability ??
+      profile.vaDisability ??
+      profile.disability_rating ??
+      profile.disabilityRating;
+    const va = vaRatingRaw === null || vaRatingRaw === undefined || vaRatingRaw === ""
       ? null
-      : num(profile.va_disability, 0);
+      : num(vaRatingRaw,0);
+    const spouse =
+      profile.spouse === true ||
+      profile.married === true ||
+      clean(profile.spouse).toLowerCase() === "true" ||
+      clean(profile.spouse).toLowerCase() === "yes" ||
+      clean(profile.married).toLowerCase() === "true" ||
+      clean(profile.married).toLowerCase() === "yes";
+    const childrenUnder18 = num(
+      profile.childrenUnder18 ??
+      profile.children_under_18,
+      0
+    );
+    const childrenInSchoolOver18 = num(
+      profile.childrenInSchoolOver18 ??
+      profile.children_in_school_over_18 ??
+      profile.childrenOver18School ??
+      profile.children_over_18_school,
+      0
+    );
+    const dependentParents = num(
+      profile.dependentParents ??
+      profile.dependent_parents,
+      0
+    );
+    const retirementSystem = clean(
+      profile.retirementSystem ||
+      profile.retirement_system ||
+      profile.system ||
+      "HIGH3"
+    ) || "HIGH3";
     return {
-      source:"pcsunited.header.comp.v3.4",
+      source:"pcsunited.header.comp.v4.0",
       mode,
       type:mode,
       status:mode,
@@ -786,8 +939,21 @@
       selectedBase:base,
       pcs_base:base,
       pcsBase:base,
+      vaRating:va,
       va_disability:va,
-      disability_rating:profile.disability_rating ?? va,
+      vaDisability:va,
+      disability_rating:va,
+      disabilityRating:va,
+      spouse,
+      married:spouse,
+      childrenUnder18,
+      children_under_18:childrenUnder18,
+      childrenInSchoolOver18,
+      children_in_school_over_18:childrenInSchoolOver18,
+      dependentParents,
+      dependent_parents:dependentParents,
+      retirementSystem,
+      retirement_system:retirementSystem,
       retired:profile.retired === false ? false : (mode === "veteran" ? true : !!profile.retired),
       email:clean(profile.email || "")
     };
@@ -805,7 +971,16 @@
     }
     if(d.comp && typeof d.comp === "object") return d.comp;
     if(d.pay && typeof d.pay === "object") return d.pay;
-    const truth = d.truth_packet || d.truthPacket || {};
+    const payload = d.payload || d.data || d.result || {};
+    const payloadComp = payload.compensation || payload.comp || payload.pay || {};
+    if(payloadComp.monthly){
+      return {
+        ...payloadComp,
+        ...payloadComp.monthly
+      };
+    }
+    if(Object.keys(payloadComp).length) return payloadComp;
+    const truth = d.truth_packet || d.truthPacket || payload.truth_packet || payload.truthPacket || {};
     const compRoot = truth.compensation || {};
     if(compRoot.monthly) return compRoot.monthly;
     if(Object.keys(compRoot).length) return compRoot;
@@ -827,68 +1002,125 @@
   function isProfileComplete(profile){
     if(!profile || !profile.rank || !profile.yos) return false;
     if(isVeteran(profile)){
-      return profile.va_disability !== null && profile.base;
+      return profile.va_disability !== null;
     }
     return !!profile.base;
   }
+  function buildActiveDutyInput(profile){
+    return {
+      ...profile,
+      mode:"active_duty",
+      rank:profile.rank,
+      rank_paygrade:profile.rank,
+      rankPaygrade:profile.rank,
+      yos:profile.yos,
+      years_of_service:profile.yos,
+      yearsOfService:profile.yos,
+      base:profile.base,
+      selected_base:profile.base,
+      selectedBase:profile.base,
+      pcs_base:profile.base,
+      pcsBase:profile.base,
+      dependents:profile.has_dependents ? "yes" : "no",
+      dependents_count:profile.dependents_count,
+      dependentsCount:profile.dependents_count,
+      has_dependents:profile.has_dependents,
+      hasDependents:profile.has_dependents,
+      family:profile.family,
+      family_size:profile.family,
+      familySize:profile.family,
+      source:"pcsunited.header.comp.v4.0"
+    };
+  }
+  function buildVeteranInput(profile){
+    return {
+      rank:profile.rank,
+      rank_paygrade:profile.rank,
+      rankPaygrade:profile.rank,
+      yos:profile.yos,
+      yearsOfService:profile.yos,
+      years_of_service:profile.yos,
+      retirementSystem:profile.retirementSystem || "HIGH3",
+      retirement_system:profile.retirementSystem || "HIGH3",
+      vaRating:profile.va_disability,
+      va_disability:profile.va_disability,
+      vaDisability:profile.va_disability,
+      rating:profile.va_disability,
+      spouse:profile.spouse === true,
+      childrenUnder18:profile.childrenUnder18 || 0,
+      children_under_18:profile.childrenUnder18 || 0,
+      childrenInSchoolOver18:profile.childrenInSchoolOver18 || 0,
+      children_in_school_over_18:profile.childrenInSchoolOver18 || 0,
+      dependentParents:profile.dependentParents || 0,
+      dependent_parents:profile.dependentParents || 0,
+      source:"pcsunited.header.comp.v4.0"
+    };
+  }
   async function callTheWing(profile){
-    const res = await fetch(BRAIN_ENDPOINT + "?t=" + Date.now(), {
+    const veteran = isVeteran(profile);
+    const body = veteran
+      ? {
+          tool:"RETIREMENT_VA",
+          input:buildVeteranInput(profile)
+        }
+      : {
+          tool:"PCS_SNAPSHOT",
+          input:buildActiveDutyInput(profile)
+        };
+    const res = await fetch(BRAIN_ENDPOINT + "?t=" + Date.now(),{
       method:"POST",
       headers:{ "Content-Type":"application/json" },
       cache:"no-store",
-      body:JSON.stringify({
-        tool:"PCS_SNAPSHOT",
-        input:{
-          ...profile,
-          source:"pcsunited.header.comp.v3.4"
-        }
-      })
+      body:JSON.stringify(body)
     });
-    const data = await res.json().catch(function(){ return {}; });
+    const data = await res.json().catch(function(){
+      return {};
+    });
     if(!res.ok || data.ok === false){
-      console.warn("Header compensation TheWing response:", data);
+      console.warn("Header strip TheWing response:",data);
       return null;
     }
     return extractCompFromTheWing(data);
   }
-  function paintComp(profile, comp){
-    const safe = safeComp(profile, comp);
-    rememberGoodValues(profile, safe);
-    console.log("HEADER COMP DEBUG:", {
-      profile: profile,
-      rawComp: comp,
-      safe: safe,
-      latestGoodVeteranValues: latestGoodVeteranValues,
-      latestGoodActiveValues: latestGoodActiveValues
-    });
-    paintValues(profile, safe, !hasAnyValues(safe));
+  function paintComp(profile,comp){
+    const safe = safeComp(profile,comp);
+    rememberGoodCompValues(profile,safe);
+    if(currentStripMode === "financial" && latestGoodFinancialValues){
+      paintFinancialValues(latestGoodFinancialValues);
+      return;
+    }
+    paintCompValues(profile,safe,!hasAnyCompValues(safe));
   }
   async function run(reason){
     const seq = ++requestSeq;
     const profile = latestProfile;
+    if(currentStripMode === "financial" && latestGoodFinancialValues){
+      paintFinancialValues(latestGoodFinancialValues);
+      return true;
+    }
     if(!isProfileComplete(profile)){
       paintZero(profile || { mode:"active_duty" });
       return false;
     }
-    setLabels(profile);
+    setCompLabels(profile);
     setLoading(true);
     setMissing(false);
     let comp = null;
     try{
       comp = await callTheWing(profile);
     }catch(err){
-      console.warn("Header compensation failed:", err);
+      console.warn("Header compensation failed:",err);
     }
     if(seq !== requestSeq) return true;
     if(!comp){
       paintZero(profile);
       return true;
     }
-    paintComp(profile, comp);
+    paintComp(profile,comp);
     try{
-      window.dispatchEvent(new CustomEvent("pcsunited:compensation-preview-ready", {
+      window.dispatchEvent(new CustomEvent("pcsunited:compensation-preview-ready",{
         detail:{
-          source:"pcsunited.header.comp.v3.4",
+          source:"pcsunited.header.comp.v4.0",
           version:VERSION,
           profile,
           compensation:comp,
@@ -898,71 +1130,189 @@
     }catch(_){}
     return true;
   }
-  function scheduleRun(reason, delay){
+  function scheduleRun(reason,delay){
     clearTimeout(runTimer);
     runTimer = setTimeout(function(){
       run(reason || "scheduled");
-    }, typeof delay === "number" ? delay : 140);
+    },typeof delay === "number" ? delay : 140);
   }
   function receiveProfileEvent(event){
     const detail = event && event.detail ? event.detail : {};
     const profile = extractProfile(detail);
     if(!profile) return;
     latestProfile = profile;
-    const comp = extractComp(detail);
-    const safe = safeComp(profile, comp);
-    console.log("HEADER PROFILE EVENT:", {
-      detail: detail,
-      profile: profile,
-      extractedComp: comp,
-      safe: safe,
-      latestGoodVeteranValues: latestGoodVeteranValues
-    });
-    if(hasAnyValues(safe)){
-      paintComp(profile, comp);
+    if(currentStripMode === "financial" && latestGoodFinancialValues){
+      paintFinancialValues(latestGoodFinancialValues);
       return;
     }
-    /*
-      Do not repaint to zero from profile-only events.
-      Just use profile-only events to trigger TheWing.
-    */
-    scheduleRun("profile-event", 120);
+    const comp = extractComp(detail);
+    const safe = safeComp(profile,comp);
+    if(hasAnyCompValues(safe)){
+      paintComp(profile,comp);
+      return;
+    }
+    scheduleRun("profile-event",120);
   }
   function receiveCompEvent(event){
     const detail = event && event.detail ? event.detail : {};
     const profile = extractProfile(detail) || latestProfile || { mode:"active_duty" };
     const comp = extractComp(detail);
-    const safe = safeComp(profile, comp);
+    const safe = safeComp(profile,comp);
     latestProfile = profile;
-    console.log("HEADER COMP EVENT:", {
-      detail: detail,
-      profile: profile,
-      extractedComp: comp,
-      safe: safe,
-      latestGoodVeteranValues: latestGoodVeteranValues
-    });
-    if(hasAnyValues(safe)){
-      paintComp(profile, comp);
+    if(currentStripMode === "financial" && latestGoodFinancialValues){
+      paintFinancialValues(latestGoodFinancialValues);
       return;
     }
-    /*
-      Do not overwrite a valid veteran split with empty comp.
-    */
+    if(hasAnyCompValues(safe)){
+      paintComp(profile,comp);
+      return;
+    }
     if(isVeteran(profile) && latestGoodVeteranValues){
-      paintValues(profile, latestGoodVeteranValues, false);
+      paintCompValues(profile,latestGoodVeteranValues,false);
       return;
     }
-    scheduleRun("comp-event-empty", 120);
+    if(!isVeteran(profile) && latestGoodActiveValues){
+      paintCompValues(profile,latestGoodActiveValues,false);
+      return;
+    }
+    scheduleRun("comp-event-empty",120);
+  }
+  function extractFinancialValues(detail){
+    const d = detail && typeof detail === "object" ? detail : {};
+    const headerSnapshot =
+      d.headerSnapshot ||
+      d.header_snapshot ||
+      d.snapshot ||
+      {};
+    const income = num(
+      headerSnapshot.income ??
+      headerSnapshot.totalIncome ??
+      headerSnapshot.totalMonthlyIncome ??
+      d.totalIncome ??
+      d.totalMonthlyIncome ??
+      d.income ??
+      d.monthlyIncome,
+      0
+    );
+    const payment = num(
+      headerSnapshot.payment ??
+      headerSnapshot.estimatedPayment ??
+      headerSnapshot.monthlyPayment ??
+      d.estimatedPayment ??
+      d.targetPayment ??
+      d.monthlyPayment ??
+      d.payment,
+      0
+    );
+    const debt = num(
+      headerSnapshot.debt ??
+      headerSnapshot.monthlyDebt ??
+      d.monthlyDebt ??
+      d.debt ??
+      d.monthlyDebtPayments,
+      0
+    );
+    const ratio = num(
+      headerSnapshot.ratio ??
+      headerSnapshot.housingRatio ??
+      d.housingRatio ??
+      d.ratio,
+      0
+    );
+    const maxPayment = num(
+      headerSnapshot.maxPayment ??
+      headerSnapshot.suggestedMaxPayment ??
+      headerSnapshot.suggestedLimit ??
+      d.suggestedLimit ??
+      d.suggestedMaxPayment ??
+      d.maxPayment,
+      0
+    );
+    return {
+      income,
+      payment,
+      debt,
+      ratio,
+      maxPayment
+    };
+  }
+  function hasValidFinancialValues(values){
+    return !!(
+      values &&
+      num(values.income,0) > 0
+    );
+  }
+  function receiveFinancialEvent(event){
+    const detail = event && event.detail ? event.detail : {};
+    const values = extractFinancialValues(detail);
+    if(!hasValidFinancialValues(values)){
+      return;
+    }
+    latestGoodFinancialValues = {
+      income:num(values.income,0),
+      payment:num(values.payment,0),
+      debt:num(values.debt,0),
+      ratio:num(values.ratio,0),
+      maxPayment:num(values.maxPayment,0)
+    };
+    paintFinancialValues(latestGoodFinancialValues);
+  }
+  function tryHydrateFromGlobals(){
+    const candidates = [
+      window.PCSU_FINANCIAL_INPUT_PANEL?.getInputs?.(),
+      window.PCSU_BASICBRAIN_CURRENT,
+      window.PCSU_BASICBRAIN_TEMP,
+      window.PCSU_BASICBRAIN?.getLastGood?.(),
+      window.PCSU_BASICBRAIN?.getState?.()
+    ];
+    for(let i = 0; i < candidates.length; i++){
+      const item = candidates[i];
+      if(!item) continue;
+      const financial = extractFinancialValues(item);
+      if(hasValidFinancialValues(financial)){
+        latestGoodFinancialValues = financial;
+        paintFinancialValues(financial);
+        return true;
+      }
+      const profile = extractProfile(item);
+      if(!profile) continue;
+      latestProfile = profile;
+      const comp = extractComp(item);
+      const safe = safeComp(profile,comp);
+      if(hasAnyCompValues(safe)){
+        paintComp(profile,comp);
+        return true;
+      }
+      if(isProfileComplete(profile)){
+        scheduleRun("global-hydrate",120);
+        return true;
+      }
+    }
+    return false;
   }
   function init(){
+    root.classList.add("is-comp-mode");
     paintZero({ mode:"active_duty" });
-    window.addEventListener("pcsunited:compensation-ready", receiveCompEvent);
-    window.addEventListener("pcsunited:basicbrain-updated", receiveProfileEvent);
-    window.addEventListener("pcsunited:profile-ready", receiveProfileEvent);
-    window.addEventListener("pcsunited:bridge-ready", receiveProfileEvent);
-    window.addEventListener("message", function(event){
+    window.addEventListener("pcsunited:compensation-ready",receiveCompEvent);
+    window.addEventListener("pcsunited:compensation-preview-ready",receiveCompEvent);
+    window.addEventListener("pcsunited:basicbrain-updated",receiveProfileEvent);
+    window.addEventListener("pcsunited:profile-ready",receiveProfileEvent);
+    window.addEventListener("pcsunited:bridge-ready",receiveProfileEvent);
+    window.addEventListener("pcsunited:financial-input-updated",receiveFinancialEvent);
+    window.addEventListener("pcsunited:run-financial-analysis",receiveFinancialEvent);
+    window.addEventListener("message",function(event){
       const data = event && event.data;
       if(!data || typeof data !== "object") return;
+      if(
+        data.type === "pcsunited-financial-input" ||
+        data.type === "pcsunited-financial-analysis" ||
+        data.source === "pcsunited.financial.input.panel.v1.1.1"
+      ){
+        receiveFinancialEvent({
+          detail:data.detail || data.payload || data
+        });
+        return;
+      }
       if(
         data.type === "pcsunited-basicbrain" ||
         data.type === "pcsunited-profile" ||
@@ -974,29 +1324,76 @@
         });
       }
     });
+    setTimeout(tryHydrateFromGlobals,250);
+    setTimeout(tryHydrateFromGlobals,1000);
+    setTimeout(tryHydrateFromGlobals,1800);
     window.PCSU_HEADER_COMP_BASICBRAIN = {
       version:VERSION,
       endpoint:BRAIN_ENDPOINT,
       refresh:function(){
+        if(currentStripMode === "financial" && latestGoodFinancialValues){
+          paintFinancialValues(latestGoodFinancialValues);
+          return true;
+        }
         return run("manual-refresh");
       },
       setProfile:function(profile){
         latestProfile = extractProfile(profile || {});
+        currentStripMode = "compensation";
+        latestGoodFinancialValues = null;
         return run("manual-set-profile");
+      },
+      setFinancial:function(values){
+        const safe = extractFinancialValues(values || {});
+        if(hasValidFinancialValues(safe)){
+          latestGoodFinancialValues = safe;
+          paintFinancialValues(safe);
+          return true;
+        }
+        return false;
+      },
+      showCompensation:function(){
+        currentStripMode = "compensation";
+        latestGoodFinancialValues = null;
+        if(latestProfile){
+          if(isVeteran(latestProfile) && latestGoodVeteranValues){
+            paintCompValues(latestProfile,latestGoodVeteranValues,false);
+            return true;
+          }
+          if(!isVeteran(latestProfile) && latestGoodActiveValues){
+            paintCompValues(latestProfile,latestGoodActiveValues,false);
+            return true;
+          }
+        }
+        paintZero(latestProfile || { mode:"active_duty" });
+        return true;
+      },
+      showFinancial:function(){
+        if(latestGoodFinancialValues){
+          paintFinancialValues(latestGoodFinancialValues);
+          return true;
+        }
+        return tryHydrateFromGlobals();
       },
       clear:function(){
         latestProfile = null;
         latestGoodVeteranValues = null;
         latestGoodActiveValues = null;
+        latestGoodFinancialValues = null;
+        currentStripMode = "compensation";
         paintZero({ mode:"active_duty" });
+      },
+      getMode:function(){
+        return currentStripMode;
       },
       getProfile:function(){
         return latestProfile;
       },
       getStickyValues:function(){
         return {
-          veteran: latestGoodVeteranValues,
-          activeDuty: latestGoodActiveValues
+          veteran:latestGoodVeteranValues,
+          activeDuty:latestGoodActiveValues,
+          financial:latestGoodFinancialValues
         };
       }
     };
@@ -5080,11 +5477,15 @@
                     <div id="w-node-_738982aa-7029-afc1-0908-d766a276410d-c85e09e0" class="tab-pane-text">
                       <div class="finance-input-code w-embed w-script"><!--  ============================================================
   PCSUNITED • FINANCIAL ANALYSIS INPUT PANEL
-  v1.1.1 • LIGHTER 6-INPUT MORTGAGE SCENARIO VERSION
+  v1.1.3 • LIGHTER 6-INPUT MORTGAGE SCENARIO VERSION
   UPDATES
-  - Removed top "Financial Analysis Input" box
-  - Removed top "Awaiting BasicBrain / BasicBrain Connected" box
-  - Everything else stays the same
+  - Removed in-panel summary cards:
+    Total Monthly Income, Estimated Payment, Monthly Debt,
+    Housing Ratio, Suggested Max Payment
+  - Keeps header strip transformation logic unchanged
+  - Prevents header strip from transforming on preload/hydration
+  - Only emits pcsunited:financial-input-updated after user interaction
+  - Continue button still emits pcsunited:run-financial-analysis
 ===============================================================  -->
                         <div id="pcsu-financial-input-panel" style="all:initial;">
                           <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5284,62 +5685,6 @@
   padding-left:62px;
 }
 /* ============================================================
-  SUMMARY STRIP
-=============================================================== */
-#pcsu-financial-input-panel .fi-summary{
-  display:grid;
-  grid-template-columns:repeat(5,minmax(0,1fr));
-  gap:10px;
-  margin:2px 0 22px;
-}
-#pcsu-financial-input-panel .fi-summary-card{
-  position:relative;
-  overflow:hidden;
-  border-radius:18px;
-  padding:14px;
-  min-height:82px;
-  background:
-    radial-gradient(circle at top left, rgba(216,184,122,.06), transparent 34%),
-    linear-gradient(180deg, rgba(12,18,28,.48), rgba(7,12,19,.40));
-  border:1px solid rgba(255,255,255,.075);
-  box-shadow:0 18px 44px rgba(0,0,0,.14);
-}
-#pcsu-financial-input-panel .fi-summary-card::before{
-  content:"";
-  position:absolute;
-  inset:0 0 auto 0;
-  height:1px;
-  background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
-}
-#pcsu-financial-input-panel .fi-summary-label{
-  position:relative;
-  z-index:1;
-  margin-bottom:8px;
-  color:var(--muted);
-  text-transform:uppercase;
-  letter-spacing:.12em;
-  font-size:.66rem;
-  line-height:1.15;
-  font-weight:900;
-}
-#pcsu-financial-input-panel .fi-summary-value{
-  position:relative;
-  z-index:1;
-  color:#fff;
-  font-size:1.32rem;
-  line-height:1;
-  font-weight:900;
-}
-#pcsu-financial-input-panel .fi-summary-value.is-green{
-  color:var(--mint);
-}
-#pcsu-financial-input-panel .fi-summary-value.is-danger{
-  color:var(--danger);
-}
-#pcsu-financial-input-panel .fi-summary-value.is-gold{
-  color:var(--gold2);
-}
-/* ============================================================
   INPUT SECTION
 =============================================================== */
 #pcsu-financial-input-panel .fi-section{
@@ -5459,9 +5804,6 @@
     0 20px 40px rgba(0,0,0,.40);
 }
 @media(max-width:1040px){
-  #pcsu-financial-input-panel .fi-summary{
-    grid-template-columns:repeat(3,1fr);
-  }
   #pcsu-financial-input-panel .fi-input-grid{
     grid-template-columns:repeat(2,1fr);
   }
@@ -5476,7 +5818,6 @@
   #pcsu-financial-input-panel .fi-topbar{
     grid-template-columns:1fr;
   }
-  #pcsu-financial-input-panel .fi-summary,
   #pcsu-financial-input-panel .fi-input-grid{
     grid-template-columns:1fr;
   }
@@ -5511,28 +5852,6 @@
                                       <option value="FHA">FHA</option>
                                     </select>
                                   </div>
-                                </div>
-                              </div>
-                              <div class="fi-summary">
-                                <div class="fi-summary-card">
-                                  <div class="fi-summary-label">Total Monthly Income</div>
-                                  <div class="fi-summary-value is-green" id="fi-summary-income">$0</div>
-                                </div>
-                                <div class="fi-summary-card">
-                                  <div class="fi-summary-label">Estimated Payment</div>
-                                  <div class="fi-summary-value is-gold" id="fi-summary-payment">$0</div>
-                                </div>
-                                <div class="fi-summary-card">
-                                  <div class="fi-summary-label">Monthly Debt</div>
-                                  <div class="fi-summary-value is-danger" id="fi-summary-debt">$0</div>
-                                </div>
-                                <div class="fi-summary-card">
-                                  <div class="fi-summary-label">Housing Ratio</div>
-                                  <div class="fi-summary-value" id="fi-summary-housing-ratio">0%</div>
-                                </div>
-                                <div class="fi-summary-card">
-                                  <div class="fi-summary-label">Suggested Max Payment</div>
-                                  <div class="fi-summary-value" id="fi-summary-limit">$0</div>
                                 </div>
                               </div>
                               <section class="fi-section">
@@ -5630,7 +5949,7 @@
                           <script>
 (function(){
   "use strict";
-  const VERSION = "1.1.1";
+  const VERSION = "1.1.3";
   const HANDOFF_KEY = "pcsunited.basicbrain.handoff.v1";
   const FINANCIAL_KEY = "pcsunited.financial.analysis.input.v1";
   const MARKET_INTENT_KEY = "pcsunited.marketPanel.mortgageIntent.v1";
@@ -5658,6 +5977,7 @@
   let BASICBRAIN = null;
   let COMP = null;
   let MARKET_INTENT = null;
+  let USER_HAS_INTERACTED = false;
   function clean(value){
     return value === undefined || value === null ? "" : String(value).trim();
   }
@@ -5683,6 +6003,13 @@
   }
   function setText(el,value){
     if(el) el.textContent = value;
+  }
+  function dispatchSafe(name,detail){
+    try{
+      window.dispatchEvent(new CustomEvent(name,{
+        detail:detail || {}
+      }));
+    }catch(_){}
   }
   function getBasicBrainFromHandoff(){
     try{
@@ -5841,7 +6168,9 @@
     }
     return Math.round(principalInterest + monthlyTax + monthlyInsurance + hoa + monthlyMi);
   }
-  function hydrateBasicBrain(){
+  function hydrateBasicBrain(options){
+    const opts = options || {};
+    const emit = opts.emit === true;
     BASICBRAIN = getBasicBrainFromGlobals() || getBasicBrainFromHandoff();
     COMP = extractComp(BASICBRAIN);
     MARKET_INTENT = getMarketIntent();
@@ -5866,7 +6195,11 @@
         profile:{}
       };
     }
-    renderSummary();
+    renderSummary({
+      emit,
+      userInitiated:false,
+      reason:"hydrate-basicbrain"
+    });
   }
   function getInputs(){
     const loanType = clean(els.loanType?.value || "VA");
@@ -5889,7 +6222,7 @@
     const suggestedLimit = totalIncome ? Math.round(totalIncome * 0.25) : 0;
     const afterPayment = totalIncome - estimatedPayment;
     return {
-      source:"pcsunited.financial.input.panel.v1.1.1",
+      source:"pcsunited.financial.input.panel.v1.1.3",
       version:VERSION,
       loanType,
       homePrice,
@@ -5910,11 +6243,19 @@
       compensation:COMP,
       basicbrain:BASICBRAIN,
       marketIntent:MARKET_INTENT,
+      userInitiated:USER_HAS_INTERACTED,
       updated_at:new Date().toISOString()
     };
   }
-  function renderSummary(){
-    const data = getInputs();
+  function renderSummary(options){
+    const opts = options || {};
+    const shouldEmit = opts.emit === true;
+    const userInitiated = opts.userInitiated === true;
+    const data = {
+      ...getInputs(),
+      userInitiated,
+      reason:opts.reason || ""
+    };
     setText(els.summaryIncome,money(data.totalIncome));
     setText(els.summaryPayment,money(data.estimatedPayment));
     setText(els.summaryDebt,money(data.monthlyDebt));
@@ -5925,10 +6266,28 @@
     }catch(err){
       console.warn("Financial Input: save failed",err);
     }
+    /*
+      Important:
+      Preload/hydration should update the panel visually and save local data,
+      but should NOT emit pcsunited:financial-input-updated.
+      This prevents the Header Strip from transforming before the user touches this panel.
+    */
+    if(shouldEmit){
+      dispatchSafe("pcsunited:financial-input-updated",data);
+    }
+    /*
+      Optional passive event for future sections that want to know the panel hydrated,
+      without telling the Header Strip to transform.
+    */
+    if(!shouldEmit){
+      dispatchSafe("pcsunited:financial-input-preloaded",data);
+    }
+    return data;
+  }
+  function markUserInteraction(){
+    USER_HAS_INTERACTED = true;
     try{
-      window.dispatchEvent(new CustomEvent("pcsunited:financial-input-updated",{
-        detail:data
-      }));
+      root.dataset.userInteracted = "true";
     }catch(_){}
   }
   function bindInputs(){
@@ -5943,29 +6302,44 @@
     ].forEach(function(el){
       if(!el) return;
       el.addEventListener("input",function(){
+        markUserInteraction();
         if(el === els.homePrice){
           el.dataset.userEdited = "1";
         }
-        renderSummary();
+        renderSummary({
+          emit:true,
+          userInitiated:true,
+          reason:"user-input"
+        });
       });
       el.addEventListener("change",function(){
+        markUserInteraction();
         if(el === els.homePrice){
           el.dataset.userEdited = "1";
         }
-        renderSummary();
+        renderSummary({
+          emit:true,
+          userInitiated:true,
+          reason:"user-change"
+        });
       });
     });
     if(els.runBtn){
       els.runBtn.addEventListener("click",function(){
-        const data = getInputs();
+        markUserInteraction();
+        const data = renderSummary({
+          emit:true,
+          userInitiated:true,
+          reason:"run-analysis-click"
+        });
         try{
           localStorage.setItem(FINANCIAL_KEY,JSON.stringify(data));
         }catch(_){}
-        try{
-          window.dispatchEvent(new CustomEvent("pcsunited:run-financial-analysis",{
-            detail:data
-          }));
-        }catch(_){}
+        dispatchSafe("pcsunited:run-financial-analysis",{
+          ...data,
+          userInitiated:true,
+          reason:"run-analysis-click"
+        });
         const targets = [
           "#pcsu-financial-analysis-results",
           "#financial-analysis-results",
@@ -5993,7 +6367,11 @@
     const detail = event?.detail || {};
     BASICBRAIN = detail.basicbrain || detail.profile || detail.bridge || detail;
     COMP = extractComp(detail) || COMP;
-    renderSummary();
+    renderSummary({
+      emit:false,
+      userInitiated:false,
+      reason:"basicbrain-event"
+    });
   }
   function handleMarketPanelReady(event){
     const detail = event?.detail || {};
@@ -6007,7 +6385,11 @@
     if(suggestedHomePrice && els.homePrice && !num(els.homePrice.dataset.userEdited,0)){
       els.homePrice.value = suggestedHomePrice;
     }
-    renderSummary();
+    renderSummary({
+      emit:false,
+      userInitiated:false,
+      reason:"market-panel-ready"
+    });
   }
   window.addEventListener("pcsunited:basicbrain-updated",handleBasicBrainEvent);
   window.addEventListener("pcsunited:compensation-ready",handleBasicBrainEvent);
@@ -6017,12 +6399,24 @@
   window.addEventListener("pcsunited:market-panel-ready",handleMarketPanelReady);
   window.addEventListener("storage",function(event){
     if(event.key === HANDOFF_KEY || event.key === MARKET_INTENT_KEY){
-      hydrateBasicBrain();
+      hydrateBasicBrain({
+        emit:false
+      });
     }
   });
   window.PCSU_FINANCIAL_INPUT_PANEL = {
     version:VERSION,
-    refresh:hydrateBasicBrain,
+    refresh:function(){
+      hydrateBasicBrain({
+        emit:false
+      });
+    },
+    refreshAndEmit:function(){
+      USER_HAS_INTERACTED = true;
+      hydrateBasicBrain({
+        emit:true
+      });
+    },
     getInputs:getInputs,
     getComp:function(){
       return COMP;
@@ -6032,12 +6426,33 @@
     },
     getMarketIntent:function(){
       return MARKET_INTENT;
+    },
+    hasUserInteracted:function(){
+      return USER_HAS_INTERACTED;
+    },
+    markUserInteraction:function(){
+      markUserInteraction();
+      return renderSummary({
+        emit:true,
+        userInitiated:true,
+        reason:"manual-mark-user-interaction"
+      });
     }
   };
   bindInputs();
-  hydrateBasicBrain();
-  setTimeout(hydrateBasicBrain,350);
-  setTimeout(hydrateBasicBrain,1200);
+  hydrateBasicBrain({
+    emit:false
+  });
+  setTimeout(function(){
+    hydrateBasicBrain({
+      emit:false
+    });
+  },350);
+  setTimeout(function(){
+    hydrateBasicBrain({
+      emit:false
+    });
+  },1200);
 })();
 </script>
                         </div>
@@ -6325,7 +6740,7 @@
               </div>
             </div>
           </div>
-          <div class="background-cta"><img class="cta-img-bg" src="../images/background_1background.avif" alt="" sizes="100vw" fade-in="y" loading="lazy" srcset="../images/background_1-p-500.png 500w, ../images/background_1-p-800.png 800w, ../images/background_1background.avif 1808w"></div>
+          <div class="background-cta"><img class="cta-img-bg" src="../images/background_1background.avif" alt="" sizes="(max-width: 1808px) 100vw, 1808px" fade-in="y" loading="lazy" srcset="../images/background_1-p-500.png 500w, ../images/background_1-p-800.png 800w, ../images/background_1background.avif 1808w"></div>
         </div>
       </section>
     </div>

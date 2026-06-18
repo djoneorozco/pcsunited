@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Jun 15 2026 13:56:19 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Jun 18 2026 05:48:46 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e1a06" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -99,7 +99,7 @@
 <body>
   <div class="page-wrapper">
     <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="tormain tormainpage w-nav">
-      <div class="navbar-wrapper-12"><img src="../images/Logo-3-white.png" loading="lazy" sizes="100vw" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
+      <div class="navbar-wrapper-12"><img src="../images/Logo-3-white.png" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
         <div class="compenstation-strip-from-basic-brain w-embed w-script"><!--  =========================================================
   PCSUnited • Header Affordability Strip
   v3.6.0 • BASE DEMO CONTEXT / THEWING + LOCAL PAYMENT
@@ -1637,8 +1637,8 @@
       </div>
     </div>
     <div class="main">
-      <section class="section faq">
-        <div class="market-panel w-embed w-script"><!--  =========================================================
+      <section class="section faq"></section>
+      <div class="market-panel w-embed w-script"><!--  =========================================================
   PCSUnited • Market Panel
   v1.0.1 • WIDER BASE DEMO MARKET PANEL / HOUSING RATIO SCORECARD
   PURPOSE
@@ -1653,11 +1653,11 @@
   - Uses 100vw breakout to reduce left/right dead space
   - Expands panel max width to 1500px
 =========================================================  -->
-          <div id="pcsu-market-panel" style="all:initial;">
-            <link rel="preconnect" href="https://fonts.googleapis.com">
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-            <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-            <style>
+        <div id="pcsu-market-panel" style="all:initial;">
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+          <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+          <style>
     #pcsu-market-panel,
     #pcsu-market-panel *{
       box-sizing:border-box;
@@ -2175,180 +2175,180 @@
       }
     }
   </style>
-            <div class="mp-wrap">
-              <section class="mp-shell">
-                <div class="mp-bg" id="mpHeroBg"></div>
-                <div class="mp-inner">
-                  <div class="mp-left">
-                    <div class="mp-eyebrow" id="mpEyebrow">Base Intelligence</div>
-                    <h1 class="mp-title" id="mpTitle">Loading base...</h1>
-                    <p class="mp-subtitle" id="mpSubtitle">
-                      Preparing market intelligence.
-                    </p>
-                    <div class="mp-line"></div>
-                    <div class="mp-card-grid">
-                      <div class="mp-card">
-                        <div class="mp-icon is-green" aria-hidden="true">
-                          <svg viewbox="0 0 24 24" fill="none">
-                            <path d="M6 11.5 12 6l6 5.5V19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
-                          </svg>
-                        </div>
-                        <div class="mp-card-label">Median List Price</div>
-                        <div class="mp-card-value" id="mpMedianListPrice">—</div>
-                        <div class="mp-card-hint">Current market anchor.</div>
+          <div class="mp-wrap">
+            <section class="mp-shell">
+              <div class="mp-bg" id="mpHeroBg"></div>
+              <div class="mp-inner">
+                <div class="mp-left">
+                  <div class="mp-eyebrow" id="mpEyebrow">Base Intelligence</div>
+                  <h1 class="mp-title" id="mpTitle">Loading base...</h1>
+                  <p class="mp-subtitle" id="mpSubtitle">
+                    Preparing market intelligence.
+                  </p>
+                  <div class="mp-line"></div>
+                  <div class="mp-card-grid">
+                    <div class="mp-card">
+                      <div class="mp-icon is-green" aria-hidden="true">
+                        <svg viewbox="0 0 24 24" fill="none">
+                          <path d="M6 11.5 12 6l6 5.5V19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+                        </svg>
                       </div>
-                      <div class="mp-card">
-                        <div class="mp-icon is-blue" aria-hidden="true">
-                          <svg viewbox="0 0 24 24" fill="none">
-                            <path d="M7 17 17 7M10 7h7v7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
-                          </svg>
-                        </div>
-                        <div class="mp-card-label">Price Per Sq Ft</div>
-                        <div class="mp-card-value" id="mpPricePerSqFt">—</div>
-                        <div class="mp-card-hint">Useful for fast comparisons.</div>
-                      </div>
-                      <div class="mp-card">
-                        <div class="mp-icon is-purple" aria-hidden="true">
-                          <svg viewbox="0 0 24 24" fill="none">
-                            <rect x="5" y="5" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.7"></rect>
-                            <path d="M9 5v14M15 5v14M5 9h14M5 15h14" stroke="currentColor" stroke-width="1.2"></path>
-                          </svg>
-                        </div>
-                        <div class="mp-card-label">Active Listings</div>
-                        <div class="mp-card-value" id="mpActiveListings">—</div>
-                        <div class="mp-card-hint">Buyer leverage signal.</div>
-                      </div>
-                      <div class="mp-card">
-                        <div class="mp-icon" aria-hidden="true">
-                          <svg viewbox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8"></circle>
-                            <path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                          </svg>
-                        </div>
-                        <div class="mp-card-label">Days On Market</div>
-                        <div class="mp-card-value" id="mpDaysOnMarket">—</div>
-                        <div class="mp-card-hint">Inventory pressure signal.</div>
-                      </div>
-                      <div class="mp-card">
-                        <div class="mp-icon is-green" aria-hidden="true">
-                          <svg viewbox="0 0 24 24" fill="none">
-                            <path d="M6 11.5 12 6l6 5.5V19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
-                          </svg>
-                        </div>
-                        <div class="mp-card-label">Typical Buy Price</div>
-                        <div class="mp-card-value" id="mpTypicalBuyPrice">—</div>
-                        <div class="mp-card-hint">Typical list price for homes in this market.</div>
-                      </div>
-                      <div class="mp-card">
-                        <div class="mp-icon is-blue" aria-hidden="true">
-                          <svg viewbox="0 0 24 24" fill="none">
-                            <rect x="5" y="5" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.7"></rect>
-                            <path d="M8 9h8M8 12h8M8 15h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
-                          </svg>
-                        </div>
-                        <div class="mp-card-label">Estimated VA Payment</div>
-                        <div class="mp-card-value"><span id="mpEstimatedPayment">—</span> <small>/mo</small></div>
-                        <div class="mp-card-hint">Principal, interest, taxes, insurance, and HOA estimate.</div>
-                      </div>
-                      <div class="mp-card">
-                        <div class="mp-icon is-green" aria-hidden="true">
-                          <svg viewbox="0 0 24 24" fill="none">
-                            <rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
-                          </svg>
-                        </div>
-                        <div class="mp-card-label">Your Monthly Income</div>
-                        <div class="mp-card-value"><span id="mpMonthlyIncome">—</span> <small>/mo</small></div>
-                        <div class="mp-card-hint">BasicBrain compensation profile when available.</div>
-                      </div>
-                      <div class="mp-card">
-                        <div class="mp-icon" aria-hidden="true">
-                          <svg viewbox="0 0 24 24" fill="none">
-                            <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8"></circle>
-                            <path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
-                          </svg>
-                        </div>
-                        <div class="mp-card-label">Housing Ratio</div>
-                        <div class="mp-card-value" id="mpHousingRatio">—</div>
-                        <div class="mp-position-pill" id="mpHousingPosition">Awaiting Data</div>
-                        <div class="mp-card-hint" id="mpHousingRatioHint">Complete BasicBrain to compare income and payment.</div>
-                      </div>
+                      <div class="mp-card-label">Median List Price</div>
+                      <div class="mp-card-value" id="mpMedianListPrice">—</div>
+                      <div class="mp-card-hint">Current market anchor.</div>
                     </div>
-                    <div class="mp-footer-signals">
-                      <strong id="mpVaReady">VA Loan Ready</strong>
-                      <span class="mp-footer-dot"></span>
-                      <span id="mpMarketOutlook">Market Outlook: —</span>
-                      <span class="mp-footer-dot"></span>
-                      <span id="mpInventoryTrend">Inventory Trend: —</span>
-                      <span class="mp-footer-dot"></span>
-                      <span id="mpBuyerLeverage">Buyer Leverage: —</span>
+                    <div class="mp-card">
+                      <div class="mp-icon is-blue" aria-hidden="true">
+                        <svg viewbox="0 0 24 24" fill="none">
+                          <path d="M7 17 17 7M10 7h7v7" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                      </div>
+                      <div class="mp-card-label">Price Per Sq Ft</div>
+                      <div class="mp-card-value" id="mpPricePerSqFt">—</div>
+                      <div class="mp-card-hint">Useful for fast comparisons.</div>
+                    </div>
+                    <div class="mp-card">
+                      <div class="mp-icon is-purple" aria-hidden="true">
+                        <svg viewbox="0 0 24 24" fill="none">
+                          <rect x="5" y="5" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.7"></rect>
+                          <path d="M9 5v14M15 5v14M5 9h14M5 15h14" stroke="currentColor" stroke-width="1.2"></path>
+                        </svg>
+                      </div>
+                      <div class="mp-card-label">Active Listings</div>
+                      <div class="mp-card-value" id="mpActiveListings">—</div>
+                      <div class="mp-card-hint">Buyer leverage signal.</div>
+                    </div>
+                    <div class="mp-card">
+                      <div class="mp-icon" aria-hidden="true">
+                        <svg viewbox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8"></circle>
+                          <path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                      </div>
+                      <div class="mp-card-label">Days On Market</div>
+                      <div class="mp-card-value" id="mpDaysOnMarket">—</div>
+                      <div class="mp-card-hint">Inventory pressure signal.</div>
+                    </div>
+                    <div class="mp-card">
+                      <div class="mp-icon is-green" aria-hidden="true">
+                        <svg viewbox="0 0 24 24" fill="none">
+                          <path d="M6 11.5 12 6l6 5.5V19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1v-7.5Z" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"></path>
+                        </svg>
+                      </div>
+                      <div class="mp-card-label">Typical Buy Price</div>
+                      <div class="mp-card-value" id="mpTypicalBuyPrice">—</div>
+                      <div class="mp-card-hint">Typical list price for homes in this market.</div>
+                    </div>
+                    <div class="mp-card">
+                      <div class="mp-icon is-blue" aria-hidden="true">
+                        <svg viewbox="0 0 24 24" fill="none">
+                          <rect x="5" y="5" width="14" height="14" rx="2" stroke="currentColor" stroke-width="1.7"></rect>
+                          <path d="M8 9h8M8 12h8M8 15h5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"></path>
+                        </svg>
+                      </div>
+                      <div class="mp-card-label">Estimated VA Payment</div>
+                      <div class="mp-card-value"><span id="mpEstimatedPayment">—</span> <small>/mo</small></div>
+                      <div class="mp-card-hint">Principal, interest, taxes, insurance, and HOA estimate.</div>
+                    </div>
+                    <div class="mp-card">
+                      <div class="mp-icon is-green" aria-hidden="true">
+                        <svg viewbox="0 0 24 24" fill="none">
+                          <rect x="6" y="6" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
+                        </svg>
+                      </div>
+                      <div class="mp-card-label">Your Monthly Income</div>
+                      <div class="mp-card-value"><span id="mpMonthlyIncome">—</span> <small>/mo</small></div>
+                      <div class="mp-card-hint">BasicBrain compensation profile when available.</div>
+                    </div>
+                    <div class="mp-card">
+                      <div class="mp-icon" aria-hidden="true">
+                        <svg viewbox="0 0 24 24" fill="none">
+                          <circle cx="12" cy="12" r="7" stroke="currentColor" stroke-width="1.8"></circle>
+                          <path d="M12 8v4l3 2" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </svg>
+                      </div>
+                      <div class="mp-card-label">Housing Ratio</div>
+                      <div class="mp-card-value" id="mpHousingRatio">—</div>
+                      <div class="mp-position-pill" id="mpHousingPosition">Awaiting Data</div>
+                      <div class="mp-card-hint" id="mpHousingRatioHint">Complete BasicBrain to compare income and payment.</div>
                     </div>
                   </div>
-                  <div class="mp-right">
-                    <div class="mp-panel-card">
-                      <div class="mp-status" id="mpVerdictStatus">Market Verdict</div>
-                      <div class="mp-verdict-title" id="mpVerdictTitle">—</div>
-                      <div class="mp-verdict-copy" id="mpVerdictCopy">—</div>
-                      <div class="mp-decision-strip" aria-label="Decision summary">
-                        <div class="mp-decision-pill">
-                          <span>Best Move</span>
-                          <strong>Run mortgage scenario</strong>
-                        </div>
-                        <div class="mp-decision-pill">
-                          <span>Your Ratio</span>
-                          <strong id="mpDecisionRatio">—</strong>
-                        </div>
-                        <div class="mp-decision-pill">
-                          <span>Watch</span>
-                          <strong>Taxes, insurance, commute, inventory</strong>
-                        </div>
+                  <div class="mp-footer-signals">
+                    <strong id="mpVaReady">VA Loan Ready</strong>
+                    <span class="mp-footer-dot"></span>
+                    <span id="mpMarketOutlook">Market Outlook: —</span>
+                    <span class="mp-footer-dot"></span>
+                    <span id="mpInventoryTrend">Inventory Trend: —</span>
+                    <span class="mp-footer-dot"></span>
+                    <span id="mpBuyerLeverage">Buyer Leverage: —</span>
+                  </div>
+                </div>
+                <div class="mp-right">
+                  <div class="mp-panel-card">
+                    <div class="mp-status" id="mpVerdictStatus">Market Verdict</div>
+                    <div class="mp-verdict-title" id="mpVerdictTitle">—</div>
+                    <div class="mp-verdict-copy" id="mpVerdictCopy">—</div>
+                    <div class="mp-decision-strip" aria-label="Decision summary">
+                      <div class="mp-decision-pill">
+                        <span>Best Move</span>
+                        <strong>Run mortgage scenario</strong>
                       </div>
-                      <button class="mp-cta" id="mpMortgageCta" type="button">
-                        Run Mortgage Scenario ›
-                      </button>
-                      <div class="mp-cta-sub">
-                        Use your BasicBrain income and this market data to test a real home price.
+                      <div class="mp-decision-pill">
+                        <span>Your Ratio</span>
+                        <strong id="mpDecisionRatio">—</strong>
+                      </div>
+                      <div class="mp-decision-pill">
+                        <span>Watch</span>
+                        <strong>Taxes, insurance, commute, inventory</strong>
                       </div>
                     </div>
-                    <div class="mp-panel-card">
-                      <div class="mp-score-title">Market Scorecard</div>
-                      <div class="mp-score-grid">
-                        <div class="mp-score-mini">
-                          <span>Affordability</span>
-                          <strong id="mpScoreAffordability">—</strong>
-                          <em id="mpScoreAffordabilityLabel">—</em>
-                        </div>
-                        <div class="mp-score-mini">
-                          <span>Growth</span>
-                          <strong id="mpScoreGrowth">—</strong>
-                          <em id="mpScoreGrowthLabel">—</em>
-                        </div>
-                        <div class="mp-score-mini">
-                          <span>Stability</span>
-                          <strong id="mpScoreStability">—</strong>
-                          <em id="mpScoreStabilityLabel">—</em>
-                        </div>
-                        <div class="mp-score-mini">
-                          <span>Overall</span>
-                          <strong id="mpScoreOverall">—</strong>
-                          <em id="mpScoreOverallLabel">—</em>
-                        </div>
-                        <div class="mp-score-mini is-ratio">
-                          <span>Housing Ratio</span>
-                          <strong id="mpScoreHousingRatio">—</strong>
-                          <em id="mpScoreHousingRatioLabel">Awaiting BasicBrain</em>
-                        </div>
-                        <div class="mp-score-mini">
-                          <span>After Payment</span>
-                          <strong id="mpScoreAfterPayment">—</strong>
-                          <em id="mpScoreAfterPaymentLabel">Income minus payment</em>
-                        </div>
+                    <button class="mp-cta" id="mpMortgageCta" type="button">
+                      Run Mortgage Scenario ›
+                    </button>
+                    <div class="mp-cta-sub">
+                      Use your BasicBrain income and this market data to test a real home price.
+                    </div>
+                  </div>
+                  <div class="mp-panel-card">
+                    <div class="mp-score-title">Market Scorecard</div>
+                    <div class="mp-score-grid">
+                      <div class="mp-score-mini">
+                        <span>Affordability</span>
+                        <strong id="mpScoreAffordability">—</strong>
+                        <em id="mpScoreAffordabilityLabel">—</em>
+                      </div>
+                      <div class="mp-score-mini">
+                        <span>Growth</span>
+                        <strong id="mpScoreGrowth">—</strong>
+                        <em id="mpScoreGrowthLabel">—</em>
+                      </div>
+                      <div class="mp-score-mini">
+                        <span>Stability</span>
+                        <strong id="mpScoreStability">—</strong>
+                        <em id="mpScoreStabilityLabel">—</em>
+                      </div>
+                      <div class="mp-score-mini">
+                        <span>Overall</span>
+                        <strong id="mpScoreOverall">—</strong>
+                        <em id="mpScoreOverallLabel">—</em>
+                      </div>
+                      <div class="mp-score-mini is-ratio">
+                        <span>Housing Ratio</span>
+                        <strong id="mpScoreHousingRatio">—</strong>
+                        <em id="mpScoreHousingRatioLabel">Awaiting BasicBrain</em>
+                      </div>
+                      <div class="mp-score-mini">
+                        <span>After Payment</span>
+                        <strong id="mpScoreAfterPayment">—</strong>
+                        <em id="mpScoreAfterPaymentLabel">Income minus payment</em>
                       </div>
                     </div>
                   </div>
                 </div>
-              </section>
-            </div>
-            <script>
+              </div>
+            </section>
+          </div>
+          <script>
   (() => {
     "use strict";
     if(window.PCSU_MARKET_PANEL?.__mounted_v101) return;
@@ -2948,23 +2948,24 @@
     }, 1200);
   })();
   </script>
-          </div>
         </div>
-        <div class="market-panel w-embed"><!--  =========================================================
+      </div>
+      <div class="market-panel w-embed w-script"><!--  =========================================================
   PCSUnited • Base Demographics
-  SHELL ONLY v2.1.0 • NO MARKET PANEL
+  EMBED 1 OF 6 • MAIN MODULAR SHELL
+  v3.0.0 • 5-TAB MODULAR ARCHITECTURE
   PURPOSE
-  - Base Demographics content only
-  - Market Panel is now separate
-  - Keeps tabs:
-    Overview, Real Estate, Demographics, Base, Guidance
-  - Preserves current IDs for JS compatibility
+  - Holds global CSS/theme
+  - Holds tab buttons
+  - Holds empty tab mount points
+  - Loads selected city/base JSON once
+  - Lets each tab register its own HTML + render function
 =========================================================  -->
-          <div id="or-city-overview" style="all:initial;">
-            <link rel="preconnect" href="https://fonts.googleapis.com">
-            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-            <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-            <style>
+        <div id="or-city-overview" style="all:initial;">
+          <link rel="preconnect" href="https://fonts.googleapis.com">
+          <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+          <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+          <style>
     #or-city-overview,
     #or-city-overview *{
       box-sizing:border-box;
@@ -3488,302 +3489,55 @@
       }
     }
   </style>
-            <div class="or-wrap">
-              <div class="or-tabs">
-                <button class="or-tab is-active" data-or-tab="overview" type="button">Overview</button>
-                <button class="or-tab" data-or-tab="real-estate" type="button">Real Estate</button>
-                <button class="or-tab" data-or-tab="demographics" type="button">Demographics</button>
-                <button class="or-tab" data-or-tab="base" type="button">Base</button>
-                <button class="or-tab" data-or-tab="guidance" type="button">Guidance</button>
-              </div>
+          <div class="or-wrap">
+            <div class="or-tabs">
+              <button class="or-tab is-active" data-or-tab="overview" type="button">Overview</button>
+              <button class="or-tab" data-or-tab="real-estate" type="button">Real Estate</button>
+              <button class="or-tab" data-or-tab="demographics" type="button">Demographics</button>
+              <button class="or-tab" data-or-tab="base" type="button">Base</button>
+              <button class="or-tab" data-or-tab="guidance" type="button">Guidance</button>
+            </div>
+            <div id="orCityPanels">
               <section class="or-panel is-active" data-or-panel="overview">
-                <h2 class="or-section-title">City Overview</h2>
-                <p class="or-section-sub" id="orOverviewIntro">City overview loaded from JSON.</p>
-                <div class="or-grid-4">
-                  <div class="or-stat">
-                    <div class="or-stat-label">Median List Price</div>
-                    <div class="or-stat-value" id="orOvListPrice">—</div>
-                    <div class="or-stat-hint">Current pricing posture across the city.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Price Per Sq Ft</div>
-                    <div class="or-stat-value" id="orOvPpsf">—</div>
-                    <div class="or-stat-hint">Useful for fast area comparisons.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Active Listings</div>
-                    <div class="or-stat-value" id="orOvListings">—</div>
-                    <div class="or-stat-hint">Helps frame current buyer leverage.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Property Tax Rate</div>
-                    <div class="or-stat-value" id="orOvTaxRate">—</div>
-                    <div class="or-stat-hint">Ownership cost needs this, not just list price.</div>
-                  </div>
-                </div>
-                <div class="or-split">
-                  <div class="or-stack">
-                    <div class="or-list-card">
-                      <div class="or-list-title">Summary Points</div>
-                      <ul class="or-list" id="orSummaryPoints"></ul>
-                    </div>
-                    <div class="or-quote" id="orFinancialBrief">Loading financial brief...</div>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Market Score Breakdown</div>
-                    <div class="or-bar-list" id="orScoreBars"></div>
-                  </div>
-                </div>
+                <div id="orOverviewMount"></div>
               </section>
               <section class="or-panel" data-or-panel="real-estate">
-                <h2 class="or-section-title">Real Estate</h2>
-                <p class="or-section-sub" id="orRealEstateIntro">
-                  Home values, rent ranges, ownership costs, and neighborhood positioning.
-                </p>
-                <div class="or-bed-top">
-                  <div>
-                    <div class="or-kpi-label">Bedroom Filter</div>
-                    <div class="or-bed-buttons" id="orBedButtons">
-                      <button class="or-bed-btn is-active" data-or-bed="3" type="button">3 Bed</button>
-                      <button class="or-bed-btn" data-or-bed="2" type="button">2 Bed</button>
-                      <button class="or-bed-btn" data-or-bed="4" type="button">4 Bed</button>
-                      <button class="or-bed-btn" data-or-bed="5" type="button">5 Bed</button>
-                    </div>
-                  </div>
-                  <div class="or-pill" id="orBedAsOf">As of —</div>
-                </div>
-                <div class="or-grid-4">
-                  <div class="or-stat">
-                    <div class="or-stat-label">Avg Home Price</div>
-                    <div class="or-stat-value" id="orBedHomePrice">—</div>
-                    <div class="or-stat-hint">Average target price for selected bedroom count.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Avg Rent</div>
-                    <div class="or-stat-value" id="orBedRent">—</div>
-                    <div class="or-stat-hint">Average monthly rent for selected bedroom count.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Avg Mortgage</div>
-                    <div class="or-stat-value" id="orBedMortgage">—</div>
-                    <div class="or-stat-hint">Estimated all-in monthly payment anchor.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Avg Utilities</div>
-                    <div class="or-stat-value" id="orBedUtilities">—</div>
-                    <div class="or-stat-hint">Electric, gas, water, and sewer estimate.</div>
-                  </div>
-                </div>
-                <div class="or-grid-2">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Ownership Cost Notes</div>
-                    <ul class="or-list" id="orOwnershipNotes"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Target Neighborhoods</div>
-                    <ul class="or-list" id="orTargetNeighborhoods"></ul>
-                  </div>
-                </div>
-                <div class="or-grid-3">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Opportunities</div>
-                    <ul class="or-list" id="orOpportunities"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Risks</div>
-                    <ul class="or-list" id="orRisks"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Investor Angle</div>
-                    <ul class="or-list" id="orInvestorAngles"></ul>
-                  </div>
-                </div>
+                <div id="orRealEstateMount"></div>
               </section>
               <section class="or-panel" data-or-panel="demographics">
-                <h2 class="or-section-title">Demographics</h2>
-                <p class="or-section-sub">
-                  Population, income, education, workforce, and housing context.
-                </p>
-                <div class="or-grid-3">
-                  <div class="or-stat">
-                    <div class="or-stat-label">Population</div>
-                    <div class="or-stat-value" id="orDemoPopulation">—</div>
-                    <div class="or-stat-hint">Current estimate from the city intelligence file.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Median Age</div>
-                    <div class="or-stat-value" id="orDemoAge">—</div>
-                    <div class="or-stat-hint">Signal for life stage and housing demand.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Persons / Household</div>
-                    <div class="or-stat-value" id="orDemoHouseholdSize">—</div>
-                    <div class="or-stat-hint">Useful indicator for bedroom demand.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Median Household Income</div>
-                    <div class="or-stat-value" id="orDemoIncome">—</div>
-                    <div class="or-stat-hint">Core measure of city purchasing power.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Per Capita Income</div>
-                    <div class="or-stat-value" id="orDemoPerCapita">—</div>
-                    <div class="or-stat-hint">Broad individual earning context.</div>
-                  </div>
-                  <div class="or-stat">
-                    <div class="or-stat-label">Poverty Rate</div>
-                    <div class="or-stat-value" id="orDemoPoverty">—</div>
-                    <div class="or-stat-hint">Signals economic strain across the city.</div>
-                  </div>
-                </div>
-                <div class="or-grid-3">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Education</div>
-                    <div class="or-mini-bars" id="orEducationBars"></div>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Workforce & Mobility</div>
-                    <div class="or-mini-bars" id="orLaborBars"></div>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Housing / Rental Snapshot</div>
-                    <div class="or-mini-bars" id="orHousingBars"></div>
-                  </div>
-                </div>
-                <div class="or-grid-2">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Schools & Safety</div>
-                    <ul class="or-list" id="orQualityNotes"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Climate & Lifestyle</div>
-                    <ul class="or-list" id="orClimateList"></ul>
-                  </div>
-                </div>
+                <div id="orDemographicsMount"></div>
               </section>
               <section class="or-panel" data-or-panel="base">
-                <h2 class="or-section-title">Base Overview</h2>
-                <p class="or-section-sub" id="orBaseIntro">Base overview loaded from JSON.</p>
-                <div class="or-grid-4 or-base-bluf-grid">
-                  <div class="or-stat or-base-bluf-card">
-                    <div class="or-stat-label">Mission BLUF</div>
-                    <div class="or-base-bluf-copy" id="orBaseBlufMission">—</div>
-                  </div>
-                  <div class="or-stat or-base-bluf-card">
-                    <div class="or-stat-label">Commute BLUF</div>
-                    <div class="or-base-bluf-copy" id="orBaseBlufCommute">—</div>
-                  </div>
-                  <div class="or-stat or-base-bluf-card">
-                    <div class="or-stat-label">Housing BLUF</div>
-                    <div class="or-base-bluf-copy" id="orBaseBlufHousing">—</div>
-                  </div>
-                  <div class="or-stat or-base-bluf-card">
-                    <div class="or-stat-label">Family BLUF</div>
-                    <div class="or-base-bluf-copy" id="orBaseBlufFamily">—</div>
-                  </div>
-                </div>
-                <div class="or-base-map-layout">
-                  <div class="or-base-map-stack">
-                    <div class="or-list-card or-base-map-card">
-                      <div class="or-list-title">Base Map</div>
-                      <a id="orBaseMapLink" href="#" target="_blank" rel="noopener noreferrer" class="or-base-map-link" aria-label="Open base map">
-                        <img id="orBaseMapImg" class="or-base-map-img" src="" alt="Base map">
-                      </a>
-                      <div class="or-base-map-empty" id="orBaseMapEmpty">No base map available yet.</div>
-                      <div class="or-base-map-caption" id="orBaseMapCaption">Public-facing base orientation map.</div>
-                    </div>
-                    <div class="or-list-card">
-                      <div class="or-list-title">Base Quick Facts</div>
-                      <ul class="or-list" id="orBaseQuickFacts"></ul>
-                    </div>
-                    <div class="or-quote" id="orBaseWhyItMatters">Loading base summary...</div>
-                  </div>
-                  <div class="or-base-right-rail">
-                    <div class="or-rail-card">
-                      <div class="or-rail-title">Strategy Signals</div>
-                      <div class="or-signal-list" id="orBaseSignals"></div>
-                    </div>
-                    <div class="or-rail-card">
-                      <div class="or-rail-title">Access & Commute</div>
-                      <ul class="or-list" id="orBaseAccess"></ul>
-                    </div>
-                    <div class="or-rail-card">
-                      <div class="or-rail-title">On-Base Living Notes</div>
-                      <ul class="or-list" id="orBaseHousing"></ul>
-                    </div>
-                    <div class="or-rail-card">
-                      <div class="or-rail-title">Fast Read</div>
-                      <div class="or-quick-grid">
-                        <div class="or-quick-mini">
-                          <div class="or-quick-mini-label">Installation</div>
-                          <div class="or-quick-mini-value" id="orBaseQuickInstall">—</div>
-                        </div>
-                        <div class="or-quick-mini">
-                          <div class="or-quick-mini-label">Metro</div>
-                          <div class="or-quick-mini-value" id="orBaseQuickMetro">—</div>
-                        </div>
-                        <div class="or-quick-mini">
-                          <div class="or-quick-mini-label">Housing Type</div>
-                          <div class="or-quick-mini-value" id="orBaseQuickHousingType">—</div>
-                        </div>
-                        <div class="or-quick-mini">
-                          <div class="or-quick-mini-label">PCS Personality</div>
-                          <div class="or-quick-mini-value" id="orBaseQuickPersonality">—</div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                <div id="orBaseMount"></div>
               </section>
               <section class="or-panel" data-or-panel="guidance">
-                <h2 class="or-section-title">Buyer, Seller, and Landlord Guidance</h2>
-                <p class="or-section-sub">
-                  Decision notes built directly from your city JSON.
-                </p>
-                <div class="or-grid-3">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Buyer Guidance</div>
-                    <ul class="or-list" id="orBuyerGuidance"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Seller Guidance</div>
-                    <ul class="or-list" id="orSellerGuidance"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Landlord Notes</div>
-                    <ul class="or-list" id="orLandlordNotes"></ul>
-                  </div>
-                </div>
-                <div class="or-grid-2">
-                  <div class="or-list-card">
-                    <div class="or-list-title">Buyer Notes</div>
-                    <ul class="or-list" id="orBuyerNotes"></ul>
-                  </div>
-                  <div class="or-list-card">
-                    <div class="or-list-title">Seller Notes</div>
-                    <ul class="or-list" id="orSellerNotes"></ul>
-                  </div>
-                </div>
+                <div id="orGuidanceMount"></div>
               </section>
-              <div class="or-error" id="orCityError"></div>
-              <div class="or-foot">
-                PCSUnited Base Demographics is powered by your base cities JSON files.
-              </div>
+            </div>
+            <div class="or-error" id="orCityError"></div>
+            <div class="or-foot">
+              PCSUnited Base Demographics is powered by your base cities JSON files and official Census ACS profile data.
             </div>
           </div>
         </div>
-        <div class="w-embed w-script">
-          <script>
+        <script>
 (() => {
   "use strict";
-  if(window.OROZCO_CITY_OVERVIEW_SINGLE?.__mounted_no_market_panel) return;
-  window.OROZCO_CITY_OVERVIEW_SINGLE = {
-    __mounted_no_market_panel:true
-  };
+  if(window.PCSU_BASE_DEMO?.__mounted_v300) return;
   const root = document.getElementById("or-city-overview");
   if(!root) return;
-  let CITY = null;
-  let ACTIVE_BED = "3";
+  const TAB_MOUNTS = {
+    overview:"#orOverviewMount",
+    "real-estate":"#orRealEstateMount",
+    demographics:"#orDemographicsMount",
+    base:"#orBaseMount",
+    guidance:"#orGuidanceMount"
+  };
+  const STATE = {
+    city:null,
+    tabs:{},
+    activeBed:"3"
+  };
   const $ = (sel, node = root) => node.querySelector(sel);
   const $$ = (sel, node = root) => Array.from(node.querySelectorAll(sel));
   function normalizeCityJsonUrl(url){
@@ -3812,6 +3566,7 @@
       "charleston":"Charleston.json",
       "creech":"Creech.json",
       "davis-monthan":"Davis-Monthan.json",
+      "davis-monthan-afb":"Davis-Monthan.json",
       "dover":"Dover.json",
       "dyess":"Dyess.json",
       "eglin":"Eglin.json",
@@ -3929,12 +3684,20 @@
   function fmtPct(v, digits = 1){
     const n = Number(v);
     if(!Number.isFinite(n)) return "—";
-    return `${n.toFixed(digits)}%`;
+    return `${n.toFixed(digits).replace(".0", "")}%`;
   }
   function fmtPctFromDecimal(v, digits = 2){
     const n = Number(v);
     if(!Number.isFinite(n)) return "—";
     return `${(n * 100).toFixed(digits)}%`;
+  }
+  function fmtPlain(v, suffix = ""){
+    if(v === null || v === undefined || v === "") return "—";
+    const n = Number(v);
+    if(Number.isFinite(n)){
+      return `${String(n).replace(/\.0$/, "")}${suffix}`;
+    }
+    return `${String(v)}${suffix}`;
   }
   function arr(v){
     return Array.isArray(v) ? v : [];
@@ -3960,47 +3723,21 @@
     if(typeof input === "object") return Object.values(input).flatMap(flattenTextList).filter(Boolean);
     return [];
   }
-  function setText(sel, value){
-    const el = $(sel);
-    if(el){
-      el.textContent = value ?? "—";
-    }
+  function setText(sel, value, node = root){
+    const el = node.querySelector(sel);
+    if(el) el.textContent = value ?? "—";
   }
-  function setHtml(sel, html){
-    const el = $(sel);
-    if(el){
-      el.innerHTML = html || "";
-    }
+  function setHtml(sel, html, node = root){
+    const el = node.querySelector(sel);
+    if(el) el.innerHTML = html || "";
   }
-  function renderList(sel, items){
-    const el = $(sel);
+  function renderList(sel, items, node = root){
+    const el = node.querySelector(sel);
     if(!el) return;
     const safe = arr(items).filter(Boolean);
     el.innerHTML = safe.length
       ? safe.map(item => `<li>${esc(item)}</li>`).join("")
       : `<li>No data available yet.</li>`;
-  }
-  function renderScoreBars(scorecard = {}){
-    const rows = [
-      ["Affordability", scorecard.affordability_score],
-      ["Growth", scorecard.growth_score],
-      ["Stability", scorecard.stability_score],
-      ["Military Fit", scorecard.military_fit_score],
-      ["Overall", scorecard.overall_score]
-    ];
-    return rows.map(([label, value]) => {
-      const n = Number(value);
-      const width = Number.isFinite(n) ? Math.max(0, Math.min(n, 100)) : 0;
-      return `
-        <div class="or-bar-row">
-          <div class="or-bar-name">${esc(label)}</div>
-          <div class="or-bar-track">
-            <div class="or-bar-fill" style="width:${width}%"></div>
-          </div>
-          <div class="or-bar-val">${Number.isFinite(n) ? n : "—"}</div>
-        </div>
-      `;
-    }).join("");
   }
   function miniBar(label, value, max, displayText){
     const n = Number(value);
@@ -4031,6 +3768,8 @@
   }
   function bindTabs(){
     $$("[data-or-tab]").forEach(btn => {
+      if(btn.dataset.bound === "true") return;
+      btn.dataset.bound = "true";
       btn.addEventListener("click", () => {
         const tab = btn.getAttribute("data-or-tab");
         if(!tab) return;
@@ -4042,110 +3781,1885 @@
             panel.getAttribute("data-or-panel") === tab
           );
         });
+        renderTab(tab);
       });
     });
   }
-  function bindBedrooms(){
-    const wrap = $("#orBedButtons");
-    if(!wrap) return;
-    wrap.addEventListener("click", e => {
-      const btn = e.target.closest("[data-or-bed]");
-      if(!btn || !CITY) return;
-      ACTIVE_BED = btn.getAttribute("data-or-bed") || "3";
-      $$("[data-or-bed]", wrap).forEach(node => node.classList.remove("is-active"));
-      btn.classList.add("is-active");
-      renderBedroom(CITY, ACTIVE_BED);
+  function mountTab(name){
+    const tab = STATE.tabs[name];
+    const mountSelector = TAB_MOUNTS[name];
+    const mount = mountSelector ? $(mountSelector) : null;
+    if(!tab || !mount) return;
+    if(tab.html && mount.dataset.tabMounted !== "true"){
+      mount.innerHTML = tab.html;
+      mount.dataset.tabMounted = "true";
+    }
+  }
+  function renderTab(name){
+    const tab = STATE.tabs[name];
+    const mountSelector = TAB_MOUNTS[name];
+    const mount = mountSelector ? $(mountSelector) : null;
+    if(!tab || !mount) return;
+    mountTab(name);
+    if(typeof tab.render === "function" && STATE.city){
+      tab.render({
+        city:STATE.city,
+        root,
+        mount,
+        state:STATE,
+        utils:window.PCSU_BASE_DEMO.utils
+      });
+    }
+  }
+  function renderAll(){
+    hideError();
+    Object.keys(STATE.tabs).forEach(name => {
+      mountTab(name);
     });
+    Object.keys(STATE.tabs).forEach(name => {
+      renderTab(name);
+    });
+    try{
+      window.dispatchEvent(new CustomEvent("pcsunited:base-demographics-ready", {
+        detail:{
+          source:"pcsunited.base-demographics.modular.v3.0.0",
+          city:STATE.city,
+          updated_at:new Date().toISOString()
+        }
+      }));
+    }catch(_){}
+  }
+  function registerTab(name, config){
+    if(!name || !config) return;
+    STATE.tabs[name] = {
+      html:config.html || "",
+      render:typeof config.render === "function" ? config.render : null
+    };
+    mountTab(name);
+    if(STATE.city){
+      renderTab(name);
+    }
+  }
+  async function loadCity(){
+    const cityJsonUrl = getCityJsonUrl();
+    try{
+      const res = await fetch(cityJsonUrl, {
+        cache:"no-store"
+      });
+      if(!res.ok){
+        throw new Error(`HTTP ${res.status} while loading ${cityJsonUrl}`);
+      }
+      STATE.city = await res.json();
+      renderAll();
+    }catch(err){
+      console.error("Base Demographics load error:", err);
+      showError(String(err?.message || err));
+    }
+  }
+  function handleBaseSelected(event){
+    const item = event?.detail || {};
+    const selectedUrl =
+      item.jsonUrl ||
+      item.cityJsonUrl ||
+      item.url ||
+      item.city_url ||
+      "";
+    if(selectedUrl){
+      const fixed = normalizeCityJsonUrl(selectedUrl);
+      window.PCSU_SELECTED_CITY_JSON_URL = fixed;
+      window.OROZCO_CITY_JSON_URL = fixed;
+      try{
+        localStorage.setItem("pcsunited.selectedCityJsonUrl.v1", fixed);
+      }catch(_){}
+    }
+    loadCity();
+  }
+  window.PCSU_BASE_DEMO = {
+    __mounted_v300:true,
+    state:STATE,
+    registerTab,
+    renderTab,
+    renderAll,
+    loadCity,
+    utils:{
+      $,
+      $$,
+      arr,
+      esc,
+      fmtMoney,
+      fmtNum,
+      fmtPct,
+      fmtPctFromDecimal,
+      fmtPlain,
+      firstDefined,
+      flattenTextList,
+      setText,
+      setHtml,
+      renderList,
+      miniBar,
+      normalizeCityJsonUrl
+    }
+  };
+  window.PCSU_BASE_DEMO_REGISTER_TAB = registerTab;
+  window.PCSU_BASE_DEMO_LOAD_CITY = loadCity;
+  window.loadCity = loadCity;
+  const pending = Array.isArray(window.PCSU_BASE_DEMO_PENDING_TABS)
+    ? window.PCSU_BASE_DEMO_PENDING_TABS
+    : [];
+  pending.forEach(item => registerTab(item.name, item.config));
+  window.PCSU_BASE_DEMO_PENDING_TABS = [];
+  window.addEventListener("pcsu:base-selected", handleBaseSelected);
+  window.addEventListener("pcsunited:base-selected", handleBaseSelected);
+  hydrateSelectedBaseFromStorage();
+  bindTabs();
+  loadCity();
+})();
+</script>
+      </div>
+      <div class="w-embed w-script"><!--  =========================================================
+  PCSUnited • Base Demographics
+  EMBED 2 OF 6 • OVERVIEW TAB
+  v3.0.0
+=========================================================  -->
+        <script>
+(() => {
+  "use strict";
+  const html = `
+    <h2 class="or-section-title">City Overview</h2>
+    <p class="or-section-sub" id="orOverviewIntro">City overview loaded from JSON.</p>
+    <div class="or-grid-4">
+      <div class="or-stat">
+        <div class="or-stat-label">Median List Price</div>
+        <div class="or-stat-value" id="orOvListPrice">—</div>
+        <div class="or-stat-hint">Current pricing posture across the city.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Price Per Sq Ft</div>
+        <div class="or-stat-value" id="orOvPpsf">—</div>
+        <div class="or-stat-hint">Useful for fast area comparisons.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Active Listings</div>
+        <div class="or-stat-value" id="orOvListings">—</div>
+        <div class="or-stat-hint">Helps frame current buyer leverage.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Property Tax Rate</div>
+        <div class="or-stat-value" id="orOvTaxRate">—</div>
+        <div class="or-stat-hint">Ownership cost needs this, not just list price.</div>
+      </div>
+    </div>
+    <div class="or-split">
+      <div class="or-stack">
+        <div class="or-list-card">
+          <div class="or-list-title">Summary Points</div>
+          <ul class="or-list" id="orSummaryPoints"></ul>
+        </div>
+        <div class="or-quote" id="orFinancialBrief">Loading financial brief...</div>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Market Score Breakdown</div>
+        <div class="or-bar-list" id="orScoreBars"></div>
+      </div>
+    </div>
+  `;
+  function renderScoreBars(scorecard = {}, u){
+    const rows = [
+      ["Affordability", scorecard.affordability_score],
+      ["Growth", scorecard.growth_score],
+      ["Stability", scorecard.stability_score],
+      ["Military Fit", scorecard.military_fit_score],
+      ["Overall", scorecard.overall_score]
+    ];
+    return rows.map(([label, value]) => {
+      const n = Number(value);
+      const width = Number.isFinite(n) ? Math.max(0, Math.min(n, 100)) : 0;
+      return `
+        <div class="or-bar-row">
+          <div class="or-bar-name">${u.esc(label)}</div>
+          <div class="or-bar-track">
+            <div class="or-bar-fill" style="width:${width}%"></div>
+          </div>
+          <div class="or-bar-val">${Number.isFinite(n) ? n : "—"}</div>
+        </div>
+      `;
+    }).join("");
+  }
+  function render(ctx){
+    const data = ctx.city;
+    const u = ctx.utils;
+    const mount = ctx.mount;
+    u.setText("#orOverviewIntro", data.profile || "City overview loaded.", mount);
+    u.setText(
+      "#orOvListPrice",
+      u.fmtMoney(data.metrics?.median_list_price || data.market_metrics?.median_list_price),
+      mount
+    );
+    u.setText(
+      "#orOvPpsf",
+      Number.isFinite(Number(data.metrics?.price_per_sqft || data.market_metrics?.price_per_sqft))
+        ? u.fmtMoney(data.metrics?.price_per_sqft || data.market_metrics?.price_per_sqft)
+        : "—",
+      mount
+    );
+    u.setText(
+      "#orOvListings",
+      u.fmtNum(data.metrics?.active_listings_total || data.market_metrics?.active_listings_total),
+      mount
+    );
+    u.setText(
+      "#orOvTaxRate",
+      u.fmtPctFromDecimal(data.property_tax_rate ?? data.ownership_costs?.property_tax_rate),
+      mount
+    );
+    u.renderList("#orSummaryPoints", data.summary_points, mount);
+    const briefParts = [
+      data.financial_brief?.affordability_summary,
+      data.financial_brief?.buyer_opportunity ? `Buyer opportunity: ${data.financial_brief.buyer_opportunity}.` : "",
+      data.financial_brief?.bah_vs_buy_position ? `Buy position: ${data.financial_brief.bah_vs_buy_position}.` : "",
+      data.financial_brief?.bah_vs_rent_position ? `Rent comparison: ${data.financial_brief.bah_vs_rent_position}.` : ""
+    ].filter(Boolean);
+    u.setText("#orFinancialBrief", briefParts.join(" ") || "No financial brief available.", mount);
+    u.setHtml("#orScoreBars", renderScoreBars(data.scorecard || {}, u), mount);
+  }
+  const config = { html, render };
+  if(window.PCSU_BASE_DEMO_REGISTER_TAB){
+    window.PCSU_BASE_DEMO_REGISTER_TAB("overview", config);
+  }else{
+    window.PCSU_BASE_DEMO_PENDING_TABS = window.PCSU_BASE_DEMO_PENDING_TABS || [];
+    window.PCSU_BASE_DEMO_PENDING_TABS.push({ name:"overview", config });
+  }
+})();
+</script>
+      </div>
+      <div class="w-embed w-script"><!--  =========================================================
+  PCSUnited • Base Demographics
+  EMBED 3 OF 6 • REAL ESTATE TAB
+  v3.2.1 • RENTCAST BEDROOM FILTER POWERED / FORCE OVERRIDE
+  UPDATE
+  - Keeps Bedroom Filter interaction
+  - Bedroom buttons now update all Real Estate sections
+  - Replaces old Live Market Snapshot version
+  - Updates:
+    Median Home Price
+    Median Rent
+    Active Sales
+    Active Rentals
+    Bedroom Market Snapshot
+    Sale Listings Summary
+    Rental Listings Summary
+  - Uses local by_bedroom JSON immediately
+  - Uses RentCast sale/rental listings filtered by bedroom count
+=========================================================  -->
+        <script>
+(() => {
+  "use strict";
+  const RENTCAST_API_BASE = "https://thewing.netlify.app/api/rentcast";
+  const TAB_NAME = "real-estate";
+  const MOUNT_ID = "orRealEstateMount";
+  const html = `
+    <h2 class="or-section-title">Real Estate</h2>
+    <p class="or-section-sub" id="orRealEstateIntro">
+      Bedroom-specific sale and rental market data powered by RentCast, with PCSUnited JSON fallback values.
+    </p>
+    <div class="or-bed-top">
+      <div>
+        <div class="or-kpi-label">Bedroom Filter</div>
+        <div class="or-bed-buttons" id="orBedButtons">
+          <button class="or-bed-btn" data-or-bed="2" type="button">2 Bed</button>
+          <button class="or-bed-btn is-active" data-or-bed="3" type="button">3 Bed</button>
+          <button class="or-bed-btn" data-or-bed="4" type="button">4 Bed</button>
+          <button class="or-bed-btn" data-or-bed="5" type="button">5 Bed</button>
+        </div>
+      </div>
+      <div class="or-pill" id="orBedAsOf">As of —</div>
+    </div>
+    <div class="or-grid-4">
+      <div class="or-stat">
+        <div class="or-stat-label">Median Home Price</div>
+        <div class="or-stat-value" id="orBedHomePrice">—</div>
+        <div class="or-stat-hint" id="orBedHomeHint">Sale listings filtered by selected bedroom count.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Median Rent</div>
+        <div class="or-stat-value" id="orBedRent">—</div>
+        <div class="or-stat-hint" id="orBedRentHint">Rental listings filtered by selected bedroom count.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Active Sales</div>
+        <div class="or-stat-value" id="orBedSaleCount">—</div>
+        <div class="or-stat-hint">Current sale listings matching selected bedroom count.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Active Rentals</div>
+        <div class="or-stat-value" id="orBedRentalCount">—</div>
+        <div class="or-stat-hint">Current rental listings matching selected bedroom count.</div>
+      </div>
+    </div>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">Bedroom Market Snapshot</div>
+        <div class="or-mini-bars" id="orBedroomMarketBars"></div>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Sale Listings Summary</div>
+        <div class="or-mini-bars" id="orRentCastSaleBars"></div>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Rental Listings Summary</div>
+        <div class="or-mini-bars" id="orRentCastRentalBars"></div>
+      </div>
+    </div>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">Target Neighborhoods</div>
+        <ul class="or-list" id="orTargetNeighborhoods"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Opportunities</div>
+        <ul class="or-list" id="orOpportunities"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Risks</div>
+        <ul class="or-list" id="orRisks"></ul>
+      </div>
+    </div>
+    <div class="or-grid-2">
+      <div class="or-list-card">
+        <div class="or-list-title">Investor / Landlord Angle</div>
+        <ul class="or-list" id="orInvestorAngles"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Real Estate Data Source</div>
+        <ul class="or-list" id="orRealEstateSourceNotes">
+          <li>Waiting for bedroom-specific RentCast data.</li>
+        </ul>
+      </div>
+    </div>
+  `;
+  function cleanNumber(value){
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+  function average(values){
+    const nums = values.map(cleanNumber).filter(n => n !== null);
+    if(!nums.length) return null;
+    return nums.reduce((sum, n) => sum + n, 0) / nums.length;
+  }
+  function median(values){
+    const nums = values.map(cleanNumber).filter(n => n !== null).sort((a,b) => a - b);
+    if(!nums.length) return null;
+    const mid = Math.floor(nums.length / 2);
+    return nums.length % 2
+      ? nums[mid]
+      : (nums[mid - 1] + nums[mid]) / 2;
+  }
+  function getList(payload){
+    if(Array.isArray(payload?.data)) return payload.data;
+    if(Array.isArray(payload?.data?.listings)) return payload.data.listings;
+    if(Array.isArray(payload?.data?.properties)) return payload.data.properties;
+    if(Array.isArray(payload?.listings)) return payload.listings;
+    if(Array.isArray(payload?.properties)) return payload.properties;
+    return [];
+  }
+  function getGeo(data){
+    const base = data?.base_profile || {};
+    const zipRaw =
+      data.zip ||
+      data.geo?.zip ||
+      base.zip ||
+      data.postal_code ||
+      "";
+    const zipCode = String(zipRaw || "").trim().slice(0, 5);
+    const cityRaw =
+      data.city ||
+      data.place_detail ||
+      data.market_label ||
+      base.metro ||
+      data.name ||
+      "";
+    let city = String(cityRaw || "").trim();
+    let state =
+      data.state_code ||
+      data.state ||
+      data.geo?.state ||
+      data.geo?.state_code ||
+      "";
+    if(city.includes(",")){
+      const parts = city.split(",").map(x => x.trim()).filter(Boolean);
+      city = parts[0] || city;
+      state = state || parts[1] || "";
+    }
+    city = city
+      .replace(/\s+[A-Z]{2}$/,"")
+      .replace(/\s+AFB$/i,"")
+      .trim();
+    return {
+      city,
+      state:String(state || "").trim().toUpperCase(),
+      zipCode
+    };
+  }
+  function makeListingUrl(action, geo, bedrooms, limit = 50){
+    const params = new URLSearchParams();
+    params.set("action", action);
+    params.set("bedrooms", String(bedrooms));
+    params.set("limit", String(limit));
+    params.set("includeTotalCount", "true");
+    if(geo.city && geo.state){
+      params.set("city", geo.city);
+      params.set("state", geo.state);
+    }else if(geo.zipCode){
+      params.set("zipCode", geo.zipCode);
+    }else{
+      return "";
+    }
+    return `${RENTCAST_API_BASE}?${params.toString()}`;
+  }
+  async function fetchJson(url){
+    if(!url) return null;
+    const res = await fetch(url, {
+      cache:"no-store"
+    });
+    const payload = await res.json();
+    if(!res.ok || !payload?.ok){
+      throw new Error(payload?.error || `HTTP ${res.status}`);
+    }
+    return payload;
+  }
+  function summarizeSaleListings(payload){
+    const listings = getList(payload);
+    const prices = listings.map(x => x.price || x.listPrice);
+    const ppsf = listings.map(x => x.pricePerSquareFoot || x.pricePerSqft);
+    const dom = listings.map(x => x.daysOnMarket || x.daysOld);
+    return {
+      count: cleanNumber(payload?.totalCount) || listings.length,
+      medianPrice: median(prices),
+      avgPrice: average(prices),
+      avgPpsf: average(ppsf),
+      avgDom: average(dom),
+      listings
+    };
+  }
+  function summarizeRentalListings(payload){
+    const listings = getList(payload);
+    const rents = listings.map(x => x.price || x.rent || x.listPrice);
+    const rentPpsf = listings.map(x => x.rentPerSquareFoot || x.pricePerSquareFoot || x.pricePerSqft);
+    const dom = listings.map(x => x.daysOnMarket || x.daysOld);
+    return {
+      count: cleanNumber(payload?.totalCount) || listings.length,
+      medianRent: median(rents),
+      avgRent: average(rents),
+      avgRentPpsf: average(rentPpsf),
+      avgDom: average(dom),
+      listings
+    };
+  }
+  function setActiveButton(mount, bedKey){
+    const wrap = mount.querySelector("#orBedButtons");
+    if(!wrap) return;
+    Array.from(wrap.querySelectorAll("[data-or-bed]")).forEach(node => {
+      node.classList.toggle(
+        "is-active",
+        node.getAttribute("data-or-bed") === String(bedKey)
+      );
+    });
+  }
+  function renderJsonBedroomFallback(data, bedKey, u, mount, sourceNote){
+    const bed = data.by_bedroom?.[bedKey] || {};
+    const homePrice =
+      bed.home_price?.avg ||
+      bed.home_price?.median ||
+      0;
+    const rent =
+      bed.rent_monthly?.avg ||
+      bed.rent_monthly?.median ||
+      0;
+    const mortgage =
+      bed.mortgage_monthly?.avg ||
+      bed.mortgage_monthly?.median ||
+      0;
+    const utilities =
+      bed.utilities?.total?.avg ||
+      bed.utilities?.total?.median ||
+      0;
+    const asOf =
+      bed.home_price?.as_of ||
+      bed.rent_monthly?.as_of ||
+      data.metrics?.as_of ||
+      "N/A";
+    u.setText("#orBedAsOf", `As of ${asOf}`, mount);
+    u.setText("#orBedHomePrice", u.fmtMoney(homePrice), mount);
+    u.setText("#orBedRent", u.fmtMoney(rent), mount);
+    u.setText("#orBedSaleCount", "—", mount);
+    u.setText("#orBedRentalCount", "—", mount);
+    u.setText("#orBedHomeHint", `${bedKey}-bed fallback value from local JSON.`, mount);
+    u.setText("#orBedRentHint", `${bedKey}-bed fallback value from local JSON.`, mount);
+    u.setHtml("#orBedroomMarketBars", [
+      u.miniBar("Home Price", homePrice || 0, 900000, u.fmtMoney(homePrice)),
+      u.miniBar("Rent", rent || 0, 5000, u.fmtMoney(rent)),
+      u.miniBar("Mortgage", mortgage || 0, 6000, u.fmtMoney(mortgage)),
+      u.miniBar("Utilities", utilities || 0, 1000, u.fmtMoney(utilities))
+    ].join(""), mount);
+    u.setHtml("#orRentCastSaleBars", [
+      u.miniBar("Active Sales", 0, 100, "—"),
+      u.miniBar("Median Price", homePrice || 0, 900000, u.fmtMoney(homePrice)),
+      u.miniBar("Avg $ / Sq Ft", 0, 500, "—"),
+      u.miniBar("Days Market", 0, 120, "—")
+    ].join(""), mount);
+    u.setHtml("#orRentCastRentalBars", [
+      u.miniBar("Active Rentals", 0, 100, "—"),
+      u.miniBar("Median Rent", rent || 0, 5000, u.fmtMoney(rent)),
+      u.miniBar("Rent / Sq Ft", 0, 5, "—"),
+      u.miniBar("Days Market", 0, 120, "—")
+    ].join(""), mount);
+    u.renderList("#orRealEstateSourceNotes", [
+      sourceNote || "Showing local bedroom-level JSON fallback values.",
+      "RentCast bedroom-specific data was unavailable or has not loaded yet.",
+      "Bedroom filter remains fully interactive."
+    ], mount);
+  }
+  function renderLoadingBedroom(bedKey, u, mount){
+    u.setText("#orBedAsOf", `Loading ${bedKey}-bed live data...`, mount);
+    u.setHtml("#orBedroomMarketBars", [
+      u.miniBar("Loading", 35, 100, "Live")
+    ].join(""), mount);
+    u.setHtml("#orRentCastSaleBars", [
+      u.miniBar("Loading Sales", 35, 100, "Live")
+    ].join(""), mount);
+    u.setHtml("#orRentCastRentalBars", [
+      u.miniBar("Loading Rentals", 35, 100, "Live")
+    ].join(""), mount);
+    u.renderList("#orRealEstateSourceNotes", [
+      `Loading RentCast ${bedKey}-bed sale and rental listings.`,
+      "Local JSON values are shown first, then replaced by live listings if available."
+    ], mount);
+  }
+  function renderBedroomRentCast(data, bedKey, saleSummary, rentalSummary, u, mount){
+    const bed = data.by_bedroom?.[bedKey] || {};
+    const fallbackHome =
+      bed.home_price?.avg ||
+      bed.home_price?.median ||
+      null;
+    const fallbackRent =
+      bed.rent_monthly?.avg ||
+      bed.rent_monthly?.median ||
+      null;
+    const medianHomePrice =
+      saleSummary.medianPrice ||
+      saleSummary.avgPrice ||
+      fallbackHome;
+    const medianRent =
+      rentalSummary.medianRent ||
+      rentalSummary.avgRent ||
+      fallbackRent;
+    const saleCount = saleSummary.count || 0;
+    const rentalCount = rentalSummary.count || 0;
+    u.setText("#orBedAsOf", `Live ${bedKey}-bed market data`, mount);
+    u.setText("#orBedHomePrice", u.fmtMoney(medianHomePrice), mount);
+    u.setText("#orBedRent", u.fmtMoney(medianRent), mount);
+    u.setText("#orBedSaleCount", u.fmtNum(saleCount), mount);
+    u.setText("#orBedRentalCount", u.fmtNum(rentalCount), mount);
+    u.setText("#orBedHomeHint", `Median ${bedKey}-bed sale listing price from RentCast.`, mount);
+    u.setText("#orBedRentHint", `Median ${bedKey}-bed rental listing price from RentCast.`, mount);
+    u.setHtml("#orBedroomMarketBars", [
+      u.miniBar("Median Price", medianHomePrice || 0, 900000, u.fmtMoney(medianHomePrice)),
+      u.miniBar("Median Rent", medianRent || 0, 5000, u.fmtMoney(medianRent)),
+      u.miniBar("Sales", saleCount || 0, Math.max(1, saleCount || 1), u.fmtNum(saleCount)),
+      u.miniBar("Rentals", rentalCount || 0, Math.max(1, rentalCount || 1), u.fmtNum(rentalCount))
+    ].join(""), mount);
+    u.setHtml("#orRentCastSaleBars", [
+      u.miniBar("Active Sales", saleCount || 0, Math.max(1, saleCount || 1), u.fmtNum(saleCount)),
+      u.miniBar("Median Price", saleSummary.medianPrice || 0, 900000, u.fmtMoney(saleSummary.medianPrice)),
+      u.miniBar("Avg $ / Sq Ft", saleSummary.avgPpsf || 0, 500, u.fmtMoney(saleSummary.avgPpsf)),
+      u.miniBar("Days Market", saleSummary.avgDom || 0, 120, saleSummary.avgDom ? `${Math.round(saleSummary.avgDom)}d` : "—")
+    ].join(""), mount);
+    u.setHtml("#orRentCastRentalBars", [
+      u.miniBar("Active Rentals", rentalCount || 0, Math.max(1, rentalCount || 1), u.fmtNum(rentalCount)),
+      u.miniBar("Median Rent", rentalSummary.medianRent || 0, 5000, u.fmtMoney(rentalSummary.medianRent)),
+      u.miniBar("Rent / Sq Ft", rentalSummary.avgRentPpsf || 0, 5, rentalSummary.avgRentPpsf ? `$${Number(rentalSummary.avgRentPpsf).toFixed(2)}` : "—"),
+      u.miniBar("Days Market", rentalSummary.avgDom || 0, 120, rentalSummary.avgDom ? `${Math.round(rentalSummary.avgDom)}d` : "—")
+    ].join(""), mount);
+    u.renderList("#orRealEstateSourceNotes", [
+      `Live RentCast bedroom filter: ${bedKey} bedroom.`,
+      "Sale listings endpoint filtered by bedroom count.",
+      "Rental listings endpoint filtered by bedroom count.",
+      "Local by_bedroom JSON remains the fallback if RentCast is unavailable."
+    ], mount);
+  }
+  async function loadBedroomRentCast(ctx, bedKey){
+    const data = ctx.city;
+    const u = ctx.utils;
+    const mount = ctx.mount;
+    const geo = getGeo(data);
+    const selectedBed = String(bedKey || "3");
+    ctx.state.activeBed = selectedBed;
+    setActiveButton(mount, selectedBed);
+    const requestId = `${selectedBed}-${Date.now()}`;
+    ctx.state.realEstateRequestId = requestId;
+    renderJsonBedroomFallback(data, selectedBed, u, mount, "Showing local bedroom-level JSON while RentCast loads.");
+    renderLoadingBedroom(selectedBed, u, mount);
+    const saleUrl = makeListingUrl("sale-listings", geo, selectedBed, 50);
+    const rentalUrl = makeListingUrl("rental-listings", geo, selectedBed, 50);
+    if(!saleUrl && !rentalUrl){
+      renderJsonBedroomFallback(data, selectedBed, u, mount, "Missing city/state or ZIP for RentCast bedroom search.");
+      return;
+    }
+    try{
+      const [saleResult, rentalResult] = await Promise.allSettled([
+        saleUrl ? fetchJson(saleUrl) : Promise.resolve(null),
+        rentalUrl ? fetchJson(rentalUrl) : Promise.resolve(null)
+      ]);
+      if(ctx.state.realEstateRequestId !== requestId) return;
+      const salePayload = saleResult.status === "fulfilled" ? saleResult.value : null;
+      const rentalPayload = rentalResult.status === "fulfilled" ? rentalResult.value : null;
+      if(!salePayload && !rentalPayload){
+        throw new Error("No RentCast bedroom-specific listings returned.");
+      }
+      const saleSummary = summarizeSaleListings(salePayload || {});
+      const rentalSummary = summarizeRentalListings(rentalPayload || {});
+      renderBedroomRentCast(data, selectedBed, saleSummary, rentalSummary, u, mount);
+    }catch(err){
+      if(ctx.state.realEstateRequestId !== requestId) return;
+      console.warn("RentCast bedroom filter unavailable:", err);
+      renderJsonBedroomFallback(
+        data,
+        selectedBed,
+        u,
+        mount,
+        `RentCast bedroom-specific data unavailable: ${String(err?.message || err)}`
+      );
+    }
+  }
+  function bindBedroomButtons(ctx){
+    const mount = ctx.mount;
+    const wrap = mount.querySelector("#orBedButtons");
+    if(!wrap) return;
+    wrap.dataset.bound = "true";
+    wrap.onclick = e => {
+      const btn = e.target.closest("[data-or-bed]");
+      if(!btn) return;
+      const selectedBed = btn.getAttribute("data-or-bed") || "3";
+      loadBedroomRentCast(ctx, selectedBed);
+    };
+  }
+  async function render(ctx){
+    const data = ctx.city;
+    const u = ctx.utils;
+    const mount = ctx.mount;
+    bindBedroomButtons(ctx);
+    const activeBed = String(ctx.state.activeBed || "3");
+    setActiveButton(mount, activeBed);
+    u.setText(
+      "#orRealEstateIntro",
+      `${data.city || data.name || "City"} bedroom-specific pricing and rental intelligence powered by RentCast sale and rental listings.`,
+      mount
+    );
+    u.renderList("#orTargetNeighborhoods", data.target_neighborhoods || data.neighborhoods, mount);
+    u.renderList("#orOpportunities", data.opportunities, mount);
+    u.renderList("#orRisks", data.risks, mount);
+    u.renderList("#orInvestorAngles", data.investor_angles, mount);
+    await loadBedroomRentCast(ctx, activeBed);
+  }
+  const config = {
+    html,
+    render
+  };
+  function forceInstallHtml(){
+    const mount = document.getElementById(MOUNT_ID);
+    if(mount){
+      mount.innerHTML = html;
+      mount.dataset.tabMounted = "true";
+    }
+  }
+  function registerWhenReady(attempt = 0){
+    forceInstallHtml();
+    if(window.PCSU_BASE_DEMO_REGISTER_TAB){
+      window.PCSU_BASE_DEMO_REGISTER_TAB(TAB_NAME, config);
+      forceInstallHtml();
+      if(window.PCSU_BASE_DEMO?.state?.city && window.PCSU_BASE_DEMO?.renderTab){
+        window.PCSU_BASE_DEMO.renderTab(TAB_NAME);
+      }
+      console.log("PCSUnited Real Estate tab registered v3.2.1.");
+      return;
+    }
+    window.PCSU_BASE_DEMO_PENDING_TABS = window.PCSU_BASE_DEMO_PENDING_TABS || [];
+    window.PCSU_BASE_DEMO_PENDING_TABS =
+      window.PCSU_BASE_DEMO_PENDING_TABS.filter(item => item.name !== TAB_NAME);
+    window.PCSU_BASE_DEMO_PENDING_TABS.push({
+      name:TAB_NAME,
+      config
+    });
+    if(attempt < 50){
+      setTimeout(() => registerWhenReady(attempt + 1), 100);
+    }else{
+      console.warn("PCSUnited Real Estate tab could not find modular shell.");
+    }
+  }
+  registerWhenReady();
+})();
+</script>
+      </div>
+      <div class="w-embed w-script"><!--  =========================================================
+  PCSUnited • Base Demographics
+  EMBED 4 OF 6 • DEMOGRAPHICS TAB
+  v3.0.0 • CENSUS API POWERED
+=========================================================  -->
+        <script>
+(() => {
+  "use strict";
+  const CENSUS_API_BASE = "https://thewing.netlify.app/api/census-profile";
+  const html = `
+    <h2 class="or-section-title">Demographics</h2>
+    <p class="or-section-sub" id="orDemoSourceIntro">
+      Official Census ACS profile data loaded from TheWing.ai Census API.
+    </p>
+    <div class="or-grid-3">
+      <div class="or-stat">
+        <div class="or-stat-label">Population</div>
+        <div class="or-stat-value" id="orDemoPopulation">—</div>
+        <div class="or-stat-hint">Official Census ACS population estimate.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Median Age</div>
+        <div class="or-stat-value" id="orDemoAge">—</div>
+        <div class="or-stat-hint">Signal for life stage and local housing demand.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Avg Household Size</div>
+        <div class="or-stat-value" id="orDemoHouseholdSize">—</div>
+        <div class="or-stat-hint">Useful indicator for bedroom demand.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Median Household Income</div>
+        <div class="or-stat-value" id="orDemoIncome">—</div>
+        <div class="or-stat-hint">Core measure of city purchasing power.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Per Capita Income</div>
+        <div class="or-stat-value" id="orDemoPerCapita">—</div>
+        <div class="or-stat-hint">Broad individual earning context.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Poverty Rate</div>
+        <div class="or-stat-value" id="orDemoPoverty">—</div>
+        <div class="or-stat-hint">Signals economic strain across the city.</div>
+      </div>
+    </div>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">Population & Sex</div>
+        <div class="or-mini-bars" id="orPopulationSexBars"></div>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Race / Ethnicity</div>
+        <div class="or-mini-bars" id="orRaceEthnicityBars"></div>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Immigration / Language</div>
+        <div class="or-mini-bars" id="orImmigrationLanguageBars"></div>
+      </div>
+    </div>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">Education</div>
+        <div class="or-mini-bars" id="orEducationBars"></div>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Workforce & Mobility</div>
+        <div class="or-mini-bars" id="orLaborBars"></div>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Housing / Rental Snapshot</div>
+        <div class="or-mini-bars" id="orHousingBars"></div>
+      </div>
+    </div>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">Military & Community</div>
+        <div class="or-mini-bars" id="orCommunityBars"></div>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Housing Pressure</div>
+        <div class="or-mini-bars" id="orHousingPressureBars"></div>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Digital Access</div>
+        <div class="or-mini-bars" id="orDigitalAccessBars"></div>
+      </div>
+    </div>
+    <div class="or-grid-2">
+      <div class="or-list-card">
+        <div class="or-list-title">Census Source</div>
+        <ul class="or-list" id="orCensusSourceNotes">
+          <li>Waiting for Census API response.</li>
+        </ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Climate & Lifestyle</div>
+        <ul class="or-list" id="orClimateList"></ul>
+      </div>
+    </div>
+  `;
+  function getCensusQueryFromCityJson(city){
+    const census =
+      city?.census ||
+      city?.census_profile ||
+      city?.census_geography ||
+      city?.geo?.census ||
+      {};
+    const params = new URLSearchParams();
+    const geoId =
+      census.geo_id ||
+      census.geoid ||
+      city?.geo_id ||
+      city?.geoid ||
+      city?.geo?.geo_id ||
+      city?.geo?.geoid ||
+      "";
+    const geoMatch = String(geoId).trim().match(/US(\d{2})(\d{5})$/);
+    if(geoMatch){
+      params.set("state", geoMatch[1]);
+      params.set("place", geoMatch[2]);
+      return params.toString();
+    }
+    const state =
+      census.state ||
+      census.state_fips ||
+      city?.state_fips ||
+      city?.geo?.state_fips ||
+      city?.geo?.state ||
+      "";
+    const place =
+      census.place ||
+      census.place_fips ||
+      city?.place_fips ||
+      city?.geo?.place_fips ||
+      city?.geo?.place ||
+      "";
+    const county =
+      census.county ||
+      census.county_fips ||
+      city?.county_fips ||
+      city?.geo?.county_fips ||
+      city?.geo?.county ||
+      "";
+    const tract =
+      census.tract ||
+      census.tract_fips ||
+      city?.tract_fips ||
+      city?.geo?.tract_fips ||
+      city?.geo?.tract ||
+      "";
+    const zip =
+      census.zip ||
+      city?.zip ||
+      city?.geo?.zip ||
+      city?.base_profile?.zip ||
+      "";
+    if(state && place){
+      params.set("state", String(state).padStart(2, "0"));
+      params.set("place", String(place).padStart(5, "0"));
+      return params.toString();
+    }
+    if(state && county && tract){
+      params.set("state", String(state).padStart(2, "0"));
+      params.set("county", String(county).padStart(3, "0"));
+      params.set("tract", String(tract));
+      return params.toString();
+    }
+    if(state && county){
+      params.set("state", String(state).padStart(2, "0"));
+      params.set("county", String(county).padStart(3, "0"));
+      return params.toString();
+    }
+    if(zip){
+      params.set("zip", String(zip).padStart(5, "0"));
+      return params.toString();
+    }
+    if(state){
+      params.set("state", String(state).padStart(2, "0"));
+      return params.toString();
+    }
+    return "";
+  }
+  function renderFallback(data, u, mount, message){
+    u.setText("#orDemoSourceIntro", message || "Census API unavailable. Showing local JSON fallback data.", mount);
+    u.setText("#orDemoPopulation", u.fmtNum(data.population?.estimate || data.snapshot?.population_city), mount);
+    u.setText("#orDemoAge", Number.isFinite(Number(data.population?.median_age)) ? String(data.population.median_age) : "—", mount);
+    u.setText("#orDemoHouseholdSize", Number.isFinite(Number(data.population?.persons_per_household)) ? String(data.population.persons_per_household) : "—", mount);
+    u.setText("#orDemoIncome", u.fmtMoney(data.income?.median_household_income || data.snapshot?.median_household_income), mount);
+    u.setText("#orDemoPerCapita", u.fmtMoney(data.income?.per_capita_income), mount);
+    u.setText("#orDemoPoverty", u.fmtPct(data.income?.poverty_rate_percent), mount);
+    u.setHtml("#orPopulationSexBars", [
+      u.miniBar("Median Age", data.population?.median_age || 0, 100, u.fmtPlain(data.population?.median_age)),
+      u.miniBar("Under 18", 0, 100, "—"),
+      u.miniBar("65+", 0, 100, "—"),
+      u.miniBar("Male", 0, 100, "—"),
+      u.miniBar("Female", 0, 100, "—")
+    ].join(""), mount);
+    u.setHtml("#orRaceEthnicityBars", [
+      u.miniBar("White", 0, 100, "—"),
+      u.miniBar("Black", 0, 100, "—"),
+      u.miniBar("Asian", 0, 100, "—"),
+      u.miniBar("Two+", 0, 100, "—"),
+      u.miniBar("Hispanic", 0, 100, "—")
+    ].join(""), mount);
+    u.setHtml("#orImmigrationLanguageBars", [
+      u.miniBar("Foreign Born", data.immigration?.foreign_born_percent || 0, 100, u.fmtPct(data.immigration?.foreign_born_percent)),
+      u.miniBar("Other Lang.", 0, 100, "—"),
+      u.miniBar("Broadband", 0, 100, "—")
+    ].join(""), mount);
+    u.setHtml("#orEducationBars", [
+      u.miniBar("HS+", data.education?.high_school_grad_or_higher_percent || 0, 100, u.fmtPct(data.education?.high_school_grad_or_higher_percent || 0)),
+      u.miniBar("Bachelor's+", data.education?.bachelors_degree_or_higher_percent || 0, 100, u.fmtPct(data.education?.bachelors_degree_or_higher_percent || 0)),
+      u.miniBar("Veteran Pop.", data.veterans?.veteran_population_percent || 0, 100, u.fmtPct(data.veterans?.veteran_population_percent || 0))
+    ].join(""), mount);
+    u.setHtml("#orLaborBars", [
+      u.miniBar("Unemployment", data.labor?.unemployment_rate_percent || 0, 15, u.fmtPct(data.labor?.unemployment_rate_percent || 0)),
+      u.miniBar("Commute", data.labor?.mean_travel_time_to_work_minutes || 0, 60, `${Number(data.labor?.mean_travel_time_to_work_minutes || 0).toFixed(1)}m`),
+      u.miniBar("Households", data.households?.total_households || 0, Math.max(1, Number(data.households?.total_households || 1)), u.fmtNum(data.households?.total_households || 0))
+    ].join(""), mount);
+    u.setHtml("#orHousingBars", [
+      u.miniBar("Median Rent", data.rental_metrics?.median_rent || 0, 4000, u.fmtMoney(data.rental_metrics?.median_rent || 0)),
+      u.miniBar("Vacancy", data.rental_metrics?.vacancy_rate_percent || data.rental_vacancy?.rate_percent || 0, 20, u.fmtPct(data.rental_metrics?.vacancy_rate_percent || data.rental_vacancy?.rate_percent || 0)),
+      u.miniBar("Housing Units", data.housing?.housing_units || 0, Math.max(1, Number(data.housing?.housing_units || 1)), u.fmtNum(data.housing?.housing_units || 0))
+    ].join(""), mount);
+    u.setHtml("#orCommunityBars", [
+      u.miniBar("Veterans", data.veterans?.veteran_population_percent || 0, 100, u.fmtPct(data.veterans?.veteran_population_percent || 0)),
+      u.miniBar("Foreign Born", data.immigration?.foreign_born_percent || 0, 100, u.fmtPct(data.immigration?.foreign_born_percent || 0)),
+      u.miniBar("Other Lang.", 0, 100, "—")
+    ].join(""), mount);
+    u.setHtml("#orHousingPressureBars", [
+      u.miniBar("Vacancy", data.rental_metrics?.vacancy_rate_percent || data.rental_vacancy?.rate_percent || 0, 20, u.fmtPct(data.rental_metrics?.vacancy_rate_percent || data.rental_vacancy?.rate_percent || 0)),
+      u.miniBar("Renter 30%+", 0, 100, "—"),
+      u.miniBar("Owner 30%+", 0, 100, "—")
+    ].join(""), mount);
+    u.setHtml("#orDigitalAccessBars", [
+      u.miniBar("Computer", 0, 100, "—"),
+      u.miniBar("Broadband", 0, 100, "—"),
+      u.miniBar("Insured", 0, 100, "—")
+    ].join(""), mount);
+    u.renderList("#orCensusSourceNotes", [
+      "Census API was not used or did not return a valid response.",
+      "Showing fallback values from the local city/base JSON.",
+      "To use Census API automatically, this JSON should include geo_id, census fields, geo fields, or zip."
+    ], mount);
+  }
+  async function render(ctx){
+    const data = ctx.city;
+    const u = ctx.utils;
+    const mount = ctx.mount;
+    u.renderList("#orClimateList", [
+      data.climate_weather?.spring ? `Spring: ${data.climate_weather.spring}` : null,
+      data.climate_weather?.summer ? `Summer: ${data.climate_weather.summer}` : null,
+      data.climate_weather?.fall ? `Fall: ${data.climate_weather.fall}` : null,
+      data.climate_weather?.winter ? `Winter: ${data.climate_weather.winter}` : null,
+      ...u.arr(data.special_events).map(x => `Local event: ${x}`)
+    ], mount);
+    const query = getCensusQueryFromCityJson(data);
+    if(!query){
+      renderFallback(data, u, mount, "Census geography was not found in this city JSON. Showing local JSON fallback data.");
+      u.renderList("#orCensusSourceNotes", [
+        "Missing Census geography.",
+        "The code looked for geo_id, census, census_profile, census_geography, geo, state/place, county, tract, and zip.",
+        "No usable Census geography was found in this JSON."
+      ], mount);
+      return;
+    }
+    try{
+      u.setText("#orDemoSourceIntro", "Loading official Census ACS profile data from TheWing.ai...", mount);
+      const url = `${CENSUS_API_BASE}?${query}`;
+      const res = await fetch(url, { cache:"no-store" });
+      const payload = await res.json();
+      if(!res.ok || !payload?.ok){
+        renderFallback(data, u, mount, "Census API request failed. Showing local JSON fallback data.");
+        u.renderList("#orCensusSourceNotes", [
+          "Census API request failed.",
+          payload?.error || `HTTP ${res.status}`,
+          `Requested query: ${query}`
+        ], mount);
+        return;
+      }
+      const p = payload.profile || payload.census || {};
+      const source = payload.source || "U.S. Census Bureau ACS 5-Year Data Profile";
+      u.setText("#orDemoSourceIntro", `Official Census ACS profile for ${p.name || data.city || data.name || "selected area"}.`, mount);
+      u.setText("#orDemoPopulation", u.fmtNum(p.population?.total), mount);
+      u.setText("#orDemoAge", u.fmtPlain(p.population?.median_age), mount);
+      u.setText("#orDemoHouseholdSize", u.fmtPlain(p.households?.average_household_size), mount);
+      u.setText("#orDemoIncome", u.fmtMoney(p.economy?.median_household_income), mount);
+      u.setText("#orDemoPerCapita", u.fmtMoney(p.economy?.per_capita_income), mount);
+      u.setText("#orDemoPoverty", u.fmtPct(p.economy?.poverty_pct), mount);
+      u.setHtml("#orPopulationSexBars", [
+        u.miniBar("Under 5", p.population?.under_5_pct || 0, 100, u.fmtPct(p.population?.under_5_pct)),
+        u.miniBar("Under 18", p.population?.under_18_pct || 0, 100, u.fmtPct(p.population?.under_18_pct)),
+        u.miniBar("65+", p.population?.age_65_plus_pct || 0, 100, u.fmtPct(p.population?.age_65_plus_pct)),
+        u.miniBar("Male", p.population?.male_pct || 0, 100, u.fmtPct(p.population?.male_pct)),
+        u.miniBar("Female", p.population?.female_pct || 0, 100, u.fmtPct(p.population?.female_pct))
+      ].join(""), mount);
+      u.setHtml("#orRaceEthnicityBars", [
+        u.miniBar("White", p.race_ethnicity?.white_pct || 0, 100, u.fmtPct(p.race_ethnicity?.white_pct)),
+        u.miniBar("Black", p.race_ethnicity?.black_pct || 0, 100, u.fmtPct(p.race_ethnicity?.black_pct)),
+        u.miniBar("Asian", p.race_ethnicity?.asian_pct || 0, 100, u.fmtPct(p.race_ethnicity?.asian_pct)),
+        u.miniBar("Two+", p.race_ethnicity?.two_or_more_races_pct || 0, 100, u.fmtPct(p.race_ethnicity?.two_or_more_races_pct)),
+        u.miniBar("Hispanic", p.race_ethnicity?.hispanic_latino_pct || 0, 100, u.fmtPct(p.race_ethnicity?.hispanic_latino_pct))
+      ].join(""), mount);
+      u.setHtml("#orImmigrationLanguageBars", [
+        u.miniBar("Foreign Born", p.immigration_language?.foreign_born_pct || 0, 100, u.fmtPct(p.immigration_language?.foreign_born_pct)),
+        u.miniBar("Other Lang.", p.immigration_language?.language_other_than_english_home_pct || 0, 100, u.fmtPct(p.immigration_language?.language_other_than_english_home_pct)),
+        u.miniBar("Broadband", p.digital_access?.households_with_broadband_pct || 0, 100, u.fmtPct(p.digital_access?.households_with_broadband_pct))
+      ].join(""), mount);
+      u.setHtml("#orEducationBars", [
+        u.miniBar("HS+", p.education?.high_school_or_higher_pct || 0, 100, u.fmtPct(p.education?.high_school_or_higher_pct)),
+        u.miniBar("Bachelor's+", p.education?.bachelors_or_higher_pct || 0, 100, u.fmtPct(p.education?.bachelors_or_higher_pct)),
+        u.miniBar("School Enroll.", p.education?.school_enrollment_pct || 0, 100, u.fmtPct(p.education?.school_enrollment_pct))
+      ].join(""), mount);
+      u.setHtml("#orLaborBars", [
+        u.miniBar("Labor Force", p.economy?.labor_force_participation_pct || 0, 100, u.fmtPct(p.economy?.labor_force_participation_pct)),
+        u.miniBar("Unemployment", p.economy?.unemployment_rate_pct || 0, 15, u.fmtPct(p.economy?.unemployment_rate_pct)),
+        u.miniBar("Commute", p.commute?.mean_travel_time_minutes || 0, 60, u.fmtPlain(p.commute?.mean_travel_time_minutes, "m"))
+      ].join(""), mount);
+      u.setHtml("#orHousingBars", [
+        u.miniBar("Median Rent", p.housing?.median_gross_rent || 0, 4000, u.fmtMoney(p.housing?.median_gross_rent)),
+        u.miniBar("Home Value", p.housing?.median_home_value || p.housing?.median_owner_occupied_home_value || 0, 800000, u.fmtMoney(p.housing?.median_home_value || p.housing?.median_owner_occupied_home_value)),
+        u.miniBar("Housing Units", p.housing?.total_housing_units || 0, Math.max(1, Number(p.housing?.total_housing_units || 1)), u.fmtNum(p.housing?.total_housing_units))
+      ].join(""), mount);
+      u.setHtml("#orCommunityBars", [
+        u.miniBar("Veterans", p.military_veterans?.civilian_veterans_pct || 0, 100, u.fmtPct(p.military_veterans?.civilian_veterans_pct)),
+        u.miniBar("Foreign Born", p.immigration_language?.foreign_born_pct || 0, 100, u.fmtPct(p.immigration_language?.foreign_born_pct)),
+        u.miniBar("Other Lang.", p.immigration_language?.language_other_than_english_home_pct || 0, 100, u.fmtPct(p.immigration_language?.language_other_than_english_home_pct))
+      ].join(""), mount);
+      u.setHtml("#orHousingPressureBars", [
+        u.miniBar("Vacancy", p.housing?.vacancy_pct || 0, 20, u.fmtPct(p.housing?.vacancy_pct)),
+        u.miniBar("Renter 30%+", p.housing_cost_burden?.renter_30_plus_pct || 0, 100, u.fmtPct(p.housing_cost_burden?.renter_30_plus_pct)),
+        u.miniBar("Owner 30%+", p.housing_cost_burden?.owner_30_plus_pct || 0, 100, u.fmtPct(p.housing_cost_burden?.owner_30_plus_pct))
+      ].join(""), mount);
+      u.setHtml("#orDigitalAccessBars", [
+        u.miniBar("Computer", p.digital_access?.households_with_computer_pct || 0, 100, u.fmtPct(p.digital_access?.households_with_computer_pct)),
+        u.miniBar("Broadband", p.digital_access?.households_with_broadband_pct || 0, 100, u.fmtPct(p.digital_access?.households_with_broadband_pct)),
+        u.miniBar("Insured", p.economy?.health_insurance_coverage_pct || 0, 100, u.fmtPct(p.economy?.health_insurance_coverage_pct))
+      ].join(""), mount);
+      u.renderList("#orCensusSourceNotes", [
+        `Source: ${source}`,
+        p.year ? `Dataset year: ${p.year}` : null,
+        p.name ? `Geography: ${p.name}` : null,
+        p.geography?.type ? `Geography type: ${p.geography.type}` : null,
+        `Requested query: ${query}`
+      ], mount);
+    }catch(err){
+      console.error("Census demographics fetch failed:", err);
+      renderFallback(data, u, mount, "Census API request failed. Showing local JSON fallback data.");
+      u.renderList("#orCensusSourceNotes", [
+        "Census API request failed.",
+        String(err?.message || err),
+        `Requested query: ${query}`
+      ], mount);
+    }
+  }
+  const config = { html, render };
+  if(window.PCSU_BASE_DEMO_REGISTER_TAB){
+    window.PCSU_BASE_DEMO_REGISTER_TAB("demographics", config);
+  }else{
+    window.PCSU_BASE_DEMO_PENDING_TABS = window.PCSU_BASE_DEMO_PENDING_TABS || [];
+    window.PCSU_BASE_DEMO_PENDING_TABS.push({ name:"demographics", config });
+  }
+})();
+</script>
+      </div>
+      <div class="w-embed w-script"><!--  =========================================================
+  PCSUnited • Base Demographics
+  EMBED 5 OF 6 • BASE TAB
+  v3.2.0 • JSON-FIRST BASE INTELLIGENCE + OPTIONAL ARCGIS
+  UPDATE
+  - Uses rich base_profile JSON first
+  - Adds Major Services / On-Base Essentials
+  - Adds Recommended Communities from base_profile.recommended_neighborhoods
+  - Adds Commute / BAH / Family Readiness sections
+  - Adds PCS Watchouts
+  - Adds Official Links / Source Notes
+  - Keeps ArcGIS as optional enhancement only
+  - Reads base_profile.base_location lat/lon if available
+=========================================================  -->
+        <script>
+(() => {
+  "use strict";
+  const ARCGIS_API_BASE = "https://thewing.netlify.app/api/arcgis";
+  const TAB_NAME = "base";
+  const MOUNT_ID = "orBaseMount";
+  const html = `
+    <h2 class="or-section-title">Base Overview</h2>
+    <p class="or-section-sub" id="orBaseIntro">
+      Base overview loaded from PCSUnited base JSON, with optional ArcGIS nearby-location intelligence.
+    </p>
+    <div class="or-grid-4 or-base-bluf-grid">
+      <div class="or-stat or-base-bluf-card">
+        <div class="or-stat-label">Mission BLUF</div>
+        <div class="or-base-bluf-copy" id="orBaseBlufMission">—</div>
+      </div>
+      <div class="or-stat or-base-bluf-card">
+        <div class="or-stat-label">Commute BLUF</div>
+        <div class="or-base-bluf-copy" id="orBaseBlufCommute">—</div>
+      </div>
+      <div class="or-stat or-base-bluf-card">
+        <div class="or-stat-label">Housing BLUF</div>
+        <div class="or-base-bluf-copy" id="orBaseBlufHousing">—</div>
+      </div>
+      <div class="or-stat or-base-bluf-card">
+        <div class="or-stat-label">Family BLUF</div>
+        <div class="or-base-bluf-copy" id="orBaseBlufFamily">—</div>
+      </div>
+    </div>
+    <div class="or-grid-4">
+      <div class="or-stat">
+        <div class="or-stat-label">Installation</div>
+        <div class="or-stat-value" id="orBaseQuickInstall">—</div>
+        <div class="or-stat-hint">Primary base or installation name.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">Metro Area</div>
+        <div class="or-stat-value" id="orBaseQuickMetro">—</div>
+        <div class="or-stat-hint">Closest civilian market area.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">ZIP</div>
+        <div class="or-stat-value" id="orBaseQuickZip">—</div>
+        <div class="or-stat-hint">Useful for rent, commute, and market lookup.</div>
+      </div>
+      <div class="or-stat">
+        <div class="or-stat-label">PCS Personality</div>
+        <div class="or-stat-value" id="orBaseQuickPersonality">—</div>
+        <div class="or-stat-hint">PCSUnited read on the base lifestyle.</div>
+      </div>
+    </div>
+    <div class="or-base-map-layout">
+      <div class="or-base-map-stack">
+        <div class="or-list-card or-base-map-card">
+          <div class="or-list-title">Base Map</div>
+          <a id="orBaseMapLink" href="#" target="_blank" rel="noopener noreferrer" class="or-base-map-link" aria-label="Open base map">
+            <img id="orBaseMapImg" class="or-base-map-img" src="" alt="Base map" />
+          </a>
+          <div class="or-base-map-empty" id="orBaseMapEmpty">No base map available yet.</div>
+          <div class="or-base-map-caption" id="orBaseMapCaption">Public-facing base orientation map.</div>
+        </div>
+        <div class="or-grid-2">
+          <div class="or-list-card">
+            <div class="or-list-title">Base Quick Facts</div>
+            <ul class="or-list" id="orBaseQuickFacts"></ul>
+          </div>
+          <div class="or-list-card">
+            <div class="or-list-title">Base Location</div>
+            <ul class="or-list" id="orBaseGeoFacts"></ul>
+          </div>
+        </div>
+        <div class="or-quote" id="orBaseWhyItMatters">Loading base summary...</div>
+      </div>
+      <div class="or-base-right-rail">
+        <div class="or-rail-card">
+          <div class="or-rail-title">Strategy Signals</div>
+          <div class="or-signal-list" id="orBaseSignals"></div>
+        </div>
+        <div class="or-rail-card">
+          <div class="or-rail-title">Access & Gates</div>
+          <ul class="or-list" id="orBaseAccess"></ul>
+        </div>
+        <div class="or-rail-card">
+          <div class="or-rail-title">On-Base Living Notes</div>
+          <ul class="or-list" id="orBaseHousing"></ul>
+        </div>
+        <div class="or-rail-card">
+          <div class="or-rail-title">Command / Mission</div>
+          <ul class="or-list" id="orBaseCommandMission"></ul>
+        </div>
+      </div>
+    </div>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">On-Base Essentials</div>
+        <ul class="or-list" id="orBaseMajorServices"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Recommended Communities</div>
+        <ul class="or-list" id="orBaseCommunitiesList"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Commute Intelligence</div>
+        <ul class="or-list" id="orBaseCommuteIntel"></ul>
+      </div>
+    </div>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">BAH / Market Reality</div>
+        <ul class="or-list" id="orBaseBahReality"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Family Readiness</div>
+        <ul class="or-list" id="orBaseFamilyReadiness"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">PCS Watchouts</div>
+        <ul class="or-list" id="orBaseWatchouts"></ul>
+      </div>
+    </div>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">Nearby Medical</div>
+        <ul class="or-list" id="orArcMedicalList">
+          <li>ArcGIS nearby data loads when base coordinates are available.</li>
+        </ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Nearby Airport / Travel</div>
+        <ul class="or-list" id="orArcAirportList">
+          <li>ArcGIS nearby data loads when base coordinates are available.</li>
+        </ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Nearby Schools / Family Areas</div>
+        <ul class="or-list" id="orArcSchoolList">
+          <li>ArcGIS nearby data loads when base coordinates are available.</li>
+        </ul>
+      </div>
+    </div>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">Essentials Near Base</div>
+        <ul class="or-list" id="orArcEssentialsList">
+          <li>ArcGIS nearby data loads when base coordinates are available.</li>
+        </ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Family / Lifestyle Nearby</div>
+        <ul class="or-list" id="orArcLifestyleList">
+          <li>ArcGIS nearby data loads when base coordinates are available.</li>
+        </ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Official Links</div>
+        <ul class="or-list" id="orBaseOfficialLinks"></ul>
+      </div>
+    </div>
+    <div class="or-grid-2">
+      <div class="or-list-card">
+        <div class="or-list-title">PCS Arrival Checklist</div>
+        <ul class="or-list" id="orBaseArrivalChecklist"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Base Data Source</div>
+        <ul class="or-list" id="orBaseSourceNotes">
+          <li>Base data loaded from PCSUnited city JSON.</li>
+          <li>Nearby landmark data loads from ArcGIS when coordinates are available.</li>
+        </ul>
+      </div>
+    </div>
+  `;
+  function cleanNumber(value){
+    const n = Number(value);
+    return Number.isFinite(n) ? n : null;
+  }
+  function milesFromMeters(value){
+    const n = cleanNumber(value);
+    if(n === null) return null;
+    return n / 1609.344;
+  }
+  function fmtMiles(value){
+    const n = cleanNumber(value);
+    if(n === null) return "";
+    return `${n.toFixed(n >= 10 ? 0 : 1)} mi`;
   }
   function getBaseProfile(data){
     return data?.base_profile || {};
   }
-  function renderBase(data){
+  function getInstallationName(data, u){
     const base = getBaseProfile(data);
-    const housing = base?.on_base_housing || {};
-    const commute = base?.commute_intelligence || {};
-    const bah = base?.bah_market_reality || {};
-    const family = base?.family_readiness || {};
-    const mapMeta = base?.base_map_image || {};
-    const installationName = firstDefined(
+    return u.firstDefined(
       base.display_name,
       base.base_name,
       base.short_name,
+      base.installation_name,
       data.name,
       data.slug
     );
-    const mapUrl = firstDefined(
+  }
+  function getBaseLocation(data){
+    const base = getBaseProfile(data);
+    return base.base_location || base.location || {};
+  }
+  function getBaseAddress(data, u){
+    const base = getBaseProfile(data);
+    const vcc = base.visitor_control_center || {};
+    const loc = getBaseLocation(data);
+    return u.firstDefined(
+      loc.address,
+      base.address,
+      base.main_address,
+      base.installation_address,
+      vcc.address,
+      data.address,
+      `${getInstallationName(data, u) || ""} ${base.metro || data.city || data.place_detail || ""}`.trim()
+    );
+  }
+  function getBaseCoordinates(data){
+    const base = getBaseProfile(data);
+    const loc = getBaseLocation(data);
+    const geo = data?.geo || {};
+    const coords =
+      loc.coordinates ||
+      base.coordinates ||
+      base.coords ||
+      data.coordinates ||
+      geo.coordinates ||
+      {};
+    const lat =
+      cleanNumber(loc.lat) ??
+      cleanNumber(loc.latitude) ??
+      cleanNumber(base.lat) ??
+      cleanNumber(base.latitude) ??
+      cleanNumber(data.lat) ??
+      cleanNumber(data.latitude) ??
+      cleanNumber(geo.lat) ??
+      cleanNumber(geo.latitude) ??
+      cleanNumber(coords.lat) ??
+      cleanNumber(coords.latitude);
+    const lon =
+      cleanNumber(loc.lon) ??
+      cleanNumber(loc.lng) ??
+      cleanNumber(loc.longitude) ??
+      cleanNumber(base.lon) ??
+      cleanNumber(base.lng) ??
+      cleanNumber(base.longitude) ??
+      cleanNumber(data.lon) ??
+      cleanNumber(data.lng) ??
+      cleanNumber(data.longitude) ??
+      cleanNumber(geo.lon) ??
+      cleanNumber(geo.lng) ??
+      cleanNumber(geo.longitude) ??
+      cleanNumber(coords.lon) ??
+      cleanNumber(coords.lng) ??
+      cleanNumber(coords.longitude);
+    if(lat === null || lon === null) return null;
+    return { lat, lon };
+  }
+  function makeArcUrl(action, paramsObj){
+    const params = new URLSearchParams();
+    params.set("action", action);
+    Object.entries(paramsObj || {}).forEach(([key, value]) => {
+      if(value !== undefined && value !== null && value !== ""){
+        params.set(key, String(value));
+      }
+    });
+    return `${ARCGIS_API_BASE}?${params.toString()}`;
+  }
+  async function fetchArc(url){
+    const res = await fetch(url, {
+      cache:"no-store"
+    });
+    const payload = await res.json();
+    if(!res.ok || payload?.ok === false){
+      throw new Error(payload?.error || `ArcGIS HTTP ${res.status}`);
+    }
+    return payload;
+  }
+  function normalizePlaces(payload){
+    const data = payload?.data || payload || {};
+    const candidates =
+      data.results ||
+      data.places ||
+      data.candidates ||
+      data.features ||
+      data.data ||
+      [];
+    if(!Array.isArray(candidates)) return [];
+    return candidates.map(item => {
+      const attrs = item.attributes || item.place || item || {};
+      const location = item.location || item.geometry || attrs.location || {};
+      const name =
+        attrs.name ||
+        attrs.Name ||
+        attrs.PlaceName ||
+        attrs.placeName ||
+        attrs.Match_addr ||
+        attrs.address ||
+        attrs.label ||
+        "Unnamed place";
+      const address =
+        attrs.address ||
+        attrs.Address ||
+        attrs.Match_addr ||
+        attrs.formattedAddress ||
+        attrs.streetAddress ||
+        attrs.fullAddress ||
+        "";
+      const rawDistance =
+        attrs.distance ||
+        attrs.Distance ||
+        attrs.distanceMeters ||
+        item.distance ||
+        item.distanceMeters;
+      let distanceMiles = null;
+      if(rawDistance !== undefined && rawDistance !== null){
+        const n = cleanNumber(rawDistance);
+        if(n !== null){
+          distanceMiles = n > 100 ? milesFromMeters(n) : n;
+        }
+      }
+      return {
+        name,
+        address,
+        distanceMiles,
+        lat:
+          cleanNumber(location.y) ??
+          cleanNumber(location.lat) ??
+          cleanNumber(location.latitude),
+        lon:
+          cleanNumber(location.x) ??
+          cleanNumber(location.lon) ??
+          cleanNumber(location.lng) ??
+          cleanNumber(location.longitude)
+      };
+    }).filter(x => x.name);
+  }
+  function renderPlacesList(sel, places, u, mount, fallbackText){
+    const rows = places.slice(0, 5).map(place => {
+      const dist = place.distanceMiles !== null && place.distanceMiles !== undefined
+        ? ` — ${fmtMiles(place.distanceMiles)}`
+        : "";
+      const addr = place.address ? ` (${place.address})` : "";
+      return `${place.name}${dist}${addr}`;
+    });
+    u.renderList(sel, rows.length ? rows : [fallbackText || "No nearby places returned yet."], mount);
+  }
+  async function geocodeBase(data, u){
+    const coords = getBaseCoordinates(data);
+    if(coords) return coords;
+    const address = getBaseAddress(data, u);
+    if(!address) return null;
+    const url = makeArcUrl("geocode", {
+      address
+    });
+    const payload = await fetchArc(url);
+    const candidates = payload?.data?.candidates || payload?.candidates || [];
+    const first = Array.isArray(candidates) ? candidates[0] : null;
+    const lat =
+      cleanNumber(first?.location?.y) ??
+      cleanNumber(first?.y) ??
+      null;
+    const lon =
+      cleanNumber(first?.location?.x) ??
+      cleanNumber(first?.x) ??
+      null;
+    if(lat === null || lon === null) return null;
+    return {
+      lat,
+      lon,
+      matchAddress:first?.address || first?.attributes?.Match_addr || address
+    };
+  }
+  async function fetchPlacesForCategory(coords, category, radius = 16000, limit = 5){
+    if(!coords?.lat || !coords?.lon) return [];
+    const url = makeArcUrl("places", {
+      lat:coords.lat,
+      lon:coords.lon,
+      category,
+      radius,
+      limit
+    });
+    const payload = await fetchArc(url);
+    return normalizePlaces(payload);
+  }
+  function safePush(list, label, value){
+    if(value !== undefined && value !== null && value !== ""){
+      list.push(label ? `${label}: ${value}` : String(value));
+    }
+  }
+  function listFromObject(obj, u, prefix = ""){
+    const rows = [];
+    if(!obj || typeof obj !== "object") return rows;
+    Object.entries(obj).forEach(([key, value]) => {
+      if(value === null || value === undefined || value === "") return;
+      const cleanKey = String(key)
+        .replaceAll("_"," ")
+        .replace(/\b\w/g, c => c.toUpperCase());
+      if(Array.isArray(value)){
+        value.forEach(item => {
+          if(typeof item === "string"){
+            rows.push(`${prefix}${cleanKey}: ${item}`);
+          }else if(item && typeof item === "object"){
+            const text = u.flattenTextList(item).join(" — ");
+            if(text) rows.push(`${prefix}${cleanKey}: ${text}`);
+          }
+        });
+      }else if(typeof value === "object"){
+        const text = u.flattenTextList(value).join(" — ");
+        if(text) rows.push(`${prefix}${cleanKey}: ${text}`);
+      }else{
+        rows.push(`${prefix}${cleanKey}: ${value}`);
+      }
+    });
+    return rows;
+  }
+  function renderMajorServices(data, u, mount){
+    const base = getBaseProfile(data);
+    const services = base.major_services || {};
+    const rows = [];
+    if(Array.isArray(services)){
+      services.forEach(item => {
+        if(typeof item === "string"){
+          rows.push(item);
+        }else if(item && typeof item === "object"){
+          const name = item.name || item.title || item.service || item.category || "Service";
+          const detail = item.summary || item.notes || item.phone || item.address || "";
+          rows.push(detail ? `${name}: ${detail}` : name);
+        }
+      });
+    }else if(services && typeof services === "object"){
+      Object.entries(services).forEach(([category, value]) => {
+        const cleanCategory = String(category)
+          .replaceAll("_"," ")
+          .replace(/\b\w/g, c => c.toUpperCase());
+        if(Array.isArray(value)){
+          value.forEach(item => {
+            if(typeof item === "string"){
+              rows.push(`${cleanCategory}: ${item}`);
+            }else if(item && typeof item === "object"){
+              const name = item.name || item.title || item.service || cleanCategory;
+              const detail = item.summary || item.notes || item.phone || item.address || item.hours || "";
+              rows.push(detail ? `${name}: ${detail}` : name);
+            }
+          });
+        }else if(value && typeof value === "object"){
+          const name = value.name || value.title || cleanCategory;
+          const detail = value.summary || value.notes || value.phone || value.address || value.hours || "";
+          rows.push(detail ? `${name}: ${detail}` : name);
+        }else if(value){
+          rows.push(`${cleanCategory}: ${value}`);
+        }
+      });
+    }
+    u.renderList(
+      "#orBaseMajorServices",
+      rows.slice(0, 12),
+      mount
+    );
+  }
+  function renderRecommendedCommunities(data, u, mount){
+    const base = getBaseProfile(data);
+    const rows = [];
+    u.arr(base.recommended_neighborhoods).forEach(item => {
+      if(typeof item === "string"){
+        rows.push(item);
+        return;
+      }
+      if(!item || typeof item !== "object") return;
+      const name = item.name || item.neighborhood || item.community || "Community";
+      const details = [
+        item.type,
+        item.commute_band ? `Commute: ${item.commute_band}` : "",
+        item.best_for ? `Best for: ${u.flattenTextList(item.best_for).join(", ")}` : "",
+        item.bah_fit ? `BAH: ${item.bah_fit}` : "",
+        item.family_fit ? `Family: ${item.family_fit}` : "",
+        item.likely_gate_logic ? `Gate: ${item.likely_gate_logic}` : "",
+        item.traffic_risk ? `Traffic: ${item.traffic_risk}` : "",
+        item.pcsu_recommendation || item.fit_summary || item.summary || ""
+      ].filter(Boolean);
+      rows.push(`${name} — ${details.join(" — ")}`);
+    });
+    u.arr(data.target_neighborhoods).forEach(item => {
+      if(typeof item === "string"){
+        rows.push(item);
+      }else if(item?.name){
+        const parts = [
+          item.name,
+          item.drive_time ? `Drive: ${item.drive_time}` : "",
+          item.distance ? `Distance: ${item.distance}` : "",
+          item.notes || item.summary || item.fit || ""
+        ].filter(Boolean);
+        rows.push(parts.join(" — "));
+      }
+    });
+    u.arr(data.neighborhoods).forEach(item => {
+      if(typeof item === "string"){
+        rows.push(item);
+      }else if(item?.name){
+        const parts = [
+          item.name,
+          item.drive_time ? `Drive: ${item.drive_time}` : "",
+          item.distance ? `Distance: ${item.distance}` : "",
+          item.notes || item.summary || item.fit || ""
+        ].filter(Boolean);
+        rows.push(parts.join(" — "));
+      }
+    });
+    const regions = data.regions || {};
+    Object.values(regions).forEach(region => {
+      if(!region) return;
+      if(typeof region === "string"){
+        rows.push(region);
+        return;
+      }
+      const name = region.name || region.label || region.region;
+      if(!name) return;
+      const parts = [
+        name,
+        region.drive_time ? `Drive: ${region.drive_time}` : "",
+        region.distance ? `Distance: ${region.distance}` : "",
+        region.pcs_fit || region.summary || region.notes || ""
+      ].filter(Boolean);
+      rows.push(parts.join(" — "));
+    });
+    u.renderList(
+      "#orBaseCommunitiesList",
+      [...new Set(rows)].slice(0, 10),
+      mount
+    );
+  }
+  function renderCommuteIntel(data, u, mount){
+    const base = getBaseProfile(data);
+    const commute = base.commute_intelligence || {};
+    const rows = [];
+    safePush(rows, "Commute BLUF", commute.commute_bluf);
+    safePush(rows, "Primary Risk", commute.primary_risk);
+    safePush(rows, "Best Planning Move", commute.best_planning_move);
+    safePush(rows, "Gate Logic", commute.gate_logic);
+    safePush(rows, "Traffic Warning", commute.traffic_warning);
+    safePush(rows, "PCS Recommendation", commute.pcsu_recommendation);
+    u.flattenTextList(commute.watchouts).forEach(x => rows.push(`Watchout: ${x}`));
+    u.flattenTextList(commute.notes).forEach(x => rows.push(x));
+    u.renderList("#orBaseCommuteIntel", rows, mount);
+  }
+  function renderBahReality(data, u, mount){
+    const base = getBaseProfile(data);
+    const bah = base.bah_market_reality || {};
+    const rows = [];
+    safePush(rows, "BAH BLUF", bah.bah_bluf);
+    safePush(rows, "Buy Reality", bah.buy_reality);
+    safePush(rows, "Rent Reality", bah.rent_reality);
+    safePush(rows, "Base Tab Message", bah.base_tab_message);
+    safePush(rows, "PCS Strategy", bah.pcs_strategy);
+    safePush(rows, "Watch Item", bah.watch_item);
+    u.flattenTextList(bah.market_watchouts).forEach(x => rows.push(`Market watchout: ${x}`));
+    u.flattenTextList(bah.notes).forEach(x => rows.push(x));
+    u.renderList("#orBaseBahReality", rows, mount);
+  }
+  function renderFamilyReadiness(data, u, mount){
+    const base = getBaseProfile(data);
+    const family = base.family_readiness || {};
+    const rows = [];
+    safePush(rows, "Family BLUF", family.family_bluf);
+    safePush(rows, "School Reality", family.school_reality);
+    safePush(rows, "Childcare Reality", family.childcare_reality);
+    safePush(rows, "Medical Reality", family.medical_reality);
+    safePush(rows, "PCS Recommendation", family.pcsu_recommendation);
+    u.flattenTextList(family.strengths).forEach(x => rows.push(`Strength: ${x}`));
+    u.flattenTextList(family.watchouts).forEach(x => rows.push(`Watchout: ${x}`));
+    u.flattenTextList(family.notes).forEach(x => rows.push(x));
+    u.renderList("#orBaseFamilyReadiness", rows, mount);
+  }
+  function renderWatchouts(data, u, mount){
+    const base = getBaseProfile(data);
+    const rows = [];
+    u.flattenTextList(base.pcs_watchouts).forEach(x => rows.push(x));
+    u.flattenTextList(base.watchouts).forEach(x => rows.push(x));
+    u.flattenTextList(base.arrival_watchouts).forEach(x => rows.push(x));
+    const housing = base.on_base_housing || {};
+    u.flattenTextList(housing.watchouts).forEach(x => rows.push(`Housing: ${x}`));
+    const commute = base.commute_intelligence || {};
+    u.flattenTextList(commute.watchouts).forEach(x => rows.push(`Commute: ${x}`));
+    u.renderList("#orBaseWatchouts", [...new Set(rows)].slice(0, 12), mount);
+  }
+  function renderOfficialLinks(data, u, mount){
+    const base = getBaseProfile(data);
+    const links = base.official_links || {};
+    const rows = [];
+    if(Array.isArray(links)){
+      links.forEach(link => {
+        if(typeof link === "string"){
+          rows.push(link);
+        }else if(link && typeof link === "object"){
+          const label = link.label || link.name || link.title || "Official link";
+          const url = link.url || link.href || "";
+          rows.push(url ? `${label}: ${url}` : label);
+        }
+      });
+    }else if(links && typeof links === "object"){
+      Object.entries(links).forEach(([key, value]) => {
+        const label = String(key).replaceAll("_"," ").replace(/\b\w/g, c => c.toUpperCase());
+        if(typeof value === "string"){
+          rows.push(`${label}: ${value}`);
+        }else if(value && typeof value === "object"){
+          const url = value.url || value.href || "";
+          const name = value.label || value.name || label;
+          rows.push(url ? `${name}: ${url}` : name);
+        }
+      });
+    }
+    if(base.website) rows.push(`Base website: ${base.website}`);
+    u.renderList("#orBaseOfficialLinks", rows, mount);
+  }
+  function renderArrivalChecklist(data, u, mount){
+    const base = getBaseProfile(data);
+    const housing = base.on_base_housing || {};
+    const commute = base.commute_intelligence || {};
+    const bah = base.bah_market_reality || {};
+    const family = base.family_readiness || {};
+    const vcc = base.visitor_control_center || {};
+    const rows = [];
+    u.flattenTextList(base.arrival_checklist).forEach(x => rows.push(x));
+    if(!rows.length){
+      if(vcc.name || vcc.address) rows.push("Confirm visitor center location, gate access, and reporting instructions before arrival.");
+      if(housing.housing_office_name || housing.housing_office_phone) rows.push("Contact the housing office early if comparing on-base housing against local rentals.");
+      if(commute.commute_bluf) rows.push(`Commute planning: ${commute.commute_bluf}`);
+      if(bah.bah_bluf) rows.push(`BAH planning: ${bah.bah_bluf}`);
+      if(family.family_bluf) rows.push(`Family planning: ${family.family_bluf}`);
+      rows.push("Compare your likely gate, commute route, school needs, and rental/home price range before locking a neighborhood.");
+    }
+    u.renderList("#orBaseArrivalChecklist", rows, mount);
+  }
+  function renderBaseSourceNotes(data, u, mount, arcStatus){
+    const base = getBaseProfile(data);
+    const rows = [];
+    rows.push("Base profile and PCS notes source: PCSUnited city/base JSON.");
+    rows.push(arcStatus || "ArcGIS nearby landmark layer runs only when coordinates or a reliable base address are available.");
+    u.flattenTextList(base.source_notes).forEach(x => rows.push(x));
+    if(base.disclaimer) rows.push(`Disclaimer: ${base.disclaimer}`);
+    rows.push("Verify gate hours, medical access, and reporting instructions with official base sources before travel.");
+    u.renderList("#orBaseSourceNotes", rows, mount);
+  }
+  function renderBaseLocationFacts(data, u, mount, coords){
+    const base = getBaseProfile(data);
+    const loc = getBaseLocation(data);
+    const address = getBaseAddress(data, u);
+    const rows = [];
+    safePush(rows, "Address", address);
+    safePush(rows, "City", loc.city || base.metro || data.city || data.place_detail);
+    safePush(rows, "State", loc.state || data.state_code || data.state);
+    safePush(rows, "ZIP", loc.zip || base.zip || data.zip || data.geo?.zip);
+    if(coords?.lat && coords?.lon){
+      rows.push(`Coordinates: ${coords.lat.toFixed(4)}, ${coords.lon.toFixed(4)}`);
+    }else{
+      rows.push("Coordinates: Not available in JSON yet.");
+    }
+    u.renderList("#orBaseGeoFacts", rows, mount);
+  }
+  async function renderArcGisNearby(ctx, coords){
+    const u = ctx.utils;
+    const mount = ctx.mount;
+    if(!coords){
+      u.renderList("#orArcMedicalList", ["Add base_profile.base_location.lat/lon to enable nearby medical lookup."], mount);
+      u.renderList("#orArcAirportList", ["Add base_profile.base_location.lat/lon to enable nearby airport lookup."], mount);
+      u.renderList("#orArcSchoolList", ["Add base_profile.base_location.lat/lon to enable nearby school lookup."], mount);
+      u.renderList("#orArcEssentialsList", ["Add base_profile.base_location.lat/lon to enable nearby essentials lookup."], mount);
+      u.renderList("#orArcLifestyleList", ["Add base_profile.base_location.lat/lon to enable nearby lifestyle lookup."], mount);
+      renderBaseSourceNotes(ctx.city, u, mount, "ArcGIS nearby layer skipped because base coordinates were not found.");
+      return;
+    }
+    try{
+      const [
+        hospitals,
+        airports,
+        schools,
+        grocery,
+        banks,
+        parks,
+        restaurants
+      ] = await Promise.allSettled([
+        fetchPlacesForCategory(coords, "hospital", 25000, 5),
+        fetchPlacesForCategory(coords, "airport", 50000, 5),
+        fetchPlacesForCategory(coords, "school", 25000, 5),
+        fetchPlacesForCategory(coords, "grocery", 16000, 5),
+        fetchPlacesForCategory(coords, "bank", 16000, 5),
+        fetchPlacesForCategory(coords, "park", 16000, 5),
+        fetchPlacesForCategory(coords, "restaurant", 12000, 5)
+      ]);
+      const hospitalRows = hospitals.status === "fulfilled" ? hospitals.value : [];
+      const airportRows = airports.status === "fulfilled" ? airports.value : [];
+      const schoolRows = schools.status === "fulfilled" ? schools.value : [];
+      const groceryRows = grocery.status === "fulfilled" ? grocery.value : [];
+      const bankRows = banks.status === "fulfilled" ? banks.value : [];
+      const parkRows = parks.status === "fulfilled" ? parks.value : [];
+      const restaurantRows = restaurants.status === "fulfilled" ? restaurants.value : [];
+      renderPlacesList("#orArcMedicalList", hospitalRows, u, mount, "No hospital results returned by ArcGIS.");
+      renderPlacesList("#orArcAirportList", airportRows, u, mount, "No airport results returned by ArcGIS.");
+      renderPlacesList("#orArcSchoolList", schoolRows, u, mount, "No school results returned by ArcGIS.");
+      const essentialRows = [
+        ...groceryRows.slice(0, 3).map(x => ({ ...x, name:`Grocery: ${x.name}` })),
+        ...bankRows.slice(0, 3).map(x => ({ ...x, name:`Bank: ${x.name}` }))
+      ];
+      renderPlacesList("#orArcEssentialsList", essentialRows, u, mount, "No grocery or bank results returned by ArcGIS.");
+      const lifestyleRows = [
+        ...parkRows.slice(0, 3).map(x => ({ ...x, name:`Park: ${x.name}` })),
+        ...restaurantRows.slice(0, 3).map(x => ({ ...x, name:`Food: ${x.name}` }))
+      ];
+      renderPlacesList("#orArcLifestyleList", lifestyleRows, u, mount, "No park or restaurant results returned by ArcGIS.");
+      renderBaseSourceNotes(ctx.city, u, mount, "Nearby medical, schools, airport, essentials, and lifestyle source: ArcGIS API.");
+    }catch(err){
+      console.warn("ArcGIS nearby lookup failed:", err);
+      renderBaseSourceNotes(
+        ctx.city,
+        u,
+        mount,
+        `ArcGIS nearby lookup failed: ${String(err?.message || err)}`
+      );
+    }
+  }
+  function renderBaseJson(ctx, coords){
+    const data = ctx.city;
+    const u = ctx.utils;
+    const mount = ctx.mount;
+    const base = getBaseProfile(data);
+    const housing = base.on_base_housing || {};
+    const commute = base.commute_intelligence || {};
+    const bah = base.bah_market_reality || {};
+    const family = base.family_readiness || {};
+    const mapMeta = base.base_map_image || {};
+    const loc = getBaseLocation(data);
+    const installationName = getInstallationName(data, u);
+    const mapUrl = u.firstDefined(
       data.base_image_url,
       mapMeta.url,
       data.image_url
     );
-    const mapAlt = firstDefined(
+    const mapAlt = u.firstDefined(
       mapMeta.alt,
       `${installationName || "Base"} map`
     );
-    const mapCaption = firstDefined(
+    const mapCaption = u.firstDefined(
       mapMeta.caption,
       mapMeta.safety_note,
       "Public-facing base orientation map."
     );
-    setText(
+    u.setText(
       "#orBaseIntro",
-      firstDefined(
+      u.firstDefined(
         base.base_bluf,
         base.primary_mission_summary,
         data.profile,
-        "Base overview loaded from JSON."
-      )
+        "Base overview loaded from PCSUnited JSON with optional ArcGIS nearby intelligence."
+      ),
+      mount
     );
-    setText(
-      "#orBaseBlufMission",
-      firstDefined(
-        base.primary_mission_summary,
-        base.installation_type,
-        "No mission summary available yet."
-      )
-    );
-    setText(
-      "#orBaseBlufCommute",
-      firstDefined(
-        commute.commute_bluf,
-        base.pcs_personality,
-        "No commute guidance available yet."
-      )
-    );
-    setText(
-      "#orBaseBlufHousing",
-      firstDefined(
-        bah.bah_bluf,
-        housing.pcsu_strategy_note,
-        "No housing guidance available yet."
-      )
-    );
-    setText(
-      "#orBaseBlufFamily",
-      firstDefined(
-        family.family_bluf,
-        base.user_positioning?.military_family_bluf,
-        "No family guidance available yet."
-      )
-    );
+    u.setText("#orBaseBlufMission", u.firstDefined(base.primary_mission_summary, base.installation_type, "No mission summary available yet."), mount);
+    u.setText("#orBaseBlufCommute", u.firstDefined(commute.commute_bluf, base.pcs_personality, "No commute guidance available yet."), mount);
+    u.setText("#orBaseBlufHousing", u.firstDefined(bah.bah_bluf, housing.pcsu_strategy_note, "No housing guidance available yet."), mount);
+    u.setText("#orBaseBlufFamily", u.firstDefined(family.family_bluf, base.user_positioning?.military_family_bluf, "No family guidance available yet."), mount);
     const quickFacts = [];
-    if(installationName) quickFacts.push(`Installation: ${installationName}`);
-    if(base.parent_installation) quickFacts.push(`Parent installation: ${base.parent_installation}`);
-    if(base.host_or_major_command) quickFacts.push(`Host / major command: ${base.host_or_major_command}`);
-    if(base.installation_type) quickFacts.push(`Installation type: ${base.installation_type}`);
-    if(base.metro) quickFacts.push(`Metro: ${base.metro}`);
-    if(base.zip) quickFacts.push(`ZIP: ${base.zip}`);
+    safePush(quickFacts, "Installation", installationName);
+    safePush(quickFacts, "Branch", base.branch);
+    safePush(quickFacts, "Parent installation", base.parent_installation);
+    safePush(quickFacts, "Command", base.host_or_major_command);
+    safePush(quickFacts, "Installation type", base.installation_type);
+    safePush(quickFacts, "Metro", base.metro || loc.city || data.city);
+    safePush(quickFacts, "ZIP", loc.zip || base.zip || data.zip || data.geo?.zip);
+    safePush(quickFacts, "Base operator", base.base_operator_phone);
     if(base.joint_base === true) quickFacts.push("Joint base: Yes");
-    if(base.pcs_personality) quickFacts.push(`PCS personality: ${base.pcs_personality}`);
-    renderList("#orBaseQuickFacts", quickFacts);
+    safePush(quickFacts, "PCS personality", base.pcs_personality);
+    u.renderList("#orBaseQuickFacts", quickFacts, mount);
     const accessNotes = [];
     const vcc = base.visitor_control_center || {};
-    if(vcc.name) accessNotes.push(`Visitor Control Center: ${vcc.name}`);
-    if(vcc.address) accessNotes.push(`VCC address: ${vcc.address}`);
-    if(vcc.hours) accessNotes.push(`VCC hours: ${vcc.hours}`);
-    if(vcc.phone) accessNotes.push(`VCC phone: ${vcc.phone}`);
-    arr(base.gates).slice(0, 5).forEach(g => {
+    safePush(accessNotes, "Visitor Control Center", vcc.name);
+    safePush(accessNotes, "VCC address", vcc.address);
+    safePush(accessNotes, "VCC hours", vcc.hours);
+    safePush(accessNotes, "VCC phone", vcc.phone);
+    u.arr(base.gates).slice(0, 8).forEach(g => {
       const gateLine = [
         g.name,
         g.hours ? `(${g.hours})` : "",
@@ -4153,56 +5667,60 @@
       ].filter(Boolean).join(" ");
       if(gateLine) accessNotes.push(gateLine);
     });
-    renderList("#orBaseAccess", accessNotes);
+    u.renderList("#orBaseAccess", accessNotes, mount);
     const housingNotes = [];
-    if(housing.housing_type) housingNotes.push(`Housing type: ${housing.housing_type}`);
-    if(housing.housing_office_name) housingNotes.push(`Housing office: ${housing.housing_office_name}`);
-    if(housing.housing_office_address) housingNotes.push(`Housing office address: ${housing.housing_office_address}`);
-    if(housing.housing_office_phone) housingNotes.push(`Housing office phone: ${housing.housing_office_phone}`);
-    flattenTextList(housing.best_for).forEach(x => housingNotes.push(`Best for: ${x}`));
-    flattenTextList(housing.watchouts).forEach(x => housingNotes.push(`Watchout: ${x}`));
-    renderList("#orBaseHousing", housingNotes);
-    setText(
+    safePush(housingNotes, "Housing type", housing.housing_type);
+    safePush(housingNotes, "Housing provider", housing.provider || housing.privatized_housing_provider);
+    safePush(housingNotes, "Housing office", housing.housing_office_name);
+    safePush(housingNotes, "Housing office address", housing.housing_office_address);
+    safePush(housingNotes, "Housing office phone", housing.housing_office_phone);
+    safePush(housingNotes, "Housing email", housing.housing_office_email);
+    safePush(housingNotes, "Housing hours", housing.housing_office_hours);
+    u.flattenTextList(housing.best_for).forEach(x => housingNotes.push(`Best for: ${x}`));
+    u.flattenTextList(housing.watchouts).forEach(x => housingNotes.push(`Watchout: ${x}`));
+    u.renderList("#orBaseHousing", housingNotes, mount);
+    const commandMission = [];
+    safePush(commandMission, "Command", base.host_or_major_command);
+    safePush(commandMission, "Mission", base.primary_mission_summary);
+    safePush(commandMission, "Installation type", base.installation_type);
+    u.flattenTextList(base.major_units).forEach(x => commandMission.push(`Major unit: ${x}`));
+    u.flattenTextList(base.mission_notes).forEach(x => commandMission.push(x));
+    u.renderList("#orBaseCommandMission", commandMission, mount);
+    u.setText(
       "#orBaseWhyItMatters",
-      firstDefined(
+      u.firstDefined(
         base.base_bluf,
         housing.pcsu_strategy_note,
         bah.base_tab_message,
         base.primary_mission_summary,
         "No base summary available yet."
-      )
+      ),
+      mount
     );
-    setText("#orBaseQuickInstall", installationName || "—");
-    setText("#orBaseQuickMetro", base.metro || data.market_label || "—");
-    setText("#orBaseQuickHousingType", housing.housing_type || "—");
-    setText("#orBaseQuickPersonality", base.pcs_personality || "—");
+    u.setText("#orBaseQuickInstall", installationName || "—", mount);
+    u.setText("#orBaseQuickMetro", base.metro || loc.city || data.market_label || data.city || "—", mount);
+    u.setText("#orBaseQuickZip", loc.zip || base.zip || data.zip || data.geo?.zip || "—", mount);
+    u.setText("#orBaseQuickPersonality", base.pcs_personality || "—", mount);
     const signalRows = [];
-    if(base.pcs_personality){
-      signalRows.push(["PCS Fit", base.pcs_personality]);
-    }
-    if(commute.commute_bluf){
-      signalRows.push(["Commute", commute.commute_bluf]);
-    }
-    if(bah.bah_bluf){
-      signalRows.push(["BAH Reality", bah.bah_bluf]);
-    }
-    if(housing.pcsu_strategy_note){
-      signalRows.push(["Housing", housing.pcsu_strategy_note]);
-    }
-    const signalEl = $("#orBaseSignals");
+    if(base.pcs_personality) signalRows.push(["PCS Fit", base.pcs_personality]);
+    if(commute.commute_bluf) signalRows.push(["Commute", commute.commute_bluf]);
+    if(bah.bah_bluf) signalRows.push(["BAH Reality", bah.bah_bluf]);
+    if(housing.pcsu_strategy_note) signalRows.push(["Housing", housing.pcsu_strategy_note]);
+    if(family.family_bluf) signalRows.push(["Family", family.family_bluf]);
+    const signalEl = mount.querySelector("#orBaseSignals");
     if(signalEl){
       signalEl.innerHTML = signalRows.length
         ? signalRows.map(([label, copy]) => `
           <div class="or-signal-row">
-            <span class="or-signal-pill">${esc(label)}</span>
-            <span class="or-signal-copy">${esc(copy)}</span>
+            <span class="or-signal-pill">${u.esc(label)}</span>
+            <span class="or-signal-copy">${u.esc(copy)}</span>
           </div>
         `).join("")
         : `<div class="or-signal-row">No strategy signals available yet.</div>`;
     }
-    const mapImg = $("#orBaseMapImg");
-    const mapLink = $("#orBaseMapLink");
-    const mapEmpty = $("#orBaseMapEmpty");
+    const mapImg = mount.querySelector("#orBaseMapImg");
+    const mapLink = mount.querySelector("#orBaseMapLink");
+    const mapEmpty = mount.querySelector("#orBaseMapEmpty");
     if(mapUrl){
       if(mapImg){
         mapImg.src = mapUrl;
@@ -4229,237 +5747,132 @@
         mapEmpty.classList.add("is-show");
       }
     }
-    setText("#orBaseMapCaption", mapCaption);
+    u.setText("#orBaseMapCaption", mapCaption, mount);
+    renderBaseLocationFacts(data, u, mount, coords);
+    renderMajorServices(data, u, mount);
+    renderRecommendedCommunities(data, u, mount);
+    renderCommuteIntel(data, u, mount);
+    renderBahReality(data, u, mount);
+    renderFamilyReadiness(data, u, mount);
+    renderWatchouts(data, u, mount);
+    renderOfficialLinks(data, u, mount);
+    renderArrivalChecklist(data, u, mount);
+    renderBaseSourceNotes(data, u, mount);
   }
-  function renderOverview(data){
-    setText("#orOverviewIntro", data.profile || "City overview loaded.");
-    setText(
-      "#orOvListPrice",
-      fmtMoney(data.metrics?.median_list_price || data.market_metrics?.median_list_price)
-    );
-    setText(
-      "#orOvPpsf",
-      Number.isFinite(Number(data.metrics?.price_per_sqft || data.market_metrics?.price_per_sqft))
-        ? fmtMoney(data.metrics?.price_per_sqft || data.market_metrics?.price_per_sqft)
-        : "—"
-    );
-    setText(
-      "#orOvListings",
-      fmtNum(data.metrics?.active_listings_total || data.market_metrics?.active_listings_total)
-    );
-    setText(
-      "#orOvTaxRate",
-      fmtPctFromDecimal(data.property_tax_rate ?? data.ownership_costs?.property_tax_rate)
-    );
-    renderList("#orSummaryPoints", data.summary_points);
-    const briefParts = [
-      data.financial_brief?.affordability_summary,
-      data.financial_brief?.buyer_opportunity ? `Buyer opportunity: ${data.financial_brief.buyer_opportunity}.` : "",
-      data.financial_brief?.bah_vs_buy_position ? `Buy position: ${data.financial_brief.bah_vs_buy_position}.` : "",
-      data.financial_brief?.bah_vs_rent_position ? `Rent comparison: ${data.financial_brief.bah_vs_rent_position}.` : ""
-    ].filter(Boolean);
-    setText("#orFinancialBrief", briefParts.join(" ") || "No financial brief available.");
-    setHtml("#orScoreBars", renderScoreBars(data.scorecard || {}));
+  async function render(ctx){
+    const data = ctx.city;
+    const u = ctx.utils;
+    const mount = ctx.mount;
+    let coords = getBaseCoordinates(data);
+    renderBaseJson(ctx, coords);
+    if(!coords){
+      try{
+        coords = await geocodeBase(data, u);
+        renderBaseLocationFacts(data, u, mount, coords);
+      }catch(err){
+        console.warn("Base geocode failed:", err);
+      }
+    }
+    await renderArcGisNearby(ctx, coords);
   }
-  function renderBedroom(data, bedKey){
-    const bed = data.by_bedroom?.[bedKey];
-    if(!bed){
-      setText("#orBedAsOf", "As of —");
-      setText("#orBedHomePrice", "—");
-      setText("#orBedRent", "—");
-      setText("#orBedMortgage", "—");
-      setText("#orBedUtilities", "—");
+  const config = {
+    html,
+    render
+  };
+  function forceInstallHtml(){
+    const mount = document.getElementById(MOUNT_ID);
+    if(mount){
+      mount.innerHTML = html;
+      mount.dataset.tabMounted = "true";
+    }
+  }
+  function registerWhenReady(attempt = 0){
+    forceInstallHtml();
+    if(window.PCSU_BASE_DEMO_REGISTER_TAB){
+      window.PCSU_BASE_DEMO_REGISTER_TAB(TAB_NAME, config);
+      forceInstallHtml();
+      if(window.PCSU_BASE_DEMO?.state?.city && window.PCSU_BASE_DEMO?.renderTab){
+        window.PCSU_BASE_DEMO.renderTab(TAB_NAME);
+      }
+      console.log("PCSUnited Base tab registered v3.2.0.");
       return;
     }
-    setText(
-      "#orBedAsOf",
-      `As of ${bed.home_price?.as_of || bed.rent_monthly?.as_of || data.metrics?.as_of || "N/A"}`
-    );
-    setText("#orBedHomePrice", fmtMoney(bed.home_price?.avg));
-    setText("#orBedRent", fmtMoney(bed.rent_monthly?.avg));
-    setText("#orBedMortgage", fmtMoney(bed.mortgage_monthly?.avg));
-    setText("#orBedUtilities", fmtMoney(bed.utilities?.total?.avg));
-  }
-  function renderRealEstate(data){
-    setText(
-      "#orRealEstateIntro",
-      `${data.city || data.name || "City"} pricing and cost structure, including taxes, insurance, HOA assumptions, and bedroom-level ranges.`
-    );
-    renderBedroom(data, ACTIVE_BED);
-    renderList("#orOwnershipNotes", data.ownership_costs?.notes);
-    renderList("#orTargetNeighborhoods", data.target_neighborhoods || data.neighborhoods);
-    renderList("#orOpportunities", data.opportunities);
-    renderList("#orRisks", data.risks);
-    renderList("#orInvestorAngles", data.investor_angles);
-  }
-  function renderDemographics(data){
-    setText("#orDemoPopulation", fmtNum(data.population?.estimate || data.snapshot?.population_city));
-    setText(
-      "#orDemoAge",
-      Number.isFinite(Number(data.population?.median_age))
-        ? String(data.population.median_age)
-        : "—"
-    );
-    setText(
-      "#orDemoHouseholdSize",
-      Number.isFinite(Number(data.population?.persons_per_household))
-        ? String(data.population.persons_per_household)
-        : "—"
-    );
-    setText("#orDemoIncome", fmtMoney(data.income?.median_household_income || data.snapshot?.median_household_income));
-    setText("#orDemoPerCapita", fmtMoney(data.income?.per_capita_income));
-    setText("#orDemoPoverty", fmtPct(data.income?.poverty_rate_percent));
-    setHtml("#orEducationBars", [
-      miniBar("HS+", data.education?.high_school_grad_or_higher_percent || 0, 100, fmtPct(data.education?.high_school_grad_or_higher_percent || 0)),
-      miniBar("Bachelor's+", data.education?.bachelors_degree_or_higher_percent || 0, 100, fmtPct(data.education?.bachelors_degree_or_higher_percent || 0)),
-      miniBar("Veteran Pop.", data.veterans?.veteran_population_percent || 0, 100, fmtPct(data.veterans?.veteran_population_percent || 0)),
-      miniBar("Foreign Born", data.immigration?.foreign_born_percent || 0, 100, fmtPct(data.immigration?.foreign_born_percent || 0))
-    ].join(""));
-    setHtml("#orLaborBars", [
-      miniBar("Unemployment", data.labor?.unemployment_rate_percent || 0, 15, fmtPct(data.labor?.unemployment_rate_percent || 0)),
-      miniBar("Commute", data.labor?.mean_travel_time_to_work_minutes || 0, 60, `${Number(data.labor?.mean_travel_time_to_work_minutes || 0).toFixed(1)}m`),
-      miniBar("Households", data.households?.total_households || 0, Math.max(1, Number(data.households?.total_households || 1)), fmtNum(data.households?.total_households || 0))
-    ].join(""));
-    setHtml("#orHousingBars", [
-      miniBar("Median Rent", data.rental_metrics?.median_rent || 0, 4000, fmtMoney(data.rental_metrics?.median_rent || 0)),
-      miniBar("Vacancy", data.rental_metrics?.vacancy_rate_percent || data.rental_vacancy?.rate_percent || 0, 20, fmtPct(data.rental_metrics?.vacancy_rate_percent || data.rental_vacancy?.rate_percent || 0)),
-      miniBar("Housing Units", data.housing?.housing_units || 0, Math.max(1, Number(data.housing?.housing_units || 1)), fmtNum(data.housing?.housing_units || 0))
-    ].join(""));
-    renderList("#orQualityNotes", [
-      data.school_quality?.on_base,
-      data.school_quality?.off_base,
-      data.crime_status?.installation,
-      data.crime_status?.metro_laredo,
-      data.crime_status?.metro_mcallen,
-      data.crime_status?.metro_san_antonio
-    ]);
-    renderList("#orClimateList", [
-      data.climate_weather?.spring ? `Spring: ${data.climate_weather.spring}` : null,
-      data.climate_weather?.summer ? `Summer: ${data.climate_weather.summer}` : null,
-      data.climate_weather?.fall ? `Fall: ${data.climate_weather.fall}` : null,
-      data.climate_weather?.winter ? `Winter: ${data.climate_weather.winter}` : null,
-      ...arr(data.special_events).map(x => `Local event: ${x}`)
-    ]);
-  }
-  function renderGuidance(data){
-    renderList("#orBuyerGuidance", data.buyer_guidance);
-    renderList("#orSellerGuidance", data.seller_guidance);
-    renderList("#orLandlordNotes", data.landlord_notes);
-    renderList("#orBuyerNotes", data.buyer_notes);
-    renderList("#orSellerNotes", data.seller_notes);
-  }
-  function renderAll(data){
-    CITY = data;
-    hideError();
-    renderOverview(data);
-    renderRealEstate(data);
-    renderDemographics(data);
-    renderBase(data);
-    renderGuidance(data);
-    try{
-      window.dispatchEvent(new CustomEvent("pcsunited:base-demographics-ready", {
-        detail:{
-          source:"pcsunited.base-demographics.no-market-panel.v2.1.0",
-          city:data,
-          updated_at:new Date().toISOString()
-        }
-      }));
-    }catch(_){}
-  }
-  async function loadCity(){
-    const cityJsonUrl = getCityJsonUrl();
-    try{
-      const res = await fetch(cityJsonUrl, {
-        cache:"no-store"
-      });
-      if(!res.ok){
-        throw new Error(`HTTP ${res.status} while loading ${cityJsonUrl}`);
-      }
-      const data = await res.json();
-      renderAll(data);
-    }catch(err){
-      console.error("Base Demographics load error:", err);
-      showError(String(err?.message || err));
+    window.PCSU_BASE_DEMO_PENDING_TABS = window.PCSU_BASE_DEMO_PENDING_TABS || [];
+    window.PCSU_BASE_DEMO_PENDING_TABS =
+      window.PCSU_BASE_DEMO_PENDING_TABS.filter(item => item.name !== TAB_NAME);
+    window.PCSU_BASE_DEMO_PENDING_TABS.push({
+      name:TAB_NAME,
+      config
+    });
+    if(attempt < 50){
+      setTimeout(() => registerWhenReady(attempt + 1), 100);
+    }else{
+      console.warn("PCSUnited Base tab could not find modular shell.");
     }
   }
-  function handleBaseSelected(event){
-    const item = event?.detail || {};
-    const selectedUrl =
-      item.jsonUrl ||
-      item.cityJsonUrl ||
-      item.url ||
-      item.city_url ||
-      "";
-    if(selectedUrl){
-      const fixed = normalizeCityJsonUrl(selectedUrl);
-      window.PCSU_SELECTED_CITY_JSON_URL = fixed;
-      window.OROZCO_CITY_JSON_URL = fixed;
-      try{
-        localStorage.setItem("pcsunited.selectedCityJsonUrl.v1", fixed);
-      }catch(_){}
-    }
-    loadCity();
-  }
-  window.loadCity = loadCity;
-  window.addEventListener("pcsu:base-selected", handleBaseSelected);
-  window.addEventListener("pcsunited:base-selected", handleBaseSelected);
-  hydrateSelectedBaseFromStorage();
-  bindTabs();
-  bindBedrooms();
-  loadCity();
+  registerWhenReady();
 })();
 </script>
-        </div>
-      </section>
-    </div>
-    <footer id="w-node-_087b196d-b026-a298-5d40-c324b41ad796-b41ad796" class="footer footer-2">
-      <div class="footer-content-wrapper">
-        <div class="footer_banners">
-          <div class="footer_buy">
-            <div class="heading-style-h4-3 text-align-center"><em>Built for service members, veterans, and military families who need clearer PCS, housing, pay, and financial readiness decisions before the move gets expensive.</em></div>
-            <div class="form-block-6 w-form">
-              <form id="wf-form-Newsletter-2" name="wf-form-Newsletter-2" data-name="Newsletter" method="get" data-wf-page-id="69eb162637c57d450e0e1a06" data-wf-element-id="1dd0a45f-caff-c36e-5aad-8762791c6bec">
-                <div class="div-block-4"><input class="form_input-2 is-footer w-input" maxlength="256" name="Email-Address" data-name="Email Address" placeholder="Email Address" type="email" id="Email-Address-3" required=""><input type="submit" data-wait="Please wait..." class="button-11 is-footer w-button" value="Send"></div>
-              </form>
-              <div class="form_message-success-2 w-form-done">
-                <div>Thank you! Your submission has been received!</div>
-              </div>
-              <div class="form_message-error w-form-fail">
-                <div>Oops! Something went wrong while submitting the form.</div>
-              </div>
-            </div>
-          </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
-        </div>
-        <div data-w-id="ee73203a-eb4c-0a70-cb0c-c0e63e1d2416" class="footer-flex-wrapper">
-          <div class="w-layout-grid footer-links-wrapper">
-            <div class="footer-links-text">
-              <div class="footer-links-title">Explore</div>
-              <a href="../air-force-blogs/main-page.html" target="_blank" class="footer-link">Contact Us</a>
-              <a href="../air-force/resources.html" target="_blank" class="footer-link">Resources</a>
-              <a href="../about-us.html" target="_blank" class="footer-link">About Us</a>
-              <a href="../air-force-blogs/main-page.html" target="_blank" class="footer-link">Blog</a>
-              <a href="../air-force/resources.html" target="_blank" class="footer-link">Privacy Policy</a>
-            </div>
-            <div class="footer-links-text">
-              <div class="footer-links-title">Tools</div>
-              <a href="../air-force/pt-calculator.html" target="_blank" class="footer-link">PT Calculator</a>
-              <a href="../air-force/housing-quiz.html" target="_blank" class="footer-link">Home Quiz</a>
-              <a href="../air-force/bah-base-pay-calculator.html" target="_blank" class="footer-link">BAH Calculator</a>
-              <a href="../air-force/va-calculator.html" target="_blank" class="footer-link">VA Calculator</a>
-              <a href="../air-force-blogs/main-page.html" target="_blank" class="footer-link">Disclamer</a>
-              <a href="../about-us.html" target="_blank" class="footer-link">Terms of Use</a>
-            </div>
-            <div class="footer-links-text">
-              <div class="footer-links-title">Official Sources</div>
-              <a href="https://www.fhfa.gov/" target="_blank" class="footer-link">FHFA</a>
-              <a href="https://www.militaryonesource.mil/" target="_blank" class="footer-link">Military OneSource</a>
-              <a href="https://www.va.gov/housing-assistance/" target="_blank" class="footer-link">VA Housing Assistance</a>
-              <a href="https://www.dfas.mil/MilitaryMembers/payentitlements/Pay-Tables/Basic-Pay/EM/" target="_blank" class="footer-link">DFAS Pay Entitlements</a>
-            </div>
-          </div>
-        </div>
       </div>
-    </footer>
+      <div class="w-embed w-script"><!--  =========================================================
+  PCSUnited • Base Demographics
+  EMBED 6 OF 6 • GUIDANCE TAB
+  v3.0.0
+=========================================================  -->
+        <script>
+(() => {
+  "use strict";
+  const html = `
+    <h2 class="or-section-title">Buyer, Seller, and Landlord Guidance</h2>
+    <p class="or-section-sub">
+      Decision notes built directly from your city JSON.
+    </p>
+    <div class="or-grid-3">
+      <div class="or-list-card">
+        <div class="or-list-title">Buyer Guidance</div>
+        <ul class="or-list" id="orBuyerGuidance"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Seller Guidance</div>
+        <ul class="or-list" id="orSellerGuidance"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Landlord Notes</div>
+        <ul class="or-list" id="orLandlordNotes"></ul>
+      </div>
+    </div>
+    <div class="or-grid-2">
+      <div class="or-list-card">
+        <div class="or-list-title">Buyer Notes</div>
+        <ul class="or-list" id="orBuyerNotes"></ul>
+      </div>
+      <div class="or-list-card">
+        <div class="or-list-title">Seller Notes</div>
+        <ul class="or-list" id="orSellerNotes"></ul>
+      </div>
+    </div>
+  `;
+  function render(ctx){
+    const data = ctx.city;
+    const u = ctx.utils;
+    const mount = ctx.mount;
+    u.renderList("#orBuyerGuidance", data.buyer_guidance, mount);
+    u.renderList("#orSellerGuidance", data.seller_guidance, mount);
+    u.renderList("#orLandlordNotes", data.landlord_notes, mount);
+    u.renderList("#orBuyerNotes", data.buyer_notes, mount);
+    u.renderList("#orSellerNotes", data.seller_notes, mount);
+  }
+  const config = { html, render };
+  if(window.PCSU_BASE_DEMO_REGISTER_TAB){
+    window.PCSU_BASE_DEMO_REGISTER_TAB("guidance", config);
+  }else{
+    window.PCSU_BASE_DEMO_PENDING_TABS = window.PCSU_BASE_DEMO_PENDING_TABS || [];
+    window.PCSU_BASE_DEMO_PENDING_TABS.push({ name:"guidance", config });
+  }
+})();
+</script>
+      </div>
+    </div>
   </div>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=69eb162337c57d450e0e19a3" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="../js/webflow.js" type="text/javascript"></script>

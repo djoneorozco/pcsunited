@@ -20185,8 +20185,8 @@ blockquote {
   height: auto;
   max-height: none;
   margin-top: 0;
-  margin-bottom: 10px;
-  margin-left: 2px;
+  margin-bottom: 0;
+  margin-left: -11px;
   padding: 0;
 }
 
@@ -22209,8 +22209,8 @@ blockquote {
 }
 
 .nav-info-dropdown-wrapper.w--open {
-  background-color: #2e2e2e;
-  border: .0625rem solid #616060;
+  background-color: #333333bf;
+  border: .0625rem #616060;
   border-radius: .375rem;
   width: 22.5rem;
   margin-left: 0;
@@ -23209,6 +23209,18 @@ blockquote {
 
 .code-embed-54 {
   padding-top: 0;
+}
+
+.head-for-resources-copy {
+  grid-column-gap: 0px;
+  grid-row-gap: 0px;
+  background-color: #2e2e2e;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  display: flex;
+  position: static;
 }
 
 @media screen and (min-width: 1280px) {
@@ -24537,9 +24549,10 @@ blockquote {
   }
 
   .finance-input-code {
+    margin-left: -20px;
     padding-top: 0;
     padding-left: 0;
-    padding-right: 10px;
+    padding-right: 0;
   }
 
   .blogs {
@@ -24794,6 +24807,12 @@ blockquote {
   .opacity-80-2-copy.hero-h01 {
     margin-top: -35px;
   }
+
+  .head-for-resources-copy {
+    background-color: #2e2e2e;
+    height: 80px;
+    margin-top: -12px;
+  }
 }
 
 @media screen and (min-width: 1440px) {
@@ -25012,6 +25031,10 @@ blockquote {
   .hero-content {
     margin-top: -113px;
     padding-bottom: 60px;
+  }
+
+  .hero-paragraph {
+    text-align: center;
   }
 
   .hero-text-wrap {
@@ -27392,9 +27415,7 @@ blockquote {
 
   .finance-input-code {
     background-color: #ededed00;
-    margin-top: 0;
-    margin-bottom: 0;
-    margin-left: -104px;
+    margin: 0 2px 0 -131px;
     padding-bottom: 0;
     padding-left: 0;
     padding-right: 0;
@@ -27932,7 +27953,7 @@ blockquote {
   }
 
   .image-183 {
-    width: 15%;
+    width: 14%;
     height: 80%;
     margin-left: 14px;
   }
@@ -27953,6 +27974,20 @@ blockquote {
 
   .image-184, .image-185 {
     border-radius: 20px;
+  }
+
+  .head-for-resources-copy {
+    color: #e6e1dd;
+    background-color: #2e2e2e;
+    width: 105%;
+    height: 100px;
+    margin-top: -9px;
+    margin-left: 0;
+    margin-right: 0;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 81px;
+    box-shadow: 0 2px 5px #000000c4;
   }
 }
 
@@ -28516,7 +28551,9 @@ blockquote {
   }
 
   .finance-input-code {
-    padding-bottom: 10px;
+    margin-left: -149px;
+    margin-right: 2px;
+    padding-bottom: 0;
   }
 
   .blogs {
@@ -28602,6 +28639,16 @@ blockquote {
 
   .intro-section-main-page {
     width: 100%;
+  }
+
+  .image-183 {
+    height: 90%;
+  }
+
+  .head-for-resources-copy {
+    width: 115%;
+    margin-top: 0;
+    margin-left: -98px;
   }
 }
 
@@ -31499,6 +31546,16 @@ blockquote {
   .image-183 {
     height: 70%;
   }
+
+  .head-for-resources-copy {
+    width: 105%;
+    min-width: 100%;
+    max-width: 110%;
+    height: 100px;
+    margin-left: -17px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
 }
 
 @media screen and (max-width: 767px) {
@@ -33151,6 +33208,14 @@ blockquote {
   .tabs-menu-4 {
     flex-flow: column;
     align-items: stretch;
+  }
+
+  .head-for-resources-copy {
+    background-color: #2e2e2e;
+    width: 110%;
+    margin-left: -38px;
+    padding-top: 0;
+    padding-bottom: 0;
   }
 }
 
@@ -37261,6 +37326,13 @@ blockquote {
   .opacity-80-2-copy {
     width: 100%;
     max-width: 100%;
+  }
+
+  .head-for-resources-copy {
+    width: 120%;
+    margin-left: -14px;
+    padding-top: 7px;
+    padding-bottom: 7px;
   }
 }
 

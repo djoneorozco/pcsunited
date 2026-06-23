@@ -1,14 +1,14 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Jun 18 2026 05:48:46 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Jun 23 2026 22:13:12 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f6df2366c61b76c85e09e0" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
-  <title>Military FinTech Resources | PCSUnited</title>
-  <meta content="Explore PCSUnited’s military-first calculators and financial readiness tools for BAH, military pay, retirement, VA disability, fitness, PCS planning, and homebuying decisions." name="description">
-  <meta content="Military FinTech Resources | PCSUnited" property="og:title">
-  <meta content="Plan your next move with military-first tools for BAH, pay, retirement, VA disability, fitness, PCS planning, and smarter homebuying decisions." property="og:description">
+  <title>Air Force PCS Resources &amp; Tools | PCSUnited</title>
+  <meta content="Access Air Force calculators, housing tools, and financial guidance for your PCS. BAH, retirement, mortgage, and VA loan tools built for military families." name="description">
+  <meta content="Air Force PCS Resources &amp; Tools | PCSUnited" property="og:title">
+  <meta content="Access Air Force calculators, housing tools, and financial guidance for your PCS. BAH, retirement, mortgage, and VA loan tools built for military families." property="og:description">
   <meta content="https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a0bdd9ce81b2373c7511aec_c0deff88448595270fbed9c6ee8122f6_A1EB3C65-A1E3-4A1E-99A7-D2A4F508CD2E.jpg" property="og:image">
-  <meta content="Military FinTech Resources | PCSUnited" name="twitter:title">
-  <meta content="Plan your next move with military-first tools for BAH, pay, retirement, VA disability, fitness, PCS planning, and smarter homebuying decisions." name="twitter:description">
+  <meta content="Air Force PCS Resources &amp; Tools | PCSUnited" name="twitter:title">
+  <meta content="Access Air Force calculators, housing tools, and financial guidance for your PCS. BAH, retirement, mortgage, and VA loan tools built for military families." name="twitter:description">
   <meta property="og:type" content="website">
   <meta content="summary_large_image" name="twitter:card">
   <meta content="width=device-width, initial-scale=1" name="viewport">
@@ -149,7 +149,7 @@
 <body>
   <div class="page-wrapper">
     <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="resources-header header-resources w-nav">
-      <div class="head-for-resources"><img src="../images/Logo-3-white.png" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
+      <div class="head-for-resources"><img src="../images/Logo-3-white.png" loading="lazy" sizes="100vw" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
         <div class="compensation-strip w-embed w-script"><!--  =========================================================
   PCSUnited • Header Progressive Compensation / Financial Strip
   v4.0.0 • BASICBRAIN + FINANCIAL SNAPSHOT MODE
@@ -3370,14 +3370,10 @@
                 <div class="slide-4 w-slide">
                   <div class="interactive-base-map w-embed w-script"><!--  =========================================================
   PCSUnited • Real Interactive U.S. Base Demographics Map
-  v3.0.4 • BASICBRAIN STATE + BASE + CITY MARKER PRESELECT • FULL CODE
-  UPDATE v3.0.4
-  - Listens for BasicBrain / selected base events
-  - Auto-selects state from BasicBrain gaining base
-  - Highlights the matching base card from BasicBrain
-  - Adds city/base marker dot on the map
-  - Keeps Texas default if no BasicBrain state/base exists
-  - Same map opening flow
+  v3.0.5 • BASICBRAIN STATE + BASE + CITY MARKER PRESELECT • NEW TAB OPEN
+  UPDATE v3.0.5
+  - Opens Base Demographics in a new tab
+  - Nothing else changes
 =========================================================  -->
                     <div id="pcsu-real-us-map">
                       <style>
@@ -3756,7 +3752,7 @@
         0 0 28px rgba(142,243,197,.20);
     }
     .pcsu-base-btn.is-selected::after{
-      content:"Your Selected Base";
+      content:"AFB Selected";
       position:absolute;
       right:14px;
       top:14px;
@@ -3866,9 +3862,9 @@
                       <script>
     (() => {
       "use strict";
-      if(window.PCSU_US_BASE_MAP?.__mounted_v304) return;
+      if(window.PCSU_US_BASE_MAP?.__mounted_v305) return;
       window.PCSU_US_BASE_MAP = {
-        __mounted_v304:true
+        __mounted_v305:true
       };
       const STORAGE_KEY =
         "pcsunited.selectedBase.v1";
@@ -4205,7 +4201,11 @@
         saveSelection(item);
         const url = getDestinationUrl();
         url.searchParams.set("base", item.id);
-        window.location.href = url.toString();
+        window.open(
+          url.toString(),
+          "_blank",
+          "noopener,noreferrer"
+        );
       }
       function clearBaseMarker(){
         if(markerLayer){
@@ -4624,9 +4624,9 @@
             <script>
 (() => {
   "use strict";
-  if(window.PCSU_US_BASE_MAP?.__mounted_v304) return;
+  if(window.PCSU_US_BASE_MAP?.__mounted_v305) return;
   window.PCSU_US_BASE_MAP = {
-    __mounted_v304:true
+    __mounted_v305:true
   };
   const STORAGE_KEY =
     "pcsunited.selectedBase.v1";
@@ -4963,7 +4963,11 @@
     saveSelection(item);
     const url = getDestinationUrl();
     url.searchParams.set("base", item.id);
-    window.location.href = url.toString();
+    window.open(
+      url.toString(),
+      "_blank",
+      "noopener,noreferrer"
+    );
   }
   function clearBaseMarker(){
     if(markerLayer){
@@ -5418,43 +5422,6 @@
           </div>
         </div>
       </div>
-      <div class="wing-back-hero bakdrop"></div>
-      <div class="sliderinblack">
-        <div data-w-id="9b176962-6ec6-ac6a-3218-48cf9c8a2538" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <section class="section home1-dev">
         <div reveal-content="true" class="w-layout-grid title-for-dashboard">
           <h3 line-split="true" class="fsize-s">How Much House Can You Afford?<br> <span class="tertiary-color-emphasis">Complete your financial snapshot to see your range.</span></h3>
@@ -5475,17 +5442,9 @@
                         <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-wf-ignore="true">
                       </video></div>
                     <div id="w-node-_738982aa-7029-afc1-0908-d766a276410d-c85e09e0" class="tab-pane-text">
-                      <div class="finance-input-code w-embed w-script"><!--  ============================================================
+                      <div class="finance-input-code w-embed"><!--  ============================================================
   PCSUNITED • FINANCIAL ANALYSIS INPUT PANEL
-  v1.1.3 • LIGHTER 6-INPUT MORTGAGE SCENARIO VERSION
-  UPDATES
-  - Removed in-panel summary cards:
-    Total Monthly Income, Estimated Payment, Monthly Debt,
-    Housing Ratio, Suggested Max Payment
-  - Keeps header strip transformation logic unchanged
-  - Prevents header strip from transforming on preload/hydration
-  - Only emits pcsunited:financial-input-updated after user interaction
-  - Continue button still emits pcsunited:run-financial-analysis
+  SHELL v1.1.8 • SLIDER INPUT + THEWING MORTGAGE ESTIMATE VERSION
 ===============================================================  -->
                         <div id="pcsu-financial-input-panel" style="all:initial;">
                           <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -5685,6 +5644,66 @@
   padding-left:62px;
 }
 /* ============================================================
+  SLIDERS
+=============================================================== */
+#pcsu-financial-input-panel .fi-slider-wrap{
+  margin-top:10px;
+}
+#pcsu-financial-input-panel .fi-slider-track{
+  position:relative;
+  height:10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.13);
+  box-shadow:
+    inset 0 1px 2px rgba(0,0,0,.24),
+    0 8px 18px rgba(0,0,0,.10);
+}
+#pcsu-financial-input-panel .fi-slider-fill{
+  position:absolute;
+  left:0;
+  top:0;
+  height:100%;
+  width:50%;
+  border-radius:999px;
+  background:linear-gradient(90deg, rgba(142,243,197,1), rgba(226,255,236,.94));
+  box-shadow:0 0 18px rgba(142,243,197,.15);
+  pointer-events:none;
+}
+#pcsu-financial-input-panel .fi-range{
+  position:absolute;
+  inset:-7px 0;
+  width:100%;
+  height:24px;
+  opacity:0;
+  cursor:pointer;
+  z-index:4;
+}
+#pcsu-financial-input-panel .fi-slider-knob{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:18px;
+  height:10px;
+  transform:translate(-50%,-50%);
+  border-radius:999px;
+  background:#dbe3ff;
+  box-shadow:
+    0 4px 12px rgba(0,0,0,.35),
+    inset 0 1px 0 rgba(255,255,255,.55);
+  pointer-events:none;
+  z-index:3;
+}
+#pcsu-financial-input-panel .fi-slider-scale{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:8px;
+  color:#b8c2ec;
+  font-size:.76rem;
+  line-height:1;
+  font-weight:900;
+}
+/* ============================================================
   INPUT SECTION
 =============================================================== */
 #pcsu-financial-input-panel .fi-section{
@@ -5727,7 +5746,7 @@
 #pcsu-financial-input-panel .fi-input-grid{
   display:grid;
   grid-template-columns:repeat(3,1fr);
-  gap:14px;
+  gap:18px 14px;
 }
 #pcsu-financial-input-panel .fi-field{
   min-width:0;
@@ -5741,6 +5760,14 @@
   font-size:.86rem;
   line-height:1.15;
   font-weight:800;
+}
+#pcsu-financial-input-panel .fi-label .fi-label-side{
+  margin-left:auto;
+  color:var(--mint);
+  font-size:.76rem;
+  line-height:1;
+  font-weight:900;
+  white-space:nowrap;
 }
 #pcsu-financial-input-panel .fi-info{
   width:16px;
@@ -5835,7 +5862,7 @@
                               <div class="fi-topbar">
                                 <div>
                                   <h3 class="fi-title">
-                                    Personal & Financial Information
+                                    Financial Readiness Snapshot
                                   </h3>
                                   <p class="fi-subtitle">
                                     We preloaded your BasicBrain income in the background. Enter the mortgage scenario details needed to calculate affordability, payment comfort, and cash-flow readiness.
@@ -5867,7 +5894,19 @@
                                     </label>
                                     <div class="fi-money-wrap">
                                       <span class="fi-prefix">$</span>
-                                      <input id="fi-home-price" class="fi-control" type="number" min="0" step="5000" value="250000">
+                                      <input id="fi-home-price" class="fi-control" type="number" min="100000" max="750000" step="5000" value="250000">
+                                    </div>
+                                    <div class="fi-slider-wrap">
+                                      <div class="fi-slider-track">
+                                        <div id="fi-home-price-fill" class="fi-slider-fill"></div>
+                                        <div id="fi-home-price-knob" class="fi-slider-knob"></div>
+                                        <input id="fi-home-price-slider" class="fi-range" type="range" min="100000" max="750000" step="5000" value="250000">
+                                      </div>
+                                      <div class="fi-slider-scale">
+                                        <span>$100k</span>
+                                        <span>$425k</span>
+                                        <span>$750k</span>
+                                      </div>
                                     </div>
                                     <div class="fi-hint">Use the price you want to test in this market.</div>
                                   </div>
@@ -5875,10 +5914,23 @@
                                     <label class="fi-label">
                                       Down Payment
                                       <span class="fi-info">i</span>
+                                      <span id="fi-down-payment-pct" class="fi-label-side">0% of price</span>
                                     </label>
                                     <div class="fi-money-wrap">
                                       <span class="fi-prefix">$</span>
                                       <input id="fi-down-payment" class="fi-control" type="number" min="0" step="1000" value="0">
+                                    </div>
+                                    <div class="fi-slider-wrap">
+                                      <div class="fi-slider-track">
+                                        <div id="fi-down-payment-fill" class="fi-slider-fill"></div>
+                                        <div id="fi-down-payment-knob" class="fi-slider-knob"></div>
+                                        <input id="fi-down-payment-slider" class="fi-range" type="range" min="0" max="20" step="1" value="0">
+                                      </div>
+                                      <div class="fi-slider-scale">
+                                        <span>0%</span>
+                                        <span>10%</span>
+                                        <span>20%</span>
+                                      </div>
                                     </div>
                                     <div class="fi-hint">VA buyers can leave this at $0, or test cash down.</div>
                                   </div>
@@ -5886,18 +5938,23 @@
                                     <label class="fi-label">
                                       Credit Score
                                       <span class="fi-info">i</span>
+                                      <span id="fi-estimated-apr" class="fi-label-side">Estimated APR: 6.20%</span>
                                     </label>
-                                    <div class="fi-select-wrap">
-                                      <select id="fi-credit-score" class="fi-control">
-                                        <option value="760">760+ Excellent</option>
-                                        <option value="740">740 - 759 Very Good</option>
-                                        <option value="720" selected="">720 - 739 Good</option>
-                                        <option value="700">700 - 719 Good</option>
-                                        <option value="680">680 - 699 Fair</option>
-                                        <option value="660">660 - 679 Watch</option>
-                                        <option value="640">640 - 659 Risk</option>
-                                        <option value="620">620 - 639 Minimum VA Range</option>
-                                      </select>
+                                    <div class="fi-money-wrap">
+                                      <span class="fi-prefix">APR</span>
+                                      <input id="fi-credit-score" class="fi-control" type="number" min="580" max="850" step="1" value="720">
+                                    </div>
+                                    <div class="fi-slider-wrap">
+                                      <div class="fi-slider-track">
+                                        <div id="fi-credit-score-fill" class="fi-slider-fill"></div>
+                                        <div id="fi-credit-score-knob" class="fi-slider-knob"></div>
+                                        <input id="fi-credit-score-slider" class="fi-range" type="range" min="580" max="850" step="1" value="720">
+                                      </div>
+                                      <div class="fi-slider-scale">
+                                        <span>580</span>
+                                        <span>720</span>
+                                        <span>850</span>
+                                      </div>
                                     </div>
                                     <div class="fi-hint">Used to estimate rate sensitivity and lender strength.</div>
                                   </div>
@@ -5908,7 +5965,19 @@
                                     </label>
                                     <div class="fi-money-wrap">
                                       <span class="fi-prefix">$</span>
-                                      <input id="fi-other-income" class="fi-control" type="number" min="0" step="25" value="0">
+                                      <input id="fi-other-income" class="fi-control" type="number" min="0" max="10000" step="100" value="0">
+                                    </div>
+                                    <div class="fi-slider-wrap">
+                                      <div class="fi-slider-track">
+                                        <div id="fi-other-income-fill" class="fi-slider-fill"></div>
+                                        <div id="fi-other-income-knob" class="fi-slider-knob"></div>
+                                        <input id="fi-other-income-slider" class="fi-range" type="range" min="0" max="10000" step="100" value="0">
+                                      </div>
+                                      <div class="fi-slider-scale">
+                                        <span>$0</span>
+                                        <span>$5k</span>
+                                        <span>$10k</span>
+                                      </div>
                                     </div>
                                     <div class="fi-hint">Spouse income, rental income, bonuses, or side income.</div>
                                   </div>
@@ -5919,7 +5988,19 @@
                                     </label>
                                     <div class="fi-money-wrap">
                                       <span class="fi-prefix">$</span>
-                                      <input id="fi-monthly-debt" class="fi-control" type="number" min="0" step="25" value="700">
+                                      <input id="fi-monthly-debt" class="fi-control" type="number" min="0" max="5000" step="50" value="700">
+                                    </div>
+                                    <div class="fi-slider-wrap">
+                                      <div class="fi-slider-track">
+                                        <div id="fi-monthly-debt-fill" class="fi-slider-fill"></div>
+                                        <div id="fi-monthly-debt-knob" class="fi-slider-knob"></div>
+                                        <input id="fi-monthly-debt-slider" class="fi-range" type="range" min="0" max="5000" step="50" value="700">
+                                      </div>
+                                      <div class="fi-slider-scale">
+                                        <span>$0</span>
+                                        <span>$2.5k</span>
+                                        <span>$5k</span>
+                                      </div>
                                     </div>
                                     <div class="fi-hint">Car loans, credit cards, student loans, personal loans.</div>
                                   </div>
@@ -5930,7 +6011,19 @@
                                     </label>
                                     <div class="fi-money-wrap">
                                       <span class="fi-prefix">$</span>
-                                      <input id="fi-emergency-fund" class="fi-control" type="number" min="0" step="100" value="8500">
+                                      <input id="fi-emergency-fund" class="fi-control" type="number" min="0" max="50000" step="500" value="8500">
+                                    </div>
+                                    <div class="fi-slider-wrap">
+                                      <div class="fi-slider-track">
+                                        <div id="fi-emergency-fund-fill" class="fi-slider-fill"></div>
+                                        <div id="fi-emergency-fund-knob" class="fi-slider-knob"></div>
+                                        <input id="fi-emergency-fund-slider" class="fi-range" type="range" min="0" max="50000" step="500" value="8500">
+                                      </div>
+                                      <div class="fi-slider-scale">
+                                        <span>$0</span>
+                                        <span>$25k</span>
+                                        <span>$50k</span>
+                                      </div>
                                     </div>
                                     <div class="fi-hint">Cash available after PCS, closing costs, and move-in expenses.</div>
                                   </div>
@@ -5940,19 +6033,26 @@
                                     Ready to continue once your mortgage scenario inputs look correct.
                                   </div>
                                   <button id="fi-run-analysis" class="fi-cta" type="button">
-                                    Continue Financial Analysis ›
+                                    Continue to Mortgage Calculator ›
                                   </button>
                                 </div>
                               </section>
                             </div>
                           </div>
-                          <script>
+                        </div>
+                      </div>
+                      <div class="finance-input-code w-embed w-script">
+                        <script>
 (function(){
   "use strict";
-  const VERSION = "1.1.3";
+  const VERSION = "1.1.8-thewing-mortgage-estimate";
   const HANDOFF_KEY = "pcsunited.basicbrain.handoff.v1";
   const FINANCIAL_KEY = "pcsunited.financial.analysis.input.v1";
   const MARKET_INTENT_KEY = "pcsunited.marketPanel.mortgageIntent.v1";
+  const MORTGAGE_HANDOFF_KEY = "pcsunited.mortgage.calculator.handoff.v1";
+  const MORTGAGE_API_URL = "https://thewing.netlify.app/api/mortgage";
+  const MORTGAGE_CALCULATOR_URL =
+    "https://pcsunited-com-28346d.webflow.io/air-force/mortgage-calculator";
   const root = document.getElementById("pcsu-financial-input-panel");
   if(!root) return;
   if(root.dataset.mounted === "true") return;
@@ -5961,11 +6061,31 @@
   const els = {
     loanType:$("#fi-loan-type"),
     homePrice:$("#fi-home-price"),
+    homePriceSlider:$("#fi-home-price-slider"),
+    homePriceFill:$("#fi-home-price-fill"),
+    homePriceKnob:$("#fi-home-price-knob"),
     downPayment:$("#fi-down-payment"),
+    downPaymentSlider:$("#fi-down-payment-slider"),
+    downPaymentFill:$("#fi-down-payment-fill"),
+    downPaymentKnob:$("#fi-down-payment-knob"),
+    downPaymentPct:$("#fi-down-payment-pct"),
     creditScore:$("#fi-credit-score"),
+    creditScoreSlider:$("#fi-credit-score-slider"),
+    creditScoreFill:$("#fi-credit-score-fill"),
+    creditScoreKnob:$("#fi-credit-score-knob"),
+    estimatedApr:$("#fi-estimated-apr"),
     otherIncome:$("#fi-other-income"),
+    otherIncomeSlider:$("#fi-other-income-slider"),
+    otherIncomeFill:$("#fi-other-income-fill"),
+    otherIncomeKnob:$("#fi-other-income-knob"),
     monthlyDebt:$("#fi-monthly-debt"),
+    monthlyDebtSlider:$("#fi-monthly-debt-slider"),
+    monthlyDebtFill:$("#fi-monthly-debt-fill"),
+    monthlyDebtKnob:$("#fi-monthly-debt-knob"),
     emergencyFund:$("#fi-emergency-fund"),
+    emergencyFundSlider:$("#fi-emergency-fund-slider"),
+    emergencyFundFill:$("#fi-emergency-fund-fill"),
+    emergencyFundKnob:$("#fi-emergency-fund-knob"),
     summaryIncome:$("#fi-summary-income"),
     summaryPayment:$("#fi-summary-payment"),
     summaryDebt:$("#fi-summary-debt"),
@@ -5978,6 +6098,15 @@
   let COMP = null;
   let MARKET_INTENT = null;
   let USER_HAS_INTERACTED = false;
+  const MORTGAGE_API_STATE = {
+    requestId:0,
+    signature:"",
+    payment:null,
+    result:null,
+    timer:null,
+    loading:false,
+    failed:false
+  };
   function clean(value){
     return value === undefined || value === null ? "" : String(value).trim();
   }
@@ -6001,6 +6130,9 @@
     if(!Number.isFinite(n)) return "0%";
     return Math.round(n) + "%";
   }
+  function clamp(value,min,max){
+    return Math.max(min,Math.min(max,value));
+  }
   function setText(el,value){
     if(el) el.textContent = value;
   }
@@ -6011,25 +6143,28 @@
       }));
     }catch(_){}
   }
-  function getBasicBrainFromHandoff(){
+  function readJSON(key){
     try{
-      const raw = localStorage.getItem(HANDOFF_KEY);
+      const raw =
+        localStorage.getItem(key) ||
+        sessionStorage.getItem(key);
       if(!raw) return null;
       return JSON.parse(raw);
-    }catch(err){
-      console.warn("Financial Input: could not read BasicBrain handoff",err);
+    }catch(_){
       return null;
     }
   }
-  function getMarketIntent(){
+  function writeJSON(key,value){
     try{
-      const raw = localStorage.getItem(MARKET_INTENT_KEY);
-      if(!raw) return null;
-      return JSON.parse(raw);
-    }catch(err){
-      console.warn("Financial Input: could not read market mortgage intent",err);
-      return null;
-    }
+      localStorage.setItem(key,JSON.stringify(value));
+      sessionStorage.setItem(key,JSON.stringify(value));
+    }catch(_){}
+  }
+  function getBasicBrainFromHandoff(){
+    return readJSON(HANDOFF_KEY);
+  }
+  function getMarketIntent(){
+    return readJSON(MARKET_INTENT_KEY);
   }
   function getBasicBrainFromGlobals(){
     const candidates = [
@@ -6135,10 +6270,9 @@
     else apr = 7.35;
     if(loan === "VA") apr -= 0.10;
     if(loan === "FHA") apr += 0.05;
-    if(loan === "CONVENTIONAL") apr += 0.00;
     return Math.max(4.5, apr);
   }
-  function estimateMonthlyPayment(homePrice, downPayment, loanType, creditScore){
+  function estimateMonthlyPaymentLocal(homePrice, downPayment, loanType, creditScore){
     const price = num(homePrice,0);
     const down = Math.min(num(downPayment,0), price);
     const principal = Math.max(price - down, 0);
@@ -6150,11 +6284,8 @@
       monthlyRate > 0
         ? principal * (monthlyRate * Math.pow(1 + monthlyRate, termMonths)) / (Math.pow(1 + monthlyRate, termMonths) - 1)
         : principal / termMonths;
-    const annualTax = price * 0.0125;
-    const monthlyTax = annualTax / 12;
-    const annualInsurance = price * 0.0045;
-    const monthlyInsurance = annualInsurance / 12;
-    const hoa = 0;
+    const monthlyTax = (price * 0.0125) / 12;
+    const monthlyInsurance = (price * 0.0045) / 12;
     const loan = clean(loanType).toUpperCase();
     let monthlyMi = 0;
     if(loan === "FHA"){
@@ -6166,7 +6297,239 @@
         monthlyMi = principal * 0.0045 / 12;
       }
     }
-    return Math.round(principalInterest + monthlyTax + monthlyInsurance + hoa + monthlyMi);
+    return Math.round(principalInterest + monthlyTax + monthlyInsurance + monthlyMi);
+  }
+  function getDownPaymentPercent(){
+    const price = num(els.homePrice?.value,0);
+    const down = num(els.downPayment?.value,0);
+    if(!price) return 0;
+    return (down / price) * 100;
+  }
+  function updateInlineLabels(){
+    const loanType = clean(els.loanType?.value || "VA");
+    const creditScore = num(els.creditScore?.value,720);
+    const apr = estimateApr(loanType,creditScore);
+    const downPct = getDownPaymentPercent();
+    if(els.downPaymentPct){
+      els.downPaymentPct.textContent =
+        (Number.isFinite(downPct) ? downPct.toFixed(1).replace(".0","") : "0") +
+        "% of price.";
+    }
+    if(els.estimatedApr){
+      els.estimatedApr.textContent =
+        "Estimated APR: " + apr.toFixed(2) + "%";
+    }
+  }
+  function getMortgageSignatureFromValues(homePrice, downPayment, loanType, creditScore){
+    return [
+      Math.round(num(homePrice,0)),
+      Math.round(num(downPayment,0)),
+      clean(loanType).toLowerCase(),
+      Math.round(num(creditScore,720))
+    ].join("|");
+  }
+  function getCurrentMortgageSignature(){
+    return getMortgageSignatureFromValues(
+      els.homePrice?.value,
+      els.downPayment?.value,
+      els.loanType?.value,
+      els.creditScore?.value
+    );
+  }
+  function extractMortgageApiPayment(result){
+    if(!result || typeof result !== "object") return 0;
+    return num(
+      result.monthly?.total_payment ??
+      result.monthly?.totalPayment ??
+      result.monthly?.totalMonthly ??
+      result.monthly?.allIn ??
+      result.monthly?.monthlyPayment ??
+      result.summary?.monthlyPayment ??
+      result.summary?.monthly_payment ??
+      result.summary?.payment ??
+      result.projected_mortgage_amount ??
+      result.projectedMortgageAmount,
+      0
+    );
+  }
+  function buildMortgageApiPayload(data){
+    const price = num(data.homePrice,0);
+    const down = Math.min(num(data.downPayment,0),price);
+    const loanType = clean(data.mortgageLoanType || data.loanType || "va").toLowerCase();
+    return {
+      source:"pcsunited.financial.input.panel",
+      version:VERSION,
+      price:price,
+      homePrice:price,
+      purchasePrice:price,
+      downPayment:down,
+      downpayment:down,
+      down_payment:down,
+      creditScore:num(data.creditScore,720),
+      credit_score:num(data.creditScore,720),
+      loanType:loanType,
+      loan_type:loanType,
+      termYears:30,
+      term_years:30,
+      propertyTaxAnnual:Math.round(price * 0.0125),
+      property_tax_annual:Math.round(price * 0.0125),
+      insuranceAnnual:Math.round(price * 0.0045),
+      insurance_annual:Math.round(price * 0.0045),
+      hoaMonthly:0,
+      hoa_monthly:0,
+      otherIncome:num(data.otherIncome,0),
+      other_income:num(data.otherIncome,0),
+      additionalIncome:num(data.otherIncome,0),
+      additional_income:num(data.otherIncome,0),
+      monthlyDebt:num(data.monthlyDebt,0),
+      monthly_debt:num(data.monthlyDebt,0),
+      monthlyDebts:num(data.monthlyDebt,0),
+      monthly_debts:num(data.monthlyDebt,0),
+      basePay:num(data.compensation?.basePay,0),
+      base_pay:num(data.compensation?.basePay,0),
+      bah:num(data.compensation?.bah,0),
+      bas:num(data.compensation?.bas,0),
+      familySize:num(data.family,1),
+      family_size:num(data.family,1),
+      state:data.basicbrain?.state || data.basicbrain?.profile?.state || "",
+      region:data.basicbrain?.region || data.basicbrain?.profile?.region || ""
+    };
+  }
+  async function postMortgageApi(payload){
+    const response = await fetch(MORTGAGE_API_URL,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(payload)
+    });
+    const text = await response.text();
+    let json = {};
+    try{
+      json = text ? JSON.parse(text) : {};
+    }catch(_){
+      json = {};
+    }
+    if(!response.ok || json.ok === false){
+      throw new Error(json.error || json.message || "Mortgage API failed.");
+    }
+    return json;
+  }
+  async function refreshMortgageEstimateFromApi(baseData,options){
+    const opts = options || {};
+    const signature = getMortgageSignatureFromValues(
+      baseData.homePrice,
+      baseData.downPayment,
+      baseData.loanType,
+      baseData.creditScore
+    );
+    const requestId = ++MORTGAGE_API_STATE.requestId;
+    MORTGAGE_API_STATE.loading = true;
+    MORTGAGE_API_STATE.failed = false;
+    try{
+      const payload = buildMortgageApiPayload(baseData);
+      const result = await postMortgageApi(payload);
+      if(requestId !== MORTGAGE_API_STATE.requestId){
+        return null;
+      }
+      const payment = extractMortgageApiPayment(result);
+      if(payment > 0){
+        MORTGAGE_API_STATE.signature = signature;
+        MORTGAGE_API_STATE.payment = Math.round(payment);
+        MORTGAGE_API_STATE.result = result;
+        MORTGAGE_API_STATE.loading = false;
+        MORTGAGE_API_STATE.failed = false;
+        return renderSummary({
+          emit:opts.emit === true,
+          userInitiated:opts.userInitiated === true,
+          reason:opts.reason || "mortgage-api-estimate",
+          skipMortgageApi:true
+        });
+      }
+      throw new Error("Mortgage API returned no monthly payment.");
+    }catch(error){
+      if(requestId !== MORTGAGE_API_STATE.requestId){
+        return null;
+      }
+      MORTGAGE_API_STATE.loading = false;
+      MORTGAGE_API_STATE.failed = true;
+      return null;
+    }
+  }
+  function scheduleMortgageApiRefresh(data,options){
+    clearTimeout(MORTGAGE_API_STATE.timer);
+    MORTGAGE_API_STATE.timer = setTimeout(function(){
+      refreshMortgageEstimateFromApi(data,options);
+    },220);
+  }
+  function getMortgageEstimateForCurrentInputs(loanType,homePrice,downPayment,creditScore){
+    const signature = getMortgageSignatureFromValues(
+      homePrice,
+      downPayment,
+      loanType,
+      creditScore
+    );
+    if(
+      MORTGAGE_API_STATE.signature === signature &&
+      num(MORTGAGE_API_STATE.payment,0) > 0
+    ){
+      return {
+        payment:num(MORTGAGE_API_STATE.payment,0),
+        source:"thewing_mortgage_api",
+        result:MORTGAGE_API_STATE.result
+      };
+    }
+    return {
+      payment:estimateMonthlyPaymentLocal(
+        homePrice,
+        downPayment,
+        loanType,
+        creditScore
+      ),
+      source:"local_fallback",
+      result:null
+    };
+  }
+  function updateSliderVisual(slider,fill,knob){
+    if(!slider || !fill || !knob) return;
+    const min = num(slider.min,0);
+    const max = num(slider.max,100);
+    const value = clamp(num(slider.value,0),min,max);
+    const percent = max > min ? ((value - min) / (max - min)) * 100 : 0;
+    fill.style.width = percent + "%";
+    knob.style.left = percent + "%";
+  }
+  function updateAllSliderVisuals(){
+    updateSliderVisual(els.homePriceSlider,els.homePriceFill,els.homePriceKnob);
+    updateSliderVisual(els.downPaymentSlider,els.downPaymentFill,els.downPaymentKnob);
+    updateSliderVisual(els.creditScoreSlider,els.creditScoreFill,els.creditScoreKnob);
+    updateSliderVisual(els.otherIncomeSlider,els.otherIncomeFill,els.otherIncomeKnob);
+    updateSliderVisual(els.monthlyDebtSlider,els.monthlyDebtFill,els.monthlyDebtKnob);
+    updateSliderVisual(els.emergencyFundSlider,els.emergencyFundFill,els.emergencyFundKnob);
+  }
+  function syncDownPaymentSliderFromAmount(){
+    if(!els.downPayment || !els.downPaymentSlider || !els.homePrice) return;
+    const price = num(els.homePrice.value,0);
+    const down = num(els.downPayment.value,0);
+    const pctValue = price ? clamp(Math.round((down / price) * 100),0,20) : 0;
+    els.downPaymentSlider.value = String(pctValue);
+  }
+  function syncDownPaymentAmountFromSlider(){
+    if(!els.downPayment || !els.downPaymentSlider || !els.homePrice) return;
+    const price = num(els.homePrice.value,0);
+    const pctValue = num(els.downPaymentSlider.value,0);
+    els.downPayment.value = String(Math.round(price * (pctValue / 100)));
+  }
+  function syncInputToSlider(input,slider){
+    if(!input || !slider) return;
+    const min = num(slider.min,0);
+    const max = num(slider.max,100);
+    const value = clamp(num(input.value,0),min,max);
+    slider.value = String(value);
+  }
+  function syncSliderToInput(slider,input){
+    if(!input || !slider) return;
+    input.value = String(num(slider.value,0));
   }
   function hydrateBasicBrain(options){
     const opts = options || {};
@@ -6183,6 +6546,11 @@
       );
       if(suggestedHomePrice && els.homePrice && !num(els.homePrice.dataset.userEdited,0)){
         els.homePrice.value = suggestedHomePrice;
+        if(els.homePriceSlider){
+          els.homePriceSlider.value = String(clamp(suggestedHomePrice,100000,750000));
+        }
+        syncDownPaymentSliderFromAmount();
+        updateAllSliderVisuals();
       }
     }
     if(!COMP || !COMP.total){
@@ -6201,6 +6569,22 @@
       reason:"hydrate-basicbrain"
     });
   }
+  function normalizeLoanTypeForMortgage(value){
+    const loan = clean(value).toUpperCase();
+    if(loan === "VA") return "va";
+    if(loan === "CONVENTIONAL") return "conventional";
+    if(loan === "FHA") return "fha";
+    return "va";
+  }
+  function firstValue(){
+    const candidates = Array.from(arguments);
+    for(const value of candidates){
+      if(value !== undefined && value !== null && String(value).trim() !== ""){
+        return value;
+      }
+    }
+    return "";
+  }
   function getInputs(){
     const loanType = clean(els.loanType?.value || "VA");
     const homePrice = num(els.homePrice?.value,0);
@@ -6211,35 +6595,120 @@
     const emergencyFund = num(els.emergencyFund?.value,0);
     const basicIncome = num(COMP?.total,0);
     const totalIncome = basicIncome + otherIncome;
-    const estimatedPayment = estimateMonthlyPayment(
+    const mortgageEstimate = getMortgageEstimateForCurrentInputs(
+      loanType,
       homePrice,
       downPayment,
-      loanType,
       creditScore
     );
+    const estimatedPayment = mortgageEstimate.payment;
     const dti = totalIncome ? (monthlyDebt / totalIncome) * 100 : 0;
     const housingRatio = totalIncome ? (estimatedPayment / totalIncome) * 100 : 0;
     const suggestedLimit = totalIncome ? Math.round(totalIncome * 0.25) : 0;
     const afterPayment = totalIncome - estimatedPayment;
+    const profile =
+      COMP?.profile ||
+      BASICBRAIN?.profile ||
+      BASICBRAIN?.bridge ||
+      BASICBRAIN?.state ||
+      BASICBRAIN ||
+      {};
+    const rank = firstValue(
+      profile.rank,
+      profile.rank_paygrade,
+      profile.paygrade,
+      BASICBRAIN?.rank,
+      BASICBRAIN?.rank_paygrade
+    );
+    const yos = firstValue(
+      profile.yos,
+      profile.yearsOfService,
+      profile.years_of_service,
+      BASICBRAIN?.yos,
+      BASICBRAIN?.yearsOfService,
+      BASICBRAIN?.years_of_service
+    );
+    const base = firstValue(
+      profile.base,
+      profile.selected_base,
+      profile.selectedBase,
+      profile.pcs_base,
+      profile.pcsBase,
+      BASICBRAIN?.base,
+      BASICBRAIN?.selected_base,
+      BASICBRAIN?.selectedBase
+    );
+    const dependentsCount = num(
+      profile.dependents_count ??
+      profile.dependentsCount ??
+      BASICBRAIN?.dependents_count ??
+      BASICBRAIN?.dependentsCount,
+      0
+    );
+    const familyCount = num(
+      profile.family ??
+      profile.familySize ??
+      profile.family_size ??
+      BASICBRAIN?.family ??
+      BASICBRAIN?.familySize,
+      0
+    );
+    const hasDependents =
+      Boolean(
+        profile.has_dependents ??
+        profile.hasDependents ??
+        BASICBRAIN?.has_dependents ??
+        BASICBRAIN?.hasDependents
+      ) ||
+      dependentsCount > 0 ||
+      familyCount > 1;
     return {
-      source:"pcsunited.financial.input.panel.v1.1.3",
+      source:"pcsunited.financial.input.panel.v1.1.8",
       version:VERSION,
       loanType,
+      mortgageLoanType:normalizeLoanTypeForMortgage(loanType),
       homePrice,
       targetHomePrice:homePrice,
+      projectedHomePrice:homePrice,
+      projected_home_price:homePrice,
       downPayment,
+      downpayment:downPayment,
+      down_payment:downPayment,
       creditScore,
+      credit_score:creditScore,
       monthlyDebt,
+      monthlyObligations:monthlyDebt,
+      monthly_obligations:monthlyDebt,
+      obligations:monthlyDebt,
       otherIncome,
+      additionalIncome:otherIncome,
+      additional_income:otherIncome,
       emergencyFund,
+      emergency_fund:emergencyFund,
       basicIncome,
       totalIncome,
       estimatedPayment,
       targetPayment:estimatedPayment,
+      projected_mortgage_amount:estimatedPayment,
+      projectedMortgageAmount:estimatedPayment,
+      mortgageEstimateSource:mortgageEstimate.source,
+      mortgageApiResult:mortgageEstimate.result,
       dti,
       housingRatio,
       suggestedLimit,
       afterPayment,
+      rank,
+      yos,
+      yearsOfService:yos,
+      years_of_service:yos,
+      base,
+      selected_base:base,
+      selectedBase:base,
+      dependents:hasDependents ? "with" : "without",
+      dependents_count:hasDependents ? 1 : 0,
+      has_dependents:hasDependents,
+      hasDependents:hasDependents,
+      family:hasDependents ? 2 : 1,
       compensation:COMP,
       basicbrain:BASICBRAIN,
       marketIntent:MARKET_INTENT,
@@ -6251,6 +6720,7 @@
     const opts = options || {};
     const shouldEmit = opts.emit === true;
     const userInitiated = opts.userInitiated === true;
+    const skipMortgageApi = opts.skipMortgageApi === true;
     const data = {
       ...getInputs(),
       userInitiated,
@@ -6261,26 +6731,23 @@
     setText(els.summaryDebt,money(data.monthlyDebt));
     setText(els.summaryHousingRatio,pct(data.housingRatio));
     setText(els.summaryLimit,money(data.suggestedLimit));
-    try{
-      localStorage.setItem(FINANCIAL_KEY,JSON.stringify(data));
-    }catch(err){
-      console.warn("Financial Input: save failed",err);
-    }
-    /*
-      Important:
-      Preload/hydration should update the panel visually and save local data,
-      but should NOT emit pcsunited:financial-input-updated.
-      This prevents the Header Strip from transforming before the user touches this panel.
-    */
+    updateInlineLabels();
+    writeJSON(FINANCIAL_KEY,data);
     if(shouldEmit){
       dispatchSafe("pcsunited:financial-input-updated",data);
-    }
-    /*
-      Optional passive event for future sections that want to know the panel hydrated,
-      without telling the Header Strip to transform.
-    */
-    if(!shouldEmit){
+    }else{
       dispatchSafe("pcsunited:financial-input-preloaded",data);
+    }
+    updateAllSliderVisuals();
+    if(!skipMortgageApi){
+      const currentSignature = getCurrentMortgageSignature();
+      if(MORTGAGE_API_STATE.signature !== currentSignature){
+        scheduleMortgageApiRefresh(data,{
+          emit:shouldEmit,
+          userInitiated:userInitiated,
+          reason:"mortgage-api-refresh"
+        });
+      }
     }
     return data;
   }
@@ -6289,6 +6756,145 @@
     try{
       root.dataset.userInteracted = "true";
     }catch(_){}
+  }
+  function saveMortgageHandoff(data){
+    const compactInputs = {
+      rank:data.rank || "",
+      yos:data.yos || "",
+      yearsOfService:data.yos || "",
+      years_of_service:data.yos || "",
+      base:data.base || "",
+      selected_base:data.base || "",
+      selectedBase:data.base || "",
+      pcs_base:data.base || "",
+      pcsBase:data.base || "",
+      dependents:data.dependents || "without",
+      dependents_count:data.dependents_count || 0,
+      has_dependents:data.has_dependents || false,
+      hasDependents:data.hasDependents || false,
+      family:data.family || 1,
+      additionalIncome:data.otherIncome || 0,
+      additional_income:data.otherIncome || 0,
+      otherIncome:data.otherIncome || 0,
+      monthlyObligations:data.monthlyDebt || 0,
+      monthly_obligations:data.monthlyDebt || 0,
+      monthlyDebt:data.monthlyDebt || 0,
+      obligations:data.monthlyDebt || 0,
+      homePrice:data.homePrice || 0,
+      targetHomePrice:data.homePrice || 0,
+      projectedHomePrice:data.homePrice || 0,
+      projected_home_price:data.homePrice || 0,
+      downPayment:data.downPayment || 0,
+      downpayment:data.downPayment || 0,
+      down_payment:data.downPayment || 0,
+      creditScore:data.creditScore || "720",
+      credit_score:data.creditScore || "720",
+      loanType:data.mortgageLoanType || "va",
+      loan_type:data.mortgageLoanType || "va",
+      mortgageLoanType:data.mortgageLoanType || "va",
+      emergencyFund:data.emergencyFund || 0,
+      emergency_fund:data.emergencyFund || 0,
+      estimatedPayment:data.estimatedPayment || 0,
+      targetPayment:data.estimatedPayment || 0,
+      projected_mortgage_amount:data.estimatedPayment || 0,
+      projectedMortgageAmount:data.estimatedPayment || 0,
+      mortgageEstimateSource:data.mortgageEstimateSource || "",
+      mortgageApiResult:data.mortgageApiResult || null
+    };
+    const payload = {
+      source:"pcsunited.financial.input.panel.to.mortgage",
+      version:VERSION,
+      saved_at:new Date().toISOString(),
+      inputs:compactInputs
+    };
+    writeJSON(MORTGAGE_HANDOFF_KEY,payload);
+    writeJSON("pcsunited.financial.intake.v1",{
+      ...compactInputs,
+      source:"pcsunited.financial.input.panel.compat",
+      updated_at:new Date().toISOString()
+    });
+    writeJSON("pcsunited.financial_intake.v1",{
+      ...compactInputs,
+      source:"pcsunited.financial.input.panel.compat_legacy",
+      updated_at:new Date().toISOString()
+    });
+    return payload;
+  }
+  function openMortgageCalculator(data){
+    saveMortgageHandoff(data);
+    const url = new URL(MORTGAGE_CALCULATOR_URL);
+    url.searchParams.set("source","financial-input-panel");
+    url.searchParams.set("homePrice",String(data.homePrice || 0));
+    url.searchParams.set("downPayment",String(data.downPayment || 0));
+    url.searchParams.set("creditScore",String(data.creditScore || "720"));
+    url.searchParams.set("loanType",String(data.mortgageLoanType || "va"));
+    url.searchParams.set("monthlyObligations",String(data.monthlyDebt || 0));
+    url.searchParams.set("additionalIncome",String(data.otherIncome || 0));
+    if(data.rank) url.searchParams.set("rank",String(data.rank));
+    if(data.yos) url.searchParams.set("yos",String(data.yos));
+    if(data.base) url.searchParams.set("base",String(data.base));
+    if(data.dependents) url.searchParams.set("dependents",String(data.dependents));
+    window.open(
+      url.toString(),
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+  function handleInputChange(el){
+    markUserInteraction();
+    if(el === els.homePrice){
+      el.dataset.userEdited = "1";
+      syncInputToSlider(els.homePrice,els.homePriceSlider);
+      syncDownPaymentSliderFromAmount();
+    }
+    if(el === els.downPayment){
+      syncDownPaymentSliderFromAmount();
+    }
+    if(el === els.creditScore){
+      syncInputToSlider(els.creditScore,els.creditScoreSlider);
+    }
+    if(el === els.otherIncome){
+      syncInputToSlider(els.otherIncome,els.otherIncomeSlider);
+    }
+    if(el === els.monthlyDebt){
+      syncInputToSlider(els.monthlyDebt,els.monthlyDebtSlider);
+    }
+    if(el === els.emergencyFund){
+      syncInputToSlider(els.emergencyFund,els.emergencyFundSlider);
+    }
+    renderSummary({
+      emit:true,
+      userInitiated:true,
+      reason:"user-input"
+    });
+  }
+  function handleSliderChange(slider){
+    markUserInteraction();
+    if(slider === els.homePriceSlider){
+      syncSliderToInput(els.homePriceSlider,els.homePrice);
+      els.homePrice.dataset.userEdited = "1";
+      syncDownPaymentAmountFromSlider();
+    }
+    if(slider === els.downPaymentSlider){
+      syncDownPaymentAmountFromSlider();
+    }
+    if(slider === els.creditScoreSlider){
+      syncSliderToInput(els.creditScoreSlider,els.creditScore);
+    }
+    if(slider === els.otherIncomeSlider){
+      syncSliderToInput(els.otherIncomeSlider,els.otherIncome);
+    }
+    if(slider === els.monthlyDebtSlider){
+      syncSliderToInput(els.monthlyDebtSlider,els.monthlyDebt);
+    }
+    if(slider === els.emergencyFundSlider){
+      syncSliderToInput(els.emergencyFundSlider,els.emergencyFund);
+    }
+    renderSummary({
+      emit:true,
+      userInitiated:true,
+      reason:"user-slider"
+    });
   }
   function bindInputs(){
     [
@@ -6302,64 +6908,59 @@
     ].forEach(function(el){
       if(!el) return;
       el.addEventListener("input",function(){
-        markUserInteraction();
-        if(el === els.homePrice){
-          el.dataset.userEdited = "1";
-        }
-        renderSummary({
-          emit:true,
-          userInitiated:true,
-          reason:"user-input"
-        });
+        handleInputChange(el);
       });
       el.addEventListener("change",function(){
-        markUserInteraction();
-        if(el === els.homePrice){
-          el.dataset.userEdited = "1";
-        }
-        renderSummary({
-          emit:true,
-          userInitiated:true,
-          reason:"user-change"
-        });
+        handleInputChange(el);
+      });
+    });
+    [
+      els.homePriceSlider,
+      els.downPaymentSlider,
+      els.creditScoreSlider,
+      els.otherIncomeSlider,
+      els.monthlyDebtSlider,
+      els.emergencyFundSlider
+    ].forEach(function(slider){
+      if(!slider) return;
+      slider.addEventListener("input",function(){
+        handleSliderChange(slider);
+      });
+      slider.addEventListener("change",function(){
+        handleSliderChange(slider);
       });
     });
     if(els.runBtn){
-      els.runBtn.addEventListener("click",function(){
+      els.runBtn.addEventListener("click",async function(){
         markUserInteraction();
-        const data = renderSummary({
+        clearTimeout(MORTGAGE_API_STATE.timer);
+        let data = renderSummary({
           emit:true,
           userInitiated:true,
-          reason:"run-analysis-click"
+          reason:"run-analysis-click",
+          skipMortgageApi:true
         });
-        try{
-          localStorage.setItem(FINANCIAL_KEY,JSON.stringify(data));
-        }catch(_){}
+        await refreshMortgageEstimateFromApi(data,{
+          emit:true,
+          userInitiated:true,
+          reason:"run-analysis-api-refresh"
+        });
+        data = renderSummary({
+          emit:true,
+          userInitiated:true,
+          reason:"run-analysis-click-final",
+          skipMortgageApi:true
+        });
         dispatchSafe("pcsunited:run-financial-analysis",{
           ...data,
           userInitiated:true,
           reason:"run-analysis-click"
         });
-        const targets = [
-          "#pcsu-financial-analysis-results",
-          "#financial-analysis-results",
-          "#pcsu-mortgage-scenario",
-          "#pcsu-financial-dashboard-results",
-          "[data-pcsu-financial-results]"
-        ];
-        for(const selector of targets){
-          const target = document.querySelector(selector);
-          if(target){
-            target.scrollIntoView({
-              behavior:"smooth",
-              block:"start"
-            });
-            return;
-          }
-        }
         if(els.saveNote){
-          els.saveNote.textContent = "Financial inputs saved. Add the results section below this panel next.";
+          els.saveNote.textContent =
+            "Opening Mortgage Calculator with your saved financial inputs...";
         }
+        openMortgageCalculator(data);
       });
     }
   }
@@ -6384,6 +6985,10 @@
     );
     if(suggestedHomePrice && els.homePrice && !num(els.homePrice.dataset.userEdited,0)){
       els.homePrice.value = suggestedHomePrice;
+      if(els.homePriceSlider){
+        els.homePriceSlider.value = String(clamp(suggestedHomePrice,100000,750000));
+      }
+      syncDownPaymentSliderFromAmount();
     }
     renderSummary({
       emit:false,
@@ -6430,6 +7035,19 @@
     hasUserInteracted:function(){
       return USER_HAS_INTERACTED;
     },
+    refreshMortgageEstimate:function(){
+      const data = renderSummary({
+        emit:false,
+        userInitiated:false,
+        reason:"manual-mortgage-refresh",
+        skipMortgageApi:true
+      });
+      return refreshMortgageEstimateFromApi(data,{
+        emit:true,
+        userInitiated:true,
+        reason:"manual-mortgage-refresh"
+      });
+    },
     markUserInteraction:function(){
       markUserInteraction();
       return renderSummary({
@@ -6437,9 +7055,37 @@
         userInitiated:true,
         reason:"manual-mark-user-interaction"
       });
+    },
+    openMortgageCalculator:async function(){
+      let data = renderSummary({
+        emit:true,
+        userInitiated:true,
+        reason:"manual-open-mortgage-calculator",
+        skipMortgageApi:true
+      });
+      await refreshMortgageEstimateFromApi(data,{
+        emit:true,
+        userInitiated:true,
+        reason:"manual-open-mortgage-calculator-api-refresh"
+      });
+      data = renderSummary({
+        emit:true,
+        userInitiated:true,
+        reason:"manual-open-mortgage-calculator-final",
+        skipMortgageApi:true
+      });
+      openMortgageCalculator(data);
     }
   };
   bindInputs();
+  syncInputToSlider(els.homePrice,els.homePriceSlider);
+  syncDownPaymentSliderFromAmount();
+  syncInputToSlider(els.creditScore,els.creditScoreSlider);
+  syncInputToSlider(els.otherIncome,els.otherIncomeSlider);
+  syncInputToSlider(els.monthlyDebt,els.monthlyDebtSlider);
+  syncInputToSlider(els.emergencyFund,els.emergencyFundSlider);
+  updateInlineLabels();
+  updateAllSliderVisuals();
   hydrateBasicBrain({
     emit:false
   });
@@ -6455,7 +7101,6 @@
   },1200);
 })();
 </script>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -6501,92 +7146,6 @@
           </div>
         </div>
       </div>
-      <div class="wing-back-hero bakdrop"></div>
-      <div class="sliderinblack">
-        <div data-w-id="c5ce80bb-9936-1501-00a7-bba3817a6048" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <section class="section hero-1">
-        <div class="hero-content">
-          <div class="w-layout-grid hero1-grid">
-            <div class="hero-text-wrap">
-              <h1 hero-line-split="true" class="hero-heading">Military FinTech Solutions</h1>
-              <p hero-line-split="true" class="hero-paragraph">Our Services are powered by TheWing.ai. Get real insight and the Financial report you deserve. </p>
-              <div class="code-embed-21-copy w-embed w-script"></div>
-            </div>
-            <div id="w-node-_336f9c6a-a9fd-7777-5a12-e6622983d64a-c85e09e0" class="hero1-background"></div>
-          </div>
-        </div>
-      </section>
-      <div class="sliderinblack">
-        <div data-w-id="f9ce2960-53cb-8519-7b52-b0526e1e7c14" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="wing-back-hero bakdrop"></div>
       <section class="section-15 home-3-solutions">
         <div class="w-layout-blockcontainer container-80 w-container">
           <div data-poster-url="../videos/Basic-Flag-1_poster.0000000.jpg" data-video-urls="../videos/Basic-Flag-1_mp4.mp4,../videos/Basic-Flag-1_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="flag-for-resources-copy w-background-video w-background-video-atom"><video id="ab6bc1c2-7476-6d55-b2b0-bbed56c29ecb-video" autoplay="" loop="" style="background-image:url(&quot;../videos/Basic-Flag-1_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
@@ -6661,88 +7220,126 @@
           </div>
         </div>
       </section>
-      <section class="section cta-v1">
-        <div reveal-content="true" class="cta1-wrapper">
-          <div class="w-layout-grid cta1-content">
-            <div id="w-node-_612a9483-36b5-11bb-5e43-bd3178ecec30-78ecec2d" class="cta-text-wrapper-left">
-              <h2 line-split="true" class="heading-cta">Create your <br>Account today</h2>
-            </div>
-            <div id="w-node-_612a9483-36b5-11bb-5e43-bd3178ecec38-78ecec2d" class="cta-text-wrapper-right">
-              <div line-split="true" class="cta-text-right">Create your account today to obtain enhanced Analytics &amp; Insight.</div>
-              <div class="code-for-create-account w-embed"><!--  =========================================================
-  PCS UNITED • Premium Account Button (Redirect) v1.0.0
-  ✅ Matches your “CREATE PREMIUM ACCOUNT” gradient pill button
-  ✅ Redirects to: https://pcs-united.webflow.io/veteran-activeduty-account
-=========================================================  -->
-                <div id="pcsu-premium-cta" style="all: initial;">
-                  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-                  <style>
-    /* Scope everything to this embed */
-    #pcsu-premium-cta, #pcsu-premium-cta *{
-      box-sizing:border-box;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    /* Centered, full-width rail like your current embed */
-    #pcsu-premium-wrap{
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 18px 10px;
-      background: transparent !important;
-    }
-    /* The button itself */
-    #pcsu-premium-btn{
-      display: block;
-      width: 100%;
-      max-width: 820px;
-      margin: 0 auto;
-      text-align: center;
-      text-decoration: none;
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: #050712;
-      /* Image-matched left→right gradient */
-      background: linear-gradient(90deg, #B7EACA 0%, #8DA8F5 100%);
-      box-shadow: 0 10px 22px rgba(0,0,0,.18);
-      transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-    #pcsu-premium-btn:hover{
-      transform: translateY(-2px);
-      filter: brightness(1.03);
-      box-shadow: 0 14px 30px rgba(0,0,0,.22);
-    }
-    #pcsu-premium-btn:active{
-      transform: translateY(0px);
-      filter: brightness(0.99);
-    }
-    #pcsu-premium-btn:focus{
-      outline: none;
-    }
-    #pcsu-premium-btn:focus-visible{
-      box-shadow:
-        0 14px 30px rgba(0,0,0,.22),
-        0 0 0 3px rgba(142,243,197,.28);
-    }
-  </style>
-                  <div id="pcsu-premium-wrap">
-                    <a id="pcsu-premium-btn" href="https://pcsunited-com-28346d.webflow.io/air-force/account" aria-label="Create Account">
-                      CREATE ACCOUNT
-                    </a>
-                  </div>
-                </div>
+      <div class="sliderinblack">
+        <div data-w-id="c5ce80bb-9936-1501-00a7-bba3817a6048" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
+              </div>
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
               </div>
             </div>
           </div>
-          <div class="background-cta"><img class="cta-img-bg" src="../images/background_1background.avif" alt="" sizes="100vw" fade-in="y" loading="lazy" srcset="../images/background_1-p-500.png 500w, ../images/background_1-p-800.png 800w, ../images/background_1background.avif 1808w"></div>
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="wing-back-hero bakdrop"></div>
+      <div class="sliderinblack">
+        <div data-w-id="f9ce2960-53cb-8519-7b52-b0526e1e7c14" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
+              </div>
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
+              </div>
+            </div>
+          </div>
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="section hero-1">
+        <div class="hero-content">
+          <div class="w-layout-grid hero1-grid">
+            <div class="hero-text-wrap">
+              <h1 hero-line-split="true" class="hero-heading">Message from our Founder,</h1>
+              <p hero-line-split="true" class="hero-paragraph">PCSUnited was create to suppor the &quot;Military Community&quot; as a whole. Our purpose is to provide unbiased and clear answers to the home-buying questions many service members face. <br><br>We hope you come back, as our platform will continue to develop and expand its services. As always PCSUnited is free to all Active Duty, Veterans, and their families. <br><br>Thank you for your Service. </p>
+            </div>
+            <div id="w-node-_336f9c6a-a9fd-7777-5a12-e6622983d64a-c85e09e0" class="hero1-background"></div>
+          </div>
         </div>
       </section>
+      <div class="sliderinblack">
+        <div data-w-id="ee01ed09-9833-2631-263c-ec4ce1f1b44c" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
+              </div>
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
+              </div>
+            </div>
+          </div>
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
     <footer id="w-node-_087b196d-b026-a298-5d40-c324b41ad796-b41ad796" class="footer footer-2">
       <div class="footer-content-wrapper">
@@ -6760,7 +7357,7 @@
                 <div>Oops! Something went wrong while submitting the form.</div>
               </div>
             </div>
-          </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
+          </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="100vw" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
         <div data-w-id="ee73203a-eb4c-0a70-cb0c-c0e63e1d2416" class="footer-flex-wrapper">
           <div class="w-layout-grid footer-links-wrapper">

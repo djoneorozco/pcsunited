@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Jun 18 2026 05:48:46 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Jun 23 2026 22:13:12 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6a2e34b6b835d8b66972faff" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -148,7 +148,7 @@
 <body>
   <div class="page-wrapper">
     <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="resources-header header-resources w-nav">
-      <div class="head-for-resources"><img src="../images/Logo-3-white.png" loading="lazy" sizes="(max-width: 800px) 100vw, 800px" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
+      <div class="head-for-resources"><img src="../images/Logo-3-white.png" loading="lazy" sizes="100vw" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
         <div class="compensation-strip w-embed w-script"><!--  =========================================================
   PCSUnited • Header Compensation Strip
   v3.4.0 • THEWING ONLY / ACTIVE DUTY + VETERAN / NO STORAGE
@@ -5077,25 +5077,19 @@
                         <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4%2F6969b34a71268b4b72e64405_Image-to-Image-5ffe2b50_webm.webm" data-wf-ignore="true">
                       </video></div>
                     <div id="w-node-_738982aa-7029-afc1-0908-d766a276410d-6972faff" class="tab-pane-text">
-                      <div class="finance-input-code w-embed w-script"><!--  ============================================================
+                      <div class="finance-input-code w-embed"><!--  ============================================================
   PCSUNITED • FINANCIAL ANALYSIS INPUT PANEL
-  v1.0.2 • BASICBRAIN HANDOFF + EVENT EXTRACTION FIX
-  UPDATE
-  - Keeps same UI
-  - Keeps Income Profile visual section removed
-  - Keeps Why We Ask / Data Stays Local section removed
-  - Fixes BasicBrain data extraction from:
-    window.PCSU_BASICBRAIN_CURRENT
-    window.PCSU_BASICBRAIN_TEMP
-    window.PCSU_BASICBRAIN.getLastGood()
-    localStorage pcsunited.basicbrain.handoff.v1
-    compensation-ready / profile-ready / bridge-ready events
-  - Prevents profile-only empty events from wiping valid compensation
+  SHELL v2.0.0 • HOUSING CALCULATOR BRIEF
+  PURPOSE
+  - Replaces generic Financial Analysis Input panel UI
+  - Uses FAD-style Housing Calculator UX
+  - Keeps original root ID and key element IDs
+  - Designed for BasicBrain + Header Compensation Strip + Mortgage handoff
 ===============================================================  -->
                         <div id="pcsu-financial-input-panel" style="all:initial;">
                           <link rel="preconnect" href="https://fonts.googleapis.com">
                           <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-                          <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+                          <link href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
                           <style>
 #pcsu-financial-input-panel,
 #pcsu-financial-input-panel *{
@@ -5103,590 +5097,1083 @@
   font-family:"Barlow",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 #pcsu-financial-input-panel{
-  --bg:#071018;
-  --bg2:#0b1621;
-  --bg3:#050912;
-  --stroke:rgba(216,184,122,.16);
-  --ink:#f3efe7;
-  --muted:#b8b0a4;
-  --gold:#d8b87a;
-  --gold2:#f6d06d;
-  --sapphire:#6aa7ff;
-  --mint:#8ef3c5;
-  --green:#8ef3a6;
+  --bg:#111522;
+  --bg2:#171c2b;
+  --bg3:#0a0d16;
+  --panel:#151a28;
+  --panel2:#0d111c;
+  --line:rgba(255,255,255,.09);
+  --line2:rgba(185,198,255,.18);
+  --ink:#f7f8ff;
+  --muted:#aeb7db;
+  --soft:#d7ddff;
+  --mint:#7df0be;
+  --blue:#6aa7ff;
+  --lav:#cdd6ff;
   --danger:#ff8aa6;
-  --shadow:0 34px 90px rgba(0,0,0,.38);
+  --warn:#ffd27d;
+  --shadow:0 24px 70px rgba(0,0,0,.35);
   display:block;
-  width:min(1120px,100%);
+  width:min(1040px,100%);
   margin:0 auto;
   color:var(--ink);
 }
 /* ============================================================
-  PANEL
+  MAIN CARD
 =============================================================== */
-#pcsu-financial-input-panel .fi-panel{
+#pcsu-financial-input-panel .fi-card{
   position:relative;
   overflow:hidden;
   width:100%;
-  border-radius:30px;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.09);
   background:
-    radial-gradient(circle at 8% 0%, rgba(216,184,122,.08), transparent 30%),
-    radial-gradient(circle at 92% 4%, rgba(111,143,183,.08), transparent 28%),
-    radial-gradient(circle at 50% 100%, rgba(142,243,197,.04), transparent 34%),
-    linear-gradient(180deg, rgba(7,16,24,.20), rgba(11,22,33,.20) 58%, rgba(5,9,18,.20));
-  border:1px solid rgba(216,184,122,.13);
+    radial-gradient(circle at 12% 0%, rgba(125,240,190,.08), transparent 28%),
+    radial-gradient(circle at 92% 4%, rgba(106,167,255,.10), transparent 30%),
+    linear-gradient(180deg, rgba(26,31,47,.96), rgba(13,17,28,.96));
   box-shadow:var(--shadow);
-  backdrop-filter:blur(22px) saturate(145%);
-  -webkit-backdrop-filter:blur(22px) saturate(145%);
   isolation:isolate;
 }
-#pcsu-financial-input-panel .fi-panel::before{
+#pcsu-financial-input-panel .fi-card::before{
   content:"";
   position:absolute;
   inset:0;
-  z-index:0;
   pointer-events:none;
   background:
-    linear-gradient(180deg, rgba(255,255,255,.045), transparent 22%),
-    radial-gradient(circle at 20% 20%, rgba(216,184,122,.08), transparent 28%),
-    radial-gradient(circle at 88% 16%, rgba(106,167,255,.07), transparent 26%);
-  mix-blend-mode:screen;
-}
-#pcsu-financial-input-panel .fi-panel::after{
-  content:"";
-  position:absolute;
-  inset:0;
+    linear-gradient(180deg, rgba(255,255,255,.045), transparent 20%),
+    linear-gradient(90deg, rgba(255,255,255,.025), transparent 48%, rgba(255,255,255,.015));
   z-index:0;
-  pointer-events:none;
-  background:
-    linear-gradient(90deg, rgba(0,0,0,.10), transparent 44%, rgba(0,0,0,.10)),
-    linear-gradient(180deg, transparent 52%, rgba(0,0,0,.14));
 }
 #pcsu-financial-input-panel .fi-inner{
   position:relative;
   z-index:2;
-  padding:24px;
+  padding:16px;
 }
 /* ============================================================
   HEADER
 =============================================================== */
-#pcsu-financial-input-panel .fi-topbar{
+#pcsu-financial-input-panel .fi-head{
   display:flex;
-  align-items:flex-start;
+  align-items:center;
   justify-content:space-between;
-  gap:18px;
-  padding-bottom:18px;
-  margin-bottom:18px;
-  position:relative;
+  gap:14px;
+  padding-bottom:14px;
+  margin-bottom:12px;
+  border-bottom:1px solid rgba(255,255,255,.07);
 }
-#pcsu-financial-input-panel .fi-topbar::after{
-  content:"";
+#pcsu-financial-input-panel .fi-title-wrap{
+  min-width:0;
+}
+#pcsu-financial-input-panel .fi-title{
+  margin:0;
+  color:#f7f8ff;
+  font-size:21px;
+  line-height:1.1;
+  font-weight:950;
+  letter-spacing:-.03em;
+}
+#pcsu-financial-input-panel .fi-subtitle{
+  margin:6px 0 0;
+  max-width:760px;
+  color:#aeb7db;
+  font-size:12px;
+  line-height:1.4;
+  font-weight:700;
+}
+#pcsu-financial-input-panel .fi-head-actions{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  flex:0 0 auto;
+}
+#pcsu-financial-input-panel .fi-detail-toggle,
+#pcsu-financial-input-panel .fi-cta{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  white-space:nowrap;
+  transition:transform .16s ease, filter .16s ease, border-color .16s ease, background .16s ease;
+}
+#pcsu-financial-input-panel .fi-detail-toggle{
+  min-height:34px;
+  padding:0 16px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.20);
+  background:rgba(12,14,25,.42);
+  color:#f2f5ff;
+  font-size:11px;
+  font-weight:950;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+  box-shadow:0 8px 20px rgba(0,0,0,.18);
+}
+#pcsu-financial-input-panel .fi-detail-toggle:hover{
+  transform:translateY(-1px);
+  border-color:rgba(125,240,190,.50);
+}
+#pcsu-financial-input-panel .fi-detail-toggle.is-on{
+  color:#7df0be;
+  border-color:rgba(106,167,255,.90);
+  box-shadow:
+    0 0 0 1px rgba(125,240,190,.55),
+    0 12px 24px rgba(0,0,0,.22);
+}
+/* ============================================================
+  CALCULATOR VIEW
+=============================================================== */
+#pcsu-financial-input-panel .fi-calc-view{
+  display:block;
+}
+#pcsu-financial-input-panel .fi-calc-view.is-hidden{
+  display:none;
+}
+#pcsu-financial-input-panel .fi-control-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:14px;
+  margin-bottom:18px;
+}
+#pcsu-financial-input-panel .fi-control-block{
+  min-width:0;
+}
+#pcsu-financial-input-panel .fi-label{
+  display:block;
+  margin:0 0 8px;
+  color:#bfc7ed;
+  font-size:11px;
+  line-height:1.1;
+  font-weight:950;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+}
+#pcsu-financial-input-panel .fi-input-box{
+  min-height:60px;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 16px;
+  border-radius:16px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(9,12,22,.72);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.045),
+    0 14px 26px rgba(0,0,0,.16);
+}
+#pcsu-financial-input-panel .fi-prefix{
+  flex:0 0 auto;
+  color:#fff;
+  font-size:22px;
+  line-height:1;
+  font-weight:950;
+}
+#pcsu-financial-input-panel .fi-main-input{
+  width:100%;
+  min-width:0;
+  border:0;
+  outline:none;
+  background:transparent;
+  color:#fff;
+  font-size:20px;
+  line-height:1;
+  font-weight:950;
+  text-align:right;
+}
+#pcsu-financial-input-panel .fi-main-input[readonly]{
+  cursor:default;
+}
+#pcsu-financial-input-panel .fi-mini-range{
+  position:relative;
+  height:10px;
+  margin-top:10px;
+  border-radius:999px;
+  background:rgba(255,255,255,.12);
+  overflow:visible;
+}
+#pcsu-financial-input-panel .fi-slider-fill{
   position:absolute;
   left:0;
-  right:0;
-  bottom:0;
-  height:1px;
-  background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
+  top:0;
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,#7df0be,#dfffe8);
+  width:50%;
+}
+#pcsu-financial-input-panel .fi-slider-knob{
+  position:absolute;
+  top:50%;
+  left:50%;
+  width:18px;
+  height:10px;
+  transform:translate(-50%,-50%);
+  border-radius:999px;
+  background:#d7ddff;
+  box-shadow:0 4px 12px rgba(0,0,0,.28);
+}
+#pcsu-financial-input-panel .fi-range-input{
+  position:absolute;
+  inset:-6px 0;
+  width:100%;
+  opacity:0;
+  cursor:pointer;
+  z-index:5;
+}
+#pcsu-financial-input-panel .fi-mini-scale{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  margin-top:8px;
+  color:#aeb7db;
+  font-size:12px;
+  line-height:1;
+  font-weight:900;
+}
+/* ============================================================
+  RESULT LAYOUT
+=============================================================== */
+#pcsu-financial-input-panel .fi-live-grid{
+  display:grid;
+  grid-template-columns:240px minmax(0,1fr);
+  gap:18px;
+  align-items:stretch;
+}
+#pcsu-financial-input-panel .fi-live-side{
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-end;
+  min-height:170px;
 }
 #pcsu-financial-input-panel .fi-kicker{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  margin:0 0 12px;
-  padding:8px 12px;
-  border-radius:999px;
-  border:1px solid rgba(216,184,122,.22);
-  background:rgba(216,184,122,.10);
-  color:var(--gold2);
+  margin:0 0 6px;
+  color:#bfc7ed;
+  font-size:11px;
+  line-height:1.1;
+  font-weight:950;
+  letter-spacing:.12em;
   text-transform:uppercase;
-  letter-spacing:.15em;
-  font-size:.70rem;
+}
+#pcsu-financial-input-panel .fi-payment{
+  color:#fff;
+  font-size:56px;
+  line-height:.88;
+  font-weight:950;
+  letter-spacing:-.06em;
+}
+#pcsu-financial-input-panel .fi-payment span{
+  color:#d7ddff;
+  font-size:18px;
+  letter-spacing:0;
+}
+#pcsu-financial-input-panel .fi-state{
+  margin-top:7px;
+  font-size:18px;
+  line-height:1;
+  font-weight:950;
+  color:#7df0be;
+}
+#pcsu-financial-input-panel .fi-state.is-good{ color:#7df0be; }
+#pcsu-financial-input-panel .fi-state.is-mid{ color:#ffd27d; }
+#pcsu-financial-input-panel .fi-state.is-bad{ color:#ff8aa6; }
+#pcsu-financial-input-panel .fi-test-btn{
+  width:max-content;
+  min-height:44px;
+  margin-top:18px;
+  padding:0 18px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.09);
+  background:rgba(255,255,255,.04);
+  color:#f2f5ff;
+  font-size:12px;
+  font-weight:950;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  cursor:pointer;
+  transition:.16s ease;
+}
+#pcsu-financial-input-panel .fi-test-btn:hover{
+  transform:translateY(-1px);
+  border-color:rgba(125,240,190,.35);
+}
+#pcsu-financial-input-panel .fi-chart-wrap{
+  min-height:176px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:20px;
+  border:1px solid rgba(255,255,255,.09);
+  background:
+    linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,.01)),
+    rgba(8,11,20,.30);
+  padding:12px;
+}
+#pcsu-financial-input-panel .fi-chart{
+  width:100%;
+  height:152px;
+}
+#pcsu-financial-input-panel .fi-chart svg{
+  display:block;
+  width:100%;
+  height:100%;
+}
+#pcsu-financial-input-panel .fi-legend{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:22px;
+  margin-top:9px;
+  color:#bfc7ed;
+  font-size:11px;
   line-height:1;
   font-weight:900;
 }
 #pcsu-financial-input-panel .fi-dot{
+  display:inline-block;
+  width:10px;
+  height:10px;
+  margin-right:6px;
+  border-radius:999px;
+  vertical-align:-1px;
+}
+#pcsu-financial-input-panel .fi-dot.mint{ background:#7df0be; }
+#pcsu-financial-input-panel .fi-dot.blue{ background:#6aa7ff; }
+#pcsu-financial-input-panel .fi-dot.lav{ background:#cdd6ff; }
+/* ============================================================
+  BASICBRAIN + SECONDARY INPUTS
+=============================================================== */
+#pcsu-financial-input-panel .fi-context-grid{
+  display:grid;
+  grid-template-columns:1.04fr .96fr;
+  gap:14px;
+  margin-top:16px;
+}
+#pcsu-financial-input-panel .fi-mini-card{
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(8,12,22,.34);
+  padding:14px;
+}
+#pcsu-financial-input-panel .fi-mini-title{
+  margin:0 0 10px;
+  color:#f7f8ff;
+  font-size:12px;
+  line-height:1.1;
+  font-weight:950;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+#pcsu-financial-input-panel .fi-basic-grid,
+#pcsu-financial-input-panel .fi-secondary-grid{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+}
+#pcsu-financial-input-panel .fi-basic-item,
+#pcsu-financial-input-panel .fi-small-field{
+  min-width:0;
+}
+#pcsu-financial-input-panel .fi-basic-label{
+  display:block;
+  margin:0 0 4px;
+  color:#aeb7db;
+  font-size:9.5px;
+  font-weight:950;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+#pcsu-financial-input-panel .fi-basic-value{
+  display:block;
+  color:#fff;
+  font-size:14px;
+  line-height:1.1;
+  font-weight:950;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+#pcsu-financial-input-panel .fi-small-label{
+  display:block;
+  margin:0 0 6px;
+  color:#aeb7db;
+  font-size:9.5px;
+  font-weight:950;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+#pcsu-financial-input-panel .fi-small-money{
+  position:relative;
+}
+#pcsu-financial-input-panel .fi-small-money span{
+  position:absolute;
+  left:11px;
+  top:50%;
+  transform:translateY(-50%);
+  color:#d7ddff;
+  font-size:12px;
+  font-weight:950;
+}
+#pcsu-financial-input-panel .fi-small-input,
+#pcsu-financial-input-panel .fi-small-select{
+  width:100%;
+  height:38px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.10);
+  outline:none;
+  background:rgba(12,14,25,.58);
+  color:#f7f8ff;
+  font-size:13px;
+  font-weight:900;
+}
+#pcsu-financial-input-panel .fi-small-input{
+  padding:0 10px 0 28px;
+  text-align:right;
+}
+#pcsu-financial-input-panel .fi-small-select{
+  padding:0 10px;
+}
+#pcsu-financial-input-panel .fi-small-select option{
+  color:#101522;
+  background:#fff;
+}
+/* ============================================================
+  DETAIL VIEW
+=============================================================== */
+#pcsu-financial-input-panel .fi-detail-view{
+  display:none;
+}
+#pcsu-financial-input-panel .fi-detail-view.is-open{
+  display:block;
+}
+#pcsu-financial-input-panel .fi-detail-top{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:14px;
+  margin-bottom:14px;
+}
+#pcsu-financial-input-panel .fi-detail-title strong{
+  display:block;
+  color:#f7f8ff;
+  font-size:13px;
+  line-height:1.1;
+  font-weight:950;
+  letter-spacing:.10em;
+  text-transform:uppercase;
+}
+#pcsu-financial-input-panel .fi-detail-title span{
+  display:block;
+  margin-top:4px;
+  color:#aeb7db;
+  font-size:11px;
+  line-height:1.25;
+  font-weight:800;
+}
+#pcsu-financial-input-panel .fi-ready-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:7px;
+  padding:7px 11px;
+  border-radius:999px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.035);
+  color:#f7f8ff;
+  font-size:10px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+#pcsu-financial-input-panel .fi-ready-pill::before{
+  content:"";
   width:7px;
   height:7px;
   border-radius:999px;
-  background:linear-gradient(180deg,var(--gold2),var(--gold));
-  box-shadow:0 0 16px rgba(216,184,122,.45);
-  flex:0 0 auto;
+  background:linear-gradient(180deg,#7df0be,#6aa7ff);
+  box-shadow:0 0 0 3px rgba(106,167,255,.12);
 }
-#pcsu-financial-input-panel .fi-title{
-  margin:0 0 8px;
-  font-family:"Gilda Display",serif;
-  font-weight:400;
-  color:#fbf4e7;
-  font-size:clamp(2rem,4vw,3rem);
-  line-height:.98;
+#pcsu-financial-input-panel .fi-detail-fields{
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:10px;
+  margin-bottom:12px;
 }
-#pcsu-financial-input-panel .fi-subtitle{
-  margin:0;
-  max-width:680px;
-  font-size:1rem;
-  line-height:1.62;
-  font-weight:500;
-  color:#dcd4c8;
-}
-#pcsu-financial-input-panel .fi-loaded-pill{
-  display:inline-flex;
-  align-items:center;
-  gap:8px;
-  flex:0 0 auto;
-  padding:11px 14px;
-  border-radius:16px;
-  color:var(--mint);
-  border:1px solid rgba(142,243,197,.18);
-  background:rgba(142,243,197,.075);
-  font-size:.82rem;
-  line-height:1;
-  font-weight:900;
-  white-space:nowrap;
-}
-#pcsu-financial-input-panel .fi-loaded-pill.is-waiting{
-  color:var(--gold2);
-  border-color:rgba(246,208,109,.20);
-  background:rgba(246,208,109,.075);
-}
-#pcsu-financial-input-panel .fi-loaded-pill svg{
-  width:17px;
-  height:17px;
-}
-/* ============================================================
-  SECTIONS
-=============================================================== */
-#pcsu-financial-input-panel .fi-section{
-  position:relative;
-  overflow:hidden;
-  border-radius:22px;
-  background:linear-gradient(180deg, rgba(12,18,28,.34), rgba(7,12,19,.28));
-  border:1px solid rgba(255,255,255,.075);
-  box-shadow:0 18px 44px rgba(0,0,0,.16);
-  padding:20px;
-  margin-bottom:14px;
-}
-#pcsu-financial-input-panel .fi-section::before{
-  content:"";
-  position:absolute;
-  inset:0 0 auto 0;
-  height:1px;
-  background:linear-gradient(90deg, rgba(216,184,122,.28), rgba(111,143,183,.16), transparent);
-}
-#pcsu-financial-input-panel .fi-section > *{
-  position:relative;
-  z-index:1;
-}
-#pcsu-financial-input-panel .fi-section-title{
+#pcsu-financial-input-panel .fi-detail-field label{
+  display:block;
   margin:0 0 5px;
-  color:var(--gold2);
+  color:#aeb7db;
+  font-size:9.5px;
+  font-weight:950;
+  letter-spacing:.10em;
   text-transform:uppercase;
-  letter-spacing:.15em;
-  font-size:.78rem;
-  line-height:1.2;
-  font-weight:900;
 }
-#pcsu-financial-input-panel .fi-section-sub{
-  margin:0 0 16px;
-  color:#dcd4c8;
-  line-height:1.55;
-  font-size:.94rem;
-  font-weight:500;
-}
-/* ============================================================
-  INPUT GRID
-=============================================================== */
-#pcsu-financial-input-panel .fi-input-grid{
-  display:grid;
-  grid-template-columns:repeat(3,1fr);
-  gap:14px;
-}
-#pcsu-financial-input-panel .fi-field{
-  min-width:0;
-}
-#pcsu-financial-input-panel .fi-label{
-  display:flex;
-  align-items:center;
-  gap:7px;
-  margin:0 0 8px;
-  color:#fbf2e2;
-  font-size:.86rem;
-  line-height:1.15;
-  font-weight:800;
-}
-#pcsu-financial-input-panel .fi-info{
-  width:16px;
-  height:16px;
-  border-radius:999px;
-  display:inline-grid;
-  place-items:center;
-  color:rgba(243,239,231,.72);
-  border:1px solid rgba(243,239,231,.36);
-  font-size:.70rem;
-  line-height:1;
-  font-weight:900;
-}
-#pcsu-financial-input-panel .fi-select-wrap,
-#pcsu-financial-input-panel .fi-money-wrap,
-#pcsu-financial-input-panel .fi-percent-wrap{
-  position:relative;
-}
-#pcsu-financial-input-panel .fi-select-wrap::after{
-  content:"⌄";
-  position:absolute;
-  right:14px;
-  top:50%;
-  transform:translateY(-56%);
-  color:var(--gold2);
-  font-size:18px;
-  font-weight:900;
-  pointer-events:none;
-}
-#pcsu-financial-input-panel .fi-control{
+#pcsu-financial-input-panel .fi-detail-input{
   width:100%;
-  height:46px;
-  appearance:none;
-  -webkit-appearance:none;
-  border-radius:15px;
-  border:1px solid rgba(216,184,122,.13);
-  background:linear-gradient(180deg, rgba(17,24,34,.72), rgba(8,13,20,.64));
-  color:#f8f1e6;
-  font-size:.95rem;
-  line-height:1;
-  font-weight:800;
+  height:38px;
+  padding:0 11px;
+  border-radius:11px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(12,14,25,.58);
+  color:#f7f8ff;
+  font-size:13px;
+  font-weight:900;
   outline:none;
-  transition:border-color .16s ease, box-shadow .16s ease, background .16s ease;
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.06),
-    0 12px 24px rgba(0,0,0,.14);
 }
-#pcsu-financial-input-panel select.fi-control{
-  padding:0 40px 0 13px;
+#pcsu-financial-input-panel .fi-detail-input:focus,
+#pcsu-financial-input-panel .fi-small-input:focus,
+#pcsu-financial-input-panel .fi-small-select:focus{
+  border-color:rgba(125,240,190,.55);
+  box-shadow:0 0 0 1px rgba(125,240,190,.16);
 }
-#pcsu-financial-input-panel input.fi-control{
-  padding:0 13px;
+#pcsu-financial-input-panel .fi-receipt{
+  border-radius:17px;
+  border:1px solid rgba(255,255,255,.08);
+  background:rgba(6,10,18,.48);
+  overflow:hidden;
 }
-#pcsu-financial-input-panel .fi-control:hover{
-  border-color:rgba(216,184,122,.28);
-  background:linear-gradient(180deg, rgba(18,24,34,.82), rgba(8,13,20,.72));
+#pcsu-financial-input-panel .fi-table{
+  width:100%;
+  border-collapse:collapse;
 }
-#pcsu-financial-input-panel .fi-control:focus{
-  border-color:rgba(216,184,122,.42);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.08),
-    0 0 0 4px rgba(216,184,122,.10),
-    0 14px 28px rgba(0,0,0,.20);
+#pcsu-financial-input-panel .fi-table th,
+#pcsu-financial-input-panel .fi-table td{
+  padding:11px 12px;
+  border-bottom:1px solid rgba(255,255,255,.06);
+  color:#f7f8ff;
+  font-size:12px;
+  line-height:1.15;
+  font-weight:850;
 }
-#pcsu-financial-input-panel .fi-control option{
-  color:#172033;
-  background:#fff;
-}
-#pcsu-financial-input-panel .fi-prefix{
-  position:absolute;
-  left:0;
-  top:0;
-  width:48px;
-  height:46px;
-  display:grid;
-  place-items:center;
-  border-right:1px solid rgba(216,184,122,.12);
-  color:var(--muted);
-  font-size:1rem;
-  font-weight:900;
-}
-#pcsu-financial-input-panel .fi-money-wrap .fi-control{
-  padding-left:62px;
-}
-#pcsu-financial-input-panel .fi-percent{
-  position:absolute;
-  right:0;
-  top:0;
-  width:48px;
-  height:46px;
-  display:grid;
-  place-items:center;
-  border-left:1px solid rgba(216,184,122,.12);
-  color:var(--muted);
-  font-size:1rem;
-  font-weight:900;
-}
-#pcsu-financial-input-panel .fi-percent-wrap .fi-control{
-  padding-right:58px;
-}
-#pcsu-financial-input-panel .fi-hint{
-  margin-top:7px;
-  color:var(--muted);
-  font-size:.78rem;
-  line-height:1.35;
-  font-weight:600;
-}
-/* ============================================================
-  SUMMARY STRIP
-=============================================================== */
-#pcsu-financial-input-panel .fi-summary{
-  display:grid;
-  grid-template-columns:1.25fr 1fr 1fr 1fr;
-  gap:12px;
-  margin-top:14px;
-}
-#pcsu-financial-input-panel .fi-summary-card{
-  border-radius:18px;
-  padding:15px;
-  background:rgba(255,255,255,.035);
-  border:1px solid rgba(255,255,255,.07);
-}
-#pcsu-financial-input-panel .fi-summary-label{
-  margin-bottom:7px;
-  color:var(--muted);
+#pcsu-financial-input-panel .fi-table th{
+  color:#aeb7db;
+  font-size:9px;
+  font-weight:950;
+  letter-spacing:.10em;
   text-transform:uppercase;
-  letter-spacing:.12em;
-  font-size:.68rem;
-  font-weight:900;
+  background:rgba(255,255,255,.02);
 }
-#pcsu-financial-input-panel .fi-summary-value{
-  color:#fff;
-  font-size:1.25rem;
-  line-height:1;
-  font-weight:900;
+#pcsu-financial-input-panel .fi-table tr:last-child td{
+  border-bottom:none;
 }
-#pcsu-financial-input-panel .fi-summary-value.is-green{
-  color:var(--mint);
+#pcsu-financial-input-panel .fi-table .right{
+  text-align:right;
+  font-variant-numeric:tabular-nums;
 }
-#pcsu-financial-input-panel .fi-summary-value.is-danger{
-  color:var(--danger);
+#pcsu-financial-input-panel .fi-table .muted{
+  color:#d7ddff;
 }
 /* ============================================================
-  FOOTER ACTIONS
+  FOOTER
 =============================================================== */
-#pcsu-financial-input-panel .fi-actions{
+#pcsu-financial-input-panel .fi-footer{
   display:flex;
   align-items:center;
   justify-content:space-between;
   gap:14px;
   margin-top:16px;
+  padding-top:14px;
+  border-top:1px solid rgba(255,255,255,.07);
 }
 #pcsu-financial-input-panel .fi-save-note{
-  color:var(--muted);
-  font-size:.84rem;
-  line-height:1.45;
-  font-weight:700;
+  color:#aeb7db;
+  font-size:12px;
+  line-height:1.35;
+  font-weight:800;
 }
 #pcsu-financial-input-panel .fi-cta{
-  min-height:48px;
-  border:none;
-  border-radius:15px;
-  cursor:pointer;
-  padding:0 22px;
-  color:#fff8ea;
-  font-family:"Gilda Display",serif;
-  font-size:1rem;
+  min-height:44px;
+  padding:0 20px;
+  border-radius:999px;
+  background:linear-gradient(180deg,#7df0be,#43c792);
+  color:#06100c;
+  font-size:12px;
   line-height:1;
-  letter-spacing:.03em;
+  font-weight:950;
+  letter-spacing:.08em;
   text-transform:uppercase;
-  background:
-    linear-gradient(180deg, rgba(246,208,109,1), rgba(184,120,35,1));
   box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.50),
-    0 16px 34px rgba(0,0,0,.34);
-  transition:transform .18s ease, filter .18s ease, box-shadow .18s ease;
+    inset 0 1px 0 rgba(255,255,255,.40),
+    0 16px 28px rgba(0,0,0,.30);
 }
 #pcsu-financial-input-panel .fi-cta:hover{
   transform:translateY(-1px);
-  filter:saturate(1.06) brightness(1.04);
-  box-shadow:
-    inset 0 1px 0 rgba(255,255,255,.58),
-    0 20px 40px rgba(0,0,0,.40);
+  filter:saturate(1.06) brightness(1.03);
 }
-@media(max-width:960px){
-  #pcsu-financial-input-panel .fi-input-grid{
-    grid-template-columns:repeat(2,1fr);
-  }
-  #pcsu-financial-input-panel .fi-summary{
-    grid-template-columns:repeat(2,1fr);
-  }
-}
-@media(max-width:680px){
-  #pcsu-financial-input-panel{
-    width:100%;
-  }
-  #pcsu-financial-input-panel .fi-inner{
-    padding:18px;
-  }
-  #pcsu-financial-input-panel .fi-topbar{
-    flex-direction:column;
-  }
-  #pcsu-financial-input-panel .fi-input-grid,
-  #pcsu-financial-input-panel .fi-summary{
+/* ============================================================
+  RESPONSIVE
+=============================================================== */
+@media(max-width:940px){
+  #pcsu-financial-input-panel .fi-control-grid,
+  #pcsu-financial-input-panel .fi-live-grid,
+  #pcsu-financial-input-panel .fi-context-grid{
     grid-template-columns:1fr;
   }
-  #pcsu-financial-input-panel .fi-actions{
+  #pcsu-financial-input-panel .fi-live-side{
+    min-height:auto;
+  }
+}
+@media(max-width:760px){
+  #pcsu-financial-input-panel .fi-head{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  #pcsu-financial-input-panel .fi-head-actions{
+    justify-content:space-between;
+  }
+  #pcsu-financial-input-panel .fi-basic-grid,
+  #pcsu-financial-input-panel .fi-secondary-grid{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #pcsu-financial-input-panel .fi-detail-fields{
+    grid-template-columns:repeat(2,minmax(0,1fr));
+  }
+  #pcsu-financial-input-panel .fi-footer{
     flex-direction:column;
     align-items:stretch;
   }
   #pcsu-financial-input-panel .fi-cta{
     width:100%;
   }
+  #pcsu-financial-input-panel .fi-payment{
+    font-size:48px;
+  }
+}
+@media(max-width:520px){
+  #pcsu-financial-input-panel .fi-inner{
+    padding:14px;
+  }
+  #pcsu-financial-input-panel .fi-basic-grid,
+  #pcsu-financial-input-panel .fi-secondary-grid,
+  #pcsu-financial-input-panel .fi-detail-fields{
+    grid-template-columns:1fr;
+  }
+  #pcsu-financial-input-panel .fi-head-actions{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  #pcsu-financial-input-panel .fi-detail-toggle{
+    width:100%;
+  }
 }
 </style>
-                          <div class="fi-panel">
+                          <div class="fi-card">
                             <div class="fi-inner">
-                              <div class="fi-topbar">
-                                <div>
-                                  <div class="fi-kicker">
-                                    <span class="fi-dot"></span>
-                                    Financial Analysis Input
-                                  </div>
-                                  <h3 class="fi-title">
-                                    Personal & Financial Information
-                                  </h3>
+                              <div class="fi-head">
+                                <div class="fi-title-wrap">
+                                  <h3 class="fi-title">Housing Calculator</h3>
                                   <p class="fi-subtitle">
-                                    We preloaded your BasicBrain profile in the background. Review the core financial inputs needed to calculate your housing readiness, mortgage range, and cash-flow position.
+                                    BasicBrain syncs your military income in the background. Adjust the housing scenario, review the real-time payment, then continue to the Mortgage Calculator.
                                   </p>
                                 </div>
-                                <div class="fi-loaded-pill is-waiting" id="fi-loaded-pill">
-                                  Awaiting BasicBrain
-                                </div>
-                              </div>
-                              <section class="fi-section">
-                                <div class="fi-section-title">Minimum Financial Inputs</div>
-                                <p class="fi-section-sub">
-                                  Just the essentials needed to run a meaningful financial analysis.
-                                </p>
-                                <div class="fi-input-grid">
-                                  <div class="fi-field">
-                                    <label class="fi-label">
-                                      Credit Score
-                                      <span class="fi-info">i</span>
-                                    </label>
-                                    <div class="fi-select-wrap">
-                                      <select id="fi-credit-score" class="fi-control">
-                                        <option value="760">760+ Excellent</option>
-                                        <option value="740">740 - 759 Very Good</option>
-                                        <option value="720" selected="">720 - 739 Good</option>
-                                        <option value="700">700 - 719 Good</option>
-                                        <option value="680">680 - 699 Fair</option>
-                                        <option value="660">660 - 679 Watch</option>
-                                        <option value="640">640 - 659 Risk</option>
-                                        <option value="620">620 - 639 Minimum VA Range</option>
-                                      </select>
-                                    </div>
-                                    <div class="fi-hint">Used to estimate rate sensitivity and lender strength.</div>
-                                  </div>
-                                  <div class="fi-field">
-                                    <label class="fi-label">
-                                      Monthly Debt Payments
-                                      <span class="fi-info">i</span>
-                                    </label>
-                                    <div class="fi-money-wrap">
-                                      <span class="fi-prefix">$</span>
-                                      <input id="fi-monthly-debt" class="fi-control" type="number" min="0" step="25" value="700">
-                                    </div>
-                                    <div class="fi-hint">Car loans, credit cards, student loans, personal loans.</div>
-                                  </div>
-                                  <div class="fi-field">
-                                    <label class="fi-label">
-                                      Other Monthly Income
-                                      <span class="fi-info">i</span>
-                                    </label>
-                                    <div class="fi-money-wrap">
-                                      <span class="fi-prefix">$</span>
-                                      <input id="fi-other-income" class="fi-control" type="number" min="0" step="25" value="0">
-                                    </div>
-                                    <div class="fi-hint">Spouse income, rental income, bonuses, or side income.</div>
-                                  </div>
-                                  <div class="fi-field">
-                                    <label class="fi-label">
-                                      Emergency Fund
-                                      <span class="fi-info">i</span>
-                                    </label>
-                                    <div class="fi-money-wrap">
-                                      <span class="fi-prefix">$</span>
-                                      <input id="fi-emergency-fund" class="fi-control" type="number" min="0" step="100" value="8500">
-                                    </div>
-                                    <div class="fi-hint">Cash available after PCS and closing costs.</div>
-                                  </div>
-                                  <div class="fi-field">
-                                    <label class="fi-label">
-                                      Monthly Savings Rate
-                                      <span class="fi-info">i</span>
-                                    </label>
-                                    <div class="fi-percent-wrap">
-                                      <input id="fi-savings-rate" class="fi-control" type="number" min="0" max="100" step="1" value="10">
-                                      <span class="fi-percent">%</span>
-                                    </div>
-                                    <div class="fi-hint">How much income you usually save each month.</div>
-                                  </div>
-                                  <div class="fi-field">
-                                    <label class="fi-label">
-                                      Target Monthly Payment
-                                      <span class="fi-info">i</span>
-                                    </label>
-                                    <div class="fi-money-wrap">
-                                      <span class="fi-prefix">$</span>
-                                      <input id="fi-target-payment" class="fi-control" type="number" min="0" step="50" value="0">
-                                    </div>
-                                    <div class="fi-hint">Leave blank if you want PCSUnited to recommend one.</div>
-                                  </div>
-                                </div>
-                                <div class="fi-summary">
-                                  <div class="fi-summary-card">
-                                    <div class="fi-summary-label">Total Monthly Income</div>
-                                    <div class="fi-summary-value is-green" id="fi-summary-income">$0</div>
-                                  </div>
-                                  <div class="fi-summary-card">
-                                    <div class="fi-summary-label">Monthly Debt</div>
-                                    <div class="fi-summary-value is-danger" id="fi-summary-debt">$0</div>
-                                  </div>
-                                  <div class="fi-summary-card">
-                                    <div class="fi-summary-label">Debt-to-Income</div>
-                                    <div class="fi-summary-value" id="fi-summary-dti">0%</div>
-                                  </div>
-                                  <div class="fi-summary-card">
-                                    <div class="fi-summary-label">Suggested Housing Limit</div>
-                                    <div class="fi-summary-value" id="fi-summary-limit">$0</div>
-                                  </div>
-                                </div>
-                                <div class="fi-actions">
-                                  <div class="fi-save-note" id="fi-save-note">
-                                    Ready to continue once your financial inputs look correct.
-                                  </div>
-                                  <button id="fi-run-analysis" class="fi-cta" type="button">
-                                    Continue Financial Analysis ›
+                                <div class="fi-head-actions">
+                                  <button id="fi-detail-toggle" class="fi-detail-toggle" type="button">
+                                    Detailed Mortgage
                                   </button>
                                 </div>
-                              </section>
+                              </div>
+                              <div id="fi-calc-view" class="fi-calc-view">
+                                <div class="fi-control-grid">
+                                  <div class="fi-control-block">
+                                    <label class="fi-label" for="fi-home-price">Home Price</label>
+                                    <div class="fi-input-box">
+                                      <span class="fi-prefix">$</span>
+                                      <input id="fi-home-price" class="fi-main-input" type="text" inputmode="numeric" autocomplete="off" value="323000">
+                                    </div>
+                                    <div class="fi-mini-range">
+                                      <div id="fi-home-price-fill" class="fi-slider-fill"></div>
+                                      <div id="fi-home-price-knob" class="fi-slider-knob"></div>
+                                      <input id="fi-home-price-range" class="fi-range-input" type="range" min="100000" max="750000" step="1000" value="323000">
+                                    </div>
+                                    <div class="fi-mini-scale">
+                                      <span>$100k</span>
+                                      <span>$570k</span>
+                                      <span>$750k</span>
+                                    </div>
+                                  </div>
+                                  <div class="fi-control-block">
+                                    <label class="fi-label" for="fi-down-payment">Down Payment</label>
+                                    <div class="fi-input-box">
+                                      <span class="fi-prefix">$</span>
+                                      <input id="fi-down-payment" class="fi-main-input" type="text" inputmode="numeric" autocomplete="off" value="0">
+                                    </div>
+                                    <div class="fi-mini-range">
+                                      <div id="fi-down-payment-fill" class="fi-slider-fill"></div>
+                                      <div id="fi-down-payment-knob" class="fi-slider-knob"></div>
+                                      <input id="fi-down-payment-range" class="fi-range-input" type="range" min="0" max="20" step="1" value="0">
+                                    </div>
+                                    <div class="fi-mini-scale">
+                                      <span>0%</span>
+                                      <span>10%</span>
+                                      <span>20%</span>
+                                    </div>
+                                  </div>
+                                  <div class="fi-control-block">
+                                    <label class="fi-label" for="fi-credit-score">Credit Score</label>
+                                    <div class="fi-input-box">
+                                      <span class="fi-prefix">APR</span>
+                                      <input id="fi-apr-display" class="fi-main-input" type="text" readonly="" value="6.65%">
+                                      <input id="fi-credit-score" type="hidden" value="720">
+                                    </div>
+                                    <div class="fi-mini-range">
+                                      <div id="fi-credit-score-fill" class="fi-slider-fill"></div>
+                                      <div id="fi-credit-score-knob" class="fi-slider-knob"></div>
+                                      <input id="fi-credit-score-range" class="fi-range-input" type="range" min="580" max="850" step="1" value="720">
+                                    </div>
+                                    <div class="fi-mini-scale">
+                                      <span>580</span>
+                                      <span>720</span>
+                                      <span>850</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="fi-live-grid">
+                                  <div class="fi-live-side">
+                                    <p class="fi-kicker">Real-Time Results</p>
+                                    <div id="fi-live-payment" class="fi-payment">$0 <span>/ mo</span></div>
+                                    <div id="fi-live-state" class="fi-state">Ready</div>
+                                    <button id="fi-test-affordability" class="fi-test-btn" type="button">
+                                      Test Affordability
+                                    </button>
+                                  </div>
+                                  <div>
+                                    <div class="fi-chart-wrap">
+                                      <div class="fi-chart">
+                                        <svg viewbox="0 0 680 230" preserveaspectratio="none" aria-hidden="true">
+                                          <defs>
+                                            <lineargradient id="fiAreaGrad" x1="0" y1="0" x2="0" y2="1">
+                                              <stop offset="0%" stop-color="#7df0be" stop-opacity=".40"></stop>
+                                              <stop offset="100%" stop-color="#6aa7ff" stop-opacity=".03"></stop>
+                                            </lineargradient>
+                                          </defs>
+                                          <g opacity=".28">
+                                            <line x1="40" y1="30" x2="640" y2="30" stroke="#cdd6ff" stroke-width="1"></line>
+                                            <line x1="40" y1="80" x2="640" y2="80" stroke="#cdd6ff" stroke-width="1"></line>
+                                            <line x1="40" y1="130" x2="640" y2="130" stroke="#cdd6ff" stroke-width="1"></line>
+                                            <line x1="40" y1="180" x2="640" y2="180" stroke="#cdd6ff" stroke-width="1"></line>
+                                            <line x1="40" y1="30" x2="40" y2="210" stroke="#cdd6ff" stroke-width="1"></line>
+                                            <line x1="160" y1="30" x2="160" y2="210" stroke="#cdd6ff" stroke-width="1"></line>
+                                            <line x1="280" y1="30" x2="280" y2="210" stroke="#cdd6ff" stroke-width="1"></line>
+                                            <line x1="400" y1="30" x2="400" y2="210" stroke="#cdd6ff" stroke-width="1"></line>
+                                            <line x1="520" y1="30" x2="520" y2="210" stroke="#cdd6ff" stroke-width="1"></line>
+                                            <line x1="640" y1="30" x2="640" y2="210" stroke="#cdd6ff" stroke-width="1"></line>
+                                          </g>
+                                          <path id="fi-chart-area" d="M40 155 C100 130,140 140,160 135 S240 110,280 105 S360 96,400 98 S480 128,520 120 S590 115,640 114 L640 210 L40 210 Z" fill="url(#fiAreaGrad)"></path>
+                                          <path id="fi-chart-line" d="M40 155 C100 130,140 140,160 135 S240 110,280 105 S360 96,400 98 S480 128,520 120 S590 115,640 114" fill="none" stroke="#7df0be" stroke-width="4" stroke-linecap="round"></path>
+                                          <g id="fi-chart-points">
+                                            <circle cx="40" cy="155" r="6" fill="#7df0be" stroke="#080c16" stroke-width="4"></circle>
+                                            <circle cx="160" cy="135" r="6" fill="#7df0be" stroke="#080c16" stroke-width="4"></circle>
+                                            <circle cx="280" cy="105" r="6" fill="#7df0be" stroke="#080c16" stroke-width="4"></circle>
+                                            <circle cx="400" cy="98" r="6" fill="#7df0be" stroke="#080c16" stroke-width="4"></circle>
+                                            <circle cx="520" cy="120" r="6" fill="#7df0be" stroke="#080c16" stroke-width="4"></circle>
+                                            <circle cx="640" cy="114" r="6" fill="#7df0be" stroke="#080c16" stroke-width="4"></circle>
+                                          </g>
+                                        </svg>
+                                      </div>
+                                    </div>
+                                    <div class="fi-legend">
+                                      <span><i class="fi-dot mint"></i>New Housing Ratio</span>
+                                      <span><i class="fi-dot blue"></i>Debt Ratio</span>
+                                      <span><i class="fi-dot lav"></i>Financial Score</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="fi-context-grid">
+                                  <div class="fi-mini-card">
+                                    <p class="fi-mini-title">BasicBrain Sync</p>
+                                    <div class="fi-basic-grid">
+                                      <div class="fi-basic-item">
+                                        <span class="fi-basic-label">Rank</span>
+                                        <span id="fi-basic-rank" class="fi-basic-value">—</span>
+                                      </div>
+                                      <div class="fi-basic-item">
+                                        <span class="fi-basic-label">Years</span>
+                                        <span id="fi-basic-yos" class="fi-basic-value">—</span>
+                                      </div>
+                                      <div class="fi-basic-item">
+                                        <span class="fi-basic-label">Base</span>
+                                        <span id="fi-basic-base" class="fi-basic-value">—</span>
+                                      </div>
+                                      <div class="fi-basic-item">
+                                        <span class="fi-basic-label">Base Pay</span>
+                                        <span id="fi-basic-basepay" class="fi-basic-value">$0</span>
+                                      </div>
+                                      <div class="fi-basic-item">
+                                        <span class="fi-basic-label">BAH</span>
+                                        <span id="fi-basic-bah" class="fi-basic-value">$0</span>
+                                      </div>
+                                      <div class="fi-basic-item">
+                                        <span class="fi-basic-label">Total Comp</span>
+                                        <span id="fi-basic-total" class="fi-basic-value">$0</span>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="fi-mini-card">
+                                    <p class="fi-mini-title">Cash Flow Inputs</p>
+                                    <div class="fi-secondary-grid">
+                                      <div class="fi-small-field">
+                                        <label class="fi-small-label" for="fi-loan-type">Loan Type</label>
+                                        <select id="fi-loan-type" class="fi-small-select">
+                                          <option value="VA" selected="">VA Loan</option>
+                                          <option value="CONVENTIONAL">Conventional</option>
+                                          <option value="FHA">FHA</option>
+                                        </select>
+                                      </div>
+                                      <div class="fi-small-field">
+                                        <label class="fi-small-label" for="fi-other-income">Other Income</label>
+                                        <div class="fi-small-money">
+                                          <span>$</span>
+                                          <input id="fi-other-income" class="fi-small-input" type="text" inputmode="numeric" value="0">
+                                        </div>
+                                      </div>
+                                      <div class="fi-small-field">
+                                        <label class="fi-small-label" for="fi-monthly-debt">Monthly Debt</label>
+                                        <div class="fi-small-money">
+                                          <span>$</span>
+                                          <input id="fi-monthly-debt" class="fi-small-input" type="text" inputmode="numeric" value="700">
+                                        </div>
+                                      </div>
+                                      <div class="fi-small-field">
+                                        <label class="fi-small-label" for="fi-emergency-fund">Emergency Fund</label>
+                                        <div class="fi-small-money">
+                                          <span>$</span>
+                                          <input id="fi-emergency-fund" class="fi-small-input" type="text" inputmode="numeric" value="8500">
+                                        </div>
+                                      </div>
+                                      <div class="fi-small-field">
+                                        <label class="fi-small-label">Housing Ratio</label>
+                                        <div id="fi-summary-housing-ratio" class="fi-basic-value">0%</div>
+                                      </div>
+                                      <div class="fi-small-field">
+                                        <label class="fi-small-label">Comfort Zone</label>
+                                        <div id="fi-summary-limit" class="fi-basic-value">$0</div>
+                                      </div>
+                                    </div>
+                                    <span id="fi-summary-income" style="display:none;"></span>
+                                    <span id="fi-summary-payment" style="display:none;"></span>
+                                    <span id="fi-summary-debt" style="display:none;"></span>
+                                  </div>
+                                </div>
+                              </div>
+                              <div id="fi-detail-view" class="fi-detail-view">
+                                <div class="fi-detail-top">
+                                  <div class="fi-detail-title">
+                                    <strong>Detailed Mortgage</strong>
+                                    <span>Monthly / Total mortgage receipt</span>
+                                  </div>
+                                  <div class="fi-ready-pill">Ready</div>
+                                </div>
+                                <div class="fi-detail-fields">
+                                  <div class="fi-detail-field">
+                                    <label for="fi-term-years">Term Years</label>
+                                    <input id="fi-term-years" class="fi-detail-input" type="text" inputmode="numeric" value="30">
+                                  </div>
+                                  <div class="fi-detail-field">
+                                    <label for="fi-tax-annual">Property Tax / Year</label>
+                                    <input id="fi-tax-annual" class="fi-detail-input" type="text" inputmode="numeric" value="0">
+                                  </div>
+                                  <div class="fi-detail-field">
+                                    <label for="fi-insurance-annual">Insurance / Year</label>
+                                    <input id="fi-insurance-annual" class="fi-detail-input" type="text" inputmode="numeric" value="0">
+                                  </div>
+                                  <div class="fi-detail-field">
+                                    <label for="fi-hoa-monthly">HOA / Month</label>
+                                    <input id="fi-hoa-monthly" class="fi-detail-input" type="text" inputmode="numeric" value="0">
+                                  </div>
+                                  <div class="fi-detail-field">
+                                    <label for="fi-pmi-monthly">PMI / Month</label>
+                                    <input id="fi-pmi-monthly" class="fi-detail-input" type="text" inputmode="numeric" value="0">
+                                  </div>
+                                </div>
+                                <div class="fi-receipt">
+                                  <table class="fi-table">
+                                    <thead>
+                                      <tr>
+                                        <th style="text-align:left;">Item</th>
+                                        <th class="right">Monthly</th>
+                                        <th class="right">Total</th>
+                                      </tr>
+                                    </thead>
+                                    <tbody id="fi-mortgage-table-body">
+                                      <tr>
+                                        <td class="muted">Mortgage Payment (P&amp;I)</td>
+                                        <td class="right">$0.00</td>
+                                        <td class="right">$0.00</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="muted">Property Tax</td>
+                                        <td class="right">$0.00</td>
+                                        <td class="right">$0.00</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="muted">Home Insurance</td>
+                                        <td class="right">$0.00</td>
+                                        <td class="right">$0.00</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="muted">HOA</td>
+                                        <td class="right">$0.00</td>
+                                        <td class="right">$0.00</td>
+                                      </tr>
+                                      <tr>
+                                        <td class="muted">PMI</td>
+                                        <td class="right">$0.00</td>
+                                        <td class="right">$0.00</td>
+                                      </tr>
+                                      <tr>
+                                        <td><b>Total Out-of-Pocket</b></td>
+                                        <td class="right"><b>$0.00</b></td>
+                                        <td class="right"><b>$0.00</b></td>
+                                      </tr>
+                                    </tbody>
+                                  </table>
+                                </div>
+                              </div>
+                              <div class="fi-footer">
+                                <div id="fi-save-note" class="fi-save-note">
+                                  Ready to continue once your housing scenario looks correct.
+                                </div>
+                                <button id="fi-run-analysis" class="fi-cta" type="button">
+                                  Continue to Mortgage Calculator ›
+                                </button>
+                              </div>
                             </div>
                           </div>
-                          <script>
+                        </div>
+                      </div>
+                      <div class="finance-input-code w-embed w-script">
+                        <script>
+/* ============================================================
+  PCSUNITED • FINANCIAL ANALYSIS INPUT PANEL
+  JS SECTION 1 OF 2
+  v2.0.1 • CORE / STATE / MORTGAGE / RENDER ENGINE
+============================================================ */
 (function(){
   "use strict";
-  const VERSION = "1.0.2";
+  window.PCSU_FINANCIAL_INPUT_PANEL_V2 = window.PCSU_FINANCIAL_INPUT_PANEL_V2 || {};
+  const M = window.PCSU_FINANCIAL_INPUT_PANEL_V2;
+  if(M.__coreLoaded === true) return;
+  M.__coreLoaded = true;
+  const VERSION = "2.0.1-housing-calculator-brief-split-js";
+  const root = document.getElementById("pcsu-financial-input-panel");
+  if(!root){
+    M.__missingRoot = true;
+    return;
+  }
+  const $ = (sel) => root.querySelector(sel);
   const HANDOFF_KEY = "pcsunited.basicbrain.handoff.v1";
   const FINANCIAL_KEY = "pcsunited.financial.analysis.input.v1";
-  const root = document.getElementById("pcsu-financial-input-panel");
-  if(!root) return;
-  if(root.dataset.mounted === "true") return;
-  root.dataset.mounted = "true";
-  const $ = (sel) => root.querySelector(sel);
+  const MARKET_INTENT_KEY = "pcsunited.marketPanel.mortgageIntent.v1";
+  const MORTGAGE_HANDOFF_KEY = "pcsunited.mortgage.calculator.handoff.v1";
+  const PROFILE_KEY = "pcsunited.profile.v1";
+  const BRIDGE_KEYS = [
+    "pcsunited.bridge",
+    "pcsunited.bridge.v1",
+    "realtysass.bridge"
+  ];
+  const DERIVED_HOUSING_KEY = "realtysass.derived.housing_monthly.v1";
+  const MORTGAGE_CACHE_KEY = "realtysass.mortgage_cache.v1";
+  const MORTGAGE_CALCULATOR_URL =
+    "https://pcsunited-com-28346d.webflow.io/air-force/mortgage-calculator";
+  function getApiBase(){
+    try{
+      const host = String(window.location.hostname || "").toLowerCase();
+      if(host.endsWith(".webflow.io")){
+        return "https://thewing.netlify.app/api";
+      }
+      if(host.includes("pcsunited.com")){
+        return "https://thewing.netlify.app/api";
+      }
+    }catch(_){}
+    return "https://thewing.netlify.app/api";
+  }
+  const API_BASE = getApiBase();
+  const MORTGAGE_ENDPOINTS = [
+    API_BASE + "/mortgage-calculator",
+    API_BASE + "/mortgage"
+  ];
   const els = {
+    calcView:$("#fi-calc-view"),
+    detailView:$("#fi-detail-view"),
+    detailToggle:$("#fi-detail-toggle"),
+    loanType:$("#fi-loan-type"),
+    homePrice:$("#fi-home-price"),
+    homePriceRange:$("#fi-home-price-range"),
+    homePriceFill:$("#fi-home-price-fill"),
+    homePriceKnob:$("#fi-home-price-knob"),
+    downPayment:$("#fi-down-payment"),
+    downPaymentRange:$("#fi-down-payment-range"),
+    downPaymentFill:$("#fi-down-payment-fill"),
+    downPaymentKnob:$("#fi-down-payment-knob"),
     creditScore:$("#fi-credit-score"),
-    monthlyDebt:$("#fi-monthly-debt"),
+    creditScoreRange:$("#fi-credit-score-range"),
+    creditScoreFill:$("#fi-credit-score-fill"),
+    creditScoreKnob:$("#fi-credit-score-knob"),
+    aprDisplay:$("#fi-apr-display"),
     otherIncome:$("#fi-other-income"),
+    monthlyDebt:$("#fi-monthly-debt"),
     emergencyFund:$("#fi-emergency-fund"),
-    savingsRate:$("#fi-savings-rate"),
-    targetPayment:$("#fi-target-payment"),
+    termYears:$("#fi-term-years"),
+    taxAnnual:$("#fi-tax-annual"),
+    insuranceAnnual:$("#fi-insurance-annual"),
+    hoaMonthly:$("#fi-hoa-monthly"),
+    pmiMonthly:$("#fi-pmi-monthly"),
+    livePayment:$("#fi-live-payment"),
+    liveState:$("#fi-live-state"),
+    testAffordability:$("#fi-test-affordability"),
+    basicRank:$("#fi-basic-rank"),
+    basicYos:$("#fi-basic-yos"),
+    basicBase:$("#fi-basic-base"),
+    basicBasePay:$("#fi-basic-basepay"),
+    basicBah:$("#fi-basic-bah"),
+    basicTotal:$("#fi-basic-total"),
     summaryIncome:$("#fi-summary-income"),
+    summaryPayment:$("#fi-summary-payment"),
     summaryDebt:$("#fi-summary-debt"),
-    summaryDti:$("#fi-summary-dti"),
+    summaryHousingRatio:$("#fi-summary-housing-ratio"),
     summaryLimit:$("#fi-summary-limit"),
-    loadedPill:$("#fi-loaded-pill"),
+    chartLine:$("#fi-chart-line"),
+    chartArea:$("#fi-chart-area"),
+    chartPoints:$("#fi-chart-points"),
+    tableBody:$("#fi-mortgage-table-body"),
     saveNote:$("#fi-save-note"),
     runBtn:$("#fi-run-analysis")
   };
-  let BASICBRAIN = null;
-  let COMP = null;
-  let LAST_GOOD_COMP = null;
+  const state = {
+    price:323000,
+    downPct:0,
+    credit:720,
+    loanType:"VA",
+    otherIncome:0,
+    monthlyDebt:700,
+    emergencyFund:8500,
+    termYears:30,
+    taxAnnual:0,
+    insuranceAnnual:0,
+    hoaMonthly:0,
+    pmiMonthly:0,
+    taxManual:false,
+    insuranceManual:false,
+    hoaManual:false,
+    pmiManual:false,
+    detailsOpen:false,
+    loading:false,
+    requestId:0,
+    result:null,
+    basicbrain:null,
+    comp:null,
+    marketIntent:null,
+    userHasInteracted:false
+  };
+  const dirty = {
+    price:false,
+    downPct:false,
+    credit:false,
+    otherIncome:false,
+    monthlyDebt:false,
+    emergencyFund:false
+  };
   function clean(value){
     return value === undefined || value === null ? "" : String(value).trim();
+  }
+  function digitsOnly(value){
+    return String(value || "").replace(/[^\d.]/g,"");
   }
   function num(value,fallback){
     const n = Number(
@@ -5696,14 +6183,28 @@
     );
     return Number.isFinite(n) ? n : (fallback ?? 0);
   }
-  function money(value){
+  function clamp(n,min,max){
+    return Math.max(min,Math.min(max,n));
+  }
+  function money0(value){
     return Number(value || 0).toLocaleString("en-US",{
       style:"currency",
       currency:"USD",
       maximumFractionDigits:0
     });
   }
-  function pct(value){
+  function money2(value){
+    return Number(value || 0).toLocaleString("en-US",{
+      style:"currency",
+      currency:"USD",
+      minimumFractionDigits:2,
+      maximumFractionDigits:2
+    });
+  }
+  function comma0(value){
+    return Math.round(Number(value || 0)).toLocaleString("en-US");
+  }
+  function pct0(value){
     const n = Number(value || 0);
     if(!Number.isFinite(n)) return "0%";
     return Math.round(n) + "%";
@@ -5711,406 +6212,1489 @@
   function setText(el,value){
     if(el) el.textContent = value;
   }
-  function hasGoodComp(comp){
-    return !!(
-      comp &&
-      (
-        num(comp.total,0) ||
-        num(comp.basePay,0) ||
-        num(comp.bah,0) ||
-        num(comp.bas,0) ||
-        num(comp.retirementPay,0) ||
-        num(comp.disabilityPay,0) ||
-        num(comp.otherPay,0)
-      )
-    );
+  function dispatchSafe(name,detail){
+    try{
+      window.dispatchEvent(new CustomEvent(name,{
+        detail:detail || {}
+      }));
+    }catch(_){}
   }
-  function getNestedCandidates(source){
-    if(!source || typeof source !== "object") return [];
-    const list = [
-      source,
-      source.basicbrain,
-      source.profile,
-      source.bridge,
-      source.state,
-      source.compensation,
-      source.calculated_comp,
-      source.comp,
-      source.pay,
-      source.payload,
-      source.data,
-      source.result
-    ];
-    if(source.basicbrain){
-      list.push(
-        source.basicbrain.profile,
-        source.basicbrain.bridge,
-        source.basicbrain.compensation,
-        source.basicbrain.calculated_comp
-      );
+  function readJSON(key){
+    try{
+      const raw =
+        localStorage.getItem(key) ||
+        sessionStorage.getItem(key);
+      if(!raw) return null;
+      return JSON.parse(raw);
+    }catch(_){
+      return null;
     }
-    if(source.bridge){
-      list.push(
-        source.bridge.compensation,
-        source.bridge.comp,
-        source.bridge.pay
-      );
+  }
+  function writeJSON(key,value){
+    try{
+      localStorage.setItem(key,JSON.stringify(value));
+    }catch(_){}
+    try{
+      sessionStorage.setItem(key,JSON.stringify(value));
+    }catch(_){}
+  }
+  function firstValue(){
+    const candidates = Array.from(arguments);
+    for(const value of candidates){
+      if(value !== undefined && value !== null && String(value).trim() !== ""){
+        return value;
+      }
     }
-    if(source.profile){
-      list.push(
-        source.profile.compensation,
-        source.profile.comp,
-        source.profile.pay
-      );
+    return "";
+  }
+  function firstPositiveNumber(){
+    const vals = Array.from(arguments);
+    for(const value of vals){
+      const n = num(value,0);
+      if(Number.isFinite(n) && n > 0) return n;
     }
-    if(source.payload){
-      list.push(
-        source.payload.profile,
-        source.payload.bridge,
-        source.payload.compensation,
-        source.payload.comp,
-        source.payload.pay,
-        source.payload.monthly
-      );
+    return 0;
+  }
+  function normalizeLoanTypeForMortgage(value){
+    const loan = clean(value).toUpperCase();
+    if(loan === "VA") return "va";
+    if(loan === "CONVENTIONAL") return "conventional";
+    if(loan === "FHA") return "fha";
+    return "va";
+  }
+  async function postJSON(url,body){
+    const res = await fetch(url,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(body || {})
+    });
+    const text = await res.text();
+    let json = {};
+    try{
+      json = text ? JSON.parse(text) : {};
+    }catch(_){
+      json = {};
     }
-    if(source.compensation){
-      list.push(
-        source.compensation.monthly,
-        source.compensation.raw,
-        source.compensation.detail
-      );
+    if(!res.ok || json.ok === false){
+      throw new Error(json.error || json.message || ("HTTP " + res.status));
     }
-    return list.filter(Boolean);
+    return json;
   }
   function extractComp(source){
     if(!source || typeof source !== "object") return null;
-    const candidates = getNestedCandidates(source);
-    let basePay = 0;
-    let bah = 0;
-    let bas = 0;
-    let retirementPay = 0;
-    let disabilityPay = 0;
-    let otherPay = 0;
-    let total = 0;
-    let mode = "";
-    let profile = {};
-    candidates.forEach(function(item){
-      if(!item || typeof item !== "object") return;
-      if(!mode){
-        mode = clean(item.mode || item.type || item.status);
-      }
-      if(!profile || !Object.keys(profile).length){
-        profile = item.profile || item.bridge || item.state || item.basicbrain || item;
-      }
-      basePay = basePay || num(
-        item.basePay ??
-        item.base_pay ??
-        item.basicPay ??
-        item.basic_pay,
-        0
-      );
-      bah = bah || num(
-        item.bah ??
-        item.BAH ??
-        item.bahMonthly ??
-        item.bah_monthly,
-        0
-      );
-      bas = bas || num(
-        item.bas ??
-        item.BAS ??
-        item.basMonthly ??
-        item.bas_monthly,
-        0
-      );
-      retirementPay = retirementPay || num(
-        item.retirementPay ??
-        item.retirement_pay ??
-        item.retiredPay ??
-        item.retired_pay ??
-        item.retiredPayGross ??
-        item.grossMonthlyRetiredPay,
-        0
-      );
-      disabilityPay = disabilityPay || num(
-        item.disabilityPay ??
-        item.disability_pay ??
-        item.vaDisabilityPay ??
-        item.va_disability_pay ??
-        item.vaCompensation ??
-        item.va_compensation ??
-        item.monthlyVA ??
-        item.vaMonthly,
-        0
-      );
-      otherPay = otherPay || num(
-        item.otherPay ??
-        item.other_pay ??
-        item.other ??
-        item.otherMonthly,
-        0
-      );
-      total = total || num(
-        item.total ??
-        item.totalMonthly ??
-        item.total_monthly ??
-        item.totalMonthlyCompensation ??
-        item.total_monthly_compensation ??
-        item.grossMonthlyComp ??
-        item.combinedMonthlyGross,
-        0
-      );
-    });
-    const activeTotal = basePay + bah + bas;
-    const veteranTotal = retirementPay + disabilityPay + otherPay;
-    const finalTotal = total || activeTotal || veteranTotal;
-    const comp = {
-      mode:mode || "active_duty",
-      total:finalTotal,
-      totalMonthly:finalTotal,
-      total_monthly:finalTotal,
+    const item =
+      source.compensation ||
+      source.calculated_comp ||
+      source.comp ||
+      source.bridge ||
+      source.state ||
+      source.profile ||
+      source;
+    const profile =
+      source.profile ||
+      source.bridge ||
+      source.state ||
+      source.basicbrain ||
+      item ||
+      {};
+    const basePay = num(
+      item.basePay ??
+      item.base_pay ??
+      profile.basePay ??
+      profile.base_pay,
+      0
+    );
+    const bah = num(
+      item.bah ??
+      item.BAH ??
+      profile.bah ??
+      profile.BAH,
+      0
+    );
+    const bas = num(
+      item.bas ??
+      item.BAS ??
+      profile.bas ??
+      profile.BAS,
+      0
+    );
+    const retirementPay = num(
+      item.retirementPay ??
+      item.retirement_pay ??
+      profile.retirementPay ??
+      profile.retirement_pay,
+      0
+    );
+    const disabilityPay = num(
+      item.disabilityPay ??
+      item.disability_pay ??
+      profile.disabilityPay ??
+      profile.disability_pay,
+      0
+    );
+    const otherPay = num(
+      item.otherPay ??
+      item.other_pay ??
+      profile.otherPay ??
+      profile.other_pay,
+      0
+    );
+    const total = num(
+      item.total ??
+      item.totalMonthly ??
+      item.total_monthly ??
+      item.totalMonthlyCompensation ??
+      profile.totalMonthlyCompensation,
+      0
+    ) || basePay + bah + bas || retirementPay + disabilityPay + otherPay;
+    return {
+      mode:source.mode || profile.mode || item.mode || "active_duty",
+      total,
       basePay,
-      base_pay:basePay,
       bah,
       bas,
       retirementPay,
-      retirement_pay:retirementPay,
       disabilityPay,
-      disability_pay:disabilityPay,
       otherPay,
-      other_pay:otherPay,
       profile
     };
-    return hasGoodComp(comp) ? comp : null;
   }
-  function getBasicBrainFromHandoff(){
-    try{
-      const raw = localStorage.getItem(HANDOFF_KEY);
-      if(!raw) return null;
-      return JSON.parse(raw);
-    }catch(err){
-      console.warn("Financial Input: could not read BasicBrain handoff",err);
-      return null;
+  function getProfile(){
+    return (
+      state.comp?.profile ||
+      state.basicbrain?.profile ||
+      state.basicbrain?.bridge ||
+      state.basicbrain?.state ||
+      state.basicbrain ||
+      readJSON(PROFILE_KEY) ||
+      {}
+    );
+  }
+  function getRank(){
+    const profile = getProfile();
+    return firstValue(
+      profile.rank,
+      profile.rank_paygrade,
+      profile.paygrade,
+      state.basicbrain?.rank,
+      state.basicbrain?.rank_paygrade
+    );
+  }
+  function getYos(){
+    const profile = getProfile();
+    return firstValue(
+      profile.yos,
+      profile.yearsOfService,
+      profile.years_of_service,
+      state.basicbrain?.yos,
+      state.basicbrain?.yearsOfService,
+      state.basicbrain?.years_of_service
+    );
+  }
+  function getBase(){
+    const profile = getProfile();
+    return firstValue(
+      profile.base,
+      profile.selected_base,
+      profile.selectedBase,
+      profile.pcs_base,
+      profile.pcsBase,
+      state.basicbrain?.base,
+      state.basicbrain?.selected_base,
+      state.basicbrain?.selectedBase
+    );
+  }
+  function getDependentsData(){
+    const profile = getProfile();
+    const dependentsCount = num(
+      profile.dependents_count ??
+      profile.dependentsCount ??
+      state.basicbrain?.dependents_count ??
+      state.basicbrain?.dependentsCount,
+      0
+    );
+    const familyCount = num(
+      profile.family ??
+      profile.familySize ??
+      profile.family_size ??
+      state.basicbrain?.family ??
+      state.basicbrain?.familySize,
+      0
+    );
+    const hasDependents =
+      Boolean(
+        profile.has_dependents ??
+        profile.hasDependents ??
+        state.basicbrain?.has_dependents ??
+        state.basicbrain?.hasDependents
+      ) ||
+      dependentsCount > 0 ||
+      familyCount > 1;
+    return {
+      dependents:hasDependents ? "with" : "without",
+      dependents_count:hasDependents ? 1 : 0,
+      has_dependents:hasDependents,
+      hasDependents:hasDependents,
+      family:hasDependents ? 2 : 1
+    };
+  }
+  function aprFromScore(score,loanType){
+    const s = Number(score) || 720;
+    const loan = clean(loanType).toUpperCase();
+    let apr = 6.65;
+    if(s >= 780) apr = 6.10;
+    else if(s >= 760) apr = 6.25;
+    else if(s >= 740) apr = 6.45;
+    else if(s >= 720) apr = 6.65;
+    else if(s >= 700) apr = 6.95;
+    else if(s >= 680) apr = 7.25;
+    else if(s >= 660) apr = 7.55;
+    else if(s >= 640) apr = 7.85;
+    else apr = 8.25;
+    if(loan === "VA") apr -= 0.15;
+    if(loan === "FHA") apr += 0.05;
+    return Math.max(4.50,apr);
+  }
+  function formatApr(apr){
+    return Number(apr || 0).toFixed(2) + "%";
+  }
+  function downAmount(){
+    return Math.round(Math.max(0,state.price) * (clamp(state.downPct,0,100) / 100));
+  }
+  function pmtMonthlyPI(loanAmount,aprPct,years){
+    const L = Math.max(0,Number(loanAmount) || 0);
+    const apr = Math.max(0,Number(aprPct) || 0) / 100;
+    const n = Math.max(1,Math.round((Number(years) || 30) * 12));
+    const r = apr / 12;
+    if(L <= 0) return 0;
+    if(r <= 0) return L / n;
+    const pow = Math.pow(1 + r,n);
+    return L * (r * pow) / (pow - 1);
+  }
+  function amortTotals(loanAmount,aprPct,years){
+    const L = Math.max(0,Number(loanAmount) || 0);
+    const apr = Math.max(0,Number(aprPct) || 0) / 100;
+    const n = Math.max(1,Math.round((Number(years) || 30) * 12));
+    const r = apr / 12;
+    if(L <= 0){
+      return {
+        n,
+        monthlyPI:0,
+        totalPayments:0,
+        totalInterest:0
+      };
     }
+    if(r <= 0){
+      const monthlyPI = L / n;
+      return {
+        n,
+        monthlyPI,
+        totalPayments:monthlyPI * n,
+        totalInterest:0
+      };
+    }
+    const monthlyPI = pmtMonthlyPI(L,aprPct,years);
+    let bal = L;
+    let totalInterest = 0;
+    for(let i = 0; i < n; i++){
+      const interest = bal * r;
+      const principal = monthlyPI - interest;
+      totalInterest += interest;
+      bal = Math.max(0,bal - principal);
+    }
+    return {
+      n,
+      monthlyPI,
+      totalPayments:monthlyPI * n,
+      totalInterest
+    };
+  }
+  function localPmiEstimate(price,loanAmount,downPct,credit,loanType){
+    const loanKind = clean(loanType).toUpperCase();
+    if(loanKind === "VA") return 0;
+    if(downPct >= 20) return 0;
+    if(loanKind === "FHA"){
+      return loanAmount * 0.0055 / 12;
+    }
+    let annualRate = 0;
+    if(downPct >= 15) annualRate = 0.0035;
+    else if(downPct >= 10) annualRate = 0.0050;
+    else if(downPct >= 5) annualRate = 0.0070;
+    else annualRate = 0.0090;
+    if(credit < 680) annualRate += 0.0010;
+    if(credit < 640) annualRate += 0.0015;
+    return loanAmount * annualRate / 12;
+  }
+  function syncDerivedDefaults(){
+    if(!state.taxManual){
+      state.taxAnnual = Math.round(state.price * 0.012);
+    }
+    if(!state.insuranceManual){
+      state.insuranceAnnual = Math.round(state.price * 0.0035);
+    }
+  }
+  function buildMortgageScenarioLocal(){
+    syncDerivedDefaults();
+    const price = Math.max(0,Number(state.price) || 0);
+    const dpPct = clamp(Number(state.downPct) || 0,0,100);
+    const down = Math.round(price * (dpPct / 100));
+    const loanAmount = Math.max(0,price - down);
+    const apr = aprFromScore(state.credit,state.loanType);
+    const years = Math.max(1,Math.round(Number(state.termYears) || 30));
+    const principalInterest = pmtMonthlyPI(loanAmount,apr,years);
+    const propertyTax = Math.max(0,Number(state.taxAnnual) || 0) / 12;
+    const insurance = Math.max(0,Number(state.insuranceAnnual) || 0) / 12;
+    const hoa = Math.max(0,Number(state.hoaMonthly) || 0);
+    let pmi = Math.max(0,Number(state.pmiMonthly) || 0);
+    if(!state.pmiManual){
+      pmi = localPmiEstimate(price,loanAmount,dpPct,state.credit,state.loanType);
+      state.pmiMonthly = Math.round(pmi);
+    }
+    const totalPayment =
+      principalInterest +
+      propertyTax +
+      insurance +
+      hoa +
+      pmi;
+    const amort = amortTotals(loanAmount,apr,years);
+    return {
+      ok:true,
+      mortgage:{
+        price,
+        downpayment:down,
+        downpayment_pct:dpPct,
+        loan_amount:loanAmount,
+        credit_score:Math.round(Number(state.credit) || 720),
+        loan_type:normalizeLoanTypeForMortgage(state.loanType),
+        apr,
+        term_years:years
+      },
+      monthly:{
+        principal_interest:principalInterest,
+        property_tax:propertyTax,
+        insurance,
+        hoa,
+        pmi,
+        total_payment:totalPayment
+      },
+      totals:{
+        months:amort.n,
+        principal_interest_total:amort.totalPayments,
+        total_interest:amort.totalInterest,
+        property_tax_total:propertyTax * amort.n,
+        insurance_total:insurance * amort.n,
+        hoa_total:hoa * amort.n,
+        pmi_total:pmi * amort.n,
+        out_of_pocket_total:
+          amort.totalPayments +
+          propertyTax * amort.n +
+          insurance * amort.n +
+          hoa * amort.n +
+          pmi * amort.n
+      },
+      summary:{
+        payment_label:"$" + Math.round(totalPayment).toLocaleString("en-US"),
+        apr_label:formatApr(apr)
+      },
+      __fallback:true
+    };
+  }
+  function buildMortgageApiPayload(){
+    syncDerivedDefaults();
+    return {
+      price:Math.round(state.price),
+      homePrice:Math.round(state.price),
+      targetHomePrice:Math.round(state.price),
+      downpayment:downAmount(),
+      downPayment:downAmount(),
+      down_payment:downAmount(),
+      downPct:Number(state.downPct),
+      down_payment_pct:Number(state.downPct),
+      credit_score:Math.round(state.credit),
+      creditScore:Math.round(state.credit),
+      term_years:Math.round(state.termYears),
+      termYears:Math.round(state.termYears),
+      property_tax_annual:Math.round(state.taxAnnual),
+      insurance_annual:Math.round(state.insuranceAnnual),
+      hoa_monthly:Math.round(state.hoaMonthly),
+      pmi_monthly:Math.round(state.pmiMonthly),
+      loan_type:normalizeLoanTypeForMortgage(state.loanType),
+      loanType:normalizeLoanTypeForMortgage(state.loanType),
+      source:"pcsunited.financial.input.panel.v2"
+    };
+  }
+  function normalizeMortgageApiResponse(res){
+    if(!res || typeof res !== "object"){
+      return buildMortgageScenarioLocal();
+    }
+    if(res.monthly && res.mortgage){
+      return res;
+    }
+    const local = buildMortgageScenarioLocal();
+    const payment = firstPositiveNumber(
+      res.total_payment,
+      res.monthly_payment,
+      res.payment,
+      res.projected_mortgage_amount,
+      res.monthly?.total_payment
+    );
+    const apr = firstPositiveNumber(
+      res.apr,
+      res.rate,
+      res.interest_rate,
+      res.mortgage?.apr
+    );
+    if(payment){
+      local.monthly.total_payment = payment;
+    }
+    if(apr){
+      local.mortgage.apr = apr;
+      local.summary.apr_label = formatApr(apr);
+    }
+    return {
+      ...local,
+      api_raw:res
+    };
+  }
+  function syncBridgeMortgageResult(result){
+    if(!result || !result.monthly || !result.mortgage) return;
+    const totalPayment = Math.round(num(result.monthly.total_payment,0));
+    const pi = Math.round(num(result.monthly.principal_interest,0));
+    const tax = Math.round(num(result.monthly.property_tax,0));
+    const ins = Math.round(num(result.monthly.insurance,0));
+    const hoa = Math.round(num(result.monthly.hoa,0));
+    const pmi = Math.round(num(result.monthly.pmi,0));
+    const apr = num(result.mortgage.apr,0);
+    const down = Math.round(num(result.mortgage.downpayment,downAmount()));
+    writeJSON(DERIVED_HOUSING_KEY,totalPayment);
+    writeJSON(MORTGAGE_CACHE_KEY,{
+      ts:Date.now(),
+      monthly:totalPayment,
+      monthlyPayment:totalPayment,
+      payment:totalPayment,
+      allIn:totalPayment,
+      principal_interest:pi,
+      property_tax:tax,
+      insurance:ins,
+      hoa,
+      pmi,
+      apr,
+      result
+    });
+    BRIDGE_KEYS.forEach(function(key){
+      const bridge = readJSON(key) || {};
+      bridge.projected_home_price = Math.round(state.price);
+      bridge.projectedHomePrice = Math.round(state.price);
+      bridge.price = Math.round(state.price);
+      bridge.homePrice = Math.round(state.price);
+      bridge.downpayment = down;
+      bridge.downPayment = down;
+      bridge.down_payment = down;
+      bridge.dpAmt = down;
+      bridge.downPct = Number(state.downPct);
+      bridge.down_pct = Number(state.downPct);
+      bridge.down_payment_pct = Number(state.downPct);
+      bridge.credit_score = Math.round(state.credit);
+      bridge.creditScore = Math.round(state.credit);
+      bridge.loan_type = normalizeLoanTypeForMortgage(state.loanType);
+      bridge.loanType = normalizeLoanTypeForMortgage(state.loanType);
+      bridge.projected_mortgage_amount = totalPayment;
+      bridge.projectedMortgageAmount = totalPayment;
+      bridge.housing_monthly = totalPayment;
+      bridge.housingMonthly = totalPayment;
+      bridge.term_years = Math.round(state.termYears);
+      bridge.termYears = Math.round(state.termYears);
+      bridge.property_tax_annual = Math.round(state.taxAnnual);
+      bridge.insurance_annual = Math.round(state.insuranceAnnual);
+      bridge.hoa_monthly = Math.round(state.hoaMonthly);
+      bridge.pmi_monthly = Math.round(state.pmiMonthly);
+      bridge.apr = apr;
+      bridge.principal_interest = pi;
+      bridge.monthly_property_tax = tax;
+      bridge.monthly_insurance = ins;
+      bridge.monthly_hoa = hoa;
+      bridge.monthly_pmi = pmi;
+      writeJSON(key,bridge);
+      try{
+        window.postMessage({
+          type:"pcsunited-bridge",
+          payload:bridge
+        },"*");
+      }catch(_){}
+      try{
+        window.postMessage({
+          type:"realtysass-bridge",
+          payload:bridge
+        },"*");
+      }catch(_){}
+    });
+    try{
+      const bridge = readJSON("pcsunited.bridge") || {};
+      dispatchSafe("pcsunited:bridge-ready",{
+        bridge
+      });
+    }catch(_){}
+  }
+  async function calculateMortgageAuthoritative(){
+    const requestId = ++state.requestId;
+    state.loading = true;
+    const payload = buildMortgageApiPayload();
+    for(const endpoint of MORTGAGE_ENDPOINTS){
+      try{
+        const res = await postJSON(endpoint,payload);
+        if(requestId !== state.requestId) return state.result;
+        state.result = normalizeMortgageApiResponse(res);
+        state.loading = false;
+        syncBridgeMortgageResult(state.result);
+        return state.result;
+      }catch(err){
+        console.warn("PCSU Financial Input mortgage endpoint failed:", endpoint, err);
+      }
+    }
+    if(requestId !== state.requestId) return state.result;
+    const fallback = buildMortgageScenarioLocal();
+    state.result = fallback;
+    state.loading = false;
+    syncBridgeMortgageResult(fallback);
+    return fallback;
+  }
+  function getInputs(){
+    const result = state.result || buildMortgageScenarioLocal();
+    const monthly = result.monthly || {};
+    const mortgage = result.mortgage || {};
+    const basicIncome = num(state.comp?.total,0);
+    const totalIncome = basicIncome + num(state.otherIncome,0);
+    const estimatedPayment = Math.round(num(monthly.total_payment,0));
+    const monthlyDebt = num(state.monthlyDebt,0);
+    const dti = totalIncome ? (monthlyDebt / totalIncome) * 100 : 0;
+    const housingRatio = totalIncome ? (estimatedPayment / totalIncome) * 100 : 0;
+    const suggestedLimit = totalIncome ? Math.round(totalIncome * 0.25) : 0;
+    const afterPayment = totalIncome - estimatedPayment;
+    const deps = getDependentsData();
+    return {
+      source:"pcsunited.financial.input.panel.v2.0.1",
+      version:VERSION,
+      loanType:state.loanType,
+      mortgageLoanType:normalizeLoanTypeForMortgage(state.loanType),
+      homePrice:Math.round(state.price),
+      targetHomePrice:Math.round(state.price),
+      projectedHomePrice:Math.round(state.price),
+      projected_home_price:Math.round(state.price),
+      downPayment:downAmount(),
+      downpayment:downAmount(),
+      down_payment:downAmount(),
+      downPct:Number(state.downPct),
+      down_payment_pct:Number(state.downPct),
+      creditScore:String(Math.round(state.credit)),
+      credit_score:String(Math.round(state.credit)),
+      apr:num(mortgage.apr,aprFromScore(state.credit,state.loanType)),
+      termYears:Math.round(state.termYears),
+      term_years:Math.round(state.termYears),
+      propertyTaxAnnual:Math.round(state.taxAnnual),
+      property_tax_annual:Math.round(state.taxAnnual),
+      insuranceAnnual:Math.round(state.insuranceAnnual),
+      insurance_annual:Math.round(state.insuranceAnnual),
+      hoaMonthly:Math.round(state.hoaMonthly),
+      hoa_monthly:Math.round(state.hoaMonthly),
+      pmiMonthly:Math.round(num(monthly.pmi,state.pmiMonthly)),
+      pmi_monthly:Math.round(num(monthly.pmi,state.pmiMonthly)),
+      monthlyDebt,
+      monthlyObligations:monthlyDebt,
+      monthly_obligations:monthlyDebt,
+      obligations:monthlyDebt,
+      otherIncome:num(state.otherIncome,0),
+      additionalIncome:num(state.otherIncome,0),
+      additional_income:num(state.otherIncome,0),
+      emergencyFund:num(state.emergencyFund,0),
+      emergency_fund:num(state.emergencyFund,0),
+      basicIncome,
+      totalIncome,
+      estimatedPayment,
+      targetPayment:estimatedPayment,
+      projected_mortgage_amount:estimatedPayment,
+      projectedMortgageAmount:estimatedPayment,
+      principalInterest:Math.round(num(monthly.principal_interest,0)),
+      monthlyPropertyTax:Math.round(num(monthly.property_tax,0)),
+      monthlyInsurance:Math.round(num(monthly.insurance,0)),
+      monthlyHoa:Math.round(num(monthly.hoa,0)),
+      monthlyPmi:Math.round(num(monthly.pmi,0)),
+      dti,
+      housingRatio,
+      suggestedLimit,
+      afterPayment,
+      rank:getRank(),
+      yos:getYos(),
+      yearsOfService:getYos(),
+      years_of_service:getYos(),
+      base:getBase(),
+      selected_base:getBase(),
+      selectedBase:getBase(),
+      ...deps,
+      compensation:state.comp,
+      basicbrain:state.basicbrain,
+      marketIntent:state.marketIntent,
+      mortgageResult:result,
+      userInitiated:state.userHasInteracted,
+      updated_at:new Date().toISOString()
+    };
+  }
+  function getComfortState(data){
+    const ratio = Number(data.housingRatio || 0);
+    const after = Number(data.afterPayment || 0);
+    if(ratio <= 25 && after >= 1500){
+      return {
+        label:"Comfortable",
+        cls:"is-good"
+      };
+    }
+    if(ratio <= 33 && after >= 750){
+      return {
+        label:"Tight",
+        cls:"is-mid"
+      };
+    }
+    return {
+      label:"High Risk",
+      cls:"is-bad"
+    };
+  }
+  function updateSlider(ref){
+    const value = clamp(Number(ref.value || 0),ref.min,ref.max);
+    const pct = ((value - ref.min) / (ref.max - ref.min)) * 100;
+    if(ref.fill) ref.fill.style.width = pct + "%";
+    if(ref.knob) ref.knob.style.left = pct + "%";
+    if(ref.range) ref.range.value = String(value);
+  }
+  function updateSliders(){
+    updateSlider({
+      value:state.price,
+      min:100000,
+      max:750000,
+      fill:els.homePriceFill,
+      knob:els.homePriceKnob,
+      range:els.homePriceRange
+    });
+    updateSlider({
+      value:state.downPct,
+      min:0,
+      max:20,
+      fill:els.downPaymentFill,
+      knob:els.downPaymentKnob,
+      range:els.downPaymentRange
+    });
+    updateSlider({
+      value:state.credit,
+      min:580,
+      max:850,
+      fill:els.creditScoreFill,
+      knob:els.creditScoreKnob,
+      range:els.creditScoreRange
+    });
+  }
+  function updateChart(payment){
+    const p = Math.max(0,Number(payment) || 0);
+    const influence = clamp(p / 4000,0.15,1);
+    const y1 = 180 - (30 * influence);
+    const y2 = 145 - (25 * influence);
+    const y3 = 105 - (18 * influence);
+    const y4 = 95 - (12 * influence);
+    const y5 = 122 - (18 * influence);
+    const y6 = 112 - (10 * influence);
+    const d = `
+      M40 ${y1}
+      C100 ${y1 - 25}, 140 ${y2 + 5}, 160 ${y2}
+      S240 ${y3 + 10}, 280 ${y3}
+      S360 ${y4 - 6}, 400 ${y4}
+      S480 ${y5 + 10}, 520 ${y5}
+      S590 ${y6 + 6}, 640 ${y6}
+    `.replace(/\s+/g," ").trim();
+    if(els.chartLine) els.chartLine.setAttribute("d",d);
+    if(els.chartArea) els.chartArea.setAttribute("d",d + " L640 210 L40 210 Z");
+    const points = [
+      [40,y1],
+      [160,y2],
+      [280,y3],
+      [400,y4],
+      [520,y5],
+      [640,y6]
+    ];
+    const circles = els.chartPoints ? Array.from(els.chartPoints.querySelectorAll("circle")) : [];
+    circles.forEach(function(circle,index){
+      if(!points[index]) return;
+      circle.setAttribute("cx",String(points[index][0]));
+      circle.setAttribute("cy",String(points[index][1]));
+    });
+  }
+  function renderDetailedMortgage(result){
+    if(!els.tableBody || !result) return;
+    const monthly = result.monthly || {};
+    const totals = result.totals || {};
+    els.tableBody.innerHTML = `
+      <tr>
+        <td class="muted">Mortgage Payment (P&amp;I)</td>
+        <td class="right">${money2(monthly.principal_interest)}</td>
+        <td class="right">${money2(totals.principal_interest_total)}</td>
+      </tr>
+      <tr>
+        <td class="muted">Property Tax</td>
+        <td class="right">${money2(monthly.property_tax)}</td>
+        <td class="right">${money2(totals.property_tax_total)}</td>
+      </tr>
+      <tr>
+        <td class="muted">Home Insurance</td>
+        <td class="right">${money2(monthly.insurance)}</td>
+        <td class="right">${money2(totals.insurance_total)}</td>
+      </tr>
+      <tr>
+        <td class="muted">HOA</td>
+        <td class="right">${money2(monthly.hoa)}</td>
+        <td class="right">${money2(totals.hoa_total)}</td>
+      </tr>
+      <tr>
+        <td class="muted">PMI</td>
+        <td class="right">${money2(monthly.pmi)}</td>
+        <td class="right">${money2(totals.pmi_total)}</td>
+      </tr>
+      <tr>
+        <td><b>Total Out-of-Pocket</b></td>
+        <td class="right"><b>${money2(monthly.total_payment)}</b></td>
+        <td class="right"><b>${money2(totals.out_of_pocket_total)}</b></td>
+      </tr>
+    `;
+  }
+  function setDetailedView(open){
+    state.detailsOpen = !!open;
+    if(els.detailToggle){
+      els.detailToggle.classList.toggle("is-on",state.detailsOpen);
+      els.detailToggle.textContent = state.detailsOpen ? "Back to Calculator" : "Detailed Mortgage";
+    }
+    if(els.calcView){
+      els.calcView.classList.toggle("is-hidden",state.detailsOpen);
+    }
+    if(els.detailView){
+      els.detailView.classList.toggle("is-open",state.detailsOpen);
+    }
+  }
+  function saveFinancialInput(data){
+    writeJSON(FINANCIAL_KEY,data);
+  }
+  function render(options){
+    const opts = options || {};
+    const shouldEmit = opts.emit === true;
+    const userInitiated = opts.userInitiated === true;
+    syncDerivedDefaults();
+    const result = state.result || buildMortgageScenarioLocal();
+    const monthly = result.monthly || {};
+    const mortgage = result.mortgage || {};
+    const data = {
+      ...getInputs(),
+      userInitiated,
+      reason:opts.reason || ""
+    };
+    const apr = num(mortgage.apr,aprFromScore(state.credit,state.loanType));
+    const payment = Math.round(num(monthly.total_payment,0));
+    const verdict = getComfortState(data);
+    if(els.homePrice) els.homePrice.value = comma0(state.price);
+    if(els.downPayment) els.downPayment.value = comma0(downAmount());
+    if(els.creditScore) els.creditScore.value = String(Math.round(state.credit));
+    if(els.aprDisplay) els.aprDisplay.value = formatApr(apr);
+    if(els.otherIncome) els.otherIncome.value = comma0(state.otherIncome);
+    if(els.monthlyDebt) els.monthlyDebt.value = comma0(state.monthlyDebt);
+    if(els.emergencyFund) els.emergencyFund.value = comma0(state.emergencyFund);
+    if(els.termYears) els.termYears.value = comma0(state.termYears);
+    if(els.taxAnnual) els.taxAnnual.value = comma0(state.taxAnnual);
+    if(els.insuranceAnnual) els.insuranceAnnual.value = comma0(state.insuranceAnnual);
+    if(els.hoaMonthly) els.hoaMonthly.value = comma0(state.hoaMonthly);
+    if(els.pmiMonthly) els.pmiMonthly.value = comma0(Math.round(num(monthly.pmi,state.pmiMonthly)));
+    setText(els.basicRank,data.rank || "—");
+    setText(els.basicYos,data.yos || "—");
+    setText(els.basicBase,data.base || "—");
+    setText(els.basicBasePay,money0(state.comp?.basePay || 0));
+    setText(els.basicBah,money0(state.comp?.bah || 0));
+    setText(els.basicTotal,money0(state.comp?.total || 0));
+    if(els.livePayment){
+      els.livePayment.innerHTML = "$" + payment.toLocaleString("en-US") + " <span>/ mo</span>";
+    }
+    if(els.liveState){
+      els.liveState.textContent = verdict.label;
+      els.liveState.classList.remove("is-good","is-mid","is-bad");
+      els.liveState.classList.add(verdict.cls);
+    }
+    setText(els.summaryIncome,money0(data.totalIncome));
+    setText(els.summaryPayment,money0(data.estimatedPayment));
+    setText(els.summaryDebt,money0(data.monthlyDebt));
+    setText(els.summaryHousingRatio,pct0(data.housingRatio));
+    setText(els.summaryLimit,money0(data.suggestedLimit));
+    updateSliders();
+    updateChart(payment);
+    renderDetailedMortgage(result);
+    setDetailedView(state.detailsOpen);
+    saveFinancialInput(data);
+    if(shouldEmit){
+      dispatchSafe("pcsunited:financial-input-updated",data);
+    }else{
+      dispatchSafe("pcsunited:financial-input-preloaded",data);
+    }
+    return data;
+  }
+  async function recalcAndRender(options){
+    await calculateMortgageAuthoritative();
+    return render(options || {});
+  }
+  function saveMortgageHandoff(data){
+    const compactInputs = {
+      rank:data.rank || "",
+      yos:data.yos || "",
+      yearsOfService:data.yos || "",
+      years_of_service:data.yos || "",
+      base:data.base || "",
+      selected_base:data.base || "",
+      selectedBase:data.base || "",
+      pcs_base:data.base || "",
+      pcsBase:data.base || "",
+      dependents:data.dependents || "without",
+      dependents_count:data.dependents_count || 0,
+      has_dependents:data.has_dependents || false,
+      hasDependents:data.hasDependents || false,
+      family:data.family || 1,
+      additionalIncome:data.otherIncome || 0,
+      additional_income:data.otherIncome || 0,
+      otherIncome:data.otherIncome || 0,
+      monthlyObligations:data.monthlyDebt || 0,
+      monthly_obligations:data.monthlyDebt || 0,
+      monthlyDebt:data.monthlyDebt || 0,
+      obligations:data.monthlyDebt || 0,
+      homePrice:data.homePrice || 0,
+      targetHomePrice:data.homePrice || 0,
+      projectedHomePrice:data.homePrice || 0,
+      projected_home_price:data.homePrice || 0,
+      downPayment:data.downPayment || 0,
+      downpayment:data.downPayment || 0,
+      down_payment:data.downPayment || 0,
+      downPct:data.downPct || 0,
+      down_payment_pct:data.downPct || 0,
+      creditScore:data.creditScore || "720",
+      credit_score:data.creditScore || "720",
+      loanType:data.mortgageLoanType || "va",
+      loan_type:data.mortgageLoanType || "va",
+      mortgageLoanType:data.mortgageLoanType || "va",
+      termYears:data.termYears || 30,
+      term_years:data.termYears || 30,
+      propertyTaxAnnual:data.propertyTaxAnnual || 0,
+      property_tax_annual:data.propertyTaxAnnual || 0,
+      insuranceAnnual:data.insuranceAnnual || 0,
+      insurance_annual:data.insuranceAnnual || 0,
+      hoaMonthly:data.hoaMonthly || 0,
+      hoa_monthly:data.hoaMonthly || 0,
+      pmiMonthly:data.pmiMonthly || 0,
+      pmi_monthly:data.pmiMonthly || 0,
+      apr:data.apr || 0,
+      emergencyFund:data.emergencyFund || 0,
+      emergency_fund:data.emergencyFund || 0,
+      projected_mortgage_amount:data.estimatedPayment || 0,
+      projectedMortgageAmount:data.estimatedPayment || 0
+    };
+    const payload = {
+      source:"pcsunited.financial.input.panel.to.mortgage",
+      version:VERSION,
+      saved_at:new Date().toISOString(),
+      inputs:compactInputs,
+      mortgageResult:data.mortgageResult || null
+    };
+    writeJSON(MORTGAGE_HANDOFF_KEY,payload);
+    writeJSON("pcsunited.financial.intake.v1",{
+      ...compactInputs,
+      source:"pcsunited.financial.input.panel.compat",
+      updated_at:new Date().toISOString()
+    });
+    writeJSON("pcsunited.financial_intake.v1",{
+      ...compactInputs,
+      source:"pcsunited.financial.input.panel.compat_legacy",
+      updated_at:new Date().toISOString()
+    });
+    return payload;
+  }
+  function openMortgageCalculator(data){
+    saveMortgageHandoff(data);
+    const url = new URL(MORTGAGE_CALCULATOR_URL);
+    url.searchParams.set("source","financial-input-panel-v2");
+    url.searchParams.set("homePrice",String(data.homePrice || 0));
+    url.searchParams.set("downPayment",String(data.downPayment || 0));
+    url.searchParams.set("creditScore",String(data.creditScore || "720"));
+    url.searchParams.set("loanType",String(data.mortgageLoanType || "va"));
+    url.searchParams.set("monthlyObligations",String(data.monthlyDebt || 0));
+    url.searchParams.set("additionalIncome",String(data.otherIncome || 0));
+    if(data.rank) url.searchParams.set("rank",String(data.rank));
+    if(data.yos) url.searchParams.set("yos",String(data.yos));
+    if(data.base) url.searchParams.set("base",String(data.base));
+    if(data.dependents) url.searchParams.set("dependents",String(data.dependents));
+    window.open(
+      url.toString(),
+      "_blank",
+      "noopener,noreferrer"
+    );
+  }
+  M.VERSION = VERSION;
+  M.root = root;
+  M.els = els;
+  M.state = state;
+  M.dirty = dirty;
+  M.keys = {
+    HANDOFF_KEY,
+    FINANCIAL_KEY,
+    MARKET_INTENT_KEY,
+    MORTGAGE_HANDOFF_KEY
+  };
+  M.helpers = {
+    clean,
+    digitsOnly,
+    num,
+    clamp,
+    money0,
+    money2,
+    comma0,
+    pct0,
+    setText,
+    dispatchSafe,
+    readJSON,
+    writeJSON,
+    firstValue,
+    firstPositiveNumber,
+    normalizeLoanTypeForMortgage,
+    extractComp
+  };
+  M.core = {
+    aprFromScore,
+    formatApr,
+    downAmount,
+    syncDerivedDefaults,
+    buildMortgageScenarioLocal,
+    calculateMortgageAuthoritative,
+    getInputs,
+    render,
+    recalcAndRender,
+    setDetailedView,
+    saveMortgageHandoff,
+    openMortgageCalculator
+  };
+})();
+</script>
+                      </div>
+                      <div class="finance-input-code w-embed w-script">
+                        <script>
+/* ============================================================
+  PCSUNITED • FINANCIAL ANALYSIS INPUT PANEL
+  JS SECTION 2 OF 2
+  v2.0.1 • HYDRATION / INPUTS / EVENTS / BOOT
+============================================================ */
+(function(){
+  "use strict";
+  const M = window.PCSU_FINANCIAL_INPUT_PANEL_V2;
+  if(!M || !M.root || !M.els || !M.state || !M.core || !M.helpers){
+    console.warn("PCSU Financial Input Panel v2 core not loaded. Load JS Section 1 first.");
+    return;
+  }
+  if(M.__bootLoaded === true) return;
+  M.__bootLoaded = true;
+  const root = M.root;
+  const els = M.els;
+  const state = M.state;
+  const dirty = M.dirty;
+  const keys = M.keys;
+  const {
+    clean,
+    digitsOnly,
+    num,
+    clamp,
+    readJSON,
+    firstPositiveNumber,
+    extractComp,
+    dispatchSafe
+  } = M.helpers;
+  const {
+    downAmount,
+    render,
+    recalcAndRender,
+    openMortgageCalculator
+  } = M.core;
+  function getBasicBrainFromHandoff(){
+    return readJSON(keys.HANDOFF_KEY);
+  }
+  function getMarketIntent(){
+    return readJSON(keys.MARKET_INTENT_KEY);
   }
   function getBasicBrainFromGlobals(){
     const candidates = [
       window.PCSU_BASICBRAIN_CURRENT,
       window.PCSU_BASICBRAIN_TEMP,
-      window.PCSU_BASICBRAIN?.getLastGood?.(),
-      window.PCSU_BASICBRAIN?.getState?.()
+      window.PCSU_BASICBRAIN?.getLastGood?.()
     ];
-    for(const item of candidates){
-      if(!item) continue;
-      const comp = extractComp(item);
-      if(comp && hasGoodComp(comp)){
-        return item;
-      }
-    }
     for(const item of candidates){
       if(item) return item;
     }
     return null;
   }
-  function setLoadedState(loaded){
-    if(!els.loadedPill) return;
-    if(loaded){
-      els.loadedPill.classList.remove("is-waiting");
-      els.loadedPill.innerHTML =
-        '<svg viewBox="0 0 24 24" fill="none">' +
-          '<path d="M20 7 10 17l-5-5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>' +
-        '</svg>' +
-        'BasicBrain Connected';
-    }else{
-      els.loadedPill.classList.add("is-waiting");
-      els.loadedPill.innerHTML = "Awaiting BasicBrain";
-    }
-  }
-  function hydrateBasicBrain(){
-    const fromGlobals = getBasicBrainFromGlobals();
-    const fromHandoff = getBasicBrainFromHandoff();
-    BASICBRAIN = fromGlobals || fromHandoff || BASICBRAIN;
-    const incomingComp =
-      extractComp(fromGlobals) ||
-      extractComp(fromHandoff) ||
-      extractComp(BASICBRAIN);
-    if(incomingComp && hasGoodComp(incomingComp)){
-      COMP = incomingComp;
-      LAST_GOOD_COMP = incomingComp;
-      setLoadedState(true);
-    }else if(LAST_GOOD_COMP && hasGoodComp(LAST_GOOD_COMP)){
-      COMP = LAST_GOOD_COMP;
-      setLoadedState(true);
-    }else{
-      COMP = {
-        mode:"active_duty",
-        total:0,
-        totalMonthly:0,
-        total_monthly:0,
-        basePay:0,
-        base_pay:0,
-        bah:0,
-        bas:0,
-        retirementPay:0,
-        retirement_pay:0,
-        disabilityPay:0,
-        disability_pay:0,
-        otherPay:0,
-        other_pay:0,
-        profile:{}
-      };
-      setLoadedState(false);
-    }
-    renderSummary();
-  }
-  function getInputs(){
-    const monthlyDebt = num(els.monthlyDebt?.value,0);
-    const otherIncome = num(els.otherIncome?.value,0);
-    const emergencyFund = num(els.emergencyFund?.value,0);
-    const savingsRate = num(els.savingsRate?.value,0);
-    const targetPayment = num(els.targetPayment?.value,0);
-    const creditScore = clean(els.creditScore?.value || "720");
-    const basicIncome = num(COMP?.total,0);
-    const totalIncome = basicIncome + otherIncome;
-    const dti = totalIncome ? (monthlyDebt / totalIncome) * 100 : 0;
-    const suggestedLimit = totalIncome ? Math.round(totalIncome * 0.25) : 0;
-    return {
-      source:"pcsunited.financial.input.panel.v1.0.2",
-      version:VERSION,
-      creditScore,
-      monthlyDebt,
-      otherIncome,
-      emergencyFund,
-      savingsRate,
-      targetPayment,
-      basicIncome,
-      totalIncome,
-      dti,
-      suggestedLimit,
-      compensation:COMP,
-      basicbrain:BASICBRAIN,
-      updated_at:new Date().toISOString()
-    };
-  }
-  function renderSummary(){
-    const data = getInputs();
-    setText(els.summaryIncome,money(data.totalIncome));
-    setText(els.summaryDebt,money(data.monthlyDebt));
-    setText(els.summaryDti,pct(data.dti));
-    setText(els.summaryLimit,money(data.suggestedLimit));
+  function markUserInteraction(){
+    state.userHasInteracted = true;
     try{
-      localStorage.setItem(FINANCIAL_KEY,JSON.stringify(data));
-    }catch(err){
-      console.warn("Financial Input: save failed",err);
-    }
-    try{
-      window.dispatchEvent(new CustomEvent("pcsunited:financial-input-updated",{
-        detail:data
-      }));
+      root.dataset.userInteracted = "true";
     }catch(_){}
   }
-  function bindInputs(){
-    [
-      els.creditScore,
-      els.monthlyDebt,
-      els.otherIncome,
-      els.emergencyFund,
-      els.savingsRate,
-      els.targetPayment
-    ].forEach(function(el){
-      if(!el) return;
-      el.addEventListener("input",renderSummary);
-      el.addEventListener("change",renderSummary);
+  function setFromField(key,value){
+    const cleanVal = digitsOnly(value);
+    const v = Number(cleanVal || 0);
+    if(key === "price"){
+      state.price = clamp(Math.round(v),100000,750000);
+      dirty.price = true;
+    }
+    if(key === "downAmount"){
+      const amount = Math.max(0,Math.round(v));
+      state.downPct = state.price ? clamp((amount / state.price) * 100,0,20) : 0;
+      dirty.downPct = true;
+    }
+    if(key === "credit"){
+      state.credit = clamp(Math.round(v),580,850);
+      dirty.credit = true;
+    }
+    if(key === "otherIncome"){
+      state.otherIncome = Math.max(0,Math.round(v));
+      dirty.otherIncome = true;
+    }
+    if(key === "monthlyDebt"){
+      state.monthlyDebt = Math.max(0,Math.round(v));
+      dirty.monthlyDebt = true;
+    }
+    if(key === "emergencyFund"){
+      state.emergencyFund = Math.max(0,Math.round(v));
+      dirty.emergencyFund = true;
+    }
+    if(key === "termYears"){
+      state.termYears = clamp(Math.round(v),5,40);
+    }
+    if(key === "taxAnnual"){
+      state.taxAnnual = Math.max(0,Math.round(v));
+      state.taxManual = true;
+    }
+    if(key === "insuranceAnnual"){
+      state.insuranceAnnual = Math.max(0,Math.round(v));
+      state.insuranceManual = true;
+    }
+    if(key === "hoaMonthly"){
+      state.hoaMonthly = Math.max(0,Math.round(v));
+      state.hoaManual = true;
+    }
+    if(key === "pmiMonthly"){
+      state.pmiMonthly = Math.max(0,Math.round(v));
+      state.pmiManual = true;
+    }
+  }
+  function bindTextInput(el,key){
+    if(!el) return;
+    el.addEventListener("input",function(){
+      markUserInteraction();
+      setFromField(key,el.value);
+      recalcAndRender({
+        emit:true,
+        userInitiated:true,
+        reason:"user-input-" + key
+      });
     });
+    el.addEventListener("blur",function(){
+      markUserInteraction();
+      setFromField(key,el.value);
+      recalcAndRender({
+        emit:true,
+        userInitiated:true,
+        reason:"user-blur-" + key
+      });
+    });
+  }
+  function bindRange(el,key){
+    if(!el) return;
+    el.addEventListener("input",function(){
+      markUserInteraction();
+      const value = Number(el.value || 0);
+      if(key === "price"){
+        state.price = clamp(Math.round(value),100000,750000);
+        dirty.price = true;
+      }
+      if(key === "downPct"){
+        state.downPct = clamp(value,0,20);
+        dirty.downPct = true;
+      }
+      if(key === "credit"){
+        state.credit = clamp(Math.round(value),580,850);
+        dirty.credit = true;
+      }
+      render({
+        emit:true,
+        userInitiated:true,
+        reason:"range-preview-" + key
+      });
+      recalcAndRender({
+        emit:true,
+        userInitiated:true,
+        reason:"range-input-" + key
+      });
+    });
+    el.addEventListener("change",function(){
+      markUserInteraction();
+      recalcAndRender({
+        emit:true,
+        userInitiated:true,
+        reason:"range-change-" + key
+      });
+    });
+  }
+  function bindInputs(){
+    bindTextInput(els.homePrice,"price");
+    bindTextInput(els.downPayment,"downAmount");
+    bindRange(els.homePriceRange,"price");
+    bindRange(els.downPaymentRange,"downPct");
+    bindRange(els.creditScoreRange,"credit");
+    bindTextInput(els.otherIncome,"otherIncome");
+    bindTextInput(els.monthlyDebt,"monthlyDebt");
+    bindTextInput(els.emergencyFund,"emergencyFund");
+    bindTextInput(els.termYears,"termYears");
+    bindTextInput(els.taxAnnual,"taxAnnual");
+    bindTextInput(els.insuranceAnnual,"insuranceAnnual");
+    bindTextInput(els.hoaMonthly,"hoaMonthly");
+    bindTextInput(els.pmiMonthly,"pmiMonthly");
+    if(els.loanType){
+      els.loanType.addEventListener("change",function(){
+        markUserInteraction();
+        state.loanType = clean(els.loanType.value || "VA").toUpperCase();
+        if(state.loanType === "VA" && !dirty.downPct){
+          state.downPct = 0;
+        }
+        recalcAndRender({
+          emit:true,
+          userInitiated:true,
+          reason:"loan-type-change"
+        });
+      });
+    }
+    if(els.detailToggle){
+      els.detailToggle.addEventListener("click",function(event){
+        event.preventDefault();
+        markUserInteraction();
+        M.core.setDetailedView(!state.detailsOpen);
+        render({
+          emit:true,
+          userInitiated:true,
+          reason:"detail-toggle"
+        });
+      });
+    }
+    if(els.testAffordability){
+      els.testAffordability.addEventListener("click",function(event){
+        event.preventDefault();
+        markUserInteraction();
+        recalcAndRender({
+          emit:true,
+          userInitiated:true,
+          reason:"test-affordability-click"
+        });
+      });
+    }
     if(els.runBtn){
       els.runBtn.addEventListener("click",function(){
-        const data = getInputs();
-        try{
-          localStorage.setItem(FINANCIAL_KEY,JSON.stringify(data));
-        }catch(_){}
-        try{
-          window.dispatchEvent(new CustomEvent("pcsunited:run-financial-analysis",{
-            detail:data
-          }));
-        }catch(_){}
-        const targets = [
-          "#pcsu-financial-analysis-results",
-          "#financial-analysis-results",
-          "#pcsu-mortgage-scenario",
-          "#pcsu-financial-dashboard-results",
-          "[data-pcsu-financial-results]"
-        ];
-        for(const selector of targets){
-          const target = document.querySelector(selector);
-          if(target){
-            target.scrollIntoView({
-              behavior:"smooth",
-              block:"start"
-            });
-            return;
+        markUserInteraction();
+        recalcAndRender({
+          emit:true,
+          userInitiated:true,
+          reason:"run-analysis-click"
+        }).then(function(data){
+          dispatchSafe("pcsunited:run-financial-analysis",{
+            ...data,
+            userInitiated:true,
+            reason:"run-analysis-click"
+          });
+          if(els.saveNote){
+            els.saveNote.textContent =
+              "Opening Mortgage Calculator with your saved housing scenario...";
           }
-        }
-        if(els.saveNote){
-          els.saveNote.textContent = "Financial inputs saved. Add the results section below this panel next.";
-        }
+          openMortgageCalculator(data);
+        });
       });
     }
   }
-  function handleBasicBrainEvent(event){
-    const detail = event?.detail || {};
-    const incomingComp = extractComp(detail);
-    BASICBRAIN = detail.basicbrain || detail.profile || detail.bridge || detail || BASICBRAIN;
-    if(incomingComp && hasGoodComp(incomingComp)){
-      COMP = incomingComp;
-      LAST_GOOD_COMP = incomingComp;
-      setLoadedState(true);
-    }else if(LAST_GOOD_COMP && hasGoodComp(LAST_GOOD_COMP)){
-      COMP = LAST_GOOD_COMP;
-      setLoadedState(true);
-    }
-    renderSummary();
-  }
-  window.addEventListener("pcsunited:basicbrain-updated",handleBasicBrainEvent);
-  window.addEventListener("pcsunited:compensation-ready",handleBasicBrainEvent);
-  window.addEventListener("pcsunited:compensation-preview-ready",handleBasicBrainEvent);
-  window.addEventListener("pcsunited:profile-ready",handleBasicBrainEvent);
-  window.addEventListener("pcsunited:bridge-ready",handleBasicBrainEvent);
-  window.addEventListener("storage",function(event){
-    if(event.key === HANDOFF_KEY){
-      hydrateBasicBrain();
-    }
-  });
-  window.PCSU_FINANCIAL_INPUT_PANEL = {
-    version:VERSION,
-    refresh:hydrateBasicBrain,
-    getInputs:getInputs,
-    getComp:function(){
-      return COMP;
-    },
-    getLastGoodComp:function(){
-      return LAST_GOOD_COMP;
-    },
-    getBasicBrain:function(){
-      return BASICBRAIN;
-    },
-    debug:function(){
-      return {
-        BASICBRAIN,
-        COMP,
-        LAST_GOOD_COMP,
-        inputs:getInputs()
+  function hydrateBasicBrain(options){
+    const opts = options || {};
+    state.basicbrain = getBasicBrainFromGlobals() || getBasicBrainFromHandoff();
+    state.comp = extractComp(state.basicbrain);
+    state.marketIntent = getMarketIntent();
+    if(!state.comp || !state.comp.total){
+      state.comp = {
+        mode:"active_duty",
+        total:0,
+        basePay:0,
+        bah:0,
+        bas:0,
+        profile:{}
       };
     }
-  };
-  bindInputs();
-  hydrateBasicBrain();
-  setTimeout(hydrateBasicBrain,250);
-  setTimeout(hydrateBasicBrain,700);
-  setTimeout(hydrateBasicBrain,1500);
-  setTimeout(hydrateBasicBrain,3000);
+    const savedFinancial = readJSON(keys.FINANCIAL_KEY);
+    const mortgageHandoff = readJSON(keys.MORTGAGE_HANDOFF_KEY);
+    const handoffInputs = mortgageHandoff?.inputs || {};
+    const suggestedHomePrice = firstPositiveNumber(
+      state.marketIntent?.suggested_home_price,
+      state.marketIntent?.homePrice,
+      state.marketIntent?.targetHomePrice,
+      state.marketIntent?.market?.typicalBuy,
+      state.marketIntent?.market?.medianList,
+      savedFinancial?.homePrice,
+      handoffInputs?.homePrice
+    );
+    if(suggestedHomePrice && !dirty.price){
+      state.price = clamp(Math.round(suggestedHomePrice),100000,750000);
+    }
+    const savedDownPayment = firstPositiveNumber(
+      savedFinancial?.downPayment,
+      handoffInputs?.downPayment
+    );
+    const savedDownPct = num(
+      savedFinancial?.downPct ??
+      handoffInputs?.downPct,
+      NaN
+    );
+    if(!dirty.downPct){
+      if(Number.isFinite(savedDownPct) && savedDownPct >= 0){
+        state.downPct = clamp(savedDownPct,0,20);
+      }else if(savedDownPayment && state.price){
+        state.downPct = clamp((savedDownPayment / state.price) * 100,0,20);
+      }else{
+        const loan = clean(savedFinancial?.loanType || handoffInputs?.loanType || state.loanType).toUpperCase();
+        state.downPct = loan === "VA" ? 0 : state.downPct;
+      }
+    }
+    const savedCredit = firstPositiveNumber(
+      savedFinancial?.creditScore,
+      savedFinancial?.credit_score,
+      handoffInputs?.creditScore,
+      handoffInputs?.credit_score
+    );
+    if(savedCredit && !dirty.credit){
+      state.credit = clamp(Math.round(savedCredit),580,850);
+    }
+    if(savedFinancial?.loanType || handoffInputs?.loanType){
+      const rawLoan = clean(savedFinancial?.loanType || handoffInputs?.loanType).toUpperCase();
+      if(rawLoan === "VA"){
+        state.loanType = "VA";
+      }else if(rawLoan === "CONVENTIONAL"){
+        state.loanType = "CONVENTIONAL";
+      }else if(rawLoan === "FHA"){
+        state.loanType = "FHA";
+      }else if(rawLoan === "CONVENTIONAL"){
+        state.loanType = "CONVENTIONAL";
+      }else{
+        state.loanType = "VA";
+      }
+      if(els.loanType) els.loanType.value = state.loanType;
+    }
+    state.otherIncome = num(
+      savedFinancial?.otherIncome ??
+      handoffInputs?.otherIncome,
+      state.otherIncome
+    );
+    state.monthlyDebt = num(
+      savedFinancial?.monthlyDebt ??
+      handoffInputs?.monthlyDebt,
+      state.monthlyDebt
+    );
+    state.emergencyFund = num(
+      savedFinancial?.emergencyFund ??
+      handoffInputs?.emergencyFund,
+      state.emergencyFund
+    );
+    state.termYears = clamp(
+      num(savedFinancial?.termYears ?? handoffInputs?.termYears,state.termYears),
+      5,
+      40
+    );
+    state.taxAnnual = Math.max(
+      0,
+      num(savedFinancial?.propertyTaxAnnual ?? handoffInputs?.propertyTaxAnnual,state.taxAnnual)
+    );
+    state.insuranceAnnual = Math.max(
+      0,
+      num(savedFinancial?.insuranceAnnual ?? handoffInputs?.insuranceAnnual,state.insuranceAnnual)
+    );
+    state.hoaMonthly = Math.max(
+      0,
+      num(savedFinancial?.hoaMonthly ?? handoffInputs?.hoaMonthly,state.hoaMonthly)
+    );
+    state.pmiMonthly = Math.max(
+      0,
+      num(savedFinancial?.pmiMonthly ?? handoffInputs?.pmiMonthly,state.pmiMonthly)
+    );
+    render({
+      emit:opts.emit === true,
+      userInitiated:false,
+      reason:opts.reason || "hydrate-basicbrain"
+    });
+    recalcAndRender({
+      emit:opts.emit === true,
+      userInitiated:false,
+      reason:opts.reason || "hydrate-basicbrain-recalc"
+    });
+  }
+  function handleBasicBrainEvent(event){
+    const detail = event?.detail || {};
+    state.basicbrain = detail.basicbrain || detail.profile || detail.bridge || detail;
+    state.comp = extractComp(detail) || state.comp;
+    render({
+      emit:false,
+      userInitiated:false,
+      reason:"basicbrain-event"
+    });
+    recalcAndRender({
+      emit:false,
+      userInitiated:false,
+      reason:"basicbrain-event-recalc"
+    });
+  }
+  function handleMarketPanelReady(event){
+    const detail = event?.detail || {};
+    state.marketIntent = detail;
+    const suggestedHomePrice = firstPositiveNumber(
+      detail.market?.typicalBuy,
+      detail.market?.medianList,
+      detail.suggested_home_price,
+      detail.homePrice,
+      detail.targetHomePrice
+    );
+    if(suggestedHomePrice && !dirty.price){
+      state.price = clamp(Math.round(suggestedHomePrice),100000,750000);
+    }
+    render({
+      emit:false,
+      userInitiated:false,
+      reason:"market-panel-ready"
+    });
+    recalcAndRender({
+      emit:false,
+      userInitiated:false,
+      reason:"market-panel-ready-recalc"
+    });
+  }
+  function bindEvents(){
+    window.addEventListener("pcsunited:basicbrain-updated",handleBasicBrainEvent);
+    window.addEventListener("pcsunited:compensation-ready",handleBasicBrainEvent);
+    window.addEventListener("pcsunited:compensation-preview-ready",handleBasicBrainEvent);
+    window.addEventListener("pcsunited:profile-ready",handleBasicBrainEvent);
+    window.addEventListener("pcsunited:bridge-ready",handleBasicBrainEvent);
+    window.addEventListener("pcsunited:market-panel-ready",handleMarketPanelReady);
+    window.addEventListener("storage",function(event){
+      if(
+        event.key === keys.HANDOFF_KEY ||
+        event.key === keys.MARKET_INTENT_KEY ||
+        event.key === keys.FINANCIAL_KEY ||
+        event.key === keys.MORTGAGE_HANDOFF_KEY
+      ){
+        hydrateBasicBrain({
+          emit:false,
+          reason:"storage-refresh"
+        });
+      }
+    });
+  }
+  function exposePublicApi(){
+    window.PCSU_FINANCIAL_INPUT_PANEL = {
+      version:M.VERSION,
+      refresh:function(){
+        hydrateBasicBrain({
+          emit:false,
+          reason:"manual-refresh"
+        });
+      },
+      refreshAndEmit:function(){
+        state.userHasInteracted = true;
+        hydrateBasicBrain({
+          emit:true,
+          reason:"manual-refresh-emit"
+        });
+      },
+      recalc:function(){
+        return recalcAndRender({
+          emit:true,
+          userInitiated:true,
+          reason:"manual-recalc"
+        });
+      },
+      getInputs:M.core.getInputs,
+      getComp:function(){
+        return state.comp;
+      },
+      getBasicBrain:function(){
+        return state.basicbrain;
+      },
+      getMarketIntent:function(){
+        return state.marketIntent;
+      },
+      getMortgageResult:function(){
+        return state.result;
+      },
+      getState:function(){
+        return {
+          ...state
+        };
+      },
+      hasUserInteracted:function(){
+        return state.userHasInteracted;
+      },
+      markUserInteraction:function(){
+        markUserInteraction();
+        return render({
+          emit:true,
+          userInitiated:true,
+          reason:"manual-mark-user-interaction"
+        });
+      },
+      openMortgageCalculator:function(){
+        return recalcAndRender({
+          emit:true,
+          userInitiated:true,
+          reason:"manual-open-mortgage-calculator"
+        }).then(function(data){
+          openMortgageCalculator(data);
+          return data;
+        });
+      }
+    };
+  }
+  function boot(){
+    if(root.dataset.mounted === "true") return;
+    root.dataset.mounted = "true";
+    bindInputs();
+    bindEvents();
+    exposePublicApi();
+    hydrateBasicBrain({
+      emit:false,
+      reason:"initial-boot"
+    });
+    setTimeout(function(){
+      hydrateBasicBrain({
+        emit:false,
+        reason:"delayed-boot-350"
+      });
+    },350);
+    setTimeout(function(){
+      hydrateBasicBrain({
+        emit:false,
+        reason:"delayed-boot-1200"
+      });
+    },1200);
+  }
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded",boot,{ once:true });
+  }else{
+    boot();
+  }
 })();
 </script>
-                        </div>
                       </div>
                     </div>
                   </div>
@@ -7425,7 +9009,7 @@
                 <div>Oops! Something went wrong while submitting the form.</div>
               </div>
             </div>
-          </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
+          </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="100vw" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
         <div data-w-id="ee73203a-eb4c-0a70-cb0c-c0e63e1d2416" class="footer-flex-wrapper">
           <div class="w-layout-grid footer-links-wrapper">

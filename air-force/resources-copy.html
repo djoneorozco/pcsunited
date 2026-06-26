@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Jun 23 2026 22:13:12 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Jun 26 2026 16:21:44 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6a2e34b6b835d8b66972faff" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -1025,7 +1025,7 @@
           <div class="w-layout-cell cell-6">
             <div class="code-embed-51 w-embed"><!--  ============================================================
   PCSUNITED • BASICBRAIN + AMY GUIDANCE COMBINED SHELL
-  v6.0.0 • BASICBRAIN HANDOFF TO AMY PANEL
+  v6.1.6 • SCROLL-SAFE PASSIVE EVENTS + AMY-ONLY BASE DEMO HANDOFF
 ===============================================================  -->
               <div id="pcsu-brain-amy-shell" style="all:initial;">
                 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1054,9 +1054,6 @@
   margin:0 auto;
   color:var(--ink);
 }
-/* ============================================================
-  SHARED PANEL
-=============================================================== */
 .pcsu-panel{
   position:relative;
   overflow:hidden;
@@ -1096,9 +1093,6 @@
     linear-gradient(90deg, rgba(0,0,0,.10), transparent 44%, rgba(0,0,0,.10)),
     linear-gradient(180deg, transparent 52%, rgba(0,0,0,.14));
 }
-/* ============================================================
-  STATE SWITCHING
-=============================================================== */
 #bb-stage,
 #ag-stage{
   transition:opacity .24s ease, transform .24s ease;
@@ -1112,9 +1106,6 @@
 #pcsu-brain-amy-shell.is-guidance-ready #ag-stage{
   display:block;
 }
-/* ============================================================
-  BASICBRAIN
-=============================================================== */
 #bb-stage{
   padding:22px;
 }
@@ -1193,7 +1184,6 @@
   font-weight:500;
   color:#dcd4c8;
 }
-/* MODE TOGGLE */
 .bb-mode-control{
   position:relative;
   display:flex;
@@ -1293,7 +1283,6 @@
   background:linear-gradient(180deg,var(--gold2),var(--gold));
   box-shadow:0 0 12px rgba(216,184,122,.45);
 }
-/* FORM */
 .bb-form{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -1437,9 +1426,6 @@
   color:var(--gold2);
   flex:0 0 auto;
 }
-/* ============================================================
-  AMY GUIDANCE PANEL
-=============================================================== */
 #ag-stage{
   position:relative;
   z-index:2;
@@ -1636,13 +1622,12 @@
 }
 </style>
                 <div id="pcsu-combined-panel" class="pcsu-panel">
-                  <!--  BASICBRAIN STAGE  -->
                   <section id="bb-stage">
                     <div class="bb-topbar">
                       <div class="bb-heading-block">
                         <div class="bb-kicker">
                           <span class="bb-dot"></span>
-                          BasicBrain Input
+                          Powered by TheWing.ai
                         </div>
                         <h3 class="bb-title" id="bb-title-text">
                           Start Your PCS Snapshot
@@ -1722,19 +1707,18 @@
                       Private. Secure. No data stored.
                     </div>
                   </section>
-                  <!--  AMY GUIDANCE STAGE  -->
                   <section id="ag-stage">
                     <div class="ag-live">
                       <div class="ag-top">
                         <div class="ag-avatar">
-                          <img src="../images/AmyProfilePic.jpg" alt="Amy">
+                          <img src="../images/Face.jpg" alt="Amy">
                         </div>
                         <div class="ag-head">
                           <h3 class="ag-title" id="ag-greeting">
                             Amy • PCS Guidance
                           </h3>
                           <p class="ag-sub" id="ag-greeting-sub">
-                            Let’s explore your PCSUnited guidance flow and build a clearer PCS strategy together.
+                            I'm Amy, your A.I Concierge. Let's explore your PCSUnited guidance flow and build a clearer PCS strategy together.
                           </p>
                         </div>
                       </div>
@@ -1801,19 +1785,92 @@
             </div>
             <div class="code-embed-51 w-embed w-script"><!--  ============================================================
   PCSUNITED • BASICBRAIN + AMY GUIDANCE COMBINED JS
-  v6.1.3 • RETIREMENT_VA + BASE DEMO HANDOFF FIX
+  v6.1.6 • SCROLL-SAFE PASSIVE EVENTS + AMY-ONLY BASE DEMO HANDOFF
 ===============================================================  -->
               <script>
 (function(){
   "use strict";
-  const VERSION = "6.1.3";
+  const VERSION = "6.1.6";
+  const MOUNT_KEY = "PCSU_BASICBRAIN_V615_MOUNTED";
   const API_BASE = "https://thewing.netlify.app/api";
   const BRAIN_ENDPOINT = API_BASE + "/opensource-brain";
   const HANDOFF_KEY = "pcsunited.basicbrain.handoff.v1";
+  if(window[MOUNT_KEY]){
+    console.warn("[PCSU BasicBrain] Duplicate mount blocked:", VERSION);
+    return;
+  }
+  window[MOUNT_KEY] = true;
   const root = document.getElementById("pcsu-brain-amy-shell");
   if(!root) return;
-  if(root.dataset.mounted === "true") return;
+  if(root.dataset.mounted === "true"){
+    console.warn("[PCSU BasicBrain] Shell already marked mounted.");
+    return;
+  }
   root.dataset.mounted = "true";
+  const SCROLL_DEBUG =
+    window.PCSU_SCROLL_DEBUG === true ||
+    /(?:\?|&)pcsuScrollDebug=1(?:&|$)/.test(window.location.search || "");
+  function logScrollDebug(tag, extra){
+    if(!SCROLL_DEBUG) return;
+    console.log("[PCSU Scroll Debug · BasicBrain]", {
+      tag,
+      scrollX:window.scrollX || window.pageXOffset || 0,
+      scrollY:window.scrollY || window.pageYOffset || 0,
+      version:VERSION,
+      ...(extra || {})
+    });
+  }
+  function readScroll(){
+    return {
+      x:window.scrollX || window.pageXOffset || 0,
+      y:window.scrollY || window.pageYOffset || 0
+    };
+  }
+  function restoreScroll(target, label){
+    const current = readScroll();
+    if(current.x !== target.x || current.y !== target.y){
+      logScrollDebug("restore-scroll", {
+        label:label || "unspecified",
+        fromY:current.y,
+        toY:target.y,
+        deltaY:current.y - target.y
+      });
+      window.scrollTo(target.x, target.y);
+    }
+  }
+  function preserveScroll(callback, allowNavigate){
+    const start = readScroll();
+    logScrollDebug("preserveScroll:before", {
+      allowNavigate:!!allowNavigate
+    });
+    try{
+      callback();
+    }catch(_){}
+    if(allowNavigate === true){
+      logScrollDebug("preserveScroll:skipped-restore", {
+        allowNavigate:true
+      });
+      return;
+    }
+    [0,16,40,80,120,200,320,500,800,1200].forEach(function(ms){
+      setTimeout(function(){
+        restoreScroll(start, "preserveScroll+" + ms + "ms");
+      }, ms);
+    });
+  }
+  function withScrollLock(fn, label){
+    const start = readScroll();
+    logScrollDebug((label || "scroll-lock") + ":before", start);
+    preserveScroll(function(){
+      fn();
+    }, false);
+    setTimeout(function(){
+      const end = readScroll();
+      logScrollDebug((label || "scroll-lock") + ":after", {
+        deltaY:end.y - start.y
+      });
+    }, 900);
+  }
   const els = {
     titleText:document.getElementById("bb-title-text"),
     subtitle:document.getElementById("bb-subtitle"),
@@ -1857,9 +1914,36 @@
     });
   }
   function dispatchSafe(name,detail){
-    try{
-      window.dispatchEvent(new CustomEvent(name,{detail:detail || {}}));
-    }catch(_){}
+    const payload =
+      detail && typeof detail === "object"
+        ? detail
+        : {};
+    const allowNavigate =
+      payload.autoNavigate === true;
+    const before = readScroll();
+    preserveScroll(function(){
+      window.dispatchEvent(
+        new CustomEvent(name,{
+          detail:payload
+        })
+      );
+      logScrollDebug("dispatch:" + name, {
+        autoNavigate:payload.autoNavigate === true,
+        source:payload.source || null,
+        deltaY:(readScroll().y - before.y)
+      });
+    },allowNavigate);
+  }
+  function postMessageSafe(payload){
+    preserveScroll(function(){
+      window.postMessage(
+        payload || {},
+        "*"
+      );
+      logScrollDebug("postMessage:" + (payload?.type || "unknown"), {
+        autoNavigate:payload?.autoNavigate === true
+      });
+    },false);
   }
   function setStatus(text,show){
     if(!els.status) return;
@@ -2213,7 +2297,7 @@
         (childrenInSchoolOver18 || 0) +
         (dependentParents || 0);
       return {
-        source:"pcsunited.basicbrain.combined.v6.1.3.veteran",
+        source:"pcsunited.basicbrain.combined.v6.1.6.veteran",
         version:VERSION,
         stored:false,
         updated_at:new Date().toISOString(),
@@ -2275,7 +2359,7 @@
     const base = clean(els.base ? els.base.value : "");
     const meta = BASE_META[base] || {};
     return {
-      source:"pcsunited.basicbrain.combined.v6.1.3.active_duty",
+      source:"pcsunited.basicbrain.combined.v6.1.6.active_duty",
       version:VERSION,
       stored:false,
       updated_at:new Date().toISOString(),
@@ -2380,7 +2464,7 @@
       cityKey:state.cityKey,
       market:state.market,
       state:state.state,
-      source:"pcsunited.basicbrain.combined.v6.1.3"
+      source:"pcsunited.basicbrain.combined.v6.1.6"
     };
   }
   function buildVeteranApiInput(state){
@@ -2404,7 +2488,7 @@
       children_in_school_over_18:state.childrenInSchoolOver18 || 0,
       dependentParents:state.dependentParents || 0,
       dependent_parents:state.dependentParents || 0,
-      source:"pcsunited.basicbrain.combined.v6.1.3"
+      source:"pcsunited.basicbrain.combined.v6.1.6"
     };
   }
   function extractPayload(data){
@@ -2583,7 +2667,7 @@
   }
   function buildSelectedBase(state){
     return {
-      source:"pcsunited.basicbrain.combined.v6.1.3",
+      source:"pcsunited.basicbrain.combined.v6.1.6",
       stored:false,
       base:state.base || "",
       label:state.base || "",
@@ -2608,7 +2692,7 @@
       localStorage.setItem(
         HANDOFF_KEY,
         JSON.stringify({
-          source:"pcsunited.basicbrain.combined.v6.1.3",
+          source:"pcsunited.basicbrain.combined.v6.1.6",
           version:VERSION,
           mode,
           profile,
@@ -2657,24 +2741,37 @@
       profile,
       bridge,
       selectedBase,
-      compensation:null
+      compensation:null,
+      autoNavigate:false
     });
-    dispatchSafe("pcsunited:profile-ready",profile);
-    dispatchSafe("pcsunited:bridge-ready",bridge);
+    dispatchSafe("pcsunited:profile-ready",{
+      ...profile,
+      autoNavigate:false
+    });
+    dispatchSafe("pcsunited:bridge-ready",{
+      ...bridge,
+      autoNavigate:false
+    });
     if(mode === "active_duty"){
-      dispatchSafe("pcsu:base-selected",selectedBase);
-    }
-    try{
-      window.postMessage({
-        type:"pcsunited-basicbrain",
-        source:"pcsunited.basicbrain.combined.v6.1.3",
-        basicbrain,
+      dispatchSafe("pcsunited:base-preview-ready",{
+        selectedBase,
         profile,
         bridge,
-        selectedBase,
-        compensation:null
-      },"*");
-    }catch(_){}
+        compensation:null,
+        autoNavigate:false,
+        source:"basicbrain-preview"
+      });
+    }
+    postMessageSafe({
+      type:"pcsunited-basicbrain",
+      source:"pcsunited.basicbrain.combined.v6.1.6",
+      basicbrain,
+      profile,
+      bridge,
+      selectedBase,
+      compensation:null,
+      autoNavigate:false
+    });
   }
   function accuracyNoteText(comp){
     if(!comp || !comp.compensationAccuracy) return "";
@@ -2694,8 +2791,8 @@
     }
     if(els.agGreetingSub){
       els.agGreetingSub.textContent = veteran
-        ? (comp.headline || "Thank you for your service. Let’s explore your PCSUnited guidance flow and build a clearer strategy together.")
-        : "Let’s explore your PCSUnited guidance flow and build a clearer PCS strategy together.";
+        ? (comp.headline || "Thank you for your service. Let's explore your PCSUnited guidance flow and build a clearer strategy together.")
+        : "Let's explore your PCSUnited guidance flow and build a clearer PCS strategy together.";
     }
     if(veteran){
       if(els.agBasePayLabel) els.agBasePayLabel.textContent = "Retirement";
@@ -2715,7 +2812,9 @@
       els.agAccuracyNote.textContent = note;
       els.agAccuracyNote.style.display = note ? "block" : "none";
     }
-    root.classList.add("is-guidance-ready");
+    preserveScroll(function(){
+      root.classList.add("is-guidance-ready");
+    }, false);
   }
   function emitComp(state,comp){
     const selectedBase = buildSelectedBase(state);
@@ -2757,17 +2856,31 @@
       profile,
       bridge,
       selectedBase,
-      compensation:comp || null
+      compensation:comp || null,
+      autoNavigate:false
     });
-    dispatchSafe("pcsunited:profile-ready",profile);
-    dispatchSafe("pcsunited:bridge-ready",bridge);
+    dispatchSafe("pcsunited:profile-ready",{
+      ...profile,
+      autoNavigate:false
+    });
+    dispatchSafe("pcsunited:bridge-ready",{
+      ...bridge,
+      autoNavigate:false
+    });
     if(mode === "active_duty"){
-      dispatchSafe("pcsu:base-selected",selectedBase);
+      dispatchSafe("pcsunited:base-preview-ready",{
+        selectedBase,
+        profile,
+        bridge,
+        compensation:comp || null,
+        autoNavigate:false,
+        source:"basicbrain-comp-preview"
+      });
     }
     if(comp){
       if(mode === "veteran"){
         dispatchSafe("pcsunited:compensation-ready",{
-          source:"pcsunited.basicbrain.combined.v6.1.3.veteran",
+          source:"pcsunited.basicbrain.combined.v6.1.6.veteran",
           mode:"veteran",
           profile,
           bridge,
@@ -2785,11 +2898,12 @@
           compensationAccuracy:comp.compensationAccuracy,
           retirementBaseMethod:comp.retirementBaseMethod,
           headline:comp.headline,
+          autoNavigate:false,
           updated_at:new Date().toISOString()
         });
       }else{
         dispatchSafe("pcsunited:compensation-ready",{
-          source:"pcsunited.basicbrain.combined.v6.1.3.active_duty",
+          source:"pcsunited.basicbrain.combined.v6.1.6.active_duty",
           mode:"active_duty",
           profile,
           bridge,
@@ -2802,29 +2916,31 @@
           total:comp.total,
           totalMonthly:comp.total,
           total_monthly:comp.total,
+          autoNavigate:false,
           updated_at:new Date().toISOString()
         });
       }
       paintAmyGuidance(state,comp);
     }
-    try{
-      window.postMessage({
-        type:"pcsunited-basicbrain",
-        source:"pcsunited.basicbrain.combined.v6.1.3",
-        basicbrain,
-        profile,
-        bridge,
-        selectedBase,
-        compensation:comp || null
-      },"*");
-    }catch(_){}
+    postMessageSafe({
+      type:"pcsunited-basicbrain",
+      source:"pcsunited.basicbrain.combined.v6.1.6",
+      basicbrain,
+      profile,
+      bridge,
+      selectedBase,
+      compensation:comp || null,
+      autoNavigate:false
+    });
     lastGoodState = state;
     lastGoodComp = comp;
   }
   async function runFlow(){
     const seq = ++requestSeq;
     const state = getState();
-    root.classList.remove("is-guidance-ready");
+    preserveScroll(function(){
+      root.classList.remove("is-guidance-ready");
+    }, false);
     emitProfileOnly({ save:true });
     if(!isComplete(state)){
       setStatus(
@@ -2865,9 +2981,54 @@
     emitComp(state,comp);
     setStatus("",false);
   }
-  function scheduleRun(){
+  function scheduleRun(event){
+    const isBaseChange =
+      !!(event && event.target && els.base && event.target === els.base);
     window.clearTimeout(runTimer);
-    runTimer = window.setTimeout(runFlow,350);
+    if(isBaseChange){
+      logScrollDebug("bb-base-change:scheduled", {
+        base:els.base ? els.base.value : ""
+      });
+      runTimer = window.setTimeout(function(){
+        withScrollLock(runFlow, "bb-base-change");
+      }, 350);
+      return;
+    }
+    runTimer = window.setTimeout(runFlow, 350);
+  }
+  function openBaseDemoFromAmy(){
+    const current = window.PCSU_BASICBRAIN_CURRENT || window.PCSU_BASICBRAIN_TEMP || null;
+    if(!current || !current.selectedBase || !current.selectedBase.base){
+      setStatus("Select a gaining base first, then open Base Demo.",true);
+      return;
+    }
+    dispatchSafe("pcsu:base-selected",{
+      ...current.selectedBase,
+      profile:current.profile || null,
+      bridge:current.bridge || null,
+      compensation:current.compensation || current.calculated_comp || null,
+      autoNavigate:true,
+      source:"amy-guidance-base-demo-click",
+      updated_at:new Date().toISOString()
+    });
+  }
+  function enableAmyFlowClicks(){
+    const cards = root.querySelectorAll(".ag-flow-card");
+    if(!cards || !cards.length) return;
+    const baseDemoCard = cards[0];
+    if(baseDemoCard){
+      baseDemoCard.style.cursor = "pointer";
+      baseDemoCard.setAttribute("role","button");
+      baseDemoCard.setAttribute("tabindex","0");
+      baseDemoCard.setAttribute("aria-label","Open Base Demographics");
+      baseDemoCard.addEventListener("click",openBaseDemoFromAmy);
+      baseDemoCard.addEventListener("keydown",function(event){
+        if(event.key === "Enter" || event.key === " "){
+          event.preventDefault();
+          openBaseDemoFromAmy();
+        }
+      });
+    }
   }
   ensureShellCompatibility();
   populateSelects();
@@ -2882,6 +3043,7 @@
       setMode(mode === "active_duty" ? "veteran" : "active_duty");
     });
   }
+  enableAmyFlowClicks();
   window.PCSU_BASICBRAIN = {
     version:VERSION,
     storage:"memory_only_with_page_handoff",
@@ -2902,6 +3064,9 @@
         paintAmyGuidance(lastGoodState,lastGoodComp);
       }
     },
+    openBaseDemo:function(){
+      openBaseDemoFromAmy();
+    },
     getLastGood:function(){
       return {
         mode,
@@ -2913,7 +3078,8 @@
       clearValues();
       clearHandoff();
       emitProfileOnly({ save:false });
-    }
+    },
+    logScrollDebug:logScrollDebug
   };
   setMode("active_duty");
 })();
@@ -2969,2010 +3135,10 @@
           <div fade-in="true" class="slideshow-wrapper">
             <div data-delay="3000" data-animation="over" class="slider-3 w-slider" data-autoplay="true" data-easing="ease-in-out-circ" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="10" data-duration="700" data-infinite="true">
               <div class="mask-3 w-slider-mask">
-                <div class="slide-4 w-slide">
-                  <div class="interactive-base-map w-embed w-script"><!--  =========================================================
-  PCSUnited • Real Interactive U.S. Base Demographics Map
-  v3.0.4 • BASICBRAIN STATE + BASE + CITY MARKER PRESELECT • FULL CODE
-  UPDATE v3.0.4
-  - Listens for BasicBrain / selected base events
-  - Auto-selects state from BasicBrain gaining base
-  - Highlights the matching base card from BasicBrain
-  - Adds city/base marker dot on the map
-  - Keeps Texas default if no BasicBrain state/base exists
-  - Same map opening flow
-=========================================================  -->
-                    <div id="pcsu-real-us-map">
-                      <style>
-    #pcsu-real-us-map,
-    #pcsu-real-us-map *{
-      box-sizing:border-box;
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    }
-    #pcsu-real-us-map{
-      width:100%;
-      color:#e9ecff;
-    }
-    #pcsu-map-card{
-      position:relative;
-      width:100%;
-      padding:34px;
-      border-radius:34px;
-      overflow:hidden;
-      background:
-        radial-gradient(circle at top left, rgba(142,243,197,.14), transparent 28%),
-        radial-gradient(circle at bottom right, rgba(106,167,255,.14), transparent 30%),
-        linear-gradient(
-          145deg,
-          rgba(12,16,30,.92),
-          rgba(9,12,24,.96)
-        );
-      border:1px solid rgba(255,255,255,.10);
-      backdrop-filter:blur(20px);
-      -webkit-backdrop-filter:blur(20px);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.05),
-        inset 0 -1px 0 rgba(255,255,255,.02),
-        0 30px 80px rgba(0,0,0,.42);
-    }
-    #pcsu-map-card::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.05),
-          transparent 24%
-        );
-      pointer-events:none;
-    }
-    #pcsu-map-eyebrow{
-      display:inline-flex;
-      align-items:center;
-      padding:8px 14px;
-      border-radius:999px;
-      border:1px solid rgba(142,243,197,.14);
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.06),
-          rgba(255,255,255,.03)
-        );
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      color:#8ef3c5;
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      margin-bottom:14px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.08),
-        0 12px 26px rgba(0,0,0,.14);
-    }
-    #pcsu-map-title{
-      font-size:clamp(34px,4vw,58px);
-      line-height:.96;
-      font-weight:900;
-      letter-spacing:-.065em;
-      margin:0;
-      color:#ffffff;
-      text-shadow:
-        0 2px 18px rgba(0,0,0,.20);
-    }
-    #pcsu-map-copy{
-      max-width:820px;
-      margin-top:18px;
-      margin-bottom:28px;
-      color:#aeb8db;
-      font-size:16px;
-      line-height:1.75;
-      font-weight:500;
-    }
-    #pcsu-map-layout{
-      display:grid;
-      grid-template-columns:
-        minmax(0,1.5fr)
-        minmax(320px,.58fr);
-      gap:24px;
-      align-items:stretch;
-    }
-    #pcsu-map-stage{
-      position:relative;
-      min-height:540px;
-      padding:20px;
-      border-radius:30px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.065),
-          rgba(255,255,255,.035)
-        );
-      border:1px solid rgba(255,255,255,.10);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.06),
-        inset 0 -1px 0 rgba(255,255,255,.02),
-        0 24px 54px rgba(0,0,0,.20);
-    }
-    #pcsu-map-stage::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.04),
-          transparent 34%
-        );
-      pointer-events:none;
-    }
-    #pcsu-us-svg{
-      width:100%;
-      height:100%;
-      min-height:500px;
-      display:block;
-    }
-    .pcsu-state{
-      fill:#dfe6f2;
-      stroke:#18233b;
-      stroke-width:1.15;
-      cursor:pointer;
-      transition:
-        fill .18s ease,
-        transform .18s ease,
-        filter .18s ease,
-        opacity .18s ease;
-    }
-    .pcsu-state.has-bases{
-      fill:#edf2fb;
-    }
-    .pcsu-state:hover{
-      fill:#8ef3c5;
-      filter:
-        drop-shadow(0 0 12px rgba(142,243,197,.55));
-      opacity:1;
-    }
-    .pcsu-state.is-active{
-      fill:#8ef3c5;
-      filter:
-        drop-shadow(0 0 18px rgba(142,243,197,.75));
-    }
-    .pcsu-state-label{
-      fill:#152038;
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.02em;
-      pointer-events:none;
-      text-anchor:middle;
-    }
-    #pcsu-base-marker-layer{
-      pointer-events:none;
-    }
-    .pcsu-base-marker-ring{
-      fill:none;
-      stroke:#8ef3c5;
-      stroke-width:2;
-      opacity:.72;
-      filter:drop-shadow(0 0 10px rgba(142,243,197,.85));
-      animation:pcsuBasePulse 1.9s ease-out infinite;
-    }
-    .pcsu-base-marker-dot{
-      fill:#8ef3c5;
-      stroke:#ffffff;
-      stroke-width:1.4;
-      filter:
-        drop-shadow(0 0 10px rgba(142,243,197,.95))
-        drop-shadow(0 0 20px rgba(142,243,197,.55));
-    }
-    .pcsu-base-marker-pin{
-      fill:#f6d06d;
-      stroke:#ffffff;
-      stroke-width:1.1;
-      filter:
-        drop-shadow(0 0 10px rgba(246,208,109,.75))
-        drop-shadow(0 0 18px rgba(142,243,197,.45));
-    }
-    .pcsu-base-marker-label-bg{
-      fill:rgba(7,12,24,.92);
-      stroke:rgba(142,243,197,.32);
-      stroke-width:1;
-      rx:10;
-      ry:10;
-      filter:drop-shadow(0 10px 22px rgba(0,0,0,.35));
-    }
-    .pcsu-base-marker-label{
-      fill:#ffffff;
-      font-size:11px;
-      font-weight:900;
-      letter-spacing:-.02em;
-    }
-    .pcsu-base-marker-sub{
-      fill:#a8b0d6;
-      font-size:9px;
-      font-weight:800;
-    }
-    @keyframes pcsuBasePulse{
-      0%{
-        r:5;
-        opacity:.9;
-      }
-      70%{
-        r:20;
-        opacity:0;
-      }
-      100%{
-        r:22;
-        opacity:0;
-      }
-    }
-    #pcsu-base-panel{
-      position:relative;
-      padding:26px;
-      border-radius:30px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.07),
-          rgba(255,255,255,.04)
-        );
-      border:1px solid rgba(255,255,255,.10);
-      backdrop-filter:blur(14px);
-      -webkit-backdrop-filter:blur(14px);
-      min-height:540px;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.06),
-        inset 0 -1px 0 rgba(255,255,255,.02),
-        0 24px 54px rgba(0,0,0,.20);
-    }
-    #pcsu-base-panel::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      border-radius:inherit;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.04),
-          transparent 36%
-        );
-      pointer-events:none;
-    }
-    #pcsu-panel-kicker{
-      display:inline-flex;
-      align-items:center;
-      padding:8px 13px;
-      border-radius:999px;
-      border:1px solid rgba(106,167,255,.18);
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.05),
-          rgba(255,255,255,.03)
-        );
-      color:#6aa7ff;
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.18em;
-      text-transform:uppercase;
-      margin-bottom:14px;
-    }
-    #pcsu-selected-state{
-      font-size:34px;
-      line-height:1;
-      font-weight:900;
-      letter-spacing:-.05em;
-      color:#ffffff;
-      margin-bottom:12px;
-      text-shadow:
-        0 2px 14px rgba(0,0,0,.16);
-    }
-    #pcsu-panel-copy{
-      color:#a8b0d6;
-      font-size:15px;
-      line-height:1.7;
-      font-weight:500;
-      margin-bottom:22px;
-    }
-    #pcsu-base-list{
-      display:grid;
-      gap:12px;
-      max-height:620px;
-      overflow:auto;
-      padding-right:4px;
-    }
-    #pcsu-base-list::-webkit-scrollbar{
-      width:8px;
-    }
-    #pcsu-base-list::-webkit-scrollbar-thumb{
-      background:rgba(255,255,255,.12);
-      border-radius:999px;
-    }
-    .pcsu-base-btn{
-      appearance:none;
-      position:relative;
-      width:100%;
-      border:1px solid rgba(255,255,255,.10);
-      border-radius:22px;
-      padding:18px 18px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.06),
-          rgba(255,255,255,.035)
-        );
-      backdrop-filter:blur(10px);
-      -webkit-backdrop-filter:blur(10px);
-      color:#e9ecff;
-      text-align:left;
-      cursor:pointer;
-      overflow:hidden;
-      transition:
-        transform .18s ease,
-        border-color .18s ease,
-        background .18s ease,
-        box-shadow .18s ease;
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.06),
-        0 18px 34px rgba(0,0,0,.12);
-    }
-    .pcsu-base-btn::before{
-      content:"";
-      position:absolute;
-      inset:0;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.04),
-          transparent 42%
-        );
-      pointer-events:none;
-    }
-    .pcsu-base-btn:hover{
-      transform:translateY(-2px);
-      border-color:rgba(142,243,197,.34);
-      background:
-        linear-gradient(
-          180deg,
-          rgba(142,243,197,.10),
-          rgba(106,167,255,.06)
-        );
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.08),
-        0 24px 42px rgba(0,0,0,.18);
-    }
-    .pcsu-base-btn.is-selected{
-      border-color:rgba(142,243,197,.62);
-      background:
-        linear-gradient(
-          180deg,
-          rgba(142,243,197,.16),
-          rgba(106,167,255,.08)
-        );
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.10),
-        0 0 0 1px rgba(142,243,197,.12),
-        0 24px 44px rgba(0,0,0,.22),
-        0 0 28px rgba(142,243,197,.20);
-    }
-    .pcsu-base-btn.is-selected::after{
-      content:"Selected from BasicBrain";
-      position:absolute;
-      right:14px;
-      top:14px;
-      padding:5px 8px;
-      border-radius:999px;
-      background:rgba(142,243,197,.12);
-      border:1px solid rgba(142,243,197,.22);
-      color:#8ef3c5;
-      font-size:8px;
-      font-weight:900;
-      letter-spacing:.14em;
-      text-transform:uppercase;
-    }
-    .pcsu-base-btn.is-selected .pcsu-base-name{
-      color:#8ef3c5;
-    }
-    .pcsu-base-name{
-      display:block;
-      font-size:16px;
-      line-height:1.2;
-      font-weight:900;
-      letter-spacing:-.02em;
-      color:#ffffff;
-    }
-    .pcsu-base-meta{
-      display:block;
-      margin-top:7px;
-      font-size:12px;
-      line-height:1.6;
-      font-weight:600;
-      color:#a8b0d6;
-    }
-    @media(max-width:980px){
-      #pcsu-map-layout{
-        grid-template-columns:1fr;
-      }
-      #pcsu-map-stage,
-      #pcsu-base-panel{
-        min-height:auto;
-      }
-      #pcsu-us-svg{
-        min-height:400px;
-      }
-    }
-    @media(max-width:640px){
-      #pcsu-map-card{
-        padding:22px;
-        border-radius:28px;
-      }
-      #pcsu-map-title{
-        font-size:36px;
-      }
-      #pcsu-map-copy{
-        font-size:14px;
-        line-height:1.7;
-      }
-      #pcsu-map-stage,
-      #pcsu-base-panel{
-        padding:18px;
-        border-radius:24px;
-      }
-      #pcsu-selected-state{
-        font-size:28px;
-      }
-      .pcsu-base-btn{
-        border-radius:18px;
-      }
-      .pcsu-base-btn.is-selected::after{
-        position:relative;
-        display:inline-flex;
-        right:auto;
-        top:auto;
-        margin-top:10px;
-      }
-    }
-  </style>
-                      <div id="pcsu-map-card">
-                        <div id="pcsu-map-eyebrow">
-                          Base Demographics Explorer
-                        </div>
-                        <h2 id="pcsu-map-title">
-                          Search Air Force Bases by State
-                        </h2>
-                        <div id="pcsu-map-copy">
-                          Hover over a state to explore available PCSUnited base markets. Click a state to view supported Air Force bases and open the matching Base Demographics profile.
-                        </div>
-                        <div id="pcsu-map-layout">
-                          <div id="pcsu-map-stage">
-                            <svg id="pcsu-us-svg" viewbox="0 0 960 600" preserveaspectratio="xMidYMid meet"></svg>
-                          </div>
-                          <aside id="pcsu-base-panel">
-                            <div id="pcsu-panel-kicker">
-                              Selected State
-                            </div>
-                            <div id="pcsu-selected-state">
-                              Choose a state
-                            </div>
-                            <div id="pcsu-panel-copy">
-                              Click a state on the map to view available profiles.
-                            </div>
-                            <div id="pcsu-base-list"></div>
-                          </aside>
-                        </div>
-                      </div>
-                      <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
-                      <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
-                      <script>
-    (() => {
-      "use strict";
-      if(window.PCSU_US_BASE_MAP?.__mounted_v304) return;
-      window.PCSU_US_BASE_MAP = {
-        __mounted_v304:true
-      };
-      const STORAGE_KEY =
-        "pcsunited.selectedBase.v1";
-      const JSON_URL_KEY =
-        "pcsunited.selectedCityJsonUrl.v1";
-      const LIVE_BASE_DEMOGRAPHICS_PATH =
-        "/air-force/base-demographics-air-force";
-      const JSON_BASE_URL =
-        window.PCSU_CITIES_BASE_URL ||
-        "https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/";
-      const DEFAULT_STATE =
-        "TX";
-      const FIPS_TO_ABBR = {
-        "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC",
-        "12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY",
-        "22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN","28":"MS","29":"MO","30":"MT",
-        "31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH",
-        "40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN","48":"TX","49":"UT",
-        "50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY"
-      };
-      const STATE_NAMES = {
-        AL:"Alabama", AK:"Alaska", AZ:"Arizona", CA:"California", CO:"Colorado",
-        DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho",
-        IL:"Illinois", KS:"Kansas", LA:"Louisiana", MA:"Massachusetts", MD:"Maryland",
-        MS:"Mississippi", MT:"Montana", NC:"North Carolina", ND:"North Dakota",
-        NE:"Nebraska", NJ:"New Jersey", NM:"New Mexico", NV:"Nevada", OH:"Ohio",
-        OK:"Oklahoma", SC:"South Carolina", SD:"South Dakota", TX:"Texas",
-        UT:"Utah", VA:"Virginia", WA:"Washington", WY:"Wyoming"
-      };
-      const BASE_REGISTRY = {
-        AK:[
-          ["Joint Base Elmendorf-Richardson","Elmendorf.json","Anchorage, AK",61.2500,-149.8065],
-          ["Eielson AFB","Eielson.json","Fairbanks, AK",64.6657,-147.1015]
-        ],
-        AL:[
-          ["Maxwell AFB","Maxwell.json","Montgomery, AL",32.3829,-86.3658]
-        ],
-        AZ:[
-          ["Davis-Monthan AFB","Davis-Monthan.json","Tucson, AZ",32.1665,-110.8832],
-          ["Luke AFB","Luke.json","Glendale, AZ",33.5350,-112.3832]
-        ],
-        CA:[
-          ["Beale AFB","Beale.json","Marysville, CA",39.1361,-121.4366],
-          ["Edwards AFB","Edwards.json","Edwards, CA",34.9054,-117.8837],
-          ["Los Angeles AFB","Los-Angeles.json","El Segundo, CA",33.9189,-118.3807],
-          ["Travis AFB","Travis.json","Fairfield, CA",38.2627,-121.9275],
-          ["Vandenberg SFB","Vandenberg.json","Lompoc, CA",34.7420,-120.5724]
-        ],
-        CO:[
-          ["Peterson SFB","Peterson.json","Colorado Springs, CO",38.8236,-104.7006],
-          ["Schriever SFB","Schriever.json","Colorado Springs, CO",38.8030,-104.5255],
-          ["U.S. Air Force Academy","Air-Force-Academy.json","Colorado Springs, CO",39.0088,-104.8911]
-        ],
-        DE:[
-          ["Dover AFB","Dover.json","Dover, DE",39.1295,-75.4660]
-        ],
-        FL:[
-          ["Eglin AFB","Eglin.json","Valparaiso, FL",30.4832,-86.5254],
-          ["Hurlburt Field","Hurlburt.json","Mary Esther, FL",30.4278,-86.6893],
-          ["MacDill AFB","MacDill.json","Tampa, FL",27.8493,-82.5212],
-          ["Patrick SFB","Patrick.json","Cocoa Beach, FL",28.2349,-80.6101],
-          ["Tyndall AFB","Tyndall.json","Panama City, FL",30.0696,-85.5754]
-        ],
-        GA:[
-          ["Moody AFB","Moody.json","Valdosta, GA",30.9678,-83.1930],
-          ["Robins AFB","Robins.json","Warner Robins, GA",32.6401,-83.5919]
-        ],
-        HI:[
-          ["Joint Base Pearl Harbor-Hickam","Hickam.json","Honolulu, HI",21.3187,-157.9224]
-        ],
-        ID:[
-          ["Mountain Home AFB","Mountain-Home.json","Mountain Home, ID",43.0436,-115.8724]
-        ],
-        IL:[
-          ["Scott AFB","Scott.json","Belleville, IL",38.5452,-89.8352]
-        ],
-        KS:[
-          ["McConnell AFB","McConnell.json","Wichita, KS",37.6231,-97.2672]
-        ],
-        LA:[
-          ["Barksdale AFB","Barksdale.json","Bossier City, LA",32.5018,-93.6627]
-        ],
-        MA:[
-          ["Hanscom AFB","Hanscom.json","Bedford, MA",42.4699,-71.2890]
-        ],
-        MD:[
-          ["Joint Base Andrews","Andrews.json","Camp Springs, MD",38.8108,-76.8669]
-        ],
-        MS:[
-          ["Columbus AFB","Columbus.json","Columbus, MS",33.6438,-88.4438],
-          ["Keesler AFB","Keesler.json","Biloxi, MS",30.4104,-88.9244]
-        ],
-        MT:[
-          ["Malmstrom AFB","Malmstrom.json","Great Falls, MT",47.5053,-111.1873]
-        ],
-        NC:[
-          ["Seymour Johnson AFB","Seymour-Johnson.json","Goldsboro, NC",35.3394,-77.9606]
-        ],
-        ND:[
-          ["Grand Forks AFB","Grand-Forks.json","Grand Forks, ND",47.9611,-97.4012],
-          ["Minot AFB","Minot.json","Minot, ND",48.4158,-101.3580]
-        ],
-        NE:[
-          ["Offutt AFB","Offutt.json","Bellevue, NE",41.1183,-95.9125]
-        ],
-        NJ:[
-          ["Joint Base McGuire-Dix-Lakehurst","McGuire.json","Wrightstown, NJ",40.0156,-74.5917]
-        ],
-        NM:[
-          ["Cannon AFB","Cannon.json","Clovis, NM",34.3828,-103.3221],
-          ["Holloman AFB","Holloman.json","Alamogordo, NM",32.8525,-106.1065],
-          ["Kirtland AFB","Kirtland.json","Albuquerque, NM",35.0402,-106.6092]
-        ],
-        NV:[
-          ["Creech AFB","Creech.json","Indian Springs, NV",36.5872,-115.6734],
-          ["Nellis AFB","Nellis.json","Las Vegas, NV",36.2362,-115.0343]
-        ],
-        OH:[
-          ["Wright-Patterson AFB","Wright-Patterson.json","Dayton, OH",39.8261,-84.0483]
-        ],
-        OK:[
-          ["Altus AFB","Altus.json","Altus, OK",34.6671,-99.2667],
-          ["Tinker AFB","Tinker.json","Oklahoma City, OK",35.4147,-97.3866],
-          ["Vance AFB","Vance.json","Enid, OK",36.3392,-97.9165]
-        ],
-        SC:[
-          ["Joint Base Charleston","Charleston.json","Charleston, SC",32.8986,-80.0405],
-          ["Shaw AFB","Shaw.json","Sumter, SC",33.9727,-80.4706]
-        ],
-        SD:[
-          ["Ellsworth AFB","Ellsworth.json","Rapid City, SD",44.1450,-103.1036]
-        ],
-        TX:[
-          ["Dyess AFB","Dyess.json","Abilene, TX",32.4208,-99.8546],
-          ["Goodfellow AFB","Goodfellow.json","San Angelo, TX",31.4343,-100.4027],
-          ["Joint Base San Antonio-Lackland","Lackland.json","San Antonio, TX",29.3842,-98.5811],
-          ["Laughlin AFB","Laughlin.json","Del Rio, TX",29.3595,-100.7780],
-          ["Joint Base San Antonio-Randolph","Randolph.json","San Antonio, TX",29.5297,-98.2789],
-          ["Sheppard AFB","Sheppard.json","Wichita Falls, TX",33.9888,-98.4919]
-        ],
-        UT:[
-          ["Hill AFB","Hill.json","Ogden, UT",41.1240,-111.9730]
-        ],
-        VA:[
-          ["Joint Base Langley-Eustis","Langley.json","Hampton, VA",37.0838,-76.3605]
-        ],
-        WA:[
-          ["Fairchild AFB","Fairchild.json","Spokane, WA",47.6151,-117.6558],
-          ["Joint Base Lewis-McChord","McChord.json","Tacoma, WA",47.1339,-122.4916]
-        ],
-        WY:[
-          ["F. E. Warren AFB","F-E-Warren.json","Cheyenne, WY",41.1339,-104.8660]
-        ]
-      };
-      const BASICBRAIN_BASE_ALIASES = {
-        "Andrews AFB":"MD",
-        "Joint Base Andrews":"MD",
-        "Barksdale AFB":"LA",
-        "Beale AFB":"CA",
-        "Cannon AFB":"NM",
-        "Charleston AFB":"SC",
-        "Joint Base Charleston":"SC",
-        "Columbus AFB":"MS",
-        "Davis-Monthan AFB":"AZ",
-        "Dover AFB":"DE",
-        "Dyess AFB":"TX",
-        "Edwards AFB":"CA",
-        "Eglin AFB":"FL",
-        "Ellsworth AFB":"SD",
-        "Fairchild AFB":"WA",
-        "FE Warren AFB":"WY",
-        "F.E. Warren AFB":"WY",
-        "F. E. Warren AFB":"WY",
-        "Grand Forks AFB":"ND",
-        "Hanscom AFB":"MA",
-        "Hill AFB":"UT",
-        "Holloman AFB":"NM",
-        "Hurlburt Field":"FL",
-        "JBSA Fort Sam Houston":"TX",
-        "Fort Sam Houston":"TX",
-        "Joint Base San Antonio-Fort Sam Houston":"TX",
-        "JBSA Lackland":"TX",
-        "Lackland AFB":"TX",
-        "Joint Base San Antonio-Lackland":"TX",
-        "JBSA Randolph":"TX",
-        "Randolph AFB":"TX",
-        "Joint Base San Antonio-Randolph":"TX",
-        "Keesler AFB":"MS",
-        "Kirtland AFB":"NM",
-        "Langley AFB":"VA",
-        "Joint Base Langley-Eustis":"VA",
-        "Laughlin AFB":"TX",
-        "Little Rock AFB":"AR",
-        "Luke AFB":"AZ",
-        "MacDill AFB":"FL",
-        "Malmstrom AFB":"MT",
-        "Maxwell AFB":"AL",
-        "McConnell AFB":"KS",
-        "McGuire AFB":"NJ",
-        "Joint Base McGuire-Dix-Lakehurst":"NJ",
-        "Minot AFB":"ND",
-        "Moody AFB":"GA",
-        "Mountain Home AFB":"ID",
-        "Nellis AFB":"NV",
-        "Offutt AFB":"NE",
-        "Patrick SFB":"FL",
-        "Peterson SFB":"CO",
-        "Robins AFB":"GA",
-        "Scott AFB":"IL",
-        "Seymour Johnson AFB":"NC",
-        "Shaw AFB":"SC",
-        "Sheppard AFB":"TX",
-        "Tinker AFB":"OK",
-        "Travis AFB":"CA",
-        "Tyndall AFB":"FL",
-        "Vance AFB":"OK",
-        "Vandenberg SFB":"CA",
-        "Whiteman AFB":"MO",
-        "Wright-Patterson AFB":"OH"
-      };
-      const svg = d3.select("#pcsu-us-svg");
-      const selectedStateEl =
-        document.getElementById("pcsu-selected-state");
-      const panelCopyEl =
-        document.getElementById("pcsu-panel-copy");
-      const baseListEl =
-        document.getElementById("pcsu-base-list");
-      let mapReady = false;
-      let pendingStateCode = "";
-      let pendingBaseId = "";
-      let currentStateCode = "";
-      let currentBaseId = "";
-      let projection = null;
-      let markerLayer = null;
-      function esc(str){
-        return String(str ?? "")
-          .replaceAll("&","&amp;")
-          .replaceAll("<","&lt;")
-          .replaceAll(">","&gt;")
-          .replaceAll('"',"&quot;")
-          .replaceAll("'","&#039;");
-      }
-      function slugify(fileName){
-        return String(fileName || "")
-          .replace(/\.json$/i, "")
-          .trim()
-          .toLowerCase()
-          .replace(/[^a-z0-9]+/g, "-")
-          .replace(/^-+|-+$/g, "");
-      }
-      function normalizeKey(value){
-        return String(value || "")
-          .toLowerCase()
-          .replace(/jointbase/g, "jb")
-          .replace(/airforcebase/g, "afb")
-          .replace(/[^a-z0-9]/g, "");
-      }
-      function makeBase(row, stateCode){
-        const name     = row[0];
-        const fileName = row[1];
-        const city     = row[2];
-        const lat      = row[3];
-        const lng      = row[4];
-        const id = slugify(fileName);
-        return {
-          id,
-          slug:id,
-          fileName,
-          base:name,
-          label:name,
-          name,
-          city,
-          state:stateCode,
-          lat,
-          lng,
-          jsonUrl:JSON_BASE_URL + fileName
-        };
-      }
-      const STATE_BASES = Object.fromEntries(
-        Object.entries(BASE_REGISTRY).map(([stateCode, rows]) => [
-          stateCode,
-          rows.map(row => makeBase(row, stateCode))
-        ])
-      );
-      const BASE_TO_STATE = (() => {
-        const out = {};
-        Object.entries(STATE_BASES).forEach(([stateCode, bases]) => {
-          bases.forEach(base => {
-            [
-              base.base,
-              base.name,
-              base.label,
-              base.fileName,
-              base.id,
-              base.slug
-            ].forEach(value => {
-              const key = normalizeKey(value);
-              if(key) out[key] = stateCode;
-            });
-          });
-        });
-        Object.entries(BASICBRAIN_BASE_ALIASES).forEach(([baseName, stateCode]) => {
-          const key = normalizeKey(baseName);
-          if(key) out[key] = stateCode;
-        });
-        return out;
-      })();
-      function getDestinationUrl(){
-        return new URL(
-          LIVE_BASE_DEMOGRAPHICS_PATH,
-          window.location.origin
-        );
-      }
-      function saveSelection(item){
-        try{
-          localStorage.setItem(
-            STORAGE_KEY,
-            JSON.stringify(item)
-          );
-          localStorage.setItem(
-            JSON_URL_KEY,
-            item.jsonUrl || ""
-          );
-          localStorage.setItem(
-            "pcsunited.selectedBaseSlug.v1",
-            item.id || ""
-          );
-        }catch(err){
-          console.warn(err);
-        }
-      }
-      function openBase(item){
-        if (!item) return;
-        saveSelection(item);
-        const url = getDestinationUrl();
-        url.searchParams.set("base", item.id);
-        window.location.href = url.toString();
-      }
-      function clearBaseMarker(){
-        if(markerLayer){
-          markerLayer.selectAll("*").remove();
-        }
-      }
-      function drawBaseMarker(base){
-        clearBaseMarker();
-        if(!base || !markerLayer || !projection) return;
-        const lat =
-          Number(base.lat);
-        const lng =
-          Number(base.lng);
-        if(!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-        const point =
-          projection([lng, lat]);
-        if(!point) return;
-        const x = point[0];
-        const y = point[1];
-        const label =
-          base.base || "Selected Base";
-        const city =
-          base.city || "";
-        let labelX =
-          x + 18;
-        let labelY =
-          y - 18;
-        if(x > 760){
-          labelX = x - 190;
-        }
-        if(y < 70){
-          labelY = y + 18;
-        }
-        const labelWidth =
-          Math.max(126, Math.min(230, label.length * 7.2 + 26));
-        const group =
-          markerLayer
-            .append("g")
-            .attr("class","pcsu-base-marker")
-            .attr("transform",`translate(${x},${y})`);
-        group
-          .append("circle")
-          .attr("class","pcsu-base-marker-ring")
-          .attr("r",5);
-        group
-          .append("circle")
-          .attr("class","pcsu-base-marker-dot")
-          .attr("r",6);
-        group
-          .append("path")
-          .attr("class","pcsu-base-marker-pin")
-          .attr("d","M0,-14 C7,-14 12,-9 12,-2 C12,7 0,17 0,17 C0,17 -12,7 -12,-2 C-12,-9 -7,-14 0,-14 Z")
-          .attr("transform","translate(0,-12)");
-        group
-          .append("circle")
-          .attr("fill","#071018")
-          .attr("r",3.3)
-          .attr("transform","translate(0,-14)");
-        const labelGroup =
-          markerLayer
-            .append("g")
-            .attr("class","pcsu-base-marker-label-group")
-            .attr("transform",`translate(${labelX},${labelY})`);
-        labelGroup
-          .append("rect")
-          .attr("class","pcsu-base-marker-label-bg")
-          .attr("width",labelWidth)
-          .attr("height",42)
-          .attr("x",0)
-          .attr("y",0);
-        labelGroup
-          .append("text")
-          .attr("class","pcsu-base-marker-label")
-          .attr("x",12)
-          .attr("y",17)
-          .text(label);
-        labelGroup
-          .append("text")
-          .attr("class","pcsu-base-marker-sub")
-          .attr("x",12)
-          .attr("y",31)
-          .text(city);
-      }
-      function renderState(stateCode, selectedBaseId){
-        const safeState =
-          String(stateCode || "").toUpperCase();
-        const safeBaseId =
-          String(selectedBaseId || "").trim();
-        if(!safeState) return;
-        if(!mapReady){
-          pendingStateCode = safeState;
-          pendingBaseId = safeBaseId;
-          return;
-        }
-        const bases =
-          STATE_BASES[safeState] || [];
-        const stateName =
-          STATE_NAMES[safeState] || safeState;
-        currentStateCode = safeState;
-        currentBaseId = safeBaseId;
-        d3.selectAll(".pcsu-state")
-          .classed("is-active", false);
-        d3.select(`#state-${safeState}`)
-          .classed("is-active", true);
-        selectedStateEl.textContent =
-          stateName;
-        if (!bases.length){
-          panelCopyEl.textContent =
-            "PCSUnited does not have supported Base Demographics profiles for this state yet.";
-          baseListEl.innerHTML = "";
-          clearBaseMarker();
-          return;
-        }
-        panelCopyEl.textContent =
-          `${bases.length} supported base profile${bases.length > 1 ? "s" : ""} available.`;
-        baseListEl.innerHTML =
-          bases.map(base => `
-            <button
-              class="pcsu-base-btn${base.id === currentBaseId ? " is-selected" : ""}"
-              type="button"
-              data-base-id="${esc(base.id)}">
-              <span class="pcsu-base-name">
-                ${esc(base.base)}
-              </span>
-              <span class="pcsu-base-meta">
-                ${esc(base.city)} • ${esc(base.fileName)} • Open Base Demographics
-              </span>
-            </button>
-          `).join("");
-        baseListEl
-          .querySelectorAll(".pcsu-base-btn")
-          .forEach(button => {
-            button.addEventListener("click", () => {
-              const selected =
-                bases.find(base =>
-                  base.id === button.dataset.baseId
-                );
-              if (selected) openBase(selected);
-            });
-          });
-        const selectedBase =
-          bases.find(base => base.id === currentBaseId);
-        if(selectedBase){
-          drawBaseMarker(selectedBase);
-        }else{
-          clearBaseMarker();
-        }
-        const selectedButton =
-          baseListEl.querySelector(".pcsu-base-btn.is-selected");
-        if(selectedButton){
-          selectedButton.scrollIntoView({
-            block:"nearest",
-            behavior:"smooth"
-          });
-        }
-      }
-      function findStateFromBaseName(baseName){
-        const key = normalizeKey(baseName);
-        if(!key) return "";
-        if(BASE_TO_STATE[key]) return BASE_TO_STATE[key];
-        const foundKey =
-          Object.keys(BASE_TO_STATE).find(existingKey => {
-            return (
-              existingKey.includes(key) ||
-              key.includes(existingKey)
-            );
-          });
-        return foundKey ? BASE_TO_STATE[foundKey] : "";
-      }
-      function findBaseIdInState(stateCode, baseName){
-        const safeState =
-          String(stateCode || "").toUpperCase();
-        const bases =
-          STATE_BASES[safeState] || [];
-        const key =
-          normalizeKey(baseName);
-        if(!safeState || !key || !bases.length) return "";
-        const exact =
-          bases.find(base => {
-            return [
-              base.base,
-              base.name,
-              base.label,
-              base.fileName,
-              base.id,
-              base.slug
-            ].some(value => normalizeKey(value) === key);
-          });
-        if(exact) return exact.id;
-        const fuzzy =
-          bases.find(base => {
-            return [
-              base.base,
-              base.name,
-              base.label,
-              base.fileName,
-              base.id,
-              base.slug
-            ].some(value => {
-              const baseKey = normalizeKey(value);
-              return baseKey.includes(key) || key.includes(baseKey);
-            });
-          });
-        return fuzzy ? fuzzy.id : "";
-      }
-      function findSelectionFromDetail(detail){
-        const d =
-          detail && typeof detail === "object"
-            ? detail
-            : {};
-        const selectedBase =
-          d.selectedBase ||
-          d.baseSelection ||
-          d.base ||
-          {};
-        const profile =
-          d.profile ||
-          d.bridge ||
-          d.basicbrain ||
-          d.input ||
-          d.state ||
-          d;
-        const directState =
-          selectedBase.state ||
-          selectedBase.stateCode ||
-          profile.state ||
-          profile.stateCode ||
-          "";
-        const baseName =
-          selectedBase.base ||
-          selectedBase.name ||
-          selectedBase.label ||
-          profile.selected_base ||
-          profile.selectedBase ||
-          profile.pcs_base ||
-          profile.pcsBase ||
-          profile.current_base ||
-          profile.currentBase ||
-          profile.base ||
-          "";
-        let stateCode = "";
-        if(
-          directState &&
-          STATE_NAMES[String(directState).toUpperCase()]
-        ){
-          stateCode = String(directState).toUpperCase();
-        }else{
-          stateCode = findStateFromBaseName(baseName);
-        }
-        if(!stateCode){
-          return {
-            stateCode:"",
-            baseId:""
-          };
-        }
-        return {
-          stateCode,
-          baseId:findBaseIdInState(stateCode, baseName)
-        };
-      }
-      function preselectFromBasicBrain(detail){
-        const selection =
-          findSelectionFromDetail(detail);
-        if(!selection.stateCode) return false;
-        renderState(selection.stateCode, selection.baseId);
-        return true;
-      }
-      function preselectFromGlobals(){
-        const candidates = [
-          window.PCSU_BASICBRAIN_CURRENT,
-          window.PCSU_BASICBRAIN_TEMP,
-          window.PCSU_BASICBRAIN?.getLastGood?.(),
-          window.PCSU_BASICBRAIN?.getState?.()
-        ];
-        for(const item of candidates){
-          if(preselectFromBasicBrain(item)){
-            return true;
-          }
-        }
-        return false;
-      }
-      function bindBasicBrainEvents(){
-        [
-          "pcsunited:basicbrain-updated",
-          "pcsunited:profile-ready",
-          "pcsunited:bridge-ready",
-          "pcsunited:compensation-ready",
-          "pcsu:base-selected"
-        ].forEach(eventName => {
-          window.addEventListener(eventName, event => {
-            preselectFromBasicBrain(event.detail || {});
-          });
-        });
-        window.addEventListener("message", event => {
-          const data =
-            event && event.data && typeof event.data === "object"
-              ? event.data
-              : {};
-          if(data.type === "pcsunited-basicbrain"){
-            preselectFromBasicBrain(data);
-          }
-        });
-      }
-      window.PCSU_US_BASE_MAP.renderState = renderState;
-      window.PCSU_US_BASE_MAP.selectState = renderState;
-      window.PCSU_US_BASE_MAP.preselectFromBasicBrain = preselectFromBasicBrain;
-      window.PCSU_US_BASE_MAP.getCurrentState = function(){
-        return currentStateCode;
-      };
-      window.PCSU_US_BASE_MAP.getCurrentBase = function(){
-        return currentBaseId;
-      };
-      bindBasicBrainEvents();
-      d3.json(
-        "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
-      ).then(us => {
-        const states =
-          topojson
-            .feature(us, us.objects.states)
-            .features;
-        projection =
-          d3.geoAlbersUsa()
-            .translate([480,300])
-            .scale(1250);
-        const path =
-          d3.geoPath(projection);
-        svg.append("g")
-          .selectAll("path")
-          .data(states)
-          .join("path")
-          .attr("class", d => {
-            const abbr =
-              FIPS_TO_ABBR[
-                String(d.id).padStart(2,"0")
-              ];
-            return STATE_BASES[abbr]
-              ? "pcsu-state has-bases"
-              : "pcsu-state";
-          })
-          .attr("id", d => {
-            const abbr =
-              FIPS_TO_ABBR[
-                String(d.id).padStart(2,"0")
-              ];
-            return `state-${abbr}`;
-          })
-          .attr("d", path)
-          .on("click", (event, d) => {
-            const abbr =
-              FIPS_TO_ABBR[
-                String(d.id).padStart(2,"0")
-              ];
-            renderState(abbr);
-          });
-        svg.append("path")
-          .datum(
-            topojson.mesh(
-              us,
-              us.objects.states,
-              (a,b) => a !== b
-            )
-          )
-          .attr("fill","none")
-          .attr("stroke","rgba(16,20,38,.75)")
-          .attr("stroke-width",1)
-          .attr("d", path);
-        svg.append("g")
-          .selectAll("text")
-          .data(states)
-          .join("text")
-          .attr("class","pcsu-state-label")
-          .attr("x", d => path.centroid(d)[0])
-          .attr("y", d => path.centroid(d)[1])
-          .text(d =>
-            FIPS_TO_ABBR[
-              String(d.id).padStart(2,"0")
-            ] || ""
-          )
-          .style("display", d => {
-            const abbr =
-              FIPS_TO_ABBR[
-                String(d.id).padStart(2,"0")
-              ];
-            return [
-              "RI","DE","CT","NJ","MD","MA","DC"
-            ].includes(abbr)
-              ? "none"
-              : "block";
-          });
-        markerLayer =
-          svg.append("g")
-            .attr("id","pcsu-base-marker-layer");
-        mapReady = true;
-        if(pendingStateCode){
-          renderState(pendingStateCode, pendingBaseId);
-        }else if(!preselectFromGlobals()){
-          renderState(DEFAULT_STATE);
-        }
-      }).catch(() => {
-        selectedStateEl.textContent =
-          "Map unavailable";
-        panelCopyEl.textContent =
-          "The map data could not load. Please refresh the page.";
-        baseListEl.innerHTML = "";
-      });
-    })();
-  </script>
-                    </div>
-                  </div>
-                </div>
+                <div class="slide-4 w-slide"></div>
               </div>
               <div fade-in="true" class="slide-nav-3 w-slider-nav"></div>
             </div>
-          </div>
-          <div class="interactive-base-map w-embed w-script">
-            <script>
-(() => {
-  "use strict";
-  if(window.PCSU_US_BASE_MAP?.__mounted_v304) return;
-  window.PCSU_US_BASE_MAP = {
-    __mounted_v304:true
-  };
-  const STORAGE_KEY =
-    "pcsunited.selectedBase.v1";
-  const JSON_URL_KEY =
-    "pcsunited.selectedCityJsonUrl.v1";
-  const LIVE_BASE_DEMOGRAPHICS_PATH =
-    "/air-force/base-demographics-air-force";
-  const JSON_BASE_URL =
-    window.PCSU_CITIES_BASE_URL ||
-    "https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/";
-  const DEFAULT_STATE =
-    "TX";
-  const FIPS_TO_ABBR = {
-    "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC",
-    "12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY",
-    "22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN","28":"MS","29":"MO","30":"MT",
-    "31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH",
-    "40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN","48":"TX","49":"UT",
-    "50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY"
-  };
-  const STATE_NAMES = {
-    AL:"Alabama", AK:"Alaska", AZ:"Arizona", CA:"California", CO:"Colorado",
-    DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho",
-    IL:"Illinois", KS:"Kansas", LA:"Louisiana", MA:"Massachusetts", MD:"Maryland",
-    MS:"Mississippi", MT:"Montana", NC:"North Carolina", ND:"North Dakota",
-    NE:"Nebraska", NJ:"New Jersey", NM:"New Mexico", NV:"Nevada", OH:"Ohio",
-    OK:"Oklahoma", SC:"South Carolina", SD:"South Dakota", TX:"Texas",
-    UT:"Utah", VA:"Virginia", WA:"Washington", WY:"Wyoming"
-  };
-  const BASE_REGISTRY = {
-    AK:[
-      ["Joint Base Elmendorf-Richardson","Elmendorf.json","Anchorage, AK",61.2500,-149.8065],
-      ["Eielson AFB","Eielson.json","Fairbanks, AK",64.6657,-147.1015]
-    ],
-    AL:[
-      ["Maxwell AFB","Maxwell.json","Montgomery, AL",32.3829,-86.3658]
-    ],
-    AZ:[
-      ["Davis-Monthan AFB","Davis-Monthan.json","Tucson, AZ",32.1665,-110.8832],
-      ["Luke AFB","Luke.json","Glendale, AZ",33.5350,-112.3832]
-    ],
-    CA:[
-      ["Beale AFB","Beale.json","Marysville, CA",39.1361,-121.4366],
-      ["Edwards AFB","Edwards.json","Edwards, CA",34.9054,-117.8837],
-      ["Los Angeles AFB","Los-Angeles.json","El Segundo, CA",33.9189,-118.3807],
-      ["Travis AFB","Travis.json","Fairfield, CA",38.2627,-121.9275],
-      ["Vandenberg SFB","Vandenberg.json","Lompoc, CA",34.7420,-120.5724]
-    ],
-    CO:[
-      ["Peterson SFB","Peterson.json","Colorado Springs, CO",38.8236,-104.7006],
-      ["Schriever SFB","Schriever.json","Colorado Springs, CO",38.8030,-104.5255],
-      ["U.S. Air Force Academy","Air-Force-Academy.json","Colorado Springs, CO",39.0088,-104.8911]
-    ],
-    DE:[
-      ["Dover AFB","Dover.json","Dover, DE",39.1295,-75.4660]
-    ],
-    FL:[
-      ["Eglin AFB","Eglin.json","Valparaiso, FL",30.4832,-86.5254],
-      ["Hurlburt Field","Hurlburt.json","Mary Esther, FL",30.4278,-86.6893],
-      ["MacDill AFB","MacDill.json","Tampa, FL",27.8493,-82.5212],
-      ["Patrick SFB","Patrick.json","Cocoa Beach, FL",28.2349,-80.6101],
-      ["Tyndall AFB","Tyndall.json","Panama City, FL",30.0696,-85.5754]
-    ],
-    GA:[
-      ["Moody AFB","Moody.json","Valdosta, GA",30.9678,-83.1930],
-      ["Robins AFB","Robins.json","Warner Robins, GA",32.6401,-83.5919]
-    ],
-    HI:[
-      ["Joint Base Pearl Harbor-Hickam","Hickam.json","Honolulu, HI",21.3187,-157.9224]
-    ],
-    ID:[
-      ["Mountain Home AFB","Mountain-Home.json","Mountain Home, ID",43.0436,-115.8724]
-    ],
-    IL:[
-      ["Scott AFB","Scott.json","Belleville, IL",38.5452,-89.8352]
-    ],
-    KS:[
-      ["McConnell AFB","McConnell.json","Wichita, KS",37.6231,-97.2672]
-    ],
-    LA:[
-      ["Barksdale AFB","Barksdale.json","Bossier City, LA",32.5018,-93.6627]
-    ],
-    MA:[
-      ["Hanscom AFB","Hanscom.json","Bedford, MA",42.4699,-71.2890]
-    ],
-    MD:[
-      ["Joint Base Andrews","Andrews.json","Camp Springs, MD",38.8108,-76.8669]
-    ],
-    MS:[
-      ["Columbus AFB","Columbus.json","Columbus, MS",33.6438,-88.4438],
-      ["Keesler AFB","Keesler.json","Biloxi, MS",30.4104,-88.9244]
-    ],
-    MT:[
-      ["Malmstrom AFB","Malmstrom.json","Great Falls, MT",47.5053,-111.1873]
-    ],
-    NC:[
-      ["Seymour Johnson AFB","Seymour-Johnson.json","Goldsboro, NC",35.3394,-77.9606]
-    ],
-    ND:[
-      ["Grand Forks AFB","Grand-Forks.json","Grand Forks, ND",47.9611,-97.4012],
-      ["Minot AFB","Minot.json","Minot, ND",48.4158,-101.3580]
-    ],
-    NE:[
-      ["Offutt AFB","Offutt.json","Bellevue, NE",41.1183,-95.9125]
-    ],
-    NJ:[
-      ["Joint Base McGuire-Dix-Lakehurst","McGuire.json","Wrightstown, NJ",40.0156,-74.5917]
-    ],
-    NM:[
-      ["Cannon AFB","Cannon.json","Clovis, NM",34.3828,-103.3221],
-      ["Holloman AFB","Holloman.json","Alamogordo, NM",32.8525,-106.1065],
-      ["Kirtland AFB","Kirtland.json","Albuquerque, NM",35.0402,-106.6092]
-    ],
-    NV:[
-      ["Creech AFB","Creech.json","Indian Springs, NV",36.5872,-115.6734],
-      ["Nellis AFB","Nellis.json","Las Vegas, NV",36.2362,-115.0343]
-    ],
-    OH:[
-      ["Wright-Patterson AFB","Wright-Patterson.json","Dayton, OH",39.8261,-84.0483]
-    ],
-    OK:[
-      ["Altus AFB","Altus.json","Altus, OK",34.6671,-99.2667],
-      ["Tinker AFB","Tinker.json","Oklahoma City, OK",35.4147,-97.3866],
-      ["Vance AFB","Vance.json","Enid, OK",36.3392,-97.9165]
-    ],
-    SC:[
-      ["Joint Base Charleston","Charleston.json","Charleston, SC",32.8986,-80.0405],
-      ["Shaw AFB","Shaw.json","Sumter, SC",33.9727,-80.4706]
-    ],
-    SD:[
-      ["Ellsworth AFB","Ellsworth.json","Rapid City, SD",44.1450,-103.1036]
-    ],
-    TX:[
-      ["Dyess AFB","Dyess.json","Abilene, TX",32.4208,-99.8546],
-      ["Goodfellow AFB","Goodfellow.json","San Angelo, TX",31.4343,-100.4027],
-      ["Joint Base San Antonio-Lackland","Lackland.json","San Antonio, TX",29.3842,-98.5811],
-      ["Laughlin AFB","Laughlin.json","Del Rio, TX",29.3595,-100.7780],
-      ["Joint Base San Antonio-Randolph","Randolph.json","San Antonio, TX",29.5297,-98.2789],
-      ["Sheppard AFB","Sheppard.json","Wichita Falls, TX",33.9888,-98.4919]
-    ],
-    UT:[
-      ["Hill AFB","Hill.json","Ogden, UT",41.1240,-111.9730]
-    ],
-    VA:[
-      ["Joint Base Langley-Eustis","Langley.json","Hampton, VA",37.0838,-76.3605]
-    ],
-    WA:[
-      ["Fairchild AFB","Fairchild.json","Spokane, WA",47.6151,-117.6558],
-      ["Joint Base Lewis-McChord","McChord.json","Tacoma, WA",47.1339,-122.4916]
-    ],
-    WY:[
-      ["F. E. Warren AFB","F-E-Warren.json","Cheyenne, WY",41.1339,-104.8660]
-    ]
-  };
-  const BASICBRAIN_BASE_ALIASES = {
-    "Andrews AFB":"MD",
-    "Joint Base Andrews":"MD",
-    "Barksdale AFB":"LA",
-    "Beale AFB":"CA",
-    "Cannon AFB":"NM",
-    "Charleston AFB":"SC",
-    "Joint Base Charleston":"SC",
-    "Columbus AFB":"MS",
-    "Davis-Monthan AFB":"AZ",
-    "Dover AFB":"DE",
-    "Dyess AFB":"TX",
-    "Edwards AFB":"CA",
-    "Eglin AFB":"FL",
-    "Ellsworth AFB":"SD",
-    "Fairchild AFB":"WA",
-    "FE Warren AFB":"WY",
-    "F.E. Warren AFB":"WY",
-    "F. E. Warren AFB":"WY",
-    "Grand Forks AFB":"ND",
-    "Hanscom AFB":"MA",
-    "Hill AFB":"UT",
-    "Holloman AFB":"NM",
-    "Hurlburt Field":"FL",
-    "JBSA Fort Sam Houston":"TX",
-    "Fort Sam Houston":"TX",
-    "Joint Base San Antonio-Fort Sam Houston":"TX",
-    "JBSA Lackland":"TX",
-    "Lackland AFB":"TX",
-    "Joint Base San Antonio-Lackland":"TX",
-    "JBSA Randolph":"TX",
-    "Randolph AFB":"TX",
-    "Joint Base San Antonio-Randolph":"TX",
-    "Keesler AFB":"MS",
-    "Kirtland AFB":"NM",
-    "Langley AFB":"VA",
-    "Joint Base Langley-Eustis":"VA",
-    "Laughlin AFB":"TX",
-    "Little Rock AFB":"AR",
-    "Luke AFB":"AZ",
-    "MacDill AFB":"FL",
-    "Malmstrom AFB":"MT",
-    "Maxwell AFB":"AL",
-    "McConnell AFB":"KS",
-    "McGuire AFB":"NJ",
-    "Joint Base McGuire-Dix-Lakehurst":"NJ",
-    "Minot AFB":"ND",
-    "Moody AFB":"GA",
-    "Mountain Home AFB":"ID",
-    "Nellis AFB":"NV",
-    "Offutt AFB":"NE",
-    "Patrick SFB":"FL",
-    "Peterson SFB":"CO",
-    "Robins AFB":"GA",
-    "Scott AFB":"IL",
-    "Seymour Johnson AFB":"NC",
-    "Shaw AFB":"SC",
-    "Sheppard AFB":"TX",
-    "Tinker AFB":"OK",
-    "Travis AFB":"CA",
-    "Tyndall AFB":"FL",
-    "Vance AFB":"OK",
-    "Vandenberg SFB":"CA",
-    "Whiteman AFB":"MO",
-    "Wright-Patterson AFB":"OH"
-  };
-  const svg = d3.select("#pcsu-us-svg");
-  const selectedStateEl =
-    document.getElementById("pcsu-selected-state");
-  const panelCopyEl =
-    document.getElementById("pcsu-panel-copy");
-  const baseListEl =
-    document.getElementById("pcsu-base-list");
-  let mapReady = false;
-  let pendingStateCode = "";
-  let pendingBaseId = "";
-  let currentStateCode = "";
-  let currentBaseId = "";
-  let projection = null;
-  let markerLayer = null;
-  function esc(str){
-    return String(str ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
-  }
-  function slugify(fileName){
-    return String(fileName || "")
-      .replace(/\.json$/i, "")
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  }
-  function normalizeKey(value){
-    return String(value || "")
-      .toLowerCase()
-      .replace(/jointbase/g, "jb")
-      .replace(/airforcebase/g, "afb")
-      .replace(/[^a-z0-9]/g, "");
-  }
-  function makeBase(row, stateCode){
-    const name     = row[0];
-    const fileName = row[1];
-    const city     = row[2];
-    const lat      = row[3];
-    const lng      = row[4];
-    const id = slugify(fileName);
-    return {
-      id,
-      slug:id,
-      fileName,
-      base:name,
-      label:name,
-      name,
-      city,
-      state:stateCode,
-      lat,
-      lng,
-      jsonUrl:JSON_BASE_URL + fileName
-    };
-  }
-  const STATE_BASES = Object.fromEntries(
-    Object.entries(BASE_REGISTRY).map(([stateCode, rows]) => [
-      stateCode,
-      rows.map(row => makeBase(row, stateCode))
-    ])
-  );
-  const BASE_TO_STATE = (() => {
-    const out = {};
-    Object.entries(STATE_BASES).forEach(([stateCode, bases]) => {
-      bases.forEach(base => {
-        [
-          base.base,
-          base.name,
-          base.label,
-          base.fileName,
-          base.id,
-          base.slug
-        ].forEach(value => {
-          const key = normalizeKey(value);
-          if(key) out[key] = stateCode;
-        });
-      });
-    });
-    Object.entries(BASICBRAIN_BASE_ALIASES).forEach(([baseName, stateCode]) => {
-      const key = normalizeKey(baseName);
-      if(key) out[key] = stateCode;
-    });
-    return out;
-  })();
-  function getDestinationUrl(){
-    return new URL(
-      LIVE_BASE_DEMOGRAPHICS_PATH,
-      window.location.origin
-    );
-  }
-  function saveSelection(item){
-    try{
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(item)
-      );
-      localStorage.setItem(
-        JSON_URL_KEY,
-        item.jsonUrl || ""
-      );
-      localStorage.setItem(
-        "pcsunited.selectedBaseSlug.v1",
-        item.id || ""
-      );
-    }catch(err){
-      console.warn(err);
-    }
-  }
-  function openBase(item){
-    if (!item) return;
-    saveSelection(item);
-    const url = getDestinationUrl();
-    url.searchParams.set("base", item.id);
-    window.location.href = url.toString();
-  }
-  function clearBaseMarker(){
-    if(markerLayer){
-      markerLayer.selectAll("*").remove();
-    }
-  }
-  function drawBaseMarker(base){
-    clearBaseMarker();
-    if(!base || !markerLayer || !projection) return;
-    const lat =
-      Number(base.lat);
-    const lng =
-      Number(base.lng);
-    if(!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-    const point =
-      projection([lng, lat]);
-    if(!point) return;
-    const x = point[0];
-    const y = point[1];
-    const label =
-      base.base || "Selected Base";
-    const city =
-      base.city || "";
-    let labelX =
-      x + 18;
-    let labelY =
-      y - 18;
-    if(x > 760){
-      labelX = x - 190;
-    }
-    if(y < 70){
-      labelY = y + 18;
-    }
-    const labelWidth =
-      Math.max(126, Math.min(230, label.length * 7.2 + 26));
-    const group =
-      markerLayer
-        .append("g")
-        .attr("class","pcsu-base-marker")
-        .attr("transform",`translate(${x},${y})`);
-    group
-      .append("circle")
-      .attr("class","pcsu-base-marker-ring")
-      .attr("r",5);
-    group
-      .append("circle")
-      .attr("class","pcsu-base-marker-dot")
-      .attr("r",6);
-    group
-      .append("path")
-      .attr("class","pcsu-base-marker-pin")
-      .attr("d","M0,-14 C7,-14 12,-9 12,-2 C12,7 0,17 0,17 C0,17 -12,7 -12,-2 C-12,-9 -7,-14 0,-14 Z")
-      .attr("transform","translate(0,-12)");
-    group
-      .append("circle")
-      .attr("fill","#071018")
-      .attr("r",3.3)
-      .attr("transform","translate(0,-14)");
-    const labelGroup =
-      markerLayer
-        .append("g")
-        .attr("class","pcsu-base-marker-label-group")
-        .attr("transform",`translate(${labelX},${labelY})`);
-    labelGroup
-      .append("rect")
-      .attr("class","pcsu-base-marker-label-bg")
-      .attr("width",labelWidth)
-      .attr("height",42)
-      .attr("x",0)
-      .attr("y",0);
-    labelGroup
-      .append("text")
-      .attr("class","pcsu-base-marker-label")
-      .attr("x",12)
-      .attr("y",17)
-      .text(label);
-    labelGroup
-      .append("text")
-      .attr("class","pcsu-base-marker-sub")
-      .attr("x",12)
-      .attr("y",31)
-      .text(city);
-  }
-  function renderState(stateCode, selectedBaseId){
-    const safeState =
-      String(stateCode || "").toUpperCase();
-    const safeBaseId =
-      String(selectedBaseId || "").trim();
-    if(!safeState) return;
-    if(!mapReady){
-      pendingStateCode = safeState;
-      pendingBaseId = safeBaseId;
-      return;
-    }
-    const bases =
-      STATE_BASES[safeState] || [];
-    const stateName =
-      STATE_NAMES[safeState] || safeState;
-    currentStateCode = safeState;
-    currentBaseId = safeBaseId;
-    d3.selectAll(".pcsu-state")
-      .classed("is-active", false);
-    d3.select(`#state-${safeState}`)
-      .classed("is-active", true);
-    selectedStateEl.textContent =
-      stateName;
-    if (!bases.length){
-      panelCopyEl.textContent =
-        "PCSUnited does not have supported Base Demographics profiles for this state yet.";
-      baseListEl.innerHTML = "";
-      clearBaseMarker();
-      return;
-    }
-    panelCopyEl.textContent =
-      `${bases.length} supported base profile${bases.length > 1 ? "s" : ""} available.`;
-    baseListEl.innerHTML =
-      bases.map(base => `
-        <button
-          class="pcsu-base-btn${base.id === currentBaseId ? " is-selected" : ""}"
-          type="button"
-          data-base-id="${esc(base.id)}">
-          <span class="pcsu-base-name">
-            ${esc(base.base)}
-          </span>
-          <span class="pcsu-base-meta">
-            ${esc(base.city)} • ${esc(base.fileName)} • Open Base Demographics
-          </span>
-        </button>
-      `).join("");
-    baseListEl
-      .querySelectorAll(".pcsu-base-btn")
-      .forEach(button => {
-        button.addEventListener("click", () => {
-          const selected =
-            bases.find(base =>
-              base.id === button.dataset.baseId
-            );
-          if (selected) openBase(selected);
-        });
-      });
-    const selectedBase =
-      bases.find(base => base.id === currentBaseId);
-    if(selectedBase){
-      drawBaseMarker(selectedBase);
-    }else{
-      clearBaseMarker();
-    }
-    const selectedButton =
-      baseListEl.querySelector(".pcsu-base-btn.is-selected");
-    if(selectedButton){
-      selectedButton.scrollIntoView({
-        block:"nearest",
-        behavior:"smooth"
-      });
-    }
-  }
-  function findStateFromBaseName(baseName){
-    const key = normalizeKey(baseName);
-    if(!key) return "";
-    if(BASE_TO_STATE[key]) return BASE_TO_STATE[key];
-    const foundKey =
-      Object.keys(BASE_TO_STATE).find(existingKey => {
-        return (
-          existingKey.includes(key) ||
-          key.includes(existingKey)
-        );
-      });
-    return foundKey ? BASE_TO_STATE[foundKey] : "";
-  }
-  function findBaseIdInState(stateCode, baseName){
-    const safeState =
-      String(stateCode || "").toUpperCase();
-    const bases =
-      STATE_BASES[safeState] || [];
-    const key =
-      normalizeKey(baseName);
-    if(!safeState || !key || !bases.length) return "";
-    const exact =
-      bases.find(base => {
-        return [
-          base.base,
-          base.name,
-          base.label,
-          base.fileName,
-          base.id,
-          base.slug
-        ].some(value => normalizeKey(value) === key);
-      });
-    if(exact) return exact.id;
-    const fuzzy =
-      bases.find(base => {
-        return [
-          base.base,
-          base.name,
-          base.label,
-          base.fileName,
-          base.id,
-          base.slug
-        ].some(value => {
-          const baseKey = normalizeKey(value);
-          return baseKey.includes(key) || key.includes(baseKey);
-        });
-      });
-    return fuzzy ? fuzzy.id : "";
-  }
-  function findSelectionFromDetail(detail){
-    const d =
-      detail && typeof detail === "object"
-        ? detail
-        : {};
-    const selectedBase =
-      d.selectedBase ||
-      d.baseSelection ||
-      d.base ||
-      {};
-    const profile =
-      d.profile ||
-      d.bridge ||
-      d.basicbrain ||
-      d.input ||
-      d.state ||
-      d;
-    const directState =
-      selectedBase.state ||
-      selectedBase.stateCode ||
-      profile.state ||
-      profile.stateCode ||
-      "";
-    const baseName =
-      selectedBase.base ||
-      selectedBase.name ||
-      selectedBase.label ||
-      profile.selected_base ||
-      profile.selectedBase ||
-      profile.pcs_base ||
-      profile.pcsBase ||
-      profile.current_base ||
-      profile.currentBase ||
-      profile.base ||
-      "";
-    let stateCode = "";
-    if(
-      directState &&
-      STATE_NAMES[String(directState).toUpperCase()]
-    ){
-      stateCode = String(directState).toUpperCase();
-    }else{
-      stateCode = findStateFromBaseName(baseName);
-    }
-    if(!stateCode){
-      return {
-        stateCode:"",
-        baseId:""
-      };
-    }
-    return {
-      stateCode,
-      baseId:findBaseIdInState(stateCode, baseName)
-    };
-  }
-  function preselectFromBasicBrain(detail){
-    const selection =
-      findSelectionFromDetail(detail);
-    if(!selection.stateCode) return false;
-    renderState(selection.stateCode, selection.baseId);
-    return true;
-  }
-  function preselectFromGlobals(){
-    const candidates = [
-      window.PCSU_BASICBRAIN_CURRENT,
-      window.PCSU_BASICBRAIN_TEMP,
-      window.PCSU_BASICBRAIN?.getLastGood?.(),
-      window.PCSU_BASICBRAIN?.getState?.()
-    ];
-    for(const item of candidates){
-      if(preselectFromBasicBrain(item)){
-        return true;
-      }
-    }
-    return false;
-  }
-  function bindBasicBrainEvents(){
-    [
-      "pcsunited:basicbrain-updated",
-      "pcsunited:profile-ready",
-      "pcsunited:bridge-ready",
-      "pcsunited:compensation-ready",
-      "pcsu:base-selected"
-    ].forEach(eventName => {
-      window.addEventListener(eventName, event => {
-        preselectFromBasicBrain(event.detail || {});
-      });
-    });
-    window.addEventListener("message", event => {
-      const data =
-        event && event.data && typeof event.data === "object"
-          ? event.data
-          : {};
-      if(data.type === "pcsunited-basicbrain"){
-        preselectFromBasicBrain(data);
-      }
-    });
-  }
-  window.PCSU_US_BASE_MAP.renderState = renderState;
-  window.PCSU_US_BASE_MAP.selectState = renderState;
-  window.PCSU_US_BASE_MAP.preselectFromBasicBrain = preselectFromBasicBrain;
-  window.PCSU_US_BASE_MAP.getCurrentState = function(){
-    return currentStateCode;
-  };
-  window.PCSU_US_BASE_MAP.getCurrentBase = function(){
-    return currentBaseId;
-  };
-  bindBasicBrainEvents();
-  d3.json(
-    "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
-  ).then(us => {
-    const states =
-      topojson
-        .feature(us, us.objects.states)
-        .features;
-    projection =
-      d3.geoAlbersUsa()
-        .translate([480,300])
-        .scale(1250);
-    const path =
-      d3.geoPath(projection);
-    svg.append("g")
-      .selectAll("path")
-      .data(states)
-      .join("path")
-      .attr("class", d => {
-        const abbr =
-          FIPS_TO_ABBR[
-            String(d.id).padStart(2,"0")
-          ];
-        return STATE_BASES[abbr]
-          ? "pcsu-state has-bases"
-          : "pcsu-state";
-      })
-      .attr("id", d => {
-        const abbr =
-          FIPS_TO_ABBR[
-            String(d.id).padStart(2,"0")
-          ];
-        return `state-${abbr}`;
-      })
-      .attr("d", path)
-      .on("click", (event, d) => {
-        const abbr =
-          FIPS_TO_ABBR[
-            String(d.id).padStart(2,"0")
-          ];
-        renderState(abbr);
-      });
-    svg.append("path")
-      .datum(
-        topojson.mesh(
-          us,
-          us.objects.states,
-          (a,b) => a !== b
-        )
-      )
-      .attr("fill","none")
-      .attr("stroke","rgba(16,20,38,.75)")
-      .attr("stroke-width",1)
-      .attr("d", path);
-    svg.append("g")
-      .selectAll("text")
-      .data(states)
-      .join("text")
-      .attr("class","pcsu-state-label")
-      .attr("x", d => path.centroid(d)[0])
-      .attr("y", d => path.centroid(d)[1])
-      .text(d =>
-        FIPS_TO_ABBR[
-          String(d.id).padStart(2,"0")
-        ] || ""
-      )
-      .style("display", d => {
-        const abbr =
-          FIPS_TO_ABBR[
-            String(d.id).padStart(2,"0")
-          ];
-        return [
-          "RI","DE","CT","NJ","MD","MA","DC"
-        ].includes(abbr)
-          ? "none"
-          : "block";
-      });
-    markerLayer =
-      svg.append("g")
-        .attr("id","pcsu-base-marker-layer");
-    mapReady = true;
-    if(pendingStateCode){
-      renderState(pendingStateCode, pendingBaseId);
-    }else if(!preselectFromGlobals()){
-      renderState(DEFAULT_STATE);
-    }
-  }).catch(() => {
-    selectedStateEl.textContent =
-      "Map unavailable";
-    panelCopyEl.textContent =
-      "The map data could not load. Please refresh the page.";
-    baseListEl.innerHTML = "";
-  });
-})();
-</script>
           </div>
         </div>
       </section>
@@ -5021,42 +3187,6 @@
         </div>
       </div>
       <div class="wing-back-hero bakdrop"></div>
-      <div class="sliderinblack">
-        <div data-w-id="9b176962-6ec6-ac6a-3218-48cf9c8a2538" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
       <section class="section home1-dev">
         <div reveal-content="true" class="w-layout-grid title-for-dashboard">
           <h3 line-split="true" class="fsize-s">How Much House Can You Afford?<br> <span class="tertiary-color-emphasis">Complete your financial snapshot to see your range.</span></h3>
@@ -8797,6 +6927,26 @@
             </div>
             <div id="w-node-_336f9c6a-a9fd-7777-5a12-e6622983d64a-6972faff" class="hero1-background"></div>
           </div>
+          <div class="asdfa-asdfasd">
+            <div data-w-id="74a4f99c-cfc1-d57c-e96b-3320276a6570" class="primary-glow-wrapper-23 blog-grid-child second-version">
+              <div class="button-overflow-hidden-2 for--blog">
+                <div class="full-size">
+                  <div class="pedding-stroke-13 big--size full-size">
+                    <div class="inside-button-32 none-padding full-size for--blog">
+                      <div data-poster-url="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg" data-video-urls="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4,https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="home2_hero_image-3 w-background-video w-background-video-atom"><video id="e1cd6b11-1315-7750-d5d1-4ab0f0ea59f5-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
+                          <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4" data-wf-ignore="true">
+                          <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-wf-ignore="true">
+                        </video></div><img sizes="100vw" srcset="../images/spline_1-p-500.png 500w, ../images/spline_1-p-800.png 800w, ../images/spline_1.png 1080w" alt="" src="../images/spline_1.png" loading="lazy" class="image-156">
+                    </div>
+                  </div>
+                  <div class="glow-wrapper stroke for--boxes">
+                    <div class="glow-item left"></div>
+                    <div class="glow-item"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
       <div class="sliderinblack">
@@ -8836,18 +6986,2619 @@
         </div>
       </div>
       <div class="wing-back-hero bakdrop"></div>
+      <div class="financial-section padding-section-medium">
+        <div class="creagteaccountafter-resouses creaateaccount-after-resources">
+          <div class="container-default-8">
+            <div data-w-id="e1cd6b11-1315-7750-d5d1-4ab0f0ea59f4" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="home2_about_grid-3">
+              <div data-poster-url="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg" data-video-urls="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4,https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="home2_hero_image-3 w-background-video w-background-video-atom"><video id="1781400e-6b9e-9b49-f09b-aef2acd3cf80-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
+                  <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4" data-wf-ignore="true">
+                  <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-wf-ignore="true">
+                </video></div>
+              <div class="home2_about_content-2">
+                <h2 class="heading-style-h1"></h2>
+                <h1 class="frd-title-2">Comprehensive Financial Dashboard</h1>
+                <div class="opensource-financial-cab-2">
+                  <div class="section_heading-5">
+                    <div class="spacer-xsmall-6">
+                      <h1 class="heading-151">Take our fun 2-minute Quiz and Find out. </h1>
+                    </div>
+                    <div class="spacer-small-6">
+                      <div class="code-embed-55 w-embed w-script"><!--  //#0 HOUSE OF SASS • PCS UNITED • FINANCIAL INTAKE (SINGLE EMBED)
+     INPUT ONLY → saves locally → queues pending cloud-save → redirects to login-gated page
+     ✅ NO Supabase write happens here (only after email/password success)
+ -->
+                        <div id="sass-mortgage-strip" style="all: initial;">
+                          <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+                          <style>
+    #sass-mortgage-strip, #sass-mortgage-strip * { box-sizing: border-box; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+    #sass-shell { width: 100%; max-width: 980px; margin: 0 auto; padding: 16px 0; }
+    #intent-row { display: flex; justify-content: center; gap: 14px; margin-bottom: 22px; }
+    .intent-btn {
+      padding: 8px 18px; border-radius: 999px; font-size: 12px; font-weight: 800;
+      letter-spacing: .08em; text-transform: uppercase; border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(12,14,25,0.65); color: #e9ecff; cursor: pointer; transition: .15s ease;
+    }
+    .intent-btn.active { background: radial-gradient(circle at top left, #8ef3c5, #6aa7ff); color: #050712; border-color: transparent; }
+    #sass-input-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: start; }
+    @media (max-width: 768px) { #sass-input-row { grid-template-columns: repeat(2, 1fr); } }
+    .sass-field-label { font-size: 11px; text-transform: uppercase; color: #a8b0d6; letter-spacing: .1em; margin-bottom: 6px; display: block; font-weight: 800; }
+    .sass-number {
+      width: 100%; padding: 9px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(12,14,25,0.65); color: #e9ecff; font-size: 14px; outline: none;
+    }
+    .sass-help { margin-top: 6px; font-size: 11px; color: rgba(233,236,255,0.65); line-height: 1.35; }
+    #sass-analyze-btn{
+      margin: 26px auto 0; display: block; padding: 11px 32px; font-size: 13px; font-weight: 800;
+      text-transform: uppercase; letter-spacing: .1em; border: none; border-radius: 999px;
+      background: radial-gradient(circle at top left, #8ef3c5, #6aa7ff); color: #050712; cursor: pointer;
+      box-shadow: 0 14px 30px rgba(0,0,0,.80); transition: .15s ease;
+    }
+    #sass-analyze-btn:hover { transform: translateY(-1px); filter: brightness(1.03); }
+    #sass-err{ margin: 10px auto 0; max-width: 720px; font-size: 12px; color: rgba(255,107,107,.95); text-align: center; display: none; }
+  </style>
+                          <div id="sass-shell">
+                            <div id="intent-row">
+                              <button class="intent-btn active" data-mode="ready">Ready Now</button>
+                              <button class="intent-btn" data-mode="soon">Within 6 Months</button>
+                              <button class="intent-btn" data-mode="unsure">Unsure</button>
+                            </div>
+                            <div id="sass-input-row">
+                              <div>
+                                <label class="sass-field-label">Monthly Expenses</label>
+                                <input class="sass-number" id="rs-expenses" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 1800">
+                                <div class="sass-help">All non-housing monthly spend.</div>
+                              </div>
+                              <div>
+                                <label class="sass-field-label">Projected Home Price</label>
+                                <input class="sass-number" id="rs-price" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 450000">
+                                <div class="sass-help">Purchase price you’re targeting.</div>
+                              </div>
+                              <div>
+                                <label class="sass-field-label">Downpayment</label>
+                                <input class="sass-number" id="rs-down" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g., 25000">
+                                <div class="sass-help">Dollar amount (not %).</div>
+                              </div>
+                              <div>
+                                <label class="sass-field-label">Credit Score</label>
+                                <input class="sass-number" id="rs-score" type="number" inputmode="numeric" min="300" max="850" step="1" placeholder="e.g., 720">
+                                <div class="sass-help">300–850 (used for APR tier).</div>
+                              </div>
+                            </div>
+                            <button id="sass-analyze-btn" type="button">Continue</button>
+                            <div id="sass-err"></div>
+                          </div>
+                          <script>
+    (function(){
+      "use strict";
+      // =========================================================
+      // //#1 CONFIG
+      // =========================================================
+      const DASHBOARD_URL = "https://pcs-united.webflow.io/military-calculator-rent-vs-buy";
+      const OV_KEY      = "pcsunited.kpi_overrides.v1";
+      const BRIDGE_KEY  = "pcsunited.bridge.v1";
+      const INTENT_KEY  = "pcsunited.financial_intake.v1";
+      // NEW: queued here; login flow commits to Supabase
+      const PENDING_KEY = "pcsunited.pending_intake.v1";
+      // Optional AIOU local keys (we’ll include if present)
+      const AIOU_KEYS = [
+        "pcsunited.user_aiou_inputs.v1",
+        "pcsunited.aiou_inputs.v1",
+        "realtysass.user_aiou_inputs.v1",
+        "realtysass.aiou_inputs.v1"
+      ];
+      const root = document.getElementById("sass-mortgage-strip");
+      if (!root) return;
+      const buttons = root.querySelectorAll(".intent-btn");
+      const continueBtn = document.getElementById("sass-analyze-btn");
+      const errEl = document.getElementById("sass-err");
+      const elExpenses = document.getElementById("rs-expenses");
+      const elPrice    = document.getElementById("rs-price");
+      const elDown     = document.getElementById("rs-down");
+      const elScore    = document.getElementById("rs-score");
+      function n0(v){ const n = Number(v); return Number.isFinite(n) ? n : 0; }
+      function readJSON(key, fallback){
+        try{ return JSON.parse(localStorage.getItem(key) || "null") ?? fallback; }
+        catch(_){ return fallback; }
+      }
+      function writeJSON(key, val){
+        try{ localStorage.setItem(key, JSON.stringify(val)); }catch(_){}
+      }
+      function getActiveMode(){
+        const a = root.querySelector(".intent-btn.active");
+        return a ? String(a.dataset.mode || "ready") : "ready";
+      }
+      function setError(msg){
+        if (!errEl) return;
+        if (!msg){ errEl.style.display = "none"; errEl.textContent = ""; return; }
+        errEl.style.display = "block";
+        errEl.textContent = msg;
+      }
+      function makeAttemptId(){
+        const rand = Math.random().toString(16).slice(2);
+        return "pcsatt_" + Date.now().toString(36) + "_" + rand;
+      }
+      function readAiouIfPresent(){
+        for (const k of AIOU_KEYS){
+          const v = readJSON(k, null);
+          if (v && typeof v === "object") return { key: k, data: v };
+        }
+        return null;
+      }
+      // intent toggles
+      buttons.forEach(btn => {
+        btn.addEventListener("click", () => {
+          buttons.forEach(b => b.classList.remove("active"));
+          btn.classList.add("active");
+        });
+      });
+      // Prefill from overrides
+      (function prefill(){
+        const ov = readJSON(OV_KEY, {}) || {};
+        const prevExpenses = ov.expensesOverride ?? "";
+        const prevPrice    = ov.projected_home_price ?? ov.housingOverride ?? "";
+        const prevDown     = ov.downpayment ?? ov.savingsOverride ?? "";
+        const prevScore    = ov.credit_score ?? ov.creditScore ?? "";
+        if (elExpenses && prevExpenses !== "") elExpenses.value = String(prevExpenses);
+        if (elPrice && prevPrice !== "")       elPrice.value    = String(prevPrice);
+        if (elDown && prevDown !== "")         elDown.value     = String(prevDown);
+        if (elScore && prevScore !== "")       elScore.value    = String(prevScore);
+      })();
+      continueBtn.addEventListener("click", ()=>{
+        setError("");
+        const mode     = getActiveMode();
+        const expenses = Math.max(0, n0(elExpenses && elExpenses.value));
+        const price    = Math.max(0, n0(elPrice && elPrice.value));
+        const down     = Math.max(0, n0(elDown && elDown.value));
+        let score      = Math.round(n0(elScore && elScore.value));
+        if (score <= 0) score = 720;
+        score = Math.max(300, Math.min(850, score));
+        if (price > 0 && down > price){
+          setError("Downpayment can’t be greater than the home price.");
+          return;
+        }
+        // =========================================================
+        // //#2 SAVE LOCAL (for dashboard math + UI)
+        // =========================================================
+        const ov = readJSON(OV_KEY, {}) || {};
+        ov.expensesOverride      = expenses;
+        ov.housingOverride       = price;
+        ov.savingsOverride       = down;
+        ov.creditScore           = score;
+        ov.dpManual              = true;
+        ov._intakeTs             = Date.now();
+        ov._intakeSource         = "pcsunited.financial.intake.v1";
+        writeJSON(OV_KEY, ov);
+        const bridge = readJSON(BRIDGE_KEY, {}) || {};
+        bridge.expenses          = expenses;
+        bridge.housing           = price;
+        bridge.dpAmt             = down;
+        bridge.creditScore       = score;
+        bridge._intakeMode       = mode;
+        bridge._intakeTs         = Date.now();
+        bridge._intakeSource     = "pcsunited.financial.intake.v1";
+        writeJSON(BRIDGE_KEY, bridge);
+        writeJSON(INTENT_KEY, {
+          mode,
+          expenses,
+          price,
+          downpayment: down,
+          creditScore: score,
+          saved_at: new Date().toISOString(),
+          source: "pcsunited.financial.intake.v1"
+        });
+        // =========================================================
+        // //#3 QUEUE PENDING CLOUD SAVE (ONLY committed AFTER LOGIN)
+        // =========================================================
+        const attempt_id = makeAttemptId();
+        const aiouWrap = readAiouIfPresent();
+        writeJSON(PENDING_KEY, {
+          attempt_id,
+          created_at: new Date().toISOString(),
+          source: "pcsunited.financial.intake.v1",
+          mode,
+          monthly_expenses: expenses,
+          projected_home_price: price,
+          downpayment: down,
+          credit_score: score,
+          aiou: aiouWrap ? aiouWrap.data : null,
+          aiou_key: aiouWrap ? aiouWrap.key : null,
+          local: { overrides: ov, bridge }
+        });
+        // =========================================================
+        // //#4 REDIRECT
+        // =========================================================
+        continueBtn.disabled = true;
+        continueBtn.textContent = "Continuing…";
+        location.href = DASHBOARD_URL;
+      });
+    })();
+  </script>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="text-style-muted80-6">Get an Executive Summary of your Financial Health based on your Finances and Future BAH. Our Financial Dashboard provides unparalleled data visualization to understand your current status and how it affects your future goals.  Create an account to take advantage of this incredible </div>
+                  </div>
+                  <div class="code-for-create-account-6 w-embed"><!--  =========================================================
+  PCS UNITED • Premium Account Button (Redirect) v1.0.0
+  ✅ Matches your “CREATE PREMIUM ACCOUNT” gradient pill button
+  ✅ Redirects to: https://pcs-united.webflow.io/veteran-activeduty-account
+=========================================================  -->
+                    <div id="pcsu-premium-cta" style="all: initial;">
+                      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+                      <style>
+    /* Scope everything to this embed */
+    #pcsu-premium-cta, #pcsu-premium-cta *{
+      box-sizing:border-box;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    /* Centered, full-width rail like your current embed */
+    #pcsu-premium-wrap{
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 18px 10px;
+      background: transparent !important;
+    }
+    /* The button itself */
+    #pcsu-premium-btn{
+      display: block;
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+      text-align: center;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #050712;
+      /* Image-matched left→right gradient */
+      background: linear-gradient(90deg, #B7EACA 0%, #8DA8F5 100%);
+      box-shadow: 0 10px 22px rgba(0,0,0,.18);
+      transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+    #pcsu-premium-btn:hover{
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+      box-shadow: 0 14px 30px rgba(0,0,0,.22);
+    }
+    #pcsu-premium-btn:active{
+      transform: translateY(0px);
+      filter: brightness(0.99);
+    }
+    #pcsu-premium-btn:focus{
+      outline: none;
+    }
+    #pcsu-premium-btn:focus-visible{
+      box-shadow:
+        0 14px 30px rgba(0,0,0,.22),
+        0 0 0 3px rgba(142,243,197,.28);
+    }
+  </style>
+                      <div id="pcsu-premium-wrap">
+                        <a id="pcsu-premium-btn" href="https://pcsu.webflow.io/create-account" aria-label="Create Account">
+                          CREATE ACCOUNT
+                        </a>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="sliderinblack-2">
+          <div data-w-id="e1cd6b11-1315-7750-d5d1-4ab0f0ea5a05" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+            <div class="highlight_marquee-group">
+              <div class="highlight_marquee-texts-2">
+                <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                  <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
+                </div>
+                <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                  <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+                </div>
+                <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                  <div class="heading-style-h4-3 text-color-alternate">VA University</div>
+                </div>
+                <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                  <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
+                </div>
+              </div>
+            </div>
+            <div class="highlight_marquee-group">
+              <div class="highlight_marquee-texts-2">
+                <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                  <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+                </div>
+                <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                  <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+                </div>
+                <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                  <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+                </div>
+                <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                  <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="fad-cabinet">
+          <div class="section_heading-5">
+            <div class="spacer-xxsmall"></div>
+            <div class="spacer-small-6">
+              <div class="code-embed-55 w-embed w-script"><!--  //#0 A.I.O.U • Inline Buyer Assumption Test
+     v5.0.0 • Housing Quiz Companion Flow
+     - Inline display like Housing Quiz
+     - No intro page
+     - No profile page
+     - Auto-starts after pcsunited:housing-quiz-complete
+     - Reads Housing Quiz baseline profile
+     - Saves AIOU result locally + pending intake
+ -->
+                <div id="aiou-shell" data-endpoint="https://theorozcorealty.netlify.app/.netlify/functions/aiou-report" style="all:initial;">
+                  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+                  <style>
+#aiou-shell,
+#aiou-shell *{
+  box-sizing:border-box;
+  font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+}
+#aiou-shell{
+  width:100%;
+  display:block;
+  color:#fff;
+  background:transparent !important;
+  --ink:#ffffff;
+  --muted:rgba(230,236,255,.76);
+  --muted2:rgba(230,236,255,.58);
+  --accent:#8ef3c5;
+  --accent2:#6aa7ff;
+  --danger:#ff6f9f;
+  --stroke:rgba(255,255,255,.10);
+}
+#aiou-stage{
+  width:100%;
+  background:transparent !important;
+  display:none;
+}
+#aiou-stage.active{
+  display:block;
+}
+#aiou-kicker{
+  margin-bottom:10px;
+  font-size:11px;
+  font-weight:900;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--accent);
+}
+#aiou-title{
+  margin:0;
+  max-width:900px;
+  font-size:48px;
+  line-height:1.02;
+  font-weight:900;
+  letter-spacing:-.05em;
+  color:#ffffff;
+}
+#aiou-sub{
+  margin-top:14px;
+  max-width:760px;
+  font-size:16px;
+  line-height:1.55;
+  color:var(--muted);
+}
+#aiou-progress-wrap{
+  margin-top:26px;
+  width:100%;
+  height:7px;
+  border-radius:999px;
+  background:rgba(255,255,255,.10);
+  overflow:hidden;
+}
+#aiou-progress-bar{
+  width:0%;
+  height:100%;
+  border-radius:999px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+  transform-origin:left;
+  transition:width .22s ease;
+}
+#aiou-question-meta{
+  margin-top:18px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:16px;
+  flex-wrap:wrap;
+}
+#aiou-qtitle{
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(230,236,255,.72);
+}
+#aiou-clock{
+  min-width:58px;
+  height:30px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  border-radius:999px;
+  border:1px solid rgba(106,167,255,.46);
+  background:rgba(106,167,255,.12);
+  color:#ffffff;
+  font-size:12px;
+  font-weight:900;
+}
+#aiou-qtext{
+  margin-top:16px;
+  max-width:860px;
+  font-size:24px;
+  line-height:1.18;
+  font-weight:900;
+  letter-spacing:-.035em;
+  color:#ffffff;
+}
+#aiou-visual-area{
+  margin-top:26px;
+  display:none;
+}
+#aiou-visual-area.active{
+  display:block;
+}
+.aiou-dualpref{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:18px;
+}
+.aiou-dualpref figure{
+  margin:0;
+  overflow:hidden;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.04);
+}
+.aiou-dualpref img{
+  width:100%;
+  height:190px;
+  display:block;
+  object-fit:cover;
+  cursor:pointer;
+}
+.aiou-dualpref figcaption{
+  padding:10px 14px 12px;
+  text-align:center;
+  font-size:13px;
+  font-weight:900;
+  color:rgba(238,243,255,.82);
+}
+#aiou-slider-row{
+  margin-top:20px;
+}
+#aiou-slider-label-row{
+  display:grid;
+  grid-template-columns:120px 1fr 120px;
+  align-items:center;
+  gap:14px;
+}
+.aiou-slider-end{
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  color:rgba(238,243,255,.82);
+}
+.aiou-slider-end.right{
+  text-align:right;
+}
+.aiou-slider-shell{
+  position:relative;
+  height:20px;
+  border-radius:999px;
+  background:transparent;
+}
+.aiou-slider-shell::before{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  top:50%;
+  height:7px;
+  transform:translateY(-50%);
+  border-radius:999px;
+  background:var(
+    --rail-bg,
+    linear-gradient(
+      90deg,
+      var(--accent) 0%,
+      var(--accent2) 50%,
+      rgba(255,255,255,.15) 50%,
+      rgba(255,255,255,.15) 100%
+    )
+  );
+  box-shadow:
+    inset 0 1px 2px rgba(255,255,255,.28),
+    inset 0 -1px 2px rgba(0,0,0,.12),
+    0 7px 16px rgba(106,167,255,.16);
+  pointer-events:none;
+}
+.aiou-range{
+  width:100%;
+  -webkit-appearance:none;
+  appearance:none;
+  background:transparent;
+  position:relative;
+  z-index:2;
+  height:20px;
+  margin:0;
+  cursor:pointer;
+}
+.aiou-range:focus{
+  outline:none;
+}
+.aiou-range::-webkit-slider-runnable-track{
+  height:20px;
+  background:transparent;
+  border:none;
+}
+.aiou-range::-moz-range-track{
+  height:20px;
+  background:transparent;
+  border:none;
+}
+.aiou-range::-webkit-slider-thumb{
+  -webkit-appearance:none;
+  appearance:none;
+  width:28px;
+  height:28px;
+  margin-top:-4px;
+  border-radius:999px;
+  background:linear-gradient(180deg,#ffffff,#e9eef6);
+  border:1px solid rgba(18,24,38,.13);
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -2px 6px rgba(18,24,38,.08);
+  transition:.16s ease;
+}
+.aiou-range:hover::-webkit-slider-thumb{
+  transform:scale(1.05);
+}
+.aiou-range::-moz-range-thumb{
+  width:28px;
+  height:28px;
+  border-radius:999px;
+  background:linear-gradient(180deg,#ffffff,#e9eef6);
+  border:1px solid rgba(18,24,38,.13);
+  box-shadow:
+    0 10px 22px rgba(0,0,0,.24),
+    inset 0 1px 0 rgba(255,255,255,.95),
+    inset 0 -2px 6px rgba(18,24,38,.08);
+  cursor:pointer;
+}
+#aiou-vlabel{
+  margin-top:10px;
+  text-align:center;
+  font-size:13px;
+  font-weight:900;
+  color:rgba(230,236,255,.78);
+}
+#aiou-scale{
+  margin-top:26px;
+  display:none;
+  grid-template-columns:repeat(11,1fr);
+  gap:8px;
+  max-width:860px;
+}
+#aiou-scale.active{
+  display:grid;
+}
+.aiou-pill{
+  appearance:none;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.045);
+  color:#ffffff;
+  border-radius:14px;
+  min-height:46px;
+  font-size:13px;
+  font-weight:900;
+  cursor:pointer;
+  transition:.16s ease;
+}
+.aiou-pill:hover{
+  transform:translateY(-1px);
+  border-color:rgba(142,243,197,.28);
+}
+.aiou-pill.active{
+  border-color:rgba(142,243,197,.44);
+  background:rgba(142,243,197,.09);
+}
+#aiou-bottom{
+  margin-top:22px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:18px;
+  flex-wrap:wrap;
+}
+#aiou-helper{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  font-size:14px;
+  line-height:1.55;
+  color:rgba(230,236,255,.72);
+}
+#aiou-helper-icon{
+  width:28px;
+  height:28px;
+  border-radius:999px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  color:var(--accent);
+  font-size:13px;
+  flex:0 0 auto;
+}
+#aiou-actions{
+  display:flex;
+  gap:12px;
+}
+.aiou-btn{
+  appearance:none;
+  border:none;
+  cursor:pointer;
+  min-width:150px;
+  height:54px;
+  padding:0 22px;
+  border-radius:18px;
+  font-size:13px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  transition:.18s ease;
+}
+#aiou-skip{
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.08);
+  color:#dbe5ff;
+}
+#aiou-reset{
+  background:transparent;
+  border:1px solid rgba(255,111,159,.68);
+  color:#ff6f9f;
+}
+.aiou-btn:hover{
+  transform:translateY(-1px);
+}
+#aiou-results{
+  display:none;
+  padding-top:10px;
+}
+#aiou-results.active{
+  display:block;
+}
+#aiou-results-title{
+  font-size:40px;
+  line-height:1.04;
+  font-weight:900;
+  letter-spacing:-.05em;
+  color:#ffffff;
+}
+#aiou-results-copy{
+  margin-top:12px;
+  max-width:860px;
+  font-size:15px;
+  line-height:1.65;
+  color:rgba(230,236,255,.74);
+}
+#aiou-kpi-grid{
+  margin-top:30px;
+  display:grid;
+  grid-template-columns:repeat(5,minmax(0,1fr));
+  gap:14px;
+  max-width:1250px;
+}
+.aiou-kpi-card{
+  min-height:94px;
+  padding:18px 20px;
+  border-radius:18px;
+  border:1px solid rgba(180,210,255,.18);
+  background:rgba(255,255,255,.045);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.08),
+    0 12px 28px rgba(0,0,0,.16);
+}
+.aiou-kpi-label{
+  font-size:12px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.11em;
+  text-transform:uppercase;
+  color:rgba(230,236,255,.64);
+}
+.aiou-kpi-value{
+  margin-top:14px;
+  font-size:28px;
+  line-height:1;
+  font-weight:900;
+  letter-spacing:.04em;
+  color:#ffffff;
+}
+#aiou-consistency,
+#aiou-archetype,
+#aiou-mbti{
+  margin-top:16px;
+  max-width:920px;
+  font-size:14px;
+  line-height:1.65;
+  color:rgba(230,236,255,.76);
+}
+#aiou-archetype{
+  font-weight:900;
+  color:#ffffff;
+}
+#aiou-report-box{
+  margin-top:20px;
+  max-width:1100px;
+  padding:18px;
+  border-radius:18px;
+  border:1px solid rgba(255,255,255,.10);
+  background:rgba(255,255,255,.045);
+  font-size:14px;
+  line-height:1.65;
+  color:rgba(230,236,255,.78);
+}
+.aiou-ok{
+  color:#58f7b7;
+  font-weight:900;
+}
+.aiou-flag{
+  color:#ff6f9f;
+  font-weight:900;
+}
+@media(max-width:1100px){
+  #aiou-kpi-grid{
+    grid-template-columns:repeat(3,minmax(0,1fr));
+  }
+}
+@media(max-width:900px){
+  #aiou-title{
+    font-size:38px;
+  }
+  .aiou-dualpref{
+    grid-template-columns:1fr;
+  }
+  #aiou-slider-label-row{
+    grid-template-columns:1fr;
+    gap:8px;
+  }
+  .aiou-slider-end.right{
+    text-align:left;
+  }
+  #aiou-scale{
+    grid-template-columns:repeat(6,1fr);
+  }
+}
+@media(max-width:640px){
+  #aiou-title{
+    font-size:30px;
+  }
+  #aiou-qtext{
+    font-size:20px;
+  }
+  .aiou-dualpref img{
+    height:145px;
+  }
+  #aiou-bottom{
+    flex-direction:column;
+    align-items:stretch;
+  }
+  #aiou-actions{
+    width:100%;
+  }
+  .aiou-btn{
+    flex:1;
+    min-width:0;
+  }
+  #aiou-kpi-grid{
+    grid-template-columns:1fr;
+  }
+  #aiou-results-title{
+    font-size:32px;
+  }
+}
+</style>
+                  <div id="aiou-stage">
+                    <div id="aiou-quiz-panel">
+                      <div id="aiou-kicker">
+                        A.I.O.U Assumption Test
+                      </div>
+                      <h2 id="aiou-title">
+                        Testing Your Housing Assumptions
+                      </h2>
+                      <div id="aiou-sub">
+                        PCSUnited is now checking whether your housing preferences stay consistent when budget, repairs, commute, and lifestyle tradeoffs are introduced.
+                      </div>
+                      <div id="aiou-progress-wrap">
+                        <div id="aiou-progress-bar"></div>
+                      </div>
+                      <div id="aiou-question-meta">
+                        <div id="aiou-qtitle">Question</div>
+                        <div id="aiou-clock">10</div>
+                      </div>
+                      <div id="aiou-qtext"></div>
+                      <div id="aiou-visual-area">
+                        <div class="aiou-dualpref">
+                          <figure>
+                            <img id="aiou-vimg-a" src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/68f9a10aab47946a36f5c135_04d878cc02583fb9bfda33ddbd28d91a_MinorFixesHome.jpg" alt="May Require Fixes">
+                            <figcaption>May Require Fixes</figcaption>
+                          </figure>
+                          <figure>
+                            <img id="aiou-vimg-b" src="https://cdn.prod.website-files.com/68cecb820ec3dbdca3ef9099/68f9a113c4924ecebad2319a_a0cc3184b96f525ed5a278c3bac62891_BrandNewHome.jpg" alt="Brand New Home">
+                            <figcaption>Brand New Home</figcaption>
+                          </figure>
+                        </div>
+                        <div id="aiou-slider-row">
+                          <div id="aiou-slider-label-row">
+                            <div class="aiou-slider-end">Needs Fixes</div>
+                            <div class="aiou-slider-shell">
+                              <input id="aiou-vslider" class="aiou-range" type="range" min="-5" max="5" step="1" value="0">
+                            </div>
+                            <div class="aiou-slider-end right">Brand New</div>
+                          </div>
+                          <div id="aiou-vlabel">Neutral</div>
+                        </div>
+                      </div>
+                      <div id="aiou-scale"></div>
+                      <div id="aiou-bottom">
+                        <div id="aiou-helper">
+                          <div id="aiou-helper-icon">✓</div>
+                          <div>
+                            No answer becomes neutral after 10 seconds. This helps reveal instinctive tradeoff behavior.
+                          </div>
+                        </div>
+                        <div id="aiou-actions">
+                          <button class="aiou-btn" id="aiou-skip" type="button">Skip</button>
+                          <button class="aiou-btn" id="aiou-reset" type="button">Reset</button>
+                        </div>
+                      </div>
+                    </div>
+                    <div id="aiou-results">
+                      <div id="aiou-results-title">
+                        Your Assumption Test Is Complete
+                      </div>
+                      <div id="aiou-results-copy">
+                        PCSUnited compared your housing instincts against tradeoff pressure to see whether your preferences stayed consistent.
+                      </div>
+                      <div id="aiou-kpi-grid">
+                        <div class="aiou-kpi-card">
+                          <div class="aiou-kpi-label">Openness</div>
+                          <div class="aiou-kpi-value" id="aiou-k-open">—</div>
+                        </div>
+                        <div class="aiou-kpi-card">
+                          <div class="aiou-kpi-label">Discipline</div>
+                          <div class="aiou-kpi-value" id="aiou-k-disc">—</div>
+                        </div>
+                        <div class="aiou-kpi-card">
+                          <div class="aiou-kpi-label">Lifestyle Pull</div>
+                          <div class="aiou-kpi-value" id="aiou-k-life">—</div>
+                        </div>
+                        <div class="aiou-kpi-card">
+                          <div class="aiou-kpi-label">Flexibility</div>
+                          <div class="aiou-kpi-value" id="aiou-k-flex">—</div>
+                        </div>
+                        <div class="aiou-kpi-card">
+                          <div class="aiou-kpi-label">Risk Aversion</div>
+                          <div class="aiou-kpi-value" id="aiou-k-risk">—</div>
+                        </div>
+                      </div>
+                      <div id="aiou-consistency"></div>
+                      <div id="aiou-archetype"></div>
+                      <div id="aiou-mbti"></div>
+                      <div id="aiou-report-box">(Generating your personalized memo…)</div>
+                    </div>
+                  </div>
+                  <script>
+(function(){
+"use strict";
+const ROOT = document.getElementById("aiou-shell");
+if(!ROOT) return;
+const ENDPOINT = (
+  ROOT.dataset.endpoint ||
+  "https://theorozcorealty.netlify.app/.netlify/functions/aiou-report"
+).trim();
+const HOUSING_KEY = "pcsunited.housing_quiz.v1";
+const AIOU_LOCAL_KEY = "pcsunited.user_aiou_inputs.v1";
+const PENDING_KEY = "pcsunited.pending_intake.v1";
+const LOGIN_EMAIL_KEYS = [
+  "pcsunited.loginEmail",
+  "pcsunited.sessionEmail",
+  "realtysass.loginEmail",
+  "realtysass.sessionEmail"
+];
+const Q = [
+  {
+    id:"V1",
+    type:"visual",
+    dim:"O",
+    text:"Where are you between these two options right now?",
+    rev:false
+  },
+  {
+    id:"O1",
+    dim:"O",
+    text:"I believe an updated, modern-looking home would make me happier long-term.",
+    rev:false,
+    ctrlPair:"O1b"
+  },
+  {
+    id:"O1b",
+    dim:"O",
+    text:"I would be satisfied with an older or plain-looking home if it gave me the right payment, location, and space.",
+    rev:true,
+    ctrlPair:"O1"
+  },
+  {
+    id:"O2",
+    dim:"O",
+    text:"I would pay more for features like newer finishes, open layout, natural light, or a better kitchen.",
+    rev:false,
+    ctrlPair:"O2b"
+  },
+  {
+    id:"O2b",
+    dim:"O",
+    text:"If the payment felt uncomfortable, I would quickly give up style and upgrades.",
+    rev:true,
+    ctrlPair:"O2"
+  },
+  {
+    id:"C1",
+    dim:"C",
+    text:"If I found a home I loved, I would be tempted to stretch above my planned budget.",
+    rev:true,
+    ctrlPair:"C1b"
+  },
+  {
+    id:"C1b",
+    dim:"C",
+    text:"Even if I loved the home, I would walk away if the numbers did not make sense.",
+    rev:false,
+    ctrlPair:"C1"
+  },
+  {
+    id:"C2",
+    dim:"C",
+    text:"My housing needs are clear enough that I can separate true must-haves from nice-to-haves.",
+    rev:false,
+    ctrlPair:"C2b"
+  },
+  {
+    id:"C2b",
+    dim:"C",
+    text:"When looking at homes, I often find myself changing what I thought mattered most.",
+    rev:true,
+    ctrlPair:"C2"
+  },
+  {
+    id:"C3",
+    dim:"C",
+    text:"I want enough space even if it means higher utilities, more maintenance, or a slightly higher payment.",
+    rev:true,
+    ctrlPair:"C3b"
+  },
+  {
+    id:"C3b",
+    dim:"C",
+    text:"I would rather choose a right-sized home than pay more for rooms I may not truly use.",
+    rev:false,
+    ctrlPair:"C3"
+  },
+  {
+    id:"E1",
+    dim:"E",
+    text:"I picture using my home for hosting, family gatherings, cookouts, or visiting relatives.",
+    rev:false,
+    ctrlPair:"E1b"
+  },
+  {
+    id:"E1b",
+    dim:"E",
+    text:"Most of the time, I prefer my home to feel private, quiet, and low-traffic.",
+    rev:true,
+    ctrlPair:"E1"
+  },
+  {
+    id:"E2",
+    dim:"E",
+    text:"I would accept a smaller or less impressive home if it placed me closer to work, school, base, or daily life.",
+    rev:false,
+    ctrlPair:"E2b"
+  },
+  {
+    id:"E2b",
+    dim:"E",
+    text:"I would rather drive farther if it means getting the home, space, or neighborhood I really want.",
+    rev:true,
+    ctrlPair:"E2"
+  },
+  {
+    id:"A1",
+    dim:"A",
+    text:"I can compromise on cosmetic details if the home solves the bigger picture.",
+    rev:false,
+    ctrlPair:"A1b"
+  },
+  {
+    id:"A1b",
+    dim:"A",
+    text:"If a home misses several details I care about, I usually struggle to see it as a real option.",
+    rev:true,
+    ctrlPair:"A1"
+  },
+  {
+    id:"N1",
+    dim:"N",
+    text:"A home needing repairs, updates, or unknown costs would make me anxious.",
+    rev:false,
+    ctrlPair:"N1b"
+  },
+  {
+    id:"N1b",
+    dim:"N",
+    text:"I am comfortable buying a home that needs work if the discount is strong enough.",
+    rev:true,
+    ctrlPair:"N1"
+  },
+  {
+    id:"N2",
+    dim:"N",
+    text:"I trust newer homes more because they feel cleaner, safer, and less risky.",
+    rev:false,
+    ctrlPair:"N2b"
+  },
+  {
+    id:"N2b",
+    dim:"N",
+    text:"I would trust an older home if inspection, maintenance history, and neighborhood quality were strong.",
+    rev:true,
+    ctrlPair:"N2"
+  },
+  {
+    id:"N3",
+    dim:"N",
+    text:"I would choose a quieter, safer-feeling area even if it meant being farther from restaurants, shopping, or events.",
+    rev:false,
+    ctrlPair:"N3b"
+  },
+  {
+    id:"N3b",
+    dim:"N",
+    text:"I would accept a busier area if it gave me better access to daily convenience and lifestyle.",
+    rev:true,
+    ctrlPair:"N3"
+  },
+  {
+    id:"X1",
+    dim:"O",
+    text:"If I had to choose, I would rather get the home that feels right than the lowest possible monthly payment.",
+    rev:false,
+    ctrlPair:"X1b"
+  },
+  {
+    id:"X1b",
+    dim:"C",
+    text:"If I had to choose, I would rather protect my monthly payment than get the home that feels emotionally perfect.",
+    rev:false,
+    ctrlPair:"X1"
+  }
+];
+let idx = 0;
+let answers = {};
+let timer = null;
+let tLeft = 10;
+let started = false;
+let housingPayload = null;
+window.__AIOU_STYLE_V_PRICE = 0;
+const stage = document.getElementById("aiou-stage");
+const quizPanel = document.getElementById("aiou-quiz-panel");
+const resultsPanel = document.getElementById("aiou-results");
+const qTitle = document.getElementById("aiou-qtitle");
+const qText = document.getElementById("aiou-qtext");
+const clock = document.getElementById("aiou-clock");
+const progressBar = document.getElementById("aiou-progress-bar");
+const visualArea = document.getElementById("aiou-visual-area");
+const scaleBlock = document.getElementById("aiou-scale");
+const vSlider = document.getElementById("aiou-vslider");
+const vLabel = document.getElementById("aiou-vlabel");
+const vImgA = document.getElementById("aiou-vimg-a");
+const vImgB = document.getElementById("aiou-vimg-b");
+const skipBtn = document.getElementById("aiou-skip");
+const resetBtn = document.getElementById("aiou-reset");
+function readJSON(key,fallback){
+  try{
+    return JSON.parse(localStorage.getItem(key) || "null") ?? fallback;
+  }catch(_){
+    return fallback;
+  }
+}
+function writeJSON(key,value){
+  try{
+    localStorage.setItem(key,JSON.stringify(value));
+  }catch(_){}
+}
+function getAnyEmail(){
+  for(const key of LOGIN_EMAIL_KEYS){
+    try{
+      const value = String(localStorage.getItem(key) || "").trim().toLowerCase();
+      if(value) return value;
+    }catch(_){}
+  }
+  try{
+    const sessionEmail = String(sessionStorage.getItem("pcsunited.sessionEmail") || "").trim().toLowerCase();
+    if(sessionEmail) return sessionEmail;
+  }catch(_){}
+  return "";
+}
+function makeAttemptId(){
+  return "aiouatt_" + Date.now().toString(36) + "_" + Math.random().toString(16).slice(2);
+}
+function mergePending(partial){
+  const existing = readJSON(PENDING_KEY,null);
+  const base = existing && typeof existing === "object"
+    ? existing
+    : {
+        attempt_id:makeAttemptId(),
+        created_at:new Date().toISOString(),
+        source:"pcsunited.aiou.quiz.v5.inline"
+      };
+  const merged = {
+    ...base,
+    ...partial,
+    attempt_id:base.attempt_id || makeAttemptId(),
+    created_at:base.created_at || new Date().toISOString(),
+    updated_at:new Date().toISOString()
+  };
+  writeJSON(PENDING_KEY,merged);
+  return merged;
+}
+function clamp(n,min,max){
+  return Math.max(min,Math.min(max,n));
+}
+function updateRangeFill(range,minOverride,maxOverride){
+  if(!range) return;
+  const min = Number(minOverride ?? range.min ?? 0);
+  const max = Number(maxOverride ?? range.max ?? 100);
+  const val = Number(range.value || min);
+  const pct = clamp(((val - min) / (max - min)) * 100,0,100);
+  const shell = range.closest(".aiou-slider-shell");
+  if(!shell) return;
+  shell.style.setProperty(
+    "--rail-bg",
+    "linear-gradient(90deg,#8ef3c5 0%,#6aa7ff " +
+    pct +
+    "%,rgba(255,255,255,.15) " +
+    pct +
+    "%,rgba(255,255,255,.15) 100%)"
+  );
+}
+function getVisualLabel(v){
+  const n = Number(v || 0);
+  if(n <= -3) return "Prefers Needs Fixes strongly";
+  if(n === -2 || n === -1) return "Leans Needs Fixes";
+  if(n === 0) return "Neutral";
+  if(n === 1 || n === 2) return "Leans Brand New";
+  return "Prefers Brand New strongly";
+}
+function mapHomeConditionFromSlider(v){
+  const x = Number(v || 0);
+  if(x >= 3) return "new";
+  if(x <= -3) return "value_add";
+  return "light";
+}
+function buildScalePills(){
+  scaleBlock.innerHTML = "";
+  for(let v = -5; v <= 5; v++){
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "aiou-pill";
+    btn.textContent = String(v);
+    btn.dataset.val = String(v);
+    btn.addEventListener("click",function(){
+      selectValue(v);
+    });
+    scaleBlock.appendChild(btn);
+  }
+}
+function selectValue(v){
+  clearInterval(timer);
+  recordAnswer(v);
+}
+function renderQuestion(){
+  const q = Q[idx];
+  const pct = ((idx) / Q.length) * 100;
+  progressBar.style.width = pct + "%";
+  qTitle.textContent = "Question " + (idx + 1) + " / " + Q.length;
+  qText.textContent = q.text;
+  if(q.type === "visual"){
+    visualArea.classList.add("active");
+    scaleBlock.classList.remove("active");
+    initVisualQuestion();
+  }else{
+    visualArea.classList.remove("active");
+    scaleBlock.classList.add("active");
+    buildScalePills();
+  }
+  startTimer();
+}
+function startTimer(){
+  clearInterval(timer);
+  tLeft = 10;
+  clock.textContent = "10";
+  timer = setInterval(function(){
+    tLeft -= 1;
+    clock.textContent = String(Math.max(0,tLeft));
+    if(tLeft <= 0){
+      clearInterval(timer);
+      recordAnswer(null);
+    }
+  },1000);
+}
+function initVisualQuestion(){
+  if(!vSlider) return;
+  vSlider.value = String(window.__AIOU_STYLE_V_PRICE || 0);
+  function paint(){
+    const value = Number(vSlider.value || 0);
+    window.__AIOU_STYLE_V_PRICE = value;
+    if(vLabel){
+      vLabel.textContent = getVisualLabel(value);
+    }
+    updateRangeFill(vSlider,-5,5);
+  }
+  vSlider.oninput = paint;
+  vSlider.onchange = paint;
+  if(vImgA){
+    vImgA.onclick = function(){
+      vSlider.value = String(
+        Math.max(-5,Number(vSlider.value || 0) - 1)
+      );
+      paint();
+    };
+  }
+  if(vImgB){
+    vImgB.onclick = function(){
+      vSlider.value = String(
+        Math.min(5,Number(vSlider.value || 0) + 1)
+      );
+      paint();
+    };
+  }
+  paint();
+}
+function recordAnswer(v){
+  const q = Q[idx];
+  if(q.type === "visual"){
+    const raw = v === null
+      ? 0
+      : Number(vSlider && vSlider.value || 0);
+    answers[q.id] = raw;
+    window.__AIOU_STYLE_V_PRICE = raw;
+  }else{
+    answers[q.id] = v === null ? 0 : Number(v);
+  }
+  idx++;
+  if(idx < Q.length){
+    renderQuestion();
+  }else{
+    finishQuiz();
+  }
+}
+function scoreAll(){
+  const dims = {
+    O:[],
+    C:[],
+    E:[],
+    A:[],
+    N:[]
+  };
+  const qMap = Object.fromEntries(Q.map(q => [q.id,q]));
+  Q.forEach(function(q){
+    if(q.type === "visual") return;
+    let value = answers[q.id];
+    if(value === undefined || value === null){
+      value = 0;
+    }
+    if(q.rev){
+      value = -value;
+    }
+    const mapped = ((value + 5) * 0.4) + 1;
+    if(dims[q.dim]){
+      dims[q.dim].push(mapped);
+    }
+  });
+  const avg = function(arr){
+    return arr.reduce((a,b) => a + b,0) / arr.length || 3;
+  };
+  const scores = {
+    O:Number(avg(dims.O).toFixed(2)),
+    C:Number(avg(dims.C).toFixed(2)),
+    E:Number(avg(dims.E).toFixed(2)),
+    A:Number(avg(dims.A).toFixed(2)),
+    N:Number(avg(dims.N).toFixed(2))
+  };
+  const visual = Number(window.__AIOU_STYLE_V_PRICE || 0);
+  scores.O = Number(
+    Math.max(1,Math.min(5,scores.O + (visual / 12.5))).toFixed(2)
+  );
+  const flags = [];
+  const handled = new Set();
+  Q.forEach(function(q){
+    if(q.ctrlPair && !handled.has(q.id)){
+      const a = answers[q.id];
+      const b = answers[q.ctrlPair];
+      if(a !== null && b !== null && a !== undefined && b !== undefined && qMap[q.ctrlPair]){
+        const aAdj = q.rev ? -a : a;
+        const bAdj = qMap[q.ctrlPair].rev ? -b : b;
+        if(Math.abs(aAdj - bAdj) >= 6){
+          flags.push(q.id + "/" + q.ctrlPair);
+        }
+      }
+      handled.add(q.id);
+      handled.add(q.ctrlPair);
+    }
+  });
+  return {
+    scores:scores,
+    inconsistencies:flags
+  };
+}
+const MBTI_BUYER_GUIDE = {
+  ISTJ:"Stable, detail-first. Prefers proven neighborhoods, low-variance costs, and strong inspection records.",
+  ISFJ:"Practical caretaker. Values safety, schools, and quiet streets; favors move-in-ready over projects.",
+  INFJ:"Purpose-driven. Wants harmony and meaningful space; calm areas and quality renovations matter.",
+  INTJ:"Planner/optimizer. Seeks value efficiency and long-term upside; ignores fluffy upgrades.",
+  ISTP:"Hands-on problem-solver. Open to light projects if priced right; needs clear scope/timeline.",
+  ISFP:"Aesthetic + comfort. Drawn to warm finishes, natural light, and cozy outdoor spots.",
+  INFP:"Idealistic. Wants character and story; needs guardrails so budget doesn’t drift.",
+  INTP:"Analytical. Structure/systems/future flexibility > staging glam.",
+  ESTP:"Action-oriented. Loves lively areas and entertainment spaces; avoid payment creep.",
+  ESFP:"Experience-first. Open layouts and social hubs; size payment first, then pick the fun.",
+  ENFP:"Vision + people. Creative layouts, natural light; watch impulsive upgrades.",
+  ENTP:"Options hunter. Wants flexibility/ADU potential; negotiate hard.",
+  ESTJ:"Structured operator. Predictability, commute efficiency, and low-maintenance wins.",
+  ESFJ:"Community anchor. Schools/parks close; turnkey > fixer to keep harmony.",
+  ENFJ:"Connector. Hosting flow matters; choose move-in-ready to keep momentum.",
+  ENTJ:"Decisive strategist. Location + resale math; newish or quality reno to avoid downtime."
+};
+function mbtiLabel(type){
+  const map = {
+    ISTJ:"Inspector",
+    ISFJ:"Protector",
+    INFJ:"Sage",
+    INTJ:"Architect",
+    ISTP:"Crafter",
+    ISFP:"Artist",
+    INFP:"Idealist",
+    INTP:"Analyst",
+    ESTP:"Promoter",
+    ESFP:"Performer",
+    ENFP:"Champion",
+    ENTP:"Debater",
+    ESTJ:"Executive",
+    ESFJ:"Consul",
+    ENFJ:"Protagonist",
+    ENTJ:"Commander"
+  };
+  return map[type] || "Persona";
+}
+function letterEI(E){
+  return E >= 3.75 ? "E" : E <= 3.25 ? "I" : E >= 3.5 ? "E" : "I";
+}
+function letterSN(O){
+  return O >= 3.75 ? "N" : O <= 3.25 ? "S" : O >= 3.5 ? "N" : "S";
+}
+function letterTF(A){
+  return A >= 3.75 ? "F" : A <= 3.25 ? "T" : A >= 3.5 ? "F" : "T";
+}
+function letterJP(C){
+  return C >= 3.75 ? "J" : C <= 3.25 ? "P" : C >= 3.5 ? "J" : "P";
+}
+function scoresToMBTI(scores){
+  const ei = letterEI(scores.E);
+  const sn = letterSN(scores.O);
+  const tf = letterTF(scores.A);
+  const jp = letterJP(scores.C);
+  const type = ei + sn + tf + jp;
+  const dist = function(v,high){
+    return high
+      ? Math.max(0,v - 3.5) / 1.5
+      : Math.max(0,3.5 - v) / 1.5;
+  };
+  const parts = [
+    ei === "E" ? dist(scores.E,true) : dist(scores.E,false),
+    sn === "N" ? dist(scores.O,true) : dist(scores.O,false),
+    tf === "F" ? dist(scores.A,true) : dist(scores.A,false),
+    jp === "J" ? dist(scores.C,true) : dist(scores.C,false)
+  ];
+  const confidence = Math.max(
+    0.35,
+    Number((parts.reduce((a,b) => a + b,0) / 4).toFixed(2))
+  );
+  return {
+    type:type,
+    confidence:confidence
+  };
+}
+function archetypeFromScores(scores){
+  const hi = v => v >= 4.0;
+  const lo = v => v <= 2.5;
+  if(hi(scores.O) && hi(scores.E) && scores.C < 3.4){
+    return "Emotion-Led Dream Hunter";
+  }
+  if(hi(scores.C) && lo(scores.O) && !hi(scores.E)){
+    return "Payment-Disciplined Planner";
+  }
+  if(hi(scores.N) && lo(scores.E)){
+    return "Risk-Guarded Nest-Builder";
+  }
+  if(hi(scores.A) && hi(scores.C)){
+    return "Flexible Family Optimizer";
+  }
+  if(hi(scores.O) && scores.N < 3.3){
+    return "Design-Forward Value Seeker";
+  }
+  if(hi(scores.C) && hi(scores.N)){
+    return "Protection-First Buyer";
+  }
+  return "Balanced Explorer";
+}
+function queueAiouPending(brief){
+  const email = getAnyEmail();
+  const homeCondition = mapHomeConditionFromSlider(brief.visual.styleVsPriceSlider);
+  const aiouRow = {
+    email:email || null,
+    bedrooms:brief.profile.bedrooms || null,
+    bathrooms:brief.profile.bathrooms || null,
+    sqft:null,
+    property_type:null,
+    amenities:null,
+    home_condition:homeCondition,
+    downpayment:null,
+    credit_score:null,
+    time_to_buy:null,
+    aiou_scores:brief.scores || null,
+    aiou_archetype:brief.archetype || null,
+    aiou_mbti:brief.mbti || null,
+    aiou_assumption_flags:brief.psych.inconsistencies || [],
+    housing_quiz:brief.housingQuiz || null,
+    source:"pcsunited.aiou.quiz.v5.inline",
+    saved_at:new Date().toISOString()
+  };
+  const finLegacy = readJSON("pcsunited.financial_intake.v1",null);
+  const finModern = readJSON("pcsunited.financial.intake.v1",null);
+  const ov = readJSON("pcsunited.kpi_overrides.v1",null);
+  const financial = {
+    ...(finLegacy || {}),
+    ...(finModern || {})
+  };
+  if(financial){
+    aiouRow.time_to_buy = financial.mode || financial.purchase_time || financial.time_to_buy || aiouRow.time_to_buy;
+    aiouRow.credit_score = Number(financial.creditScore || financial.credit_score || 0) || aiouRow.credit_score;
+    aiouRow.downpayment = Number(financial.downpayment || financial.downPayment || financial.dpAmt || 0) || aiouRow.downpayment;
+  }
+  if(ov){
+    const sc = Number(ov.credit_score ?? ov.creditScore ?? 0) || 0;
+    const dp = Number(ov.downpayment ?? ov.savingsOverride ?? 0) || 0;
+    if(!aiouRow.credit_score && sc){
+      aiouRow.credit_score = sc;
+    }
+    if(!aiouRow.downpayment && dp){
+      aiouRow.downpayment = dp;
+    }
+  }
+  writeJSON(AIOU_LOCAL_KEY,aiouRow);
+  mergePending({
+    email:email || null,
+    aiou:aiouRow,
+    aiou_brief:brief,
+    source:"pcsunited.pending.v1"
+  });
+}
+function paintResults(scores,inconsistencies,archetype,mbti){
+  document.getElementById("aiou-k-open").textContent = scores.O.toFixed(2);
+  document.getElementById("aiou-k-disc").textContent = scores.C.toFixed(2);
+  document.getElementById("aiou-k-life").textContent = scores.E.toFixed(2);
+  document.getElementById("aiou-k-flex").textContent = scores.A.toFixed(2);
+  document.getElementById("aiou-k-risk").textContent = scores.N.toFixed(2);
+  const consistencyEl = document.getElementById("aiou-consistency");
+  const archetypeEl = document.getElementById("aiou-archetype");
+  const mbtiEl = document.getElementById("aiou-mbti");
+  if(inconsistencies.length){
+    consistencyEl.innerHTML =
+      '<span class="aiou-flag">⚠ Assumption mismatch flags:</span> ' +
+      inconsistencies.join(", ") +
+      '<br><span style="color:rgba(230,236,255,.72);font-weight:700;">These are not bad answers. They show where a stated preference may conflict with another tradeoff.</span>';
+  }else{
+    consistencyEl.innerHTML =
+      '<span class="aiou-ok">✓ Your responses appear consistent across tradeoff checks.</span>';
+  }
+  archetypeEl.textContent = "Archetype: " + archetype;
+  const blurb = MBTI_BUYER_GUIDE[mbti.type] ||
+    "Personality informs your tradeoffs; size budget first, then match how you live.";
+  mbtiEl.innerHTML =
+    "MBTI: <b>" +
+    mbti.type +
+    "</b> — " +
+    mbtiLabel(mbti.type) +
+    ' <span style="opacity:.7">(' +
+    Math.round(mbti.confidence * 100) +
+    "% match)</span><br>" +
+    '<span style="color:rgba(230,236,255,.72);font-weight:400;">' +
+    blurb +
+    "</span>";
+}
+async function sendToLLM(brief){
+  const box = document.getElementById("aiou-report-box");
+  if(!box) return;
+  box.innerHTML = "(Generating your personalized memo…)";
+  try{
+    const response = await fetch(ENDPOINT,{
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body:JSON.stringify(brief)
+    });
+    if(!response.ok){
+      throw new Error("Server returned " + response.status);
+    }
+    const data = await response.json();
+    const html =
+      data.memoHtml ||
+      (
+        data.memo
+          ? "<p>" + String(data.memo).replace(/</g,"&lt;") + "</p>"
+          : "<p>No memo returned.</p>"
+      );
+    box.innerHTML = html;
+  }catch(err){
+    box.innerHTML =
+      '<span class="aiou-flag">Memo generation unavailable:</span> ' +
+      String(err.message || err);
+  }
+}
+function finishQuiz(){
+  clearInterval(timer);
+  progressBar.style.width = "100%";
+  const scored = scoreAll();
+  const scores = scored.scores;
+  const inconsistencies = scored.inconsistencies;
+  const archetype = archetypeFromScores(scores);
+  const mbti = scoresToMBTI(scores);
+  const bedBath = housingPayload?.answers?.bedBath || {};
+  const hqAnswers = housingPayload?.answers || {};
+  const hqBaseline = housingPayload?.baselineScores || null;
+  const brief = {
+    version:"aiou.v5.inline.housing_companion",
+    ts:new Date().toISOString(),
+    profile:{
+      firstName:"",
+      lastName:"",
+      bedrooms:Number(bedBath.bedrooms || 0),
+      bathrooms:Number(bedBath.bathrooms || 0),
+      budgetMax:0,
+      setting:"",
+      safetyPriority:null
+    },
+    housingQuiz:{
+      answers:hqAnswers,
+      baselineScores:hqBaseline,
+      completedAt:housingPayload?.completedAt || null
+    },
+    scores:scores,
+    archetype:archetype,
+    mbti:mbti,
+    psych:{
+      totalItems:Q.length,
+      inconsistencies:inconsistencies,
+      purpose:"Tests whether buyer assumptions match actual housing tradeoff behavior."
+    },
+    visual:{
+      styleVsPriceSlider:Number(window.__AIOU_STYLE_V_PRICE || 0),
+      homeCondition:mapHomeConditionFromSlider(Number(window.__AIOU_STYLE_V_PRICE || 0))
+    },
+    answers:answers
+  };
+  queueAiouPending(brief);
+  paintResults(scores,inconsistencies,archetype,mbti);
+  quizPanel.style.display = "none";
+  resultsPanel.classList.add("active");
+  try{
+    window.dispatchEvent(
+      new CustomEvent(
+        "pcsunited:aiou-complete",
+        { detail:brief }
+      )
+    );
+  }catch(_){}
+  sendToLLM(brief);
+}
+function startAiou(payload){
+  if(started) return;
+  started = true;
+  housingPayload = payload || readJSON(HOUSING_KEY,null);
+  stage.classList.add("active");
+  quizPanel.style.display = "block";
+  resultsPanel.classList.remove("active");
+  idx = 0;
+  answers = {};
+  window.__AIOU_STYLE_V_PRICE = 0;
+  Q.forEach(q => {
+    answers[q.id] = undefined;
+  });
+  renderQuestion();
+  try{
+    stage.scrollIntoView({
+      behavior:"smooth",
+      block:"start"
+    });
+  }catch(_){}
+}
+function resetAiou(){
+  clearInterval(timer);
+  started = false;
+  idx = 0;
+  answers = {};
+  window.__AIOU_STYLE_V_PRICE = 0;
+  resultsPanel.classList.remove("active");
+  quizPanel.style.display = "block";
+  startAiou(housingPayload);
+}
+skipBtn.addEventListener("click",function(){
+  clearInterval(timer);
+  recordAnswer(null);
+});
+resetBtn.addEventListener("click",function(){
+  resetAiou();
+});
+window.addEventListener("pcsunited:housing-quiz-complete",function(event){
+  startAiou(event.detail || null);
+});
+const existingHousing = readJSON(HOUSING_KEY,null);
+if(existingHousing && existingHousing.completedAt){
+  setTimeout(function(){
+    startAiou(existingHousing);
+  },500);
+}
+window.PCSU_AIOU_INLINE = {
+  version:"5.0.0-inline-housing-companion",
+  start:startAiou,
+  reset:resetAiou,
+  questions:Q
+};
+})();
+</script>
+                </div>
+              </div>
+            </div>
+          </div>
+          <a href="#" class="home3_hero_lightbox-2 w-inline-block w-lightbox">
+            <div data-poster-url="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726%2F68d524ca2ce6986723c50e11_3196062-hd_1920_1080_25fps-poster-00001.jpg" data-video-urls="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6965838af59da527c04bd079_3196062-hd_1920_1080_25fps-poster-00001.jpg,https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6965838af59da527c04bd079_3196062-hd_1920_1080_25fps-transcode.mp4,https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6965838af59da527c04bd079_3196062-hd_1920_1080_25fps-transcode.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="home3_hero_image-2 w-background-video w-background-video-atom"><video id="e1cd6b11-1315-7750-d5d1-4ab0f0ea5a30-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726%2F68d524ca2ce6986723c50e11_3196062-hd_1920_1080_25fps-poster-00001.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
+                <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6965838af59da527c04bd079_3196062-hd_1920_1080_25fps-poster-00001.jpg" data-wf-ignore="true">
+                <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6965838af59da527c04bd079_3196062-hd_1920_1080_25fps-transcode.mp4" data-wf-ignore="true">
+                <source src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6965838af59da527c04bd079_3196062-hd_1920_1080_25fps-transcode.webm" data-wf-ignore="true">
+              </video></div>
+            <div class="home3_hero_watch-2">
+              <div class="stories_watch-3"><img loading="lazy" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6965838af59da527c04bd052_play.svg" alt="" class="icon-height-small-5">
+                <div>Watch Video</div>
+              </div>
+            </div>
+            <script type="application/json" class="w-json">{
+  "items": [
+    {
+      "url": "https://www.youtube.com/watch?v=-yXdPqm7zC0&feature=youtu.be",
+      "originalUrl": "https://www.youtube.com/watch?v=-yXdPqm7zC0&feature=youtu.be",
+      "width": 940,
+      "height": 528,
+      "thumbnailUrl": "https://i.ytimg.com/vi/-yXdPqm7zC0/hqdefault.jpg",
+      "html": "<iframe class=\"embedly-embed\" src=\"//cdn.embedly.com/widgets/media.html?src=https%3A%2F%2Fwww.youtube.com%2Fembed%2F-yXdPqm7zC0%3Ffeature%3Doembed&display_name=YouTube&url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D-yXdPqm7zC0&image=https%3A%2F%2Fi.ytimg.com%2Fvi%2F-yXdPqm7zC0%2Fhqdefault.jpg&type=text%2Fhtml&schema=youtube\" width=\"940\" height=\"528\" scrolling=\"no\" title=\"YouTube embed\" frameborder=\"0\" allow=\"autoplay; fullscreen; encrypted-media; picture-in-picture;\" allowfullscreen=\"true\"></iframe>",
+      "type": "video"
+    }
+  ],
+  "group": ""
+}</script>
+          </a>
+        </div>
+      </div>
       <section class="section-15 home-3-solutions">
         <div class="w-layout-blockcontainer container-80 w-container">
           <div data-poster-url="../videos/Basic-Flag-1_poster.0000000.jpg" data-video-urls="../videos/Basic-Flag-1_mp4.mp4,../videos/Basic-Flag-1_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="flag-for-resources-copy w-background-video w-background-video-atom"><video id="ab6bc1c2-7476-6d55-b2b0-bbed56c29ecb-video" autoplay="" loop="" style="background-image:url(&quot;../videos/Basic-Flag-1_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
               <source src="../videos/Basic-Flag-1_mp4.mp4" data-wf-ignore="true">
               <source src="../videos/Basic-Flag-1_webm.webm" data-wf-ignore="true">
             </video></div>
-        </div><img src="../images/TheWingIcon.png" loading="lazy" sizes="100vw" srcset="../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, ../images/TheWingIcon.png 1100w" alt="Logo" class="image-178">
+        </div><img src="../images/TheWingIcon.png" loading="lazy" sizes="(max-width: 1100px) 100vw, 1100px" srcset="../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, ../images/TheWingIcon.png 1100w" alt="Logo" class="image-178">
         <h2 data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e56" class="text-center">Air Force Calculators &amp; Applications</h2>
         <div class="w-layout-blockcontainer container-one w-container">
           <div class="w-layout-vflex home-three-category-wrap">
             <div class="overflow-none">
               <p data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e59" class="home-three-category-paragraph text-center"> Our array of calculators and files are created I.A.W Air Force standards and regulations. For further details and exact regulation used please click on More Info tab on the bottom right corner of each Application.</p>
+            </div>
+          </div>
+          <div class="code-embed-30 w-embed w-script"><!--  ============================================================
+  RealtySaSS • Ask Elena — HUD Overlay (House of SaSS)
+  HUD v2.2.1 (2026-02-10)
+  ✅ FIX: Local Memory persistence is now bulletproof
+  ✅ FIX: Accepts memory_patch OR memory_echo from server
+  ✅ NEW: In-memory fallback if localStorage is blocked
+===============================================================  -->
+            <div id="ask-elena-widget" data-endpoint="/api/ask-elena" style="all: initial;">
+              <style>
+    #ask-elena-widget, #ask-elena-widget *{
+      box-sizing:border-box;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    }
+    #ask-elena-widget{
+      --ink:#e9ecff;
+      --muted:#a8b0d6;
+      --mint:#8ef3c5;
+      --sapphire:#6aa7ff;
+      --panel: rgba(12,14,25,.38);
+      --border: rgba(255,255,255,.10);
+      --shadow: 0 22px 48px rgba(0,0,0,.62);
+      --shadowSoft: 0 14px 30px rgba(0,0,0,.22);
+      --rDock: 16px;
+      --rBtn: 12px;
+      --blur: 20px;
+      --sat: 170%;
+    }
+    #ae-hud{
+      position: fixed;
+      right: 14px;
+      bottom: 14px;
+      z-index: 2147483645;
+      width: 360px;
+      max-width: calc(100vw - 28px);
+      pointer-events: none;
+    }
+    #ae-panel{
+      pointer-events: auto;
+      border-radius: var(--rDock);
+      overflow: hidden;
+      border: 1px solid var(--border);
+      background:
+        radial-gradient(1200px 700px at 12% 0%, rgba(106,167,255,.14), transparent 58%),
+        radial-gradient(900px 520px at 92% 120%, rgba(142,243,197,.10), transparent 55%),
+        var(--panel);
+      -webkit-backdrop-filter: blur(var(--blur)) saturate(var(--sat));
+      backdrop-filter: blur(var(--blur)) saturate(var(--sat));
+      box-shadow:
+        var(--shadow),
+        inset 0 0 0 1px rgba(255,255,255,.05),
+        inset 0 0 26px rgba(106,167,255,.08),
+        inset 0 0 22px rgba(142,243,197,.05);
+      position: relative;
+      transform: translateZ(0);
+    }
+    #ae-panel::before{
+      content:"";
+      position:absolute; inset:0;
+      pointer-events:none;
+      background: linear-gradient(180deg, rgba(255,255,255,.07), rgba(0,0,0,0));
+    }
+    #ae-panel::after{
+      content:"";
+      position:absolute; inset:0;
+      pointer-events:none;
+      background:
+        linear-gradient(90deg, rgba(255,255,255,.045) 1px, transparent 1px),
+        linear-gradient(0deg, rgba(255,255,255,.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255,255,255,.04), rgba(0,0,0,0) 45%, rgba(0,0,0,0) 70%, rgba(255,255,255,.025));
+      background-size: 34px 34px, 34px 34px, 100% 100%;
+      opacity: .10;
+      mix-blend-mode: overlay;
+    }
+    #ae-panel > *{ position: relative; z-index: 2; }
+    #ae-hud[data-open="1"]{
+      right: 0; bottom: 0;
+      width: 50vw; max-width: 50vw;
+      height: 100vh;
+      pointer-events: none;
+    }
+    #ae-hud[data-open="1"] #ae-panel{
+      pointer-events: auto;
+      width: 50vw;
+      height: 100vh;
+      border-radius: 0;
+      border-left: 1px solid rgba(255,255,255,.12);
+      border-top: 0; border-right: 0; border-bottom: 0;
+      box-shadow: none;
+      background:
+        radial-gradient(1400px 800px at 12% 0%, rgba(106,167,255,.14), transparent 60%),
+        radial-gradient(1100px 700px at 92% 120%, rgba(142,243,197,.10), transparent 58%),
+        rgba(12,14,25,.42);
+      -webkit-backdrop-filter: blur(22px) saturate(175%);
+      backdrop-filter: blur(22px) saturate(175%);
+    }
+    @media (max-width: 860px){
+      #ae-hud[data-open="1"]{ width: 100vw; max-width: 100vw; }
+      #ae-hud[data-open="1"] #ae-panel{ width: 100vw; }
+    }
+    .ae-dock{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+      padding: 12px 14px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,0));
+    }
+    .ae-pill{
+      display:flex; align-items:center; justify-content:space-between;
+      gap: 10px;
+      padding: 12px 14px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      cursor:pointer;
+      user-select:none;
+      transition: transform .14s ease, filter .14s ease, box-shadow .14s ease;
+    }
+    .ae-pill:hover{
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      box-shadow: 0 18px 36px rgba(0,0,0,.30);
+    }
+    .ae-avatar{
+      width: 34px; height: 34px; border-radius: 999px; flex:0 0 auto;
+      background-image: url("https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/6965838af59da527c04bd03b_34deddc0ea637cb5627a4b008f89aa8c_people2.png");
+      background-size: cover; background-position:center;
+      border: 2px solid rgba(255,255,255,.20);
+      box-shadow: 0 0 16px rgba(106,167,255,.14), 0 0 18px rgba(142,243,197,.10);
+      margin-right: 10px;
+    }
+    .ae-pillTitle{
+      margin:0;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      font-size: 12px;
+      color: rgba(233,236,255,.92);
+      line-height: 1.05;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ae-pillSub{
+      margin-top: 4px;
+      font-size: 11px;
+      color: rgba(168,176,214,.88);
+      font-weight: 800;
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .ae-dockInput{
+      width:100%;
+      height: 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,.11);
+      background: rgba(12,14,25,.42);
+      color: var(--ink);
+      font-size: 13px;
+      font-weight: 800;
+      outline:none;
+      padding: 10px 12px;
+      transition: border-color .14s ease, box-shadow .14s ease, filter .14s ease;
+    }
+    .ae-dockInput::placeholder{ color: rgba(233,236,255,.42); font-weight: 800; }
+    .ae-dockInput:focus{
+      border-color: rgba(142,243,197,.50);
+      box-shadow: 0 0 0 3px rgba(142,243,197,.12);
+      filter: brightness(1.02);
+    }
+    .ae-sendBtn{
+      height: 44px;
+      padding: 0 14px;
+      border: 0;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: .12em;
+      text-transform: uppercase;
+      background: linear-gradient(180deg, rgba(142,243,197,1), rgba(106,167,255,.95));
+      color:#06112b;
+      box-shadow: 0 14px 28px rgba(0,0,0,.50);
+      transition: transform .14s ease, filter .14s ease, box-shadow .14s ease;
+      user-select:none;
+    }
+    .ae-sendBtn:hover{ transform: translateY(-1px); filter: brightness(1.03); box-shadow: 0 18px 34px rgba(0,0,0,.58); }
+    .ae-sendBtn:active{ transform: translateY(0); filter: brightness(.99); }
+    .ae-sendBtn:disabled{ opacity:.6; cursor:not-allowed; transform:none; box-shadow:none; }
+    #ae-hud[data-open="1"] .ae-dock{ display:none !important; }
+    .ae-expanded{ display:none; height: 100vh; background: rgba(0,0,0,.06); }
+    #ae-hud[data-open="1"] .ae-expanded{
+      display:grid;
+      grid-template-rows: auto 1fr auto;
+    }
+    .ae-header{
+      display:flex; align-items:center; justify-content:space-between;
+      gap:12px;
+      padding: 12px 14px;
+      border-bottom: 1px solid rgba(255,255,255,.07);
+      background: linear-gradient(180deg, rgba(255,255,255,.05), rgba(0,0,0,0));
+    }
+    .ae-titleWrap{ display:flex; align-items:center; gap:12px; min-width:0; }
+    .ae-title{
+      font-weight: 900;
+      font-size: 12px;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: rgba(233,236,255,.92);
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+      line-height:1.05;
+    }
+    .ae-sub{
+      font-size: 11px;
+      color: rgba(168,176,214,.88);
+      font-weight: 800;
+      margin-top: 4px;
+      white-space:nowrap; overflow:hidden; text-overflow:ellipsis;
+    }
+    .ae-close{
+      border: 1px solid rgba(255,255,255,.10);
+      background: rgba(0,0,0,.12);
+      color: rgba(233,236,255,.92);
+      width: 40px; height: 40px;
+      border-radius: 12px;
+      cursor:pointer;
+      font-weight: 1000;
+      transition: transform .14s ease, filter .14s ease, border-color .14s ease;
+      user-select:none;
+    }
+    .ae-close:hover{
+      transform: translateY(-1px);
+      filter: brightness(1.03);
+      border-color: rgba(142,243,197,.30);
+    }
+    .ae-chat{
+      padding: 14px 14px 10px;
+      overflow:auto;
+      display:flex;
+      flex-direction:column;
+      gap: 12px;
+      background:
+        radial-gradient(900px 520px at 30% -20%, rgba(106,167,255,.10), transparent 60%),
+        radial-gradient(800px 520px at 80% 120%, rgba(142,243,197,.08), transparent 60%),
+        linear-gradient(180deg, rgba(0,0,0,.04), rgba(0,0,0,.10));
+      scroll-behavior:smooth;
+    }
+    .ae-msg{
+      max-width: 86%;
+      padding: 10px 12px;
+      border-radius: 12px;
+      line-height: 1.45;
+      font-size: 13px;
+      white-space: pre-wrap;
+      color: rgba(233,236,255,.94) !important;
+      border: 1px solid rgba(255,255,255,.11);
+      background: rgba(0,0,0,.12);
+      -webkit-backdrop-filter: blur(12px) saturate(150%);
+      backdrop-filter: blur(12px) saturate(150%);
+      box-shadow: var(--shadowSoft);
+    }
+    .ae-user{
+      align-self:flex-end;
+      background: rgba(142,243,197,.07);
+      border-color: rgba(142,243,197,.24);
+      box-shadow: 0 0 18px rgba(142,243,197,.07);
+    }
+    .ae-bot{ align-self:flex-start; }
+    .ae-typing{ font-size:12px; opacity:.85; }
+    .ae-msg small{
+      display:block;
+      margin-top:8px;
+      color: rgba(168,176,214,.90);
+      font-weight: 900;
+      font-size: 10.5px;
+      letter-spacing:.10em;
+      text-transform: uppercase;
+    }
+    .ae-footer{
+      border-top: 1px solid rgba(255,255,255,.07);
+      padding: 12px 14px;
+      display:grid;
+      grid-template-columns: 1fr auto;
+      gap:10px;
+      background: rgba(0,0,0,.08);
+    }
+    .ae-input{
+      width:100%;
+      outline:none;
+      border:1px solid rgba(255,255,255,.11);
+      background: rgba(12,14,25,.40);
+      color: rgba(233,236,255,.94) !important;
+      padding: 12px 12px;
+      border-radius: 12px;
+      font-size: 13px;
+      font-weight: 800;
+    }
+    .ae-input::placeholder{ color: rgba(233,236,255,.42); }
+    .tw-caret{
+      display:inline-block;
+      width:1px;
+      height:1.2em;
+      margin-left:2px;
+      background: currentColor;
+      animation: tw-blink 1s steps(1,end) infinite;
+    }
+    @keyframes tw-blink { 50% { opacity: 0; } }
+    @media (prefers-reduced-motion: reduce){
+      .tw-caret{ animation:none; }
+    }
+  </style>
+              <div id="ae-hud" data-open="0" aria-live="polite">
+                <div id="ae-panel">
+                  <div class="ae-dock">
+                    <div class="ae-pill" id="ae-openBtn" role="button" tabindex="0" aria-label="Open Ask Elena panel">
+                      <div style="display:flex; align-items:center; gap:10px; min-width:0;">
+                        <div class="ae-avatar" aria-hidden="true"></div>
+                        <div style="min-width:0">
+                          <div class="ae-pillTitle">Ask Elena</div>
+                          <div class="ae-pillSub">Scripts • Offers • Objections • Workflow</div>
+                        </div>
+                      </div>
+                    </div>
+                    <input id="ae-dockInput" class="ae-dockInput" type="text" placeholder="Ask: script, objection, offer, or workflow…" autocomplete="off">
+                    <button id="ae-dockSend" class="ae-sendBtn" type="button">Send</button>
+                  </div>
+                  <div class="ae-expanded" aria-label="Ask Elena expanded panel">
+                    <div class="ae-header">
+                      <div class="ae-titleWrap">
+                        <div class="ae-avatar" aria-hidden="true"></div>
+                        <div style="min-width:0">
+                          <div class="ae-title">Elena • RealtySaSS Concierge</div>
+                          <div class="ae-sub">High-tech, personable, alluring</div>
+                        </div>
+                      </div>
+                      <button class="ae-close" id="ae-closeBtn" type="button" aria-label="Close Ask Elena panel">×</button>
+                    </div>
+                    <div class="ae-chat" id="ae-chat"></div>
+                    <div class="ae-footer">
+                      <input id="ae-input" class="ae-input" type="text" placeholder="Type here… (Enter to send)" autocomplete="off">
+                      <button id="ae-send" class="ae-sendBtn" type="button">Send</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <script>
+    (() => {
+      "use strict";
+      if (window.__RealtySaSS_ElenaHUD_v221) return;
+      window.__RealtySaSS_ElenaHUD_v221 = true;
+      const root = document.getElementById("ask-elena-widget");
+      const PRIMARY_ENDPOINT = (root.getAttribute("data-endpoint") || "").trim() || "/api/ask-elena";
+      const hud      = root.querySelector("#ae-hud");
+      const panel    = root.querySelector("#ae-panel");
+      const openBtn  = root.querySelector("#ae-openBtn");
+      const closeBtn = root.querySelector("#ae-closeBtn");
+      const dockInput= root.querySelector("#ae-dockInput");
+      const dockSend = root.querySelector("#ae-dockSend");
+      const chatEl   = root.querySelector("#ae-chat");
+      const inputEl  = root.querySelector("#ae-input");
+      const sendBtn  = root.querySelector("#ae-send");
+      const KEY_IDENTITY = "realtysass.identity";
+      // Local memory keys
+      const KEY_CID    = "realtysass.elena.cid.v1";
+      const KEY_THREAD = "realtysass.elena.thread.v1";
+      const KEY_MEM    = "realtysass.elena.memory.v1";
+      // In-memory fallback (if localStorage blocked)
+      window.__RS_ELENA_THREAD = window.__RS_ELENA_THREAD || [];
+      window.__RS_ELENA_MEM    = window.__RS_ELENA_MEM || {};
+      window.__RS_ELENA_CID    = window.__RS_ELENA_CID || "";
+      const THREAD_MAX = 24;
+      const prefersReduced = () =>
+        window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      function safeJSON(str){ try { return JSON.parse(str); } catch(_){ return null; } }
+      const AE_DEBUG = (() => {
+        try{
+          const qs = new URLSearchParams(location.search);
+          return (qs.get("ae_debug") === "1");
+        }catch(_){ return false; }
+      })();
+      function dbg(){ if (AE_DEBUG) console.log("[RealtySaSS AskElenaHUD]", ...arguments); }
+      /* =========================================================
+         //#1 — Storage safe wrappers
+      ========================================================= */
+      function lsGet(key){
+        try{ return localStorage.getItem(key); }catch(_){ return null; }
+      }
+      function lsSet(key, val){
+        try{ localStorage.setItem(key, val); return true; }catch(_){ return false; }
+      }
+      function lsDel(key){
+        try{ localStorage.removeItem(key); return true; }catch(_){ return false; }
+      }
+      function uuid(){
+        return "cid_" + Math.random().toString(16).slice(2) + "_" + Date.now().toString(16);
+      }
+      function getCID(){
+        const existing = (lsGet(KEY_CID) || "").trim() || (window.__RS_ELENA_CID || "");
+        if (existing) return existing;
+        const id = uuid();
+        window.__RS_ELENA_CID = id;
+        lsSet(KEY_CID, id);
+        return id;
+      }
+      function loadThread(){
+        const raw = lsGet(KEY_THREAD);
+        const t = safeJSON(raw || "[]");
+        if (Array.isArray(t)) {
+          window.__RS_ELENA_THREAD = t;
+          return t;
+        }
+        return Array.isArray(window.__RS_ELENA_THREAD) ? window.__RS_ELENA_THREAD : [];
+      }
+      function saveThread(thread){
+        const trimmed = Array.isArray(thread) ? thread.slice(-THREAD_MAX) : [];
+        window.__RS_ELENA_THREAD = trimmed;
+        lsSet(KEY_THREAD, JSON.stringify(trimmed));
+        return trimmed;
+      }
+      function addToThread(role, content){
+        const thread = loadThread();
+        thread.push({
+          role: role === "assistant" ? "assistant" : "user",
+          content: String(content || ""),
+          ts: Date.now()
+        });
+        return saveThread(thread);
+      }
+      function loadMemory(){
+        const raw = lsGet(KEY_MEM);
+        const m = safeJSON(raw || "{}");
+        if (m && typeof m === "object") {
+          window.__RS_ELENA_MEM = m;
+          return m;
+        }
+        return (window.__RS_ELENA_MEM && typeof window.__RS_ELENA_MEM === "object") ? window.__RS_ELENA_MEM : {};
+      }
+      function saveMemory(mem){
+        const clean = (mem && typeof mem === "object") ? mem : {};
+        window.__RS_ELENA_MEM = clean;
+        lsSet(KEY_MEM, JSON.stringify(clean));
+        return clean;
+      }
+      function applyMemoryPatch(patch){
+        if (!patch || typeof patch !== "object") return loadMemory();
+        const mem = loadMemory();
+        Object.keys(patch).forEach((k) => { mem[k] = patch[k]; });
+        return saveMemory(mem);
+      }
+      function resetLocalMemory(){
+        lsDel(KEY_THREAD);
+        lsDel(KEY_MEM);
+        lsDel(KEY_CID);
+        window.__RS_ELENA_THREAD = [];
+        window.__RS_ELENA_MEM = {};
+        window.__RS_ELENA_CID = "";
+      }
+      /* =========================================================
+         //#2 — Panel open/close
+      ========================================================= */
+      function isOpen(){ return hud.getAttribute("data-open") === "1"; }
+      let __suppressDockOpenOnFocus = false;
+      function openPanel(focusComposer = true){
+        hud.setAttribute("data-open", "1");
+        const v = (dockInput.value || "").trim();
+        if (v && !inputEl.value) inputEl.value = v;
+        if (focusComposer) setTimeout(() => inputEl.focus(), 30);
+      }
+      function focusDockSafely(){
+        __suppressDockOpenOnFocus = true;
+        setTimeout(() => {
+          try{ dockInput.focus(); }catch(_){}
+          setTimeout(() => { __suppressDockOpenOnFocus = false; }, 120);
+        }, 30);
+      }
+      function closePanel(){
+        hud.setAttribute("data-open", "0");
+        const v = (inputEl.value || "").trim();
+        if (v && !dockInput.value) dockInput.value = v;
+        focusDockSafely();
+      }
+      document.addEventListener("pointerdown", (e) => {
+        if (!isOpen()) return;
+        const t = e.target;
+        if (t && !panel.contains(t)) closePanel();
+      }, true);
+      function bindHardClose(btn){
+        if (!btn) return;
+        const hard = (e) => {
+          try{
+            e.preventDefault();
+            e.stopPropagation();
+            if (e.stopImmediatePropagation) e.stopImmediatePropagation();
+          }catch(_){}
+          closePanel();
+        };
+        btn.addEventListener("pointerdown", hard, true);
+        btn.addEventListener("click", hard, true);
+        btn.addEventListener("touchstart", hard, { passive:false, capture:true });
+      }
+      bindHardClose(closeBtn);
+      /* =========================================================
+         //#3 — Identity helpers
+      ========================================================= */
+      function getIdentityEmail(){
+        const raw = lsGet(KEY_IDENTITY);
+        if (!raw) return "";
+        const obj = safeJSON(raw);
+        if (obj && obj.email) return String(obj.email).trim().toLowerCase();
+        if (raw.includes("@")) return raw.trim().toLowerCase();
+        return "";
+      }
+      function tryProfileEmailFromLocalStorage(){
+        const keys = [
+          "realtysass.profile",
+          "realtysass.profile.v1",
+          "realtysass.profile_lookup",
+          "realtysass.profile_by_email",
+          "realtysass.profileByEmail",
+          "realtysass.loginEmail"
+        ];
+        for (const k of keys){
+          const raw = lsGet(k);
+          if (!raw) continue;
+          if (raw.includes && raw.includes("@") && raw.length < 180) return raw.trim().toLowerCase();
+          const obj = safeJSON(raw || "");
+          if (obj && typeof obj === "object"){
+            const em = (obj.email || (obj.profile && obj.profile.email) || "").toString().trim().toLowerCase();
+            if (em.includes("@")) return em;
+          }
+        }
+        return "";
+      }
+      function getEmail(){
+        const idEmail = getIdentityEmail();
+        if (idEmail) return idEmail;
+        try{
+          const qs = new URLSearchParams(window.location.search);
+          const q = (qs.get("email") || "").trim();
+          if (q) return q.toLowerCase();
+        }catch(_){}
+        const s1 = (sessionStorage.getItem("realtysass.sessionEmail") || "").trim();
+        if (s1) return s1.toLowerCase();
+        const p = tryProfileEmailFromLocalStorage();
+        if (p) return p;
+        return "";
+      }
+      function getIdentityObject(email){
+        const obj = safeJSON(lsGet(KEY_IDENTITY) || "");
+        if (obj && typeof obj === "object" && obj.email){
+          return {
+            email: String(obj.email).trim().toLowerCase(),
+            ts: obj.ts != null ? Number(obj.ts) : Date.now()
+          };
+        }
+        if (!email) return { anonymous: true, ts: Date.now() };
+        return { email: email, ts: Date.now() };
+      }
+      function getBridge(){
+        return safeJSON(lsGet("realtysass.bridge")) ||
+               safeJSON(lsGet("realtysass.bridge.v1")) ||
+               null;
+      }
+      function getOverrides(){
+        return safeJSON(lsGet("realtysass.kpi_overrides.v1")) || null;
+      }
+      function getLightProfileHint(){
+        const p = safeJSON(lsGet("realtysass.profile") || "") ||
+                  safeJSON(lsGet("realtysass.profile.v1") || "") ||
+                  safeJSON(lsGet("realtysass.profile_lookup") || "") ||
+                  null;
+        if (p && typeof p === "object"){
+          return {
+            email: p.email || null,
+            full_name: p.full_name || p.fullName || null,
+            first_name: p.first_name || p.firstName || null,
+            last_name: p.last_name || p.lastName || null
+          };
+        }
+        const b = getBridge();
+        if (!b || typeof b !== "object") return null;
+        return {
+          email: b.email || null,
+          full_name: b.full_name || b.fullName || null,
+          first_name: b.first_name || b.firstName || null,
+          last_name: b.last_name || b.lastName || null
+        };
+      }
+      function getPageContext(){
+        const path = (location && location.pathname) ? String(location.pathname) : "";
+        return {
+          href: (location && location.href) ? String(location.href) : "",
+          origin: (location && location.origin) ? String(location.origin) : "",
+          path
+        };
+      }
+      function uniq(list){ return Array.from(new Set((list||[]).filter(Boolean))); }
+      function buildAskElenaEndpoints(){
+        return uniq([
+          PRIMARY_ENDPOINT,
+          "/api/ask-elena",
+          "/.netlify/functions/ask-elena",
+          "https://realtysass.netlify.app/api/ask-elena",
+          "https://realtysass.netlify.app/.netlify/functions/ask-elena"
+        ]);
+      }
+      async function postJSON(url, body){
+        const r = await fetch(url, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(body || {})
+        });
+        const txt = await r.text();
+        let j = {};
+        try{ j = JSON.parse(txt || "{}"); }catch(_){ j = { raw: txt }; }
+        if (!r.ok || j.ok === false){
+          const msg = j.error || j.message || ("HTTP " + r.status);
+          const e = new Error(msg);
+          e.__status = r.status;
+          e.__raw = j;
+          throw e;
+        }
+        return j;
+      }
+      /* =========================================================
+         //#4 — Chat UI
+      ========================================================= */
+      function scrollToBottom(){ chatEl.scrollTop = chatEl.scrollHeight; }
+      function showTyping(){
+        const t = document.createElement("div");
+        t.className = "ae-msg ae-bot ae-typing";
+        t.id = "ae-typing";
+        t.textContent = "Elena is thinking…";
+        chatEl.appendChild(t);
+        scrollToBottom();
+      }
+      function hideTyping(){
+        const t = root.querySelector("#ae-typing");
+        if (t) t.remove();
+      }
+      function typewriterInto(el, text, speed, startDelay){
+        return new Promise((resolve) => {
+          el.textContent = "";
+          const caret = document.createElement("span");
+          caret.className = "tw-caret";
+          el.appendChild(caret);
+          let i = 0;
+          const tick = () => {
+            if (i < text.length) {
+              caret.insertAdjacentText("beforebegin", text.charAt(i++));
+              scrollToBottom();
+              setTimeout(tick, speed);
+            } else {
+              caret.remove();
+              resolve();
+            }
+          };
+          setTimeout(tick, startDelay);
+        });
+      }
+      async function pushMsg(role, content, opts){
+        opts = opts || {};
+        const typewriter = !!opts.typewriter;
+        const speed = Number(opts.speed || 22);
+        const delay = Number(opts.delay || 150);
+        const msg = document.createElement("div");
+        msg.className = "ae-msg " + (role === "user" ? "ae-user" : "ae-bot");
+        msg.setAttribute("data-role", role);
+        const textNode = document.createElement("span");
+        msg.appendChild(textNode);
+        const stamp = document.createElement("small");
+        const d = new Date();
+        const hh = String(d.getHours()).padStart(2,"0");
+        const mm = String(d.getMinutes()).padStart(2,"0");
+        stamp.textContent = (role === "user" ? "You" : "Elena") + " • " + hh + ":" + mm;
+        chatEl.appendChild(msg);
+        msg.appendChild(stamp);
+        scrollToBottom();
+        // local thread store
+        if (role === "user") addToThread("user", content);
+        else addToThread("assistant", content);
+        if (!typewriter || prefersReduced() || role === "user"){
+          textNode.textContent = content;
+          scrollToBottom();
+          return;
+        }
+        await typewriterInto(textNode, content, speed, delay);
+        scrollToBottom();
+      }
+      function renderThreadFromMemory(){
+        const thread = loadThread();
+        if (!thread.length) return;
+        const recent = thread.slice(-12);
+        recent.forEach((m) => {
+          const role = (m.role === "assistant") ? "assistant" : "user";
+          const msg = document.createElement("div");
+          msg.className = "ae-msg " + (role === "user" ? "ae-user" : "ae-bot");
+          msg.setAttribute("data-role", role);
+          const textNode = document.createElement("span");
+          textNode.textContent = String(m.content || "");
+          msg.appendChild(textNode);
+          const stamp = document.createElement("small");
+          const d = new Date(m.ts || Date.now());
+          const hh = String(d.getHours()).padStart(2,"0");
+          const mm = String(d.getMinutes()).padStart(2,"0");
+          stamp.textContent = (role === "user" ? "You" : "Elena") + " • " + hh + ":" + mm;
+          chatEl.appendChild(msg);
+          msg.appendChild(stamp);
+        });
+        scrollToBottom();
+      }
+      /* =========================================================
+         //#5 — Call
+      ========================================================= */
+      async function callElena(userText){
+        sendBtn.disabled = true;
+        dockSend.disabled = true;
+        showTyping();
+        const page = getPageContext();
+        const email = getEmail();
+        const identity = getIdentityObject(email);
+        const profileHint = getLightProfileHint();
+        const bridge = getBridge();
+        const overrides = getOverrides();
+        const isPublic = !(email && email.includes("@"));
+        const cid = getCID();
+        const thread = loadThread();
+        const memory = loadMemory();
+        const payload = {
+          message: userText,
+          ...(isPublic ? {} : { email: email }),
+          identity: identity,
+          context: {
+            source: "web",
+            widget: "ask-elena-hud",
+            product: "realtysass",
+            version: "realtysass-elena-hud-v2.2.1",
+            page: page,
+            public_mode: isPublic,
+            response_limits: { max_chars: 420, greeting_max_chars: 160 },
+            // role switching (future-proof)
+            role: (isPublic ? "public_mainpage" : "realtor_signed_in"),
+            conversation_id: cid,
+            thread: thread,
+            memory: memory,
+            profile: (isPublic ? undefined : (profileHint || undefined)),
+            scenario: (bridge || undefined),
+            overrides: (overrides || undefined),
+            styleGuide: {
+              rules: [
+                "If user greets ('hi', 'hello'), respond in 1–2 short lines and ask ONE question.",
+                "Be conversational: reference prior user turn when relevant.",
+                "No upsell on greetings. Only mention account when user asks about saving/personalizing/timeline."
+              ]
+            }
+          }
+        };
+        try{
+          let data = null;
+          let lastErr = null;
+          for (const ep of buildAskElenaEndpoints()){
+            try{
+              dbg("POST → (ask-elena)", ep, payload);
+              data = await postJSON(ep, payload);
+              dbg("OK ← (ask-elena)", ep, data);
+              break;
+            }catch(e){
+              lastErr = e;
+              dbg("FAIL ← (ask-elena)", ep, e && e.message ? e.message : e);
+            }
+          }
+          hideTyping();
+          if (!data) throw lastErr || new Error("All endpoints failed");
+          // ✅ FIX: accept either memory_patch or memory_echo
+          if (data.memory_patch && typeof data.memory_patch === "object") {
+            applyMemoryPatch(data.memory_patch);
+          }
+          if (data.memory_echo && typeof data.memory_echo === "object") {
+            saveMemory(data.memory_echo);
+          }
+          const reply = data.reply || "I’m here. What do you want to build?";
+          const ui = data.ui || {};
+          const speed = Number(ui.speed || 22);
+          const delay = Number(ui.startDelay || 120);
+          await pushMsg("assistant", reply, { typewriter:true, speed, delay });
+          return;
+        } catch(err){
+          hideTyping();
+          const msg =
+            AE_DEBUG
+              ? ("Connection snag: " + (err && err.message ? err.message : "Unknown error") + "\n\nCheck console logs.")
+              : "Hmm… I hit a connection snag. Try again?";
+          await pushMsg("assistant", msg, { typewriter:true, speed:22, delay:120 });
+        } finally {
+          sendBtn.disabled = false;
+          dockSend.disabled = false;
+        }
+      }
+      /* =========================================================
+         //#6 — Send wiring
+      ========================================================= */
+      function sendFromExpanded(){
+        const text = (inputEl.value || "").trim();
+        if (!text) return;
+        if (text.toLowerCase() === "/reset") {
+          resetLocalMemory();
+          inputEl.value = "";
+          dockInput.value = "";
+          chatEl.innerHTML = "";
+          pushMsg("assistant", "Done. Local memory cleared. What are we working on now?", { typewriter:true, speed:22, delay:120 });
+          return;
+        }
+        pushMsg("user", text);
+        inputEl.value = "";
+        dockInput.value = "";
+        callElena(text);
+      }
+      function sendFromDock(){
+        const text = (dockInput.value || "").trim();
+        if (!text){ openPanel(true); return; }
+        if (text.toLowerCase() === "/reset") {
+          resetLocalMemory();
+          dockInput.value = "";
+          inputEl.value = "";
+          chatEl.innerHTML = "";
+          openPanel(true);
+          pushMsg("assistant", "Done. Local memory cleared. What are we working on now?", { typewriter:true, speed:22, delay:120 });
+          return;
+        }
+        openPanel(false);
+        pushMsg("user", text);
+        dockInput.value = "";
+        inputEl.value = "";
+        callElena(text);
+        setTimeout(() => inputEl.focus(), 30);
+      }
+      openBtn.addEventListener("click", () => openPanel(true));
+      openBtn.addEventListener("keydown", (e) => {
+        if (e.key === "Enter" || e.key === " "){ e.preventDefault(); openPanel(true); }
+      });
+      dockInput.addEventListener("focus", () => {
+        if (__suppressDockOpenOnFocus) return;
+        openPanel(false);
+      });
+      dockInput.addEventListener("click", () => openPanel(false));
+      dockSend.addEventListener("click", sendFromDock);
+      dockInput.addEventListener("keydown", (e) => {
+        if (e.key === "Enter"){ e.preventDefault(); sendFromDock(); }
+        if (e.key === "Escape"){ e.preventDefault(); closePanel(); }
+      });
+      sendBtn.addEventListener("click", sendFromExpanded);
+      inputEl.addEventListener("keydown", (e) => {
+        if (e.key === "Enter"){ e.preventDefault(); sendFromExpanded(); }
+        if (e.key === "Escape"){ e.preventDefault(); closePanel(); }
+      });
+      /* =========================================================
+         //#7 — Boot
+      ========================================================= */
+      renderThreadFromMemory();
+      if (loadThread().length === 0) {
+        pushMsg("assistant",
+          "Hey — I’m Elena. Want a script, an offer move, or a workflow?",
+          { typewriter:true, speed:22, delay:180 }
+        );
+      }
+    })();
+  </script>
             </div>
           </div>
           <div class="w-layout-vflex home-three-category-main-block">
@@ -9009,16 +9760,16 @@
                 <div>Oops! Something went wrong while submitting the form.</div>
               </div>
             </div>
-          </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="100vw" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
+          </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
         <div data-w-id="ee73203a-eb4c-0a70-cb0c-c0e63e1d2416" class="footer-flex-wrapper">
           <div class="w-layout-grid footer-links-wrapper">
             <div class="footer-links-text">
               <div class="footer-links-title">Explore</div>
-              <a href="../air-force-blogs/main-page.html" target="_blank" class="footer-link">Contact Us</a>
+              <a href="../air-force-blogs/pcsunited-blog-page.html" target="_blank" class="footer-link">Contact Us</a>
               <a href="../air-force/resources.html" target="_blank" class="footer-link">Resources</a>
               <a href="../about-us.html" target="_blank" class="footer-link">About Us</a>
-              <a href="../air-force-blogs/main-page.html" target="_blank" class="footer-link">Blog</a>
+              <a href="../air-force-blogs/pcsunited-blog-page.html" target="_blank" class="footer-link">Blog</a>
               <a href="../air-force/resources.html" target="_blank" class="footer-link">Privacy Policy</a>
             </div>
             <div class="footer-links-text">
@@ -9027,7 +9778,7 @@
               <a href="../air-force/housing-quiz.html" target="_blank" class="footer-link">Home Quiz</a>
               <a href="../air-force/bah-base-pay-calculator.html" target="_blank" class="footer-link">BAH Calculator</a>
               <a href="../air-force/va-calculator.html" target="_blank" class="footer-link">VA Calculator</a>
-              <a href="../air-force-blogs/main-page.html" target="_blank" class="footer-link">Disclamer</a>
+              <a href="../air-force-blogs/pcsunited-blog-page.html" target="_blank" class="footer-link">Disclamer</a>
               <a href="../about-us.html" target="_blank" class="footer-link">Terms of Use</a>
             </div>
             <div class="footer-links-text">

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Jun 23 2026 22:13:12 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Jun 26 2026 16:21:44 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69f6df2366c61b76c85e09e0" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -149,31 +149,16 @@
 <body>
   <div class="page-wrapper">
     <div data-animation="default" data-collapse="small" data-duration="400" data-easing="ease" data-easing2="ease" role="banner" class="resources-header header-resources w-nav">
-      <div class="head-for-resources"><img src="../images/Logo-3-white.png" loading="lazy" sizes="100vw" srcset="../images/f3633b2d4ddc8821d6ec68d58295e7a0_Logo-3-white-p-500.png 500w, ../images/Logo-3-white.png 800w" alt="" class="image-183">
+      <div class="head-for-resources"><img src="../images/Logo-3-white.png" loading="lazy" width="400" alt="" class="image-183">
         <div class="compensation-strip w-embed w-script"><!--  =========================================================
   PCSUnited • Header Progressive Compensation / Financial Strip
-  v4.0.0 • BASICBRAIN + FINANCIAL SNAPSHOT MODE
-  PURPOSE
-  - Starts as BasicBrain compensation strip:
-      Active Duty: Base Pay / BAS / BAH / Total
-      Veteran: Retirement / Disability / Other Pay / Total
-  - After Financial Analysis Input updates:
-      Income / Payment / Debt / Ratio / Max Pay
-  LISTENS TO
-  - pcsunited:compensation-ready
-  - pcsunited:compensation-preview-ready
-  - pcsunited:basicbrain-updated
-  - pcsunited:profile-ready
-  - pcsunited:bridge-ready
-  - pcsunited:financial-input-updated
-  - pcsunited:run-financial-analysis
-  SAFETY
-  - Does not switch to financial mode unless total income > 0
-  - Keeps latest good compensation values
-  - Keeps latest good financial values once available
-  - No localStorage required
-  - No sessionStorage required
-  - No frontend pay tables
+  v4.0.1 • NO AUTO SCROLL + NO DUPLICATE THEWING PROFILE CALLS
+  FIXES
+  - Stops header strip from auto-calling TheWing on BasicBrain profile events
+  - Uses BasicBrain compensation-ready as source of truth
+  - Adds autoNavigate:false to emitted preview events
+  - Adds scroll guard around outgoing events
+  - Prevents this strip from re-triggering Base Demo / page movement chains
 =========================================================  -->
           <div id="pcsu-header-comp-basicbrain" style="all:initial;">
             <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -357,7 +342,7 @@
             <script>
 (function(){
   "use strict";
-  const VERSION = "4.0.0";
+  const VERSION = "4.0.1";
   const API_BASE = "https://thewing.netlify.app/api";
   const BRAIN_ENDPOINT = API_BASE + "/opensource-brain";
   const root = document.getElementById("pcsu-header-comp-basicbrain");
@@ -395,7 +380,7 @@
   let latestGoodFinancialValues = null;
   let runTimer = null;
   let requestSeq = 0;
-  function num(value, fallback){
+  function num(value,fallback){
     if(fallback === undefined) fallback = 0;
     const n = Number(
       String(value ?? "")
@@ -459,6 +444,44 @@
       el.classList.add(tone);
     }
   }
+  function preserveScroll(callback){
+    const startX =
+      window.scrollX || window.pageXOffset || 0;
+    const startY =
+      window.scrollY || window.pageYOffset || 0;
+    try{
+      callback();
+    }catch(_){}
+    requestAnimationFrame(function(){
+      window.scrollTo(startX,startY);
+    });
+    setTimeout(function(){
+      window.scrollTo(startX,startY);
+    },0);
+    setTimeout(function(){
+      window.scrollTo(startX,startY);
+    },60);
+    setTimeout(function(){
+      window.scrollTo(startX,startY);
+    },160);
+    setTimeout(function(){
+      window.scrollTo(startX,startY);
+    },320);
+  }
+  function dispatchPreviewReady(profile,comp){
+    preserveScroll(function(){
+      window.dispatchEvent(new CustomEvent("pcsunited:compensation-preview-ready",{
+        detail:{
+          source:"pcsunited.header.comp.v4.0.1",
+          version:VERSION,
+          profile,
+          compensation:comp,
+          autoNavigate:false,
+          updated_at:new Date().toISOString()
+        }
+      }));
+    });
+  }
   function activateCompMode(){
     currentStripMode = "compensation";
     root.classList.add("is-comp-mode");
@@ -493,7 +516,7 @@
     els.label3.textContent = "BAH";
     els.label4.textContent = "Total";
   }
-  function paintCompValues(profile, values, missing){
+  function paintCompValues(profile,values,missing){
     activateCompMode();
     setCompLabels(profile || { mode:"active_duty" });
     els.pay1.textContent = money(values.pay1);
@@ -916,7 +939,7 @@
       "HIGH3"
     ) || "HIGH3";
     return {
-      source:"pcsunited.header.comp.v4.0",
+      source:"pcsunited.header.comp.v4.0.1",
       mode,
       type:mode,
       status:mode,
@@ -1029,7 +1052,7 @@
       family:profile.family,
       family_size:profile.family,
       familySize:profile.family,
-      source:"pcsunited.header.comp.v4.0"
+      source:"pcsunited.header.comp.v4.0.1"
     };
   }
   function buildVeteranInput(profile){
@@ -1053,7 +1076,7 @@
       children_in_school_over_18:profile.childrenInSchoolOver18 || 0,
       dependentParents:profile.dependentParents || 0,
       dependent_parents:profile.dependentParents || 0,
-      source:"pcsunited.header.comp.v4.0"
+      source:"pcsunited.header.comp.v4.0.1"
     };
   }
   async function callTheWing(profile){
@@ -1117,17 +1140,12 @@
       return true;
     }
     paintComp(profile,comp);
-    try{
-      window.dispatchEvent(new CustomEvent("pcsunited:compensation-preview-ready",{
-        detail:{
-          source:"pcsunited.header.comp.v4.0",
-          version:VERSION,
-          profile,
-          compensation:comp,
-          updated_at:new Date().toISOString()
-        }
-      }));
-    }catch(_){}
+    /*
+      Safe preview event:
+      This is only used for passive UI updates.
+      It must never navigate or trigger Base Demo.
+    */
+    dispatchPreviewReady(profile,comp);
     return true;
   }
   function scheduleRun(reason,delay){
@@ -1151,7 +1169,16 @@
       paintComp(profile,comp);
       return;
     }
-    scheduleRun("profile-event",120);
+    /*
+      HARD FIX:
+      Do not auto-call TheWing from profile/basicbrain/bridge events.
+      BasicBrain is already the source of truth and will send:
+      pcsunited:compensation-ready
+      This prevents duplicate API calls and duplicate event chains
+      that can wake up Base Demo or other page sections.
+    */
+    paintZero(profile);
+    return;
   }
   function receiveCompEvent(event){
     const detail = event && event.detail ? event.detail : {};
@@ -1175,7 +1202,12 @@
       paintCompValues(profile,latestGoodActiveValues,false);
       return;
     }
-    scheduleRun("comp-event-empty",120);
+    /*
+      No scheduleRun here.
+      Do not re-trigger TheWing just because an event was empty.
+    */
+    paintZero(profile);
+    return;
   }
   function extractFinancialValues(detail){
     const d = detail && typeof detail === "object" ? detail : {};
@@ -1283,16 +1315,25 @@
         paintComp(profile,comp);
         return true;
       }
-      if(isProfileComplete(profile)){
-        scheduleRun("global-hydrate",120);
-        return true;
-      }
+      /*
+        HARD FIX:
+        Do not schedule header TheWing hydration automatically.
+        Keep the strip passive until BasicBrain sends compensation-ready.
+      */
+      paintZero(profile);
+      return true;
     }
     return false;
   }
   function init(){
     root.classList.add("is-comp-mode");
     paintZero({ mode:"active_duty" });
+    /*
+      Passive listeners only.
+      These update the strip visually.
+      They do not navigate.
+      They do not auto-call TheWing.
+    */
     window.addEventListener("pcsunited:compensation-ready",receiveCompEvent);
     window.addEventListener("pcsunited:compensation-preview-ready",receiveCompEvent);
     window.addEventListener("pcsunited:basicbrain-updated",receiveProfileEvent);
@@ -1324,6 +1365,10 @@
         });
       }
     });
+    /*
+      Passive hydration only.
+      Does not trigger API calls.
+    */
     setTimeout(tryHydrateFromGlobals,250);
     setTimeout(tryHydrateFromGlobals,1000);
     setTimeout(tryHydrateFromGlobals,1800);
@@ -1331,6 +1376,10 @@
       version:VERSION,
       endpoint:BRAIN_ENDPOINT,
       refresh:function(){
+        /*
+          Manual refresh is the only place this strip may call TheWing.
+          It is not triggered by BasicBrain field input.
+        */
         if(currentStripMode === "financial" && latestGoodFinancialValues){
           paintFinancialValues(latestGoodFinancialValues);
           return true;
@@ -1341,7 +1390,12 @@
         latestProfile = extractProfile(profile || {});
         currentStripMode = "compensation";
         latestGoodFinancialValues = null;
-        return run("manual-set-profile");
+        /*
+          Do not auto-call TheWing here.
+          Keep it passive.
+        */
+        paintZero(latestProfile || { mode:"active_duty" });
+        return true;
       },
       setFinancial:function(values){
         const safe = extractFinancialValues(values || {});
@@ -1423,7 +1477,7 @@
           <div class="w-layout-cell cell-6">
             <div class="code-embed-51 w-embed"><!--  ============================================================
   PCSUNITED • BASICBRAIN + AMY GUIDANCE COMBINED SHELL
-  v6.0.0 • BASICBRAIN HANDOFF TO AMY PANEL
+  v6.1.7 • UNIFIED BOTTOM MESSAGE PANEL
 ===============================================================  -->
               <div id="pcsu-brain-amy-shell" style="all:initial;">
                 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -1452,9 +1506,6 @@
   margin:0 auto;
   color:var(--ink);
 }
-/* ============================================================
-  SHARED PANEL
-=============================================================== */
 .pcsu-panel{
   position:relative;
   overflow:hidden;
@@ -1494,9 +1545,6 @@
     linear-gradient(90deg, rgba(0,0,0,.10), transparent 44%, rgba(0,0,0,.10)),
     linear-gradient(180deg, transparent 52%, rgba(0,0,0,.14));
 }
-/* ============================================================
-  STATE SWITCHING
-=============================================================== */
 #bb-stage,
 #ag-stage{
   transition:opacity .24s ease, transform .24s ease;
@@ -1510,9 +1558,6 @@
 #pcsu-brain-amy-shell.is-guidance-ready #ag-stage{
   display:block;
 }
-/* ============================================================
-  BASICBRAIN
-=============================================================== */
 #bb-stage{
   padding:22px;
 }
@@ -1591,7 +1636,6 @@
   font-weight:500;
   color:#dcd4c8;
 }
-/* MODE TOGGLE */
 .bb-mode-control{
   position:relative;
   display:flex;
@@ -1691,7 +1735,6 @@
   background:linear-gradient(180deg,var(--gold2),var(--gold));
   box-shadow:0 0 12px rgba(216,184,122,.45);
 }
-/* FORM */
 .bb-form{
   display:grid;
   grid-template-columns:repeat(2,1fr);
@@ -1797,23 +1840,18 @@
   color:#172033;
   background:#fff;
 }
-.bb-status{
-  margin-top:14px;
-  padding:12px 14px;
-  border-radius:18px;
-  background:linear-gradient(180deg, rgba(216,184,122,.065), rgba(255,255,255,.025));
-  border:1px solid rgba(216,184,122,.13);
-  color:#ebe3d5;
-  font-size:.86rem;
-  line-height:1.45;
-  font-weight:800;
-  text-align:center;
-  display:none;
-}
-.bb-status.show{
-  display:block;
-}
+/* ============================================================
+   UNIFIED BOTTOM MESSAGE PANEL
+   - Default: Private. Secure. No data stored.
+   - Status replaces that text in the same panel.
+============================================================ */
+.bb-status,
 .bb-private{
+  position:relative;
+  z-index:2;
+}
+.bb-private,
+.bb-unified-message{
   margin-top:14px;
   padding:16px 18px;
   border-radius:18px;
@@ -1828,6 +1866,13 @@
   line-height:1.45;
   font-weight:700;
   text-align:center;
+  min-height:52px;
+}
+.bb-unified-message.is-status{
+  background:linear-gradient(180deg, rgba(216,184,122,.065), rgba(255,255,255,.025));
+  border-color:rgba(216,184,122,.13);
+  color:#ebe3d5;
+  font-weight:800;
 }
 .bb-private-icon{
   width:15px;
@@ -1835,9 +1880,6 @@
   color:var(--gold2);
   flex:0 0 auto;
 }
-/* ============================================================
-  AMY GUIDANCE PANEL
-=============================================================== */
 #ag-stage{
   position:relative;
   z-index:2;
@@ -2034,13 +2076,12 @@
 }
 </style>
                 <div id="pcsu-combined-panel" class="pcsu-panel">
-                  <!--  BASICBRAIN STAGE  -->
                   <section id="bb-stage">
                     <div class="bb-topbar">
                       <div class="bb-heading-block">
                         <div class="bb-kicker">
                           <span class="bb-dot"></span>
-                          BasicBrain Input
+                          Powered by TheWing.ai
                         </div>
                         <h3 class="bb-title" id="bb-title-text">
                           Start Your PCS Snapshot
@@ -2109,30 +2150,26 @@
                         </div>
                       </div>
                     </div>
-                    <div id="bb-status" class="bb-status">
-                      Waiting for PCS details.
-                    </div>
-                    <div class="bb-private">
+                    <div id="bb-status" class="bb-private bb-unified-message">
                       <svg class="bb-private-icon" viewbox="0 0 24 24" fill="none">
                         <rect x="5" y="10" width="14" height="10" rx="2" stroke="currentColor" stroke-width="1.8"></rect>
                         <path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"></path>
                       </svg>
-                      Private. Secure. No data stored.
+                      <span id="bb-status-text">Private. Secure. No data stored.</span>
                     </div>
                   </section>
-                  <!--  AMY GUIDANCE STAGE  -->
                   <section id="ag-stage">
                     <div class="ag-live">
                       <div class="ag-top">
                         <div class="ag-avatar">
-                          <img src="../images/AmyProfilePic.jpg" alt="Amy">
+                          <img src="../images/Face.jpg" alt="Amy">
                         </div>
                         <div class="ag-head">
                           <h3 class="ag-title" id="ag-greeting">
                             Amy • PCS Guidance
                           </h3>
                           <p class="ag-sub" id="ag-greeting-sub">
-                            Let’s explore your PCSUnited guidance flow and build a clearer PCS strategy together.
+                            I'm Amy, your A.I Concierge. Let's explore your PCSUnited guidance flow and build a clearer PCS strategy together.
                           </p>
                         </div>
                       </div>
@@ -2199,19 +2236,92 @@
             </div>
             <div class="code-embed-51 w-embed w-script"><!--  ============================================================
   PCSUNITED • BASICBRAIN + AMY GUIDANCE COMBINED JS
-  v6.1.3 • RETIREMENT_VA + BASE DEMO HANDOFF FIX
+  v6.1.7 • UNIFIED STATUS PANEL + SCROLL-SAFE PASSIVE EVENTS
 ===============================================================  -->
               <script>
 (function(){
   "use strict";
-  const VERSION = "6.1.3";
+  const VERSION = "6.1.7";
+  const MOUNT_KEY = "PCSU_BASICBRAIN_V617_MOUNTED";
   const API_BASE = "https://thewing.netlify.app/api";
   const BRAIN_ENDPOINT = API_BASE + "/opensource-brain";
   const HANDOFF_KEY = "pcsunited.basicbrain.handoff.v1";
+  if(window[MOUNT_KEY]){
+    console.warn("[PCSU BasicBrain] Duplicate mount blocked:", VERSION);
+    return;
+  }
+  window[MOUNT_KEY] = true;
   const root = document.getElementById("pcsu-brain-amy-shell");
   if(!root) return;
-  if(root.dataset.mounted === "true") return;
+  if(root.dataset.mounted === "true"){
+    console.warn("[PCSU BasicBrain] Shell already marked mounted.");
+    return;
+  }
   root.dataset.mounted = "true";
+  const SCROLL_DEBUG =
+    window.PCSU_SCROLL_DEBUG === true ||
+    /(?:\?|&)pcsuScrollDebug=1(?:&|$)/.test(window.location.search || "");
+  function logScrollDebug(tag, extra){
+    if(!SCROLL_DEBUG) return;
+    console.log("[PCSU Scroll Debug · BasicBrain]", {
+      tag,
+      scrollX:window.scrollX || window.pageXOffset || 0,
+      scrollY:window.scrollY || window.pageYOffset || 0,
+      version:VERSION,
+      ...(extra || {})
+    });
+  }
+  function readScroll(){
+    return {
+      x:window.scrollX || window.pageXOffset || 0,
+      y:window.scrollY || window.pageYOffset || 0
+    };
+  }
+  function restoreScroll(target, label){
+    const current = readScroll();
+    if(current.x !== target.x || current.y !== target.y){
+      logScrollDebug("restore-scroll", {
+        label:label || "unspecified",
+        fromY:current.y,
+        toY:target.y,
+        deltaY:current.y - target.y
+      });
+      window.scrollTo(target.x, target.y);
+    }
+  }
+  function preserveScroll(callback, allowNavigate){
+    const start = readScroll();
+    logScrollDebug("preserveScroll:before", {
+      allowNavigate:!!allowNavigate
+    });
+    try{
+      callback();
+    }catch(_){}
+    if(allowNavigate === true){
+      logScrollDebug("preserveScroll:skipped-restore", {
+        allowNavigate:true
+      });
+      return;
+    }
+    [0,16,40,80,120,200,320,500,800,1200].forEach(function(ms){
+      setTimeout(function(){
+        restoreScroll(start, "preserveScroll+" + ms + "ms");
+      }, ms);
+    });
+  }
+  function withScrollLock(fn, label){
+    const start = readScroll();
+    logScrollDebug((label || "scroll-lock") + ":before", start);
+    preserveScroll(function(){
+      fn();
+    }, false);
+    setTimeout(function(){
+      const end = readScroll();
+      logScrollDebug((label || "scroll-lock") + ":after", {
+        deltaY:end.y - start.y
+      });
+    }, 900);
+  }
   const els = {
     titleText:document.getElementById("bb-title-text"),
     subtitle:document.getElementById("bb-subtitle"),
@@ -2228,6 +2338,7 @@
     baseRow:document.getElementById("bb-base-row"),
     dependentsRow:document.getElementById("bb-dependents-row"),
     status:document.getElementById("bb-status"),
+    statusText:document.getElementById("bb-status-text"),
     agGreeting:document.getElementById("ag-greeting"),
     agGreetingSub:document.getElementById("ag-greeting-sub"),
     agBasePay:document.getElementById("ag-basepay"),
@@ -2255,14 +2366,51 @@
     });
   }
   function dispatchSafe(name,detail){
-    try{
-      window.dispatchEvent(new CustomEvent(name,{detail:detail || {}}));
-    }catch(_){}
+    const payload =
+      detail && typeof detail === "object"
+        ? detail
+        : {};
+    const allowNavigate =
+      payload.autoNavigate === true;
+    const before = readScroll();
+    preserveScroll(function(){
+      window.dispatchEvent(
+        new CustomEvent(name,{
+          detail:payload
+        })
+      );
+      logScrollDebug("dispatch:" + name, {
+        autoNavigate:payload.autoNavigate === true,
+        source:payload.source || null,
+        deltaY:(readScroll().y - before.y)
+      });
+    },allowNavigate);
+  }
+  function postMessageSafe(payload){
+    preserveScroll(function(){
+      window.postMessage(
+        payload || {},
+        "*"
+      );
+      logScrollDebug("postMessage:" + (payload?.type || "unknown"), {
+        autoNavigate:payload?.autoNavigate === true
+      });
+    },false);
   }
   function setStatus(text,show){
     if(!els.status) return;
-    els.status.textContent = text || "";
-    els.status.classList.toggle("show",!!show);
+    const defaultText =
+      "Private. Secure. No data stored.";
+    const nextText =
+      show && text
+        ? text
+        : defaultText;
+    if(els.statusText){
+      els.statusText.textContent = nextText;
+    }else{
+      els.status.textContent = nextText;
+    }
+    els.status.classList.toggle("is-status",!!(show && text));
   }
   function normalizeRank(value){
     const raw = clean(value)
@@ -2611,7 +2759,7 @@
         (childrenInSchoolOver18 || 0) +
         (dependentParents || 0);
       return {
-        source:"pcsunited.basicbrain.combined.v6.1.3.veteran",
+        source:"pcsunited.basicbrain.combined.v6.1.7.veteran",
         version:VERSION,
         stored:false,
         updated_at:new Date().toISOString(),
@@ -2673,7 +2821,7 @@
     const base = clean(els.base ? els.base.value : "");
     const meta = BASE_META[base] || {};
     return {
-      source:"pcsunited.basicbrain.combined.v6.1.3.active_duty",
+      source:"pcsunited.basicbrain.combined.v6.1.7.active_duty",
       version:VERSION,
       stored:false,
       updated_at:new Date().toISOString(),
@@ -2778,7 +2926,7 @@
       cityKey:state.cityKey,
       market:state.market,
       state:state.state,
-      source:"pcsunited.basicbrain.combined.v6.1.3"
+      source:"pcsunited.basicbrain.combined.v6.1.7"
     };
   }
   function buildVeteranApiInput(state){
@@ -2802,7 +2950,7 @@
       children_in_school_over_18:state.childrenInSchoolOver18 || 0,
       dependentParents:state.dependentParents || 0,
       dependent_parents:state.dependentParents || 0,
-      source:"pcsunited.basicbrain.combined.v6.1.3"
+      source:"pcsunited.basicbrain.combined.v6.1.7"
     };
   }
   function extractPayload(data){
@@ -2981,7 +3129,7 @@
   }
   function buildSelectedBase(state){
     return {
-      source:"pcsunited.basicbrain.combined.v6.1.3",
+      source:"pcsunited.basicbrain.combined.v6.1.7",
       stored:false,
       base:state.base || "",
       label:state.base || "",
@@ -3006,7 +3154,7 @@
       localStorage.setItem(
         HANDOFF_KEY,
         JSON.stringify({
-          source:"pcsunited.basicbrain.combined.v6.1.3",
+          source:"pcsunited.basicbrain.combined.v6.1.7",
           version:VERSION,
           mode,
           profile,
@@ -3055,24 +3203,37 @@
       profile,
       bridge,
       selectedBase,
-      compensation:null
+      compensation:null,
+      autoNavigate:false
     });
-    dispatchSafe("pcsunited:profile-ready",profile);
-    dispatchSafe("pcsunited:bridge-ready",bridge);
+    dispatchSafe("pcsunited:profile-ready",{
+      ...profile,
+      autoNavigate:false
+    });
+    dispatchSafe("pcsunited:bridge-ready",{
+      ...bridge,
+      autoNavigate:false
+    });
     if(mode === "active_duty"){
-      dispatchSafe("pcsu:base-selected",selectedBase);
-    }
-    try{
-      window.postMessage({
-        type:"pcsunited-basicbrain",
-        source:"pcsunited.basicbrain.combined.v6.1.3",
-        basicbrain,
+      dispatchSafe("pcsunited:base-preview-ready",{
+        selectedBase,
         profile,
         bridge,
-        selectedBase,
-        compensation:null
-      },"*");
-    }catch(_){}
+        compensation:null,
+        autoNavigate:false,
+        source:"basicbrain-preview"
+      });
+    }
+    postMessageSafe({
+      type:"pcsunited-basicbrain",
+      source:"pcsunited.basicbrain.combined.v6.1.7",
+      basicbrain,
+      profile,
+      bridge,
+      selectedBase,
+      compensation:null,
+      autoNavigate:false
+    });
   }
   function accuracyNoteText(comp){
     if(!comp || !comp.compensationAccuracy) return "";
@@ -3088,12 +3249,12 @@
     const veteran = state.mode === "veteran";
     const title = rankTitle(state.rank);
     if(els.agGreeting){
-      els.agGreeting.textContent = "Pleasure to Meet You, " + title;
+      els.agGreeting.textContent = "Pleasure to Meet You, " + title + "!";
     }
     if(els.agGreetingSub){
       els.agGreetingSub.textContent = veteran
-        ? (comp.headline || "Thank you for your service. Let’s explore your PCSUnited guidance flow and build a clearer strategy together.")
-        : "Let’s explore your PCSUnited guidance flow and build a clearer PCS strategy together.";
+        ? (comp.headline || "I'm Amy your A.I Concierge. Let's explore your PCSUnited guidance flow and build a clearer strategy together.")
+        : "I'm Amy your A.I Concierge. Let's explore your PCSUnited guidance flow and build a clearer PCS strategy together.";
     }
     if(veteran){
       if(els.agBasePayLabel) els.agBasePayLabel.textContent = "Retirement";
@@ -3113,7 +3274,9 @@
       els.agAccuracyNote.textContent = note;
       els.agAccuracyNote.style.display = note ? "block" : "none";
     }
-    root.classList.add("is-guidance-ready");
+    preserveScroll(function(){
+      root.classList.add("is-guidance-ready");
+    }, false);
   }
   function emitComp(state,comp){
     const selectedBase = buildSelectedBase(state);
@@ -3155,17 +3318,31 @@
       profile,
       bridge,
       selectedBase,
-      compensation:comp || null
+      compensation:comp || null,
+      autoNavigate:false
     });
-    dispatchSafe("pcsunited:profile-ready",profile);
-    dispatchSafe("pcsunited:bridge-ready",bridge);
+    dispatchSafe("pcsunited:profile-ready",{
+      ...profile,
+      autoNavigate:false
+    });
+    dispatchSafe("pcsunited:bridge-ready",{
+      ...bridge,
+      autoNavigate:false
+    });
     if(mode === "active_duty"){
-      dispatchSafe("pcsu:base-selected",selectedBase);
+      dispatchSafe("pcsunited:base-preview-ready",{
+        selectedBase,
+        profile,
+        bridge,
+        compensation:comp || null,
+        autoNavigate:false,
+        source:"basicbrain-comp-preview"
+      });
     }
     if(comp){
       if(mode === "veteran"){
         dispatchSafe("pcsunited:compensation-ready",{
-          source:"pcsunited.basicbrain.combined.v6.1.3.veteran",
+          source:"pcsunited.basicbrain.combined.v6.1.7.veteran",
           mode:"veteran",
           profile,
           bridge,
@@ -3183,11 +3360,12 @@
           compensationAccuracy:comp.compensationAccuracy,
           retirementBaseMethod:comp.retirementBaseMethod,
           headline:comp.headline,
+          autoNavigate:false,
           updated_at:new Date().toISOString()
         });
       }else{
         dispatchSafe("pcsunited:compensation-ready",{
-          source:"pcsunited.basicbrain.combined.v6.1.3.active_duty",
+          source:"pcsunited.basicbrain.combined.v6.1.7.active_duty",
           mode:"active_duty",
           profile,
           bridge,
@@ -3200,29 +3378,31 @@
           total:comp.total,
           totalMonthly:comp.total,
           total_monthly:comp.total,
+          autoNavigate:false,
           updated_at:new Date().toISOString()
         });
       }
       paintAmyGuidance(state,comp);
     }
-    try{
-      window.postMessage({
-        type:"pcsunited-basicbrain",
-        source:"pcsunited.basicbrain.combined.v6.1.3",
-        basicbrain,
-        profile,
-        bridge,
-        selectedBase,
-        compensation:comp || null
-      },"*");
-    }catch(_){}
+    postMessageSafe({
+      type:"pcsunited-basicbrain",
+      source:"pcsunited.basicbrain.combined.v6.1.7",
+      basicbrain,
+      profile,
+      bridge,
+      selectedBase,
+      compensation:comp || null,
+      autoNavigate:false
+    });
     lastGoodState = state;
     lastGoodComp = comp;
   }
   async function runFlow(){
     const seq = ++requestSeq;
     const state = getState();
-    root.classList.remove("is-guidance-ready");
+    preserveScroll(function(){
+      root.classList.remove("is-guidance-ready");
+    }, false);
     emitProfileOnly({ save:true });
     if(!isComplete(state)){
       setStatus(
@@ -3263,9 +3443,54 @@
     emitComp(state,comp);
     setStatus("",false);
   }
-  function scheduleRun(){
+  function scheduleRun(event){
+    const isBaseChange =
+      !!(event && event.target && els.base && event.target === els.base);
     window.clearTimeout(runTimer);
-    runTimer = window.setTimeout(runFlow,350);
+    if(isBaseChange){
+      logScrollDebug("bb-base-change:scheduled", {
+        base:els.base ? els.base.value : ""
+      });
+      runTimer = window.setTimeout(function(){
+        withScrollLock(runFlow, "bb-base-change");
+      }, 350);
+      return;
+    }
+    runTimer = window.setTimeout(runFlow, 350);
+  }
+  function openBaseDemoFromAmy(){
+    const current = window.PCSU_BASICBRAIN_CURRENT || window.PCSU_BASICBRAIN_TEMP || null;
+    if(!current || !current.selectedBase || !current.selectedBase.base){
+      setStatus("Select a gaining base first, then open Base Demo.",true);
+      return;
+    }
+    dispatchSafe("pcsu:base-selected",{
+      ...current.selectedBase,
+      profile:current.profile || null,
+      bridge:current.bridge || null,
+      compensation:current.compensation || current.calculated_comp || null,
+      autoNavigate:true,
+      source:"amy-guidance-base-demo-click",
+      updated_at:new Date().toISOString()
+    });
+  }
+  function enableAmyFlowClicks(){
+    const cards = root.querySelectorAll(".ag-flow-card");
+    if(!cards || !cards.length) return;
+    const baseDemoCard = cards[0];
+    if(baseDemoCard){
+      baseDemoCard.style.cursor = "pointer";
+      baseDemoCard.setAttribute("role","button");
+      baseDemoCard.setAttribute("tabindex","0");
+      baseDemoCard.setAttribute("aria-label","Open Base Demographics");
+      baseDemoCard.addEventListener("click",openBaseDemoFromAmy);
+      baseDemoCard.addEventListener("keydown",function(event){
+        if(event.key === "Enter" || event.key === " "){
+          event.preventDefault();
+          openBaseDemoFromAmy();
+        }
+      });
+    }
   }
   ensureShellCompatibility();
   populateSelects();
@@ -3280,6 +3505,7 @@
       setMode(mode === "active_duty" ? "veteran" : "active_duty");
     });
   }
+  enableAmyFlowClicks();
   window.PCSU_BASICBRAIN = {
     version:VERSION,
     storage:"memory_only_with_page_handoff",
@@ -3300,6 +3526,9 @@
         paintAmyGuidance(lastGoodState,lastGoodComp);
       }
     },
+    openBaseDemo:function(){
+      openBaseDemoFromAmy();
+    },
     getLastGood:function(){
       return {
         mode,
@@ -3311,7 +3540,8 @@
       clearValues();
       clearHandoff();
       emitProfileOnly({ save:false });
-    }
+    },
+    logScrollDebug:logScrollDebug
   };
   setMode("active_duty");
 })();
@@ -4620,761 +4850,1576 @@
               <div fade-in="true" class="slide-nav-3 w-slider-nav"></div>
             </div>
           </div>
-          <div class="interactive-base-map w-embed w-script">
+          <div class="interactive-base-map w-embed w-script"><!--  =========================================================
+  PCSUnited • Base Demographics Duplicate UI Cleaner
+  v1.0.0 • Removes duplicate Base Map HTML from Webflow page
+  PURPOSE
+  - Fixes issue where two Base Demographics UIs appear
+  - Keeps the first #pcsu-real-us-map
+  - Removes duplicate #pcsu-real-us-map blocks
+  - Also removes duplicate D3/topojson-loaded map copies if Webflow renders twice
+=========================================================  -->
             <script>
-(() => {
+(function(){
   "use strict";
-  if(window.PCSU_US_BASE_MAP?.__mounted_v305) return;
-  window.PCSU_US_BASE_MAP = {
-    __mounted_v305:true
-  };
-  const STORAGE_KEY =
-    "pcsunited.selectedBase.v1";
-  const JSON_URL_KEY =
-    "pcsunited.selectedCityJsonUrl.v1";
-  const LIVE_BASE_DEMOGRAPHICS_PATH =
-    "/air-force/base-demographics-air-force";
-  const JSON_BASE_URL =
-    window.PCSU_CITIES_BASE_URL ||
-    "https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/";
-  const DEFAULT_STATE =
-    "TX";
-  const FIPS_TO_ABBR = {
-    "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC",
-    "12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY",
-    "22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN","28":"MS","29":"MO","30":"MT",
-    "31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH",
-    "40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN","48":"TX","49":"UT",
-    "50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY"
-  };
-  const STATE_NAMES = {
-    AL:"Alabama", AK:"Alaska", AZ:"Arizona", CA:"California", CO:"Colorado",
-    DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho",
-    IL:"Illinois", KS:"Kansas", LA:"Louisiana", MA:"Massachusetts", MD:"Maryland",
-    MS:"Mississippi", MT:"Montana", NC:"North Carolina", ND:"North Dakota",
-    NE:"Nebraska", NJ:"New Jersey", NM:"New Mexico", NV:"Nevada", OH:"Ohio",
-    OK:"Oklahoma", SC:"South Carolina", SD:"South Dakota", TX:"Texas",
-    UT:"Utah", VA:"Virginia", WA:"Washington", WY:"Wyoming"
-  };
-  const BASE_REGISTRY = {
-    AK:[
-      ["Joint Base Elmendorf-Richardson","Elmendorf.json","Anchorage, AK",61.2500,-149.8065],
-      ["Eielson AFB","Eielson.json","Fairbanks, AK",64.6657,-147.1015]
-    ],
-    AL:[
-      ["Maxwell AFB","Maxwell.json","Montgomery, AL",32.3829,-86.3658]
-    ],
-    AZ:[
-      ["Davis-Monthan AFB","Davis-Monthan.json","Tucson, AZ",32.1665,-110.8832],
-      ["Luke AFB","Luke.json","Glendale, AZ",33.5350,-112.3832]
-    ],
-    CA:[
-      ["Beale AFB","Beale.json","Marysville, CA",39.1361,-121.4366],
-      ["Edwards AFB","Edwards.json","Edwards, CA",34.9054,-117.8837],
-      ["Los Angeles AFB","Los-Angeles.json","El Segundo, CA",33.9189,-118.3807],
-      ["Travis AFB","Travis.json","Fairfield, CA",38.2627,-121.9275],
-      ["Vandenberg SFB","Vandenberg.json","Lompoc, CA",34.7420,-120.5724]
-    ],
-    CO:[
-      ["Peterson SFB","Peterson.json","Colorado Springs, CO",38.8236,-104.7006],
-      ["Schriever SFB","Schriever.json","Colorado Springs, CO",38.8030,-104.5255],
-      ["U.S. Air Force Academy","Air-Force-Academy.json","Colorado Springs, CO",39.0088,-104.8911]
-    ],
-    DE:[
-      ["Dover AFB","Dover.json","Dover, DE",39.1295,-75.4660]
-    ],
-    FL:[
-      ["Eglin AFB","Eglin.json","Valparaiso, FL",30.4832,-86.5254],
-      ["Hurlburt Field","Hurlburt.json","Mary Esther, FL",30.4278,-86.6893],
-      ["MacDill AFB","MacDill.json","Tampa, FL",27.8493,-82.5212],
-      ["Patrick SFB","Patrick.json","Cocoa Beach, FL",28.2349,-80.6101],
-      ["Tyndall AFB","Tyndall.json","Panama City, FL",30.0696,-85.5754]
-    ],
-    GA:[
-      ["Moody AFB","Moody.json","Valdosta, GA",30.9678,-83.1930],
-      ["Robins AFB","Robins.json","Warner Robins, GA",32.6401,-83.5919]
-    ],
-    HI:[
-      ["Joint Base Pearl Harbor-Hickam","Hickam.json","Honolulu, HI",21.3187,-157.9224]
-    ],
-    ID:[
-      ["Mountain Home AFB","Mountain-Home.json","Mountain Home, ID",43.0436,-115.8724]
-    ],
-    IL:[
-      ["Scott AFB","Scott.json","Belleville, IL",38.5452,-89.8352]
-    ],
-    KS:[
-      ["McConnell AFB","McConnell.json","Wichita, KS",37.6231,-97.2672]
-    ],
-    LA:[
-      ["Barksdale AFB","Barksdale.json","Bossier City, LA",32.5018,-93.6627]
-    ],
-    MA:[
-      ["Hanscom AFB","Hanscom.json","Bedford, MA",42.4699,-71.2890]
-    ],
-    MD:[
-      ["Joint Base Andrews","Andrews.json","Camp Springs, MD",38.8108,-76.8669]
-    ],
-    MS:[
-      ["Columbus AFB","Columbus.json","Columbus, MS",33.6438,-88.4438],
-      ["Keesler AFB","Keesler.json","Biloxi, MS",30.4104,-88.9244]
-    ],
-    MT:[
-      ["Malmstrom AFB","Malmstrom.json","Great Falls, MT",47.5053,-111.1873]
-    ],
-    NC:[
-      ["Seymour Johnson AFB","Seymour-Johnson.json","Goldsboro, NC",35.3394,-77.9606]
-    ],
-    ND:[
-      ["Grand Forks AFB","Grand-Forks.json","Grand Forks, ND",47.9611,-97.4012],
-      ["Minot AFB","Minot.json","Minot, ND",48.4158,-101.3580]
-    ],
-    NE:[
-      ["Offutt AFB","Offutt.json","Bellevue, NE",41.1183,-95.9125]
-    ],
-    NJ:[
-      ["Joint Base McGuire-Dix-Lakehurst","McGuire.json","Wrightstown, NJ",40.0156,-74.5917]
-    ],
-    NM:[
-      ["Cannon AFB","Cannon.json","Clovis, NM",34.3828,-103.3221],
-      ["Holloman AFB","Holloman.json","Alamogordo, NM",32.8525,-106.1065],
-      ["Kirtland AFB","Kirtland.json","Albuquerque, NM",35.0402,-106.6092]
-    ],
-    NV:[
-      ["Creech AFB","Creech.json","Indian Springs, NV",36.5872,-115.6734],
-      ["Nellis AFB","Nellis.json","Las Vegas, NV",36.2362,-115.0343]
-    ],
-    OH:[
-      ["Wright-Patterson AFB","Wright-Patterson.json","Dayton, OH",39.8261,-84.0483]
-    ],
-    OK:[
-      ["Altus AFB","Altus.json","Altus, OK",34.6671,-99.2667],
-      ["Tinker AFB","Tinker.json","Oklahoma City, OK",35.4147,-97.3866],
-      ["Vance AFB","Vance.json","Enid, OK",36.3392,-97.9165]
-    ],
-    SC:[
-      ["Joint Base Charleston","Charleston.json","Charleston, SC",32.8986,-80.0405],
-      ["Shaw AFB","Shaw.json","Sumter, SC",33.9727,-80.4706]
-    ],
-    SD:[
-      ["Ellsworth AFB","Ellsworth.json","Rapid City, SD",44.1450,-103.1036]
-    ],
-    TX:[
-      ["Dyess AFB","Dyess.json","Abilene, TX",32.4208,-99.8546],
-      ["Goodfellow AFB","Goodfellow.json","San Angelo, TX",31.4343,-100.4027],
-      ["Joint Base San Antonio-Lackland","Lackland.json","San Antonio, TX",29.3842,-98.5811],
-      ["Laughlin AFB","Laughlin.json","Del Rio, TX",29.3595,-100.7780],
-      ["Joint Base San Antonio-Randolph","Randolph.json","San Antonio, TX",29.5297,-98.2789],
-      ["Sheppard AFB","Sheppard.json","Wichita Falls, TX",33.9888,-98.4919]
-    ],
-    UT:[
-      ["Hill AFB","Hill.json","Ogden, UT",41.1240,-111.9730]
-    ],
-    VA:[
-      ["Joint Base Langley-Eustis","Langley.json","Hampton, VA",37.0838,-76.3605]
-    ],
-    WA:[
-      ["Fairchild AFB","Fairchild.json","Spokane, WA",47.6151,-117.6558],
-      ["Joint Base Lewis-McChord","McChord.json","Tacoma, WA",47.1339,-122.4916]
-    ],
-    WY:[
-      ["F. E. Warren AFB","F-E-Warren.json","Cheyenne, WY",41.1339,-104.8660]
-    ]
-  };
-  const BASICBRAIN_BASE_ALIASES = {
-    "Andrews AFB":"MD",
-    "Joint Base Andrews":"MD",
-    "Barksdale AFB":"LA",
-    "Beale AFB":"CA",
-    "Cannon AFB":"NM",
-    "Charleston AFB":"SC",
-    "Joint Base Charleston":"SC",
-    "Columbus AFB":"MS",
-    "Davis-Monthan AFB":"AZ",
-    "Dover AFB":"DE",
-    "Dyess AFB":"TX",
-    "Edwards AFB":"CA",
-    "Eglin AFB":"FL",
-    "Ellsworth AFB":"SD",
-    "Fairchild AFB":"WA",
-    "FE Warren AFB":"WY",
-    "F.E. Warren AFB":"WY",
-    "F. E. Warren AFB":"WY",
-    "Grand Forks AFB":"ND",
-    "Hanscom AFB":"MA",
-    "Hill AFB":"UT",
-    "Holloman AFB":"NM",
-    "Hurlburt Field":"FL",
-    "JBSA Fort Sam Houston":"TX",
-    "Fort Sam Houston":"TX",
-    "Joint Base San Antonio-Fort Sam Houston":"TX",
-    "JBSA Lackland":"TX",
-    "Lackland AFB":"TX",
-    "Joint Base San Antonio-Lackland":"TX",
-    "JBSA Randolph":"TX",
-    "Randolph AFB":"TX",
-    "Joint Base San Antonio-Randolph":"TX",
-    "Keesler AFB":"MS",
-    "Kirtland AFB":"NM",
-    "Langley AFB":"VA",
-    "Joint Base Langley-Eustis":"VA",
-    "Laughlin AFB":"TX",
-    "Little Rock AFB":"AR",
-    "Luke AFB":"AZ",
-    "MacDill AFB":"FL",
-    "Malmstrom AFB":"MT",
-    "Maxwell AFB":"AL",
-    "McConnell AFB":"KS",
-    "McGuire AFB":"NJ",
-    "Joint Base McGuire-Dix-Lakehurst":"NJ",
-    "Minot AFB":"ND",
-    "Moody AFB":"GA",
-    "Mountain Home AFB":"ID",
-    "Nellis AFB":"NV",
-    "Offutt AFB":"NE",
-    "Patrick SFB":"FL",
-    "Peterson SFB":"CO",
-    "Robins AFB":"GA",
-    "Scott AFB":"IL",
-    "Seymour Johnson AFB":"NC",
-    "Shaw AFB":"SC",
-    "Sheppard AFB":"TX",
-    "Tinker AFB":"OK",
-    "Travis AFB":"CA",
-    "Tyndall AFB":"FL",
-    "Vance AFB":"OK",
-    "Vandenberg SFB":"CA",
-    "Whiteman AFB":"MO",
-    "Wright-Patterson AFB":"OH"
-  };
-  const svg = d3.select("#pcsu-us-svg");
-  const selectedStateEl =
-    document.getElementById("pcsu-selected-state");
-  const panelCopyEl =
-    document.getElementById("pcsu-panel-copy");
-  const baseListEl =
-    document.getElementById("pcsu-base-list");
-  let mapReady = false;
-  let pendingStateCode = "";
-  let pendingBaseId = "";
-  let currentStateCode = "";
-  let currentBaseId = "";
-  let projection = null;
-  let markerLayer = null;
-  function esc(str){
-    return String(str ?? "")
-      .replaceAll("&","&amp;")
-      .replaceAll("<","&lt;")
-      .replaceAll(">","&gt;")
-      .replaceAll('"',"&quot;")
-      .replaceAll("'","&#039;");
+  const VERSION = "1.0.0";
+  const ROOT_ID = "pcsu-real-us-map";
+  const CLEANER_KEY = "PCSU_BASE_MAP_DUPLICATE_CLEANER_V100";
+  if(window[CLEANER_KEY]){
+    return;
   }
-  function slugify(fileName){
-    return String(fileName || "")
-      .replace(/\.json$/i, "")
-      .trim()
-      .toLowerCase()
-      .replace(/[^a-z0-9]+/g, "-")
-      .replace(/^-+|-+$/g, "");
-  }
-  function normalizeKey(value){
-    return String(value || "")
-      .toLowerCase()
-      .replace(/jointbase/g, "jb")
-      .replace(/airforcebase/g, "afb")
-      .replace(/[^a-z0-9]/g, "");
-  }
-  function makeBase(row, stateCode){
-    const name     = row[0];
-    const fileName = row[1];
-    const city     = row[2];
-    const lat      = row[3];
-    const lng      = row[4];
-    const id = slugify(fileName);
-    return {
-      id,
-      slug:id,
-      fileName,
-      base:name,
-      label:name,
-      name,
-      city,
-      state:stateCode,
-      lat,
-      lng,
-      jsonUrl:JSON_BASE_URL + fileName
-    };
-  }
-  const STATE_BASES = Object.fromEntries(
-    Object.entries(BASE_REGISTRY).map(([stateCode, rows]) => [
-      stateCode,
-      rows.map(row => makeBase(row, stateCode))
-    ])
-  );
-  const BASE_TO_STATE = (() => {
-    const out = {};
-    Object.entries(STATE_BASES).forEach(([stateCode, bases]) => {
-      bases.forEach(base => {
-        [
-          base.base,
-          base.name,
-          base.label,
-          base.fileName,
-          base.id,
-          base.slug
-        ].forEach(value => {
-          const key = normalizeKey(value);
-          if(key) out[key] = stateCode;
-        });
-      });
-    });
-    Object.entries(BASICBRAIN_BASE_ALIASES).forEach(([baseName, stateCode]) => {
-      const key = normalizeKey(baseName);
-      if(key) out[key] = stateCode;
-    });
-    return out;
-  })();
-  function getDestinationUrl(){
-    return new URL(
-      LIVE_BASE_DEMOGRAPHICS_PATH,
-      window.location.origin
-    );
-  }
-  function saveSelection(item){
+  window[CLEANER_KEY] = true;
+  function log(message,data){
     try{
-      localStorage.setItem(
-        STORAGE_KEY,
-        JSON.stringify(item)
-      );
-      localStorage.setItem(
-        JSON_URL_KEY,
-        item.jsonUrl || ""
-      );
-      localStorage.setItem(
-        "pcsunited.selectedBaseSlug.v1",
-        item.id || ""
-      );
-    }catch(err){
-      console.warn(err);
-    }
+      if(window.PCSU_SCROLL_DEBUG === true || window.PCSU_DEBUG === true){
+        console.log("[PCSU Base Map Duplicate Cleaner]", message, data || "");
+      }
+    }catch(_){}
   }
-  function openBase(item){
-    if (!item) return;
-    saveSelection(item);
-    const url = getDestinationUrl();
-    url.searchParams.set("base", item.id);
-    window.open(
-      url.toString(),
-      "_blank",
-      "noopener,noreferrer"
+  function isVisible(el){
+    if(!el) return false;
+    const style = window.getComputedStyle(el);
+    return !(
+      style.display === "none" ||
+      style.visibility === "hidden" ||
+      Number(style.opacity) === 0
     );
   }
-  function clearBaseMarker(){
-    if(markerLayer){
-      markerLayer.selectAll("*").remove();
+  function scoreMap(map,index){
+    if(!map) return -1;
+    let score = 0;
+    const text =
+      (map.textContent || "").toLowerCase();
+    const html =
+      (map.innerHTML || "").toLowerCase();
+    if(text.includes("search air force bases by state")){
+      score += 20;
     }
+    if(text.includes("base demographics explorer")){
+      score += 20;
+    }
+    if(html.includes("v3.0.7")){
+      score += 50;
+    }
+    if(html.includes("passive basicbrain isolation")){
+      score += 50;
+    }
+    if(map.querySelector("#pcsu-us-svg")){
+      score += 20;
+    }
+    if(map.querySelector("#pcsu-map-card")){
+      score += 20;
+    }
+    if(map.querySelector("#pcsu-base-list")){
+      score += 15;
+    }
+    if(isVisible(map)){
+      score += 10;
+    }
+    /*
+      Prefer the first valid map when scores are close.
+      This prevents the second duplicate from winning just because
+      it mounted later.
+    */
+    score -= index;
+    return score;
   }
-  function drawBaseMarker(base){
-    clearBaseMarker();
-    if(!base || !markerLayer || !projection) return;
-    const lat =
-      Number(base.lat);
-    const lng =
-      Number(base.lng);
-    if(!Number.isFinite(lat) || !Number.isFinite(lng)) return;
-    const point =
-      projection([lng, lat]);
-    if(!point) return;
-    const x = point[0];
-    const y = point[1];
-    const label =
-      base.base || "Selected Base";
-    const city =
-      base.city || "";
-    let labelX =
-      x + 18;
-    let labelY =
-      y - 18;
-    if(x > 760){
-      labelX = x - 190;
-    }
-    if(y < 70){
-      labelY = y + 18;
-    }
-    const labelWidth =
-      Math.max(126, Math.min(230, label.length * 7.2 + 26));
-    const group =
-      markerLayer
-        .append("g")
-        .attr("class","pcsu-base-marker")
-        .attr("transform",`translate(${x},${y})`);
-    group
-      .append("circle")
-      .attr("class","pcsu-base-marker-ring")
-      .attr("r",5);
-    group
-      .append("circle")
-      .attr("class","pcsu-base-marker-dot")
-      .attr("r",6);
-    group
-      .append("path")
-      .attr("class","pcsu-base-marker-pin")
-      .attr("d","M0,-14 C7,-14 12,-9 12,-2 C12,7 0,17 0,17 C0,17 -12,7 -12,-2 C-12,-9 -7,-14 0,-14 Z")
-      .attr("transform","translate(0,-12)");
-    group
-      .append("circle")
-      .attr("fill","#071018")
-      .attr("r",3.3)
-      .attr("transform","translate(0,-14)");
-    const labelGroup =
-      markerLayer
-        .append("g")
-        .attr("class","pcsu-base-marker-label-group")
-        .attr("transform",`translate(${labelX},${labelY})`);
-    labelGroup
-      .append("rect")
-      .attr("class","pcsu-base-marker-label-bg")
-      .attr("width",labelWidth)
-      .attr("height",42)
-      .attr("x",0)
-      .attr("y",0);
-    labelGroup
-      .append("text")
-      .attr("class","pcsu-base-marker-label")
-      .attr("x",12)
-      .attr("y",17)
-      .text(label);
-    labelGroup
-      .append("text")
-      .attr("class","pcsu-base-marker-sub")
-      .attr("x",12)
-      .attr("y",31)
-      .text(city);
-  }
-  function renderState(stateCode, selectedBaseId){
-    const safeState =
-      String(stateCode || "").toUpperCase();
-    const safeBaseId =
-      String(selectedBaseId || "").trim();
-    if(!safeState) return;
-    if(!mapReady){
-      pendingStateCode = safeState;
-      pendingBaseId = safeBaseId;
+  function removeDuplicateBaseMaps(){
+    const maps =
+      Array.from(document.querySelectorAll("#" + ROOT_ID));
+    if(maps.length <= 1){
+      log("No duplicate maps found.",{
+        count:maps.length
+      });
       return;
     }
-    const bases =
-      STATE_BASES[safeState] || [];
-    const stateName =
-      STATE_NAMES[safeState] || safeState;
-    currentStateCode = safeState;
-    currentBaseId = safeBaseId;
-    d3.selectAll(".pcsu-state")
-      .classed("is-active", false);
-    d3.select(`#state-${safeState}`)
-      .classed("is-active", true);
-    selectedStateEl.textContent =
-      stateName;
-    if (!bases.length){
-      panelCopyEl.textContent =
-        "PCSUnited does not have supported Base Demographics profiles for this state yet.";
-      baseListEl.innerHTML = "";
-      clearBaseMarker();
-      return;
-    }
-    panelCopyEl.textContent =
-      `${bases.length} supported base profile${bases.length > 1 ? "s" : ""} available.`;
-    baseListEl.innerHTML =
-      bases.map(base => `
-        <button
-          class="pcsu-base-btn${base.id === currentBaseId ? " is-selected" : ""}"
-          type="button"
-          data-base-id="${esc(base.id)}">
-          <span class="pcsu-base-name">
-            ${esc(base.base)}
-          </span>
-          <span class="pcsu-base-meta">
-            ${esc(base.city)} • ${esc(base.fileName)} • Open Base Demographics
-          </span>
-        </button>
-      `).join("");
-    baseListEl
-      .querySelectorAll(".pcsu-base-btn")
-      .forEach(button => {
-        button.addEventListener("click", () => {
-          const selected =
-            bases.find(base =>
-              base.id === button.dataset.baseId
-            );
-          if (selected) openBase(selected);
-        });
-      });
-    const selectedBase =
-      bases.find(base => base.id === currentBaseId);
-    if(selectedBase){
-      drawBaseMarker(selectedBase);
-    }else{
-      clearBaseMarker();
-    }
-    const selectedButton =
-      baseListEl.querySelector(".pcsu-base-btn.is-selected");
-    if(selectedButton){
-      selectedButton.scrollIntoView({
-        block:"nearest",
-        behavior:"smooth"
-      });
-    }
-  }
-  function findStateFromBaseName(baseName){
-    const key = normalizeKey(baseName);
-    if(!key) return "";
-    if(BASE_TO_STATE[key]) return BASE_TO_STATE[key];
-    const foundKey =
-      Object.keys(BASE_TO_STATE).find(existingKey => {
-        return (
-          existingKey.includes(key) ||
-          key.includes(existingKey)
-        );
-      });
-    return foundKey ? BASE_TO_STATE[foundKey] : "";
-  }
-  function findBaseIdInState(stateCode, baseName){
-    const safeState =
-      String(stateCode || "").toUpperCase();
-    const bases =
-      STATE_BASES[safeState] || [];
-    const key =
-      normalizeKey(baseName);
-    if(!safeState || !key || !bases.length) return "";
-    const exact =
-      bases.find(base => {
-        return [
-          base.base,
-          base.name,
-          base.label,
-          base.fileName,
-          base.id,
-          base.slug
-        ].some(value => normalizeKey(value) === key);
-      });
-    if(exact) return exact.id;
-    const fuzzy =
-      bases.find(base => {
-        return [
-          base.base,
-          base.name,
-          base.label,
-          base.fileName,
-          base.id,
-          base.slug
-        ].some(value => {
-          const baseKey = normalizeKey(value);
-          return baseKey.includes(key) || key.includes(baseKey);
-        });
-      });
-    return fuzzy ? fuzzy.id : "";
-  }
-  function findSelectionFromDetail(detail){
-    const d =
-      detail && typeof detail === "object"
-        ? detail
-        : {};
-    const selectedBase =
-      d.selectedBase ||
-      d.baseSelection ||
-      d.base ||
-      {};
-    const profile =
-      d.profile ||
-      d.bridge ||
-      d.basicbrain ||
-      d.input ||
-      d.state ||
-      d;
-    const directState =
-      selectedBase.state ||
-      selectedBase.stateCode ||
-      profile.state ||
-      profile.stateCode ||
-      "";
-    const baseName =
-      selectedBase.base ||
-      selectedBase.name ||
-      selectedBase.label ||
-      profile.selected_base ||
-      profile.selectedBase ||
-      profile.pcs_base ||
-      profile.pcsBase ||
-      profile.current_base ||
-      profile.currentBase ||
-      profile.base ||
-      "";
-    let stateCode = "";
-    if(
-      directState &&
-      STATE_NAMES[String(directState).toUpperCase()]
-    ){
-      stateCode = String(directState).toUpperCase();
-    }else{
-      stateCode = findStateFromBaseName(baseName);
-    }
-    if(!stateCode){
-      return {
-        stateCode:"",
-        baseId:""
-      };
-    }
-    return {
-      stateCode,
-      baseId:findBaseIdInState(stateCode, baseName)
-    };
-  }
-  function preselectFromBasicBrain(detail){
-    const selection =
-      findSelectionFromDetail(detail);
-    if(!selection.stateCode) return false;
-    renderState(selection.stateCode, selection.baseId);
-    return true;
-  }
-  function preselectFromGlobals(){
-    const candidates = [
-      window.PCSU_BASICBRAIN_CURRENT,
-      window.PCSU_BASICBRAIN_TEMP,
-      window.PCSU_BASICBRAIN?.getLastGood?.(),
-      window.PCSU_BASICBRAIN?.getState?.()
-    ];
-    for(const item of candidates){
-      if(preselectFromBasicBrain(item)){
-        return true;
+    let keeperIndex = 0;
+    let keeperScore = -999999;
+    maps.forEach(function(map,index){
+      const score = scoreMap(map,index);
+      if(score > keeperScore){
+        keeperScore = score;
+        keeperIndex = index;
       }
-    }
-    return false;
-  }
-  function bindBasicBrainEvents(){
-    [
-      "pcsunited:basicbrain-updated",
-      "pcsunited:profile-ready",
-      "pcsunited:bridge-ready",
-      "pcsunited:compensation-ready",
-      "pcsu:base-selected"
-    ].forEach(eventName => {
-      window.addEventListener(eventName, event => {
-        preselectFromBasicBrain(event.detail || {});
-      });
     });
-    window.addEventListener("message", event => {
-      const data =
-        event && event.data && typeof event.data === "object"
-          ? event.data
-          : {};
-      if(data.type === "pcsunited-basicbrain"){
-        preselectFromBasicBrain(data);
+    const keeper =
+      maps[keeperIndex];
+    maps.forEach(function(map,index){
+      if(index === keeperIndex){
+        map.setAttribute("data-pcsu-map-kept","true");
+        map.setAttribute("data-pcsu-map-cleaner-version",VERSION);
+        return;
+      }
+      map.setAttribute("data-pcsu-map-removed","true");
+      try{
+        map.remove();
+        log("Removed duplicate Base Map UI.",{
+          removedIndex:index,
+          keeperIndex:keeperIndex,
+          totalBefore:maps.length
+        });
+      }catch(err){
+        try{
+          map.style.display = "none";
+          map.style.visibility = "hidden";
+          map.style.height = "0";
+          map.style.overflow = "hidden";
+          map.style.pointerEvents = "none";
+          log("Hidden duplicate Base Map UI after remove failed.",{
+            removedIndex:index,
+            error:String(err)
+          });
+        }catch(_){}
+      }
+    });
+    if(keeper){
+      log("Kept Base Map UI.",{
+        keeperIndex:keeperIndex,
+        keeperScore:keeperScore
+      });
+    }
+  }
+  function removeDuplicateMapCards(){
+    /*
+      Backup cleaner:
+      If Webflow somehow duplicates the inside card without duplicating
+      the full #pcsu-real-us-map root, remove extra #pcsu-map-card blocks.
+    */
+    const cards =
+      Array.from(document.querySelectorAll("#pcsu-map-card"));
+    if(cards.length <= 1){
+      return;
+    }
+    cards.forEach(function(card,index){
+      if(index === 0) return;
+      try{
+        card.remove();
+        log("Removed duplicate #pcsu-map-card.",{
+          removedIndex:index
+        });
+      }catch(_){
+        card.style.display = "none";
       }
     });
   }
-  window.PCSU_US_BASE_MAP.renderState = renderState;
-  window.PCSU_US_BASE_MAP.selectState = renderState;
-  window.PCSU_US_BASE_MAP.preselectFromBasicBrain = preselectFromBasicBrain;
-  window.PCSU_US_BASE_MAP.getCurrentState = function(){
-    return currentStateCode;
-  };
-  window.PCSU_US_BASE_MAP.getCurrentBase = function(){
-    return currentBaseId;
-  };
-  bindBasicBrainEvents();
-  d3.json(
-    "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
-  ).then(us => {
-    const states =
-      topojson
-        .feature(us, us.objects.states)
-        .features;
-    projection =
-      d3.geoAlbersUsa()
-        .translate([480,300])
-        .scale(1250);
-    const path =
-      d3.geoPath(projection);
-    svg.append("g")
-      .selectAll("path")
-      .data(states)
-      .join("path")
-      .attr("class", d => {
-        const abbr =
-          FIPS_TO_ABBR[
-            String(d.id).padStart(2,"0")
-          ];
-        return STATE_BASES[abbr]
-          ? "pcsu-state has-bases"
-          : "pcsu-state";
-      })
-      .attr("id", d => {
-        const abbr =
-          FIPS_TO_ABBR[
-            String(d.id).padStart(2,"0")
-          ];
-        return `state-${abbr}`;
-      })
-      .attr("d", path)
-      .on("click", (event, d) => {
-        const abbr =
-          FIPS_TO_ABBR[
-            String(d.id).padStart(2,"0")
-          ];
-        renderState(abbr);
-      });
-    svg.append("path")
-      .datum(
-        topojson.mesh(
-          us,
-          us.objects.states,
-          (a,b) => a !== b
-        )
-      )
-      .attr("fill","none")
-      .attr("stroke","rgba(16,20,38,.75)")
-      .attr("stroke-width",1)
-      .attr("d", path);
-    svg.append("g")
-      .selectAll("text")
-      .data(states)
-      .join("text")
-      .attr("class","pcsu-state-label")
-      .attr("x", d => path.centroid(d)[0])
-      .attr("y", d => path.centroid(d)[1])
-      .text(d =>
-        FIPS_TO_ABBR[
-          String(d.id).padStart(2,"0")
-        ] || ""
-      )
-      .style("display", d => {
-        const abbr =
-          FIPS_TO_ABBR[
-            String(d.id).padStart(2,"0")
-          ];
-        return [
-          "RI","DE","CT","NJ","MD","MA","DC"
-        ].includes(abbr)
-          ? "none"
-          : "block";
-      });
-    markerLayer =
-      svg.append("g")
-        .attr("id","pcsu-base-marker-layer");
-    mapReady = true;
-    if(pendingStateCode){
-      renderState(pendingStateCode, pendingBaseId);
-    }else if(!preselectFromGlobals()){
-      renderState(DEFAULT_STATE);
+  function removeDuplicateSvgMaps(){
+    /*
+      Backup cleaner:
+      Prevents duplicate SVG map instances inside the kept root.
+    */
+    const keptRoot =
+      document.querySelector("#" + ROOT_ID);
+    if(!keptRoot) return;
+    const svgs =
+      Array.from(keptRoot.querySelectorAll("#pcsu-us-svg"));
+    if(svgs.length <= 1){
+      return;
     }
-  }).catch(() => {
-    selectedStateEl.textContent =
-      "Map unavailable";
-    panelCopyEl.textContent =
-      "The map data could not load. Please refresh the page.";
-    baseListEl.innerHTML = "";
-  });
+    svgs.forEach(function(svg,index){
+      if(index === 0) return;
+      try{
+        svg.remove();
+        log("Removed duplicate #pcsu-us-svg.",{
+          removedIndex:index
+        });
+      }catch(_){
+        svg.style.display = "none";
+      }
+    });
+  }
+  function cleanAll(){
+    removeDuplicateBaseMaps();
+    removeDuplicateMapCards();
+    removeDuplicateSvgMaps();
+  }
+  /*
+    Run immediately.
+  */
+  cleanAll();
+  /*
+    Run after Webflow finishes rendering.
+  */
+  if(document.readyState === "loading"){
+    document.addEventListener("DOMContentLoaded",cleanAll);
+  }else{
+    setTimeout(cleanAll,0);
+  }
+  /*
+    Run after external scripts and images load.
+  */
+  window.addEventListener("load",cleanAll);
+  /*
+    Run several delayed checks because Webflow embeds can hydrate late.
+  */
+  setTimeout(cleanAll,250);
+  setTimeout(cleanAll,750);
+  setTimeout(cleanAll,1500);
+  setTimeout(cleanAll,3000);
+  /*
+    Observe future DOM changes in case Webflow re-injects the duplicate.
+  */
+  try{
+    const observer =
+      new MutationObserver(function(){
+        cleanAll();
+      });
+    observer.observe(document.documentElement,{
+      childList:true,
+      subtree:true
+    });
+    window.PCSU_BASE_MAP_DUPLICATE_CLEANER_OBSERVER =
+      observer;
+  }catch(err){
+    log("MutationObserver unavailable.",{
+      error:String(err)
+    });
+  }
+  window.PCSU_BASE_MAP_DUPLICATE_CLEANER = {
+    version:VERSION,
+    clean:cleanAll,
+    removeDuplicateBaseMaps:removeDuplicateBaseMaps,
+    removeDuplicateMapCards:removeDuplicateMapCards,
+    removeDuplicateSvgMaps:removeDuplicateSvgMaps
+  };
 })();
 </script>
+          </div>
+          <div class="interactive-base-map w-embed w-script"><!--  =========================================================
+  PCSUnited • Real Interactive U.S. Base Demographics Map
+  v3.0.7 • PASSIVE BASICBRAIN ISOLATION + SCROLL-SAFE PRESELECT
+  ROOT CAUSE FIXED (v3.0.5):
+  - bindBasicBrainEvents() reacted to passive pcsunited:* events
+  - preselectFromGlobals() hydrated from PCSU_BASICBRAIN_CURRENT on load
+  - renderState() always called scrollIntoView() on the selected base button,
+    which scrolled the page down to the Base Demographics embed
+  v3.0.7 RULE:
+  - Ignore ALL passive BasicBrain events (autoNavigate !== true)
+  - Only pcsu:base-selected with autoNavigate === true may update the map
+  - scrollIntoView only runs on intentional user navigation
+=========================================================  -->
+            <div id="pcsu-real-us-map">
+              <style>
+    #pcsu-real-us-map,
+    #pcsu-real-us-map *{
+      box-sizing:border-box;
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    #pcsu-real-us-map{
+      width:100%;
+      color:#e9ecff;
+    }
+    #pcsu-map-card{
+      position:relative;
+      width:100%;
+      padding:34px;
+      border-radius:34px;
+      overflow:hidden;
+      background:
+        radial-gradient(circle at top left, rgba(142,243,197,.14), transparent 28%),
+        radial-gradient(circle at bottom right, rgba(106,167,255,.14), transparent 30%),
+        linear-gradient(
+          145deg,
+          rgba(12,16,30,.92),
+          rgba(9,12,24,.96)
+        );
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(20px);
+      -webkit-backdrop-filter:blur(20px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.05),
+        inset 0 -1px 0 rgba(255,255,255,.02),
+        0 30px 80px rgba(0,0,0,.42);
+    }
+    #pcsu-map-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.05),
+          transparent 24%
+        );
+      pointer-events:none;
+    }
+    #pcsu-map-eyebrow{
+      display:inline-flex;
+      align-items:center;
+      padding:8px 14px;
+      border-radius:999px;
+      border:1px solid rgba(142,243,197,.14);
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.06),
+          rgba(255,255,255,.03)
+        );
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:#8ef3c5;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      margin-bottom:14px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.08),
+        0 12px 26px rgba(0,0,0,.14);
+    }
+    #pcsu-map-title{
+      font-size:clamp(34px,4vw,58px);
+      line-height:.96;
+      font-weight:900;
+      letter-spacing:-.065em;
+      margin:0;
+      color:#ffffff;
+      text-shadow:
+        0 2px 18px rgba(0,0,0,.20);
+    }
+    #pcsu-map-copy{
+      max-width:820px;
+      margin-top:18px;
+      margin-bottom:28px;
+      color:#aeb8db;
+      font-size:16px;
+      line-height:1.75;
+      font-weight:500;
+    }
+    #pcsu-map-layout{
+      display:grid;
+      grid-template-columns:
+        minmax(0,1.5fr)
+        minmax(320px,.58fr);
+      gap:24px;
+      align-items:stretch;
+    }
+    #pcsu-map-stage{
+      position:relative;
+      min-height:540px;
+      padding:20px;
+      border-radius:30px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.065),
+          rgba(255,255,255,.035)
+        );
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06),
+        inset 0 -1px 0 rgba(255,255,255,.02),
+        0 24px 54px rgba(0,0,0,.20);
+    }
+    #pcsu-map-stage::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.04),
+          transparent 34%
+        );
+      pointer-events:none;
+    }
+    #pcsu-us-svg{
+      width:100%;
+      height:100%;
+      min-height:500px;
+      display:block;
+    }
+    .pcsu-state{
+      fill:#dfe6f2;
+      stroke:#18233b;
+      stroke-width:1.15;
+      cursor:pointer;
+      transition:
+        fill .18s ease,
+        transform .18s ease,
+        filter .18s ease,
+        opacity .18s ease;
+    }
+    .pcsu-state.has-bases{
+      fill:#edf2fb;
+    }
+    .pcsu-state:hover{
+      fill:#8ef3c5;
+      filter:
+        drop-shadow(0 0 12px rgba(142,243,197,.55));
+      opacity:1;
+    }
+    .pcsu-state.is-active{
+      fill:#8ef3c5;
+      filter:
+        drop-shadow(0 0 18px rgba(142,243,197,.75));
+    }
+    .pcsu-state-label{
+      fill:#152038;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.02em;
+      pointer-events:none;
+      text-anchor:middle;
+    }
+    #pcsu-base-marker-layer{
+      pointer-events:none;
+    }
+    .pcsu-base-marker-ring{
+      fill:none;
+      stroke:#8ef3c5;
+      stroke-width:2;
+      opacity:.72;
+      filter:drop-shadow(0 0 10px rgba(142,243,197,.85));
+      animation:pcsuBasePulse 1.9s ease-out infinite;
+    }
+    .pcsu-base-marker-dot{
+      fill:#8ef3c5;
+      stroke:#ffffff;
+      stroke-width:1.4;
+      filter:
+        drop-shadow(0 0 10px rgba(142,243,197,.95))
+        drop-shadow(0 0 20px rgba(142,243,197,.55));
+    }
+    .pcsu-base-marker-pin{
+      fill:#f6d06d;
+      stroke:#ffffff;
+      stroke-width:1.1;
+      filter:
+        drop-shadow(0 0 10px rgba(246,208,109,.75))
+        drop-shadow(0 0 18px rgba(142,243,197,.45));
+    }
+    .pcsu-base-marker-label-bg{
+      fill:rgba(7,12,24,.92);
+      stroke:rgba(142,243,197,.32);
+      stroke-width:1;
+      rx:10;
+      ry:10;
+      filter:drop-shadow(0 10px 22px rgba(0,0,0,.35));
+    }
+    .pcsu-base-marker-label{
+      fill:#ffffff;
+      font-size:11px;
+      font-weight:900;
+      letter-spacing:-.02em;
+    }
+    .pcsu-base-marker-sub{
+      fill:#a8b0d6;
+      font-size:9px;
+      font-weight:800;
+    }
+    @keyframes pcsuBasePulse{
+      0%{
+        r:5;
+        opacity:.9;
+      }
+      70%{
+        r:20;
+        opacity:0;
+      }
+      100%{
+        r:22;
+        opacity:0;
+      }
+    }
+    #pcsu-base-panel{
+      position:relative;
+      padding:26px;
+      border-radius:30px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.07),
+          rgba(255,255,255,.04)
+        );
+      border:1px solid rgba(255,255,255,.10);
+      backdrop-filter:blur(14px);
+      -webkit-backdrop-filter:blur(14px);
+      min-height:540px;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06),
+        inset 0 -1px 0 rgba(255,255,255,.02),
+        0 24px 54px rgba(0,0,0,.20);
+    }
+    #pcsu-base-panel::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      border-radius:inherit;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.04),
+          transparent 36%
+        );
+      pointer-events:none;
+    }
+    #pcsu-panel-kicker{
+      display:inline-flex;
+      align-items:center;
+      padding:8px 13px;
+      border-radius:999px;
+      border:1px solid rgba(106,167,255,.18);
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.05),
+          rgba(255,255,255,.03)
+        );
+      color:#6aa7ff;
+      font-size:10px;
+      font-weight:900;
+      letter-spacing:.18em;
+      text-transform:uppercase;
+      margin-bottom:14px;
+    }
+    #pcsu-selected-state{
+      font-size:34px;
+      line-height:1;
+      font-weight:900;
+      letter-spacing:-.05em;
+      color:#ffffff;
+      margin-bottom:12px;
+      text-shadow:
+        0 2px 14px rgba(0,0,0,.16);
+    }
+    #pcsu-panel-copy{
+      color:#a8b0d6;
+      font-size:15px;
+      line-height:1.7;
+      font-weight:500;
+      margin-bottom:22px;
+    }
+    #pcsu-base-list{
+      display:grid;
+      gap:12px;
+      max-height:620px;
+      overflow:auto;
+      padding-right:4px;
+    }
+    #pcsu-base-list::-webkit-scrollbar{
+      width:8px;
+    }
+    #pcsu-base-list::-webkit-scrollbar-thumb{
+      background:rgba(255,255,255,.12);
+      border-radius:999px;
+    }
+    .pcsu-base-btn{
+      appearance:none;
+      position:relative;
+      width:100%;
+      border:1px solid rgba(255,255,255,.10);
+      border-radius:22px;
+      padding:18px 18px;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.06),
+          rgba(255,255,255,.035)
+        );
+      backdrop-filter:blur(10px);
+      -webkit-backdrop-filter:blur(10px);
+      color:#e9ecff;
+      text-align:left;
+      cursor:pointer;
+      overflow:hidden;
+      transition:
+        transform .18s ease,
+        border-color .18s ease,
+        background .18s ease,
+        box-shadow .18s ease;
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.06),
+        0 18px 34px rgba(0,0,0,.12);
+    }
+    .pcsu-base-btn::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        linear-gradient(
+          180deg,
+          rgba(255,255,255,.04),
+          transparent 42%
+        );
+      pointer-events:none;
+    }
+    .pcsu-base-btn:hover{
+      transform:translateY(-2px);
+      border-color:rgba(142,243,197,.34);
+      background:
+        linear-gradient(
+          180deg,
+          rgba(142,243,197,.10),
+          rgba(106,167,255,.06)
+        );
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.08),
+        0 24px 42px rgba(0,0,0,.18);
+    }
+    .pcsu-base-btn.is-selected{
+      border-color:rgba(142,243,197,.62);
+      background:
+        linear-gradient(
+          180deg,
+          rgba(142,243,197,.16),
+          rgba(106,167,255,.08)
+        );
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,.10),
+        0 0 0 1px rgba(142,243,197,.12),
+        0 24px 44px rgba(0,0,0,.22),
+        0 0 28px rgba(142,243,197,.20);
+    }
+    .pcsu-base-btn.is-selected::after{
+      content:"AFB Selected";
+      position:absolute;
+      right:14px;
+      top:14px;
+      padding:5px 8px;
+      border-radius:999px;
+      background:rgba(142,243,197,.12);
+      border:1px solid rgba(142,243,197,.22);
+      color:#8ef3c5;
+      font-size:8px;
+      font-weight:900;
+      letter-spacing:.14em;
+      text-transform:uppercase;
+    }
+    .pcsu-base-btn.is-selected .pcsu-base-name{
+      color:#8ef3c5;
+    }
+    .pcsu-base-name{
+      display:block;
+      font-size:16px;
+      line-height:1.2;
+      font-weight:900;
+      letter-spacing:-.02em;
+      color:#ffffff;
+    }
+    .pcsu-base-meta{
+      display:block;
+      margin-top:7px;
+      font-size:12px;
+      line-height:1.6;
+      font-weight:600;
+      color:#a8b0d6;
+    }
+    @media(max-width:980px){
+      #pcsu-map-layout{
+        grid-template-columns:1fr;
+      }
+      #pcsu-map-stage,
+      #pcsu-base-panel{
+        min-height:auto;
+      }
+      #pcsu-us-svg{
+        min-height:400px;
+      }
+    }
+    @media(max-width:640px){
+      #pcsu-map-card{
+        padding:22px;
+        border-radius:28px;
+      }
+      #pcsu-map-title{
+        font-size:36px;
+      }
+      #pcsu-map-copy{
+        font-size:14px;
+        line-height:1.7;
+      }
+      #pcsu-map-stage,
+      #pcsu-base-panel{
+        padding:18px;
+        border-radius:24px;
+      }
+      #pcsu-selected-state{
+        font-size:28px;
+      }
+      .pcsu-base-btn{
+        border-radius:18px;
+      }
+      .pcsu-base-btn.is-selected::after{
+        position:relative;
+        display:inline-flex;
+        right:auto;
+        top:auto;
+        margin-top:10px;
+      }
+    }
+  </style>
+              <div id="pcsu-map-card">
+                <div id="pcsu-map-eyebrow">
+                  Base Demographics Explorer
+                </div>
+                <h2 id="pcsu-map-title">
+                  Search Air Force Bases by State
+                </h2>
+                <div id="pcsu-map-copy">
+                  Hover over a state to explore available PCSUnited base markets. Click a state to view supported Air Force bases and open the matching Base Demographics profile.
+                </div>
+                <div id="pcsu-map-layout">
+                  <div id="pcsu-map-stage">
+                    <svg id="pcsu-us-svg" viewbox="0 0 960 600" preserveaspectratio="xMidYMid meet"></svg>
+                  </div>
+                  <aside id="pcsu-base-panel">
+                    <div id="pcsu-panel-kicker">
+                      Selected State
+                    </div>
+                    <div id="pcsu-selected-state">
+                      Choose a state
+                    </div>
+                    <div id="pcsu-panel-copy">
+                      Click a state on the map to view available profiles.
+                    </div>
+                    <div id="pcsu-base-list"></div>
+                  </aside>
+                </div>
+              </div>
+              <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+              <script src="https://cdn.jsdelivr.net/npm/topojson-client@3"></script>
+              <script>
+    (() => {
+      "use strict";
+      const VERSION = "3.0.7";
+      const MOUNT_KEY = "PCSU_US_BASE_MAP_V307_MOUNTED";
+      if(window[MOUNT_KEY]){
+        console.warn("[PCSU Base Map] Duplicate mount blocked:", VERSION);
+        return;
+      }
+      window[MOUNT_KEY] = true;
+      if(window.PCSU_US_BASE_MAP?.__mounted_v305){
+        console.warn("[PCSU Base Map] Older v3.0.5 instance detected on page — remove the old embed to prevent duplicate listeners.");
+      }
+      const mapRoot = document.getElementById("pcsu-real-us-map");
+      if(!mapRoot){
+        console.warn("[PCSU Base Map] Root element missing.");
+        return;
+      }
+      const SCROLL_DEBUG =
+        window.PCSU_SCROLL_DEBUG === true ||
+        /(?:\?|&)pcsuScrollDebug=1(?:&|$)/.test(window.location.search || "");
+      function logScrollDebug(tag, extra){
+        if(!SCROLL_DEBUG) return;
+        const payload = {
+          tag,
+          scrollX:window.scrollX || window.pageXOffset || 0,
+          scrollY:window.scrollY || window.pageYOffset || 0,
+          version:VERSION,
+          ...(extra || {})
+        };
+        console.log("[PCSU Scroll Debug · Base Map]", payload);
+      }
+      window.PCSU_US_BASE_MAP = {
+        version:VERSION,
+        __mounted_v307:true
+      };
+      const STORAGE_KEY =
+        "pcsunited.selectedBase.v1";
+      const JSON_URL_KEY =
+        "pcsunited.selectedCityJsonUrl.v1";
+      const LIVE_BASE_DEMOGRAPHICS_PATH =
+        "/air-force/base-demographics-air-force";
+      const JSON_BASE_URL =
+        window.PCSU_CITIES_BASE_URL ||
+        "https://raw.githubusercontent.com/djoneorozco/PCSUnited/main/netlify/functions/cities/";
+      const DEFAULT_STATE =
+        "TX";
+      const FIPS_TO_ABBR = {
+        "01":"AL","02":"AK","04":"AZ","05":"AR","06":"CA","08":"CO","09":"CT","10":"DE","11":"DC",
+        "12":"FL","13":"GA","15":"HI","16":"ID","17":"IL","18":"IN","19":"IA","20":"KS","21":"KY",
+        "22":"LA","23":"ME","24":"MD","25":"MA","26":"MI","27":"MN","28":"MS","29":"MO","30":"MT",
+        "31":"NE","32":"NV","33":"NH","34":"NJ","35":"NM","36":"NY","37":"NC","38":"ND","39":"OH",
+        "40":"OK","41":"OR","42":"PA","44":"RI","45":"SC","46":"SD","47":"TN","48":"TX","49":"UT",
+        "50":"VT","51":"VA","53":"WA","54":"WV","55":"WI","56":"WY"
+      };
+      const STATE_NAMES = {
+        AL:"Alabama", AK:"Alaska", AZ:"Arizona", CA:"California", CO:"Colorado",
+        DE:"Delaware", FL:"Florida", GA:"Georgia", HI:"Hawaii", ID:"Idaho",
+        IL:"Illinois", KS:"Kansas", LA:"Louisiana", MA:"Massachusetts", MD:"Maryland",
+        MS:"Mississippi", MT:"Montana", NC:"North Carolina", ND:"North Dakota",
+        NE:"Nebraska", NJ:"New Jersey", NM:"New Mexico", NV:"Nevada", OH:"Ohio",
+        OK:"Oklahoma", SC:"South Carolina", SD:"South Dakota", TX:"Texas",
+        UT:"Utah", VA:"Virginia", WA:"Washington", WY:"Wyoming"
+      };
+      const BASE_REGISTRY = {
+        AK:[
+          ["Joint Base Elmendorf-Richardson","Elmendorf.json","Anchorage, AK",61.2500,-149.8065],
+          ["Eielson AFB","Eielson.json","Fairbanks, AK",64.6657,-147.1015]
+        ],
+        AL:[
+          ["Maxwell AFB","Maxwell.json","Montgomery, AL",32.3829,-86.3658]
+        ],
+        AZ:[
+          ["Davis-Monthan AFB","Davis-Monthan.json","Tucson, AZ",32.1665,-110.8832],
+          ["Luke AFB","Luke.json","Glendale, AZ",33.5350,-112.3832]
+        ],
+        CA:[
+          ["Beale AFB","Beale.json","Marysville, CA",39.1361,-121.4366],
+          ["Edwards AFB","Edwards.json","Edwards, CA",34.9054,-117.8837],
+          ["Los Angeles AFB","Los-Angeles.json","El Segundo, CA",33.9189,-118.3807],
+          ["Travis AFB","Travis.json","Fairfield, CA",38.2627,-121.9275],
+          ["Vandenberg SFB","Vandenberg.json","Lompoc, CA",34.7420,-120.5724]
+        ],
+        CO:[
+          ["Peterson SFB","Peterson.json","Colorado Springs, CO",38.8236,-104.7006],
+          ["Schriever SFB","Schriever.json","Colorado Springs, CO",38.8030,-104.5255],
+          ["U.S. Air Force Academy","Air-Force-Academy.json","Colorado Springs, CO",39.0088,-104.8911]
+        ],
+        DE:[
+          ["Dover AFB","Dover.json","Dover, DE",39.1295,-75.4660]
+        ],
+        FL:[
+          ["Eglin AFB","Eglin.json","Valparaiso, FL",30.4832,-86.5254],
+          ["Hurlburt Field","Hurlburt.json","Mary Esther, FL",30.4278,-86.6893],
+          ["MacDill AFB","MacDill.json","Tampa, FL",27.8493,-82.5212],
+          ["Patrick SFB","Patrick.json","Cocoa Beach, FL",28.2349,-80.6101],
+          ["Tyndall AFB","Tyndall.json","Panama City, FL",30.0696,-85.5754]
+        ],
+        GA:[
+          ["Moody AFB","Moody.json","Valdosta, GA",30.9678,-83.1930],
+          ["Robins AFB","Robins.json","Warner Robins, GA",32.6401,-83.5919]
+        ],
+        HI:[
+          ["Joint Base Pearl Harbor-Hickam","Hickam.json","Honolulu, HI",21.3187,-157.9224]
+        ],
+        ID:[
+          ["Mountain Home AFB","Mountain-Home.json","Mountain Home, ID",43.0436,-115.8724]
+        ],
+        IL:[
+          ["Scott AFB","Scott.json","Belleville, IL",38.5452,-89.8352]
+        ],
+        KS:[
+          ["McConnell AFB","McConnell.json","Wichita, KS",37.6231,-97.2672]
+        ],
+        LA:[
+          ["Barksdale AFB","Barksdale.json","Bossier City, LA",32.5018,-93.6627]
+        ],
+        MA:[
+          ["Hanscom AFB","Hanscom.json","Bedford, MA",42.4699,-71.2890]
+        ],
+        MD:[
+          ["Joint Base Andrews","Andrews.json","Camp Springs, MD",38.8108,-76.8669]
+        ],
+        MS:[
+          ["Columbus AFB","Columbus.json","Columbus, MS",33.6438,-88.4438],
+          ["Keesler AFB","Keesler.json","Biloxi, MS",30.4104,-88.9244]
+        ],
+        MT:[
+          ["Malmstrom AFB","Malmstrom.json","Great Falls, MT",47.5053,-111.1873]
+        ],
+        NC:[
+          ["Seymour Johnson AFB","Seymour-Johnson.json","Goldsboro, NC",35.3394,-77.9606]
+        ],
+        ND:[
+          ["Grand Forks AFB","Grand-Forks.json","Grand Forks, ND",47.9611,-97.4012],
+          ["Minot AFB","Minot.json","Minot, ND",48.4158,-101.3580]
+        ],
+        NE:[
+          ["Offutt AFB","Offutt.json","Bellevue, NE",41.1183,-95.9125]
+        ],
+        NJ:[
+          ["Joint Base McGuire-Dix-Lakehurst","McGuire.json","Wrightstown, NJ",40.0156,-74.5917]
+        ],
+        NM:[
+          ["Cannon AFB","Cannon.json","Clovis, NM",34.3828,-103.3221],
+          ["Holloman AFB","Holloman.json","Alamogordo, NM",32.8525,-106.1065],
+          ["Kirtland AFB","Kirtland.json","Albuquerque, NM",35.0402,-106.6092]
+        ],
+        NV:[
+          ["Creech AFB","Creech.json","Indian Springs, NV",36.5872,-115.6734],
+          ["Nellis AFB","Nellis.json","Las Vegas, NV",36.2362,-115.0343]
+        ],
+        OH:[
+          ["Wright-Patterson AFB","Wright-Patterson.json","Dayton, OH",39.8261,-84.0483]
+        ],
+        OK:[
+          ["Altus AFB","Altus.json","Altus, OK",34.6671,-99.2667],
+          ["Tinker AFB","Tinker.json","Oklahoma City, OK",35.4147,-97.3866],
+          ["Vance AFB","Vance.json","Enid, OK", 36.3392,-97.9165]
+        ],
+        SC:[
+          ["Joint Base Charleston","Charleston.json","Charleston, SC",32.8986,-80.0405],
+          ["Shaw AFB","Shaw.json","Sumter, SC",33.9727,-80.4706]
+        ],
+        SD:[
+          ["Ellsworth AFB","Ellsworth.json","Rapid City, SD",44.1450,-103.1036]
+        ],
+        TX:[
+          ["Dyess AFB","Dyess.json","Abilene, TX",32.4208,-99.8546],
+          ["Goodfellow AFB","Goodfellow.json","San Angelo, TX",31.4343,-100.4027],
+          ["Joint Base San Antonio-Lackland","Lackland.json","San Antonio, TX",29.3842,-98.5811],
+          ["Laughlin AFB","Laughlin.json","Del Rio, TX",29.3595,-100.7780],
+          ["Joint Base San Antonio-Randolph","Randolph.json","San Antonio, TX",29.5297,-98.2789],
+          ["Sheppard AFB","Sheppard.json","Wichita Falls, TX",33.9888,-98.4919]
+        ],
+        UT:[
+          ["Hill AFB","Hill.json","Ogden, UT",41.1240,-111.9730]
+        ],
+        VA:[
+          ["Joint Base Langley-Eustis","Langley.json","Hampton, VA",37.0838,-76.3605]
+        ],
+        WA:[
+          ["Fairchild AFB","Fairchild.json","Spokane, WA",47.6151,-117.6558],
+          ["Joint Base Lewis-McChord","McChord.json","Tacoma, WA",47.1339,-122.4916]
+        ],
+        WY:[
+          ["F. E. Warren AFB","F-E-Warren.json","Cheyenne, WY",41.1339,-104.8660]
+        ]
+      };
+      const BASICBRAIN_BASE_ALIASES = {
+        "Andrews AFB":"MD",
+        "Joint Base Andrews":"MD",
+        "Barksdale AFB":"LA",
+        "Beale AFB":"CA",
+        "Cannon AFB":"NM",
+        "Charleston AFB":"SC",
+        "Joint Base Charleston":"SC",
+        "Columbus AFB":"MS",
+        "Davis-Monthan AFB":"AZ",
+        "Dover AFB":"DE",
+        "Dyess AFB":"TX",
+        "Edwards AFB":"CA",
+        "Eglin AFB":"FL",
+        "Ellsworth AFB":"SD",
+        "Fairchild AFB":"WA",
+        "FE Warren AFB":"WY",
+        "F.E. Warren AFB":"WY",
+        "F. E. Warren AFB":"WY",
+        "Grand Forks AFB":"ND",
+        "Hanscom AFB":"MA",
+        "Hill AFB":"UT",
+        "Holloman AFB":"NM",
+        "Hurlburt Field":"FL",
+        "JBSA Fort Sam Houston":"TX",
+        "Fort Sam Houston":"TX",
+        "Joint Base San Antonio-Fort Sam Houston":"TX",
+        "JBSA Lackland":"TX",
+        "Lackland AFB":"TX",
+        "Joint Base San Antonio-Lackland":"TX",
+        "JBSA Randolph":"TX",
+        "Randolph AFB":"TX",
+        "Joint Base San Antonio-Randolph":"TX",
+        "Keesler AFB":"MS",
+        "Kirtland AFB":"NM",
+        "Langley AFB":"VA",
+        "Joint Base Langley-Eustis":"VA",
+        "Laughlin AFB":"TX",
+        "Little Rock AFB":"AR",
+        "Luke AFB":"AZ",
+        "MacDill AFB":"FL",
+        "Malmstrom AFB":"MT",
+        "Maxwell AFB":"AL",
+        "McConnell AFB":"KS",
+        "McGuire AFB":"NJ",
+        "Joint Base McGuire-Dix-Lakehurst":"NJ",
+        "Minot AFB":"ND",
+        "Moody AFB":"GA",
+        "Mountain Home AFB":"ID",
+        "Nellis AFB":"NV",
+        "Offutt AFB":"NE",
+        "Patrick SFB":"FL",
+        "Peterson SFB":"CO",
+        "Robins AFB":"GA",
+        "Scott AFB":"IL",
+        "Seymour Johnson AFB":"NC",
+        "Shaw AFB":"SC",
+        "Sheppard AFB":"TX",
+        "Tinker AFB":"OK",
+        "Travis AFB":"CA",
+        "Tyndall AFB":"FL",
+        "Vance AFB":"OK",
+        "Vandenberg SFB":"CA",
+        "Whiteman AFB":"MO",
+        "Wright-Patterson AFB":"OH"
+      };
+      const svg = d3.select("#pcsu-us-svg");
+      const selectedStateEl =
+        document.getElementById("pcsu-selected-state");
+      const panelCopyEl =
+        document.getElementById("pcsu-panel-copy");
+      const baseListEl =
+        document.getElementById("pcsu-base-list");
+      let mapReady = false;
+      let pendingStateCode = "";
+      let pendingBaseId = "";
+      let pendingAllowScroll = false;
+      let currentStateCode = "";
+      let currentBaseId = "";
+      let projection = null;
+      let markerLayer = null;
+      function esc(str){
+        return String(str ?? "")
+          .replaceAll("&","&amp;")
+          .replaceAll("<","&lt;")
+          .replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;")
+          .replaceAll("'","&#039;");
+      }
+      function slugify(fileName){
+        return String(fileName || "")
+          .replace(/\.json$/i, "")
+          .trim()
+          .toLowerCase()
+          .replace(/[^a-z0-9]+/g, "-")
+          .replace(/^-+|-+$/g, "");
+      }
+      function normalizeKey(value){
+        return String(value || "")
+          .toLowerCase()
+          .replace(/jointbase/g, "jb")
+          .replace(/airforcebase/g, "afb")
+          .replace(/[^a-z0-9]/g, "");
+      }
+      function makeBase(row, stateCode){
+        const name     = row[0];
+        const fileName = row[1];
+        const city     = row[2];
+        const lat      = row[3];
+        const lng      = row[4];
+        const id = slugify(fileName);
+        return {
+          id,
+          slug:id,
+          fileName,
+          base:name,
+          label:name,
+          name,
+          city,
+          state:stateCode,
+          lat,
+          lng,
+          jsonUrl:JSON_BASE_URL + fileName
+        };
+      }
+      const STATE_BASES = Object.fromEntries(
+        Object.entries(BASE_REGISTRY).map(([stateCode, rows]) => [
+          stateCode,
+          rows.map(row => makeBase(row, stateCode))
+        ])
+      );
+      const BASE_TO_STATE = (() => {
+        const out = {};
+        Object.entries(STATE_BASES).forEach(([stateCode, bases]) => {
+          bases.forEach(base => {
+            [
+              base.base,
+              base.name,
+              base.label,
+              base.fileName,
+              base.id,
+              base.slug
+            ].forEach(value => {
+              const key = normalizeKey(value);
+              if(key) out[key] = stateCode;
+            });
+          });
+        });
+        Object.entries(BASICBRAIN_BASE_ALIASES).forEach(([baseName, stateCode]) => {
+          const key = normalizeKey(baseName);
+          if(key) out[key] = stateCode;
+        });
+        return out;
+      })();
+      function getDestinationUrl(){
+        return new URL(
+          LIVE_BASE_DEMOGRAPHICS_PATH,
+          window.location.origin
+        );
+      }
+      function saveSelection(item){
+        try{
+          localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(item)
+          );
+          localStorage.setItem(
+            JSON_URL_KEY,
+            item.jsonUrl || ""
+          );
+          localStorage.setItem(
+            "pcsunited.selectedBaseSlug.v1",
+            item.id || ""
+          );
+        }catch(err){
+          console.warn(err);
+        }
+      }
+      function openBase(item){
+        if (!item) return;
+        saveSelection(item);
+        const url = getDestinationUrl();
+        url.searchParams.set("base", item.id);
+        window.open(
+          url.toString(),
+          "_blank",
+          "noopener,noreferrer"
+        );
+      }
+      function clearBaseMarker(){
+        if(markerLayer){
+          markerLayer.selectAll("*").remove();
+        }
+      }
+      function drawBaseMarker(base){
+        clearBaseMarker();
+        if(!base || !markerLayer || !projection) return;
+        const lat =
+          Number(base.lat);
+        const lng =
+          Number(base.lng);
+        if(!Number.isFinite(lat) || !Number.isFinite(lng)) return;
+        const point =
+          projection([lng, lat]);
+        if(!point) return;
+        const x = point[0];
+        const y = point[1];
+        const label =
+          base.base || "Selected Base";
+        const city =
+          base.city || "";
+        let labelX =
+          x + 18;
+        let labelY =
+          y - 18;
+        if(x > 760){
+          labelX = x - 190;
+        }
+        if(y < 70){
+          labelY = y + 18;
+        }
+        const labelWidth =
+          Math.max(126, Math.min(230, label.length * 7.2 + 26));
+        const group =
+          markerLayer
+            .append("g")
+            .attr("class","pcsu-base-marker")
+            .attr("transform",`translate(${x},${y})`);
+        group
+          .append("circle")
+          .attr("class","pcsu-base-marker-ring")
+          .attr("r",5);
+        group
+          .append("circle")
+          .attr("class","pcsu-base-marker-dot")
+          .attr("r",6);
+        group
+          .append("path")
+          .attr("class","pcsu-base-marker-pin")
+          .attr("d","M0,-14 C7,-14 12,-9 12,-2 C12,7 0,17 0,17 C0,17 -12,7 -12,-2 C-12,-9 -7,-14 0,-14 Z")
+          .attr("transform","translate(0,-12)");
+        group
+          .append("circle")
+          .attr("fill","#071018")
+          .attr("r",3.3)
+          .attr("transform","translate(0,-14)");
+        const labelGroup =
+          markerLayer
+            .append("g")
+            .attr("class","pcsu-base-marker-label-group")
+            .attr("transform",`translate(${labelX},${labelY})`);
+        labelGroup
+          .append("rect")
+          .attr("class","pcsu-base-marker-label-bg")
+          .attr("width",labelWidth)
+          .attr("height",42)
+          .attr("x",0)
+          .attr("y",0);
+        labelGroup
+          .append("text")
+          .attr("class","pcsu-base-marker-label")
+          .attr("x",12)
+          .attr("y",17)
+          .text(label);
+        labelGroup
+          .append("text")
+          .attr("class","pcsu-base-marker-sub")
+          .attr("x",12)
+          .attr("y",31)
+          .text(city);
+      }
+      function scrollSelectedButtonIntoList(selectedButton){
+        if(!selectedButton || !baseListEl) return;
+        const listTop = baseListEl.scrollTop;
+        const listHeight = baseListEl.clientHeight;
+        const buttonTop = selectedButton.offsetTop;
+        const buttonHeight = selectedButton.offsetHeight;
+        const nextScroll =
+          Math.max(0, buttonTop - Math.max(0, (listHeight - buttonHeight) / 2));
+        if(Math.abs(nextScroll - listTop) > 2){
+          baseListEl.scrollTop = nextScroll;
+        }
+      }
+      function scrollMapSectionIntoView(){
+        if(!mapRoot) return;
+        logScrollDebug("intentional-map-scroll:before");
+        mapRoot.scrollIntoView({
+          behavior:"smooth",
+          block:"start"
+        });
+        setTimeout(function(){
+          logScrollDebug("intentional-map-scroll:after");
+        }, 400);
+      }
+      function renderState(stateCode, selectedBaseId, options){
+        const opts =
+          options && typeof options === "object"
+            ? options
+            : {};
+        const allowScroll = opts.allowScroll === true;
+        const allowSectionScroll = opts.allowSectionScroll === true;
+        const beforeY = window.scrollY || window.pageYOffset || 0;
+        logScrollDebug("renderState:before", {
+          stateCode,
+          selectedBaseId,
+          allowScroll,
+          allowSectionScroll
+        });
+        const safeState =
+          String(stateCode || "").toUpperCase();
+        const safeBaseId =
+          String(selectedBaseId || "").trim();
+        if(!safeState) return;
+        if(!mapReady){
+          pendingStateCode = safeState;
+          pendingBaseId = safeBaseId;
+          pendingAllowScroll = allowScroll;
+          return;
+        }
+        const bases =
+          STATE_BASES[safeState] || [];
+        const stateName =
+          STATE_NAMES[safeState] || safeState;
+        currentStateCode = safeState;
+        currentBaseId = safeBaseId;
+        d3.selectAll(".pcsu-state")
+          .classed("is-active", false);
+        d3.select(`#state-${safeState}`)
+          .classed("is-active", true);
+        selectedStateEl.textContent =
+          stateName;
+        if (!bases.length){
+          panelCopyEl.textContent =
+            "PCSUnited does not have supported Base Demographics profiles for this state yet.";
+          baseListEl.innerHTML = "";
+          clearBaseMarker();
+          logScrollDebug("renderState:after-empty", {
+            deltaY:(window.scrollY || 0) - beforeY
+          });
+          return;
+        }
+        panelCopyEl.textContent =
+          `${bases.length} supported base profile${bases.length > 1 ? "s" : ""} available.`;
+        baseListEl.innerHTML =
+          bases.map(base => `
+            <button
+              class="pcsu-base-btn${base.id === currentBaseId ? " is-selected" : ""}"
+              type="button"
+              data-base-id="${esc(base.id)}">
+              <span class="pcsu-base-name">
+                ${esc(base.base)}
+              </span>
+              <span class="pcsu-base-meta">
+                ${esc(base.city)} • ${esc(base.fileName)} • Open Base Demographics
+              </span>
+            </button>
+          `).join("");
+        baseListEl
+          .querySelectorAll(".pcsu-base-btn")
+          .forEach(button => {
+            button.addEventListener("click", () => {
+              const selected =
+                bases.find(base =>
+                  base.id === button.dataset.baseId
+                );
+              if (selected) openBase(selected);
+            });
+          });
+        const selectedBase =
+          bases.find(base => base.id === currentBaseId);
+        if(selectedBase){
+          drawBaseMarker(selectedBase);
+        }else{
+          clearBaseMarker();
+        }
+        const selectedButton =
+          baseListEl.querySelector(".pcsu-base-btn.is-selected");
+        if(selectedButton && allowScroll){
+          scrollSelectedButtonIntoList(selectedButton);
+        }
+        if(allowSectionScroll){
+          scrollMapSectionIntoView();
+        }
+        const afterY = window.scrollY || window.pageYOffset || 0;
+        logScrollDebug("renderState:after", {
+          deltaY:afterY - beforeY,
+          allowScroll,
+          allowSectionScroll
+        });
+      }
+      function findStateFromBaseName(baseName){
+        const key = normalizeKey(baseName);
+        if(!key) return "";
+        if(BASE_TO_STATE[key]) return BASE_TO_STATE[key];
+        const foundKey =
+          Object.keys(BASE_TO_STATE).find(existingKey => {
+            return (
+              existingKey.includes(key) ||
+              key.includes(existingKey)
+            );
+          });
+        return foundKey ? BASE_TO_STATE[foundKey] : "";
+      }
+      function findBaseIdInState(stateCode, baseName){
+        const safeState =
+          String(stateCode || "").toUpperCase();
+        const bases =
+          STATE_BASES[safeState] || [];
+        const key =
+          normalizeKey(baseName);
+        if(!safeState || !key || !bases.length) return "";
+        const exact =
+          bases.find(base => {
+            return [
+              base.base,
+              base.name,
+              base.label,
+              base.fileName,
+              base.id,
+              base.slug
+            ].some(value => normalizeKey(value) === key);
+          });
+        if(exact) return exact.id;
+        const fuzzy =
+          bases.find(base => {
+            return [
+              base.base,
+              base.name,
+              base.label,
+              base.fileName,
+              base.id,
+              base.slug
+            ].some(value => {
+              const baseKey = normalizeKey(value);
+              return baseKey.includes(key) || key.includes(baseKey);
+            });
+          });
+        return fuzzy ? fuzzy.id : "";
+      }
+      function findSelectionFromDetail(detail){
+        const d =
+          detail && typeof detail === "object"
+            ? detail
+            : {};
+        const selectedBase =
+          d.selectedBase ||
+          d.baseSelection ||
+          d.base ||
+          {};
+        const profile =
+          d.profile ||
+          d.bridge ||
+          d.basicbrain ||
+          d.input ||
+          d.state ||
+          d;
+        const directState =
+          selectedBase.state ||
+          selectedBase.stateCode ||
+          profile.state ||
+          profile.stateCode ||
+          d.state ||
+          "";
+        const baseName =
+          selectedBase.base ||
+          selectedBase.name ||
+          selectedBase.label ||
+          d.base ||
+          d.name ||
+          d.label ||
+          profile.selected_base ||
+          profile.selectedBase ||
+          profile.pcs_base ||
+          profile.pcsBase ||
+          profile.current_base ||
+          profile.currentBase ||
+          profile.base ||
+          "";
+        let stateCode = "";
+        if(
+          directState &&
+          STATE_NAMES[String(directState).toUpperCase()]
+        ){
+          stateCode = String(directState).toUpperCase();
+        }else{
+          stateCode = findStateFromBaseName(baseName);
+        }
+        if(!stateCode){
+          return {
+            stateCode:"",
+            baseId:""
+          };
+        }
+        return {
+          stateCode,
+          baseId:findBaseIdInState(stateCode, baseName)
+        };
+      }
+      function preselectFromDetail(detail, options){
+        const selection =
+          findSelectionFromDetail(detail);
+        if(!selection.stateCode) return false;
+        renderState(
+          selection.stateCode,
+          selection.baseId,
+          options
+        );
+        return true;
+      }
+      function isIntentionalNavigation(detail){
+        return !!(
+          detail &&
+          typeof detail === "object" &&
+          detail.autoNavigate === true
+        );
+      }
+      function handleIntentionalBaseSelection(detail){
+        logScrollDebug("pcsu:base-selected:intentional", {
+          source:detail?.source || "unknown"
+        });
+        preselectFromDetail(detail, {
+          allowScroll:true,
+          allowSectionScroll:true
+        });
+      }
+      function bindNavigationEvents(){
+        window.addEventListener("pcsu:base-selected", function(event){
+          const detail = event.detail || {};
+          if(!isIntentionalNavigation(detail)){
+            logScrollDebug("ignored-pcsu:base-selected-passive", {
+              autoNavigate:detail.autoNavigate,
+              source:detail.source || "unknown"
+            });
+            return;
+          }
+          handleIntentionalBaseSelection(detail);
+        });
+      }
+      window.PCSU_US_BASE_MAP.renderState = renderState;
+      window.PCSU_US_BASE_MAP.selectState = renderState;
+      window.PCSU_US_BASE_MAP.preselectFromBasicBrain = function(detail, options){
+        return preselectFromDetail(detail, options);
+      };
+      window.PCSU_US_BASE_MAP.getCurrentState = function(){
+        return currentStateCode;
+      };
+      window.PCSU_US_BASE_MAP.getCurrentBase = function(){
+        return currentBaseId;
+      };
+      window.PCSU_US_BASE_MAP.logScrollDebug = logScrollDebug;
+      bindNavigationEvents();
+      d3.json(
+        "https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
+      ).then(us => {
+        const states =
+          topojson
+            .feature(us, us.objects.states)
+            .features;
+        projection =
+          d3.geoAlbersUsa()
+            .translate([480,300])
+            .scale(1250);
+        const path =
+          d3.geoPath(projection);
+        svg.append("g")
+          .selectAll("path")
+          .data(states)
+          .join("path")
+          .attr("class", d => {
+            const abbr =
+              FIPS_TO_ABBR[
+                String(d.id).padStart(2,"0")
+              ];
+            return STATE_BASES[abbr]
+              ? "pcsu-state has-bases"
+              : "pcsu-state";
+          })
+          .attr("id", d => {
+            const abbr =
+              FIPS_TO_ABBR[
+                String(d.id).padStart(2,"0")
+              ];
+            return `state-${abbr}`;
+          })
+          .attr("d", path)
+          .on("click", (event, d) => {
+            const abbr =
+              FIPS_TO_ABBR[
+                String(d.id).padStart(2,"0")
+              ];
+            renderState(abbr, "", { allowScroll:false });
+          });
+        svg.append("path")
+          .datum(
+            topojson.mesh(
+              us,
+              us.objects.states,
+              (a,b) => a !== b
+            )
+          )
+          .attr("fill","none")
+          .attr("stroke","rgba(16,20,38,.75)")
+          .attr("stroke-width",1)
+          .attr("d", path);
+        svg.append("g")
+          .selectAll("text")
+          .data(states)
+          .join("text")
+          .attr("class","pcsu-state-label")
+          .attr("x", d => path.centroid(d)[0])
+          .attr("y", d => path.centroid(d)[1])
+          .text(d =>
+            FIPS_TO_ABBR[
+              String(d.id).padStart(2,"0")
+            ] || ""
+          )
+          .style("display", d => {
+            const abbr =
+              FIPS_TO_ABBR[
+                String(d.id).padStart(2,"0")
+              ];
+            return [
+              "RI","DE","CT","NJ","MD","MA","DC"
+            ].includes(abbr)
+              ? "none"
+              : "block";
+          });
+        markerLayer =
+          svg.append("g")
+            .attr("id","pcsu-base-marker-layer");
+        mapReady = true;
+        if(pendingStateCode){
+          renderState(
+            pendingStateCode,
+            pendingBaseId,
+            { allowScroll:pendingAllowScroll }
+          );
+        }else{
+          renderState(DEFAULT_STATE, "", { allowScroll:false });
+        }
+      }).catch(() => {
+        selectedStateEl.textContent =
+          "Map unavailable";
+        panelCopyEl.textContent =
+          "The map data could not load. Please refresh the page.";
+        baseListEl.innerHTML = "";
+      });
+    })();
+  </script>
+            </div>
           </div>
         </div>
       </section>
@@ -5865,7 +6910,7 @@
                                     Financial Readiness Snapshot
                                   </h3>
                                   <p class="fi-subtitle">
-                                    We preloaded your BasicBrain income in the background. Enter the mortgage scenario details needed to calculate affordability, payment comfort, and cash-flow readiness.
+                                    We preloaded your Base Pay and BAH in the background. Enter the mortgage scenario details needed to calculate affordability, payment comfort, and cash-flow readiness.
                                   </p>
                                 </div>
                                 <div class="fi-scenario-top">
@@ -7152,7 +8197,7 @@
               <source src="../videos/Basic-Flag-1_mp4.mp4" data-wf-ignore="true">
               <source src="../videos/Basic-Flag-1_webm.webm" data-wf-ignore="true">
             </video></div>
-        </div><img src="../images/TheWingIcon.png" loading="lazy" sizes="100vw" srcset="../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, ../images/TheWingIcon.png 1100w" alt="Logo" class="image-178">
+        </div><img src="../images/TheWingIcon.png" loading="lazy" sizes="(max-width: 1100px) 100vw, 1100px" srcset="../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, ../images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, ../images/TheWingIcon.png 1100w" alt="Logo" class="image-178">
         <h2 data-w-id="dea51de8-d2c4-d7a7-6c1c-c573dfbe5e56" style="opacity:0" class="text-center">Air Force Calculators &amp; Applications</h2>
         <div class="w-layout-blockcontainer container-one w-container">
           <div class="w-layout-vflex home-three-category-wrap">
@@ -7221,43 +8266,6 @@
         </div>
       </section>
       <div class="sliderinblack">
-        <div data-w-id="c5ce80bb-9936-1501-00a7-bba3817a6048" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
-              </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
-              </div>
-              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
-              </div>
-            </div>
-          </div>
-          <div class="highlight_marquee-group">
-            <div class="highlight_marquee-texts">
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
-              </div>
-              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
-                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="wing-back-hero bakdrop"></div>
-      <div class="sliderinblack">
         <div data-w-id="f9ce2960-53cb-8519-7b52-b0526e1e7c14" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts">
@@ -7293,14 +8301,336 @@
           </div>
         </div>
       </div>
-      <section class="section hero-1">
-        <div class="hero-content">
-          <div class="w-layout-grid hero1-grid">
-            <div class="hero-text-wrap">
-              <h1 hero-line-split="true" class="hero-heading">Message from our Founder,</h1>
-              <p hero-line-split="true" class="hero-paragraph">PCSUnited was create to suppor the &quot;Military Community&quot; as a whole. Our purpose is to provide unbiased and clear answers to the home-buying questions many service members face. <br><br>We hope you come back, as our platform will continue to develop and expand its services. As always PCSUnited is free to all Active Duty, Veterans, and their families. <br><br>Thank you for your Service. </p>
+      <div class="about-half-wrapper"></div>
+      <div class="sliderinblack">
+        <div data-w-id="b49d0a2a-8807-397c-bb20-c4ba78d0a880" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, ../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="../images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
+              </div>
+              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="../images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, ../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="../images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, ../images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Military Solutions</div>
+              </div>
+              <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="https://cdn.prod.website-files.com/69658389f59da527c04bcbd4/696f1fbe0f33bbc616679a92_9966AA73-DCAF-4A0E-8BA2-B7C6B01EF063.png" loading="lazy" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Financial Forecasting</div>
+              </div>
             </div>
-            <div id="w-node-_336f9c6a-a9fd-7777-5a12-e6622983d64a-c85e09e0" class="hero1-background"></div>
+          </div>
+          <div class="highlight_marquee-group">
+            <div class="highlight_marquee-texts">
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463c1367e74ed75b2b64_icon%20line1.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Data Driven</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d12bd765230295ab2a313d_home%20benefit3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Client-Centered</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cc584fa704a062e85_icon%20line3.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Tailored Approach</div>
+              </div>
+              <div class="highlight_marquee-box"><img loading="lazy" src="https://cdn.prod.website-files.com/68cfa1cf90b94da5987c0726/68d2463cfc9d239365775af8_icon%20line4.png" alt="" class="icon-height-large-2">
+                <div class="heading-style-h4-3 text-color-alternate">Measurable Results</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <section class="section hero-1">
+        <div class="code-embed-56 w-embed"><!--  =========================================================
+PCSUnited • Aurora Blog Hero
+FROM COFFEE TO WINE
+Full Webflow Embed
+Version 1.0.1
+=========================================================  -->
+          <div id="pcsu-aurora-blog-hero" style="all:initial;">
+            <link rel="preconnect" href="https://fonts.googleapis.com">
+            <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+            <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Merriweather:wght@700&display=swap" rel="stylesheet">
+            <style>
+    #pcsu-aurora-blog-hero,
+    #pcsu-aurora-blog-hero *{
+      box-sizing:border-box;
+      margin:0;
+      padding:0;
+    }
+    #pcsu-aurora-blog-hero{
+      --ink:#eef3ff;
+      --muted:#c3c9dc;
+      --line:rgba(255,255,255,.16);
+      --teal:#39f3df;
+      --sapphire:#69a7ff;
+      --warm:#f2aa6b;
+      --hero-image:url("https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a3ea5ff837d09c4b594b838_Top%20Amy%20Jeans.jpg");
+      display:block;
+      width:100%;
+      color:var(--ink);
+      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    }
+    #pcsu-aurora-blog-hero .pcsu-wrap{
+      position:relative;
+      width:100%;
+      min-height:760px;
+      overflow:hidden;
+      isolation:isolate;
+      background:
+        linear-gradient(180deg, rgba(5,8,16,.18), rgba(5,8,16,.76)),
+        var(--hero-image) center center / cover no-repeat;
+    }
+    #pcsu-aurora-blog-hero .pcsu-wrap::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      z-index:0;
+      background:
+        radial-gradient(760px 380px at 10% 12%, rgba(57,243,223,.24), transparent 62%),
+        radial-gradient(820px 430px at 82% 18%, rgba(105,167,255,.18), transparent 62%),
+        radial-gradient(700px 380px at 78% 82%, rgba(242,170,107,.14), transparent 60%),
+        linear-gradient(115deg, rgba(7,12,24,.78), rgba(8,13,24,.48) 42%, rgba(5,8,16,.82));
+      pointer-events:none;
+    }
+    #pcsu-aurora-blog-hero .pcsu-wrap::after{
+      content:"";
+      position:absolute;
+      inset:-10%;
+      z-index:0;
+      background:
+        radial-gradient(34% 26% at 13% 19%, rgba(57,243,223,.18), transparent 72%),
+        radial-gradient(28% 24% at 78% 18%, rgba(105,167,255,.12), transparent 72%),
+        radial-gradient(26% 22% at 72% 76%, rgba(242,170,107,.10), transparent 76%);
+      filter:blur(34px);
+      opacity:.95;
+      animation:pcsuAuroraFloat 16s ease-in-out infinite alternate;
+      pointer-events:none;
+    }
+    @keyframes pcsuAuroraFloat{
+      0%{ transform:scale(1.03) translate3d(-10px,0,0); }
+      100%{ transform:scale(1.08) translate3d(14px,-12px,0); }
+    }
+    #pcsu-aurora-blog-hero .pcsu-grain{
+      position:absolute;
+      inset:0;
+      z-index:1;
+      pointer-events:none;
+      opacity:.08;
+      background-image:radial-gradient(rgba(255,255,255,.22) .6px, transparent .8px);
+      background-size:10px 10px;
+      mix-blend-mode:soft-light;
+    }
+    #pcsu-aurora-blog-hero .pcsu-inner{
+      position:relative;
+      z-index:2;
+      width:min(1360px, calc(100% - 48px));
+      min-height:760px;
+      margin:0 auto;
+      display:grid;
+      grid-template-columns:minmax(0, 760px) 1fr;
+      gap:36px;
+      align-items:center;
+      padding:72px 0;
+    }
+    #pcsu-aurora-blog-hero .pcsu-card{
+      position:relative;
+      overflow:hidden;
+      max-width:760px;
+      padding:36px 36px 32px;
+      border-radius:30px;
+      border:1px solid var(--line);
+      background:
+        linear-gradient(180deg, rgba(255,255,255,.08), rgba(255,255,255,.035)),
+        linear-gradient(135deg, rgba(12,18,34,.72), rgba(8,12,24,.50));
+      box-shadow:
+        0 30px 80px rgba(0,0,0,.52),
+        inset 0 1px 0 rgba(255,255,255,.08);
+      backdrop-filter:blur(18px) saturate(135%);
+      -webkit-backdrop-filter:blur(18px) saturate(135%);
+    }
+    #pcsu-aurora-blog-hero .pcsu-card::before{
+      content:"";
+      position:absolute;
+      inset:0;
+      background:
+        radial-gradient(420px 190px at 0% 0%, rgba(57,243,223,.14), transparent 70%),
+        radial-gradient(360px 190px at 100% 0%, rgba(105,167,255,.12), transparent 70%);
+      pointer-events:none;
+    }
+    #pcsu-aurora-blog-hero .pcsu-card-content{
+      position:relative;
+      z-index:1;
+    }
+    #pcsu-aurora-blog-hero .pcsu-kicker{
+      display:inline-flex;
+      align-items:center;
+      gap:12px;
+      margin-bottom:28px;
+      color:#dbe2f6;
+      font-size:18px;
+      font-weight:500;
+      letter-spacing:.16em;
+      text-transform:uppercase;
+    }
+    #pcsu-aurora-blog-hero .pcsu-fire{
+      font-size:34px;
+      line-height:1;
+      filter:drop-shadow(0 0 16px rgba(255,120,40,.35));
+    }
+    #pcsu-aurora-blog-hero .pcsu-title{
+      margin-bottom:14px;
+      font-family:Merriweather, Georgia, serif;
+      font-size:clamp(42px, 5vw, 66px);
+      line-height:1.05;
+      font-weight:700;
+      letter-spacing:-.045em;
+      color:#ffffff;
+      text-shadow:0 2px 18px rgba(0,0,0,.28);
+    }
+    #pcsu-aurora-blog-hero .pcsu-subtitle{
+      margin-bottom:32px;
+      max-width:680px;
+      color:#f1f4ff;
+      font-size:clamp(25px, 2.7vw, 36px);
+      line-height:1.22;
+      font-weight:400;
+      letter-spacing:-.02em;
+    }
+    #pcsu-aurora-blog-hero .pcsu-copy{
+      margin-bottom:32px;
+      max-width:640px;
+      color:#f1f4ff;
+      font-size:clamp(18px, 1.7vw, 26px);
+      line-height:1.7;
+      font-weight:400;
+    }
+    #pcsu-aurora-blog-hero .pcsu-copy span{
+      display:block;
+    }
+    #pcsu-aurora-blog-hero .pcsu-actions{
+      display:flex;
+      gap:14px;
+      flex-wrap:wrap;
+      align-items:center;
+    }
+    #pcsu-aurora-blog-hero .pcsu-btn{
+      appearance:none;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      min-height:58px;
+      padding:0 34px;
+      border-radius:999px;
+      border:1px solid rgba(255,255,255,.18);
+      background:
+        radial-gradient(circle at 28% 22%, rgba(255,255,255,.38), transparent 28%),
+        linear-gradient(135deg, #34d8e8 0%, #35f0d2 52%, #64b6ff 100%);
+      color:#06101a;
+      text-decoration:none;
+      font-size:18px;
+      font-weight:800;
+      letter-spacing:.01em;
+      box-shadow:
+        0 18px 42px rgba(57,243,223,.26),
+        inset 0 1px 0 rgba(255,255,255,.42);
+      transition:transform .22s ease, filter .22s ease, box-shadow .22s ease;
+    }
+    #pcsu-aurora-blog-hero .pcsu-btn:hover{
+      transform:translateY(-2px);
+      filter:saturate(1.08);
+      box-shadow:
+        0 24px 54px rgba(57,243,223,.34),
+        inset 0 1px 0 rgba(255,255,255,.48);
+    }
+    #pcsu-aurora-blog-hero .pcsu-note{
+      color:var(--muted);
+      font-size:14px;
+      line-height:1.5;
+      max-width:260px;
+    }
+    @media (max-width: 980px){
+      #pcsu-aurora-blog-hero .pcsu-wrap{
+        min-height:720px;
+        background-position:center center;
+      }
+      #pcsu-aurora-blog-hero .pcsu-inner{
+        width:min(100% - 32px, 720px);
+        min-height:720px;
+        grid-template-columns:1fr;
+        padding:58px 0;
+      }
+      #pcsu-aurora-blog-hero .pcsu-card{
+        padding:30px 24px 26px;
+        border-radius:24px;
+      }
+      #pcsu-aurora-blog-hero .pcsu-kicker{
+        font-size:14px;
+        margin-bottom:22px;
+      }
+      #pcsu-aurora-blog-hero .pcsu-fire{
+        font-size:28px;
+      }
+      #pcsu-aurora-blog-hero .pcsu-btn{
+        width:100%;
+      }
+      #pcsu-aurora-blog-hero .pcsu-note{
+        max-width:100%;
+      }
+    }
+    @media (max-width: 560px){
+      #pcsu-aurora-blog-hero .pcsu-wrap{
+        min-height:680px;
+      }
+      #pcsu-aurora-blog-hero .pcsu-inner{
+        width:min(100% - 24px, 520px);
+        min-height:680px;
+        padding:44px 0;
+      }
+      #pcsu-aurora-blog-hero .pcsu-card{
+        padding:26px 20px 22px;
+      }
+      #pcsu-aurora-blog-hero .pcsu-title{
+        font-size:38px;
+      }
+      #pcsu-aurora-blog-hero .pcsu-subtitle{
+        font-size:24px;
+      }
+      #pcsu-aurora-blog-hero .pcsu-copy{
+        font-size:18px;
+        line-height:1.6;
+      }
+    }
+  </style>
+            <section class="pcsu-wrap" aria-label="From Coffee to Wine blog hero">
+              <div class="pcsu-grain" aria-hidden="true"></div>
+              <div class="pcsu-inner">
+                <article class="pcsu-card">
+                  <div class="pcsu-card-content">
+                    <div class="pcsu-kicker">
+                      <span class="pcsu-fire">🔥</span>
+                      <span>Blog & Vlog Page</span>
+                    </div>
+                    <h1 class="pcsu-title">
+                      Visit our Blog Page
+                    </h1>
+                    <p class="pcsu-subtitle">
+                      The PCS Transition No One Talks About
+                    </p>
+                    <p class="pcsu-copy">
+                      <span>Most service members master discipline...</span>
+                      <span>Few ever transition into ownership.</span>
+                    </p>
+                    <div class="pcsu-actions">
+                      <a class="pcsu-btn" href="#start-transition">
+                        Start Your Transition
+                      </a>
+                      <p class="pcsu-note">
+                        A PCSUnited story about moving from orders to ownership.
+                      </p>
+                    </div>
+                  </div>
+                </article>
+              </div>
+            </section>
           </div>
         </div>
       </section>
@@ -7357,16 +8687,16 @@
                 <div>Oops! Something went wrong while submitting the form.</div>
               </div>
             </div>
-          </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="100vw" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
+          </div><img src="../images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, ../images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, ../images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
         <div data-w-id="ee73203a-eb4c-0a70-cb0c-c0e63e1d2416" class="footer-flex-wrapper">
           <div class="w-layout-grid footer-links-wrapper">
             <div class="footer-links-text">
               <div class="footer-links-title">Explore</div>
-              <a href="../air-force-blogs/main-page.html" target="_blank" class="footer-link">Contact Us</a>
+              <a href="../air-force-blogs/pcsunited-blog-page.html" target="_blank" class="footer-link">Contact Us</a>
               <a href="../air-force/resources.html" target="_blank" aria-current="page" class="footer-link w--current">Resources</a>
               <a href="../about-us.html" target="_blank" class="footer-link">About Us</a>
-              <a href="../air-force-blogs/main-page.html" target="_blank" class="footer-link">Blog</a>
+              <a href="../air-force-blogs/pcsunited-blog-page.html" target="_blank" class="footer-link">Blog</a>
               <a href="../air-force/resources.html" target="_blank" aria-current="page" class="footer-link w--current">Privacy Policy</a>
             </div>
             <div class="footer-links-text">
@@ -7375,7 +8705,7 @@
               <a href="../air-force/housing-quiz.html" target="_blank" class="footer-link">Home Quiz</a>
               <a href="../air-force/bah-base-pay-calculator.html" target="_blank" class="footer-link">BAH Calculator</a>
               <a href="../air-force/va-calculator.html" target="_blank" class="footer-link">VA Calculator</a>
-              <a href="../air-force-blogs/main-page.html" target="_blank" class="footer-link">Disclamer</a>
+              <a href="../air-force-blogs/pcsunited-blog-page.html" target="_blank" class="footer-link">Disclamer</a>
               <a href="../about-us.html" target="_blank" class="footer-link">Terms of Use</a>
             </div>
             <div class="footer-links-text">

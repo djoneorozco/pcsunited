@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Jul 19 2026 14:26:13 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Jul 22 2026 03:25:36 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e1a1a" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -90,9 +90,9 @@
             <nav role="navigation" id="w-node-a20e7068-528c-2165-b385-785e4c45ca5e-4c45ca57" class="nav-menu w-nav-menu">
               <div class="default-nav-links big-menu">
                 <a href="index.html" aria-current="page" class="nav-link w-nav-link w--current">Home Page</a>
-                <a href="pcsu-resources.html" target="_blank" class="nav-link w-nav-link">Resources</a>
+                <a href="resources-x.html" target="_blank" class="nav-link w-nav-link">Resources</a>
                 <a href="about-us.html" class="nav-link w-nav-link">About Us</a>
-                <a href="air-force-blogs/pcsunited-blog-page.html" class="nav-link w-nav-link">Rediness Hub</a>
+                <a href="air-force-readiness-hub.html" class="nav-link w-nav-link">Readiness Hub</a>
               </div>
               <div class="nav-mobile-social">
                 <div line-split="intro" class="fsize-body-large primary-color-emphasis all-caps">Connect</div>
@@ -438,10 +438,10 @@
             <source src="videos/7467750-hd_1920_1080_30fps_webm.webm" data-wf-ignore="true">
           </video></div>
       </section>
-      <section class="section-14 home1-3col"><img src="https://cdn.prod.website-files.com/6a046e85f853405192b35dfe/6a053eb5c00ec6535b85268f_9dede1349084b29a8ed8187f962d72f3_reviews%20start.png" loading="lazy" alt="" class="pcsu-image">
+      <section class="section-14 home1-3col"><img src="images/PCSU-.png" loading="lazy" sizes="(max-width: 1260px) 100vw, 1260px" srcset="images/1b76144160add5f07c142430113c8c58_69ba53d24d169e2593688e05_PCSU-p-500.png 500w, images/1b76144160add5f07c142430113c8c58_69ba53d24d169e2593688e05_PCSU-p-800.png 800w, images/1b76144160add5f07c142430113c8c58_69ba53d24d169e2593688e05_PCSU-p-1080.png 1080w, images/PCSU-.png 1260w" alt="PCSU png" class="pcsu-image">
         <div class="w-layout-blockcontainer container-65 w-container">
           <div reveal-content="true" class="_3cols-heading-2">
-            <h3 line-split="true" class="center-align-2">PCS Solutions for <br><span class="mil-community">The Military Community</span></h3>
+            <h3 line-split="true" class="main-page-title-info-copy">PCS Solutions for <br><span class="mil-community">The Military Community</span></h3>
             <p line-split="true" class="fsize-body-large-2 center-align-2">Permanent Change of Duty Station (PCS) are stressful at any stage of your military career due to growing responsibilities. Home purchase becomes an option during this time, but often not properly vetted. PCSUnited was created to facilitate this process while providing comprehensive and unbiased anwers. We are not a Selling Platform, we are a Non-Profit Platform build to support our Military Community.</p>
           </div>
           <div reveal-content="true" class="w-layout-grid home1-3cols-2">
@@ -478,338 +478,95 @@
           <div reveal-content="true" class="about-our-story-copy">
             <h2 line-split="true" class="about-us-title-2-copy-copy">Our Story <br><span class="tertiary-color-emphasis-2"> &amp; Our Purpose</span></h2>
             <p line-split="true" class="exaplin-about-us">Like Most Service Members, I tried to Find a Purpose Post my Military Career, only to Find Myself seeking to be Part of The Team again. <br>My Specialized knowledge in Product Management &amp; Data Analytics created the perfect Opportunity for me to Create this Framework I call &quot;PCSUnited.&quot;<br>‍<br><em>In many real estate transactions, the Home become the sole focus rather than Quality of Life for your Family. PCSUnited was created to prepare our  military community make sound Home-Buying decision by balancing financial analytics, their home preferrences and current market insight. </em><br>‍</p>
-            <div class="create-your-account w-embed w-script"><!--  =========================================================
-  PCS UNITED • Information Video Button
-  v1.1.0 • SELF-CONTAINED BOTTOM-RIGHT VIDEO PLAYER
-  BEHAVIOR
-  - Clicking the button does not redirect
-  - Opens the video at the bottom-right of the page
-  - Automatically attempts to play the video
-  - Includes a close button
-  - Clicking the button again reopens the video
+            <div class="create-your-account w-embed"><!--  =========================================================
+  PCS UNITED • Premium Account Button (Redirect) v1.0.0
+  ✅ Matches your “CREATE PREMIUM ACCOUNT” gradient pill button
+  ✅ Redirects to: https://pcs-united.webflow.io/veteran-activeduty-account
 =========================================================  -->
-              <div id="pcsu-premium-cta" style="all:initial;">
+              <div id="pcsu-premium-cta" style="all: initial;">
                 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
                 <style>
-    /* =========================================================
-       SCOPED BASE STYLES
-    ========================================================= */
-    #pcsu-premium-cta,
-    #pcsu-premium-cta *{
+    /* Scope everything to this embed */
+    #pcsu-premium-cta, #pcsu-premium-cta *{
       box-sizing:border-box;
-      font-family:Inter, system-ui, -apple-system, BlinkMacSystemFont,
-        "Segoe UI", Roboto, Arial, sans-serif;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
     }
-    /* =========================================================
-       BUTTON WRAPPER
-    ========================================================= */
-    #pcsu-premium-cta .pcsu-premium-wrap{
-      width:100%;
-      max-width:900px;
-      margin:0 auto;
-      padding:18px 10px;
-      background:transparent !important;
+    /* Centered, full-width rail like your current embed */
+    #pcsu-premium-wrap{
+      width: 100%;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 18px 10px;
+      background: transparent !important;
     }
-    /* =========================================================
-       BUTTON
-    ========================================================= */
-    #pcsu-premium-cta .pcsu-premium-btn{
-      appearance:none;
-      display:block;
-      width:100%;
-      max-width:820px;
-      margin:0 auto;
-      padding:12px 16px;
-      border:0;
-      border-radius:12px;
-      text-align:center;
-      text-decoration:none;
-      font-size:14px;
-      font-weight:800;
-      line-height:1.2;
-      letter-spacing:.04em;
-      text-transform:uppercase;
-      color:#050712;
-      background:linear-gradient(
-        90deg,
-        #B7EACA 0%,
-        #8DA8F5 100%
-      );
-      box-shadow:0 10px 22px rgba(0,0,0,.18);
-      transition:
-        transform .15s ease,
-        filter .15s ease,
-        box-shadow .15s ease;
-      cursor:pointer;
-      -webkit-tap-highlight-color:transparent;
-      user-select:none;
+    /* The button itself */
+    #pcsu-premium-btn{
+      display: block;
+      width: 100%;
+      max-width: 820px;
+      margin: 0 auto;
+      text-align: center;
+      text-decoration: none;
+      padding: 12px 16px;
+      border-radius: 12px;
+      font-size: 14px;
+      font-weight: 800;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      color: #050712;
+      /* Image-matched left→right gradient */
+      background: linear-gradient(90deg, #B7EACA 0%, #8DA8F5 100%);
+      box-shadow: 0 10px 22px rgba(0,0,0,.18);
+      transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
+      cursor: pointer;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
-    #pcsu-premium-cta .pcsu-premium-btn:hover{
-      transform:translateY(-2px);
-      filter:brightness(1.03);
-      box-shadow:0 14px 30px rgba(0,0,0,.22);
+    #pcsu-premium-btn:hover{
+      transform: translateY(-2px);
+      filter: brightness(1.03);
+      box-shadow: 0 14px 30px rgba(0,0,0,.22);
     }
-    #pcsu-premium-cta .pcsu-premium-btn:active{
-      transform:translateY(0);
-      filter:brightness(.99);
+    #pcsu-premium-btn:active{
+      transform: translateY(0px);
+      filter: brightness(0.99);
     }
-    #pcsu-premium-cta .pcsu-premium-btn:focus{
-      outline:none;
+    #pcsu-premium-btn:focus{
+      outline: none;
     }
-    #pcsu-premium-cta .pcsu-premium-btn:focus-visible{
+    #pcsu-premium-btn:focus-visible{
       box-shadow:
         0 14px 30px rgba(0,0,0,.22),
         0 0 0 3px rgba(142,243,197,.28);
     }
-    /* =========================================================
-       VIDEO PLAYER
-    ========================================================= */
-    #pcsu-premium-cta .pcsu-video-player{
-      position:fixed;
-      right:18px;
-      bottom:18px;
-      z-index:2147483000;
-      width:360px;
-      height:480px;
-      max-width:calc(100vw - 36px);
-      max-height:calc(100vh - 36px);
-      display:flex;
-      flex-direction:column;
-      overflow:hidden;
-      border-radius:16px;
-      background:rgba(5,7,18,.97);
-      border:1px solid rgba(255,255,255,.15);
-      box-shadow:
-        0 28px 80px rgba(0,0,0,.68),
-        0 0 0 1px rgba(141,168,245,.08);
-      opacity:0;
-      visibility:hidden;
-      pointer-events:none;
-      transform:translateY(24px) scale(.97);
-      transition:
-        opacity .35s cubic-bezier(.16,1,.3,1),
-        transform .35s cubic-bezier(.16,1,.3,1),
-        visibility .35s ease;
-    }
-    #pcsu-premium-cta .pcsu-video-player.is-open{
-      opacity:1;
-      visibility:visible;
-      pointer-events:auto;
-      transform:translateY(0) scale(1);
-    }
-    /* =========================================================
-       VIDEO HEADER
-    ========================================================= */
-    #pcsu-premium-cta .pcsu-video-header{
-      flex:0 0 auto;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      min-height:48px;
-      padding:10px 12px 10px 14px;
-      background:
-        linear-gradient(
-          90deg,
-          rgba(183,234,202,.10),
-          rgba(141,168,245,.10)
-        );
-      border-bottom:1px solid rgba(255,255,255,.10);
-    }
-    #pcsu-premium-cta .pcsu-video-title{
-      color:#eef2ff;
-      font-size:12px;
-      font-weight:800;
-      line-height:1.2;
-      letter-spacing:.04em;
-      text-transform:uppercase;
-    }
-    #pcsu-premium-cta .pcsu-video-close{
-      appearance:none;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      width:30px;
-      height:30px;
-      padding:0;
-      border-radius:8px;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(255,255,255,.07);
-      color:#ffffff;
-      font-size:15px;
-      font-weight:700;
-      line-height:1;
-      cursor:pointer;
-      transition:
-        background .15s ease,
-        transform .15s ease;
-    }
-    #pcsu-premium-cta .pcsu-video-close:hover{
-      background:rgba(255,255,255,.14);
-      transform:scale(1.04);
-    }
-    #pcsu-premium-cta .pcsu-video-close:focus-visible{
-      outline:2px solid rgba(183,234,202,.75);
-      outline-offset:2px;
-    }
-    /* =========================================================
-       VIDEO
-    ========================================================= */
-    #pcsu-premium-cta .pcsu-video{
-      display:block;
-      flex:1 1 auto;
-      width:100%;
-      min-height:0;
-      background:#000;
-      object-fit:cover;
-    }
-    /* =========================================================
-       MOBILE
-    ========================================================= */
-    @media (max-width:600px){
-      #pcsu-premium-cta .pcsu-video-player{
-        right:12px;
-        bottom:12px;
-        width:calc(100vw - 24px);
-        height:min(68vh, 540px);
-        max-width:none;
-        max-height:calc(100vh - 24px);
-        border-radius:14px;
-      }
-    }
-    @media (prefers-reduced-motion:reduce){
-      #pcsu-premium-cta .pcsu-premium-btn,
-      #pcsu-premium-cta .pcsu-video-player,
-      #pcsu-premium-cta .pcsu-video-close{
-        transition:none;
-      }
-    }
   </style>
-                <!--  =========================================================
-       CTA BUTTON
-  =========================================================  -->
-                <div class="pcsu-premium-wrap">
-                  <button class="pcsu-premium-btn" type="button" aria-label="Watch the PCSUnited information video" aria-controls="pcsu-information-video-player" aria-expanded="false">
-                    See Our About Us Video
-                  </button>
+                <div id="pcsu-premium-wrap">
+                  <a id="pcsu-premium-btn" href="https://pcsunited-com-28346d.webflow.io/information-center" aria-label="Create Account">
+                    See Our Information Page
+                  </a>
                 </div>
-                <!--  =========================================================
-       BOTTOM-RIGHT VIDEO PLAYER
-  =========================================================  -->
-                <div id="pcsu-information-video-player" class="pcsu-video-player" role="dialog" aria-modal="false" aria-label="PCSUnited information video" aria-hidden="true">
-                  <div class="pcsu-video-header">
-                    <div class="pcsu-video-title">
-                      PCSUnited.com — Information Video
-                    </div>
-                    <button class="pcsu-video-close" type="button" aria-label="Close information video">
-                      ✕
-                    </button>
-                  </div>
-                  <video class="pcsu-video" playsinline="" controls="" preload="metadata">
-                    <source src="https://s3.amazonaws.com/webflow-prod-assets/68cecb820ec3dbdca3ef9099/69e0207ed368a4f375b8e097_AboutUS_1%20(1).mp4" type="video/mp4">
-                    Your browser does not support HTML video.
-                  </video>
-                </div>
-                <!--  =========================================================
-       OPEN / CLOSE LOGIC
-  =========================================================  -->
-                <script>
-    (() => {
-      "use strict";
-      const root = document.getElementById("pcsu-premium-cta");
-      if (!root || root.dataset.videoMounted === "true") return;
-      root.dataset.videoMounted = "true";
-      const openButton = root.querySelector(".pcsu-premium-btn");
-      const player = root.querySelector(".pcsu-video-player");
-      const closeButton = root.querySelector(".pcsu-video-close");
-      const video = root.querySelector(".pcsu-video");
-      if (!openButton || !player || !closeButton || !video) return;
-      function openVideo() {
-        player.classList.add("is-open");
-        player.setAttribute("aria-hidden", "false");
-        openButton.setAttribute("aria-expanded", "true");
-        try {
-          video.currentTime = 0;
-        } catch (error) {
-          /* Video may not be ready yet. */
-        }
-        const playPromise = video.play();
-        if (
-          playPromise &&
-          typeof playPromise.catch === "function"
-        ) {
-          playPromise.catch(() => {
-            /*
-              The player remains visible if autoplay is blocked.
-              The user can press the native Play control.
-            */
-          });
-        }
-      }
-      function closeVideo() {
-        video.pause();
-        player.classList.remove("is-open");
-        player.setAttribute("aria-hidden", "true");
-        openButton.setAttribute("aria-expanded", "false");
-        openButton.focus({
-          preventScroll:true
-        });
-      }
-      openButton.addEventListener("click", openVideo);
-      closeButton.addEventListener("click", closeVideo);
-      video.addEventListener("ended", () => {
-        video.pause();
-      });
-      document.addEventListener("keydown", event => {
-        if (
-          event.key === "Escape" &&
-          player.classList.contains("is-open")
-        ) {
-          closeVideo();
-        }
-      });
-    })();
-  </script>
               </div>
             </div>
-          </div><img src="images/Air-Force-Captain-Jennifer-Orozco.jpg" loading="lazy" sizes="(max-width: 767px) 48vw, (max-width: 991px) 356px, 462px" srcset="images/us-p-500.jpg 500w, images/us-p-800.jpg 800w, images/us-p-1080.jpg 1080w, images/us-p-1600.jpg 1600w, images/us-p-2000.jpg 2000w, images/Air-Force-Captain-Jennifer-Orozco.jpg 2475w" alt="Air Force Capt. Jennifer Orozco, a clinical social worker assigned to the 60th Medical Operations Squadron, and her spouse, Josue, participate in the Military Spouse Appreciation Day campaign at Travis Air Force Base, Calif., April 7, 2022. The base is celebrating Military Spouse Appreciation Day, which falls on May 6 this year, by highlighting the resiliency and commitment of spouses in the military community." class="image-2">
+          </div><img src="images/Air-Force-Captain-Jennifer-Orozco.jpg" loading="lazy" sizes="100vw" srcset="images/us-p-500.jpg 500w, images/us-p-800.jpg 800w, images/us-p-1080.jpg 1080w, images/us-p-1600.jpg 1600w, images/us-p-2000.jpg 2000w, images/Air-Force-Captain-Jennifer-Orozco.jpg 2475w" alt="Air Force Capt. Jennifer Orozco, a clinical social worker assigned to the 60th Medical Operations Squadron, and her spouse, Josue, participate in the Military Spouse Appreciation Day campaign at Travis Air Force Base, Calif., April 7, 2022. The base is celebrating Military Spouse Appreciation Day, which falls on May 6 this year, by highlighting the resiliency and commitment of spouses in the military community." class="image-2">
         </div>
       </div>
-      <section class="section-33">
-        <div class="container-95">
-          <div class="content-13">
+      <section class="section-41">
+        <div class="container-103">
+          <div class="content-17">
             <div class="center-wrap-15">
               <div class="heading-block slider-h01">
                 <div class="center-wrap-15">
-                  <div data-w-id="6c984541-3f2a-5977-201d-0aaa64deab22" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="top-tag-wrap-2">
-                    <div>Military Specific Applications</div>
+                  <div data-w-id="18ac54bf-272e-e3ed-b05c-54ce993e8abe" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="top-tag-wrap-2">
+                    <div>Military Specific Applications</div>
                   </div>
                 </div>
+                <div class="space-194"></div>
               </div>
             </div>
-            <h1 data-w-id="6c984541-3f2a-5977-201d-0aaa64deab25" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="suite-title">PCSUnited Suite of Services</h1>
+            <h1 data-w-id="1121688c-3eff-3f12-af24-0e04cc38364b" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="suite-title">PCSUnited Suite of Services</h1>
             <p line-split="true" class="suite-subtitle center-align-2">Experience the Quality of PCSUnited. <br>Base Comparison calculator is an advance dashboad that provides concise and accurate data about your current or next PCS Location. Simply enter your Rank, YoS, Dependent status and New Duty Location and see your Estimated Home Price Range, Finaical Readiness Estimage and a Buy vs Rent Guide.  </p>
-            <div data-delay="4000" data-animation="slide" class="slider-6 w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
-              <div data-w-id="6c984541-3f2a-5977-201d-0aaa64deab2c" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="slider-mask w-slider-mask">
-                <div class="slider-slide-2 w-slide">
-                  <div class="slider-bg-wrap-2">
-                    <div class="slider-bg-content-3">
-                      <div class="slider-text-wrap">
-                        <h4>Base Demographics</h4>
-                        <div>A Comprehensive overview of your Base &amp; Surrounding area.</div>
-                        <div class="sub-heading-03---24px-3"><br>Obtain Market Insight, Demographics Information, and Base Specific data to learn about your next duty location. This comprehensive tool is a must before your PCS move.</div>
-                        <div class="space-163">
-                          <div class="tabs-tag-wrap"><img src="https://cdn.prod.website-files.com/6a046e85f853405192b35dfe/6a054d3c7bb114915f33ff08_TheWingIcon.png" loading="lazy" alt="" class="image-192">
-                            <div>Powered by TheWing.ai</div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="slider-h01-image-wrap-3">
-                      <div class="image-wrap slider-h01"><img src="https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a54737dddd009e53e0863e7_MAP.jpg" loading="lazy" alt="" class="image-193"></div>
-                    </div>
-                  </div>
-                </div>
+            <div data-delay="4000" data-animation="slide" class="slider-10 w-slider" data-autoplay="false" data-easing="ease" data-hide-arrows="false" data-disable-swipe="false" data-autoplay-limit="0" data-nav-spacing="3" data-duration="500" data-infinite="true">
+              <div data-w-id="18ac54bf-272e-e3ed-b05c-54ce993e8ac5" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="slider-mask w-slider-mask">
                 <div class="w-slide">
                   <div class="slider-bg-wrap-2">
                     <div class="slider-bg-content-3">
@@ -828,7 +585,7 @@
                         <div data-poster-url="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg" data-video-urls="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4,https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-autoplay="true" data-loop="true" data-wf-ignore="true" class="home2_hero_image-3 w-background-video w-background-video-atom"><video id="9e504a93-c781-d67f-5f29-ef93f4b3b0f6-video" autoplay="" loop="" style="background-image:url(&quot;https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_poster.0000000.jpg&quot;)" muted="" playsinline="" data-wf-ignore="true" data-object-fit="cover">
                             <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_mp4.mp4" data-wf-ignore="true">
                             <source src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16%2F69e5ba35f3b0897c3d81d574_7467731-hd_1920_1080_30fps_webm.webm" data-wf-ignore="true">
-                          </video></div><img sizes="(max-width: 1080px) 100vw, 1080px" srcset="images/spline_1-p-500.png 500w, images/spline_1-p-800.png 800w, images/spline_1.png 1080w" alt="" src="images/spline_1.png" loading="lazy" class="image-156">
+                          </video></div><img sizes="100vw" srcset="images/spline_1-p-500.png 500w, images/spline_1-p-800.png 800w, images/spline_1.png 1080w" alt="" src="images/spline_1.png" loading="lazy" class="image-156">
                       </div>
                     </div>
                   </div>
@@ -852,7 +609,7 @@
                       </div>
                     </div>
                     <div class="slider-h01-image-wrap-3">
-                      <div class="image-wrap slider-h01"><img src="images/Testimonials-Image.jpg" loading="lazy" sizes="(max-width: 746px) 100vw, 746px" srcset="images/e6420ca24cd29d66d08540ab9f687a5e_Testimonials-Image-p-500.jpg 500w, images/Testimonials-Image.jpg 746w" alt="Young man with styled brown hair wearing a teal sweater over a light blue collared shirt, standing against a plain light gray background." class="image-194"></div>
+                      <div class="image-wrap slider-h01"><img src="images/Testimonials-Image.jpg" loading="lazy" sizes="100vw" srcset="images/e6420ca24cd29d66d08540ab9f687a5e_Testimonials-Image-p-500.jpg 500w, images/Testimonials-Image.jpg 746w" alt="Young man with styled brown hair wearing a teal sweater over a light blue collared shirt, standing against a plain light gray background." class="image-194"></div>
                     </div>
                   </div>
                 </div>
@@ -879,16 +636,16 @@
                     </div>
                   </div>
                 </div>
-                <div class="w-slide">
+                <div class="slider-slide-2 w-slide">
                   <div class="slider-bg-wrap-2">
                     <div class="slider-bg-content-3">
                       <div class="slider-text-wrap">
-                        <h4>Military Mortgage Calculator</h4>
+                        <h4>PCS Snapshot</h4>
                         <div class="align-left-12">
-                          <div>I.A.W l</div>
+                          <div>Base to Base Comparison Tool</div>
                         </div>
                         <div class="space-162"></div>
-                        <div class="sub-heading-03---24px-3">The same Calculator you require in a modern and intuitive format. </div>
+                        <div class="sub-heading-03---24px-3">The All-in-One PCS Solution Dashboard. Obtain Base to Base Comparison Analysis and a Snapshot of your New Duty Location&#x27;s Demographics, Housing Market and Analysis. </div>
                         <div class="space-163"></div>
                         <div class="align-left-12">
                           <div class="tabs-tag-wrap"><img src="https://cdn.prod.website-files.com/6a046e85f853405192b35dfe/6a054d3c7bb114915f33ff08_TheWingIcon.png" loading="lazy" alt="" class="image-192">
@@ -898,15 +655,61 @@
                       </div>
                     </div>
                     <div class="slider-h01-image-wrap-3">
-                      <div class="image-wrap slider-h01"><img sizes="(max-width: 917px) 100vw, 917px" srcset="images/Tab-Image-2_1-p-500.png 500w, images/Tab-Image-2_1-p-800.png 800w, images/Tab-Image-2_1.png 917w" alt="Bar chart showing customer profile data with five bars labeled A to E representing 10%, 20%, 30%, 40%, and 50%." src="images/Tab-Image-2_1.png" loading="lazy" class="image-194"></div>
+                      <div class="image-wrap slider-h01"><img src="images/Testimonials-Image.jpg" loading="lazy" sizes="100vw" srcset="images/e6420ca24cd29d66d08540ab9f687a5e_Testimonials-Image-p-500.jpg 500w, images/Testimonials-Image.jpg 746w" alt="Young man with styled brown hair wearing a teal sweater over a light blue collared shirt, standing against a plain light gray background." class="image-194"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="slider-slide-2 w-slide">
+                  <div class="slider-bg-wrap-6">
+                    <div class="slider-bg-content-7">
+                      <div class="slider-text-wrap">
+                        <div class="align-left-14">
+                          <h1>PCS Snapshot</h1>
+                        </div>
+                        <div class="space-192"></div>
+                        <div class="sub-heading-03---24px-9">Rapeto has revolutionized how I manage my startup’s finances. The platform is intuitive and the insights are incredibly valuable. I can’t imagine going back to how we used to do things.</div>
+                        <div class="space-193"></div>
+                        <div class="align-left-14">
+                          <div class="slider-clients-wrap">
+                            <div class="body-01---18px-semi-bold">David Wilson</div>
+                            <div>CEO, Tech Innovations</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="slider-h01-image-wrap-2">
+                      <div class="image-wrap slider-h01"><img src="images/Testimonials-Image.jpg" loading="lazy" sizes="100vw" srcset="images/e6420ca24cd29d66d08540ab9f687a5e_Testimonials-Image-p-500.jpg 500w, images/Testimonials-Image.jpg 746w" alt="Young man with styled brown hair wearing a teal sweater over a light blue collared shirt, standing against a plain light gray background." class="image-217"></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="slider-slide-2 w-slide">
+                  <div class="slider-bg-wrap-2">
+                    <div class="slider-bg-content-3">
+                      <div class="slider-text-wrap">
+                        <h4>PCS Snapshot</h4>
+                        <div class="align-left-12">
+                          <div>Base to Base Comparison Tool</div>
+                        </div>
+                        <div class="space-162"></div>
+                        <div class="sub-heading-03---24px-3">The All-in-One PCS Solution Dashboard. Obtain Base to Base Comparison Analysis and a Snapshot of your New Duty Location&#x27;s Demographics, Housing Market and Analysis. </div>
+                        <div class="space-163"></div>
+                        <div class="align-left-12">
+                          <div class="tabs-tag-wrap"><img src="https://cdn.prod.website-files.com/6a046e85f853405192b35dfe/6a054d3c7bb114915f33ff08_TheWingIcon.png" loading="lazy" alt="" class="image-192">
+                            <div>Powered by TheWing.ai</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="slider-h01-image-wrap-3">
+                      <div class="image-wrap slider-h01"><img src="images/Testimonials-Image.jpg" loading="lazy" sizes="100vw" srcset="images/e6420ca24cd29d66d08540ab9f687a5e_Testimonials-Image-p-500.jpg 500w, images/Testimonials-Image.jpg 746w" alt="Young man with styled brown hair wearing a teal sweater over a light blue collared shirt, standing against a plain light gray background." class="image-194"></div>
                     </div>
                   </div>
                 </div>
               </div>
-              <div data-w-id="6c984541-3f2a-5977-201d-0aaa64deab7e" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="slider-icon left w-slider-arrow-left">
+              <div data-w-id="18ac54bf-272e-e3ed-b05c-54ce993e8aec" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="slider-icon left w-slider-arrow-left">
                 <div class="su-form-button icon-block _56px"><img src="images/Slider-Icon-1.svg" loading="lazy" alt=""></div>
               </div>
-              <div data-w-id="6c984541-3f2a-5977-201d-0aaa64deab81" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="slider-icon right w-slider-arrow-right">
+              <div data-w-id="18ac54bf-272e-e3ed-b05c-54ce993e8aef" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="slider-icon right w-slider-arrow-right">
                 <div class="su-form-button icon-block _56px"><img src="images/Slider-Icon-2.svg" loading="lazy" alt=""></div>
               </div>
               <div class="slider-nav-none w-slider-nav w-round w-num"></div>
@@ -1174,73 +977,298 @@
           <div class="w-layout-grid interstitial-2cols-2 career">
             <div reveal-content="true" class="interstital-content-2"><img src="images/TheWingIcon.png" loading="lazy" sizes="(max-width: 479px) 69vw, (max-width: 767px) 48vw, (max-width: 991px) 356px, 462px" srcset="images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, images/TheWingIcon.png 1100w" alt="Logo" class="image-177">
               <h2 line-split="true" class="heading-100">&quot;Get Advance Insight<br><span class="tertiary-color-emphasis-2"> &amp; Analytics,&quot;</span></h2>
-              <div class="create-your-account w-embed"><!--  =========================================================
-  PCS UNITED • Premium Account Button (Redirect) v1.0.0
-  ✅ Matches your “CREATE PREMIUM ACCOUNT” gradient pill button
-  ✅ Redirects to: https://pcs-united.webflow.io/veteran-activeduty-account
+              <div class="create-your-account w-embed w-script"><!--  =========================================================
+  PCS UNITED • Information Video Button
+  v1.1.0 • SELF-CONTAINED BOTTOM-RIGHT VIDEO PLAYER
+  BEHAVIOR
+  - Clicking the button does not redirect
+  - Opens the video at the bottom-right of the page
+  - Automatically attempts to play the video
+  - Includes a close button
+  - Clicking the button again reopens the video
 =========================================================  -->
-                <div id="pcsu-premium-cta" style="all: initial;">
+                <div id="pcsu-premium-cta" style="all:initial;">
                   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
                   <style>
-    /* Scope everything to this embed */
-    #pcsu-premium-cta, #pcsu-premium-cta *{
+    /* =========================================================
+       SCOPED BASE STYLES
+    ========================================================= */
+    #pcsu-premium-cta,
+    #pcsu-premium-cta *{
       box-sizing:border-box;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+      font-family:Inter, system-ui, -apple-system, BlinkMacSystemFont,
+        "Segoe UI", Roboto, Arial, sans-serif;
     }
-    /* Centered, full-width rail like your current embed */
-    #pcsu-premium-wrap{
-      width: 100%;
-      max-width: 900px;
-      margin: 0 auto;
-      padding: 18px 10px;
-      background: transparent !important;
+    /* =========================================================
+       BUTTON WRAPPER
+    ========================================================= */
+    #pcsu-premium-cta .pcsu-premium-wrap{
+      width:100%;
+      max-width:900px;
+      margin:0 auto;
+      padding:18px 10px;
+      background:transparent !important;
     }
-    /* The button itself */
-    #pcsu-premium-btn{
-      display: block;
-      width: 100%;
-      max-width: 820px;
-      margin: 0 auto;
-      text-align: center;
-      text-decoration: none;
-      padding: 12px 16px;
-      border-radius: 12px;
-      font-size: 14px;
-      font-weight: 800;
-      letter-spacing: .04em;
-      text-transform: uppercase;
-      color: #050712;
-      /* Image-matched left→right gradient */
-      background: linear-gradient(90deg, #B7EACA 0%, #8DA8F5 100%);
-      box-shadow: 0 10px 22px rgba(0,0,0,.18);
-      transition: transform .15s ease, filter .15s ease, box-shadow .15s ease;
-      cursor: pointer;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
+    /* =========================================================
+       BUTTON
+    ========================================================= */
+    #pcsu-premium-cta .pcsu-premium-btn{
+      appearance:none;
+      display:block;
+      width:100%;
+      max-width:820px;
+      margin:0 auto;
+      padding:12px 16px;
+      border:0;
+      border-radius:12px;
+      text-align:center;
+      text-decoration:none;
+      font-size:14px;
+      font-weight:800;
+      line-height:1.2;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+      color:#050712;
+      background:linear-gradient(
+        90deg,
+        #B7EACA 0%,
+        #8DA8F5 100%
+      );
+      box-shadow:0 10px 22px rgba(0,0,0,.18);
+      transition:
+        transform .15s ease,
+        filter .15s ease,
+        box-shadow .15s ease;
+      cursor:pointer;
+      -webkit-tap-highlight-color:transparent;
+      user-select:none;
     }
-    #pcsu-premium-btn:hover{
-      transform: translateY(-2px);
-      filter: brightness(1.03);
-      box-shadow: 0 14px 30px rgba(0,0,0,.22);
+    #pcsu-premium-cta .pcsu-premium-btn:hover{
+      transform:translateY(-2px);
+      filter:brightness(1.03);
+      box-shadow:0 14px 30px rgba(0,0,0,.22);
     }
-    #pcsu-premium-btn:active{
-      transform: translateY(0px);
-      filter: brightness(0.99);
+    #pcsu-premium-cta .pcsu-premium-btn:active{
+      transform:translateY(0);
+      filter:brightness(.99);
     }
-    #pcsu-premium-btn:focus{
-      outline: none;
+    #pcsu-premium-cta .pcsu-premium-btn:focus{
+      outline:none;
     }
-    #pcsu-premium-btn:focus-visible{
+    #pcsu-premium-cta .pcsu-premium-btn:focus-visible{
       box-shadow:
         0 14px 30px rgba(0,0,0,.22),
         0 0 0 3px rgba(142,243,197,.28);
     }
+    /* =========================================================
+       VIDEO PLAYER
+    ========================================================= */
+    #pcsu-premium-cta .pcsu-video-player{
+      position:fixed;
+      right:18px;
+      bottom:18px;
+      z-index:2147483000;
+      width:360px;
+      height:480px;
+      max-width:calc(100vw - 36px);
+      max-height:calc(100vh - 36px);
+      display:flex;
+      flex-direction:column;
+      overflow:hidden;
+      border-radius:16px;
+      background:rgba(5,7,18,.97);
+      border:1px solid rgba(255,255,255,.15);
+      box-shadow:
+        0 28px 80px rgba(0,0,0,.68),
+        0 0 0 1px rgba(141,168,245,.08);
+      opacity:0;
+      visibility:hidden;
+      pointer-events:none;
+      transform:translateY(24px) scale(.97);
+      transition:
+        opacity .35s cubic-bezier(.16,1,.3,1),
+        transform .35s cubic-bezier(.16,1,.3,1),
+        visibility .35s ease;
+    }
+    #pcsu-premium-cta .pcsu-video-player.is-open{
+      opacity:1;
+      visibility:visible;
+      pointer-events:auto;
+      transform:translateY(0) scale(1);
+    }
+    /* =========================================================
+       VIDEO HEADER
+    ========================================================= */
+    #pcsu-premium-cta .pcsu-video-header{
+      flex:0 0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:12px;
+      min-height:48px;
+      padding:10px 12px 10px 14px;
+      background:
+        linear-gradient(
+          90deg,
+          rgba(183,234,202,.10),
+          rgba(141,168,245,.10)
+        );
+      border-bottom:1px solid rgba(255,255,255,.10);
+    }
+    #pcsu-premium-cta .pcsu-video-title{
+      color:#eef2ff;
+      font-size:12px;
+      font-weight:800;
+      line-height:1.2;
+      letter-spacing:.04em;
+      text-transform:uppercase;
+    }
+    #pcsu-premium-cta .pcsu-video-close{
+      appearance:none;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      width:30px;
+      height:30px;
+      padding:0;
+      border-radius:8px;
+      border:1px solid rgba(255,255,255,.18);
+      background:rgba(255,255,255,.07);
+      color:#ffffff;
+      font-size:15px;
+      font-weight:700;
+      line-height:1;
+      cursor:pointer;
+      transition:
+        background .15s ease,
+        transform .15s ease;
+    }
+    #pcsu-premium-cta .pcsu-video-close:hover{
+      background:rgba(255,255,255,.14);
+      transform:scale(1.04);
+    }
+    #pcsu-premium-cta .pcsu-video-close:focus-visible{
+      outline:2px solid rgba(183,234,202,.75);
+      outline-offset:2px;
+    }
+    /* =========================================================
+       VIDEO
+    ========================================================= */
+    #pcsu-premium-cta .pcsu-video{
+      display:block;
+      flex:1 1 auto;
+      width:100%;
+      min-height:0;
+      background:#000;
+      object-fit:cover;
+    }
+    /* =========================================================
+       MOBILE
+    ========================================================= */
+    @media (max-width:600px){
+      #pcsu-premium-cta .pcsu-video-player{
+        right:12px;
+        bottom:12px;
+        width:calc(100vw - 24px);
+        height:min(68vh, 540px);
+        max-width:none;
+        max-height:calc(100vh - 24px);
+        border-radius:14px;
+      }
+    }
+    @media (prefers-reduced-motion:reduce){
+      #pcsu-premium-cta .pcsu-premium-btn,
+      #pcsu-premium-cta .pcsu-video-player,
+      #pcsu-premium-cta .pcsu-video-close{
+        transition:none;
+      }
+    }
   </style>
-                  <div id="pcsu-premium-wrap">
-                    <a id="pcsu-premium-btn" href="https://pcsunited.com/information-pcsunited.html" aria-label="Create Account">
-                      See Our Information Page
-                    </a>
+                  <!--  =========================================================
+       CTA BUTTON
+  =========================================================  -->
+                  <div class="pcsu-premium-wrap">
+                    <button class="pcsu-premium-btn" type="button" aria-label="Watch the PCSUnited information video" aria-controls="pcsu-information-video-player" aria-expanded="false">
+                      See Our About Us Video
+                    </button>
                   </div>
+                  <!--  =========================================================
+       BOTTOM-RIGHT VIDEO PLAYER
+  =========================================================  -->
+                  <div id="pcsu-information-video-player" class="pcsu-video-player" role="dialog" aria-modal="false" aria-label="PCSUnited information video" aria-hidden="true">
+                    <div class="pcsu-video-header">
+                      <div class="pcsu-video-title">
+                        PCSUnited.com — Information Video
+                      </div>
+                      <button class="pcsu-video-close" type="button" aria-label="Close information video">
+                        ✕
+                      </button>
+                    </div>
+                    <video class="pcsu-video" playsinline="" controls="" preload="metadata">
+                      <source src="https://s3.amazonaws.com/webflow-prod-assets/68cecb820ec3dbdca3ef9099/69e0207ed368a4f375b8e097_AboutUS_1%20(1).mp4" type="video/mp4">
+                      Your browser does not support HTML video.
+                    </video>
+                  </div>
+                  <!--  =========================================================
+       OPEN / CLOSE LOGIC
+  =========================================================  -->
+                  <script>
+    (() => {
+      "use strict";
+      const root = document.getElementById("pcsu-premium-cta");
+      if (!root || root.dataset.videoMounted === "true") return;
+      root.dataset.videoMounted = "true";
+      const openButton = root.querySelector(".pcsu-premium-btn");
+      const player = root.querySelector(".pcsu-video-player");
+      const closeButton = root.querySelector(".pcsu-video-close");
+      const video = root.querySelector(".pcsu-video");
+      if (!openButton || !player || !closeButton || !video) return;
+      function openVideo() {
+        player.classList.add("is-open");
+        player.setAttribute("aria-hidden", "false");
+        openButton.setAttribute("aria-expanded", "true");
+        try {
+          video.currentTime = 0;
+        } catch (error) {
+          /* Video may not be ready yet. */
+        }
+        const playPromise = video.play();
+        if (
+          playPromise &&
+          typeof playPromise.catch === "function"
+        ) {
+          playPromise.catch(() => {
+            /*
+              The player remains visible if autoplay is blocked.
+              The user can press the native Play control.
+            */
+          });
+        }
+      }
+      function closeVideo() {
+        video.pause();
+        player.classList.remove("is-open");
+        player.setAttribute("aria-hidden", "true");
+        openButton.setAttribute("aria-expanded", "false");
+        openButton.focus({
+          preventScroll:true
+        });
+      }
+      openButton.addEventListener("click", openVideo);
+      closeButton.addEventListener("click", closeVideo);
+      video.addEventListener("ended", () => {
+        video.pause();
+      });
+      document.addEventListener("keydown", event => {
+        if (
+          event.key === "Escape" &&
+          player.classList.contains("is-open")
+        ) {
+          closeVideo();
+        }
+      });
+    })();
+  </script>
                 </div>
               </div>
               <div line-split="true" class="subtitle-for-create-account">Account Required for Personalized Financial Modeling &amp; Secure Data Analysis<br>‍</div>
@@ -1303,7 +1331,7 @@
               </div>
               <div class="team-bg-wrap">
                 <div class="team-image-wrap">
-                  <a href="air-force-blogs/blog-a-i--influence-real-estate-military-home-buyers.html" class="w-inline-block"><img src="images/Hero-Tag-Wrap.jpg" loading="lazy" sizes="(max-width: 1122px) 100vw, 1122px" srcset="images/81bea542c339fbac3cbd627c238e469b_Hero-Tag-Wrap-p-500.jpg 500w, images/81bea542c339fbac3cbd627c238e469b_Hero-Tag-Wrap-p-800.jpg 800w, images/81bea542c339fbac3cbd627c238e469b_Hero-Tag-Wrap-p-1080.jpg 1080w, images/Hero-Tag-Wrap.jpg 1122w" alt="" class="image-160"></a>
+                  <a href="air-force-blogs/blog-a-i--influence-real-estate-military-home-buyers.html" class="w-inline-block"><img src="images/Hero-Tag-Wrap.jpg" loading="lazy" sizes="100vw" srcset="images/81bea542c339fbac3cbd627c238e469b_Hero-Tag-Wrap-p-500.jpg 500w, images/81bea542c339fbac3cbd627c238e469b_Hero-Tag-Wrap-p-800.jpg 800w, images/81bea542c339fbac3cbd627c238e469b_Hero-Tag-Wrap-p-1080.jpg 1080w, images/Hero-Tag-Wrap.jpg 1122w" alt="" class="image-160"></a>
                 </div>
                 <div class="team-wrap">
                   <div class="team-content">
@@ -1316,9 +1344,9 @@
           </div>
           <div class="content-3">
             <div data-w-id="74f54443-81c7-0504-01a6-351d0109bf97" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="team-grid-bg-wrap-2">
-              <a href="air-force-blogs/pcsunited-blog-page.html" class="w-inline-block">
+              <a href="air-force-readiness-hub.html" class="w-inline-block">
                 <div class="team-bg-wrap">
-                  <div class="team-image-wrap"><img src="images/Services-Image-2.png" loading="lazy" sizes="(max-width: 1650px) 100vw, 1650px" srcset="images/55ab796bbaef1453a4dd0557caf4bd4d_Services-Image-2-p-500.png 500w, images/55ab796bbaef1453a4dd0557caf4bd4d_Services-Image-2-p-800.png 800w, images/55ab796bbaef1453a4dd0557caf4bd4d_Services-Image-2-p-1080.png 1080w, images/55ab796bbaef1453a4dd0557caf4bd4d_Services-Image-2-p-1600.png 1600w, images/Services-Image-2.png 1650w" alt="Weekly Raffle showing $37,000 prize with two progress bars at 71% and 36%."></div>
+                  <div class="team-image-wrap"><img src="images/Services-Image-2.png" loading="lazy" sizes="100vw" srcset="images/55ab796bbaef1453a4dd0557caf4bd4d_Services-Image-2-p-500.png 500w, images/55ab796bbaef1453a4dd0557caf4bd4d_Services-Image-2-p-800.png 800w, images/55ab796bbaef1453a4dd0557caf4bd4d_Services-Image-2-p-1080.png 1080w, images/55ab796bbaef1453a4dd0557caf4bd4d_Services-Image-2-p-1600.png 1600w, images/Services-Image-2.png 1650w" alt="Weekly Raffle showing $37,000 prize with two progress bars at 71% and 36%."></div>
                   <div class="team-wrap">
                     <div class="team-content">
                       <div class="sub-heading-03---24px">Top 10 Reasons you need PCS United </div>
@@ -1327,7 +1355,7 @@
                   </div>
                 </div>
               </a>
-              <a href="air-force-blogs/pcsunited-blog-page.html" class="w-inline-block">
+              <a href="air-force-readiness-hub.html" class="w-inline-block">
                 <div class="team-bg-wrap">
                   <div class="team-image-wrap"><img src="images/Office-BG-Image_1Office-BG-Image.avif" loading="lazy" alt="Modern office space with colorful accent walls, a glass-walled meeting room, and seating area with a pink sofa and red chair." class="image-159"></div>
                   <div class="team-wrap">
@@ -1338,9 +1366,9 @@
                   </div>
                 </div>
               </a>
-              <a href="air-force-blogs/pcsunited-blog-page.html" class="w-inline-block">
+              <a href="air-force-readiness-hub.html" class="w-inline-block">
                 <div class="team-bg-wrap">
-                  <div class="team-image-wrap"><img src="images/ChatGPT-Image-Apr-25-2026-08_21_56-PM.png" loading="lazy" sizes="(max-width: 3596px) 100vw, 3596px" srcset="images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-500.png 500w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-800.png 800w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-1080.png 1080w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-1600.png 1600w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-2000.png 2000w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-2600.png 2600w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-3200.png 3200w, images/ChatGPT-Image-Apr-25-2026-08_21_56-PM.png 3596w" alt=""></div>
+                  <div class="team-image-wrap"><img src="images/ChatGPT-Image-Apr-25-2026-08_21_56-PM.png" loading="lazy" sizes="100vw" srcset="images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-500.png 500w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-800.png 800w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-1080.png 1080w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-1600.png 1600w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-2000.png 2000w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-2600.png 2600w, images/78407b27254f764ffcf87edee7e20efe_ChatGPT-Image-Apr-25-2026-08_21_56-PM-p-3200.png 3200w, images/ChatGPT-Image-Apr-25-2026-08_21_56-PM.png 3596w" alt=""></div>
                   <div class="team-wrap">
                     <div class="team-content">
                       <div class="sub-heading-03---24px">Is PCSUnited fully Free?</div>
@@ -1375,7 +1403,7 @@
         <div data-w-id="96354988-6ef2-574c-f8fb-a3f4e5d78f4b" class="footer-flex-wrapper-2">
           <div class="footer-content-wrapper-2">
             <a href="#" class="footer-logo-link w-inline-block">
-              <div class="logo-footer-wrapper"><img width="73" height="175" alt="Logo" src="images/Logo.png" loading="lazy" srcset="images/e4a51368bb6987b56f272eab8043db5a_Logo-p-500.png 500w, images/e4a51368bb6987b56f272eab8043db5a_Logo-p-800.png 800w, images/Logo.png 1024w" sizes="73px" class="logo-image half-size">
+              <div class="logo-footer-wrapper"><img width="73" height="175" alt="Crest for PCSUnited" src="images/PCSUnited-Crest.png" loading="lazy" srcset="images/c6888af0fa07f62155e39e416aa2a8c9_Button-Shape-p-500.png 500w, images/c6888af0fa07f62155e39e416aa2a8c9_Button-Shape-p-800.png 800w, images/c6888af0fa07f62155e39e416aa2a8c9_Button-Shape-p-1080.png 1080w, images/PCSUnited-Crest.png 1536w" sizes="73px" class="logo-image half-size">
                 <div>
                   <h4 class="logo-text">PCSUnited</h4>
                   <h6 class="logo-text-small">Military FinTech Solutions</h6>

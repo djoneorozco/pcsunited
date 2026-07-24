@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Jul 22 2026 03:25:36 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Jul 24 2026 01:02:44 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69eb162637c57d450e0e1a1b" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -79,7 +79,7 @@
         <div class="nav-wrapper">
           <div class="nav-container">
             <div class="nav-left">
-              <a aria-label="Yeyeyeah" href="user-dashboard.html" class="brand-logo w-nav-brand"><img sizes="100vw" srcset="images/763f1bcf67421ca21e870fec9affc01b_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/763f1bcf67421ca21e870fec9affc01b_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/763f1bcf67421ca21e870fec9affc01b_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1536w" alt="" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
+              <a aria-label="Yeyeyeah" href="user-dashboard.html" class="brand-logo w-nav-brand"><img sizes="(max-width: 1536px) 100vw, 1536px" srcset="images/763f1bcf67421ca21e870fec9affc01b_Screenshot-2026-04-28-at-3.11.08-PM-p-500.png 500w, images/763f1bcf67421ca21e870fec9affc01b_Screenshot-2026-04-28-at-3.11.08-PM-p-800.png 800w, images/763f1bcf67421ca21e870fec9affc01b_Screenshot-2026-04-28-at-3.11.08-PM-p-1080.png 1080w, images/Screenshot-2026-04-28-at-3.11.08-PM.png 1536w" alt="" src="images/Screenshot-2026-04-28-at-3.11.08-PM.png" loading="lazy" class="logo-nav"></a>
             </div>
             <nav role="navigation" id="w-node-d28b0724-bb28-d5e9-4eaf-90c909ff93c8-09ff93c1" class="nav-menu w-nav-menu">
               <div class="default-nav-links big-menu">
@@ -599,9 +599,10 @@ UPDATES
           </div>
         </div>
         <div class="code-embed-63 w-embed w-script"><!--  ============================================================
-  PCSUNITED • INTRO VIDEO + ASK AMY
-  STAGE 1 = Older Intro Video Flow
-  STAGE 2 = NEW Ask Elena Command Center v5.3
+  PCSUNITED • ABOUT US INTRO VIDEO + ASK AMY
+  STAGE 1 = Existing Intro Video Flow
+  STAGE 2 = PCSUnited Public Ask Amy Command Center v6.0
+  BACKEND = TheWing.ai /agent-amy-public
   FULL REPLACEMENT
 ===============================================================  -->
           <!--  ============================================================
@@ -616,267 +617,403 @@ UPDATES
   transition:opacity .4s cubic-bezier(.16,1,.3,1), transform .4s cubic-bezier(.16,1,.3,1);
 ">
             <div style="display:flex; align-items:center; justify-content:space-between; padding:.5rem .75rem;">
-              <div style="color:#a8b0d6; font:600 .8rem/1 Inter,system-ui,sans-serif;">PCSUnited.com - Video</div>
-              <button id="about-video-close" aria-label="Close video" style="
-      appearance:none; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06);
-      color:#fff; font:.8rem/1 Inter,system-ui,sans-serif; padding:.25rem .5rem; border-radius:.5rem; cursor:pointer;
-    ">✕</button>
+              <div style="color:#a8b0d6; font:600 .8rem/1 Inter,system-ui,sans-serif;">
+                PCSUnited.com — Our Story
+              </div>
+              <button id="about-video-close" type="button" aria-label="Close video" style="
+        appearance:none;
+        border:1px solid rgba(255,255,255,.18);
+        background:rgba(255,255,255,.06);
+        color:#fff;
+        font:.8rem/1 Inter,system-ui,sans-serif;
+        padding:.25rem .5rem;
+        border-radius:.5rem;
+        cursor:pointer;
+      ">
+                ✕
+              </button>
             </div>
-            <video id="about-video" playsinline="" controls="" preload="auto" style="display:block; width:100%; height:calc(100% - 2rem); object-fit:cover; background:#000;">
+            <video id="about-video" playsinline="" controls="" preload="auto" style="
+      display:block;
+      width:100%;
+      height:calc(100% - 2rem);
+      object-fit:cover;
+      background:#000;
+    ">
               <source src="https://s3.amazonaws.com/webflow-prod-assets/68cecb820ec3dbdca3ef9099/69e0207ed368a4f375b8e097_AboutUS_1%20(1).mp4">
             </video>
           </div>
-          <!--  STAGE 1 CHIP  -->
-          <div id="voice-trigger" style="
-  position:fixed; bottom:1rem; right:1rem; z-index:2147480000;
-  display:flex; align-items:center; gap:.75rem; min-width:220px;
-  background:rgba(11,14,26,0.6); border:1px solid rgba(255,255,255,.12); border-radius:1rem;
-  padding:.75rem 1rem; color:#fff; font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-  cursor:pointer; box-shadow:0 18px 48px rgba(0,0,0,.6); backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
-  opacity:0; transform:translateY(20px) scale(.98); pointer-events:none;
-  transition:opacity .6s cubic-bezier(.16,1,.3,1), transform .6s cubic-bezier(.16,1,.3,1);
-">
-            <img src="images/frontimage.jpg" alt="Elena Concierge" style="width:44px; height:44px; border-radius:50%; object-fit:cover;
-       border:1px solid rgba(255,255,255,.3); box-shadow:0 10px 30px rgba(142,243,197,.4);">
+          <!--  ============================================================
+  STAGE 1 — VIDEO CHIP
+===============================================================  -->
+          <div id="voice-trigger" role="button" tabindex="0" aria-label="Play the PCSUnited story video" style="
+    position:fixed;
+    bottom:1rem;
+    right:1rem;
+    z-index:2147480000;
+    display:flex;
+    align-items:center;
+    gap:.75rem;
+    min-width:220px;
+    background:rgba(11,14,26,0.6);
+    border:1px solid rgba(255,255,255,.12);
+    border-radius:1rem;
+    padding:.75rem 1rem;
+    color:#fff;
+    font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+    cursor:pointer;
+    box-shadow:0 18px 48px rgba(0,0,0,.6);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    opacity:0;
+    transform:translateY(20px) scale(.98);
+    pointer-events:none;
+    transition:
+      opacity .6s cubic-bezier(.16,1,.3,1),
+      transform .6s cubic-bezier(.16,1,.3,1);
+  ">
+            <img src="images/Amy-A.I-Concierge-.jpg" alt="Amy, PCSUnited concierge" style="
+      width:44px;
+      height:44px;
+      border-radius:50%;
+      object-fit:cover;
+      border:1px solid rgba(255,255,255,.3);
+      box-shadow:0 10px 30px rgba(142,243,197,.4);
+    ">
             <div style="display:flex; flex-direction:column; line-height:1.2;">
-              <div style="font-size:.8rem; font-weight:600;">PCSUnited</div>
-              <div style="font-size:.7rem; color:#a8b0d6;">Hear our Story Here</div>
+              <div style="font-size:.8rem; font-weight:600;">
+                PCSUnited
+              </div>
+              <div style="font-size:.7rem; color:#a8b0d6;">
+                Hear Our Story Here
+              </div>
             </div>
             <div id="voice-status" style="
-    margin-left:auto; font-size:.7rem; font-weight:600; color:#8ef3c5;
-    border:1px solid rgba(142,243,197,.4); background:rgba(142,243,197,.08);
-    padding:.4rem .6rem; border-radius:.5rem; white-space:nowrap;">▶ Play</div>
+      margin-left:auto;
+      font-size:.7rem;
+      font-weight:600;
+      color:#8ef3c5;
+      border:1px solid rgba(142,243,197,.4);
+      background:rgba(142,243,197,.08);
+      padding:.4rem .6rem;
+      border-radius:.5rem;
+      white-space:nowrap;
+    ">
+              ▶ Play
+            </div>
           </div>
           <script>
 (function () {
-  const chip = document.getElementById('voice-trigger');
-  const statusEl = document.getElementById('voice-status');
-  const wrap = document.getElementById('about-video-wrap');
-  const video = document.getElementById('about-video');
-  const closeBtn = document.getElementById('about-video-close');
+  const chip = document.getElementById("voice-trigger");
+  const statusEl = document.getElementById("voice-status");
+  const wrap = document.getElementById("about-video-wrap");
+  const video = document.getElementById("about-video");
+  const closeBtn = document.getElementById("about-video-close");
   if (!chip || !statusEl || !wrap || !video || !closeBtn) return;
+  if (chip.__pcsuVideoMounted) return;
+  chip.__pcsuVideoMounted = true;
   let revealed = false;
   function revealChip() {
     if (!revealed && window.scrollY > 150) {
       revealed = true;
-      chip.style.opacity = '1';
-      chip.style.transform = 'translateY(0)';
-      chip.style.pointerEvents = 'auto';
+      chip.style.opacity = "1";
+      chip.style.transform = "translateY(0)";
+      chip.style.pointerEvents = "auto";
     }
   }
-  revealChip();
-  window.addEventListener('scroll', revealChip, { passive: true });
   function showPlayer() {
-    wrap.style.opacity = '1';
-    wrap.style.pointerEvents = 'auto';
-    wrap.style.transform = 'translateY(0)';
+    wrap.style.opacity = "1";
+    wrap.style.pointerEvents = "auto";
+    wrap.style.transform = "translateY(0)";
   }
   function hidePlayer() {
-    wrap.style.opacity = '0';
-    wrap.style.pointerEvents = 'none';
-    wrap.style.transform = 'translateY(20px)';
+    wrap.style.opacity = "0";
+    wrap.style.pointerEvents = "none";
+    wrap.style.transform = "translateY(20px)";
   }
-  chip.addEventListener('click', () => {
-    if (wrap.style.pointerEvents !== 'auto') showPlayer();
+  function toggleVideo() {
+    if (wrap.style.pointerEvents !== "auto") {
+      showPlayer();
+    }
     if (!video.paused) {
       video.pause();
-      statusEl.textContent = '▶ Play';
-      statusEl.style.color = '#8ef3c5';
-    } else {
-      video.play().then(() => {
-        statusEl.textContent = '● Playing';
-        statusEl.style.color = '#fff';
-      }).catch(() => {});
+      statusEl.textContent = "▶ Play";
+      statusEl.style.color = "#8ef3c5";
+      return;
+    }
+    video.play()
+      .then(() => {
+        statusEl.textContent = "● Playing";
+        statusEl.style.color = "#fff";
+      })
+      .catch(() => {});
+  }
+  revealChip();
+  window.addEventListener("scroll", revealChip, {
+    passive: true
+  });
+  chip.addEventListener("click", toggleVideo);
+  chip.addEventListener("keydown", (event) => {
+    if (event.key === "Enter" || event.key === " ") {
+      event.preventDefault();
+      toggleVideo();
     }
   });
-  closeBtn.addEventListener('click', hidePlayer);
-  video.addEventListener('ended', () => {
+  closeBtn.addEventListener("click", hidePlayer);
+  video.addEventListener("pause", () => {
+    if (!video.ended) {
+      statusEl.textContent = "▶ Play";
+      statusEl.style.color = "#8ef3c5";
+    }
+  });
+  video.addEventListener("ended", () => {
     hidePlayer();
-    chip.style.opacity = '0';
-    chip.style.pointerEvents = 'none';
+    chip.style.opacity = "0";
+    chip.style.pointerEvents = "none";
     setTimeout(() => {
       chip.remove();
       wrap.remove();
-      const launcher = document.getElementById('ask-elena-launcher');
+      const launcher = document.getElementById("ask-amy-launcher");
       if (launcher) {
-        launcher.style.opacity = '1';
-        launcher.style.pointerEvents = 'auto';
-        launcher.style.transform = 'translateY(0)';
+        launcher.style.opacity = "1";
+        launcher.style.pointerEvents = "auto";
+        launcher.style.transform = "translateY(0)";
       }
     }, 600);
   });
 })();
 </script>
           <!--  ============================================================
-  STAGE 2 — LAUNCHER
+  STAGE 2 — ASK AMY LAUNCHER
 ===============================================================  -->
-          <div id="ask-elena-launcher" style="
-  position:fixed; bottom:1rem; right:1rem; z-index:2147480000;
-  padding:1rem 1.2rem; border-radius:1rem; cursor:pointer;
-  background:rgba(14,18,30,0.7); backdrop-filter:blur(12px);
-  border:1px solid rgba(255,255,255,.12);
-  color:#fff; font-family:Inter,sans-serif; display:flex;
-  align-items:center; gap:.75rem;
-  opacity:0; pointer-events:none;
-  transform:translateY(20px); transition:.4s ease;
-  box-shadow:0 18px 48px rgba(0,0,0,.45);
-">
-            <img src="images/Face.jpg" style="width:42px;height:42px;border-radius:50%;object-fit:cover;border:1px solid rgba(255,255,255,.18);">
-            <div style="display:flex;flex-direction:column;line-height:1.2;">
-              <div style="font-size:.8rem;font-weight:600;">Ask Amy</div>
-              <div style="font-size:.7rem;color:#a8b0d6;">Your A.I. Concierge</div>
+          <div id="ask-amy-launcher" role="button" tabindex="0" aria-label="Open Ask Amy" style="
+    position:fixed;
+    bottom:1rem;
+    right:1rem;
+    z-index:2147480000;
+    padding:1rem 1.2rem;
+    border-radius:1rem;
+    cursor:pointer;
+    background:rgba(14,18,30,0.7);
+    backdrop-filter:blur(12px);
+    -webkit-backdrop-filter:blur(12px);
+    border:1px solid rgba(255,255,255,.12);
+    color:#fff;
+    font-family:Inter,sans-serif;
+    display:flex;
+    align-items:center;
+    gap:.75rem;
+    opacity:0;
+    pointer-events:none;
+    transform:translateY(20px);
+    transition:.4s ease;
+    box-shadow:0 18px 48px rgba(0,0,0,.45);
+  ">
+            <img src="images/A.I-Concierge-Amy.jpg" alt="Amy, PCSUnited AI concierge" style="
+      width:42px;
+      height:42px;
+      border-radius:50%;
+      object-fit:cover;
+      border:1px solid rgba(255,255,255,.18);
+    ">
+            <div style="display:flex; flex-direction:column; line-height:1.2;">
+              <div style="font-size:.8rem; font-weight:600;">
+                Ask Amy
+              </div>
+              <div style="font-size:.7rem; color:#a8b0d6;">
+                PCSUnited A.I. Concierge
+              </div>
             </div>
           </div>
           <!--  ============================================================
-  STAGE 2 — MODAL WRAPPER FOR NEW ASK ELENA
+  STAGE 2 — ASK AMY MODAL
 ===============================================================  -->
-          <div id="ask-elena-modal" style="
-  position:fixed;
-  inset:0;
-  z-index:2147480001;
-  display:none;
-  align-items:flex-end;
-  justify-content:flex-end;
-  padding:18px;
-  background:rgba(4,6,10,.34);
-  backdrop-filter:blur(6px);
-  -webkit-backdrop-filter:blur(6px);
-">
-            <div id="ask-elena-panel" style="
-    position:relative;
-    width:min(1280px, calc(100vw - 36px));
-    max-width:min(1280px, calc(100vw - 36px));
-    max-height:calc(100vh - 36px);
-    border-radius:24px;
-    overflow:hidden;
-    box-shadow:0 30px 80px rgba(0,0,0,.60);
+          <div id="ask-amy-modal" role="dialog" aria-modal="true" aria-label="Ask Amy" style="
+    position:fixed;
+    inset:0;
+    z-index:2147480001;
+    display:none;
+    align-items:flex-end;
+    justify-content:flex-end;
+    padding:18px;
+    background:rgba(4,6,10,.34);
+    backdrop-filter:blur(6px);
+    -webkit-backdrop-filter:blur(6px);
   ">
-              <button id="ask-elena-modal-close" aria-label="Close Ask Elena" style="
-      position:absolute;
-      top:14px;
-      right:14px;
-      z-index:30;
-      appearance:none;
-      border:1px solid rgba(255,255,255,.18);
-      background:rgba(7,8,12,.64);
-      color:#f4efe6;
-      font:800 12px/1 Barlow, Inter, sans-serif;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      border-radius:999px;
-      padding:10px 12px;
-      cursor:pointer;
-      backdrop-filter:blur(8px);
-      -webkit-backdrop-filter:blur(8px);
-      box-shadow:0 14px 30px rgba(0,0,0,.32);
-    ">Close ✕</button>
+            <div id="ask-amy-panel" style="
+      position:relative;
+      width:min(1280px, calc(100vw - 36px));
+      max-width:min(1280px, calc(100vw - 36px));
+      max-height:calc(100vh - 36px);
+      border-radius:24px;
+      overflow:hidden;
+      box-shadow:0 30px 80px rgba(0,0,0,.60);
+    ">
+              <button id="ask-amy-modal-close" type="button" aria-label="Close Ask Amy" style="
+        position:absolute;
+        top:14px;
+        right:14px;
+        z-index:30;
+        appearance:none;
+        border:1px solid rgba(255,255,255,.18);
+        background:rgba(7,8,12,.64);
+        color:#f4efe6;
+        font:800 12px/1 Barlow,Inter,sans-serif;
+        letter-spacing:.08em;
+        text-transform:uppercase;
+        border-radius:999px;
+        padding:10px 12px;
+        cursor:pointer;
+        backdrop-filter:blur(8px);
+        -webkit-backdrop-filter:blur(8px);
+        box-shadow:0 14px 30px rgba(0,0,0,.32);
+      ">
+                Close ✕
+              </button>
               <!--  ============================================================
-      NEW ASK ELENA v5.3
+      PCSUNITED PUBLIC ASK AMY v6.0
+      Uses TheWing.ai agent-amy-public
     ============================================================  -->
-              <div id="ask-elena-shell" data-endpoint="https://theorozcorealty.netlify.app/.netlify/functions/ask-elena" style="all: initial;">
+              <div id="ask-amy-shell" data-endpoint="https://thewing.netlify.app/.netlify/functions/agent-amy-public" style="all:initial;">
                 <link href="https://fonts.googleapis.com/css2?family=Gilda+Display&family=Barlow:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
                 <style>
-        #ask-elena-shell,
-        #ask-elena-shell * {
-          box-sizing: border-box;
-          font-family: Barlow, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+        #ask-amy-shell,
+        #ask-amy-shell * {
+          box-sizing:border-box;
+          font-family:
+            Barlow,
+            system-ui,
+            -apple-system,
+            Segoe UI,
+            Roboto,
+            Arial,
+            sans-serif;
         }
-        #ask-elena-shell{
-          --ae-bg:#06070b;
-          --ae-bg2:#0b0d12;
-          --ae-bg3:#12151b;
-          --ae-card:rgba(15,17,22,.82);
-          --ae-card2:rgba(18,20,26,.90);
-          --ae-card3:rgba(22,24,31,.84);
-          --ae-ink:#f4efe6;
-          --ae-ink-soft:#e8dece;
-          --ae-muted:rgba(220,207,185,.72);
-          --ae-muted2:rgba(220,207,185,.52);
-          --ae-line:rgba(201,170,115,.16);
-          --ae-line2:rgba(201,170,115,.28);
-          --ae-gold:#c9aa73;
-          --ae-gold2:#e3c792;
-          --ae-gold3:#a88752;
-          --ae-bronze:#8d6a3d;
-          --ae-cream:#f7f0e3;
-          --ae-danger:#d78f97;
-          --ae-warn:#d7b06a;
-          --ae-mint:#9fe7d5;
-          --ae-radius:20px;
-          --ae-radius-lg:24px;
-          --ae-shadow:0 22px 55px rgba(0,0,0,.54);
-          --ae-shadow-soft:0 14px 28px rgba(0,0,0,.34);
-          --ae-shadow-deep:0 28px 70px rgba(0,0,0,.60);
-        }
-        #ask-elena-shell {
+        #ask-amy-shell {
+          --aa-bg:#06070b;
+          --aa-card:rgba(15,17,22,.82);
+          --aa-ink:#f4efe6;
+          --aa-ink-soft:#e8dece;
+          --aa-muted:rgba(220,207,185,.72);
+          --aa-line:rgba(201,170,115,.16);
+          --aa-line2:rgba(201,170,115,.28);
+          --aa-gold:#c9aa73;
+          --aa-gold2:#e3c792;
+          --aa-cream:#f7f0e3;
+          --aa-danger:#d78f97;
+          --aa-radius-lg:24px;
+          --aa-shadow:0 22px 55px rgba(0,0,0,.54);
+          --aa-shadow-soft:0 14px 28px rgba(0,0,0,.34);
           display:flex;
           justify-content:center;
           padding:40px 20px;
           background:
-            radial-gradient(1200px 720px at 14% 8%, rgba(201,170,115,.10), transparent 52%),
-            radial-gradient(980px 580px at 86% 14%, rgba(227,199,146,.06), transparent 42%),
-            radial-gradient(900px 700px at 52% 100%, rgba(110,89,55,.12), transparent 58%),
-            linear-gradient(180deg, #050608 0%, #090b10 34%, #07080c 100%);
-          color:var(--ae-ink);
+            radial-gradient(
+              1200px 720px at 14% 8%,
+              rgba(201,170,115,.10),
+              transparent 52%
+            ),
+            radial-gradient(
+              980px 580px at 86% 14%,
+              rgba(227,199,146,.06),
+              transparent 42%
+            ),
+            radial-gradient(
+              900px 700px at 52% 100%,
+              rgba(110,89,55,.12),
+              transparent 58%
+            ),
+            linear-gradient(
+              180deg,
+              #050608 0%,
+              #090b10 34%,
+              #07080c 100%
+            );
+          color:var(--aa-ink);
         }
-        #ae-container {
+        #aa-container {
           width:100%;
           max-width:1400px;
           display:grid;
-          grid-template-columns:280px minmax(0, 1fr);
+          grid-template-columns:280px minmax(0,1fr);
           gap:24px;
           position:relative;
           align-items:stretch;
         }
-        #ae-left {
+        #aa-left,
+        #aa-right {
           position:relative;
           overflow:hidden;
-          border-radius:var(--ae-radius-lg);
-          padding:28px 24px;
+          border-radius:var(--aa-radius-lg);
           background:
-            radial-gradient(700px 260px at 18% 10%, rgba(201,170,115,.10), transparent 60%),
-            radial-gradient(520px 200px at 82% 16%, rgba(227,199,146,.05), transparent 60%),
-            linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.015));
-          background-color:var(--ae-card);
-          border:1px solid var(--ae-line);
-          box-shadow:var(--ae-shadow);
+            radial-gradient(
+              700px 260px at 18% 10%,
+              rgba(201,170,115,.10),
+              transparent 60%
+            ),
+            radial-gradient(
+              520px 200px at 82% 16%,
+              rgba(227,199,146,.05),
+              transparent 60%
+            ),
+            linear-gradient(
+              180deg,
+              rgba(255,255,255,.04),
+              rgba(255,255,255,.015)
+            );
+          background-color:var(--aa-card);
+          border:1px solid var(--aa-line);
+          box-shadow:var(--aa-shadow);
           backdrop-filter:blur(14px) saturate(135%);
           -webkit-backdrop-filter:blur(14px) saturate(135%);
         }
-        #ae-left::before{
+        #aa-left {
+          padding:28px 24px;
+        }
+        #aa-left::before,
+        #aa-right::before {
           content:"";
           position:absolute;
           inset:0;
           pointer-events:none;
           background:
-            radial-gradient(circle at 20% 18%, rgba(255,255,255,.04), transparent 24%),
-            linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0));
+            linear-gradient(
+              180deg,
+              rgba(255,255,255,.025),
+              rgba(255,255,255,0)
+            );
           opacity:.72;
         }
-        .ae-avatar-wrapper {
+        .aa-avatar-wrapper {
           width:168px;
           height:168px;
-          margin:0 auto 18px auto;
+          margin:0 auto 18px;
           position:relative;
           border-radius:50%;
         }
-        .ae-avatar-wrapper::before {
+        .aa-avatar-wrapper::before {
           content:"";
           position:absolute;
           inset:-30px;
           border-radius:50%;
           background:
-            radial-gradient(circle, rgba(201,170,115,.32), rgba(141,106,61,.20), transparent 72%);
+            radial-gradient(
+              circle,
+              rgba(201,170,115,.32),
+              rgba(141,106,61,.20),
+              transparent 72%
+            );
           filter:blur(26px);
           z-index:0;
         }
-        .ae-avatar {
+        .aa-avatar {
           position:relative;
           z-index:2;
           width:168px;
           height:168px;
           border-radius:50%;
-          background-image:url("https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a3334f99ed5987c434df57f_Face.jpg");
+          background-image:
+            url("https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a3334f99ed5987c434df57f_Face.jpg");
           background-size:cover;
           background-position:center;
           border:2px solid rgba(255,255,255,.14);
@@ -884,25 +1021,25 @@ UPDATES
             0 0 0 8px rgba(255,255,255,.025),
             0 18px 32px rgba(0,0,0,.34);
         }
-        .ae-name {
+        .aa-name {
           text-align:center;
-          font-family:"Gilda Display", Georgia, serif;
+          font-family:"Gilda Display",Georgia,serif;
           font-size:28px;
           line-height:1.05;
           letter-spacing:.02em;
           margin-top:10px;
-          color:var(--ae-cream);
+          color:var(--aa-cream);
         }
-        .ae-sub {
+        .aa-sub {
           text-align:center;
           font-size:13px;
-          color:var(--ae-muted);
+          color:var(--aa-muted);
           margin-top:6px;
           letter-spacing:.08em;
           text-transform:uppercase;
           font-weight:800;
         }
-        .ae-links {
+        .aa-links {
           margin-top:26px;
           display:flex;
           flex-direction:column;
@@ -910,7 +1047,7 @@ UPDATES
           position:relative;
           z-index:1;
         }
-        .ae-link-btn {
+        .aa-link-btn {
           display:block;
           text-decoration:none;
           padding:11px 14px;
@@ -919,24 +1056,24 @@ UPDATES
           font-weight:900;
           letter-spacing:.08em;
           text-transform:uppercase;
-          color:var(--ae-ink);
+          color:var(--aa-ink);
           background:rgba(255,255,255,.04);
-          border:1px solid var(--ae-line);
+          border:1px solid var(--aa-line);
           transition:.22s ease;
-          box-shadow:var(--ae-shadow-soft);
+          box-shadow:var(--aa-shadow-soft);
         }
-        .ae-link-btn:hover {
+        .aa-link-btn:hover {
           transform:translateY(-1px);
-          border-color:var(--ae-line2);
+          border-color:var(--aa-line2);
           background:rgba(201,170,115,.08);
-          color:var(--ae-cream);
+          color:var(--aa-cream);
         }
-        .ae-badge {
+        .aa-badge {
           margin-top:28px;
           text-align:center;
           font-size:11px;
           line-height:1.45;
-          color:var(--ae-gold2);
+          color:var(--aa-gold2);
           opacity:.92;
           letter-spacing:.08em;
           text-transform:uppercase;
@@ -944,35 +1081,15 @@ UPDATES
           position:relative;
           z-index:1;
         }
-        #ae-right {
-          position:relative;
-          overflow:hidden;
-          border-radius:var(--ae-radius-lg);
-          background:
-            radial-gradient(1200px 700px at 15% 10%, rgba(201,170,115,.10), transparent 55%),
-            radial-gradient(800px 460px at 92% 12%, rgba(227,199,146,.05), transparent 55%),
-            linear-gradient(180deg, rgba(255,255,255,.04), rgba(255,255,255,.02));
-          background-color:var(--ae-card);
-          border:1px solid var(--ae-line);
-          box-shadow:var(--ae-shadow);
+        #aa-right {
           display:flex;
           flex-direction:column;
           height:760px;
           min-height:760px;
           max-height:760px;
           min-width:0;
-          backdrop-filter:blur(14px) saturate(135%);
-          -webkit-backdrop-filter:blur(14px) saturate(135%);
         }
-        #ae-right::before{
-          content:"";
-          position:absolute;
-          inset:0;
-          pointer-events:none;
-          background:linear-gradient(180deg, rgba(255,255,255,.025), rgba(255,255,255,0));
-          opacity:.7;
-        }
-        .ae-topbar{
+        .aa-topbar {
           position:relative;
           z-index:1;
           flex:0 0 auto;
@@ -980,74 +1097,83 @@ UPDATES
           align-items:flex-start;
           justify-content:space-between;
           gap:16px;
-          padding:20px 20px 12px 20px;
+          padding:20px 76px 14px 20px;
           border-bottom:1px solid rgba(255,255,255,.06);
-          background:linear-gradient(180deg, rgba(255,255,255,.035), rgba(255,255,255,.01));
+          background:
+            linear-gradient(
+              180deg,
+              rgba(255,255,255,.035),
+              rgba(255,255,255,.01)
+            );
         }
-        .ae-topbar-copy h2{
+        .aa-topbar-copy h2 {
           margin:0;
-          font-family:"Gilda Display", Georgia, serif;
+          font-family:"Gilda Display",Georgia,serif;
           font-size:24px;
           line-height:1.05;
-          color:var(--ae-cream);
+          color:var(--aa-cream);
           letter-spacing:.02em;
         }
-        .ae-topbar-copy p{
-          margin:6px 0 0 0;
+        .aa-topbar-copy p {
+          margin:6px 0 0;
           font-size:13px;
           line-height:1.4;
           font-weight:700;
-          color:var(--ae-muted);
-          max-width:540px;
+          color:var(--aa-muted);
+          max-width:600px;
         }
-        .ae-topbar-pill{
+        .aa-status-pill {
           display:inline-flex;
           align-items:center;
-          gap:8px;
-          padding:10px 12px;
+          gap:7px;
+          margin-top:10px;
+          padding:7px 10px;
           border-radius:999px;
           background:rgba(201,170,115,.08);
-          border:1px solid var(--ae-line);
-          font-size:11px;
+          border:1px solid var(--aa-line);
+          font-size:10px;
           line-height:1;
           font-weight:900;
-          letter-spacing:.10em;
+          letter-spacing:.09em;
           text-transform:uppercase;
-          color:var(--ae-gold2);
-          white-space:nowrap;
-          box-shadow:var(--ae-shadow-soft);
+          color:var(--aa-gold2);
         }
-        .ae-top-controls {
+        .aa-status-dot {
+          width:7px;
+          height:7px;
+          border-radius:50%;
+          background:#9fe7d5;
+          box-shadow:0 0 12px rgba(159,231,213,.7);
+        }
+        .aa-quick-prompts {
           position:relative;
           z-index:1;
           flex:0 0 auto;
-          padding:16px 18px 0 18px;
-          display:grid;
-          grid-template-columns:1fr;
-          gap:10px;
+          padding:14px 18px 0;
+          display:flex;
+          flex-wrap:wrap;
+          gap:8px;
         }
-        .ae-control-input {
-          width:100%;
-          padding:13px 14px;
-          font-size:13px;
+        .aa-prompt-btn {
+          appearance:none;
+          border:1px solid var(--aa-line);
+          background:rgba(255,255,255,.04);
+          color:var(--aa-ink-soft);
+          border-radius:999px;
+          padding:9px 12px;
+          font-size:11px;
+          line-height:1.2;
           font-weight:800;
-          background:rgba(255,255,255,.05);
-          border:1px solid var(--ae-line);
-          color:var(--ae-cream) !important;
-          border-radius:14px;
-          outline:none;
-          transition:.16s ease;
-          box-shadow:inset 0 14px 28px rgba(0,0,0,.20);
-          min-width:0;
+          cursor:pointer;
+          transition:.18s ease;
         }
-        .ae-control-input:focus,
-        .ae-input:focus {
-          border-color:rgba(201,170,115,.52);
-          box-shadow:
-            inset 0 14px 28px rgba(0,0,0,.20),
-            0 0 0 4px rgba(201,170,115,.10);
+        .aa-prompt-btn:hover {
+          transform:translateY(-1px);
+          border-color:var(--aa-line2);
+          background:rgba(201,170,115,.08);
+          color:var(--aa-cream);
         }
-        .ae-chat {
+        .aa-chat {
           position:relative;
           z-index:1;
           flex:1 1 auto;
@@ -1062,7 +1188,7 @@ UPDATES
           scroll-behavior:smooth;
           overscroll-behavior:contain;
         }
-        .ae-msg {
+        .aa-msg {
           max-width:82%;
           padding:13px 15px;
           border-radius:16px;
@@ -1073,33 +1199,38 @@ UPDATES
           overflow-wrap:anywhere;
           backdrop-filter:blur(10px);
           -webkit-backdrop-filter:blur(10px);
-          color:var(--ae-cream) !important;
-          box-shadow:var(--ae-shadow-soft);
+          color:var(--aa-cream) !important;
+          box-shadow:var(--aa-shadow-soft);
           border:1px solid rgba(255,255,255,.10);
           flex:0 0 auto;
         }
-        .ae-user {
+        .aa-user {
           align-self:flex-end;
           background:
-            radial-gradient(220px 110px at 20% 25%, rgba(201,170,115,.14), transparent 65%),
+            radial-gradient(
+              220px 110px at 20% 25%,
+              rgba(201,170,115,.14),
+              transparent 65%
+            ),
             rgba(201,170,115,.08);
           border-color:rgba(201,170,115,.24);
-          color:var(--ae-cream) !important;
         }
-        .ae-bot {
+        .aa-bot {
           align-self:flex-start;
           background:
-            radial-gradient(220px 110px at 20% 25%, rgba(227,199,146,.10), transparent 65%),
+            radial-gradient(
+              220px 110px at 20% 25%,
+              rgba(227,199,146,.10),
+              transparent 65%
+            ),
             rgba(255,255,255,.04);
-          border-color:rgba(255,255,255,.10);
-          color:var(--ae-cream) !important;
         }
-        .ae-typing {
+        .aa-typing {
           opacity:.92;
           font-size:12px !important;
-          color:var(--ae-ink-soft) !important;
+          color:var(--aa-ink-soft) !important;
         }
-        .ae-footer {
+        .aa-footer {
           position:relative;
           z-index:1;
           flex:0 0 auto;
@@ -1110,27 +1241,37 @@ UPDATES
           gap:10px;
           background:rgba(0,0,0,.12);
         }
-        .ae-input {
+        .aa-input {
           width:100%;
           min-width:0;
           padding:14px;
           font-size:14px;
           font-weight:800;
           background:rgba(255,255,255,.05);
-          border:1px solid var(--ae-line);
-          color:var(--ae-cream) !important;
+          border:1px solid var(--aa-line);
+          color:var(--aa-cream) !important;
           border-radius:14px;
           outline:none;
           transition:.16s ease;
           box-shadow:inset 0 14px 28px rgba(0,0,0,.20);
         }
-        .ae-input::placeholder,
-        .ae-control-input::placeholder {
+        .aa-input:focus {
+          border-color:rgba(201,170,115,.52);
+          box-shadow:
+            inset 0 14px 28px rgba(0,0,0,.20),
+            0 0 0 4px rgba(201,170,115,.10);
+        }
+        .aa-input::placeholder {
           color:rgba(231,214,186,.55);
         }
-        .ae-btn {
+        .aa-btn {
           padding:14px 20px;
-          background:linear-gradient(180deg, rgba(227,199,146,.98), rgba(169,135,82,.95));
+          background:
+            linear-gradient(
+              180deg,
+              rgba(227,199,146,.98),
+              rgba(169,135,82,.95)
+            );
           color:#1b1308;
           border-radius:14px;
           font-weight:900;
@@ -1141,449 +1282,673 @@ UPDATES
           border:none;
           transition:.22s ease;
           box-shadow:0 16px 30px rgba(0,0,0,.36);
-          flex:0 0 auto;
         }
-        .ae-btn:hover {
+        .aa-btn:hover {
           filter:brightness(1.06);
           transform:translateY(-1px);
         }
-        .ae-btn[disabled] {
+        .aa-btn[disabled] {
           opacity:.6;
           cursor:not-allowed;
           transform:none;
         }
-        .tw-caret {
+        .aa-caret {
           display:inline-block;
           width:1px;
           height:1.2em;
           background:currentColor;
           margin-left:2px;
-          animation:tw-blink 1s steps(1,end) infinite;
+          animation:aa-blink 1s steps(1,end) infinite;
         }
-        @keyframes tw-blink { 50% { opacity:0; } }
-        @media (max-width: 980px){
-          #ae-container{
+        @keyframes aa-blink {
+          50% {
+            opacity:0;
+          }
+        }
+        @media (max-width:980px) {
+          #aa-container {
             grid-template-columns:1fr;
           }
-          #ae-right{
+          #aa-left {
+            display:none;
+          }
+          #aa-right {
             height:680px;
             min-height:680px;
             max-height:680px;
           }
-          .ae-topbar{
-            flex-direction:column;
-            align-items:flex-start;
-          }
         }
-        @media (max-width: 767px){
-          #ask-elena-shell{
-            padding:20px 12px;
+        @media (max-width:767px) {
+          #ask-amy-shell {
+            padding:12px;
           }
-          #ae-right{
-            height:62vh;
-            min-height:62vh;
-            max-height:62vh;
+          #aa-right {
+            height:calc(100vh - 60px);
+            min-height:calc(100vh - 60px);
+            max-height:calc(100vh - 60px);
+            border-radius:18px;
+          }
+          .aa-topbar {
+            padding:18px 66px 12px 16px;
+          }
+          .aa-quick-prompts {
+            padding:12px 14px 0;
+          }
+          .aa-chat {
+            padding:18px 14px;
+          }
+          .aa-msg {
+            max-width:90%;
+          }
+          .aa-footer {
+            padding:12px;
+          }
+          .aa-btn {
+            padding:14px 15px;
           }
         }
       </style>
-                <div id="ae-container">
-                  <div id="ae-left">
-                    <div class="ae-avatar-wrapper">
-                      <div class="ae-avatar"></div>
+                <div id="aa-container">
+                  <!--  =====================================================
+          LEFT PROFILE PANEL
+        ======================================================  -->
+                  <aside id="aa-left">
+                    <div class="aa-avatar-wrapper">
+                      <div class="aa-avatar" role="img" aria-label="Amy, PCSUnited AI concierge"></div>
                     </div>
-                    <div class="ae-name">Elena</div>
-                    <div class="ae-sub">A.I Agent & Concierge</div>
-                    <div class="ae-links">
-                      <a class="ae-link-btn" href="https://new-real-estate-purchase.webflow.io/blog-page/va-loan-process" target="_blank">VA Loan Process</a>
-                      <a class="ae-link-btn" href="https://new-real-estate-purchase.webflow.io/blog-page/home-buying-steps" target="_blank">Benefits & Risks</a>
-                      <a class="ae-link-btn" href="https://new-real-estate-purchase.webflow.io/blog-page/do-i-need-a-realtor" target="_blank">Do I Need A Realtor</a>
-                      <a class="ae-link-btn" href="https://new-real-estate-purchase.webflow.io/blog-page/new-blog" target="_blank">New Blog</a>
-                      <a class="ae-link-btn" href="https://new-real-estate-purchase.webflow.io/blog-page/new-blog-2" target="_blank">New Blog 2</a>
+                    <div class="aa-name">
+                      Amy
                     </div>
-                    <div class="ae-badge">OrozcoRealty • A.I.-Powered Real Estate Intelligence</div>
-                  </div>
-                  <div id="ae-right">
-                    <div class="ae-topbar">
-                      <div class="ae-topbar-copy">
-                        <h2>Ask Elena</h2>
-                        <p>Realtor &amp; Financial Expert.</p>
+                    <div class="aa-sub">
+                      PCSUnited A.I. Concierge
+                    </div>
+                    <div class="aa-links">
+                      <a class="aa-link-btn" href="index.html" target="_self">
+                        PCSUnited Home
+                      </a>
+                      <a class="aa-link-btn" href="/resources" target="_self">
+                        Explore Resources
+                      </a>
+                      <a class="aa-link-btn" href="air-force/base-demographics-air-force.html" target="_self">
+                        Base Demographics
+                      </a>
+                    </div>
+                    <div class="aa-badge">
+                      PCSUnited • Powered by TheWing.ai
+                    </div>
+                  </aside>
+                  <!--  =====================================================
+          RIGHT CHAT PANEL
+        ======================================================  -->
+                  <section id="aa-right">
+                    <div class="aa-topbar">
+                      <div class="aa-topbar-copy">
+                        <h2>
+                          Ask Amy
+                        </h2>
+                        <p>
+                          Learn about PCSUnited, explore our relocation tools,
+                          or ask for military housing and financial guidance.
+                        </p>
+                        <div class="aa-status-pill">
+                          <span class="aa-status-dot"></span>
+                          Public Session • No Account Required
+                        </div>
                       </div>
                     </div>
-                    <div class="ae-top-controls">
-                      <input id="ae-email" class="ae-control-input" type="email" placeholder="Enter your email to load your saved profile">
+                    <div class="aa-quick-prompts" aria-label="Suggested questions">
+                      <button type="button" class="aa-prompt-btn" data-question="What is PCSUnited and why was it created?">
+                        What is PCSUnited?
+                      </button>
+                      <button type="button" class="aa-prompt-btn" data-question="How can PCSUnited help a military family prepare for a PCS move?">
+                        How can PCSUnited help?
+                      </button>
+                      <button type="button" class="aa-prompt-btn" data-question="What PCSUnited tools should I explore first?">
+                        Which tool should I use?
+                      </button>
                     </div>
-                    <div class="ae-chat" id="ae-chat"></div>
-                    <div class="ae-footer">
-                      <input id="ae-input" class="ae-input" type="text" placeholder="Ask Elena anything…">
-                      <button id="ae-send" class="ae-btn">Send</button>
+                    <div class="aa-chat" id="aa-chat" aria-live="polite" aria-label="Ask Amy conversation"></div>
+                    <div class="aa-footer">
+                      <input id="aa-input" class="aa-input" type="text" maxlength="5000" autocomplete="off" placeholder="Ask Amy about PCSUnited, relocation, housing, or military finances…" aria-label="Message Amy">
+                      <button id="aa-send" class="aa-btn" type="button">
+                        Send
+                      </button>
                     </div>
-                  </div>
+                  </section>
                 </div>
                 <script>
       (() => {
-        const root = document.getElementById("ask-elena-shell");
-        if (!root || root.__aeMountedV53) return;
-        root.__aeMountedV53 = true;
-        const RAW_ENDPOINT = root.getAttribute("data-endpoint") || "";
-        const chatEl = document.getElementById("ae-chat");
-        const inputEl = document.getElementById("ae-input");
-        const sendBtn = document.getElementById("ae-send");
-        const emailEl = document.getElementById("ae-email");
-        const STORAGE_KEY = "orozco.ask_elena.v5_3";
-        const VERIFIED_EMAIL_KEY = "orozco.ask_elena.verified_email.v1";
-        const VERIFIED_PROFILE_KEY = "orozco.ask_elena.verified_profile.v1";
-        let verifyTimer = null;
-        let verifySeq = 0;
-        let lastVerifiedEmail = "";
-        let verifiedProfile = null;
-        let verifyingEmail = "";
-        function resolveAskEndpoint(raw) {
-          if (location.hostname && /webflow\.io$/i.test(location.hostname)) {
-            return "https://theorozcorealty.netlify.app/.netlify/functions/ask-elena";
-          }
-          if (!raw) return "/.netlify/functions/ask-elena";
-          return raw;
+        const root = document.getElementById("ask-amy-shell");
+        if (!root || root.__askAmyMountedV60) return;
+        root.__askAmyMountedV60 = true;
+        const DEFAULT_ENDPOINT =
+          "https://thewing.netlify.app/.netlify/functions/agent-amy-public";
+        const ENDPOINT = String(
+          root.getAttribute("data-endpoint") || DEFAULT_ENDPOINT
+        ).trim();
+        const chatEl = document.getElementById("aa-chat");
+        const inputEl = document.getElementById("aa-input");
+        const sendBtn = document.getElementById("aa-send");
+        const promptButtons = Array.from(
+          root.querySelectorAll(".aa-prompt-btn")
+        );
+        if (!chatEl || !inputEl || !sendBtn) return;
+        /*
+        ============================================================
+          PUBLIC CONVERSATION STATE
+          This state remains in memory only.
+          No localStorage.
+          No sessionStorage.
+          No Supabase.
+          No authenticated profile lookup.
+          No email verification.
+        ============================================================
+        */
+        const state = {
+          conversationId: createConversationId(),
+          thread: [],
+          memory: {},
+          sending: false
+        };
+        function createConversationId() {
+          try {
+            if (
+              window.crypto &&
+              typeof window.crypto.randomUUID === "function"
+            ) {
+              return "pcsu-about-" + window.crypto.randomUUID();
+            }
+          } catch (_) {}
+          return (
+            "pcsu-about-" +
+            Date.now() +
+            "-" +
+            Math.random().toString(36).slice(2, 10)
+          );
         }
-        function resolveApiBase() {
-          if (location.hostname && /webflow\.io$/i.test(location.hostname)) {
-            return "https://theorozcorealty.netlify.app/api";
-          }
-          return (location.origin || "") + "/api";
+        function prefersReducedMotion() {
+          return Boolean(
+            window.matchMedia &&
+            window.matchMedia(
+              "(prefers-reduced-motion: reduce)"
+            ).matches
+          );
         }
-        const ENDPOINT = resolveAskEndpoint(RAW_ENDPOINT);
-        const API_BASE = resolveApiBase();
-        const prefersReduced = () =>
-          window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+        function clean(value) {
+          return String(
+            value == null ? "" : value
+          ).trim();
+        }
+        function isObject(value) {
+          return (
+            Boolean(value) &&
+            typeof value === "object" &&
+            !Array.isArray(value)
+          );
+        }
+        function cloneSafe(value, fallback) {
+          try {
+            return JSON.parse(
+              JSON.stringify(value)
+            );
+          } catch (_) {
+            return fallback;
+          }
+        }
+        function firstObject(...values) {
+          for (const value of values) {
+            if (
+              isObject(value) &&
+              Object.keys(value).length
+            ) {
+              return cloneSafe(value, {});
+            }
+          }
+          return {};
+        }
+        function firstPacket(...values) {
+          for (const value of values) {
+            if (
+              isObject(value) &&
+              Object.keys(value).length
+            ) {
+              return cloneSafe(value, null);
+            }
+          }
+          return null;
+        }
+        /*
+        ============================================================
+          PUBLIC PCSUNITED PAGE CONTEXT
+          The agent-amy-public endpoint intentionally ignores identity,
+          email, account, session, and private profile fields.
+          This function only gathers current page-level PCSUnited data
+          when it exists.
+        ============================================================
+        */
+        function collectPublicPageContext() {
+          const basicBrainCurrent = firstObject(
+            window.PCSU_BASICBRAIN_CURRENT,
+            window.PCSUnitedBasicBrain,
+            window.PCSUnitedBasicBrainCurrent
+          );
+          const profile = firstObject(
+            basicBrainCurrent.profile,
+            window.PCSUnitedPublicProfile,
+            window.PCSUnitedProfile
+          );
+          const bridge = firstObject(
+            basicBrainCurrent.bridge,
+            window.PCSU_BASICBRAIN_BRIDGE,
+            window.PCSUnitedBridge
+          );
+          const compensation = firstPacket(
+            basicBrainCurrent.compensation,
+            window.PCSU_COMPENSATION_CURRENT,
+            window.PCSUnitedCompensation
+          );
+          const mortgage = firstPacket(
+            window.PCSU_MORTGAGE_CURRENT,
+            window.PCSUnitedMortgage,
+            window.PCSUnitedMortgageResults
+          );
+          const housingPreferences = firstObject(
+            window.PCSUnitedHousingPreferences,
+            window.PCSU_HOUSING_PREFERENCES
+          );
+          const fad = firstObject(
+            window.PCSUnitedFAD,
+            window.PCSU_FAD_CURRENT,
+            housingPreferences
+              ? {
+                  housing_preferences: housingPreferences
+                }
+              : {}
+          );
+          return {
+            profile,
+            bridge,
+            compensation,
+            mortgage,
+            fad
+          };
+        }
+        function mergeMemory(current, patch) {
+          const next = isObject(current)
+            ? { ...current }
+            : {};
+          if (!isObject(patch)) {
+            return next;
+          }
+          for (const [key, value] of Object.entries(patch)) {
+            if (value === undefined) {
+              continue;
+            }
+            if (value === null) {
+              delete next[key];
+              continue;
+            }
+            next[key] = value;
+          }
+          return next;
+        }
         function scrollToBottom() {
           chatEl.scrollTop = chatEl.scrollHeight;
         }
-        function clean(v) {
-          return String(v == null ? "" : v).trim();
+        function rememberThread(role, content) {
+          state.thread.push({
+            role,
+            content: clean(content)
+          });
+          state.thread = state.thread.slice(-12);
         }
-        function lowerEmail(v) {
-          return clean(v).toLowerCase();
-        }
-        function safeParse(raw, fallback = null) {
-          try { return JSON.parse(raw || "null") ?? fallback; }
-          catch { return fallback; }
-        }
-        function savePrefs() {
-          try {
-            localStorage.setItem(STORAGE_KEY, JSON.stringify({
-              email: emailEl ? emailEl.value : ""
-            }));
-          } catch {}
-        }
-        function loadPrefs() {
-          try {
-            const raw = localStorage.getItem(STORAGE_KEY);
-            if (!raw) return;
-            const data = JSON.parse(raw);
-            if (emailEl && data.email) emailEl.value = data.email;
-          } catch {}
-        }
-        function saveVerifiedState(email, profile) {
-          try {
-            localStorage.setItem(VERIFIED_EMAIL_KEY, email || "");
-            localStorage.setItem(VERIFIED_PROFILE_KEY, JSON.stringify(profile || null));
-          } catch {}
-        }
-        function loadVerifiedState() {
-          try {
-            const savedEmail = lowerEmail(localStorage.getItem(VERIFIED_EMAIL_KEY) || "");
-            const savedProfile = safeParse(localStorage.getItem(VERIFIED_PROFILE_KEY), null);
-            if (savedEmail && savedProfile && typeof savedProfile === "object") {
-              lastVerifiedEmail = savedEmail;
-              verifiedProfile = savedProfile;
-            }
-          } catch {}
-        }
-        function clearVerifiedState() {
-          lastVerifiedEmail = "";
-          verifiedProfile = null;
-          try {
-            localStorage.removeItem(VERIFIED_EMAIL_KEY);
-            localStorage.removeItem(VERIFIED_PROFILE_KEY);
-          } catch {}
-        }
-        function getDisplayName(profile) {
-          if (!profile || typeof profile !== "object") return "";
-          return clean(
-            profile.full_name ||
-            profile.fullName ||
-            [profile.first_name, profile.last_name].filter(Boolean).join(" ") ||
-            profile.name ||
-            ""
-          );
-        }
-        function getFirstName(profile) {
-          if (!profile || typeof profile !== "object") return "";
-          return clean(
-            profile.first_name ||
-            profile.firstName ||
-            getDisplayName(profile).split(" ")[0] ||
-            ""
-          );
-        }
-        function normalizeProfile(profile) {
-          if (!profile || typeof profile !== "object") return null;
-          return {
-            id: profile.id ?? null,
-            email: lowerEmail(profile.email || ""),
-            full_name: clean(
-              profile.full_name ||
-              profile.fullName ||
-              [profile.first_name, profile.last_name].filter(Boolean).join(" ") ||
-              profile.name ||
-              ""
-            ),
-            first_name: clean(profile.first_name || profile.firstName || ""),
-            last_name: clean(profile.last_name || profile.lastName || ""),
-            phone: clean(profile.phone || ""),
-            mode: clean(profile.mode || profile.user_type || ""),
-            rank: clean(profile.rank || profile.rank_paygrade || ""),
-            rank_paygrade: clean(profile.rank_paygrade || profile.rank || ""),
-            va_disability: profile.va_disability ?? null,
-            yos: profile.yos ?? null,
-            family: profile.family ?? null,
-            base: clean(profile.base || ""),
-            notes: clean(profile.notes || ""),
-            projected_home_price: profile.projected_home_price ?? profile.projectedHomePrice ?? profile.price ?? null,
-            monthly_expenses: profile.monthly_expenses ?? profile.monthlyExpenses ?? profile.expenses ?? null,
-            downpayment: profile.downpayment ?? profile.downPayment ?? null,
-            savings: profile.savings ?? null,
-            credit_score: profile.credit_score ?? profile.creditScore ?? null,
-            bedrooms: profile.bedrooms ?? null,
-            bathrooms: profile.bathrooms ?? null,
-            sqft: profile.sqft ?? null,
-            property_type: clean(profile.property_type || profile.propertyType || ""),
-            home_condition: clean(profile.home_condition || profile.homeCondition || ""),
-            amenities: Array.isArray(profile.amenities) ? profile.amenities : clean(profile.amenities || "")
-          };
-        }
-        function buildContextSummary(profile) {
-          if (!profile) return "";
-          const parts = [];
-          if (profile.full_name) parts.push("Name: " + profile.full_name);
-          if (profile.base) parts.push("Base: " + profile.base);
-          if (profile.rank_paygrade || profile.rank) parts.push("Rank: " + (profile.rank_paygrade || profile.rank));
-          if (profile.projected_home_price) parts.push("Target Price: $" + Number(profile.projected_home_price).toLocaleString("en-US"));
-          if (profile.monthly_expenses) parts.push("Monthly Expenses: $" + Number(profile.monthly_expenses).toLocaleString("en-US"));
-          if (profile.downpayment) parts.push("Down Payment: $" + Number(profile.downpayment).toLocaleString("en-US"));
-          if (profile.credit_score) parts.push("Credit Score: " + profile.credit_score);
-          if (profile.bedrooms) parts.push("Bedrooms: " + profile.bedrooms);
-          if (profile.home_condition) parts.push("Home Condition: " + profile.home_condition);
-          return parts.join(" | ");
-        }
-        async function pushMsg(role, content, opts = {}) {
-          const { typewriter = false, speed = 18, delay = 120 } = opts;
+        async function pushMessage(
+          role,
+          content,
+          options = {}
+        ) {
+          const text = clean(content);
+          if (!text) return;
+          const typewriter =
+            options.typewriter === true;
+          const speed =
+            Number(options.speed || 18);
+          const delay =
+            Number(options.delay || 80);
+          const remember =
+            options.remember !== false;
           const msg = document.createElement("div");
-          msg.className = "ae-msg " + (role === "user" ? "ae-user" : "ae-bot");
-          const textNode = document.createElement("span");
+          msg.className =
+            "aa-msg " +
+            (
+              role === "user"
+                ? "aa-user"
+                : "aa-bot"
+            );
+          const textNode =
+            document.createElement("span");
           msg.appendChild(textNode);
           chatEl.appendChild(msg);
           scrollToBottom();
-          if (!typewriter || prefersReduced() || role === "user") {
-            textNode.textContent = content;
+          if (remember) {
+            rememberThread(
+              role === "user"
+                ? "user"
+                : "assistant",
+              text
+            );
+          }
+          if (
+            !typewriter ||
+            prefersReducedMotion() ||
+            role === "user"
+          ) {
+            textNode.textContent = text;
             scrollToBottom();
             return;
           }
-          await typewriterInto(textNode, content, speed, delay);
+          await typewriterInto(
+            textNode,
+            text,
+            speed,
+            delay
+          );
           scrollToBottom();
         }
         function showTyping() {
-          const t = document.createElement("div");
-          t.className = "ae-msg ae-bot ae-typing";
-          t.id = "ae-typing";
-          t.textContent = "Elena is reviewing your question…";
-          chatEl.appendChild(t);
+          hideTyping();
+          const typing =
+            document.createElement("div");
+          typing.className =
+            "aa-msg aa-bot aa-typing";
+          typing.id = "aa-typing";
+          typing.textContent =
+            "Amy is reviewing your question…";
+          chatEl.appendChild(typing);
           scrollToBottom();
         }
         function hideTyping() {
-          const t = document.getElementById("ae-typing");
-          if (t) t.remove();
+          const typing =
+            document.getElementById("aa-typing");
+          if (typing) {
+            typing.remove();
+          }
         }
-        function typewriterInto(el, text, speed = 18, startDelay = 120) {
+        function typewriterInto(
+          element,
+          text,
+          speed,
+          startDelay
+        ) {
           return new Promise((resolve) => {
-            el.textContent = "";
-            const caret = document.createElement("span");
-            caret.className = "tw-caret";
-            el.appendChild(caret);
-            let i = 0;
-            const tick = () => {
-              if (i < text.length) {
-                caret.insertAdjacentText("beforebegin", text.charAt(i++));
+            element.textContent = "";
+            const caret =
+              document.createElement("span");
+            caret.className = "aa-caret";
+            element.appendChild(caret);
+            let index = 0;
+            function tick() {
+              if (index < text.length) {
+                caret.insertAdjacentText(
+                  "beforebegin",
+                  text.charAt(index)
+                );
+                index += 1;
                 scrollToBottom();
                 setTimeout(tick, speed);
-              } else {
-                caret.remove();
-                resolve();
+                return;
               }
-            };
+              caret.remove();
+              resolve();
+            }
             setTimeout(tick, startDelay);
           });
         }
-        async function postJSON(url, body) {
-          const res = await fetch(url, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify(body || {})
-          });
-          const text = await res.text();
+        /*
+        ============================================================
+          CALL THEWING PUBLIC AMY
+          Endpoint contract:
+          POST /agent-amy-public
+          Main request fields:
+          - message
+          - profile
+          - bridge
+          - compensation
+          - mortgage
+          - fad
+          - context
+          Main response fields:
+          - ok
+          - reply
+          - conversation_id
+          - memory_patch
+          - ui
+          - truth_packet
+        ============================================================
+        */
+        async function postToAmy(userText) {
+          const publicContext =
+            collectPublicPageContext();
+          /*
+            The current user message was already added to state.thread.
+            Only send the historical messages in context.thread because
+            the current user message is supplied separately as message.
+          */
+          const historicalThread =
+            state.thread.slice(0, -1);
+          const payload = {
+            message: userText,
+            profile:
+              publicContext.profile,
+            bridge:
+              publicContext.bridge,
+            compensation:
+              publicContext.compensation || undefined,
+            mortgage:
+              publicContext.mortgage || undefined,
+            fad:
+              publicContext.fad,
+            context: {
+              conversation_id:
+                state.conversationId,
+              thread:
+                historicalThread,
+              memory:
+                state.memory,
+              requested_mode:
+                "education",
+              response_limits: {
+                max_chars: 900,
+                greeting_max_chars: 260,
+                max_follow_up_questions: 1
+              },
+              style_guide: {
+                tone:
+                  "clear, encouraging, practical, military-family friendly",
+                format:
+                  "short paragraphs; explain acronyms; do not invent calculations"
+              },
+              page:
+                "PCSUnited About Us",
+              widget:
+                "about-us-ask-amy-v6.0",
+              product:
+                "PCSUnited",
+              version:
+                "6.0.0"
+            }
+          };
+          const response = await fetch(
+            ENDPOINT,
+            {
+              method: "POST",
+              mode: "cors",
+              credentials: "omit",
+              headers: {
+                "Content-Type":
+                  "application/json",
+                "X-PCSU-Client":
+                  "about-us-ask-amy-v6.0"
+              },
+              body: JSON.stringify(payload)
+            }
+          );
+          const rawText =
+            await response.text();
           let data = {};
-          try { data = text ? JSON.parse(text) : {}; }
-          catch { data = {}; }
-          if (!res.ok || data.ok === false) {
-            throw new Error(data.error || data.message || ("HTTP " + res.status));
+          try {
+            data = rawText
+              ? JSON.parse(rawText)
+              : {};
+          } catch (_) {
+            data = {};
+          }
+          if (
+            !response.ok ||
+            !data ||
+            data.ok !== true
+          ) {
+            const message = clean(
+              data.error ||
+              data.message ||
+              (
+                "HTTP " +
+                response.status
+              )
+            );
+            throw new Error(
+              message ||
+              "Request failed."
+            );
+          }
+          if (clean(data.conversation_id)) {
+            state.conversationId =
+              clean(data.conversation_id);
+          }
+          if (isObject(data.memory_patch)) {
+            state.memory = mergeMemory(
+              state.memory,
+              data.memory_patch
+            );
           }
           return data;
         }
-        async function verifyEmailAndLoadProfile(email) {
-          const out = await postJSON(API_BASE + "/profile-by-email", { email });
-          const profile = out.profile || out.data || out || null;
-          if (!profile || typeof profile !== "object") {
-            throw new Error("Profile not found.");
-          }
-          const normalized = normalizeProfile(profile);
-          if (!normalized || !normalized.email) {
-            throw new Error("Profile loaded, but email data was missing.");
-          }
-          if (normalized.email !== lowerEmail(email)) {
-            throw new Error("Loaded profile email did not match the entered email.");
-          }
-          return normalized;
-        }
-        async function autoVerifyEmail(showFailureMessage = true) {
-          const email = lowerEmail(emailEl && emailEl.value);
-          if (!email) {
-            clearVerifiedState();
-            return;
-          }
-          if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-            clearVerifiedState();
-            return;
-          }
-          if (email === lastVerifiedEmail && verifiedProfile) {
-            return;
-          }
-          const seq = ++verifySeq;
-          verifyingEmail = email;
-          try {
-            const profile = await verifyEmailAndLoadProfile(email);
-            if (seq !== verifySeq) return;
-            lastVerifiedEmail = profile.email;
-            verifiedProfile = profile;
-            saveVerifiedState(profile.email, profile);
-            await pushMsg(
-              "assistant",
-              `Perfect — I verified ${profile.email} and loaded your saved profile${getFirstName(profile) ? `, ${getFirstName(profile)}` : ""}. You can ask me questions that use your saved OrozcoRealty information now.`,
-              { typewriter: true, speed: 16, delay: 90 }
-            );
-          } catch (err) {
-            if (seq !== verifySeq) return;
-            clearVerifiedState();
-            if (showFailureMessage && email === lowerEmail(emailEl && emailEl.value)) {
-              await pushMsg(
-                "assistant",
-                "Verification failed, please try again.",
-                { typewriter: true, speed: 16, delay: 80 }
-              );
-            }
-          } finally {
-            if (seq === verifySeq) verifyingEmail = "";
-          }
-        }
-        function scheduleAutoVerify() {
-          savePrefs();
-          const current = lowerEmail(emailEl && emailEl.value);
-          if (!current || current !== lastVerifiedEmail) {
-            clearVerifiedState();
-          }
-          if (verifyTimer) clearTimeout(verifyTimer);
-          verifyTimer = setTimeout(() => {
-            autoVerifyEmail(true);
-          }, 700);
-        }
-        async function callElena(userText) {
+        async function callAmy(userText) {
+          if (state.sending) return;
+          state.sending = true;
           sendBtn.disabled = true;
+          inputEl.disabled = true;
           showTyping();
           try {
-            savePrefs();
-            const currentEmail = lowerEmail(emailEl && emailEl.value);
-            const contextSummary = buildContextSummary(verifiedProfile);
-            const payload = {
-              message: userText,
-              email: currentEmail || undefined,
-              marketSlug: undefined,
-              verifiedProfile: verifiedProfile || undefined,
-              profileContext: contextSummary || undefined
-            };
-            const res = await fetch(ENDPOINT, {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(payload)
-            });
-            const data = await res.json().catch(() => ({}));
+            const data =
+              await postToAmy(userText);
             hideTyping();
-            if (!res.ok || !data || data.ok !== true) {
-              throw new Error((data && data.error) || "Request failed.");
-            }
-            const reply = String(data.reply || "I’m here. What would you like to explore?");
-            const ui = data.ui || {};
-            const speed = Number(ui.speed || 18);
-            const delay = Number(ui.startDelay || 120);
-            await pushMsg("assistant", reply, { typewriter: true, speed, delay });
-          } catch (err) {
-            hideTyping();
-            await pushMsg(
+            const reply = clean(
+              data.reply ||
+              data.answer?.summary ||
+              "I’m here. What would you like to explore about PCSUnited?"
+            );
+            const ui = isObject(data.ui)
+              ? data.ui
+              : {};
+            const speed =
+              Number(ui.speed || 18);
+            const delay =
+              Number(ui.startDelay || 80);
+            await pushMessage(
               "assistant",
-              "Hmm… I hit a connection snag. Please make sure this widget is calling /.netlify/functions/ask-elena.",
-              { typewriter: true, speed: 16, delay: 80 }
+              reply,
+              {
+                typewriter: true,
+                speed,
+                delay,
+                remember: true
+              }
+            );
+          } catch (error) {
+            hideTyping();
+            console.error(
+              "Ask Amy connection error:",
+              error
+            );
+            await pushMessage(
+              "assistant",
+              "I hit a connection snag while reaching TheWing.ai. Please try again in a moment.",
+              {
+                typewriter: true,
+                speed: 16,
+                delay: 60,
+                remember: false
+              }
             );
           } finally {
+            state.sending = false;
             sendBtn.disabled = false;
+            inputEl.disabled = false;
+            inputEl.focus();
           }
         }
-        async function trySend() {
-          const text = clean(inputEl.value);
-          if (!text) return;
-          const currentEmail = lowerEmail(emailEl && emailEl.value);
-          if (currentEmail && (!verifiedProfile || currentEmail !== lastVerifiedEmail)) {
-            if (verifyTimer) {
-              clearTimeout(verifyTimer);
-              verifyTimer = null;
-            }
-            await autoVerifyEmail(true);
+        async function trySend(textOverride) {
+          const text = clean(
+            textOverride ||
+            inputEl.value
+          );
+          if (!text || state.sending) {
+            return;
           }
-          await pushMsg("user", text);
           inputEl.value = "";
-          await callElena(text);
+          await pushMessage(
+            "user",
+            text,
+            {
+              remember: true
+            }
+          );
+          await callAmy(text);
         }
-        if (sendBtn) sendBtn.addEventListener("click", trySend);
-        if (inputEl) {
-          inputEl.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
+        sendBtn.addEventListener(
+          "click",
+          () => trySend()
+        );
+        inputEl.addEventListener(
+          "keydown",
+          (event) => {
+            if (
+              event.key === "Enter" &&
+              !event.shiftKey
+            ) {
+              event.preventDefault();
               trySend();
             }
-          });
-        }
-        if (emailEl) {
-          emailEl.addEventListener("input", scheduleAutoVerify);
-          emailEl.addEventListener("change", () => autoVerifyEmail(true));
-          emailEl.addEventListener("blur", () => autoVerifyEmail(true));
-          emailEl.addEventListener("keydown", (e) => {
-            if (e.key === "Enter") {
-              e.preventDefault();
-              autoVerifyEmail(true);
+          }
+        );
+        promptButtons.forEach((button) => {
+          button.addEventListener(
+            "click",
+            () => {
+              const question = clean(
+                button.getAttribute(
+                  "data-question"
+                )
+              );
+              if (question) {
+                trySend(question);
+              }
             }
-          });
-        }
-        loadPrefs();
-        loadVerifiedState();
+          );
+        });
         const greeting =
-          "Hey — I’m Elena, your OrozcoRealty concierge. Ask me about Texas real estate, affordability, monthly payments, buyer or seller strategy, or a market like San Antonio or McAllen.";
-        pushMsg("assistant", greeting, { typewriter: true, speed: 18, delay: 220 });
+          "Hey — I’m Amy, PCSUnited’s public A.I. concierge. I can explain why PCSUnited was created, show you which tools to explore, and help you think through PCS relocation, housing, and military financial questions.";
+        pushMessage(
+          "assistant",
+          greeting,
+          {
+            typewriter: true,
+            speed: 18,
+            delay: 220,
+            remember: true
+          }
+        );
       })();
       </script>
               </div>
@@ -1593,31 +1958,87 @@ UPDATES
   STAGE 2 — OPEN / CLOSE LOGIC
 ===============================================================  -->
           <script>
-(function(){
-  const launcher = document.getElementById("ask-elena-launcher");
-  const modal = document.getElementById("ask-elena-modal");
-  const closeBtn = document.getElementById("ask-elena-modal-close");
-  if (!launcher || !modal || !closeBtn) return;
-  function openAskElena(){
+(function () {
+  const launcher =
+    document.getElementById("ask-amy-launcher");
+  const modal =
+    document.getElementById("ask-amy-modal");
+  const closeBtn =
+    document.getElementById("ask-amy-modal-close");
+  const input =
+    document.getElementById("aa-input");
+  if (!launcher || !modal || !closeBtn) {
+    return;
+  }
+  if (launcher.__askAmyModalMounted) {
+    return;
+  }
+  launcher.__askAmyModalMounted = true;
+  let previousHtmlOverflow = "";
+  let previousBodyOverflow = "";
+  function openAskAmy() {
+    previousHtmlOverflow =
+      document.documentElement.style.overflow;
+    previousBodyOverflow =
+      document.body.style.overflow;
     modal.style.display = "flex";
-    document.documentElement.style.overflow = "hidden";
-    document.body.style.overflow = "hidden";
+    document.documentElement.style.overflow =
+      "hidden";
+    document.body.style.overflow =
+      "hidden";
+    setTimeout(() => {
+      if (input) {
+        input.focus();
+      }
+    }, 80);
   }
-  function closeAskElena(){
+  function closeAskAmy() {
     modal.style.display = "none";
-    document.documentElement.style.overflow = "";
-    document.body.style.overflow = "";
+    document.documentElement.style.overflow =
+      previousHtmlOverflow;
+    document.body.style.overflow =
+      previousBodyOverflow;
+    launcher.focus();
   }
-  launcher.addEventListener("click", openAskElena);
-  closeBtn.addEventListener("click", closeAskElena);
-  modal.addEventListener("click", (e) => {
-    if (e.target === modal) closeAskElena();
-  });
-  window.addEventListener("keydown", (e) => {
-    if (e.key === "Escape" && modal.style.display === "flex") {
-      closeAskElena();
+  launcher.addEventListener(
+    "click",
+    openAskAmy
+  );
+  launcher.addEventListener(
+    "keydown",
+    (event) => {
+      if (
+        event.key === "Enter" ||
+        event.key === " "
+      ) {
+        event.preventDefault();
+        openAskAmy();
+      }
     }
-  });
+  );
+  closeBtn.addEventListener(
+    "click",
+    closeAskAmy
+  );
+  modal.addEventListener(
+    "click",
+    (event) => {
+      if (event.target === modal) {
+        closeAskAmy();
+      }
+    }
+  );
+  window.addEventListener(
+    "keydown",
+    (event) => {
+      if (
+        event.key === "Escape" &&
+        modal.style.display === "flex"
+      ) {
+        closeAskAmy();
+      }
+    }
+  );
 })();
 </script>
         </div>
@@ -1675,7 +2096,7 @@ UPDATES
                 <div>Oops! Something went wrong while submitting the form.</div>
               </div>
             </div>
-          </div><img src="images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="100vw" srcset="images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
+          </div><img src="images/VIRIN-220407-F-FM924-1053.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_6966c986c8472ee377c2b9df_ffdcab38d6a982d23413fb95c1452762_PCSUnited-p-800-p-1080.png 1080w, images/VIRIN-220407-F-FM924-1053.png 1535w" alt="Air Force Capt. Jennifer Orozco stands with spouse Josue Orozco during a Military Spouse Appreciation Day photo at Travis Air Force Base, https://www.dvidshub.net/image/7139848/military-spouse-appreciation-day " class="footer_image">
         </div>
         <div data-w-id="96354988-6ef2-574c-f8fb-a3f4e5d78f4b" class="footer-flex-wrapper-2">
           <div class="footer-content-wrapper-2">

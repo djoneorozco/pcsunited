@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Jul 28 2026 14:37:38 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Jul 30 2026 05:16:37 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6a5d8f7d05e50bc41d868725" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -96,1312 +96,9 @@
     <div class="iphones">
       <div class="w-layout-hflex nav-link-box-2">
         <nav role="navigation" class="nav-menu-wrapper-6 w-nav-menu">
-          <div class="compensation-strip-3 w-embed w-script"><!--  =========================================================
-  PCSUnited • Header Progressive Compensation / Financial Strip
-  v4.0.1 • NO AUTO SCROLL + NO DUPLICATE THEWING PROFILE CALLS
-  FIXES
-  - Stops header strip from auto-calling TheWing on BasicBrain profile events
-  - Uses BasicBrain compensation-ready as source of truth
-  - Adds autoNavigate:false to emitted preview events
-  - Adds scroll guard around outgoing events
-  - Prevents this strip from re-triggering Base Demo / page movement chains
-=========================================================  -->
-            <div id="pcsu-header-comp-basicbrain" style="all:initial;">
-              <link rel="preconnect" href="https://fonts.googleapis.com">
-              <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
-              <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
-              <style>
-    #pcsu-header-comp-basicbrain,
-    #pcsu-header-comp-basicbrain *{
-      box-sizing:border-box;
-      font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-    }
-    #pcsu-header-comp-basicbrain{
-      display:block;
-      width:100%;
-      color:#f5f5f5;
-      background:transparent !important;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-wrap{
-      width:100%;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      background:transparent !important;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-grid{
-      display:grid;
-      grid-template-columns:repeat(5, minmax(84px, 1fr));
-      gap:8px;
-      width:min(560px, 100%);
-      background:transparent !important;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile{
-      position:relative;
-      overflow:hidden;
-      border:1px solid rgba(255,255,255,.16);
-      border-radius:999px;
-      padding:7px 12px 8px;
-      min-height:34px;
-      background:
-        linear-gradient(
-          180deg,
-          rgba(255,255,255,.88),
-          rgba(238,241,248,.76)
-        );
-      box-shadow:
-        inset 0 1px 0 rgba(255,255,255,.95),
-        0 8px 18px rgba(0,0,0,.18);
-      backdrop-filter:blur(10px) saturate(135%);
-      -webkit-backdrop-filter:blur(10px) saturate(135%);
-      display:flex;
-      flex-direction:column;
-      justify-content:center;
-      align-items:center;
-      text-align:center;
-      transition:
-        opacity .18s ease,
-        transform .18s ease,
-        filter .18s ease;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile::before{
-      content:"";
-      position:absolute;
-      inset:0 0 auto 0;
-      height:1px;
-      background:linear-gradient(
-        90deg,
-        transparent,
-        rgba(199,156,79,.32),
-        rgba(106,167,255,.16),
-        transparent
-      );
-      pointer-events:none;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-label{
-      display:block;
-      margin-bottom:2px;
-      color:rgba(18,24,38,.58);
-      font-size:7.5px;
-      line-height:1;
-      font-weight:900;
-      text-transform:uppercase;
-      letter-spacing:.12em;
-      white-space:nowrap;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-value{
-      display:block;
-      color:#101728;
-      font-size:12.5px;
-      line-height:1.05;
-      font-weight:900;
-      letter-spacing:-.03em;
-      white-space:nowrap;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-total,
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-gold{
-      color:#9b7939;
-      font-weight:900;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-green{
-      color:#16795a;
-      font-weight:900;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-value.is-danger{
-      color:#a23c5a;
-      font-weight:900;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-loading .pcsu-header-comp-value{
-      opacity:.60;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-missing{
-      opacity:.58;
-    }
-    #pcsu-header-comp-basicbrain .pcsu-header-comp-tile.is-hidden{
-      display:none;
-    }
-    #pcsu-header-comp-basicbrain.is-comp-mode .pcsu-header-comp-grid{
-      grid-template-columns:repeat(4, minmax(92px, 1fr));
-      width:min(430px, 100%);
-    }
-    #pcsu-header-comp-basicbrain.is-financial-mode .pcsu-header-comp-grid{
-      grid-template-columns:repeat(5, minmax(84px, 1fr));
-      width:min(560px, 100%);
-    }
-    @media(max-width:900px){
-      #pcsu-header-comp-basicbrain.is-financial-mode .pcsu-header-comp-grid{
-        width:min(520px, 100%);
-        gap:6px;
-      }
-      #pcsu-header-comp-basicbrain .pcsu-header-comp-label{
-        font-size:7px;
-      }
-      #pcsu-header-comp-basicbrain .pcsu-header-comp-value{
-        font-size:12px;
-      }
-    }
-    @media(max-width:760px){
-      #pcsu-header-comp-basicbrain .pcsu-header-comp-grid,
-      #pcsu-header-comp-basicbrain.is-comp-mode .pcsu-header-comp-grid,
-      #pcsu-header-comp-basicbrain.is-financial-mode .pcsu-header-comp-grid{
-        grid-template-columns:repeat(2, minmax(110px, 1fr));
-        width:100%;
-      }
-      #pcsu-header-comp-basicbrain .pcsu-header-comp-tile{
-        border-radius:12px;
-        min-height:44px;
-      }
-      #pcsu-header-comp-basicbrain .pcsu-header-comp-label{
-        font-size:9px;
-      }
-      #pcsu-header-comp-basicbrain .pcsu-header-comp-value{
-        font-size:15px;
-      }
-    }
-  </style>
-              <div class="pcsu-header-comp-wrap">
-                <div style="width:100%;">
-                  <div class="pcsu-header-comp-grid">
-                    <div class="pcsu-header-comp-tile is-missing" id="bb-header-tile-1">
-                      <span class="pcsu-header-comp-label" id="bb-header-label-1">Base Pay</span>
-                      <span class="pcsu-header-comp-value" id="bb-header-pay1">$0</span>
-                    </div>
-                    <div class="pcsu-header-comp-tile is-missing" id="bb-header-tile-2">
-                      <span class="pcsu-header-comp-label" id="bb-header-label-2">BAS</span>
-                      <span class="pcsu-header-comp-value" id="bb-header-pay2">$0</span>
-                    </div>
-                    <div class="pcsu-header-comp-tile is-missing" id="bb-header-tile-3">
-                      <span class="pcsu-header-comp-label" id="bb-header-label-3">BAH</span>
-                      <span class="pcsu-header-comp-value" id="bb-header-pay3">$0</span>
-                    </div>
-                    <div class="pcsu-header-comp-tile is-missing" id="bb-header-tile-4">
-                      <span class="pcsu-header-comp-label" id="bb-header-label-4">Total</span>
-                      <span class="pcsu-header-comp-value is-total" id="bb-header-total">$0</span>
-                    </div>
-                    <div class="pcsu-header-comp-tile is-missing is-hidden" id="bb-header-tile-5">
-                      <span class="pcsu-header-comp-label" id="bb-header-label-5">Max Pay</span>
-                      <span class="pcsu-header-comp-value is-total" id="bb-header-pay5">$0</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <script>
-(function(){
-  "use strict";
-  const VERSION = "4.0.1";
-  const API_BASE = "https://thewing.netlify.app/api";
-  const BRAIN_ENDPOINT = API_BASE + "/opensource-brain";
-  const root = document.getElementById("pcsu-header-comp-basicbrain");
-  if(!root) return;
-  if(root.dataset.mounted === "true") return;
-  root.dataset.mounted = "true";
-  const els = {
-    tile1:root.querySelector("#bb-header-tile-1"),
-    tile2:root.querySelector("#bb-header-tile-2"),
-    tile3:root.querySelector("#bb-header-tile-3"),
-    tile4:root.querySelector("#bb-header-tile-4"),
-    tile5:root.querySelector("#bb-header-tile-5"),
-    label1:root.querySelector("#bb-header-label-1"),
-    label2:root.querySelector("#bb-header-label-2"),
-    label3:root.querySelector("#bb-header-label-3"),
-    label4:root.querySelector("#bb-header-label-4"),
-    label5:root.querySelector("#bb-header-label-5"),
-    pay1:root.querySelector("#bb-header-pay1"),
-    pay2:root.querySelector("#bb-header-pay2"),
-    pay3:root.querySelector("#bb-header-pay3"),
-    total:root.querySelector("#bb-header-total"),
-    pay5:root.querySelector("#bb-header-pay5")
-  };
-  const tiles = [
-    els.tile1,
-    els.tile2,
-    els.tile3,
-    els.tile4,
-    els.tile5
-  ].filter(Boolean);
-  let currentStripMode = "compensation";
-  let latestProfile = null;
-  let latestGoodVeteranValues = null;
-  let latestGoodActiveValues = null;
-  let latestGoodFinancialValues = null;
-  let runTimer = null;
-  let requestSeq = 0;
-  function num(value,fallback){
-    if(fallback === undefined) fallback = 0;
-    const n = Number(
-      String(value ?? "")
-        .replace(/[$,%]/g,"")
-        .replace(/,/g,"")
-    );
-    return Number.isFinite(n) ? n : fallback;
-  }
-  function money(value){
-    return "$" + Number(num(value,0)).toLocaleString("en-US",{
-      maximumFractionDigits:0
-    });
-  }
-  function pct(value){
-    const n = num(value,0);
-    return Math.round(n) + "%";
-  }
-  function clean(value){
-    return value === undefined || value === null ? "" : String(value).trim();
-  }
-  function normalizeRank(value){
-    const raw = clean(value)
-      .toUpperCase()
-      .replace(/\s+/g,"")
-      .replace("–","-")
-      .replace("—","-");
-    if(!raw) return "";
-    if(/^[EOW]-\d{1,2}$/.test(raw)) return raw;
-    if(/^[EOW]\d{1,2}$/.test(raw)) return raw.charAt(0) + "-" + raw.slice(1);
-    return raw;
-  }
-  function normalizeMode(value){
-    const raw = clean(value).toLowerCase();
-    if(
-      raw === "veteran" ||
-      raw === "vet" ||
-      raw === "retired" ||
-      raw === "retiree"
-    ){
-      return "veteran";
-    }
-    return "active_duty";
-  }
-  function isVeteran(profile){
-    return normalizeMode(profile && (profile.mode || profile.type || profile.status)) === "veteran";
-  }
-  function setLoading(isLoading){
-    tiles.forEach(function(tile){
-      tile.classList.toggle("is-loading",!!isLoading);
-    });
-  }
-  function setMissing(isMissing){
-    tiles.forEach(function(tile){
-      tile.classList.toggle("is-missing",!!isMissing);
-    });
-  }
-  function setValueTone(el,tone){
-    if(!el) return;
-    el.classList.remove("is-total","is-gold","is-green","is-danger");
-    if(tone){
-      el.classList.add(tone);
-    }
-  }
-  function preserveScroll(callback){
-    const startX =
-      window.scrollX || window.pageXOffset || 0;
-    const startY =
-      window.scrollY || window.pageYOffset || 0;
-    try{
-      callback();
-    }catch(_){}
-    requestAnimationFrame(function(){
-      window.scrollTo(startX,startY);
-    });
-    setTimeout(function(){
-      window.scrollTo(startX,startY);
-    },0);
-    setTimeout(function(){
-      window.scrollTo(startX,startY);
-    },60);
-    setTimeout(function(){
-      window.scrollTo(startX,startY);
-    },160);
-    setTimeout(function(){
-      window.scrollTo(startX,startY);
-    },320);
-  }
-  function dispatchPreviewReady(profile,comp){
-    preserveScroll(function(){
-      window.dispatchEvent(new CustomEvent("pcsunited:compensation-preview-ready",{
-        detail:{
-          source:"pcsunited.header.comp.v4.0.1",
-          version:VERSION,
-          profile,
-          compensation:comp,
-          autoNavigate:false,
-          updated_at:new Date().toISOString()
-        }
-      }));
-    });
-  }
-  function activateCompMode(){
-    currentStripMode = "compensation";
-    root.classList.add("is-comp-mode");
-    root.classList.remove("is-financial-mode");
-    if(els.tile5){
-      els.tile5.classList.add("is-hidden");
-    }
-    setValueTone(els.pay1,"");
-    setValueTone(els.pay2,"");
-    setValueTone(els.pay3,"");
-    setValueTone(els.total,"is-total");
-    setValueTone(els.pay5,"is-total");
-  }
-  function activateFinancialMode(){
-    currentStripMode = "financial";
-    root.classList.remove("is-comp-mode");
-    root.classList.add("is-financial-mode");
-    if(els.tile5){
-      els.tile5.classList.remove("is-hidden");
-    }
-  }
-  function setCompLabels(profile){
-    if(isVeteran(profile)){
-      els.label1.textContent = "Retirement";
-      els.label2.textContent = "Disability";
-      els.label3.textContent = "Other Pay";
-      els.label4.textContent = "Total";
-      return;
-    }
-    els.label1.textContent = "Base Pay";
-    els.label2.textContent = "BAS";
-    els.label3.textContent = "BAH";
-    els.label4.textContent = "Total";
-  }
-  function paintCompValues(profile,values,missing){
-    activateCompMode();
-    setCompLabels(profile || { mode:"active_duty" });
-    els.pay1.textContent = money(values.pay1);
-    els.pay2.textContent = money(values.pay2);
-    els.pay3.textContent = money(values.pay3);
-    els.total.textContent = money(values.total);
-    setLoading(false);
-    setMissing(!!missing);
-  }
-  function paintZero(profile){
-    const veteran = isVeteran(profile);
-    if(veteran && latestGoodVeteranValues && hasAnyCompValues(latestGoodVeteranValues)){
-      paintCompValues(profile,latestGoodVeteranValues,false);
-      return;
-    }
-    if(!veteran && latestGoodActiveValues && hasAnyCompValues(latestGoodActiveValues)){
-      paintCompValues(profile,latestGoodActiveValues,false);
-      return;
-    }
-    paintCompValues(profile || { mode:"active_duty" },{
-      pay1:0,
-      pay2:0,
-      pay3:0,
-      total:0
-    },true);
-  }
-  function paintFinancialValues(values){
-    activateFinancialMode();
-    els.label1.textContent = "Income";
-    els.label2.textContent = "Payment";
-    els.label3.textContent = "Debt";
-    els.label4.textContent = "Ratio";
-    els.label5.textContent = "Max Pay";
-    els.pay1.textContent = money(values.income);
-    els.pay2.textContent = money(values.payment);
-    els.pay3.textContent = money(values.debt);
-    els.total.textContent = pct(values.ratio);
-    els.pay5.textContent = money(values.maxPayment);
-    setValueTone(els.pay1,"is-green");
-    setValueTone(els.pay2,"is-gold");
-    setValueTone(els.pay3,"is-danger");
-    if(num(values.ratio,0) <= 25){
-      setValueTone(els.total,"is-green");
-    }else if(num(values.ratio,0) <= 30){
-      setValueTone(els.total,"is-gold");
-    }else{
-      setValueTone(els.total,"is-danger");
-    }
-    setValueTone(els.pay5,"is-total");
-    setLoading(false);
-    setMissing(false);
-  }
-  function deepFindNumber(obj,names){
-    const wanted = names.map(function(name){
-      return String(name).toLowerCase();
-    });
-    const seen = new WeakSet();
-    function walk(node){
-      if(!node || typeof node !== "object") return 0;
-      if(seen.has(node)) return 0;
-      seen.add(node);
-      const keys = Object.keys(node);
-      for(let i = 0; i < keys.length; i++){
-        const key = keys[i];
-        const normalizedKey = key.toLowerCase();
-        if(wanted.includes(normalizedKey)){
-          const value = num(node[key],0);
-          if(value) return value;
-        }
-      }
-      for(let j = 0; j < keys.length; j++){
-        const found = walk(node[keys[j]]);
-        if(found) return found;
-      }
-      return 0;
-    }
-    return walk(obj);
-  }
-  function safeComp(profile,comp){
-    const c = comp && typeof comp === "object" ? comp : {};
-    if(isVeteran(profile)){
-      const retirement = num(
-        c.retirementPay ??
-        c.retirement_pay ??
-        c.retiredPay ??
-        c.retired_pay ??
-        c.retiredPayGross ??
-        c.grossMonthlyRetiredPay ??
-        c.monthlyRetirement ??
-        c.retirement ??
-        c.retirementMonthly ??
-        c.retirement_monthly ??
-        c.militaryRetirement ??
-        c.military_retirement,
-        0
-      ) || deepFindNumber(c,[
-        "retirementPay",
-        "retirement_pay",
-        "retiredPay",
-        "retired_pay",
-        "retiredPayGross",
-        "grossMonthlyRetiredPay",
-        "monthlyRetirement",
-        "retirement",
-        "retirementMonthly",
-        "retirement_monthly",
-        "militaryRetirement",
-        "military_retirement",
-        "retirement_pay_monthly",
-        "monthly_retirement"
-      ]);
-      const disability = num(
-        c.disabilityPay ??
-        c.disability_pay ??
-        c.vaDisabilityPay ??
-        c.va_disability_pay ??
-        c.vaCompensation ??
-        c.va_compensation ??
-        c.monthlyVA ??
-        c.vaMonthly ??
-        c.disability ??
-        c.disabilityMonthly ??
-        c.disability_monthly ??
-        c.va_monthly,
-        0
-      ) || deepFindNumber(c,[
-        "disabilityPay",
-        "disability_pay",
-        "vaDisabilityPay",
-        "va_disability_pay",
-        "vaCompensation",
-        "va_compensation",
-        "monthlyVA",
-        "vaMonthly",
-        "disability",
-        "disabilityMonthly",
-        "disability_monthly",
-        "va_monthly",
-        "va_disability_monthly",
-        "monthly_va",
-        "monthly_disability"
-      ]);
-      const other = num(
-        c.otherPay ??
-        c.other_pay ??
-        c.other ??
-        c.otherMonthly ??
-        c.other_monthly,
-        0
-      ) || deepFindNumber(c,[
-        "otherPay",
-        "other_pay",
-        "other",
-        "otherMonthly",
-        "other_monthly"
-      ]);
-      const total = num(
-        c.total ??
-        c.totalMonthly ??
-        c.total_monthly ??
-        c.totalMonthlyCompensation ??
-        c.total_monthly_compensation ??
-        c.grossMonthlyComp ??
-        c.combinedMonthlyGross,
-        0
-      ) || deepFindNumber(c,[
-        "total",
-        "totalMonthly",
-        "total_monthly",
-        "totalMonthlyCompensation",
-        "total_monthly_compensation",
-        "grossMonthlyComp",
-        "combinedMonthlyGross",
-        "monthly_total",
-        "total_compensation"
-      ]) || retirement + disability + other;
-      let safe = {
-        pay1:retirement,
-        pay2:disability,
-        pay3:other,
-        total:total
-      };
-      if(latestGoodVeteranValues){
-        const incomingHasSplit =
-          num(safe.pay1,0) ||
-          num(safe.pay2,0) ||
-          num(safe.pay3,0);
-        const incomingOnlyTotal =
-          num(safe.total,0) && !incomingHasSplit;
-        if(incomingOnlyTotal){
-          safe = {
-            pay1:latestGoodVeteranValues.pay1,
-            pay2:latestGoodVeteranValues.pay2,
-            pay3:latestGoodVeteranValues.pay3,
-            total:safe.total || latestGoodVeteranValues.total
-          };
-        }else{
-          safe = {
-            pay1:safe.pay1 || latestGoodVeteranValues.pay1 || 0,
-            pay2:safe.pay2 || latestGoodVeteranValues.pay2 || 0,
-            pay3:safe.pay3 || latestGoodVeteranValues.pay3 || 0,
-            total:safe.total || latestGoodVeteranValues.total || 0
-          };
-        }
-      }
-      return safe;
-    }
-    const basePay = num(
-      c.basePay ??
-      c.base_pay ??
-      c.basicPay ??
-      c.basic_pay,
-      0
-    ) || deepFindNumber(c,[
-      "basePay",
-      "base_pay",
-      "basicPay",
-      "basic_pay"
-    ]);
-    const bas = num(
-      c.bas ??
-      c.BAS,
-      0
-    ) || deepFindNumber(c,[
-      "bas",
-      "BAS",
-      "basMonthly",
-      "bas_monthly"
-    ]);
-    const bah = num(
-      c.bah ??
-      c.BAH,
-      0
-    ) || deepFindNumber(c,[
-      "bah",
-      "BAH",
-      "bahMonthly",
-      "bah_monthly"
-    ]);
-    const total = num(
-      c.total ??
-      c.totalMonthly ??
-      c.total_monthly ??
-      c.grossMonthlyComp ??
-      c.combinedMonthlyGross ??
-      c.totalMonthlyCompensation,
-      0
-    ) || deepFindNumber(c,[
-      "total",
-      "totalMonthly",
-      "total_monthly",
-      "grossMonthlyComp",
-      "combinedMonthlyGross",
-      "totalMonthlyCompensation"
-    ]) || basePay + bas + bah;
-    let safe = {
-      pay1:basePay,
-      pay2:bas,
-      pay3:bah,
-      total:total
-    };
-    if(latestGoodActiveValues){
-      const incomingHasSplit =
-        num(safe.pay1,0) ||
-        num(safe.pay2,0) ||
-        num(safe.pay3,0);
-      const incomingOnlyTotal =
-        num(safe.total,0) && !incomingHasSplit;
-      if(incomingOnlyTotal){
-        safe = {
-          pay1:latestGoodActiveValues.pay1,
-          pay2:latestGoodActiveValues.pay2,
-          pay3:latestGoodActiveValues.pay3,
-          total:safe.total || latestGoodActiveValues.total
-        };
-      }else{
-        safe = {
-          pay1:safe.pay1 || latestGoodActiveValues.pay1 || 0,
-          pay2:safe.pay2 || latestGoodActiveValues.pay2 || 0,
-          pay3:safe.pay3 || latestGoodActiveValues.pay3 || 0,
-          total:safe.total || latestGoodActiveValues.total || 0
-        };
-      }
-    }
-    return safe;
-  }
-  function hasAnyCompValues(values){
-    return !!(
-      values &&
-      (
-        num(values.pay1,0) ||
-        num(values.pay2,0) ||
-        num(values.pay3,0) ||
-        num(values.total,0)
-      )
-    );
-  }
-  function hasSplitValues(values){
-    return !!(
-      values &&
-      (
-        num(values.pay1,0) ||
-        num(values.pay2,0) ||
-        num(values.pay3,0)
-      )
-    );
-  }
-  function rememberGoodCompValues(profile,values){
-    if(!values || !hasAnyCompValues(values)) return;
-    if(isVeteran(profile)){
-      if(hasSplitValues(values)){
-        latestGoodVeteranValues = {
-          pay1:num(values.pay1,0),
-          pay2:num(values.pay2,0),
-          pay3:num(values.pay3,0),
-          total:num(values.total,0)
-        };
-      }
-      return;
-    }
-    if(hasSplitValues(values)){
-      latestGoodActiveValues = {
-        pay1:num(values.pay1,0),
-        pay2:num(values.pay2,0),
-        pay3:num(values.pay3,0),
-        total:num(values.total,0)
-      };
-    }
-  }
-  function extractProfile(detail){
-    const d = detail && typeof detail === "object" ? detail : {};
-    const profile = d.profile || d.bridge || d.input || d.basicbrain || d.payload || d;
-    if(!profile || typeof profile !== "object") return null;
-    const mode = normalizeMode(profile.mode || profile.type || profile.status);
-    const rank = normalizeRank(
-      profile.rank_paygrade ||
-      profile.rankPaygrade ||
-      profile.rank ||
-      profile.paygrade ||
-      ""
-    );
-    const yos = num(
-      profile.yos ??
-      profile.years_of_service ??
-      profile.yearsOfService,
-      0
-    );
-    const depRaw =
-      profile.dependents_count ??
-      profile.dependentsCount ??
-      profile.dependents ??
-      "";
-    let dependentsCount = 0;
-    if(clean(depRaw).toLowerCase() === "yes"){
-      dependentsCount = 1;
-    }else if(clean(depRaw).toLowerCase() === "no"){
-      dependentsCount = 0;
-    }else{
-      dependentsCount = num(depRaw,0);
-    }
-    const hasDependents =
-      profile.has_dependents === true ||
-      profile.hasDependents === true ||
-      profile.family === true ||
-      dependentsCount > 0 ||
-      clean(profile.dependents).toLowerCase() === "yes";
-    const family =
-      num(profile.family_size ?? profile.familySize ?? profile.family,0) ||
-      (hasDependents ? Math.max(dependentsCount + 1,2) : 1);
-    const base = clean(
-      profile.base ||
-      profile.current_base ||
-      profile.currentBase ||
-      profile.selected_base ||
-      profile.selectedBase ||
-      profile.pcs_base ||
-      profile.pcsBase ||
-      profile.market ||
-      profile.target_market ||
-      ""
-    );
-    const vaRatingRaw =
-      profile.vaRating ??
-      profile.va_rating ??
-      profile.va_disability ??
-      profile.vaDisability ??
-      profile.disability_rating ??
-      profile.disabilityRating;
-    const va = vaRatingRaw === null || vaRatingRaw === undefined || vaRatingRaw === ""
-      ? null
-      : num(vaRatingRaw,0);
-    const spouse =
-      profile.spouse === true ||
-      profile.married === true ||
-      clean(profile.spouse).toLowerCase() === "true" ||
-      clean(profile.spouse).toLowerCase() === "yes" ||
-      clean(profile.married).toLowerCase() === "true" ||
-      clean(profile.married).toLowerCase() === "yes";
-    const childrenUnder18 = num(
-      profile.childrenUnder18 ??
-      profile.children_under_18,
-      0
-    );
-    const childrenInSchoolOver18 = num(
-      profile.childrenInSchoolOver18 ??
-      profile.children_in_school_over_18 ??
-      profile.childrenOver18School ??
-      profile.children_over_18_school,
-      0
-    );
-    const dependentParents = num(
-      profile.dependentParents ??
-      profile.dependent_parents,
-      0
-    );
-    const retirementSystem = clean(
-      profile.retirementSystem ||
-      profile.retirement_system ||
-      profile.system ||
-      "HIGH3"
-    ) || "HIGH3";
-    return {
-      source:"pcsunited.header.comp.v4.0.1",
-      mode,
-      type:mode,
-      status:mode,
-      rank,
-      rank_paygrade:rank,
-      rankPaygrade:rank,
-      yos,
-      years_of_service:yos,
-      yearsOfService:yos,
-      dependents:hasDependents ? "yes" : "no",
-      dependents_count:dependentsCount,
-      dependentsCount:dependentsCount,
-      has_dependents:hasDependents,
-      hasDependents:hasDependents,
-      family,
-      family_size:family,
-      familySize:family,
-      base,
-      selected_base:base,
-      selectedBase:base,
-      pcs_base:base,
-      pcsBase:base,
-      vaRating:va,
-      va_disability:va,
-      vaDisability:va,
-      disability_rating:va,
-      disabilityRating:va,
-      spouse,
-      married:spouse,
-      childrenUnder18,
-      children_under_18:childrenUnder18,
-      childrenInSchoolOver18,
-      children_in_school_over_18:childrenInSchoolOver18,
-      dependentParents,
-      dependent_parents:dependentParents,
-      retirementSystem,
-      retirement_system:retirementSystem,
-      retired:profile.retired === false ? false : (mode === "veteran" ? true : !!profile.retired),
-      email:clean(profile.email || "")
-    };
-  }
-  function extractComp(detail){
-    const d = detail && typeof detail === "object" ? detail : {};
-    if(d.compensation && typeof d.compensation === "object"){
-      if(d.compensation.raw && typeof d.compensation.raw === "object"){
-        return {
-          ...d.compensation.raw,
-          ...d.compensation
-        };
-      }
-      return d.compensation;
-    }
-    if(d.comp && typeof d.comp === "object") return d.comp;
-    if(d.pay && typeof d.pay === "object") return d.pay;
-    const payload = d.payload || d.data || d.result || {};
-    const payloadComp = payload.compensation || payload.comp || payload.pay || {};
-    if(payloadComp.monthly){
-      return {
-        ...payloadComp,
-        ...payloadComp.monthly
-      };
-    }
-    if(Object.keys(payloadComp).length) return payloadComp;
-    const truth = d.truth_packet || d.truthPacket || payload.truth_packet || payload.truthPacket || {};
-    const compRoot = truth.compensation || {};
-    if(compRoot.monthly) return compRoot.monthly;
-    if(Object.keys(compRoot).length) return compRoot;
-    return d;
-  }
-  function extractCompFromTheWing(data){
-    const payload = data && (data.payload || data.data || data.result || data) || {};
-    const truth = payload.truth_packet || payload.truthPacket || data.truth_packet || data.truthPacket || {};
-    const compRoot = payload.compensation || payload.comp || payload.pay || truth.compensation || {};
-    const monthly = compRoot.monthly || payload.monthly || compRoot;
-    return {
-      ...data,
-      ...payload,
-      ...truth,
-      ...compRoot,
-      ...monthly
-    };
-  }
-  function isProfileComplete(profile){
-    if(!profile || !profile.rank || !profile.yos) return false;
-    if(isVeteran(profile)){
-      return profile.va_disability !== null;
-    }
-    return !!profile.base;
-  }
-  function buildActiveDutyInput(profile){
-    return {
-      ...profile,
-      mode:"active_duty",
-      rank:profile.rank,
-      rank_paygrade:profile.rank,
-      rankPaygrade:profile.rank,
-      yos:profile.yos,
-      years_of_service:profile.yos,
-      yearsOfService:profile.yos,
-      base:profile.base,
-      selected_base:profile.base,
-      selectedBase:profile.base,
-      pcs_base:profile.base,
-      pcsBase:profile.base,
-      dependents:profile.has_dependents ? "yes" : "no",
-      dependents_count:profile.dependents_count,
-      dependentsCount:profile.dependents_count,
-      has_dependents:profile.has_dependents,
-      hasDependents:profile.has_dependents,
-      family:profile.family,
-      family_size:profile.family,
-      familySize:profile.family,
-      source:"pcsunited.header.comp.v4.0.1"
-    };
-  }
-  function buildVeteranInput(profile){
-    return {
-      rank:profile.rank,
-      rank_paygrade:profile.rank,
-      rankPaygrade:profile.rank,
-      yos:profile.yos,
-      yearsOfService:profile.yos,
-      years_of_service:profile.yos,
-      retirementSystem:profile.retirementSystem || "HIGH3",
-      retirement_system:profile.retirementSystem || "HIGH3",
-      vaRating:profile.va_disability,
-      va_disability:profile.va_disability,
-      vaDisability:profile.va_disability,
-      rating:profile.va_disability,
-      spouse:profile.spouse === true,
-      childrenUnder18:profile.childrenUnder18 || 0,
-      children_under_18:profile.childrenUnder18 || 0,
-      childrenInSchoolOver18:profile.childrenInSchoolOver18 || 0,
-      children_in_school_over_18:profile.childrenInSchoolOver18 || 0,
-      dependentParents:profile.dependentParents || 0,
-      dependent_parents:profile.dependentParents || 0,
-      source:"pcsunited.header.comp.v4.0.1"
-    };
-  }
-  async function callTheWing(profile){
-    const veteran = isVeteran(profile);
-    const body = veteran
-      ? {
-          tool:"RETIREMENT_VA",
-          input:buildVeteranInput(profile)
-        }
-      : {
-          tool:"PCS_SNAPSHOT",
-          input:buildActiveDutyInput(profile)
-        };
-    const res = await fetch(BRAIN_ENDPOINT + "?t=" + Date.now(),{
-      method:"POST",
-      headers:{ "Content-Type":"application/json" },
-      cache:"no-store",
-      body:JSON.stringify(body)
-    });
-    const data = await res.json().catch(function(){
-      return {};
-    });
-    if(!res.ok || data.ok === false){
-      console.warn("Header strip TheWing response:",data);
-      return null;
-    }
-    return extractCompFromTheWing(data);
-  }
-  function paintComp(profile,comp){
-    const safe = safeComp(profile,comp);
-    rememberGoodCompValues(profile,safe);
-    if(currentStripMode === "financial" && latestGoodFinancialValues){
-      paintFinancialValues(latestGoodFinancialValues);
-      return;
-    }
-    paintCompValues(profile,safe,!hasAnyCompValues(safe));
-  }
-  async function run(reason){
-    const seq = ++requestSeq;
-    const profile = latestProfile;
-    if(currentStripMode === "financial" && latestGoodFinancialValues){
-      paintFinancialValues(latestGoodFinancialValues);
-      return true;
-    }
-    if(!isProfileComplete(profile)){
-      paintZero(profile || { mode:"active_duty" });
-      return false;
-    }
-    setCompLabels(profile);
-    setLoading(true);
-    setMissing(false);
-    let comp = null;
-    try{
-      comp = await callTheWing(profile);
-    }catch(err){
-      console.warn("Header compensation failed:",err);
-    }
-    if(seq !== requestSeq) return true;
-    if(!comp){
-      paintZero(profile);
-      return true;
-    }
-    paintComp(profile,comp);
-    /*
-      Safe preview event:
-      This is only used for passive UI updates.
-      It must never navigate or trigger Base Demo.
-    */
-    dispatchPreviewReady(profile,comp);
-    return true;
-  }
-  function scheduleRun(reason,delay){
-    clearTimeout(runTimer);
-    runTimer = setTimeout(function(){
-      run(reason || "scheduled");
-    },typeof delay === "number" ? delay : 140);
-  }
-  function receiveProfileEvent(event){
-    const detail = event && event.detail ? event.detail : {};
-    const profile = extractProfile(detail);
-    if(!profile) return;
-    latestProfile = profile;
-    if(currentStripMode === "financial" && latestGoodFinancialValues){
-      paintFinancialValues(latestGoodFinancialValues);
-      return;
-    }
-    const comp = extractComp(detail);
-    const safe = safeComp(profile,comp);
-    if(hasAnyCompValues(safe)){
-      paintComp(profile,comp);
-      return;
-    }
-    /*
-      HARD FIX:
-      Do not auto-call TheWing from profile/basicbrain/bridge events.
-      BasicBrain is already the source of truth and will send:
-      pcsunited:compensation-ready
-      This prevents duplicate API calls and duplicate event chains
-      that can wake up Base Demo or other page sections.
-    */
-    paintZero(profile);
-    return;
-  }
-  function receiveCompEvent(event){
-    const detail = event && event.detail ? event.detail : {};
-    const profile = extractProfile(detail) || latestProfile || { mode:"active_duty" };
-    const comp = extractComp(detail);
-    const safe = safeComp(profile,comp);
-    latestProfile = profile;
-    if(currentStripMode === "financial" && latestGoodFinancialValues){
-      paintFinancialValues(latestGoodFinancialValues);
-      return;
-    }
-    if(hasAnyCompValues(safe)){
-      paintComp(profile,comp);
-      return;
-    }
-    if(isVeteran(profile) && latestGoodVeteranValues){
-      paintCompValues(profile,latestGoodVeteranValues,false);
-      return;
-    }
-    if(!isVeteran(profile) && latestGoodActiveValues){
-      paintCompValues(profile,latestGoodActiveValues,false);
-      return;
-    }
-    /*
-      No scheduleRun here.
-      Do not re-trigger TheWing just because an event was empty.
-    */
-    paintZero(profile);
-    return;
-  }
-  function extractFinancialValues(detail){
-    const d = detail && typeof detail === "object" ? detail : {};
-    const headerSnapshot =
-      d.headerSnapshot ||
-      d.header_snapshot ||
-      d.snapshot ||
-      {};
-    const income = num(
-      headerSnapshot.income ??
-      headerSnapshot.totalIncome ??
-      headerSnapshot.totalMonthlyIncome ??
-      d.totalIncome ??
-      d.totalMonthlyIncome ??
-      d.income ??
-      d.monthlyIncome,
-      0
-    );
-    const payment = num(
-      headerSnapshot.payment ??
-      headerSnapshot.estimatedPayment ??
-      headerSnapshot.monthlyPayment ??
-      d.estimatedPayment ??
-      d.targetPayment ??
-      d.monthlyPayment ??
-      d.payment,
-      0
-    );
-    const debt = num(
-      headerSnapshot.debt ??
-      headerSnapshot.monthlyDebt ??
-      d.monthlyDebt ??
-      d.debt ??
-      d.monthlyDebtPayments,
-      0
-    );
-    const ratio = num(
-      headerSnapshot.ratio ??
-      headerSnapshot.housingRatio ??
-      d.housingRatio ??
-      d.ratio,
-      0
-    );
-    const maxPayment = num(
-      headerSnapshot.maxPayment ??
-      headerSnapshot.suggestedMaxPayment ??
-      headerSnapshot.suggestedLimit ??
-      d.suggestedLimit ??
-      d.suggestedMaxPayment ??
-      d.maxPayment,
-      0
-    );
-    return {
-      income,
-      payment,
-      debt,
-      ratio,
-      maxPayment
-    };
-  }
-  function hasValidFinancialValues(values){
-    return !!(
-      values &&
-      num(values.income,0) > 0
-    );
-  }
-  function receiveFinancialEvent(event){
-    const detail = event && event.detail ? event.detail : {};
-    const values = extractFinancialValues(detail);
-    if(!hasValidFinancialValues(values)){
-      return;
-    }
-    latestGoodFinancialValues = {
-      income:num(values.income,0),
-      payment:num(values.payment,0),
-      debt:num(values.debt,0),
-      ratio:num(values.ratio,0),
-      maxPayment:num(values.maxPayment,0)
-    };
-    paintFinancialValues(latestGoodFinancialValues);
-  }
-  function tryHydrateFromGlobals(){
-    const candidates = [
-      window.PCSU_FINANCIAL_INPUT_PANEL?.getInputs?.(),
-      window.PCSU_BASICBRAIN_CURRENT,
-      window.PCSU_BASICBRAIN_TEMP,
-      window.PCSU_BASICBRAIN?.getLastGood?.(),
-      window.PCSU_BASICBRAIN?.getState?.()
-    ];
-    for(let i = 0; i < candidates.length; i++){
-      const item = candidates[i];
-      if(!item) continue;
-      const financial = extractFinancialValues(item);
-      if(hasValidFinancialValues(financial)){
-        latestGoodFinancialValues = financial;
-        paintFinancialValues(financial);
-        return true;
-      }
-      const profile = extractProfile(item);
-      if(!profile) continue;
-      latestProfile = profile;
-      const comp = extractComp(item);
-      const safe = safeComp(profile,comp);
-      if(hasAnyCompValues(safe)){
-        paintComp(profile,comp);
-        return true;
-      }
-      /*
-        HARD FIX:
-        Do not schedule header TheWing hydration automatically.
-        Keep the strip passive until BasicBrain sends compensation-ready.
-      */
-      paintZero(profile);
-      return true;
-    }
-    return false;
-  }
-  function init(){
-    root.classList.add("is-comp-mode");
-    paintZero({ mode:"active_duty" });
-    /*
-      Passive listeners only.
-      These update the strip visually.
-      They do not navigate.
-      They do not auto-call TheWing.
-    */
-    window.addEventListener("pcsunited:compensation-ready",receiveCompEvent);
-    window.addEventListener("pcsunited:compensation-preview-ready",receiveCompEvent);
-    window.addEventListener("pcsunited:basicbrain-updated",receiveProfileEvent);
-    window.addEventListener("pcsunited:profile-ready",receiveProfileEvent);
-    window.addEventListener("pcsunited:bridge-ready",receiveProfileEvent);
-    window.addEventListener("pcsunited:financial-input-updated",receiveFinancialEvent);
-    window.addEventListener("pcsunited:run-financial-analysis",receiveFinancialEvent);
-    window.addEventListener("message",function(event){
-      const data = event && event.data;
-      if(!data || typeof data !== "object") return;
-      if(
-        data.type === "pcsunited-financial-input" ||
-        data.type === "pcsunited-financial-analysis" ||
-        data.source === "pcsunited.financial.input.panel.v1.1.1"
-      ){
-        receiveFinancialEvent({
-          detail:data.detail || data.payload || data
-        });
-        return;
-      }
-      if(
-        data.type === "pcsunited-basicbrain" ||
-        data.type === "pcsunited-profile" ||
-        data.type === "pcsunited-bridge" ||
-        data.source === "pcsunited.basicbrain.input"
-      ){
-        receiveProfileEvent({
-          detail:data.basicbrain || data.profile || data.bridge || data.payload || data
-        });
-      }
-    });
-    /*
-      Passive hydration only.
-      Does not trigger API calls.
-    */
-    setTimeout(tryHydrateFromGlobals,250);
-    setTimeout(tryHydrateFromGlobals,1000);
-    setTimeout(tryHydrateFromGlobals,1800);
-    window.PCSU_HEADER_COMP_BASICBRAIN = {
-      version:VERSION,
-      endpoint:BRAIN_ENDPOINT,
-      refresh:function(){
-        /*
-          Manual refresh is the only place this strip may call TheWing.
-          It is not triggered by BasicBrain field input.
-        */
-        if(currentStripMode === "financial" && latestGoodFinancialValues){
-          paintFinancialValues(latestGoodFinancialValues);
-          return true;
-        }
-        return run("manual-refresh");
-      },
-      setProfile:function(profile){
-        latestProfile = extractProfile(profile || {});
-        currentStripMode = "compensation";
-        latestGoodFinancialValues = null;
-        /*
-          Do not auto-call TheWing here.
-          Keep it passive.
-        */
-        paintZero(latestProfile || { mode:"active_duty" });
-        return true;
-      },
-      setFinancial:function(values){
-        const safe = extractFinancialValues(values || {});
-        if(hasValidFinancialValues(safe)){
-          latestGoodFinancialValues = safe;
-          paintFinancialValues(safe);
-          return true;
-        }
-        return false;
-      },
-      showCompensation:function(){
-        currentStripMode = "compensation";
-        latestGoodFinancialValues = null;
-        if(latestProfile){
-          if(isVeteran(latestProfile) && latestGoodVeteranValues){
-            paintCompValues(latestProfile,latestGoodVeteranValues,false);
-            return true;
-          }
-          if(!isVeteran(latestProfile) && latestGoodActiveValues){
-            paintCompValues(latestProfile,latestGoodActiveValues,false);
-            return true;
-          }
-        }
-        paintZero(latestProfile || { mode:"active_duty" });
-        return true;
-      },
-      showFinancial:function(){
-        if(latestGoodFinancialValues){
-          paintFinancialValues(latestGoodFinancialValues);
-          return true;
-        }
-        return tryHydrateFromGlobals();
-      },
-      clear:function(){
-        latestProfile = null;
-        latestGoodVeteranValues = null;
-        latestGoodActiveValues = null;
-        latestGoodFinancialValues = null;
-        currentStripMode = "compensation";
-        paintZero({ mode:"active_duty" });
-      },
-      getMode:function(){
-        return currentStripMode;
-      },
-      getProfile:function(){
-        return latestProfile;
-      },
-      getStickyValues:function(){
-        return {
-          veteran:latestGoodVeteranValues,
-          activeDuty:latestGoodActiveValues,
-          financial:latestGoodFinancialValues
-        };
-      }
-    };
-  }
-  init();
-})();
-</script>
-            </div>
+          <div class="compensation-strip-3 w-embed w-script"><!--  PCSUnited Header Progression Mount  -->
+            <div id="pcsu-header-progression-widget" style="all: initial;"></div>
+            <script src="https://thewing.netlify.app/public/ask-amy/header-progression.js" defer=""></script>
           </div>
         </nav>
         <div class="w-layout-hflex nav-one-button-wrap-4">
@@ -1423,7 +120,7 @@
   <div class="sg-outer-wrapper max-width-1440px">
     <div class="sg-left-top-wrapper-3">
       <div class="sg-brand-wrapper-3">
-        <a href="index.html" class="logo-lb w-inline-block"><img src="images/TheWingIcon.png" loading="eager" sizes="(max-width: 1100px) 100vw, 1100px" srcset="images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, images/TheWingIcon.png 1100w" alt="Logo" class="logo-3"></a>
+        <a href="index.html" class="logo-lb w-inline-block"><img src="images/TheWingIcon.png" loading="eager" sizes="100vw" srcset="images/0a60464e6a5ffa7452136acee37a55e2_RS-p-500.png 500w, images/0a60464e6a5ffa7452136acee37a55e2_RS-p-800.png 800w, images/0a60464e6a5ffa7452136acee37a55e2_RS-p-1080.png 1080w, images/TheWingIcon.png 1100w" alt="Logo" class="logo-3"></a>
       </div>
       <div class="sg-anchor-links-wrapper-2">
         <a href="#introduction" class="sg-anchor-lb-3 w-inline-block"><img src="images/iconpcsu.png" loading="lazy" alt="" class="get-started-image">
@@ -1446,366 +143,9 @@
         </a>
       </div>
       <a href="#" class="sg-return-to-home-lb-2 desktop-only w-inline-block">
-        <div class="code-embed-68 w-embed w-script"><!--  ============================================================
-  PCSUnited • Ask Amy Sidebar Dock + Overview Video
-  Thin PCSU Native Style • Front Panel Only
-  Active State Syncs With HUD
-  UPDATE: Adds Video Panel Above Ask Amy
-===============================================================  -->
-          <div id="pcsu-ask-amy-sidebar" style="all: initial;">
-            <style>
-    #pcsu-ask-amy-sidebar,
-    #pcsu-ask-amy-sidebar *{
-      box-sizing:border-box;
-      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    }
-    #pcsu-ask-amy-sidebar{
-      --pcsu-bg:#14100f;
-      --pcsu-bg2:#1b1715;
-      --pcsu-line:rgba(235,186,82,.34);
-      --pcsu-line-soft:rgba(255,255,255,.10);
-      --pcsu-gold:#e7b553;
-      --pcsu-gold2:#f4d58a;
-      --pcsu-ink:#f4efe4;
-      --pcsu-muted:rgba(244,239,228,.62);
-      --pcsu-shadow:0 12px 28px rgba(0,0,0,.42);
-      display:block;
-      width:100%;
-    }
-    .pcsu-amy-dock{
-      width:100%;
-      padding:0 18px;
-      margin:0 auto;
-    }
-    /* ============================================================
-      OVERVIEW VIDEO
-      Stays inside the Webflow embed location.
-    ============================================================ */
-    #pcsu-amy-video-wrap{
-      position:relative;
-      width:100%;
-      max-width:100%;
-      height:0;
-      opacity:0;
-      overflow:hidden;
-      pointer-events:none;
-      border-radius:10px;
-      background:rgba(8,8,10,.92);
-      border:1px solid transparent;
-      box-shadow:none;
-      transform:translateY(10px);
-      transition:
-        opacity .35s ease,
-        transform .35s ease,
-        height .35s ease,
-        margin-bottom .35s ease,
-        border-color .35s ease,
-        box-shadow .35s ease;
-    }
-    #pcsu-amy-video-wrap[data-open="1"]{
-      height:360px;
-      opacity:1;
-      pointer-events:auto;
-      margin-bottom:12px;
-      border-color:var(--pcsu-line);
-      box-shadow:0 22px 60px rgba(0,0,0,.55);
-      transform:translateY(0);
-    }
-    .pcsu-amy-video-head{
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:10px;
-      height:38px;
-      padding:.55rem .75rem;
-      background:rgba(0,0,0,.22);
-      border-bottom:1px solid var(--pcsu-line-soft);
-    }
-    .pcsu-amy-video-title{
-      color:var(--pcsu-muted);
-      font-size:.76rem;
-      font-weight:800;
-      letter-spacing:.04em;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    #pcsu-amy-video-close{
-      appearance:none;
-      border:1px solid var(--pcsu-line-soft);
-      background:rgba(255,255,255,.06);
-      color:var(--pcsu-ink);
-      font-size:.8rem;
-      line-height:1;
-      padding:.35rem .55rem;
-      border-radius:4px;
-      cursor:pointer;
-    }
-    #pcsu-amy-video-close:hover{
-      background:rgba(231,181,83,.14);
-      border-color:var(--pcsu-line);
-    }
-    #pcsu-amy-video{
-      display:block;
-      width:100%;
-      height:calc(100% - 38px);
-      object-fit:cover;
-      background:#000;
-    }
-    /* ============================================================
-      ASK AMY FRONT PANEL
-    ============================================================ */
-    .pcsu-amy-card{
-      width:100%;
-      min-height:54px;
-      display:flex;
-      align-items:center;
-      gap:11px;
-      padding:9px 11px;
-      border-radius:2px;
-      border-top:1px solid var(--pcsu-line-soft);
-      border-bottom:1px solid var(--pcsu-line-soft);
-      background:
-        linear-gradient(180deg, rgba(255,255,255,.035), rgba(0,0,0,.08)),
-        var(--pcsu-bg2);
-      cursor:pointer;
-      user-select:none;
-      transition:
-        background .16s ease,
-        border-color .16s ease,
-        transform .16s ease,
-        box-shadow .16s ease;
-    }
-    .pcsu-amy-card:hover{
-      background:
-        linear-gradient(180deg, rgba(231,181,83,.16), rgba(231,181,83,.08)),
-        var(--pcsu-bg2);
-      border-top-color:var(--pcsu-line);
-      border-bottom-color:var(--pcsu-line);
-      transform:translateY(-1px);
-    }
-    /* ACTIVE / HUD OPEN STATE */
-    #pcsu-ask-amy-sidebar[data-active="1"] .pcsu-amy-card{
-      background:
-        linear-gradient(180deg, rgba(231,181,83,.25), rgba(231,181,83,.11)),
-        var(--pcsu-bg2);
-      border-top-color:rgba(231,181,83,.70);
-      border-bottom-color:rgba(231,181,83,.70);
-      box-shadow:
-        0 0 0 1px rgba(231,181,83,.22),
-        0 0 20px rgba(231,181,83,.16),
-        0 12px 28px rgba(0,0,0,.42);
-    }
-    #pcsu-ask-amy-sidebar[data-active="1"] .pcsu-amy-avatar{
-      border-color:rgba(244,213,138,.86);
-      box-shadow:
-        0 0 0 2px rgba(0,0,0,.35),
-        0 0 16px rgba(231,181,83,.28);
-    }
-    #pcsu-ask-amy-sidebar[data-active="1"] .pcsu-amy-mark{
-      background:var(--pcsu-gold2);
-      box-shadow:
-        0 0 10px rgba(231,181,83,.80),
-        0 0 20px rgba(231,181,83,.35);
-    }
-    .pcsu-amy-avatar{
-      width:34px;
-      height:34px;
-      border-radius:999px;
-      flex:0 0 auto;
-      background-image:url("https://cdn.prod.website-files.com/69eb162337c57d450e0e19a3/6a3334f99ed5987c434df57f_Face.jpg");
-      background-size:cover;
-      background-position:center;
-      border:1px solid rgba(231,181,83,.55);
-      box-shadow:0 0 0 2px rgba(0,0,0,.35);
-      filter:saturate(.9) contrast(1.02);
-      transition:border-color .16s ease, box-shadow .16s ease;
-    }
-    .pcsu-amy-copy{
-      min-width:0;
-      flex:1;
-    }
-    .pcsu-amy-title{
-      color:var(--pcsu-ink);
-      font-size:12px;
-      font-weight:900;
-      letter-spacing:.16em;
-      text-transform:uppercase;
-      line-height:1;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .pcsu-amy-sub{
-      margin-top:5px;
-      color:var(--pcsu-muted);
-      font-size:10px;
-      font-weight:700;
-      letter-spacing:.02em;
-      line-height:1.1;
-      white-space:nowrap;
-      overflow:hidden;
-      text-overflow:ellipsis;
-    }
-    .pcsu-amy-actions{
-      display:flex;
-      align-items:center;
-      gap:7px;
-      flex:0 0 auto;
-    }
-    .pcsu-amy-video-btn{
-      appearance:none;
-      border:1px solid rgba(231,181,83,.42);
-      background:rgba(231,181,83,.10);
-      color:var(--pcsu-gold2);
-      font-size:10px;
-      font-weight:900;
-      letter-spacing:.08em;
-      text-transform:uppercase;
-      padding:7px 8px;
-      border-radius:3px;
-      cursor:pointer;
-      white-space:nowrap;
-    }
-    .pcsu-amy-video-btn:hover{
-      background:rgba(231,181,83,.18);
-      border-color:rgba(231,181,83,.68);
-    }
-    .pcsu-amy-mark{
-      width:7px;
-      height:7px;
-      border-radius:999px;
-      flex:0 0 auto;
-      background:var(--pcsu-gold);
-      box-shadow:0 0 10px rgba(231,181,83,.55);
-      transition:background .16s ease, box-shadow .16s ease;
-    }
-    @media(max-width:480px){
-      .pcsu-amy-dock{
-        padding:0 12px;
-      }
-      #pcsu-amy-video-wrap[data-open="1"]{
-        height:320px;
-      }
-      .pcsu-amy-card{
-        min-height:50px;
-        padding:8px 10px;
-      }
-      .pcsu-amy-avatar{
-        width:31px;
-        height:31px;
-      }
-      .pcsu-amy-title{
-        font-size:11px;
-      }
-      .pcsu-amy-sub{
-        font-size:9.5px;
-      }
-      .pcsu-amy-video-btn{
-        display:none;
-      }
-    }
-  </style>
-            <div class="pcsu-amy-dock">
-              <!--  OVERVIEW VIDEO PANEL  -->
-              <div id="pcsu-amy-video-wrap" data-open="0">
-                <div class="pcsu-amy-video-head">
-                  <div class="pcsu-amy-video-title">PCSUnited — Page Overview</div>
-                  <button id="pcsu-amy-video-close" type="button" aria-label="Close overview video">✕</button>
-                </div>
-                <video id="pcsu-amy-video" playsinline="" controls="" preload="auto">
-                  <!--  Replace this video URL later with your PCSU overview video  -->
-                  <source src="PASTE-PCSU-OVERVIEW-VIDEO-URL-HERE">
-                </video>
-              </div>
-              <!--  ASK AMY FRONT PANEL  -->
-              <div class="pcsu-amy-card" role="button" tabindex="0" aria-label="Open Ask Amy">
-                <div class="pcsu-amy-avatar" aria-hidden="true"></div>
-                <div class="pcsu-amy-copy">
-                  <div class="pcsu-amy-title">Ask Amy</div>
-                  <div class="pcsu-amy-sub">The Wing calculates, Amy explains</div>
-                </div>
-                <div class="pcsu-amy-actions">
-                  <button class="pcsu-amy-video-btn" id="pcsu-amy-video-btn" type="button">Video</button>
-                  <div class="pcsu-amy-mark" aria-hidden="true"></div>
-                </div>
-              </div>
-            </div>
-            <script>
-    (() => {
-      "use strict";
-      if (window.__PCSU_ASK_AMY_SIDEBAR_ACTIVE_VIDEO_V1) return;
-      window.__PCSU_ASK_AMY_SIDEBAR_ACTIVE_VIDEO_V1 = true;
-      const sidebar = document.getElementById("pcsu-ask-amy-sidebar");
-      if (!sidebar) return;
-      const videoWrap = document.getElementById("pcsu-amy-video-wrap");
-      const video = document.getElementById("pcsu-amy-video");
-      const videoBtn = document.getElementById("pcsu-amy-video-btn");
-      const videoClose = document.getElementById("pcsu-amy-video-close");
-      function syncAmyActiveState(){
-        const hud = document.getElementById("pcsu-amy-hud");
-        const isOpen = hud && hud.getAttribute("data-open") === "1";
-        sidebar.setAttribute("data-active", isOpen ? "1" : "0");
-      }
-      function watchHud(){
-        const hud = document.getElementById("pcsu-amy-hud");
-        if (!hud){
-          syncAmyActiveState();
-          setTimeout(watchHud, 300);
-          return;
-        }
-        syncAmyActiveState();
-        const observer = new MutationObserver(syncAmyActiveState);
-        observer.observe(hud, {
-          attributes:true,
-          attributeFilter:["data-open"]
-        });
-      }
-      function openVideo(){
-        if (!videoWrap || !video) return;
-        videoWrap.setAttribute("data-open", "1");
-        try {
-          const playPromise = video.play();
-          if (playPromise && typeof playPromise.catch === "function") {
-            playPromise.catch(() => {});
-          }
-        } catch(_) {}
-      }
-      function closeVideo(){
-        if (!videoWrap || !video) return;
-        try { video.pause(); } catch(_) {}
-        videoWrap.setAttribute("data-open", "0");
-      }
-      watchHud();
-      if (videoBtn){
-        videoBtn.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          openVideo();
-        });
-      }
-      if (videoClose){
-        videoClose.addEventListener("click", (e) => {
-          e.preventDefault();
-          e.stopPropagation();
-          closeVideo();
-        });
-      }
-      if (video){
-        video.addEventListener("ended", closeVideo);
-      }
-      document.addEventListener("keydown", (e) => {
-        if (e.key === "Enter" || e.key === " "){
-          const active = document.activeElement;
-          if (active && active.closest && active.closest("#pcsu-ask-amy-sidebar .pcsu-amy-card")){
-            e.preventDefault();
-            active.click();
-          }
-        }
-      });
-    })();
-  </script>
-          </div>
+        <div class="code-embed-68 w-embed w-script"><!--  Ask Amy Sidebar Mount  -->
+          <div id="pcsu-ask-amy-sidebar-widget" data-video-url="PASTE-YOUR-PCSU-OVERVIEW-VIDEO-URL-HERE" data-video-title="PCSUnited — Page Overview" style="all: initial;"></div>
+          <script src="https://thewing.netlify.app/public/ask-amy/ask-amy-sidebar.js" defer=""></script>
         </div>
       </a>
     </div>
@@ -3912,10 +2252,10 @@
         <div data-w-id="b7d089a9-a5f0-1988-4e4f-0eecd7b25781" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts-4">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
               </div>
               <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
@@ -3949,10 +2289,10 @@
         <div data-w-id="80525cd2-2eb9-61e5-82f2-0dd6ece5d010" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts-4">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
               </div>
               <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
@@ -4580,11 +2920,11 @@
         </div>
         <div class="w-layout-blockcontainer pcsnap-container w-container">
           <div data-w-id="20182c96-8328-6e69-069f-4f9a7005daa5" style="opacity:0;-webkit-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 0, 0) scale3d(0.9, 0.9, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="office-bg-wrap-2">
-            <div class="office-image-wrap-2"><img src="images/About-Image.jpg" loading="lazy" sizes="100vw" srcset="images/About-Image-p-500.jpg 500w, images/About-Image-p-800.jpg 800w, images/About-Image-p-1080.jpg 1080w, images/About-Image.jpg 1297w" alt="living room with sofa" class="office-bg-image-3">
+            <div class="office-image-wrap-2"><img src="images/About-Image.jpg" loading="lazy" sizes="(max-width: 767px) 100vw, (max-width: 991px) 728px, 940px" srcset="images/About-Image-p-500.jpg 500w, images/About-Image-p-800.jpg 800w, images/About-Image-p-1080.jpg 1080w, images/About-Image.jpg 1297w" alt="living room with sofa" class="office-bg-image-3">
               <div class="office-bg-content-2">
                 <div data-w-id="20182c96-8328-6e69-069f-4f9a7005daa9" style="opacity:0" class="office-bg-block-2">
                   <div class="office-wrap-2">
-                    <div class="align-left-14"><img src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" sizes="(max-width: 767px) 100vw, (max-width: 991px) 728px, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" class="image-207">
+                    <div class="align-left-14"><img src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" class="image-207">
                       <div class="sub-heading-03---24px-3">Compare Old Base</div>
                     </div>
                     <div class="space-167"></div>
@@ -4610,10 +2950,10 @@
         <div data-w-id="ac0d671a-b27d-5754-b241-e5f2c77d7c2f" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts-4">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
               </div>
               <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
@@ -4647,10 +2987,10 @@
         <div data-w-id="2ddc6fad-612a-376b-d6b3-3bb908879ad2" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts-4">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
               </div>
               <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
@@ -9494,10 +7834,10 @@ setTimeout(refresh,900);
         <div data-w-id="93683238-a185-f146-c095-09ee85ab9d33" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts-4">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
               </div>
               <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
@@ -9531,10 +7871,10 @@ setTimeout(refresh,900);
         <div data-w-id="03170cdc-bb5d-bade-9246-49d0b619d799" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts-4">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
               </div>
               <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
@@ -12363,10 +10703,10 @@ setTimeout(refresh,900);
         <div data-w-id="de7b4ced-4eaa-4cc8-8bd0-2944b4ce562d" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts-4">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
               </div>
               <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
@@ -12400,10 +10740,10 @@ setTimeout(refresh,900);
         <div data-w-id="e66bf0df-5414-3171-68c7-d5af39d392e4" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts-4">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
               </div>
               <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">
@@ -12433,17 +10773,270 @@ setTimeout(refresh,900);
         </div>
       </div>
       <section id="Financial-Health" class="military-mortgage-calculator">
-        <div class="rtb-4 w-richtext">
-          <blockquote class="block-quote-2">      &quot;A Mortgage Calculator specifically designed for the Air Force Community. &quot;</blockquote>
+        <div class="code-embed-73 w-embed w-script"><!--  ============================================================
+  PCSUnited • Financial Analysis CTA
+  Full-Width Narrow Footer Button
+  Opens Destination Outside Embedded Frame
+===============================================================  -->
+          <div id="pcsu-analysis-cta">
+            <a id="pcsu-analysis-link" class="pcsu-analysis-link" href="https://pcsunited-com-28346d.webflow.io/financial-analysis" target="_top" rel="noopener" aria-label="Open the PCSUnited Financial Analysis">
+              <span class="pcsu-analysis-icon" aria-hidden="true">
+                <svg viewbox="0 0 24 24">
+                  <path d="M5 19V11"></path>
+                  <path d="M10 19V7"></path>
+                  <path d="M15 19V13"></path>
+                  <path d="M20 19V4"></path>
+                </svg>
+              </span>
+              <span class="pcsu-analysis-text">
+                Provide Financial Analysis
+              </span>
+              <span class="pcsu-analysis-arrow" aria-hidden="true">
+                <svg viewbox="0 0 24 24">
+                  <path d="M5 12h13"></path>
+                  <path d="m14 7 5 5-5 5"></path>
+                </svg>
+              </span>
+            </a>
+          </div>
+          <style>
+  #pcsu-analysis-cta,
+  #pcsu-analysis-cta *,
+  #pcsu-analysis-cta *::before,
+  #pcsu-analysis-cta *::after {
+    box-sizing: border-box;
+  }
+  #pcsu-analysis-cta {
+    display: block;
+    width: 100%;
+    max-width: none;
+    min-width: 0;
+    padding: 6px 10px;
+    font-family:
+      Inter,
+      Barlow,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      Arial,
+      sans-serif;
+  }
+  #pcsu-analysis-cta .pcsu-analysis-link {
+    position: relative;
+    isolation: isolate;
+    display: flex;
+    width: 100%;
+    min-width: 0;
+    height: 44px;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    overflow: hidden;
+    color: #f5f2e9;
+    text-decoration: none;
+    cursor: pointer;
+    background:
+      radial-gradient(
+        circle at 50% -80%,
+        rgba(222, 184, 87, 0.17),
+        transparent 60%
+      ),
+      linear-gradient(
+        180deg,
+        #202126 0%,
+        #141518 100%
+      );
+    border: 1px solid rgba(214, 175, 76, 0.42);
+    border-radius: 10px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.055),
+      0 7px 18px rgba(0, 0, 0, 0.25),
+      0 0 0 rgba(214, 175, 76, 0);
+    transition:
+      transform 220ms ease,
+      border-color 220ms ease,
+      box-shadow 220ms ease;
+  }
+  /* Restrained animated light sweep */
+  #pcsu-analysis-cta .pcsu-analysis-link::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: -35px;
+    bottom: -35px;
+    left: -45%;
+    width: 28%;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 228, 159, 0.04),
+        rgba(255, 228, 159, 0.20),
+        rgba(255, 228, 159, 0.04),
+        transparent
+      );
+    opacity: 0;
+    transform: skewX(-20deg);
+    animation:
+      pcsu-analysis-sweep 5.5s ease-in-out infinite;
+  }
+  /* Interior depth */
+  #pcsu-analysis-cta .pcsu-analysis-link::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    border-radius: inherit;
+    box-shadow:
+      inset 0 0 16px rgba(214, 175, 76, 0.025),
+      inset 0 -1px 0 rgba(0, 0, 0, 0.55);
+  }
+  #pcsu-analysis-cta .pcsu-analysis-icon {
+    display: grid;
+    width: 24px;
+    height: 24px;
+    flex: 0 0 24px;
+    place-items: center;
+    color: #dfbb60;
+    background: rgba(214, 175, 76, 0.09);
+    border: 1px solid rgba(214, 175, 76, 0.25);
+    border-radius: 7px;
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.04);
+  }
+  #pcsu-analysis-cta .pcsu-analysis-icon svg,
+  #pcsu-analysis-cta .pcsu-analysis-arrow svg {
+    width: 14px;
+    height: 14px;
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  #pcsu-analysis-cta .pcsu-analysis-text {
+    overflow: hidden;
+    color: #f5f2e9;
+    font-size: 13px;
+    font-weight: 600;
+    line-height: 1;
+    letter-spacing: 0.02em;
+    text-align: center;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #pcsu-analysis-cta .pcsu-analysis-arrow {
+    display: grid;
+    width: 18px;
+    height: 18px;
+    flex: 0 0 18px;
+    place-items: center;
+    color: rgba(223, 187, 96, 0.9);
+    transition:
+      transform 220ms ease;
+  }
+  #pcsu-analysis-cta .pcsu-analysis-link:hover {
+    transform: translateY(-1px);
+    border-color: rgba(229, 194, 105, 0.72);
+    box-shadow:
+      inset 0 1px 0 rgba(255, 255, 255, 0.07),
+      0 9px 22px rgba(0, 0, 0, 0.30),
+      0 0 20px rgba(214, 175, 76, 0.11);
+  }
+  #pcsu-analysis-cta
+    .pcsu-analysis-link:hover
+    .pcsu-analysis-arrow {
+    transform: translateX(3px);
+  }
+  #pcsu-analysis-cta .pcsu-analysis-link:active {
+    transform: translateY(0) scale(0.995);
+  }
+  #pcsu-analysis-cta .pcsu-analysis-link:focus-visible {
+    outline: 2px solid rgba(229, 194, 105, 0.92);
+    outline-offset: 2px;
+  }
+  @keyframes pcsu-analysis-sweep {
+    0%,
+    18% {
+      left: -45%;
+      opacity: 0;
+    }
+    30% {
+      opacity: 0.65;
+    }
+    58%,
+    100% {
+      left: 120%;
+      opacity: 0;
+    }
+  }
+  @media (max-width: 480px) {
+    #pcsu-analysis-cta {
+      padding: 5px 7px;
+    }
+    #pcsu-analysis-cta .pcsu-analysis-link {
+      height: 42px;
+      gap: 8px;
+    }
+    #pcsu-analysis-cta .pcsu-analysis-text {
+      font-size: 12px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    #pcsu-analysis-cta .pcsu-analysis-link::before {
+      animation: none;
+    }
+    #pcsu-analysis-cta .pcsu-analysis-link,
+    #pcsu-analysis-cta .pcsu-analysis-arrow {
+      transition: none;
+    }
+  }
+</style>
+          <script>
+  (function () {
+    "use strict";
+    var destination =
+      "https://pcsunited-com-28346d.webflow.io/air-force/financial-analysis";
+    var link = document.getElementById("pcsu-analysis-link");
+    if (!link || link.dataset.pcsuNavigationReady === "1") {
+      return;
+    }
+    link.dataset.pcsuNavigationReady = "1";
+    link.addEventListener("click", function (event) {
+      event.preventDefault();
+      /*
+       * First try to navigate the full browser window.
+       * This prevents the destination from loading inside an iframe.
+       */
+      try {
+        if (window.top && window.top !== window.self) {
+          window.top.location.assign(destination);
+          return;
+        }
+        window.location.assign(destination);
+      } catch (error) {
+        /*
+         * Some sandboxed frames block top-level navigation.
+         * In that case, open the page in a new browser tab.
+         */
+        var newWindow = window.open(
+          destination,
+          "_blank",
+          "noopener,noreferrer"
+        );
+        if (!newWindow) {
+          window.location.href = destination;
+        }
+      }
+    });
+  })();
+</script>
         </div>
         <div class="w-layout-blockcontainer dashboard-promo-2 w-container">
           <div reveal-content="true" class="reveal-content-wrap">
             <div fade-in="true" data-current="Market Insight" data-easing="ease-in-out" data-duration-in="300" data-duration-out="200" class="tabs-4 w-tabs">
-              <div class="tabs-menu-6 w-tab-menu">
-                <a data-w-tab="Market Insight" class="tab-link-5 w-inline-block w-tab-link w--current">
-                  <div class="text-block-46">Read how the VA-Loan support Military Home Buyers </div>
-                </a>
-              </div>
               <div class="tabs-content w-tab-content">
                 <div data-w-tab="Market Insight" class="tab-pane-4 w-tab-pane w--tab-active">
                   <div class="code-embed-69 w-embed">
@@ -12457,15 +11050,16 @@ setTimeout(refresh,900);
             </div>
           </div>
         </div>
+        <a href="#">LINK TO FINANCIAL ANALYSIS</a>
       </section>
       <div class="slider-for-resoruces">
         <div data-w-id="bfc4b2ca-9417-0998-a013-4364152e190f" style="-webkit-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 1.5rem, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);opacity:0" class="highlight_marquee-2">
           <div class="highlight_marquee-group">
             <div class="highlight_marquee-texts-4">
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7-p-500.png 500w, images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png 800w" alt="" src="images/FD3D91A4-DF28-4384-BE8D-383A4DC7E6E7.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">Veteran Owned</div>
               </div>
-              <div class="highlight_marquee-box"><img sizes="(max-width: 800px) 100vw, 800px" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
+              <div class="highlight_marquee-box"><img sizes="100vw" srcset="images/23F6295F-2530-4C86-9849-70534F5B1BE0-p-500.png 500w, images/23F6295F-2530-4C86-9849-70534F5B1BE0.png 800w" alt="" src="images/23F6295F-2530-4C86-9849-70534F5B1BE0.png" loading="lazy" class="icon-height-large-2">
                 <div class="heading-style-h4-3 text-color-alternate">A.I Intelligence</div>
               </div>
               <div class="highlight_marquee-box"><img width="100" height="100" alt="" src="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png" loading="lazy" srcset="images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4-p-500.png 500w, images/C0BCD46A-D476-4F87-AFE9-1B2D9B5474D4.png 800w" sizes="100px" class="icon-height-large-2">

@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Thu Jul 30 2026 05:16:37 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Fri Jul 31 2026 00:08:03 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="69ed8de8c17910d141ac6d85" data-wf-site="69eb162337c57d450e0e19a3" lang="en">
 <head>
   <meta charset="utf-8">
@@ -872,8 +872,8 @@
       </style>
           <div id="aa-container">
             <!--  =====================================================
-          LEFT PROFILE PANEL
-        ======================================================  -->
+  LEFT PROFILE PANEL
+======================================================  -->
             <aside id="aa-left">
               <div class="aa-avatar-wrapper">
                 <div class="aa-avatar" role="img" aria-label="Amy, PCSUnited AI concierge"></div>
@@ -885,14 +885,14 @@
                 PCSUnited A.I. Concierge
               </div>
               <div class="aa-links">
-                <a class="aa-link-btn" href="../index.html" target="_self">
-                  PCSUnited Home
+                <a class="aa-link-btn" href="https://www.afpc.af.mil/Portals/70/documents/FITNESS/Tab%204.%20The%20Warfighter's%20Fitness%20Playbook%20%202.0%20Feb%202026.pdf" target="_blank" rel="noopener noreferrer">
+                  The Fitness Playbook
                 </a>
-                <a class="aa-link-btn" href="../resources.html" target="_self">
-                  Explore Resources
+                <a class="aa-link-btn" href="https://myairforcelife.com/fitness-sports/#fitness-center" target="_blank" rel="noopener noreferrer">
+                  AF Personal Trainers
                 </a>
-                <a class="aa-link-btn" href="../air-force/base-demographics-air-force.html" target="_self">
-                  Base Demographics
+                <a class="aa-link-btn" href="https://www.af.mil/Policy-Updates/" target="_blank" rel="noopener noreferrer">
+                  Policy Updates
                 </a>
               </div>
               <div class="aa-badge">
@@ -919,14 +919,17 @@
                 </div>
               </div>
               <div class="aa-quick-prompts" aria-label="Suggested questions">
-                <button type="button" class="aa-prompt-btn" data-question="What happens if I receive an Unsatisfactory Air Force PFRA? Explain my retest timeline, Fitness Reconditioning Program requirements, and possible administrative consequences without overstating them.">
-                  What If I Fail?
+                <button type="button" class="aa-prompt-btn" data-question="What strength, core endurance, and cardio events can I choose for the Air Force PFRA, and which options require a medical exemption?">
+                  Which Events Can I Choose?
+                </button>
+                <button type="button" class="aa-prompt-btn" data-question="Analyze my current Air Force PFRA score using the live PT Calculator results. Explain my total score, rating, component scores, whether all minimums were met, my strongest and weakest areas, and the best opportunities to improve. Do not recalculate or change the displayed score.">
+                  Analyze My Score
                 </button>
                 <button type="button" class="aa-prompt-btn" data-question="Based on current Air Force fitness policy and my available information, when is my next PFRA due? If you cannot determine the exact month, tell me what information is missing and where I should verify it.">
                   When Do I Test Again?
                 </button>
-                <button type="button" class="aa-prompt-btn" data-question="What strength, core endurance, and cardio events can I choose for the Air Force PFRA, and which options require a medical exemption?">
-                  Which Events Can I Choose?
+                <button type="button" class="aa-prompt-btn" data-question="What happens if I receive an Unsatisfactory Air Force PFRA? Explain my retest timeline, Fitness Reconditioning Program requirements, and possible administrative consequences without overstating them.">
+                  What If I Fail?
                 </button>
               </div>
               <div class="aa-chat" id="aa-chat" aria-live="polite" aria-label="Ask Amy conversation"></div>
@@ -961,6 +964,217 @@
           memory:{},
           sending:false
         };
+        /* =====================================================
+          LIVE PT CALCULATOR BRIDGE
+        ====================================================== */
+        let latestPtSnapshot = null;
+        let ptBridgeMounted = false;
+        function clonePtSnapshot(value) {
+          if (
+            !value ||
+            typeof value !== "object" ||
+            Array.isArray(value)
+          ) {
+            return null;
+          }
+          try {
+            return JSON.parse(JSON.stringify(value));
+          } catch (_) {
+            return null;
+          }
+        }
+        function setLatestPtSnapshot(value) {
+          const snapshot = clonePtSnapshot(value);
+          if (!snapshot) return null;
+          latestPtSnapshot = snapshot;
+          return clonePtSnapshot(latestPtSnapshot);
+        }
+        function readPtSnapshotFromGlobals() {
+          try {
+            const current = clonePtSnapshot(
+              window.PCSU_PT_SCORE_CURRENT
+            );
+            if (current) return current;
+          } catch (_) {}
+          try {
+            const calculatorApi =
+              window.PCSU_PT_CALCULATOR;
+            if (
+              calculatorApi &&
+              typeof calculatorApi.getScoreSnapshot ===
+                "function"
+            ) {
+              const calculatorSnapshot =
+                clonePtSnapshot(
+                  calculatorApi.getScoreSnapshot()
+                );
+              if (calculatorSnapshot) {
+                return calculatorSnapshot;
+              }
+            }
+          } catch (_) {}
+          try {
+            const headerApi =
+              window.PCSU_PT_HEADER;
+            if (
+              headerApi &&
+              typeof headerApi.getScoreSnapshot ===
+                "function"
+            ) {
+              const headerSnapshot =
+                clonePtSnapshot(
+                  headerApi.getScoreSnapshot()
+                );
+              if (headerSnapshot) {
+                return headerSnapshot;
+              }
+            }
+          } catch (_) {}
+          return null;
+        }
+        function readLegacyPtSnapshot() {
+          try {
+            const legacyApi =
+              window.PCSUnitedPTCalculator;
+            if (
+              legacyApi &&
+              typeof legacyApi.getData === "function"
+            ) {
+              return clonePtSnapshot(
+                legacyApi.getData()
+              );
+            }
+          } catch (_) {}
+          return null;
+        }
+        function hydratePtSnapshot() {
+          const liveSnapshot =
+            readPtSnapshotFromGlobals();
+          if (liveSnapshot) {
+            return setLatestPtSnapshot(liveSnapshot);
+          }
+          if (latestPtSnapshot) {
+            return clonePtSnapshot(latestPtSnapshot);
+          }
+          const legacySnapshot =
+            readLegacyPtSnapshot();
+          if (legacySnapshot) {
+            return setLatestPtSnapshot(
+              legacySnapshot
+            );
+          }
+          return null;
+        }
+        function extractPtSnapshotFromEventDetail(detail) {
+          if (
+            !detail ||
+            typeof detail !== "object" ||
+            Array.isArray(detail)
+          ) {
+            return null;
+          }
+          if (
+            detail.pt &&
+            typeof detail.pt === "object"
+          ) {
+            return clonePtSnapshot(detail.pt);
+          }
+          if (
+            detail.detail &&
+            typeof detail.detail === "object"
+          ) {
+            return clonePtSnapshot(detail.detail);
+          }
+          return clonePtSnapshot(detail);
+        }
+        function bindPtBridge() {
+          if (ptBridgeMounted) return;
+          ptBridgeMounted = true;
+          window.addEventListener(
+            "pcsunited:pt-score-updated",
+            (event) => {
+              const snapshot =
+                extractPtSnapshotFromEventDetail(
+                  event && event.detail
+                );
+              if (snapshot) {
+                setLatestPtSnapshot(snapshot);
+              } else {
+                hydratePtSnapshot();
+              }
+            }
+          );
+          window.addEventListener(
+            "pcsunited:pt-calculator-ready",
+            (event) => {
+              const snapshot =
+                extractPtSnapshotFromEventDetail(
+                  event && event.detail
+                );
+              if (snapshot) {
+                setLatestPtSnapshot(snapshot);
+              } else {
+                hydratePtSnapshot();
+              }
+            }
+          );
+          window.addEventListener(
+            "pcsunited:pt-calculator-updated",
+            (event) => {
+              const snapshot =
+                extractPtSnapshotFromEventDetail(
+                  event && event.detail
+                );
+              if (snapshot) {
+                setLatestPtSnapshot(snapshot);
+              } else {
+                hydratePtSnapshot();
+              }
+            }
+          );
+          window.addEventListener(
+            "message",
+            (event) => {
+              const message =
+                event && event.data;
+              if (
+                !message ||
+                typeof message !== "object" ||
+                message.type !==
+                  "pcsunited-pt-score" ||
+                !message.detail ||
+                typeof message.detail !== "object"
+              ) {
+                return;
+              }
+              setLatestPtSnapshot(
+                message.detail
+              );
+            }
+          );
+          hydratePtSnapshot();
+          setTimeout(
+            hydratePtSnapshot,
+            100
+          );
+          setTimeout(
+            hydratePtSnapshot,
+            500
+          );
+          setTimeout(
+            hydratePtSnapshot,
+            1200
+          );
+          window.PCSU_PT_AMY_BRIDGE = {
+            getSnapshot() {
+              return hydratePtSnapshot();
+            },
+            refresh() {
+              return hydratePtSnapshot();
+            }
+          };
+        }
+        bindPtBridge();
         function createConversationId() {
           try {
             if (
@@ -1175,8 +1389,13 @@
         async function postToAmy(userText) {
           const publicContext = collectPublicPageContext();
           const historicalThread = state.thread.slice(0,-1);
+          const ptSnapshot =
+            clonePtSnapshot(
+              hydratePtSnapshot()
+            );
           const payload = {
             message:userText,
+            pt:ptSnapshot,
             profile:publicContext.profile,
             bridge:publicContext.bridge,
             compensation:
@@ -1189,6 +1408,7 @@
               thread:historicalThread,
               memory:state.memory,
               requested_mode:"education",
+              pt:ptSnapshot,
               response_limits:{
                 max_chars:900,
                 greeting_max_chars:260,
@@ -1200,8 +1420,8 @@
                 format:
                   "short paragraphs; explain acronyms; do not invent calculations"
               },
-              page:"PCSUnited About Us",
-              widget:"about-us-ask-amy-v6.1",
+              page:"PCSUnited Air Force PT Calculator",
+              widget:"pt-calculator-ask-amy",
               product:"PCSUnited",
               version:"6.1.0"
             }

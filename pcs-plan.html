@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Sun Oct 18 2026 07:46:08 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Oct 27 2026 03:17:03 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6ad198dcf56d626321fd3df5" data-wf-site="6acde39c80b636b344e4764b" lang="en">
 <head>
   <meta charset="utf-8">
@@ -241,261 +241,625 @@
     </div>
   </header>
   <main id="tw-pcs-page" class="va-command-center-page">
-    <div class="va-command-center-embed w-embed"><!--  TheWing.ai PCS Planning v1.0 | Interface and scoped styles. Use once, before embed 02.  -->
-      <style>#tw-pcs-planner-app{--ink:#192f36;--muted:#5c6b70;--paper:#f6f5f1;--white:#fff;--line:#dedfd9;--copper:#985c38;--peach:#ecb78d;--pale:#eee5da;--green:#2f6a5d;--amber:#80551f;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none}#tw-pcs-planner-app *{box-sizing:border-box}#tw-pcs-planner-app{margin:0}#tw-pcs-planner-app button,#tw-pcs-planner-app input,#tw-pcs-planner-app select,#tw-pcs-planner-app textarea{font:inherit;color:inherit}#tw-pcs-planner-app a,#tw-pcs-planner-app button,#tw-pcs-planner-app input,#tw-pcs-planner-app select,#tw-pcs-planner-app summary,#tw-pcs-planner-app textarea{-webkit-tap-highlight-color:transparent}#tw-pcs-planner-app button{cursor:pointer}#tw-pcs-planner-app a{color:var(--copper);text-underline-offset:4px}#tw-pcs-planner-app [tabindex]:focus-visible,#tw-pcs-planner-app a:focus-visible,#tw-pcs-planner-app button:focus-visible,#tw-pcs-planner-app input:focus-visible,#tw-pcs-planner-app select:focus-visible,#tw-pcs-planner-app summary:focus-visible,#tw-pcs-planner-app textarea:focus-visible{outline:3px solid #a3562b;outline-offset:4px}#tw-pcs-planner-app [hidden]{display:none!important}#tw-pcs-planner-app button{border:0;background:0 0}#tw-pcs-planner-app figure,#tw-pcs-planner-app h1,#tw-pcs-planner-app h2,#tw-pcs-planner-app h3,#tw-pcs-planner-app p{margin:0}#tw-pcs-planner-app h1,#tw-pcs-planner-app h2,#tw-pcs-planner-app h3{letter-spacing:-.035em}#tw-pcs-planner-app p{line-height:1.65}#tw-pcs-planner-app .wrap{width:min(1280px,calc(100% - 96px));margin:auto}#tw-pcs-planner-app .site-header{background:#12272f;color:#fff}#tw-pcs-planner-app .header-inner{max-width:1376px;min-height:72px;padding:0 48px;margin:auto;display:flex;align-items:center;gap:28px}#tw-pcs-planner-app .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;font-size:14px;letter-spacing:.17em;font-weight:700;min-height:44px}#tw-pcs-planner-app .brand img{width:43px;height:27px;object-fit:contain}#tw-pcs-planner-app .product-name{border-left:1px solid #ffffff35;padding-left:26px;color:#d2dadb;font-size:13px}#tw-pcs-planner-app .preview-badge{margin-left:auto;font-size:9px;letter-spacing:.12em;border:1px solid #ffffff35;padding:7px 10px;border-radius:5px;color:#e9c6a9}#tw-pcs-planner-app .hero{padding:44px 0 38px;display:grid;grid-template-columns:1.2fr 1fr;gap:70px;align-items:center}#tw-pcs-planner-app .eyebrow{font-size:10px;font-weight:700;color:var(--copper);letter-spacing:.12em;line-height:1.6}#tw-pcs-planner-app .hero h1{font-size:54px;line-height:1.04;font-weight:650;margin:13px 0 16px}#tw-pcs-planner-app .hero h1 span{color:var(--copper)}#tw-pcs-planner-app .hero-copy{font-size:16px;color:var(--muted);line-height:1.6}#tw-pcs-planner-app .hero-note{font-size:11px;color:var(--muted);margin-top:12px}#tw-pcs-planner-app .hero-photo{height:240px;position:relative;border-radius:4px 26px 4px 26px;overflow:hidden;background:#d0d1cc}#tw-pcs-planner-app .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:60% 48%;display:block}#tw-pcs-planner-app .hero-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#132b36a6,transparent 55%);pointer-events:none}#tw-pcs-planner-app .hero-photo figcaption{position:absolute;bottom:14px;left:18px;color:#fff;z-index:1;font-size:10px}#tw-pcs-planner-app .hero-photo i{position:absolute;width:36px;height:36px;top:15px;left:15px;border-left:2px solid var(--peach);border-top:2px solid var(--peach)}#tw-pcs-planner-app .panel{border:1px solid var(--line);border-radius:18px;background:var(--white);box-shadow:0 6px 24px #172f3604}#tw-pcs-planner-app .setup{padding:28px 32px}#tw-pcs-planner-app .section-heading{display:flex;justify-content:space-between;gap:24px;align-items:start}#tw-pcs-planner-app .section-heading h2{font-size:25px;margin:4px 0 7px}#tw-pcs-planner-app .section-heading p:not(.eyebrow){font-size:13px;color:var(--muted)}#tw-pcs-planner-app .line-icon{font-size:36px;color:var(--copper);line-height:1}#tw-pcs-planner-app .setup-fields{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:20px;margin-top:22px}#tw-pcs-planner-app label{display:block;color:var(--ink);font-size:12px;font-weight:600;line-height:1.5}#tw-pcs-planner-app .optional{font-size:11px;color:var(--muted);font-weight:400;margin-left:4px}#tw-pcs-planner-app input:not([type=checkbox]),#tw-pcs-planner-app select,#tw-pcs-planner-app textarea{display:block;width:100%;min-width:0;min-height:46px;border:1px solid #c6cecc;border-radius:8px;background:#fff;padding:10px 12px;font-size:14px;line-height:1.4;margin-top:7px;color:var(--ink);color-scheme:light}#tw-pcs-planner-app textarea{resize:vertical;min-height:80px}#tw-pcs-planner-app .fine{font-size:11px;color:var(--muted);line-height:1.6;margin-top:10px}#tw-pcs-planner-app .circumstances{border:0;margin:18px 0 0;padding:0;display:flex;gap:12px;flex-wrap:wrap}#tw-pcs-planner-app .circumstances legend{font-size:11px;font-weight:600;margin-bottom:8px}#tw-pcs-planner-app .circumstances label{display:flex;align-items:center;gap:9px;min-height:42px;font-weight:500;border:1px solid var(--line);border-radius:30px;padding:8px 14px;background:#fbfbf9;font-size:12px}#tw-pcs-planner-app input[type=checkbox]{accent-color:var(--copper);height:17px;width:17px;margin:0}#tw-pcs-planner-app .setup-actions{display:flex;align-items:center;gap:15px;margin-top:20px}#tw-pcs-planner-app .button{display:inline-flex;align-items:center;justify-content:center;gap:20px;min-height:44px;border-radius:8px;padding:10px 17px;font-size:12px;font-weight:600;line-height:1.45;transition:background .18s,box-shadow .18s;white-space:nowrap}#tw-pcs-planner-app .primary{background:var(--ink);color:#fff;border:1px solid var(--ink)}#tw-pcs-planner-app .primary:hover{background:#304a54;box-shadow:0 3px 12px #172f3620}#tw-pcs-planner-app .secondary{border:1px solid #d4d9d6;background:#fff;color:var(--ink)}#tw-pcs-planner-app .secondary:hover{background:#f3f3ef}#tw-pcs-planner-app .plain{color:var(--copper)}#tw-pcs-planner-app .plain:hover{background:#f1eade}#tw-pcs-planner-app .error{color:#923b26;font-size:13px;margin-top:10px}#tw-pcs-planner-app .planner-nav{position:sticky;top:0;z-index:4;display:flex;gap:40px;margin-top:24px;background:var(--paper);border-bottom:1px solid #ced3cf;min-height:62px;padding:0 3px;isolation:isolate}#tw-pcs-planner-app .planner-nav:before{content:"";position:absolute;z-index:-1;inset:0 -8px;background:var(--paper)}#tw-pcs-planner-app .planner-nav button{position:relative;display:flex;align-items:center;gap:10px;padding:18px 2px;font-size:13px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent}#tw-pcs-planner-app .planner-nav button[aria-selected=true]{border-bottom-color:var(--copper);color:var(--ink)}#tw-pcs-planner-app .nav-num{font-size:10px;color:var(--copper);font-weight:500}#tw-pcs-planner-app .nav-dot{width:5px;height:5px;border-radius:50%;background:var(--copper);opacity:0}#tw-pcs-planner-app .planner-nav button[aria-selected=true] .nav-dot{opacity:1}#tw-pcs-planner-app .welcome-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;padding:30px 0 10px}#tw-pcs-planner-app .welcome-grid article{padding-right:20px}#tw-pcs-planner-app .welcome-icon{font-size:11px;color:var(--copper);border:1px solid #d5c5b5;width:31px;height:31px;border-radius:8px;display:grid;place-items:center;margin-bottom:13px}#tw-pcs-planner-app .welcome-grid h3{font-size:19px;margin-bottom:8px}#tw-pcs-planner-app .welcome-grid p{font-size:13px;color:var(--muted)}#tw-pcs-planner-app .plan-footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 35px;margin-top:28px;padding:20px 0;border-top:1px solid var(--line)}#tw-pcs-planner-app .plan-footer p{max-width:540px;font-size:11px;color:var(--muted)}#tw-pcs-planner-app .plan-footer strong{font-weight:600;color:var(--ink)}#tw-pcs-planner-app .site-footer{display:flex;justify-content:space-between;gap:20px;padding:20px 0 30px;font-size:9px;letter-spacing:.08em;color:#68777b}#tw-pcs-planner-app .site-footer i{font-style:normal;color:var(--copper);margin:0 10px}#tw-pcs-planner-app .text-button{font-size:11px;text-decoration:underline;text-underline-offset:4px;color:var(--copper);min-height:40px;padding:4px 0}#tw-pcs-planner-app.has-plan .hero{padding:26px 0;gap:40px}#tw-pcs-planner-app.has-plan .hero h1{font-size:34px;margin:8px 0 10px}#tw-pcs-planner-app.has-plan .hero h1 br{display:none}#tw-pcs-planner-app.has-plan .hero-copy{font-size:14px}#tw-pcs-planner-app.has-plan .hero-note{display:none}#tw-pcs-planner-app.has-plan .hero-photo{height:148px}#tw-pcs-planner-app .move-overview{padding:25px 28px 0}#tw-pcs-planner-app .overview-heading{display:flex;justify-content:space-between;gap:20px;align-items:center}#tw-pcs-planner-app .overview-heading h2{font-size:24px;line-height:1.3;margin-top:5px;max-width:720px}#tw-pcs-planner-app .move-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-top:3px}#tw-pcs-planner-app .move-meta .text-button{margin-left:8px}#tw-pcs-planner-app .plan-actions{display:flex;gap:9px;flex-shrink:0}#tw-pcs-planner-app .save-note{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:10px;color:var(--muted);margin:7px 0 20px}#tw-pcs-planner-app .status-dot{width:5px;height:5px;border-radius:50%;background:#a17c53}#tw-pcs-planner-app .save-clarification{margin-left:auto}#tw-pcs-planner-app .overview-stats{display:grid;grid-template-columns:1.6fr 1fr 1fr;border-top:1px solid var(--line);margin:0 -28px}#tw-pcs-planner-app .next-action{text-align:left;padding:20px 28px;display:flex;flex-direction:column;align-items:start;gap:6px;border-right:1px solid var(--line);border-bottom-left-radius:18px;background:#faf7f2}#tw-pcs-planner-app .next-action strong{font-size:17px;letter-spacing:-.02em;line-height:1.4}#tw-pcs-planner-app .next-action .eyebrow{font-size:9px}#tw-pcs-planner-app .next-action .eyebrow span{margin-left:8px}#tw-pcs-planner-app .next-link{font-size:11px;color:var(--copper);margin-top:3px}#tw-pcs-planner-app .stat{padding:17px 25px;text-align:left;display:flex;flex-direction:column;justify-content:center;align-items:start;gap:4px}#tw-pcs-planner-app .stat+.stat{border-left:1px solid var(--line)}#tw-pcs-planner-app .stat strong{font-size:30px;font-weight:600;letter-spacing:-.05em;line-height:1.1}#tw-pcs-planner-app .stat span{font-size:12px;font-weight:600}#tw-pcs-planner-app .stat small{font-size:10px;color:var(--muted);line-height:1.5}#tw-pcs-planner-app .workspace-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:28px 0 20px}#tw-pcs-planner-app .workspace-heading h2{font-size:29px;margin:6px 0}#tw-pcs-planner-app .workspace-heading p:not(.eyebrow){font-size:13px;color:var(--muted)}#tw-pcs-planner-app .workspace-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:22px}#tw-pcs-planner-app .task-panel{overflow:hidden}#tw-pcs-planner-app .list-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line)}#tw-pcs-planner-app .filter-group{display:flex;gap:4px;border-radius:8px;background:#f3f4ef;padding:3px}#tw-pcs-planner-app .filter-group button{min-height:34px;padding:7px 10px;font-size:10px;border-radius:5px;color:var(--muted);font-weight:500}#tw-pcs-planner-app .filter-group button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 4px #18323815}#tw-pcs-planner-app .list-toolbar>span{font-size:10px;color:var(--muted)}#tw-pcs-planner-app .table-heading,#tw-pcs-planner-app .task-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(82px,.75fr) minmax(58px,.5fr) minmax(95px,.8fr);gap:12px;align-items:center;padding:15px 22px}#tw-pcs-planner-app .table-heading{font-size:8px;font-weight:650;letter-spacing:.08em;background:#fbfcf9;color:var(--muted)}#tw-pcs-planner-app .task-row{width:100%;text-align:left;min-height:84px;border-top:1px solid #e9eae5;position:relative;transition:background .18s}#tw-pcs-planner-app .task-row:hover{background:#faf8f2}#tw-pcs-planner-app .task-main{display:flex;gap:12px;align-items:center}#tw-pcs-planner-app .task-symbol{height:24px;width:24px;border:1px solid #d7dcd8;border-radius:7px;display:grid;place-items:center;font-size:12px;flex-shrink:0;color:#8a694e;background:#fbfaf6}#tw-pcs-planner-app .task-title{font-size:12px;font-weight:600;line-height:1.5;display:block}#tw-pcs-planner-app .task-context{font-size:10px;color:var(--muted);display:block;margin-top:4px}#tw-pcs-planner-app .task-date,#tw-pcs-planner-app .task-owner{font-size:11px;color:#516167}#tw-pcs-planner-app .tag{font-size:9px;display:inline-flex;align-items:center;gap:5px;padding:6px 7px;white-space:nowrap;border-radius:5px;font-weight:550;width:fit-content}#tw-pcs-planner-app .tag:before{content:"";height:4px;width:4px;border-radius:50%;background:currentColor}#tw-pcs-planner-app .requested{color:#80551f;background:#fbf0dd}#tw-pcs-planner-app .confirmed{color:#2f6a5d;background:#edf5ef}#tw-pcs-planner-app .not-started{color:#5b6c74;background:#f0f2f3}#tw-pcs-planner-app .complete{color:#607168;background:#eff2ed}#tw-pcs-planner-app .does-not-apply{color:#667173;background:#f2f2ee}#tw-pcs-planner-app .list-note{padding:14px 22px;border-top:1px solid var(--line);font-size:9px;color:var(--muted);line-height:1.6}#tw-pcs-planner-app .list-note span{white-space:nowrap}#tw-pcs-planner-app .sidebar{display:grid;gap:16px;align-content:start}#tw-pcs-planner-app .checkpoint{padding:23px}#tw-pcs-planner-app .small-icon{font-size:24px;color:var(--copper);display:block;margin-bottom:12px}#tw-pcs-planner-app .checkpoint h3{font-size:21px;line-height:1.2;margin-bottom:12px}#tw-pcs-planner-app .checkpoint p:not(.eyebrow){font-size:12px;color:var(--muted)}#tw-pcs-planner-app .checkpoint a{font-size:12px;display:inline-block;margin-top:16px;line-height:1.6}#tw-pcs-planner-app .status-legend{display:flex;flex-wrap:wrap;gap:7px;font-size:8px;color:#5b6d72;margin-top:15px}#tw-pcs-planner-app .context-link{display:block;padding:20px 22px;border-radius:14px;background:#eee9df;text-decoration:none;color:var(--ink)}#tw-pcs-planner-app .context-link strong{display:block;font-size:14px;line-height:1.45;margin-top:8px;letter-spacing:-.02em}#tw-pcs-planner-app .context-link p{font-size:11px;margin-top:7px;color:var(--muted)}#tw-pcs-planner-app .source-note{padding:0 7px}#tw-pcs-planner-app .source-note a{font-size:11px}#tw-pcs-planner-app .source-note p{font-size:10px;color:var(--muted);margin-top:8px}#tw-pcs-planner-app .packing-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:22px}#tw-pcs-planner-app .carry-panel,#tw-pcs-planner-app .decisions-panel{padding:28px}#tw-pcs-planner-app .carry-panel h3,#tw-pcs-planner-app .decisions-panel h3{font-size:23px;margin:7px 0}#tw-pcs-planner-app .carry-panel>p:not(.eyebrow),#tw-pcs-planner-app .decisions-panel .section-heading p{font-size:13px;color:var(--muted)}#tw-pcs-planner-app .carry-row{display:flex;gap:12px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line);min-height:60px;font-size:13px}#tw-pcs-planner-app .carry-row input{flex-shrink:0}#tw-pcs-planner-app .decision-row{display:grid;grid-template-columns:1fr 150px;gap:20px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}#tw-pcs-planner-app .decision-row select{margin:0;font-size:12px}#tw-pcs-planner-app .decision-row label{font-size:13px}#tw-pcs-planner-app details{margin-top:20px;font-size:12px}#tw-pcs-planner-app summary{cursor:pointer;min-height:44px;line-height:1.6;padding:10px 0;font-weight:600}#tw-pcs-planner-app details p{color:var(--muted);padding:3px 0 10px}#tw-pcs-planner-app .arrival-tip{display:flex;gap:18px;padding:22px;background:#f9f7f2;align-items:center}#tw-pcs-planner-app .arrival-tip p{font-size:12px;color:var(--muted)}#tw-pcs-planner-app .arrival-tip strong{color:var(--ink);font-weight:600}#tw-pcs-planner-app .arrival-tip .small-icon{margin:0}#tw-pcs-planner-app .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:calc(100% - 40px);width:max-content;border-radius:8px;background:var(--ink);color:#fff;font-size:12px;z-index:20;padding:12px 18px;box-shadow:0 8px 30px #152e3630;pointer-events:none}#tw-pcs-planner-app .toast:empty{display:none}#tw-pcs-planner-app .skip{position:fixed;left:16px;top:8px;z-index:50;transform:translateY(-150%);background:#fff;padding:12px;color:var(--ink)}#tw-pcs-planner-app .skip:focus{transform:none}#tw-pcs-planner-app dialog{border:1px solid #d9ded9;border-radius:20px;padding:0;width:min(540px,calc(100% - 28px));max-height:calc(100dvh - 40px);color:var(--ink);background:var(--white);box-shadow:0 30px 120px #10282f50}#tw-pcs-planner-app dialog::backdrop{background:#132b354f;backdrop-filter:blur(3px)}#tw-pcs-planner-app dialog[open]{display:flex;flex-direction:column;animation:tw-pcs-panel-in .22s ease-out}#tw-pcs-planner-app dialog form{display:flex;flex-direction:column;min-height:0;width:100%}#tw-pcs-planner-app .dialog-header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 26px;border-bottom:1px solid var(--line);flex-shrink:0}#tw-pcs-planner-app .dialog-header h2{font-size:25px;margin-top:3px}#tw-pcs-planner-app .icon-button{font-size:27px;line-height:1;height:44px;width:44px;border:1px solid var(--line);border-radius:50%;color:var(--muted)}#tw-pcs-planner-app .dialog-content{padding:20px 26px;overflow-y:auto;overscroll-behavior:contain;min-height:0}#tw-pcs-planner-app .dialog-content>label{margin-top:16px}#tw-pcs-planner-app .sample-note{font-size:10px;color:var(--copper)}#tw-pcs-planner-app .form-two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}#tw-pcs-planner-app .status-explanation{font-size:11px;color:var(--muted);background:#f6f5ef;padding:12px 14px;border-radius:8px;margin-top:10px;line-height:1.6}#tw-pcs-planner-app .dialog-footer{display:flex;justify-content:space-between;gap:16px;padding:16px 26px;border-top:1px solid var(--line);flex-shrink:0}#tw-pcs-planner-app .empty-list{padding:30px;font-size:13px;color:var(--muted)}#tw-pcs-planner-app #tw-pcs-planner{scroll-margin-top:20px}#tw-pcs-planner-app #tw-pcs-workspace [role=tabpanel]{scroll-margin-top:76px}@keyframes tw-pcs-panel-in{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}@media(max-width:1100px){#tw-pcs-planner-app .wrap{width:calc(100% - 56px)}#tw-pcs-planner-app .header-inner{padding:0 28px}#tw-pcs-planner-app .hero{gap:35px}#tw-pcs-planner-app .hero h1{font-size:46px}#tw-pcs-planner-app .overview-heading{align-items:start;flex-wrap:wrap}#tw-pcs-planner-app .overview-heading h2{font-size:24px}#tw-pcs-planner-app .plan-actions{margin-top:2px}#tw-pcs-planner-app .workspace-grid{grid-template-columns:minmax(0,1fr) 230px;gap:16px}#tw-pcs-planner-app .table-heading,#tw-pcs-planner-app .task-row{grid-template-columns:minmax(0,1.8fr) 72px 55px 100px;gap:9px;padding:16px}#tw-pcs-planner-app .task-title{font-size:12px}#tw-pcs-planner-app .task-symbol{display:none}#tw-pcs-planner-app .checkpoint{padding:20px}#tw-pcs-planner-app .filter-group button{padding:7px 8px}}@media(max-width:800px){#tw-pcs-planner-app .hero{grid-template-columns:1.1fr 1fr;gap:20px}#tw-pcs-planner-app .hero h1{font-size:39px}#tw-pcs-planner-app .hero-photo{height:230px}#tw-pcs-planner-app .setup{padding:25px}#tw-pcs-planner-app .setup-fields{grid-template-columns:1fr 1fr}#tw-pcs-planner-app .setup-fields>label:first-child{grid-column:1/-1}#tw-pcs-planner-app .workspace-grid{grid-template-columns:1fr}#tw-pcs-planner-app .sidebar{grid-template-columns:1fr 1fr}#tw-pcs-planner-app .source-note{grid-column:1/-1}#tw-pcs-planner-app .overview-stats{grid-template-columns:1.3fr 1fr 1fr}#tw-pcs-planner-app .stat{padding:15px}#tw-pcs-planner-app .next-action{padding:18px}#tw-pcs-planner-app .stat small{font-size:9px}#tw-pcs-planner-app.has-plan .hero{grid-template-columns:1fr}#tw-pcs-planner-app.has-plan .hero-photo{display:none}#tw-pcs-planner-app.has-plan .hero h1{font-size:31px}#tw-pcs-planner-app .packing-grid{grid-template-columns:1fr}#tw-pcs-planner-app .welcome-grid{gap:22px}#tw-pcs-planner-app .welcome-grid h3{font-size:17px}#tw-pcs-planner-app .welcome-grid p{font-size:12px}}@media(max-width:540px){#tw-pcs-planner-app .wrap{width:calc(100% - 36px)}#tw-pcs-planner-app .header-inner{padding:0 18px;min-height:60px;gap:12px}#tw-pcs-planner-app .brand{font-size:11px;gap:8px;letter-spacing:.12em}#tw-pcs-planner-app .brand img{width:32px;height:21px}#tw-pcs-planner-app .product-name{display:none}#tw-pcs-planner-app .preview-badge{font-size:8px;padding:6px;letter-spacing:.06em}#tw-pcs-planner-app .hero{grid-template-columns:1fr;padding:28px 0 24px;gap:0}#tw-pcs-planner-app .hero h1{font-size:40px;letter-spacing:-.045em;margin:12px 0}#tw-pcs-planner-app .hero .eyebrow{font-size:9px}#tw-pcs-planner-app .hero-photo{display:none}#tw-pcs-planner-app .hero-copy{font-size:14px}#tw-pcs-planner-app .hero-note{font-size:10px}#tw-pcs-planner-app .desktop{display:none}#tw-pcs-planner-app .setup{padding:22px 20px}#tw-pcs-planner-app .section-heading h2{font-size:24px;line-height:1.15;margin:7px 0 9px}#tw-pcs-planner-app .section-heading p:not(.eyebrow){font-size:12px}#tw-pcs-planner-app .line-icon{display:none}#tw-pcs-planner-app .setup-fields{gap:15px 12px;margin-top:20px}#tw-pcs-planner-app .setup-fields label{font-size:11px}#tw-pcs-planner-app input:not([type=checkbox]),#tw-pcs-planner-app select,#tw-pcs-planner-app textarea{font-size:16px;padding:10px;min-height:46px}#tw-pcs-planner-app .fine{font-size:10px}#tw-pcs-planner-app .circumstances{gap:8px}#tw-pcs-planner-app .circumstances legend{font-size:10px}#tw-pcs-planner-app .circumstances label{font-size:11px;min-height:44px;padding:8px 11px}#tw-pcs-planner-app .setup-actions{flex-direction:column;gap:5px;align-items:stretch}#tw-pcs-planner-app .button{min-height:46px;font-size:12px;padding:11px 13px;gap:12px}#tw-pcs-planner-app .planner-nav{gap:0;justify-content:space-between;min-height:58px;margin-top:16px}#tw-pcs-planner-app .planner-nav button{font-size:12px;gap:7px;padding:17px 3px}#tw-pcs-planner-app .nav-dot{display:none}#tw-pcs-planner-app .nav-num{font-size:9px}#tw-pcs-planner-app .welcome-grid{grid-template-columns:1fr;padding-top:24px;gap:24px}#tw-pcs-planner-app .welcome-grid article{position:relative;padding:0 0 0 45px}#tw-pcs-planner-app .welcome-icon{position:absolute;left:0;top:0}#tw-pcs-planner-app .welcome-grid h3{font-size:18px}#tw-pcs-planner-app .welcome-grid p{font-size:12px}#tw-pcs-planner-app .plan-footer{margin-top:23px;padding:18px 0;gap:12px}#tw-pcs-planner-app .plan-footer p{font-size:10px}#tw-pcs-planner-app .site-footer{flex-direction:column;padding-top:10px;gap:10px;font-size:8px}#tw-pcs-planner-app.has-plan .hero{padding:21px 0}#tw-pcs-planner-app.has-plan .hero h1{font-size:26px}#tw-pcs-planner-app.has-plan .hero .eyebrow{font-size:8px}#tw-pcs-planner-app.has-plan .hero-copy{font-size:12px;line-height:1.5}#tw-pcs-planner-app .move-overview{padding:20px 18px 0}#tw-pcs-planner-app .overview-heading{gap:13px}#tw-pcs-planner-app .overview-heading h2{font-size:21px;margin-top:8px}#tw-pcs-planner-app .move-meta{font-size:10px;gap:5px;line-height:1.5;margin-top:7px}#tw-pcs-planner-app .move-meta .text-button{margin:0 0 0 5px;min-height:30px;font-size:10px}#tw-pcs-planner-app .plan-actions{width:100%;display:grid;grid-template-columns:1.1fr 1fr;gap:8px}#tw-pcs-planner-app .plan-actions .button{font-size:10px;padding:10px 6px;gap:6px}#tw-pcs-planner-app .save-note{font-size:9px;margin-top:10px;line-height:1.5}#tw-pcs-planner-app .save-clarification{margin-left:11px;width:100%}#tw-pcs-planner-app .overview-stats{grid-template-columns:1fr 1fr;margin:0 -18px}#tw-pcs-planner-app .next-action{grid-column:1/-1;border-right:0;border-bottom:1px solid var(--line);border-radius:0;padding:17px 18px}#tw-pcs-planner-app .next-action strong{font-size:16px}#tw-pcs-planner-app .next-action .eyebrow{font-size:8px}#tw-pcs-planner-app .next-action .eyebrow span{margin-left:7px}#tw-pcs-planner-app .stat{padding:14px 18px;gap:4px}#tw-pcs-planner-app .stat strong{font-size:24px}#tw-pcs-planner-app .stat span{font-size:10px}#tw-pcs-planner-app .stat small{font-size:9px}#tw-pcs-planner-app .workspace-heading{margin:22px 0 17px;align-items:start;gap:12px}#tw-pcs-planner-app .workspace-heading h2{font-size:25px;line-height:1.15;margin:7px 0}#tw-pcs-planner-app .workspace-heading p:not(.eyebrow){font-size:12px}#tw-pcs-planner-app .workspace-heading .eyebrow{font-size:9px}#tw-pcs-planner-app .workspace-heading .button{font-size:10px;padding:8px 10px;flex-shrink:0;margin-top:22px}#tw-pcs-planner-app .workspace-grid{gap:18px}#tw-pcs-planner-app .list-toolbar{padding:12px;display:block}#tw-pcs-planner-app .filter-group{justify-content:space-between;gap:0}#tw-pcs-planner-app .filter-group button{min-height:40px;font-size:10px;padding:8px 9px}#tw-pcs-planner-app .list-toolbar>span{display:block;font-size:9px;margin-top:10px}#tw-pcs-planner-app .table-heading{display:none}#tw-pcs-planner-app .task-row{grid-template-columns:1fr auto;gap:10px;padding:18px 16px;min-height:100px}#tw-pcs-planner-app .task-main{grid-column:1/-1}#tw-pcs-planner-app .task-title{font-size:14px;line-height:1.4}#tw-pcs-planner-app .task-context{font-size:10px;margin-top:5px}#tw-pcs-planner-app .task-date{font-size:11px}#tw-pcs-planner-app .task-owner{font-size:10px;grid-row:3}#tw-pcs-planner-app .task-owner:before{content:'Owner: '}#tw-pcs-planner-app .task-row .tag{grid-column:2;grid-row:2/4;font-size:10px;align-self:center}#tw-pcs-planner-app .list-note{font-size:9px;padding:13px 16px}#tw-pcs-planner-app .sidebar{grid-template-columns:1fr}#tw-pcs-planner-app .checkpoint{padding:22px}#tw-pcs-planner-app .context-link{padding:20px}#tw-pcs-planner-app .source-note{padding:3px 7px}#tw-pcs-planner-app .carry-panel,#tw-pcs-planner-app .decisions-panel{padding:23px 20px}#tw-pcs-planner-app .decision-row{grid-template-columns:1fr;gap:10px}#tw-pcs-planner-app .decision-row select{font-size:16px}#tw-pcs-planner-app .arrival-tip{padding:18px}#tw-pcs-planner-app .arrival-tip p{font-size:12px}#tw-pcs-planner-app .form-two{grid-template-columns:1fr 1fr;gap:12px}#tw-pcs-planner-app .form-two label{font-size:11px}#tw-pcs-planner-app .dialog-content>label{margin-top:15px}#tw-pcs-planner-app dialog{width:calc(100% - 20px);max-height:calc(100dvh - 32px);border-radius:18px}#tw-pcs-planner-app .dialog-header{padding:17px 20px}#tw-pcs-planner-app .dialog-header h2{font-size:24px}#tw-pcs-planner-app .dialog-content{padding:16px 20px}#tw-pcs-planner-app .dialog-footer{padding:13px 20px}#tw-pcs-planner-app .sample-note{font-size:9px}#tw-pcs-planner-app .dialog-content label{font-size:12px}#tw-pcs-planner-app .status-explanation{font-size:11px}#tw-pcs-planner-app .dialog-content textarea{min-height:68px}#tw-pcs-planner-app .dialog-content .fine{font-size:10px}#tw-pcs-planner-app .icon-button{width:42px;height:42px}#tw-pcs-planner-app .toast{font-size:11px}}@media(prefers-reduced-motion:reduce){#tw-pcs-planner-app *,#tw-pcs-planner-app ::after,#tw-pcs-planner-app ::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}@media print{#tw-pcs-planner-app .hero,#tw-pcs-planner-app .plan-actions,#tw-pcs-planner-app .plan-footer,#tw-pcs-planner-app .planner-nav,#tw-pcs-planner-app .sidebar,#tw-pcs-planner-app .site-footer,#tw-pcs-planner-app .site-header,#tw-pcs-planner-app .toast,#tw-pcs-planner-app button,#tw-pcs-planner-app dialog{display:none!important}#tw-pcs-planner-app .wrap{width:100%}#tw-pcs-planner-app .panel{box-shadow:none}#tw-pcs-planner-app .workspace-grid{grid-template-columns:1fr}#tw-pcs-planner-app .task-row{break-inside:avoid}#tw-pcs-planner-app .move-overview{padding:0}#tw-pcs-planner-app .overview-stats{display:none}}#tw-pcs-planner-app.has-plan .hero-photo img{object-position:60% 27%}#tw-pcs-planner-app #tw-pcs-workspace{scroll-margin-top:76px}@media(max-width:360px){#tw-pcs-planner-app .form-two{grid-template-columns:1fr}}#tw-pcs-planner-app{width:100%;text-align:left;font-size:16px;line-height:1.5;position:relative;isolation:isolate}#tw-pcs-planner-app :is(h1,h2,h3,p,label,input,select,textarea,button,a){font-family:inherit}#tw-pcs-planner-app :is(h1,h2,h3){color:var(--ink);font-weight:600}#tw-pcs-planner-app label{color:var(--ink)}#tw-pcs-planner-app dialog{margin:auto}#tw-pcs-planner-app .tw-icon{width:1em;height:1em;display:inline-block;vertical-align:-.12em;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}#tw-pcs-planner-app .workspace-heading h3{font-size:23px}#tw-pcs-planner-app .tag{border:0;line-height:1.5}#tw-pcs-planner-app .task-row:focus-visible{outline-offset:-4px}#tw-pcs-planner-app .filter-group button{min-height:44px}#tw-pcs-planner-app .preview-badge{font-size:10px}#tw-pcs-planner-app .setup-fields label{line-height:1.5}#tw-pcs-planner-app .planner-nav{overflow:visible}#tw-pcs-planner-app .skip{transform:none;clip-path:inset(50%);width:1px;height:1px;overflow:hidden;padding:0;white-space:nowrap}#tw-pcs-planner-app .skip:focus{clip-path:none;width:auto;height:auto;overflow:visible;padding:12px}</style>
-      <div id="tw-pcs-planner-app">
-        <a class="skip" href="#tw-pcs-planner">Skip to your plan</a>
-        <header class="site-header">
-          <div class="header-inner">
-            <a class="brand" href="https://the-wing.webflow.io/" aria-label="TheWing.ai home"><img src="https://cdn.prod.website-files.com/6a6ff0545aa01c93602db711/6a6ff0545aa01c93602db988_TheWingIcon.png" alt=""><span>THEWING.AI</span></a><span class="product-name">PCS Planning</span><span class="preview-badge">PCS PLANNING</span>
-          </div>
-        </header>
-        <div class="main-content">
-          <section class="hero wrap">
-            <div>
-              <p class="eyebrow">A LITTLE CLARITY FOR YOUR NEXT CHAPTER</p>
-              <h1>Your next move.<br> <span>One clear plan.</span></h1>
-              <p class="hero-copy">Know what’s next, what needs confirmation,<br class="desktop"> and what to keep close.</p>
-              <p class="hero-note">Start without an account. Your dates. Your decisions.</p>
-            </div>
-            <figure class="hero-photo"><img src="images/Vartical-Accordion-Image-2.jpg" alt="Military household preparing for a move">
-              <figcaption>Plan the move. Keep the essentials close.</figcaption><i aria-hidden="true"></i>
-            </figure>
-          </section>
-          <section id="tw-pcs-planner" class="wrap" aria-label="Your move planner" tabindex="-1">
-            <noscript>
-              <p class="panel setup">This planner needs JavaScript to save and organize your tasks. You can also use <a href="https://planmymove.militaryonesource.mil/">Military OneSource’s official Plan My Move</a>.</p>
-            </noscript>
-            <p id="tw-pcs-load-warning" class="error" role="status" hidden=""></p>
-            <div id="tw-pcs-setup" class="setup panel">
-              <div class="section-heading">
-                <div>
-                  <p class="eyebrow">YOUR MOVE</p>
-                  <h2>A few details. A useful starting point.</h2>
-                  <p>Everything is optional. Refine your plan as arrangements become clear. Changes to these choices add useful tasks; existing tasks stay until you mark them not applicable.</p>
-                </div><span class="line-icon" aria-hidden="true"><svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                    <path d="M6 18 18 6M6 6h12v12"></path>
-                  </svg></span>
-              </div>
-              <form id="tw-pcs-setup-form">
-                <div class="setup-fields"><label>Destination <span class="optional">optional</span><input name="destination" placeholder="Installation or area" maxlength="80" autocomplete="off"></label><label>Planned departure<input name="depart" type="date" min="2020-01-01" max="2100-12-31"></label><label>Planned arrival<input name="arrive" aria-describedby="tw-pcs-date-help tw-pcs-setup-error" type="date" min="2020-01-01" max="2100-12-31"></label></div>
-                <p id="tw-pcs-date-help" class="fine">Personal planning dates, not official reporting deadlines or authorized travel days.</p>
-                <fieldset class="circumstances">
-                  <legend>Make the starting list relevant <span class="optional">optional</span></legend><label><input name="children" type="checkbox"> Moving with children</label><label><input name="pets" type="checkbox"> Moving with a pet</label><label><input name="overseas" type="checkbox"> Overseas move</label>
-                </fieldset>
-                <p id="tw-pcs-setup-error" class="error" role="alert" hidden=""></p>
-                <div class="setup-actions"><button class="button primary" type="submit">Create my plan <span aria-hidden="true"><svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                        <path d="M6 18 18 6M6 6h12v12"></path>
-                      </svg></span></button><button class="button plain" id="tw-pcs-sample-button" type="button">Explore an illustrative plan →</button></div>
-              </form>
-            </div>
-            <div id="tw-pcs-move-overview" class="panel move-overview" hidden="">
-              <div class="overview-heading">
-                <div>
-                  <p class="eyebrow">YOUR MOVE <span id="tw-pcs-sample-label">/ ILLUSTRATIVE PLAN</span></p>
-                  <h2 id="tw-pcs-move-name"></h2>
-                  <div class="move-meta"><span id="tw-pcs-move-dates"></span><span class="divider">·</span><span id="tw-pcs-move-tags"></span><button class="text-button" id="tw-pcs-edit-move">Edit details</button></div>
-                </div>
-                <div class="plan-actions"><button class="button secondary" id="tw-pcs-save-plan">Save on this browser</button><button class="button primary" id="tw-pcs-export-plan">Download plan <span aria-hidden="true">↓</span></button></div>
-              </div>
-              <div class="save-note"><span class="status-dot" aria-hidden="true"></span><span id="tw-pcs-save-state">Not saved. Changes will reset on reload.</span><span class="save-clarification">No account or cross-device sync.</span></div>
-              <div class="overview-stats"><button id="tw-pcs-show-next" class="next-action"><span class="eyebrow">NEXT PERSONAL TARGET <span id="tw-pcs-next-date"></span></span><strong id="tw-pcs-next-task"></strong><span class="next-link">Review task <span aria-hidden="true"><svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                        <path d="M6 18 18 6M6 6h12v12"></path>
-                      </svg></span></span></button><button id="tw-pcs-show-waiting" class="stat"><strong id="tw-pcs-waiting-count"></strong><span>Awaiting confirmation</span><small>Requests still need an answer</small></button>
-                <div class="stat"><strong id="tw-pcs-complete-count"></strong><span>Tasks complete</span><small>Counts your list, not PCS readiness</small></div>
-              </div>
-            </div>
-            <nav class="planner-nav" aria-label="Planning sections"><button id="tw-pcs-tab-timeline" role="tab" aria-controls="tw-pcs-view-timeline" aria-selected="true" tabindex="0"><span class="nav-num">01</span> <span>Timeline</span><span class="nav-dot" aria-hidden="true"></span></button><button id="tw-pcs-tab-move" role="tab" aria-controls="tw-pcs-view-move" aria-selected="false" tabindex="-1"><span class="nav-num">02</span> <span>Your move</span><span class="nav-dot" aria-hidden="true"></span></button><button id="tw-pcs-tab-arrival" role="tab" aria-controls="tw-pcs-view-arrival" aria-selected="false" tabindex="-1"><span class="nav-num">03</span> <span>Arrival</span><span class="nav-dot" aria-hidden="true"></span></button></nav>
-            <div id="tw-pcs-welcome" class="welcome-grid">
-              <article><span class="welcome-icon" aria-hidden="true">01</span>
-                <h3>Map your timeline</h3>
-                <p>Give the next steps a target date and an owner. Keep requests separate from confirmations.</p>
-              </article>
-              <article><span class="welcome-icon" aria-hidden="true">02</span>
-                <h3>Organize your move</h3>
-                <p>Separate hand-carried essentials from shipment decisions and open questions.</p>
-              </article>
-              <article><span class="welcome-icon" aria-hidden="true">03</span>
-                <h3>Prepare for arrival</h3>
-                <p>Connect reporting, lodging, delivery, and the first few days in one plan.</p>
-              </article>
-            </div>
-            <div id="tw-pcs-workspace" hidden="">
-              <section id="tw-pcs-view-timeline" role="tabpanel" aria-labelledby="tw-pcs-tab-timeline" tabindex="0">
-                <div class="workspace-heading">
-                  <div>
-                    <p class="eyebrow">01 / MAP YOUR TIMELINE</p>
-                    <h2>A next step you can act on.</h2>
-                    <p>Targets you choose. Arrangements you confirm.</p>
-                  </div><button class="button secondary add-task">＋ Add a task</button>
-                </div>
-                <div class="workspace-grid">
-                  <div class="panel task-panel">
-                    <div class="list-toolbar">
-                      <div class="filter-group" role="group" aria-label="Filter tasks"><button data-filter="open" aria-pressed="true">Open</button><button data-filter="waiting" aria-pressed="false">Awaiting confirmation</button><button data-filter="all" aria-pressed="false">All tasks</button></div><span id="tw-pcs-list-count"></span>
-                    </div>
-                    <div class="table-heading" aria-hidden="true"><span>YOUR NEXT STEPS</span><span>PERSONAL TARGET</span><span>OWNER</span><span>STATUS</span></div>
-                    <div id="tw-pcs-timeline-list" class="task-list"></div>
-                    <div class="list-note">Sorted by your personal target date. Undated tasks follow. <span>No automatic deadlines.</span></div>
-                  </div>
-                  <aside class="sidebar">
-                    <div class="panel checkpoint"><span class="small-icon" aria-hidden="true"><svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                          <path d="M4 7h12m-4-4 4 4-4 4M20 17H8m4-4-4 4 4 4"></path>
-                        </svg></span>
-                      <h3>Keep the handoffs clear.</h3>
-                      <p>A request is a starting point. Mark it confirmed only after you have an answer from the responsible office or provider.</p>
-                      <div class="status-legend"><span>Requested</span><span aria-hidden="true">→</span><span>Confirmed</span><span aria-hidden="true">→</span><span>Complete</span></div>
-                    </div>
-                    <a class="context-link" href="https://the-wing.webflow.io/air-force/financial-dashboard" target="_blank" rel="noopener"><span class="eyebrow">PLANNING THE COSTS?</span><strong>Open Financial Guidance <span aria-hidden="true"><svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                            <path d="M6 18 18 6M6 6h12v12"></path>
-                          </svg></span></strong>
-                      <p>Keep your budget alongside your move plan.</p>
-                    </a>
-                    <div class="source-note">
-                      <a href="https://planmymove.militaryonesource.mil/" target="_blank" rel="noopener">Official Plan My Move <svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                          <path d="M6 18 18 6M6 6h12v12"></path>
-                        </svg></a>
-                      <p>Use official checklists and your unit’s instructions to confirm what applies.</p>
-                    </div>
-                  </aside>
-                </div>
-              </section>
-              <section id="tw-pcs-view-move" role="tabpanel" aria-labelledby="tw-pcs-tab-move" tabindex="0" hidden="">
-                <div class="workspace-heading">
-                  <div>
-                    <p class="eyebrow">02 / ORGANIZE YOUR MOVE</p>
-                    <h2>Keep close. Ship thoughtfully.</h2>
-                    <p>Make a decision for each category. Keep unresolved questions visible.</p>
-                  </div>
-                </div>
-                <div class="packing-grid">
-                  <div class="panel carry-panel">
-                    <p class="eyebrow">WITH YOU, NOT IN A BOX</p>
-                    <h3>Your hand-carry kit</h3>
-                    <p>Start with the things you need while the shipment is out of reach.</p>
-                    <div id="tw-pcs-carry-list"></div>
-                    <p class="fine">Track preparation only. Keep documents and identifiers out of this planner.</p>
-                  </div>
-                  <div class="panel decisions-panel">
-                    <div class="section-heading">
-                      <div>
-                        <h3>Shipment decisions</h3>
-                        <p id="tw-pcs-decision-count"></p>
-                      </div><span class="small-icon" aria-hidden="true"><svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                          <path d="M6 18 18 6M6 6h12v12"></path>
-                        </svg></span>
-                    </div>
-                    <div id="tw-pcs-decision-list"></div>
-                    <details>
-                      <summary>What needs a separate conversation?</summary>
-                      <p>Ask transportation about carrier restrictions, destination rules, and items requiring special handling. A selection here is your plan, not shipment authorization.</p>
-                      <a href="https://www.militaryonesource.mil/resources/millife-guides/military-pcs-move-management/" target="_blank" rel="noopener">Official moving-day guidance <svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                          <path d="M6 18 18 6M6 6h12v12"></path>
-                        </svg></a>
-                    </details>
-                  </div>
-                </div>
-                <div class="workspace-heading">
-                  <div>
-                    <h3>Move arrangements</h3>
-                    <p>The same tasks and confirmations shown on your timeline.</p>
-                  </div><button class="button secondary add-task">＋ Add a task</button>
-                </div>
-                <div class="panel task-panel">
-                  <div id="tw-pcs-move-list" class="task-list"></div>
-                </div>
-              </section>
-              <section id="tw-pcs-view-arrival" role="tabpanel" aria-labelledby="tw-pcs-tab-arrival" tabindex="0" hidden="">
-                <div class="workspace-heading">
-                  <div>
-                    <p class="eyebrow">03 / PREPARE FOR ARRIVAL</p>
-                    <h2>Make the first nights easier.</h2>
-                    <p>The same tasks, focused on reporting, access, and settling in.</p>
-                  </div><button class="button secondary add-task">＋ Add a task</button>
-                </div>
-                <div class="workspace-grid">
-                  <div class="panel task-panel">
-                    <div class="arrival-tip"><span class="small-icon" aria-hidden="true"><svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                          <path d="m3 11 9-8 9 8M6 9v12h12V9m-9 12v-7h6v7"></path>
-                        </svg></span>
-                      <p><strong>Confirmed lodging is not a completed stay.</strong><br>Keep the booking, access, and arrival steps distinct.</p>
-                    </div>
-                    <div id="tw-pcs-arrival-list" class="task-list"></div>
-                  </div>
-                  <aside class="sidebar">
-                    <div class="panel checkpoint">
-                      <p class="eyebrow">YOUR UNIT’S INSTRUCTIONS COME FIRST</p>
-                      <h3>Confirm when and where to report.</h3>
-                      <p>Personal targets help you plan. Your unit and responsible offices set official requirements.</p>
-                      <a href="https://www.militaryonesource.mil/resources/millife-guides/settling-in-after-a-pcs/" target="_blank" rel="noopener">Official arrival guidance <svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                          <path d="M6 18 18 6M6 6h12v12"></path>
-                        </svg></a>
-                    </div>
-                    <a class="context-link" href="https://the-wing.webflow.io/air-force/va-command-center" target="_blank" rel="noopener"><span class="eyebrow">CONSIDERING A HOME PURCHASE?</span><strong>Explore the VA Command Center <svg viewbox="0 0 24 24" aria-hidden="true" class="tw-icon">
-                          <path d="M6 18 18 6M6 6h12v12"></path>
-                        </svg></strong>
-                      <p>Learn about the benefit before a lender conversation.</p>
-                    </a>
-                  </aside>
-                </div>
-              </section>
-            </div>
-            <div class="plan-footer">
-              <p><strong>A plan you can keep.</strong> Save on this browser or download a readable text copy. Downloads cannot be imported. Browser data can be cleared; keep a backup.</p>
-              <p>Saved only in this browser, with no account sync. Owner labels do not share tasks. No notifications, bookings, or shipment tracking.</p><button id="tw-pcs-start-over" class="text-button" hidden="">Start a new plan</button>
-            </div>
-            <p id="tw-pcs-notice" class="toast" role="status" aria-live="polite"></p>
-          </section>
+    <div class="va-command-center-embed w-embed"><!--  PCS Plan: interaction and generated-list styles. Edit the native PCS Plan content in the Navigator.  -->
+      <style>#tw-pcs-planner-app{--ink:#192f36;--muted:#5c6b70;--paper:#f6f5f1;--white:#fff;--line:#dedfd9;--copper:#985c38;--peach:#ecb78d;--pale:#eee5da;--green:#2f6a5d;--amber:#80551f;}
+#tw-pcs-planner-app [data-pcs-generated]{--ink:#192f36;--muted:#5c6b70;--paper:#f6f5f1;--white:#fff;--line:#dedfd9;--copper:#985c38;--peach:#ecb78d;--pale:#eee5da;--green:#2f6a5d;--amber:#80551f;font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none}
+#tw-pcs-planner-app [data-pcs-generated] *{box-sizing:border-box}
+#tw-pcs-planner-app [data-pcs-generated]{margin:0}
+#tw-pcs-planner-app [data-pcs-generated] button,#tw-pcs-planner-app [data-pcs-generated] input,#tw-pcs-planner-app [data-pcs-generated] select,#tw-pcs-planner-app [data-pcs-generated] textarea{font:inherit;color:inherit}
+#tw-pcs-planner-app [data-pcs-generated] a,#tw-pcs-planner-app [data-pcs-generated] button,#tw-pcs-planner-app [data-pcs-generated] input,#tw-pcs-planner-app [data-pcs-generated] select,#tw-pcs-planner-app [data-pcs-generated] summary,#tw-pcs-planner-app [data-pcs-generated] textarea{-webkit-tap-highlight-color:transparent}
+#tw-pcs-planner-app [data-pcs-generated] button{cursor:pointer}
+#tw-pcs-planner-app [data-pcs-generated] a{color:var(--copper);text-underline-offset:4px}
+#tw-pcs-planner-app [tabindex]:focus-visible,#tw-pcs-planner-app a:focus-visible,#tw-pcs-planner-app button:focus-visible,#tw-pcs-planner-app input:focus-visible,#tw-pcs-planner-app select:focus-visible,#tw-pcs-planner-app summary:focus-visible,#tw-pcs-planner-app textarea:focus-visible{outline:3px solid #a3562b;outline-offset:4px}
+#tw-pcs-planner-app [data-pcs-generated] [tabindex]:focus-visible,#tw-pcs-planner-app [data-pcs-generated] a:focus-visible,#tw-pcs-planner-app [data-pcs-generated] button:focus-visible,#tw-pcs-planner-app [data-pcs-generated] input:focus-visible,#tw-pcs-planner-app [data-pcs-generated] select:focus-visible,#tw-pcs-planner-app [data-pcs-generated] summary:focus-visible,#tw-pcs-planner-app [data-pcs-generated] textarea:focus-visible{outline:3px solid #a3562b;outline-offset:4px}
+#tw-pcs-planner-app [hidden]{display:none!important}
+#tw-pcs-planner-app [data-pcs-generated] [hidden]{display:none!important}
+#tw-pcs-planner-app [data-pcs-generated] button{border:0;background:0 0}
+#tw-pcs-planner-app [data-pcs-generated] figure,#tw-pcs-planner-app [data-pcs-generated] h1,#tw-pcs-planner-app [data-pcs-generated] h2,#tw-pcs-planner-app [data-pcs-generated] h3,#tw-pcs-planner-app [data-pcs-generated] p{margin:0}
+#tw-pcs-planner-app [data-pcs-generated] h1,#tw-pcs-planner-app [data-pcs-generated] h2,#tw-pcs-planner-app [data-pcs-generated] h3{letter-spacing:-.035em}
+#tw-pcs-planner-app [data-pcs-generated] p{line-height:1.65}
+#tw-pcs-planner-app [data-pcs-generated] .wrap{width:min(1280px,calc(100% - 96px));margin:auto}
+#tw-pcs-planner-app [data-pcs-generated] .site-header{background:#12272f;color:#fff}
+#tw-pcs-planner-app [data-pcs-generated] .header-inner{max-width:1376px;min-height:72px;padding:0 48px;margin:auto;display:flex;align-items:center;gap:28px}
+#tw-pcs-planner-app [data-pcs-generated] .brand{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;font-size:14px;letter-spacing:.17em;font-weight:700;min-height:44px}
+#tw-pcs-planner-app [data-pcs-generated] .brand img{width:43px;height:27px;object-fit:contain}
+#tw-pcs-planner-app [data-pcs-generated] .product-name{border-left:1px solid #ffffff35;padding-left:26px;color:#d2dadb;font-size:13px}
+#tw-pcs-planner-app [data-pcs-generated] .preview-badge{margin-left:auto;font-size:9px;letter-spacing:.12em;border:1px solid #ffffff35;padding:7px 10px;border-radius:5px;color:#e9c6a9}
+#tw-pcs-planner-app [data-pcs-generated] .hero{padding:44px 0 38px;display:grid;grid-template-columns:1.2fr 1fr;gap:70px;align-items:center}
+#tw-pcs-planner-app [data-pcs-generated] .eyebrow{font-size:10px;font-weight:700;color:var(--copper);letter-spacing:.12em;line-height:1.6}
+#tw-pcs-planner-app [data-pcs-generated] .hero h1{font-size:54px;line-height:1.04;font-weight:650;margin:13px 0 16px}
+#tw-pcs-planner-app [data-pcs-generated] .hero h1 span{color:var(--copper)}
+#tw-pcs-planner-app [data-pcs-generated] .hero-copy{font-size:16px;color:var(--muted);line-height:1.6}
+#tw-pcs-planner-app [data-pcs-generated] .hero-note{font-size:11px;color:var(--muted);margin-top:12px}
+#tw-pcs-planner-app [data-pcs-generated] .hero-photo{height:240px;position:relative;border-radius:4px 26px 4px 26px;overflow:hidden;background:#d0d1cc}
+#tw-pcs-planner-app [data-pcs-generated] .hero-photo img{width:100%;height:100%;object-fit:cover;object-position:60% 48%;display:block}
+#tw-pcs-planner-app :is(.hero-photo,[data-pcs-class~="hero-photo"]):after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#132b36a6,transparent 55%);pointer-events:none}
+#tw-pcs-planner-app [data-pcs-generated] .hero-photo:after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,#132b36a6,transparent 55%);pointer-events:none}
+#tw-pcs-planner-app [data-pcs-generated] .hero-photo figcaption{position:absolute;bottom:14px;left:18px;color:#fff;z-index:1;font-size:10px}
+#tw-pcs-planner-app [data-pcs-generated] .hero-photo i{position:absolute;width:36px;height:36px;top:15px;left:15px;border-left:2px solid var(--peach);border-top:2px solid var(--peach)}
+#tw-pcs-planner-app [data-pcs-generated] .panel{border:1px solid var(--line);border-radius:18px;background:var(--white);box-shadow:0 6px 24px #172f3604}
+#tw-pcs-planner-app [data-pcs-generated] .setup{padding:28px 32px}
+#tw-pcs-planner-app [data-pcs-generated] .section-heading{display:flex;justify-content:space-between;gap:24px;align-items:start}
+#tw-pcs-planner-app [data-pcs-generated] .section-heading h2{font-size:25px;margin:4px 0 7px}
+#tw-pcs-planner-app [data-pcs-generated] .section-heading p:not(.eyebrow){font-size:13px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .line-icon{font-size:36px;color:var(--copper);line-height:1}
+#tw-pcs-planner-app [data-pcs-generated] .setup-fields{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:20px;margin-top:22px}
+#tw-pcs-planner-app [data-pcs-generated] label{display:block;color:var(--ink);font-size:12px;font-weight:600;line-height:1.5}
+#tw-pcs-planner-app [data-pcs-generated] .optional{font-size:11px;color:var(--muted);font-weight:400;margin-left:4px}
+#tw-pcs-planner-app [data-pcs-generated] input:not([type=checkbox]),#tw-pcs-planner-app [data-pcs-generated] select,#tw-pcs-planner-app [data-pcs-generated] textarea{display:block;width:100%;min-width:0;min-height:46px;border:1px solid #c6cecc;border-radius:8px;background:#fff;padding:10px 12px;font-size:14px;line-height:1.4;margin-top:7px;color:var(--ink);color-scheme:light}
+#tw-pcs-planner-app [data-pcs-generated] textarea{resize:vertical;min-height:80px}
+#tw-pcs-planner-app [data-pcs-generated] .fine{font-size:11px;color:var(--muted);line-height:1.6;margin-top:10px}
+#tw-pcs-planner-app [data-pcs-generated] .circumstances{border:0;margin:18px 0 0;padding:0;display:flex;gap:12px;flex-wrap:wrap}
+#tw-pcs-planner-app [data-pcs-generated] .circumstances legend{font-size:11px;font-weight:600;margin-bottom:8px}
+#tw-pcs-planner-app [data-pcs-generated] .circumstances label{display:flex;align-items:center;gap:9px;min-height:42px;font-weight:500;border:1px solid var(--line);border-radius:30px;padding:8px 14px;background:#fbfbf9;font-size:12px}
+#tw-pcs-planner-app [data-pcs-generated] input[type=checkbox]{accent-color:var(--copper);height:17px;width:17px;margin:0}
+#tw-pcs-planner-app [data-pcs-generated] .setup-actions{display:flex;align-items:center;gap:15px;margin-top:20px}
+#tw-pcs-planner-app [data-pcs-generated] .button{display:inline-flex;align-items:center;justify-content:center;gap:20px;min-height:44px;border-radius:8px;padding:10px 17px;font-size:12px;font-weight:600;line-height:1.45;transition:background .18s,box-shadow .18s;white-space:nowrap}
+#tw-pcs-planner-app [data-pcs-generated] .primary{background:var(--ink);color:#fff;border:1px solid var(--ink)}
+#tw-pcs-planner-app :is(.primary,[data-pcs-class~="primary"]):hover{background:#304a54;box-shadow:0 3px 12px #172f3620}
+#tw-pcs-planner-app [data-pcs-generated] .primary:hover{background:#304a54;box-shadow:0 3px 12px #172f3620}
+#tw-pcs-planner-app [data-pcs-generated] .secondary{border:1px solid #d4d9d6;background:#fff;color:var(--ink)}
+#tw-pcs-planner-app :is(.secondary,[data-pcs-class~="secondary"]):hover{background:#f3f3ef}
+#tw-pcs-planner-app [data-pcs-generated] .secondary:hover{background:#f3f3ef}
+#tw-pcs-planner-app [data-pcs-generated] .plain{color:var(--copper)}
+#tw-pcs-planner-app :is(.plain,[data-pcs-class~="plain"]):hover{background:#f1eade}
+#tw-pcs-planner-app [data-pcs-generated] .plain:hover{background:#f1eade}
+#tw-pcs-planner-app [data-pcs-generated] .error{color:#923b26;font-size:13px;margin-top:10px}
+#tw-pcs-planner-app [data-pcs-generated] .planner-nav{position:sticky;top:0;z-index:4;display:flex;gap:40px;margin-top:24px;background:var(--paper);border-bottom:1px solid #ced3cf;min-height:62px;padding:0 3px;isolation:isolate}
+#tw-pcs-planner-app :is(.planner-nav,[data-pcs-class~="planner-nav"]):before{content:"";position:absolute;z-index:-1;inset:0 -8px;background:var(--paper)}
+#tw-pcs-planner-app [data-pcs-generated] .planner-nav:before{content:"";position:absolute;z-index:-1;inset:0 -8px;background:var(--paper)}
+#tw-pcs-planner-app [data-pcs-generated] .planner-nav button{position:relative;display:flex;align-items:center;gap:10px;padding:18px 2px;font-size:13px;font-weight:600;color:var(--muted);border-bottom:3px solid transparent}
+#tw-pcs-planner-app :is(.planner-nav,[data-pcs-class~="planner-nav"]) button[aria-selected=true]{border-bottom-color:var(--copper);color:var(--ink)}
+#tw-pcs-planner-app [data-pcs-generated] .planner-nav button[aria-selected=true]{border-bottom-color:var(--copper);color:var(--ink)}
+#tw-pcs-planner-app [data-pcs-generated] .nav-num{font-size:10px;color:var(--copper);font-weight:500}
+#tw-pcs-planner-app [data-pcs-generated] .nav-dot{width:5px;height:5px;border-radius:50%;background:var(--copper);opacity:0}
+#tw-pcs-planner-app :is(.planner-nav,[data-pcs-class~="planner-nav"]) button[aria-selected=true] :is(.nav-dot,[data-pcs-class~="nav-dot"]){opacity:1}
+#tw-pcs-planner-app [data-pcs-generated] .planner-nav button[aria-selected=true] .nav-dot{opacity:1}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:32px;padding:30px 0 10px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid article{padding-right:20px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-icon{font-size:11px;color:var(--copper);border:1px solid #d5c5b5;width:31px;height:31px;border-radius:8px;display:grid;place-items:center;margin-bottom:13px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid h3{font-size:19px;margin-bottom:8px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid p{font-size:13px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .plan-footer{display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 35px;margin-top:28px;padding:20px 0;border-top:1px solid var(--line)}
+#tw-pcs-planner-app [data-pcs-generated] .plan-footer p{max-width:540px;font-size:11px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .plan-footer strong{font-weight:600;color:var(--ink)}
+#tw-pcs-planner-app [data-pcs-generated] .site-footer{display:flex;justify-content:space-between;gap:20px;padding:20px 0 30px;font-size:9px;letter-spacing:.08em;color:#68777b}
+#tw-pcs-planner-app [data-pcs-generated] .site-footer i{font-style:normal;color:var(--copper);margin:0 10px}
+#tw-pcs-planner-app [data-pcs-generated] .text-button{font-size:11px;text-decoration:underline;text-underline-offset:4px;color:var(--copper);min-height:40px;padding:4px 0}
+#tw-pcs-planner-app.has-plan :is(.hero,[data-pcs-class~="hero"]){padding:26px 0;gap:40px}
+#tw-pcs-planner-app.has-plan :is(.hero,[data-pcs-class~="hero"]) h1{font-size:34px;margin:8px 0 10px}
+#tw-pcs-planner-app.has-plan :is(.hero,[data-pcs-class~="hero"]) h1 br{display:none}
+#tw-pcs-planner-app.has-plan :is(.hero-copy,[data-pcs-class~="hero-copy"]){font-size:14px}
+#tw-pcs-planner-app.has-plan :is(.hero-note,[data-pcs-class~="hero-note"]){display:none}
+#tw-pcs-planner-app.has-plan :is(.hero-photo,[data-pcs-class~="hero-photo"]){height:148px}
+#tw-pcs-planner-app [data-pcs-generated] .move-overview{padding:25px 28px 0}
+#tw-pcs-planner-app [data-pcs-generated] .overview-heading{display:flex;justify-content:space-between;gap:20px;align-items:center}
+#tw-pcs-planner-app [data-pcs-generated] .overview-heading h2{font-size:24px;line-height:1.3;margin-top:5px;max-width:720px}
+#tw-pcs-planner-app [data-pcs-generated] .move-meta{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:11px;color:var(--muted);margin-top:3px}
+#tw-pcs-planner-app [data-pcs-generated] .move-meta .text-button{margin-left:8px}
+#tw-pcs-planner-app [data-pcs-generated] .plan-actions{display:flex;gap:9px;flex-shrink:0}
+#tw-pcs-planner-app [data-pcs-generated] .save-note{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:10px;color:var(--muted);margin:7px 0 20px}
+#tw-pcs-planner-app [data-pcs-generated] .status-dot{width:5px;height:5px;border-radius:50%;background:#a17c53}
+#tw-pcs-planner-app [data-pcs-generated] .save-clarification{margin-left:auto}
+#tw-pcs-planner-app [data-pcs-generated] .overview-stats{display:grid;grid-template-columns:1.6fr 1fr 1fr;border-top:1px solid var(--line);margin:0 -28px}
+#tw-pcs-planner-app [data-pcs-generated] .next-action{text-align:left;padding:20px 28px;display:flex;flex-direction:column;align-items:start;gap:6px;border-right:1px solid var(--line);border-bottom-left-radius:18px;background:#faf7f2}
+#tw-pcs-planner-app [data-pcs-generated] .next-action strong{font-size:17px;letter-spacing:-.02em;line-height:1.4}
+#tw-pcs-planner-app [data-pcs-generated] .next-action .eyebrow{font-size:9px}
+#tw-pcs-planner-app [data-pcs-generated] .next-action .eyebrow span{margin-left:8px}
+#tw-pcs-planner-app [data-pcs-generated] .next-link{font-size:11px;color:var(--copper);margin-top:3px}
+#tw-pcs-planner-app [data-pcs-generated] .stat{padding:17px 25px;text-align:left;display:flex;flex-direction:column;justify-content:center;align-items:start;gap:4px}
+#tw-pcs-planner-app [data-pcs-generated] .stat+.stat{border-left:1px solid var(--line)}
+#tw-pcs-planner-app [data-pcs-generated] .stat strong{font-size:30px;font-weight:600;letter-spacing:-.05em;line-height:1.1}
+#tw-pcs-planner-app [data-pcs-generated] .stat span{font-size:12px;font-weight:600}
+#tw-pcs-planner-app [data-pcs-generated] .stat small{font-size:10px;color:var(--muted);line-height:1.5}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-heading{display:flex;justify-content:space-between;align-items:center;gap:20px;margin:28px 0 20px}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-heading h2{font-size:29px;margin:6px 0}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-heading p:not(.eyebrow){font-size:13px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-grid{display:grid;grid-template-columns:minmax(0,1fr) 270px;gap:22px}
+#tw-pcs-planner-app [data-pcs-generated] .task-panel{overflow:hidden}
+#tw-pcs-planner-app [data-pcs-generated] .list-toolbar{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:16px 20px;border-bottom:1px solid var(--line)}
+#tw-pcs-planner-app [data-pcs-generated] .filter-group{display:flex;gap:4px;border-radius:8px;background:#f3f4ef;padding:3px}
+#tw-pcs-planner-app [data-pcs-generated] .filter-group button{min-height:34px;padding:7px 10px;font-size:10px;border-radius:5px;color:var(--muted);font-weight:500}
+#tw-pcs-planner-app :is(.filter-group,[data-pcs-class~="filter-group"]) button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 4px #18323815}
+#tw-pcs-planner-app [data-pcs-generated] .filter-group button[aria-pressed=true]{background:#fff;color:var(--ink);box-shadow:0 1px 4px #18323815}
+#tw-pcs-planner-app [data-pcs-generated] .list-toolbar>span{font-size:10px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .table-heading,#tw-pcs-planner-app [data-pcs-generated] .task-row{display:grid;grid-template-columns:minmax(0,2fr) minmax(82px,.75fr) minmax(58px,.5fr) minmax(95px,.8fr);gap:12px;align-items:center;padding:15px 22px}
+#tw-pcs-planner-app [data-pcs-generated] .table-heading{font-size:8px;font-weight:650;letter-spacing:.08em;background:#fbfcf9;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .task-row{width:100%;text-align:left;min-height:84px;border-top:1px solid #e9eae5;position:relative;transition:background .18s}
+#tw-pcs-planner-app :is(.task-row,[data-pcs-class~="task-row"]):hover{background:#faf8f2}
+#tw-pcs-planner-app [data-pcs-generated] .task-row:hover{background:#faf8f2}
+#tw-pcs-planner-app [data-pcs-generated] .task-main{display:flex;gap:12px;align-items:center}
+#tw-pcs-planner-app [data-pcs-generated] .task-symbol{height:24px;width:24px;border:1px solid #d7dcd8;border-radius:7px;display:grid;place-items:center;font-size:12px;flex-shrink:0;color:#8a694e;background:#fbfaf6}
+#tw-pcs-planner-app [data-pcs-generated] .task-title{font-size:12px;font-weight:600;line-height:1.5;display:block}
+#tw-pcs-planner-app [data-pcs-generated] .task-context{font-size:10px;color:var(--muted);display:block;margin-top:4px}
+#tw-pcs-planner-app [data-pcs-generated] .task-date,#tw-pcs-planner-app [data-pcs-generated] .task-owner{font-size:11px;color:#516167}
+#tw-pcs-planner-app [data-pcs-generated] .tag{font-size:9px;display:inline-flex;align-items:center;gap:5px;padding:6px 7px;white-space:nowrap;border-radius:5px;font-weight:550;width:fit-content}
+#tw-pcs-planner-app :is(.tag,[data-pcs-class~="tag"]):before{content:"";height:4px;width:4px;border-radius:50%;background:currentColor}
+#tw-pcs-planner-app [data-pcs-generated] .tag:before{content:"";height:4px;width:4px;border-radius:50%;background:currentColor}
+#tw-pcs-planner-app [data-pcs-generated] .requested{color:#80551f;background:#fbf0dd}
+#tw-pcs-planner-app [data-pcs-generated] .confirmed{color:#2f6a5d;background:#edf5ef}
+#tw-pcs-planner-app [data-pcs-generated] .not-started{color:#5b6c74;background:#f0f2f3}
+#tw-pcs-planner-app [data-pcs-generated] .complete{color:#607168;background:#eff2ed}
+#tw-pcs-planner-app [data-pcs-generated] .does-not-apply{color:#667173;background:#f2f2ee}
+#tw-pcs-planner-app [data-pcs-generated] .list-note{padding:14px 22px;border-top:1px solid var(--line);font-size:9px;color:var(--muted);line-height:1.6}
+#tw-pcs-planner-app [data-pcs-generated] .list-note span{white-space:nowrap}
+#tw-pcs-planner-app [data-pcs-generated] .sidebar{display:grid;gap:16px;align-content:start}
+#tw-pcs-planner-app [data-pcs-generated] .checkpoint{padding:23px}
+#tw-pcs-planner-app [data-pcs-generated] .small-icon{font-size:24px;color:var(--copper);display:block;margin-bottom:12px}
+#tw-pcs-planner-app [data-pcs-generated] .checkpoint h3{font-size:21px;line-height:1.2;margin-bottom:12px}
+#tw-pcs-planner-app [data-pcs-generated] .checkpoint p:not(.eyebrow){font-size:12px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .checkpoint a{font-size:12px;display:inline-block;margin-top:16px;line-height:1.6}
+#tw-pcs-planner-app [data-pcs-generated] .status-legend{display:flex;flex-wrap:wrap;gap:7px;font-size:8px;color:#5b6d72;margin-top:15px}
+#tw-pcs-planner-app [data-pcs-generated] .context-link{display:block;padding:20px 22px;border-radius:14px;background:#eee9df;text-decoration:none;color:var(--ink)}
+#tw-pcs-planner-app [data-pcs-generated] .context-link strong{display:block;font-size:14px;line-height:1.45;margin-top:8px;letter-spacing:-.02em}
+#tw-pcs-planner-app [data-pcs-generated] .context-link p{font-size:11px;margin-top:7px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .source-note{padding:0 7px}
+#tw-pcs-planner-app [data-pcs-generated] .source-note a{font-size:11px}
+#tw-pcs-planner-app [data-pcs-generated] .source-note p{font-size:10px;color:var(--muted);margin-top:8px}
+#tw-pcs-planner-app [data-pcs-generated] .packing-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:22px}
+#tw-pcs-planner-app [data-pcs-generated] .carry-panel,#tw-pcs-planner-app [data-pcs-generated] .decisions-panel{padding:28px}
+#tw-pcs-planner-app [data-pcs-generated] .carry-panel h3,#tw-pcs-planner-app [data-pcs-generated] .decisions-panel h3{font-size:23px;margin:7px 0}
+#tw-pcs-planner-app [data-pcs-generated] .carry-panel>p:not(.eyebrow),#tw-pcs-planner-app [data-pcs-generated] .decisions-panel .section-heading p{font-size:13px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .carry-row{display:flex;gap:12px;align-items:center;padding:18px 0;border-bottom:1px solid var(--line);min-height:60px;font-size:13px}
+#tw-pcs-planner-app [data-pcs-generated] .carry-row input{flex-shrink:0}
+#tw-pcs-planner-app [data-pcs-generated] .decision-row{display:grid;grid-template-columns:1fr 150px;gap:20px;align-items:center;padding:14px 0;border-bottom:1px solid var(--line)}
+#tw-pcs-planner-app [data-pcs-generated] .decision-row select{margin:0;font-size:12px}
+#tw-pcs-planner-app [data-pcs-generated] .decision-row label{font-size:13px}
+#tw-pcs-planner-app [data-pcs-generated] details{margin-top:20px;font-size:12px}
+#tw-pcs-planner-app [data-pcs-generated] summary{cursor:pointer;min-height:44px;line-height:1.6;padding:10px 0;font-weight:600}
+#tw-pcs-planner-app [data-pcs-generated] details p{color:var(--muted);padding:3px 0 10px}
+#tw-pcs-planner-app [data-pcs-generated] .arrival-tip{display:flex;gap:18px;padding:22px;background:#f9f7f2;align-items:center}
+#tw-pcs-planner-app [data-pcs-generated] .arrival-tip p{font-size:12px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .arrival-tip strong{color:var(--ink);font-weight:600}
+#tw-pcs-planner-app [data-pcs-generated] .arrival-tip .small-icon{margin:0}
+#tw-pcs-planner-app [data-pcs-generated] .toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);max-width:calc(100% - 40px);width:max-content;border-radius:8px;background:var(--ink);color:#fff;font-size:12px;z-index:20;padding:12px 18px;box-shadow:0 8px 30px #152e3630;pointer-events:none}
+#tw-pcs-planner-app :is(.toast,[data-pcs-class~="toast"]):empty{display:none}
+#tw-pcs-planner-app [data-pcs-generated] .toast:empty{display:none}
+#tw-pcs-planner-app [data-pcs-generated] .skip{position:fixed;left:16px;top:8px;z-index:50;transform:translateY(-150%);background:#fff;padding:12px;color:var(--ink)}
+#tw-pcs-planner-app :is(.skip,[data-pcs-class~="skip"]):focus{transform:none}
+#tw-pcs-planner-app [data-pcs-generated] .skip:focus{transform:none}
+#tw-pcs-planner-app [data-pcs-generated] dialog{border:1px solid #d9ded9;border-radius:20px;padding:0;width:min(540px,calc(100% - 28px));max-height:calc(100dvh - 40px);color:var(--ink);background:var(--white);box-shadow:0 30px 120px #10282f50}
+#tw-pcs-planner-app dialog::backdrop{background:#132b354f;backdrop-filter:blur(3px)}
+#tw-pcs-planner-app [data-pcs-generated] dialog::backdrop{background:#132b354f;backdrop-filter:blur(3px)}
+#tw-pcs-planner-app dialog[open]{display:flex;flex-direction:column;animation:tw-pcs-panel-in .22s ease-out}
+#tw-pcs-planner-app [data-pcs-generated] dialog[open]{display:flex;flex-direction:column;animation:tw-pcs-panel-in .22s ease-out}
+#tw-pcs-planner-app [data-pcs-generated] dialog form{display:flex;flex-direction:column;min-height:0;width:100%}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-header{display:flex;justify-content:space-between;align-items:center;gap:20px;padding:22px 26px;border-bottom:1px solid var(--line);flex-shrink:0}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-header h2{font-size:25px;margin-top:3px}
+#tw-pcs-planner-app [data-pcs-generated] .icon-button{font-size:27px;line-height:1;height:44px;width:44px;border:1px solid var(--line);border-radius:50%;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-content{padding:20px 26px;overflow-y:auto;overscroll-behavior:contain;min-height:0}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-content>label{margin-top:16px}
+#tw-pcs-planner-app [data-pcs-generated] .sample-note{font-size:10px;color:var(--copper)}
+#tw-pcs-planner-app [data-pcs-generated] .form-two{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-top:16px}
+#tw-pcs-planner-app [data-pcs-generated] .status-explanation{font-size:11px;color:var(--muted);background:#f6f5ef;padding:12px 14px;border-radius:8px;margin-top:10px;line-height:1.6}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-footer{display:flex;justify-content:space-between;gap:16px;padding:16px 26px;border-top:1px solid var(--line);flex-shrink:0}
+#tw-pcs-planner-app [data-pcs-generated] .empty-list{padding:30px;font-size:13px;color:var(--muted)}
+#tw-pcs-planner-app [data-pcs-generated] #tw-pcs-planner{scroll-margin-top:20px}
+#tw-pcs-planner-app [data-pcs-generated] #tw-pcs-workspace [role=tabpanel]{scroll-margin-top:76px}
+@keyframes tw-pcs-panel-in{from{transform:translateY(12px);opacity:0}to{transform:translateY(0);opacity:1}}
+@media (max-width:1100px){#tw-pcs-planner-app [data-pcs-generated] .wrap{width:calc(100% - 56px)}
+#tw-pcs-planner-app [data-pcs-generated] .header-inner{padding:0 28px}
+#tw-pcs-planner-app [data-pcs-generated] .hero{gap:35px}
+#tw-pcs-planner-app [data-pcs-generated] .hero h1{font-size:46px}
+#tw-pcs-planner-app [data-pcs-generated] .overview-heading{align-items:start;flex-wrap:wrap}
+#tw-pcs-planner-app [data-pcs-generated] .overview-heading h2{font-size:24px}
+#tw-pcs-planner-app [data-pcs-generated] .plan-actions{margin-top:2px}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-grid{grid-template-columns:minmax(0,1fr) 230px;gap:16px}
+#tw-pcs-planner-app [data-pcs-generated] .table-heading,#tw-pcs-planner-app [data-pcs-generated] .task-row{grid-template-columns:minmax(0,1.8fr) 72px 55px 100px;gap:9px;padding:16px}
+#tw-pcs-planner-app [data-pcs-generated] .task-title{font-size:12px}
+#tw-pcs-planner-app [data-pcs-generated] .task-symbol{display:none}
+#tw-pcs-planner-app [data-pcs-generated] .checkpoint{padding:20px}
+#tw-pcs-planner-app [data-pcs-generated] .filter-group button{padding:7px 8px}}
+@media (max-width:800px){#tw-pcs-planner-app [data-pcs-generated] .hero{grid-template-columns:1.1fr 1fr;gap:20px}
+#tw-pcs-planner-app [data-pcs-generated] .hero h1{font-size:39px}
+#tw-pcs-planner-app [data-pcs-generated] .hero-photo{height:230px}
+#tw-pcs-planner-app [data-pcs-generated] .setup{padding:25px}
+#tw-pcs-planner-app [data-pcs-generated] .setup-fields{grid-template-columns:1fr 1fr}
+#tw-pcs-planner-app [data-pcs-generated] .setup-fields>label:first-child{grid-column:1/-1}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-grid{grid-template-columns:1fr}
+#tw-pcs-planner-app [data-pcs-generated] .sidebar{grid-template-columns:1fr 1fr}
+#tw-pcs-planner-app [data-pcs-generated] .source-note{grid-column:1/-1}
+#tw-pcs-planner-app [data-pcs-generated] .overview-stats{grid-template-columns:1.3fr 1fr 1fr}
+#tw-pcs-planner-app [data-pcs-generated] .stat{padding:15px}
+#tw-pcs-planner-app [data-pcs-generated] .next-action{padding:18px}
+#tw-pcs-planner-app [data-pcs-generated] .stat small{font-size:9px}
+#tw-pcs-planner-app.has-plan :is(.hero,[data-pcs-class~="hero"]){grid-template-columns:1fr}
+#tw-pcs-planner-app.has-plan :is(.hero-photo,[data-pcs-class~="hero-photo"]){display:none}
+#tw-pcs-planner-app.has-plan :is(.hero,[data-pcs-class~="hero"]) h1{font-size:31px}
+#tw-pcs-planner-app [data-pcs-generated] .packing-grid{grid-template-columns:1fr}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid{gap:22px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid h3{font-size:17px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid p{font-size:12px}}
+@media (max-width:540px){#tw-pcs-planner-app [data-pcs-generated] .wrap{width:calc(100% - 36px)}
+#tw-pcs-planner-app [data-pcs-generated] .header-inner{padding:0 18px;min-height:60px;gap:12px}
+#tw-pcs-planner-app [data-pcs-generated] .brand{font-size:11px;gap:8px;letter-spacing:.12em}
+#tw-pcs-planner-app [data-pcs-generated] .brand img{width:32px;height:21px}
+#tw-pcs-planner-app [data-pcs-generated] .product-name{display:none}
+#tw-pcs-planner-app [data-pcs-generated] .preview-badge{font-size:8px;padding:6px;letter-spacing:.06em}
+#tw-pcs-planner-app [data-pcs-generated] .hero{grid-template-columns:1fr;padding:28px 0 24px;gap:0}
+#tw-pcs-planner-app [data-pcs-generated] .hero h1{font-size:40px;letter-spacing:-.045em;margin:12px 0}
+#tw-pcs-planner-app [data-pcs-generated] .hero .eyebrow{font-size:9px}
+#tw-pcs-planner-app [data-pcs-generated] .hero-photo{display:none}
+#tw-pcs-planner-app [data-pcs-generated] .hero-copy{font-size:14px}
+#tw-pcs-planner-app [data-pcs-generated] .hero-note{font-size:10px}
+#tw-pcs-planner-app [data-pcs-generated] .desktop{display:none}
+#tw-pcs-planner-app [data-pcs-generated] .setup{padding:22px 20px}
+#tw-pcs-planner-app [data-pcs-generated] .section-heading h2{font-size:24px;line-height:1.15;margin:7px 0 9px}
+#tw-pcs-planner-app [data-pcs-generated] .section-heading p:not(.eyebrow){font-size:12px}
+#tw-pcs-planner-app [data-pcs-generated] .line-icon{display:none}
+#tw-pcs-planner-app [data-pcs-generated] .setup-fields{gap:15px 12px;margin-top:20px}
+#tw-pcs-planner-app [data-pcs-generated] .setup-fields label{font-size:11px}
+#tw-pcs-planner-app [data-pcs-generated] input:not([type=checkbox]),#tw-pcs-planner-app [data-pcs-generated] select,#tw-pcs-planner-app [data-pcs-generated] textarea{font-size:16px;padding:10px;min-height:46px}
+#tw-pcs-planner-app [data-pcs-generated] .fine{font-size:10px}
+#tw-pcs-planner-app [data-pcs-generated] .circumstances{gap:8px}
+#tw-pcs-planner-app [data-pcs-generated] .circumstances legend{font-size:10px}
+#tw-pcs-planner-app [data-pcs-generated] .circumstances label{font-size:11px;min-height:44px;padding:8px 11px}
+#tw-pcs-planner-app [data-pcs-generated] .setup-actions{flex-direction:column;gap:5px;align-items:stretch}
+#tw-pcs-planner-app [data-pcs-generated] .button{min-height:46px;font-size:12px;padding:11px 13px;gap:12px}
+#tw-pcs-planner-app [data-pcs-generated] .planner-nav{gap:0;justify-content:space-between;min-height:58px;margin-top:16px}
+#tw-pcs-planner-app [data-pcs-generated] .planner-nav button{font-size:12px;gap:7px;padding:17px 3px}
+#tw-pcs-planner-app [data-pcs-generated] .nav-dot{display:none}
+#tw-pcs-planner-app [data-pcs-generated] .nav-num{font-size:9px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid{grid-template-columns:1fr;padding-top:24px;gap:24px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid article{position:relative;padding:0 0 0 45px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-icon{position:absolute;left:0;top:0}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid h3{font-size:18px}
+#tw-pcs-planner-app [data-pcs-generated] .welcome-grid p{font-size:12px}
+#tw-pcs-planner-app [data-pcs-generated] .plan-footer{margin-top:23px;padding:18px 0;gap:12px}
+#tw-pcs-planner-app [data-pcs-generated] .plan-footer p{font-size:10px}
+#tw-pcs-planner-app [data-pcs-generated] .site-footer{flex-direction:column;padding-top:10px;gap:10px;font-size:8px}
+#tw-pcs-planner-app.has-plan :is(.hero,[data-pcs-class~="hero"]){padding:21px 0}
+#tw-pcs-planner-app.has-plan :is(.hero,[data-pcs-class~="hero"]) h1{font-size:26px}
+#tw-pcs-planner-app.has-plan :is(.hero,[data-pcs-class~="hero"]) :is(.eyebrow,[data-pcs-class~="eyebrow"]){font-size:8px}
+#tw-pcs-planner-app.has-plan :is(.hero-copy,[data-pcs-class~="hero-copy"]){font-size:12px;line-height:1.5}
+#tw-pcs-planner-app [data-pcs-generated] .move-overview{padding:20px 18px 0}
+#tw-pcs-planner-app [data-pcs-generated] .overview-heading{gap:13px}
+#tw-pcs-planner-app [data-pcs-generated] .overview-heading h2{font-size:21px;margin-top:8px}
+#tw-pcs-planner-app [data-pcs-generated] .move-meta{font-size:10px;gap:5px;line-height:1.5;margin-top:7px}
+#tw-pcs-planner-app [data-pcs-generated] .move-meta .text-button{margin:0 0 0 5px;min-height:30px;font-size:10px}
+#tw-pcs-planner-app [data-pcs-generated] .plan-actions{width:100%;display:grid;grid-template-columns:1.1fr 1fr;gap:8px}
+#tw-pcs-planner-app [data-pcs-generated] .plan-actions .button{font-size:10px;padding:10px 6px;gap:6px}
+#tw-pcs-planner-app [data-pcs-generated] .save-note{font-size:9px;margin-top:10px;line-height:1.5}
+#tw-pcs-planner-app [data-pcs-generated] .save-clarification{margin-left:11px;width:100%}
+#tw-pcs-planner-app [data-pcs-generated] .overview-stats{grid-template-columns:1fr 1fr;margin:0 -18px}
+#tw-pcs-planner-app [data-pcs-generated] .next-action{grid-column:1/-1;border-right:0;border-bottom:1px solid var(--line);border-radius:0;padding:17px 18px}
+#tw-pcs-planner-app [data-pcs-generated] .next-action strong{font-size:16px}
+#tw-pcs-planner-app [data-pcs-generated] .next-action .eyebrow{font-size:8px}
+#tw-pcs-planner-app [data-pcs-generated] .next-action .eyebrow span{margin-left:7px}
+#tw-pcs-planner-app [data-pcs-generated] .stat{padding:14px 18px;gap:4px}
+#tw-pcs-planner-app [data-pcs-generated] .stat strong{font-size:24px}
+#tw-pcs-planner-app [data-pcs-generated] .stat span{font-size:10px}
+#tw-pcs-planner-app [data-pcs-generated] .stat small{font-size:9px}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-heading{margin:22px 0 17px;align-items:start;gap:12px}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-heading h2{font-size:25px;line-height:1.15;margin:7px 0}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-heading p:not(.eyebrow){font-size:12px}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-heading .eyebrow{font-size:9px}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-heading .button{font-size:10px;padding:8px 10px;flex-shrink:0;margin-top:22px}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-grid{gap:18px}
+#tw-pcs-planner-app [data-pcs-generated] .list-toolbar{padding:12px;display:block}
+#tw-pcs-planner-app [data-pcs-generated] .filter-group{justify-content:space-between;gap:0}
+#tw-pcs-planner-app [data-pcs-generated] .filter-group button{min-height:40px;font-size:10px;padding:8px 9px}
+#tw-pcs-planner-app [data-pcs-generated] .list-toolbar>span{display:block;font-size:9px;margin-top:10px}
+#tw-pcs-planner-app [data-pcs-generated] .table-heading{display:none}
+#tw-pcs-planner-app [data-pcs-generated] .task-row{grid-template-columns:1fr auto;gap:10px;padding:18px 16px;min-height:100px}
+#tw-pcs-planner-app [data-pcs-generated] .task-main{grid-column:1/-1}
+#tw-pcs-planner-app [data-pcs-generated] .task-title{font-size:14px;line-height:1.4}
+#tw-pcs-planner-app [data-pcs-generated] .task-context{font-size:10px;margin-top:5px}
+#tw-pcs-planner-app [data-pcs-generated] .task-date{font-size:11px}
+#tw-pcs-planner-app [data-pcs-generated] .task-owner{font-size:10px;grid-row:3}
+#tw-pcs-planner-app :is(.task-owner,[data-pcs-class~="task-owner"]):before{content:"Owner: "}
+#tw-pcs-planner-app [data-pcs-generated] .task-owner:before{content:"Owner: "}
+#tw-pcs-planner-app [data-pcs-generated] .task-row .tag{grid-column:2;grid-row:2/4;font-size:10px;align-self:center}
+#tw-pcs-planner-app [data-pcs-generated] .list-note{font-size:9px;padding:13px 16px}
+#tw-pcs-planner-app [data-pcs-generated] .sidebar{grid-template-columns:1fr}
+#tw-pcs-planner-app [data-pcs-generated] .checkpoint{padding:22px}
+#tw-pcs-planner-app [data-pcs-generated] .context-link{padding:20px}
+#tw-pcs-planner-app [data-pcs-generated] .source-note{padding:3px 7px}
+#tw-pcs-planner-app [data-pcs-generated] .carry-panel,#tw-pcs-planner-app [data-pcs-generated] .decisions-panel{padding:23px 20px}
+#tw-pcs-planner-app [data-pcs-generated] .decision-row{grid-template-columns:1fr;gap:10px}
+#tw-pcs-planner-app [data-pcs-generated] .decision-row select{font-size:16px}
+#tw-pcs-planner-app [data-pcs-generated] .arrival-tip{padding:18px}
+#tw-pcs-planner-app [data-pcs-generated] .arrival-tip p{font-size:12px}
+#tw-pcs-planner-app [data-pcs-generated] .form-two{grid-template-columns:1fr 1fr;gap:12px}
+#tw-pcs-planner-app [data-pcs-generated] .form-two label{font-size:11px}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-content>label{margin-top:15px}
+#tw-pcs-planner-app [data-pcs-generated] dialog{width:calc(100% - 20px);max-height:calc(100dvh - 32px);border-radius:18px}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-header{padding:17px 20px}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-header h2{font-size:24px}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-content{padding:16px 20px}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-footer{padding:13px 20px}
+#tw-pcs-planner-app [data-pcs-generated] .sample-note{font-size:9px}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-content label{font-size:12px}
+#tw-pcs-planner-app [data-pcs-generated] .status-explanation{font-size:11px}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-content textarea{min-height:68px}
+#tw-pcs-planner-app [data-pcs-generated] .dialog-content .fine{font-size:10px}
+#tw-pcs-planner-app [data-pcs-generated] .icon-button{width:42px;height:42px}
+#tw-pcs-planner-app [data-pcs-generated] .toast{font-size:11px}}
+@media (prefers-reduced-motion:reduce){#tw-pcs-planner-app ::after,#tw-pcs-planner-app ::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+#tw-pcs-planner-app [data-pcs-generated] *,#tw-pcs-planner-app [data-pcs-generated] ::after,#tw-pcs-planner-app [data-pcs-generated] ::before{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+@media  print{#tw-pcs-planner-app [data-pcs-generated] .hero,#tw-pcs-planner-app [data-pcs-generated] .plan-actions,#tw-pcs-planner-app [data-pcs-generated] .plan-footer,#tw-pcs-planner-app [data-pcs-generated] .planner-nav,#tw-pcs-planner-app [data-pcs-generated] .sidebar,#tw-pcs-planner-app [data-pcs-generated] .site-footer,#tw-pcs-planner-app [data-pcs-generated] .site-header,#tw-pcs-planner-app [data-pcs-generated] .toast,#tw-pcs-planner-app [data-pcs-generated] button,#tw-pcs-planner-app [data-pcs-generated] dialog{display:none!important}
+#tw-pcs-planner-app [data-pcs-generated] .wrap{width:100%}
+#tw-pcs-planner-app [data-pcs-generated] .panel{box-shadow:none}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-grid{grid-template-columns:1fr}
+#tw-pcs-planner-app [data-pcs-generated] .task-row{break-inside:avoid}
+#tw-pcs-planner-app [data-pcs-generated] .move-overview{padding:0}
+#tw-pcs-planner-app [data-pcs-generated] .overview-stats{display:none}}
+#tw-pcs-planner-app.has-plan :is(.hero-photo,[data-pcs-class~="hero-photo"]) img{object-position:60% 27%}
+#tw-pcs-planner-app [data-pcs-generated] #tw-pcs-workspace{scroll-margin-top:76px}
+@media (max-width:360px){#tw-pcs-planner-app [data-pcs-generated] .form-two{grid-template-columns:1fr}}
+#tw-pcs-planner-app [data-pcs-generated]{width:100%;text-align:left;font-size:16px;line-height:1.5;position:relative;isolation:isolate}
+#tw-pcs-planner-app [data-pcs-generated] :is(h1,h2,h3,p,label,input,select,textarea,button,a){font-family:inherit}
+#tw-pcs-planner-app [data-pcs-generated] :is(h1,h2,h3){color:var(--ink);font-weight:600}
+#tw-pcs-planner-app [data-pcs-generated] label{color:var(--ink)}
+#tw-pcs-planner-app [data-pcs-generated] dialog{margin:auto}
+#tw-pcs-planner-app [data-pcs-generated] .tw-icon{width:1em;height:1em;display:inline-block;vertical-align:-.12em;fill:none;stroke:currentColor;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;flex-shrink:0}
+#tw-pcs-planner-app [data-pcs-generated] .workspace-heading h3{font-size:23px}
+#tw-pcs-planner-app [data-pcs-generated] .tag{border:0;line-height:1.5}
+#tw-pcs-planner-app :is(.task-row,[data-pcs-class~="task-row"]):focus-visible{outline-offset:-4px}
+#tw-pcs-planner-app [data-pcs-generated] .task-row:focus-visible{outline-offset:-4px}
+#tw-pcs-planner-app [data-pcs-generated] .filter-group button{min-height:44px}
+#tw-pcs-planner-app [data-pcs-generated] .preview-badge{font-size:10px}
+#tw-pcs-planner-app [data-pcs-generated] .setup-fields label{line-height:1.5}
+#tw-pcs-planner-app [data-pcs-generated] .planner-nav{overflow:visible}
+#tw-pcs-planner-app [data-pcs-generated] .skip{transform:none;clip-path:inset(50%);width:1px;height:1px;overflow:hidden;padding:0;white-space:nowrap}
+#tw-pcs-planner-app :is(.skip,[data-pcs-class~="skip"]):focus{clip-path:none;width:auto;height:auto;overflow:visible;padding:12px}
+#tw-pcs-planner-app [data-pcs-generated] .skip:focus{clip-path:none;width:auto;height:auto;overflow:visible;padding:12px}
+@media(max-width:360px){#tw-pcs-planner-app [data-pcs-class~="form-two"]{grid-template-columns:1fr}}
+:where(#tw-pcs-planner-app){font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif}:where(#tw-pcs-planner-app) :where(h1,h2,h3,p,label,input,select,textarea,button,a){font-family:inherit}
+html.wf-design-mode #tw-pcs-planner-app #tw-pcs-move-overview,html.wf-design-mode #tw-pcs-planner-app #tw-pcs-workspace,html.wf-design-mode #tw-pcs-planner-app #tw-pcs-view-move,html.wf-design-mode #tw-pcs-planner-app #tw-pcs-view-arrival{display:block!important}
+html.wf-design-mode #tw-pcs-planner-app dialog{display:block;position:relative;margin:24px auto;max-height:none}
+</style>
+    </div>
+    <div id="tw-pcs-planner-app" class="pcsplan-planner-app">
+      <a href="#tw-pcs-planner" data-pcs-class="skip" class="pcsplan-skip">Skip to your plan</a>
+      <header data-pcs-class="site-header" class="pcsplan-site-header">
+        <div data-pcs-class="header-inner" class="pcsplan-header-inner">
+          <a href="https://the-wing.webflow.io/" data-pcs-class="brand" aria-label="TheWing.ai home" class="pcsplan-brand w-inline-block"><img src="images/pcs-plan-thewing-icon.png" loading="lazy" alt="" class="pcsplan-img"><span class="pcsplan-span">THEWING.AI</span></a><span data-pcs-class="product-name" class="pcsplan-product-name">PCS Planning</span><span data-pcs-class="preview-badge" class="pcsplan-preview-badge">PCS PLANNING</span>
         </div>
-        <footer class="site-footer wrap"><span>THEWING.AI <i>/</i> PCS PLANNING</span><span>Independent planning tool · Follow your unit’s official instructions</span></footer>
-        <dialog id="tw-pcs-task-dialog" aria-labelledby="tw-pcs-task-dialog-title">
-          <form id="tw-pcs-task-form">
-            <header class="dialog-header">
-              <div>
-                <p class="eyebrow">YOUR NEXT STEP</p>
-                <h2 id="tw-pcs-task-dialog-title">Task details</h2>
-              </div><button class="icon-button" type="button" id="tw-pcs-close-task" aria-label="Close task details">×</button>
-            </header>
-            <div class="dialog-content">
-              <p class="sample-note">Personal targets, not official deadlines</p><label>Task<input id="tw-pcs-task-name" maxlength="100" required=""></label>
-              <div class="form-two"><label>Personal target date<input id="tw-pcs-task-date" type="date" min="2020-01-01" max="2100-12-31"></label><label>Responsible person<select id="tw-pcs-task-owner">
-                    <option>Me</option>
-                    <option>Partner</option>
-                    <option>Together</option>
-                    <option>Unassigned</option>
-                  </select></label></div><label>Status<select id="tw-pcs-task-status" aria-describedby="tw-pcs-status-help">
-                  <option>Not started</option>
-                  <option>Requested</option>
-                  <option>Confirmed</option>
-                  <option>Complete</option>
-                  <option>Does not apply</option>
-                </select></label>
-              <div class="status-explanation" id="tw-pcs-status-help"></div><label>Planning area<select id="tw-pcs-task-area">
-                  <option value="timeline">Timeline</option>
-                  <option value="move">Your move</option>
-                  <option value="arrival">Arrival</option>
-                </select></label><label>Notes <span class="optional">optional</span><textarea id="tw-pcs-task-notes" rows="3" maxlength="280" placeholder="What still needs an answer?"></textarea></label>
-              <p class="fine">Owner labels do not share the plan or notify anyone. Avoid sensitive records or booking identifiers.</p>
+      </header>
+      <div data-pcs-class="main-content" class="pcsplan-main-content">
+        <section data-pcs-class="hero wrap" class="pcsplan-hero">
+          <div class="pcsplan-div">
+            <p data-pcs-class="eyebrow" class="pcsplan-eyebrow">A LITTLE CLARITY FOR YOUR NEXT CHAPTER</p>
+            <h1 class="pcsplan-h1">Your next move.<br><span class="pcsplan-span-2">One clear plan.</span></h1>
+            <p data-pcs-class="hero-copy" class="pcsplan-hero-copy">Know what’s next, what needs confirmation,<br> and what to keep close.</p>
+            <p data-pcs-class="hero-note" class="pcsplan-hero-note">Start without an account. Your dates. Your decisions.</p>
+          </div>
+          <figure data-pcs-class="hero-photo" class="pcsplan-hero-photo"><img src="images/Vartical-Accordion-Image-2.jpg" loading="lazy" alt="Military household preparing for a move" class="pcsplan-img-2">
+            <figcaption class="pcsplan-figcaption pcsplan-figcaption">Plan the move. Keep the essentials close.</figcaption><i aria-hidden="true" class="pcsplan-i pcsplan-i"></i>
+          </figure>
+        </section>
+        <section id="tw-pcs-planner" data-pcs-class="wrap" tabindex="-1" aria-label="Your move planner" class="pcsplan-wrap"><noscript data-pcs-native-tag="noscript" class="pcsplan-noscript pcsplan-noscript">
+            <p data-pcs-class="panel setup" class="pcsplan-panel">This planner needs JavaScript to save and organize your tasks. You can also use <a href="https://planmymove.militaryonesource.mil/" class="pcsplan-a">Military OneSource’s official Plan My Move</a>.</p>
+          </noscript>
+          <p id="tw-pcs-load-warning" data-pcs-class="error" role="status" class="pcsplan-error"></p>
+          <div id="tw-pcs-setup" data-pcs-class="setup panel" class="pcsplan-setup">
+            <div data-pcs-class="section-heading" class="pcsplan-section-heading">
+              <div class="pcsplan-div">
+                <p data-pcs-class="eyebrow" class="pcsplan-eyebrow-2">YOUR MOVE</p>
+                <h2 class="pcsplan-h2">A few details. A useful starting point.</h2>
+                <p class="pcsplan-p">Everything is optional. Refine your plan as arrangements become clear. Changes to these choices add useful tasks; existing tasks stay until you mark them not applicable.</p>
+              </div><span aria-hidden="true" data-pcs-class="line-icon" class="pcsplan-line-icon"><svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                  <path d="M6 18 18 6M6 6h12v12" class="pcsplan-path pcsplan-path"></path>
+                </svg></span>
             </div>
-            <footer class="dialog-footer"><button class="button plain" type="button" id="tw-pcs-cancel-task">Cancel</button><button class="button primary" type="submit">Save changes <span aria-hidden="true">✓</span></button></footer>
-          </form>
-        </dialog>
-        <dialog id="tw-pcs-reset-dialog" aria-labelledby="tw-pcs-reset-title">
-          <div class="dialog-header">
-            <h2 id="tw-pcs-reset-title">Start a new plan?</h2>
+            <form data-pcs-native-tag="form" id="tw-pcs-setup-form" class="pcsplan-setup-form pcsplan-setup-form">
+              <div data-pcs-class="setup-fields" class="pcsplan-setup-fields"><label data-pcs-native-tag="label" class="pcsplan-label pcsplan-label">Destination <span data-pcs-class="optional" class="pcsplan-optional">optional</span><input data-pcs-native-tag="input" id="pcsplan-field-destination" autocomplete="off" maxlength="80" placeholder="Installation or area" name="destination" class="pcsplan-input pcsplan-input"></label><label data-pcs-native-tag="label" class="pcsplan-label-2 pcsplan-label-2">Planned departure<input data-pcs-native-tag="input" id="pcsplan-field-depart" max="2100-12-31" min="2020-01-01" type="date" name="depart" class="pcsplan-input pcsplan-input"></label><label data-pcs-native-tag="label" class="pcsplan-label-2 pcsplan-label-2">Planned arrival<input data-pcs-native-tag="input" id="pcsplan-field-arrive" max="2100-12-31" min="2020-01-01" type="date" aria-describedby="tw-pcs-date-help tw-pcs-setup-error" name="arrive" class="pcsplan-input pcsplan-input"></label></div>
+              <p id="tw-pcs-date-help" data-pcs-class="fine" class="pcsplan-fine">Personal planning dates, not official reporting deadlines or authorized travel days.</p>
+              <fieldset data-pcs-native-tag="fieldset" data-pcs-class="circumstances" class="pcsplan-circumstances pcsplan-circumstances">
+                <legend data-pcs-native-tag="legend" class="pcsplan-legend pcsplan-legend">Make the starting list relevant <span data-pcs-class="optional" class="pcsplan-optional">optional</span></legend><label data-pcs-native-tag="label" class="pcsplan-label-3 pcsplan-label-3"><input data-pcs-native-tag="input" id="pcsplan-field-children" type="checkbox" class="pcsplan-input-2 pcsplan-input-2">Moving with children</label><label data-pcs-native-tag="label" class="pcsplan-label-3 pcsplan-label-3"><input data-pcs-native-tag="input" id="pcsplan-field-pets" type="checkbox" name="pets" class="pcsplan-input-2 pcsplan-input-2">Moving with a pet</label><label data-pcs-native-tag="label" class="pcsplan-label-3 pcsplan-label-3"><input data-pcs-native-tag="input" id="pcsplan-field-overseas" type="checkbox" name="overseas" class="pcsplan-input-2 pcsplan-input-2">Overseas move</label>
+              </fieldset>
+              <p id="tw-pcs-setup-error" data-pcs-class="error" role="alert" class="pcsplan-error"></p>
+              <div data-pcs-class="setup-actions" class="pcsplan-setup-actions"><button data-pcs-native-tag="button" data-pcs-class="button primary" type="submit" class="pcsplan-button pcsplan-button">Create my plan <span aria-hidden="true" class="pcsplan-span"><svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                      <path d="M6 18 18 6M6 6h12v12" class="pcsplan-path pcsplan-path"></path>
+                    </svg></span></button><button data-pcs-native-tag="button" data-pcs-class="button plain" type="button" id="tw-pcs-sample-button" class="pcsplan-button-2 pcsplan-button-2">Explore an illustrative plan →</button></div>
+            </form>
           </div>
-          <div class="dialog-content">
-            <p>This clears this planner’s saved copy in this browser. Download your current plan first if you want to keep a readable copy.</p>
+          <div id="tw-pcs-move-overview" data-pcs-class="panel move-overview" class="pcsplan-panel-2">
+            <div data-pcs-class="overview-heading" class="pcsplan-overview-heading">
+              <div class="pcsplan-div">
+                <p data-pcs-class="eyebrow" class="pcsplan-eyebrow-2">YOUR MOVE <span id="tw-pcs-sample-label" class="pcsplan-span">/ ILLUSTRATIVE PLAN</span></p>
+                <h2 id="tw-pcs-move-name" class="pcsplan-move-name"></h2>
+                <div data-pcs-class="move-meta" class="pcsplan-move-meta"><span id="tw-pcs-move-dates" class="pcsplan-span"></span><span data-pcs-class="divider" class="pcsplan-divider">·</span><span id="tw-pcs-move-tags" class="pcsplan-span"></span><button data-pcs-native-tag="button" data-pcs-class="text-button" id="tw-pcs-edit-move" class="pcsplan-text-button pcsplan-text-button">Edit details</button></div>
+              </div>
+              <div data-pcs-class="plan-actions" class="pcsplan-plan-actions"><button data-pcs-native-tag="button" data-pcs-class="button secondary" id="tw-pcs-save-plan" class="pcsplan-button-3 pcsplan-button-3">Save on this browser</button><button data-pcs-native-tag="button" data-pcs-class="button primary" id="tw-pcs-export-plan" class="pcsplan-button-4 pcsplan-button-4">Download plan <span aria-hidden="true" class="pcsplan-span">↓</span></button></div>
+            </div>
+            <div data-pcs-class="save-note" class="pcsplan-save-note"><span aria-hidden="true" data-pcs-class="status-dot" class="pcsplan-status-dot"></span><span id="tw-pcs-save-state" class="pcsplan-span">Not saved. Changes will reset on reload.</span><span data-pcs-class="save-clarification" class="pcsplan-save-clarification">No account or cross-device sync.</span></div>
+            <div data-pcs-class="overview-stats" class="pcsplan-overview-stats"><button data-pcs-native-tag="button" data-pcs-class="next-action" id="tw-pcs-show-next" class="pcsplan-next-action pcsplan-next-action"><span data-pcs-class="eyebrow" class="pcsplan-eyebrow-3">NEXT PERSONAL TARGET <span id="tw-pcs-next-date" class="pcsplan-next-date"></span></span><strong id="tw-pcs-next-task" class="pcsplan-next-task"></strong><span data-pcs-class="next-link" class="pcsplan-next-link">Review task <span aria-hidden="true" class="pcsplan-span"><svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                      <path d="M6 18 18 6M6 6h12v12" class="pcsplan-path pcsplan-path"></path>
+                    </svg></span></span></button><button data-pcs-native-tag="button" data-pcs-class="stat" id="tw-pcs-show-waiting" class="pcsplan-stat pcsplan-stat"><strong id="tw-pcs-waiting-count" class="pcsplan-waiting-count"></strong><span class="pcsplan-span-3">Awaiting confirmation</span><small class="pcsplan-small pcsplan-small">Requests still need an answer</small></button>
+              <div data-pcs-class="stat" class="pcsplan-stat-2"><strong id="tw-pcs-complete-count" class="pcsplan-waiting-count"></strong><span class="pcsplan-span-3">Tasks complete</span><small class="pcsplan-small pcsplan-small">Counts your list, not PCS readiness</small></div>
+            </div>
           </div>
-          <div class="dialog-footer"><button type="button" class="button secondary" id="tw-pcs-reset-cancel">Keep my plan</button><button type="button" class="button primary" id="tw-pcs-reset-confirm">Clear and start new</button></div>
-        </dialog>
+          <nav aria-label="Planning sections" data-pcs-class="planner-nav" class="pcsplan-planner-nav"><button data-pcs-native-tag="button" tabindex="0" aria-selected="true" aria-controls="tw-pcs-view-timeline" role="tab" id="tw-pcs-tab-timeline" class="pcsplan-tab-timeline pcsplan-tab-timeline"><span data-pcs-class="nav-num" class="pcsplan-nav-num">01</span> <span class="pcsplan-span">Timeline</span><span aria-hidden="true" data-pcs-class="nav-dot" class="pcsplan-nav-dot"></span></button><button data-pcs-native-tag="button" tabindex="-1" aria-selected="false" aria-controls="tw-pcs-view-move" role="tab" id="tw-pcs-tab-move" class="pcsplan-tab-timeline pcsplan-tab-timeline"><span data-pcs-class="nav-num" class="pcsplan-nav-num">02</span> <span class="pcsplan-span">Your move</span><span aria-hidden="true" data-pcs-class="nav-dot" class="pcsplan-nav-dot"></span></button><button data-pcs-native-tag="button" tabindex="-1" aria-selected="false" aria-controls="tw-pcs-view-arrival" role="tab" id="tw-pcs-tab-arrival" class="pcsplan-tab-timeline pcsplan-tab-timeline"><span data-pcs-class="nav-num" class="pcsplan-nav-num">03</span> <span class="pcsplan-span">Arrival</span><span aria-hidden="true" data-pcs-class="nav-dot" class="pcsplan-nav-dot"></span></button></nav>
+          <div id="tw-pcs-welcome" data-pcs-class="welcome-grid" class="pcsplan-welcome-grid">
+            <article class="pcsplan-article"><span aria-hidden="true" data-pcs-class="welcome-icon" class="pcsplan-welcome-icon">01</span>
+              <h3 class="pcsplan-h3">Map your timeline</h3>
+              <p class="pcsplan-p-2">Give the next steps a target date and an owner. Keep requests separate from confirmations.</p>
+            </article>
+            <article class="pcsplan-article"><span aria-hidden="true" data-pcs-class="welcome-icon" class="pcsplan-welcome-icon">02</span>
+              <h3 class="pcsplan-h3">Organize your move</h3>
+              <p class="pcsplan-p-2">Separate hand-carried essentials from shipment decisions and open questions.</p>
+            </article>
+            <article class="pcsplan-article"><span aria-hidden="true" data-pcs-class="welcome-icon" class="pcsplan-welcome-icon">03</span>
+              <h3 class="pcsplan-h3">Prepare for arrival</h3>
+              <p class="pcsplan-p-2">Connect reporting, lodging, delivery, and the first few days in one plan.</p>
+            </article>
+          </div>
+          <div id="tw-pcs-workspace" class="pcsplan-workspace">
+            <section id="tw-pcs-view-timeline" tabindex="0" aria-labelledby="tw-pcs-tab-timeline" role="tabpanel" class="pcsplan-view-timeline">
+              <div data-pcs-class="workspace-heading" class="pcsplan-workspace-heading">
+                <div class="pcsplan-div">
+                  <p data-pcs-class="eyebrow" class="pcsplan-eyebrow">01 / MAP YOUR TIMELINE</p>
+                  <h2 class="pcsplan-h2-2">A next step you can act on.</h2>
+                  <p class="pcsplan-p">Targets you choose. Arrangements you confirm.</p>
+                </div><button data-pcs-native-tag="button" data-pcs-class="button secondary add-task" class="pcsplan-button-5 pcsplan-button-5">＋ Add a task</button>
+              </div>
+              <div data-pcs-class="workspace-grid" class="pcsplan-workspace-grid">
+                <div data-pcs-class="panel task-panel" class="pcsplan-panel-3">
+                  <div data-pcs-class="list-toolbar" class="pcsplan-list-toolbar">
+                    <div role="group" data-pcs-class="filter-group" aria-label="Filter tasks" class="pcsplan-filter-group"><button data-pcs-native-tag="button" aria-pressed="true" data-filter="open" class="pcsplan-button-6 pcsplan-button-6">Open</button><button data-pcs-native-tag="button" aria-pressed="false" data-filter="waiting" class="pcsplan-button-6 pcsplan-button-6">Awaiting confirmation</button><button data-pcs-native-tag="button" aria-pressed="false" data-filter="all" class="pcsplan-button-6 pcsplan-button-6">All tasks</button></div><span id="tw-pcs-list-count" class="pcsplan-list-count"></span>
+                  </div>
+                  <div aria-hidden="true" data-pcs-class="table-heading" class="pcsplan-table-heading"><span class="pcsplan-span">YOUR NEXT STEPS</span><span class="pcsplan-span">PERSONAL TARGET</span><span class="pcsplan-span">OWNER</span><span class="pcsplan-span">STATUS</span></div>
+                  <div id="tw-pcs-timeline-list" data-pcs-generated="true" data-pcs-class="task-list" class="pcsplan-task-list"></div>
+                  <div data-pcs-class="list-note" class="pcsplan-list-note">Sorted by your personal target date. Undated tasks follow. <span class="pcsplan-span-4">No automatic deadlines.</span></div>
+                </div>
+                <aside data-pcs-class="sidebar" class="pcsplan-sidebar">
+                  <div data-pcs-class="panel checkpoint" class="pcsplan-panel-4"><span aria-hidden="true" data-pcs-class="small-icon" class="pcsplan-small-icon"><svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                        <path d="M4 7h12m-4-4 4 4-4 4M20 17H8m4-4-4 4 4 4" class="pcsplan-path pcsplan-path"></path>
+                      </svg></span>
+                    <h3 class="pcsplan-h3-2">Keep the handoffs clear.</h3>
+                    <p class="pcsplan-p-3">A request is a starting point. Mark it confirmed only after you have an answer from the responsible office or provider.</p>
+                    <div data-pcs-class="status-legend" class="pcsplan-status-legend"><span class="pcsplan-span">Requested</span><span aria-hidden="true" class="pcsplan-span">→</span><span class="pcsplan-span">Confirmed</span><span aria-hidden="true" class="pcsplan-span">→</span><span class="pcsplan-span">Complete</span></div>
+                  </div>
+                  <a href="https://the-wing.webflow.io/air-force/financial-dashboard" data-pcs-class="context-link" rel="noopener" class="pcsplan-context-link w-inline-block"><span data-pcs-class="eyebrow" class="pcsplan-eyebrow-4">PLANNING THE COSTS?</span><strong class="pcsplan-strong"><span class="pcsplan-span">Open Financial Guidance ↗</span></strong>
+                    <p class="pcsplan-p-4">Keep your budget alongside your move plan.</p>
+                  </a>
+                  <div data-pcs-class="source-note" class="pcsplan-source-note">
+                    <a href="https://planmymove.militaryonesource.mil/" rel="noopener" class="pcsplan-a-2 w-inline-block">Official Plan My Move<svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                        <path d="M6 18 18 6M6 6h12v12" class="pcsplan-path pcsplan-path"></path>
+                      </svg></a>
+                    <p class="pcsplan-p-5">Use official checklists and your unit’s instructions to confirm what applies.</p>
+                  </div>
+                </aside>
+              </div>
+            </section>
+            <section id="tw-pcs-view-move" tabindex="0" aria-labelledby="tw-pcs-tab-move" role="tabpanel" class="pcsplan-view-timeline">
+              <div data-pcs-class="workspace-heading" class="pcsplan-workspace-heading">
+                <div class="pcsplan-div">
+                  <p data-pcs-class="eyebrow" class="pcsplan-eyebrow">02 / ORGANIZE YOUR MOVE</p>
+                  <h2 class="pcsplan-h2-2">Keep close. Ship thoughtfully.</h2>
+                  <p class="pcsplan-p">Make a decision for each category. Keep unresolved questions visible.</p>
+                </div>
+              </div>
+              <div data-pcs-class="packing-grid" class="pcsplan-packing-grid">
+                <div data-pcs-class="panel carry-panel" class="pcsplan-panel-5">
+                  <p data-pcs-class="eyebrow" class="pcsplan-eyebrow-2">WITH YOU, NOT IN A BOX</p>
+                  <h3 class="pcsplan-h3-3">Your hand-carry kit</h3>
+                  <p class="pcsplan-p-6">Start with the things you need while the shipment is out of reach.</p>
+                  <div id="tw-pcs-carry-list" data-pcs-generated="true" class="pcsplan-div"></div>
+                  <p data-pcs-class="fine" class="pcsplan-fine-2">Track preparation only. Keep documents and identifiers out of this planner.</p>
+                </div>
+                <div data-pcs-class="panel decisions-panel" class="pcsplan-panel-6">
+                  <div data-pcs-class="section-heading" class="pcsplan-section-heading">
+                    <div class="pcsplan-div">
+                      <h3 class="pcsplan-h3-3">Shipment decisions</h3>
+                      <p id="tw-pcs-decision-count" class="pcsplan-p"></p>
+                    </div><span aria-hidden="true" data-pcs-class="small-icon" class="pcsplan-small-icon"><svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                        <path d="M6 18 18 6M6 6h12v12" class="pcsplan-path pcsplan-path"></path>
+                      </svg></span>
+                  </div>
+                  <div id="tw-pcs-decision-list" data-pcs-generated="true" class="pcsplan-div"></div>
+                  <details class="pcsplan-details pcsplan-details">
+                    <summary class="pcsplan-summary pcsplan-summary">What needs a separate conversation?</summary>
+                    <p class="pcsplan-p-7">Ask transportation about carrier restrictions, destination rules, and items requiring special handling. A selection here is your plan, not shipment authorization.</p>
+                    <a href="https://www.militaryonesource.mil/resources/millife-guides/military-pcs-move-management/" rel="noopener" class="pcsplan-a w-inline-block">Official moving-day guidance<svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                        <path d="M6 18 18 6M6 6h12v12" class="pcsplan-path pcsplan-path"></path>
+                      </svg></a>
+                  </details>
+                </div>
+              </div>
+              <div data-pcs-class="workspace-heading" class="pcsplan-workspace-heading">
+                <div class="pcsplan-div">
+                  <h3 class="pcsplan-h3-4">Move arrangements</h3>
+                  <p class="pcsplan-p">The same tasks and confirmations shown on your timeline.</p>
+                </div><button data-pcs-native-tag="button" data-pcs-class="button secondary add-task" class="pcsplan-button-5 pcsplan-button-5">＋ Add a task</button>
+              </div>
+              <div data-pcs-class="panel task-panel" class="pcsplan-panel-3">
+                <div id="tw-pcs-move-list" data-pcs-generated="true" data-pcs-class="task-list" class="pcsplan-task-list"></div>
+              </div>
+            </section>
+            <section id="tw-pcs-view-arrival" tabindex="0" aria-labelledby="tw-pcs-tab-arrival" role="tabpanel" class="pcsplan-view-timeline">
+              <div data-pcs-class="workspace-heading" class="pcsplan-workspace-heading">
+                <div class="pcsplan-div">
+                  <p data-pcs-class="eyebrow" class="pcsplan-eyebrow">03 / PREPARE FOR ARRIVAL</p>
+                  <h2 class="pcsplan-h2-2">Make the first nights easier.</h2>
+                  <p class="pcsplan-p">The same tasks, focused on reporting, access, and settling in.</p>
+                </div><button data-pcs-native-tag="button" data-pcs-class="button secondary add-task" class="pcsplan-button-5 pcsplan-button-5">＋ Add a task</button>
+              </div>
+              <div data-pcs-class="workspace-grid" class="pcsplan-workspace-grid">
+                <div data-pcs-class="panel task-panel" class="pcsplan-panel-3">
+                  <div data-pcs-class="arrival-tip" class="pcsplan-arrival-tip"><span aria-hidden="true" data-pcs-class="small-icon" class="pcsplan-small-icon-2"><svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                        <path d="m3 11 9-8 9 8M6 9v12h12V9m-9 12v-7h6v7" class="pcsplan-path pcsplan-path"></path>
+                      </svg></span>
+                    <p class="pcsplan-p-3"><strong class="pcsplan-strong-2">Confirmed lodging is not a completed stay.</strong><br>Keep the booking, access, and arrival steps distinct.</p>
+                  </div>
+                  <div id="tw-pcs-arrival-list" data-pcs-generated="true" data-pcs-class="task-list" class="pcsplan-task-list"></div>
+                </div>
+                <aside data-pcs-class="sidebar" class="pcsplan-sidebar">
+                  <div data-pcs-class="panel checkpoint" class="pcsplan-panel-4">
+                    <p data-pcs-class="eyebrow" class="pcsplan-eyebrow-2">YOUR UNIT’S INSTRUCTIONS COME FIRST</p>
+                    <h3 class="pcsplan-h3-2">Confirm when and where to report.</h3>
+                    <p class="pcsplan-p-3">Personal targets help you plan. Your unit and responsible offices set official requirements.</p>
+                    <a href="https://www.militaryonesource.mil/resources/millife-guides/settling-in-after-a-pcs/" rel="noopener" class="pcsplan-a-3 w-inline-block">Official arrival guidance<svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                        <path d="M6 18 18 6M6 6h12v12" class="pcsplan-path pcsplan-path"></path>
+                      </svg></a>
+                  </div>
+                  <a href="https://the-wing.webflow.io/air-force/va-command-center" data-pcs-class="context-link" rel="noopener" class="pcsplan-context-link w-inline-block"><span data-pcs-class="eyebrow" class="pcsplan-eyebrow-4">CONSIDERING A HOME PURCHASE?</span><strong class="pcsplan-strong">Explore the VA Command Center <svg data-pcs-class="tw-icon" aria-hidden="true" viewbox="0 0 24 24" class="pcsplan-tw-icon pcsplan-tw-icon">
+                        <path d="M6 18 18 6M6 6h12v12" class="pcsplan-path pcsplan-path"></path>
+                      </svg></strong>
+                    <p class="pcsplan-p-4">Learn about the benefit before a lender conversation.</p>
+                  </a>
+                </aside>
+              </div>
+            </section>
+          </div>
+          <div data-pcs-class="plan-footer" class="pcsplan-plan-footer">
+            <p class="pcsplan-p-8"><strong class="pcsplan-strong-2">A plan you can keep.</strong> Save on this browser or download a readable text copy. Downloads cannot be imported. Browser data can be cleared; keep a backup.</p>
+            <p class="pcsplan-p-8">Saved only in this browser, with no account sync. Owner labels do not share tasks. No notifications, bookings, or shipment tracking.</p><button data-pcs-native-tag="button" data-pcs-class="text-button" id="tw-pcs-start-over" class="pcsplan-text-button-2 pcsplan-text-button-2">Start a new plan</button>
+          </div>
+          <p id="tw-pcs-notice" data-pcs-class="toast" aria-live="polite" role="status" class="pcsplan-toast"></p>
+        </section>
       </div>
+      <footer data-pcs-class="site-footer wrap" class="pcsplan-site-footer"><span class="pcsplan-span">THEWING.AI <i class="pcsplan-i-2 pcsplan-i-2">/</i> PCS PLANNING</span><span class="pcsplan-span">Independent planning tool · Follow your unit’s official instructions</span></footer>
+      <dialog aria-labelledby="tw-pcs-task-dialog-title" id="tw-pcs-task-dialog" class="pcsplan-task-dialog pcsplan-task-dialog">
+        <form data-pcs-native-tag="form" id="tw-pcs-task-form" class="pcsplan-task-form pcsplan-task-form">
+          <header data-pcs-class="dialog-header" class="pcsplan-dialog-header">
+            <div class="pcsplan-div">
+              <p data-pcs-class="eyebrow" class="pcsplan-eyebrow-2">YOUR NEXT STEP</p>
+              <h2 id="tw-pcs-task-dialog-title" class="pcsplan-task-dialog-title">Task details</h2>
+            </div><button data-pcs-native-tag="button" data-pcs-class="icon-button" aria-label="Close task details" id="tw-pcs-close-task" type="button" class="pcsplan-icon-button pcsplan-icon-button">×</button>
+          </header>
+          <div data-pcs-class="dialog-content" class="pcsplan-dialog-content">
+            <p data-pcs-class="sample-note" class="pcsplan-sample-note">Personal targets, not official deadlines</p><label data-pcs-native-tag="label" class="pcsplan-label-4 pcsplan-label-4">Task<input data-pcs-native-tag="input" maxlength="100" id="tw-pcs-task-name" class="pcsplan-input pcsplan-input"></label>
+            <div data-pcs-class="form-two" class="pcsplan-form-two"><label data-pcs-native-tag="label" class="pcsplan-label-5 pcsplan-label-5">Personal target date<input data-pcs-native-tag="input" max="2100-12-31" min="2020-01-01" type="date" id="tw-pcs-task-date" class="pcsplan-input pcsplan-input"></label><label data-pcs-native-tag="label" class="pcsplan-label-5 pcsplan-label-5">Responsible person<select data-pcs-native-tag="select" id="tw-pcs-task-owner" class="pcsplan-task-owner pcsplan-task-owner">
+                  <option data-pcs-native-tag="option" class="pcsplan-option pcsplan-option">Me</option>
+                  <option data-pcs-native-tag="option" class="pcsplan-option pcsplan-option">Partner</option>
+                  <option data-pcs-native-tag="option" class="pcsplan-option pcsplan-option">Together</option>
+                  <option data-pcs-native-tag="option" class="pcsplan-option pcsplan-option">Unassigned</option>
+                </select></label></div><label data-pcs-native-tag="label" class="pcsplan-label-4 pcsplan-label-4">Status<select data-pcs-native-tag="select" aria-describedby="tw-pcs-status-help" id="tw-pcs-task-status" class="pcsplan-task-owner pcsplan-task-owner">
+                <option data-pcs-native-tag="option" class="pcsplan-option pcsplan-option">Not started</option>
+                <option data-pcs-native-tag="option" class="pcsplan-option pcsplan-option">Requested</option>
+                <option data-pcs-native-tag="option" class="pcsplan-option pcsplan-option">Confirmed</option>
+                <option data-pcs-native-tag="option" class="pcsplan-option pcsplan-option">Complete</option>
+                <option data-pcs-native-tag="option" class="pcsplan-option pcsplan-option">Does not apply</option>
+              </select></label>
+            <div id="tw-pcs-status-help" data-pcs-class="status-explanation" class="pcsplan-status-explanation"></div><label data-pcs-native-tag="label" class="pcsplan-label-4 pcsplan-label-4">Planning area<select data-pcs-native-tag="select" id="tw-pcs-task-area" class="pcsplan-task-owner pcsplan-task-owner">
+                <option data-pcs-native-tag="option" value="timeline" class="pcsplan-option pcsplan-option">Timeline</option>
+                <option data-pcs-native-tag="option" value="move" class="pcsplan-option pcsplan-option">Your move</option>
+                <option data-pcs-native-tag="option" value="arrival" class="pcsplan-option pcsplan-option">Arrival</option>
+              </select></label><label data-pcs-native-tag="label" class="pcsplan-label-4 pcsplan-label-4">Notes <span data-pcs-class="optional" class="pcsplan-optional">optional</span><textarea data-pcs-native-tag="textarea" placeholder="What still needs an answer?" maxlength="280" rows="3" id="tw-pcs-task-notes" class="pcsplan-task-notes pcsplan-task-notes"></textarea></label>
+            <p data-pcs-class="fine" class="pcsplan-fine">Owner labels do not share the plan or notify anyone. Avoid sensitive records or booking identifiers.</p>
+          </div>
+          <footer data-pcs-class="dialog-footer" class="pcsplan-dialog-footer"><button data-pcs-native-tag="button" data-pcs-class="button plain" id="tw-pcs-cancel-task" type="button" class="pcsplan-button-2 pcsplan-button-2">Cancel</button><button data-pcs-native-tag="button" data-pcs-class="button primary" type="submit" class="pcsplan-button pcsplan-button">Save changes <span aria-hidden="true" class="pcsplan-span">✓</span></button></footer>
+        </form>
+      </dialog>
+      <dialog aria-labelledby="tw-pcs-reset-title" id="tw-pcs-reset-dialog" class="pcsplan-task-dialog pcsplan-task-dialog">
+        <div data-pcs-class="dialog-header" class="pcsplan-dialog-header-2">
+          <h2 id="tw-pcs-reset-title" class="pcsplan-task-dialog-title">Start a new plan?</h2>
+        </div>
+        <div data-pcs-class="dialog-content" class="pcsplan-dialog-content">
+          <p class="pcsplan-p-9">This clears this planner’s saved copy in this browser. Download your current plan first if you want to keep a readable copy.</p>
+        </div>
+        <div data-pcs-class="dialog-footer" class="pcsplan-dialog-footer-2"><button data-pcs-native-tag="button" data-pcs-class="button secondary" id="tw-pcs-reset-cancel" type="button" class="pcsplan-button-7 pcsplan-button-7">Keep my plan</button><button data-pcs-native-tag="button" data-pcs-class="button primary" id="tw-pcs-reset-confirm" type="button" class="pcsplan-button pcsplan-button">Clear and start new</button></div>
+      </dialog>
     </div>
     <div class="va-command-center-embed w-embed w-script"><!--  TheWing.ai PCS Planning v1.0 | Shared controller. Place immediately after embed 01.  -->
       <script>
 (()=>{'use strict';
 const root=document.getElementById('tw-pcs-planner-app');if(!root||root.dataset.ready)return;root.dataset.ready='true';
-const $=s=>root.querySelector(s),$$=s=>Array.from(root.querySelectorAll(s)),KEY='tw-pcs-plan-v1';
+const nativeSelector=s=>s.replace(/\.([a-zA-Z][\w-]*)/g,(_,name)=>':is(.'+name+',[data-pcs-class~="'+name+'"])');
+const $=s=>root.querySelector(nativeSelector(s)),$$=s=>Array.from(root.querySelectorAll(nativeSelector(s))),KEY='tw-pcs-plan-v1';
 const statuses=['Not started','Requested','Confirmed','Complete','Does not apply'];
 const owners=['Me','Partner','Together','Unassigned'];
 const explanations={'Not started':'No arrangement has been requested or completed yet.','Requested':'You have asked, but still need an answer. A request is not a booking.','Confirmed':'The responsible office or provider has confirmed the arrangement. Follow-through may still be needed.','Complete':'You have finished this task. This does not confirm overall PCS readiness.','Does not apply':'Leave this task out of your active list only if it does not apply to your move.'};
@@ -516,7 +880,7 @@ function profileFromForm(){const form=$('#tw-pcs-setup-form');if(!form.reportVal
 function create(){const p=profileFromForm();if(!p)return false;if(plan){plan.profile={...plan.profile,...p};const existing=new Set(plan.tasks.map(t=>t.id));baseTasks(p,false).forEach(t=>{if(!existing.has(t.id))plan.tasks.push(t);});}else plan=newPlan(p);change();return true;}
 $('#tw-pcs-setup-form').addEventListener('submit',e=>{e.preventDefault();if(create())$('#tw-pcs-move-overview').scrollIntoView({block:'start',behavior:'auto'});});
 $('#tw-pcs-sample-button').addEventListener('click',()=>{plan=sample();saved=false;render();$('#tw-pcs-move-overview').scrollIntoView({block:'start',behavior:'auto'});});
-$('#tw-pcs-edit-move').addEventListener('click',()=>{const f=$('#tw-pcs-setup-form');['destination','depart','arrive'].forEach(k=>f.elements[k].value=plan.profile[k]);['children','pets','overseas'].forEach(k=>f.elements[k].checked=plan.profile[k]);$('#tw-pcs-setup').hidden=false;$('#tw-pcs-setup-form button[type=submit]').innerHTML='Update my plan <span aria-hidden="true">✓</span>';$('#tw-pcs-setup').scrollIntoView({block:'start',behavior:'auto'});f.elements.destination.focus({preventScroll:true});});
+$('#tw-pcs-edit-move').addEventListener('click',()=>{const f=$('#tw-pcs-setup-form');['destination','depart','arrive'].forEach(k=>f.elements[k].value=plan.profile[k]);['children','pets','overseas'].forEach(k=>f.elements[k].checked=plan.profile[k]);$('#tw-pcs-setup').hidden=false;$('#tw-pcs-setup-form button[type=submit]').textContent='Update my plan ✓';$('#tw-pcs-setup').scrollIntoView({block:'start',behavior:'auto'});f.elements.destination.focus({preventScroll:true});});
 $('#tw-pcs-save-plan').addEventListener('click',()=>notify(save()?'Saved on this browser. Download a backup for safekeeping.':'Saving unavailable. Download your plan instead.'));
 const resetDialog=$('#tw-pcs-reset-dialog');let resetOverflow='';
 function closeReset(){resetDialog.close();document.body.style.overflow=resetOverflow;$('#tw-pcs-start-over').focus({preventScroll:true});}

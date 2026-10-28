@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Oct 28 2026 03:12:54 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Oct 28 2026 04:13:37 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6ad2e1e4fdf89885caab663a" data-wf-site="6acde39c80b636b344e4764b" lang="en">
 <head>
   <meta charset="utf-8">
@@ -187,7 +187,7 @@
 #pcsu-reveal-footer .footer-flex-wrapper-2{opacity:1!important;transform:none!important;margin:32px auto 24px;width:calc(100% - 40px)}
 #pcsu-reveal-footer .logo-image{position:static;transform:none;width:73px;height:auto;max-width:100%;flex-shrink:0}
 @media(max-width:991px){
- #pcsu-reveal-footer[data-reveal]{position:relative;inset:auto}
+ #pcsu-reveal-footer[data-reveal="true"]{position:sticky;top:auto;bottom:var(--pcsu-reveal-bottom,0px)}
  #pcsu-reveal-footer{padding:24px 20px}
  #pcsu-reveal-footer *{box-sizing:border-box}
  #pcsu-reveal-footer .footer_banners{margin:0 0 32px}
@@ -300,6 +300,25 @@
  #pcsw-home .hero-slider-section .w-slider-arrow-left,
  #pcsw-home .hero-slider-section .w-slider-arrow-right,
  #pcsw-home .hero-slider-section .w-slider-nav{opacity:0}
+}
+</style>
+  <style id="pcsu-story-phone-flow-v1">
+/* Keep the native Our Story card and image in normal flow on small screens. */
+@media(max-width:991px){
+ #pcsw-home .beyond-the-numbers-ad,
+ #pcsw-home .beyond-the-numbers-ad .style-text-wrapper-2,
+ #pcsw-home .beyond-the-numbers-ad .inside,
+ #pcsw-home .beyond-the-numbers-ad .the-future-is-pcsu-ad{height:auto;min-height:0;max-height:none}
+ #pcsw-home .beyond-the-numbers-ad .style-text-wrapper-2{width:100%;max-width:100%;margin:0}
+ #pcsw-home .beyond-the-numbers-ad .the-future-is-pcsu-ad{display:flex;flex-direction:column;gap:24px;width:100%;max-width:100%;margin:0}
+ #pcsw-home .beyond-the-numbers-ad .services-h01-wrap,
+ #pcsw-home .beyond-the-numbers-ad .services-h01-text-wrap{width:100%;min-width:0;max-width:100%;height:auto}
+ #pcsw-home .beyond-the-numbers-ad .primary-glow-wrapper-24{width:100%;max-width:480px;height:auto;min-height:0;margin:0 auto;flex:none}
+ #pcsw-home .beyond-the-numbers-ad .button-overflow-hidden-2-copy,
+ #pcsw-home .beyond-the-numbers-ad .primary-glow-wrapper-24 .full-size{width:100%;height:auto;min-height:0;max-height:none}
+ #pcsw-home .beyond-the-numbers-ad .inside-button-14>a{display:block;width:100%}
+ #pcsw-home .beyond-the-numbers-ad .image-251{display:block;width:100%;max-width:100%;height:auto;object-fit:contain}
+ #pcsw-home .beyond-the-numbers-ad .glow-wrapper{height:100%;max-height:100%;pointer-events:none}
 }
 </style>
 </head>
@@ -701,7 +720,7 @@
         <div class="style-text-wrapper-2">
           <div class="inside">
             <div class="style-text-wrapper-2">
-              <div class="the-future-is-pcsu-ad">
+              <div class="pcsu-home-story-card">
                 <div class="services-h01-wrap">
                   <div class="services-h01-text-wrap">
                     <div class="align-left-14">
@@ -719,8 +738,8 @@
                     </div>
                   </div>
                 </div>
-                <div class="primary-glow-wrapper-24 blog-grid-child second-version">
-                  <div class="button-overflow-hidden-2-copy for--blog-copy">
+                <div class="pcsu-home-story-image-wrap">
+                  <div class="pcsu-home-story-image-frame">
                     <div class="full-size">
                       <div class="pedding-stroke-13 big--size full-size">
                         <div class="inside-button-14 none-padding full-size for--blog">
@@ -741,9 +760,9 @@
       </div>
       <section id="pcsw-benefits" aria-labelledby="pcsw-benefits-title" class="pcsw-benefits">
         <div class="pcsw-benefits-inner">
+          <p class="pcsw-eyebrow-light">AIR FORCE SPECIFIC APPLICATIONS WORTH KNOWING</p>
           <div class="pcsw-benefits-top">
             <div>
-              <p class="pcsw-eyebrow-light">AIR FORCE SPECIFIC APPLICATIONS WORTH KNOWING</p>
               <h2 id="pcsw-benefits-title" class="pcsw-h2-light">Your move may come<br>with more support.</h2>
             </div>
             <p class="pcsw-benefits-intro">Discover eight PCS benefits and allowances. Tap a topic. Explore what may apply.</p>
@@ -1057,14 +1076,14 @@ document.querySelectorAll('#pcsj-header [data-pcsj-jump],#pcsw-home .pcsw-footer
 })();
 </script>
   <script>
-/* PCSUnited footer curtain v1: adapts to edited content without disabling on short desktops. */
+/* PCSUnited footer curtain v2: all viewport widths, with tall-footer access and reduced-motion fallback. */
 (function(){
  function init(){
   const footer=document.querySelector('#pcsu-reveal-footer');
   const main=document.querySelector('#pcsw-home');
   if(!footer||!main)return;
   const nav=document.querySelector('header.modern-navbar-2');
-  const mq=matchMedia('(min-width:992px) and (prefers-reduced-motion:no-preference)');
+  const mq=matchMedia('(prefers-reduced-motion:no-preference)');
   let frame=0,focusMode=false;
   function sync(){
    frame=0;

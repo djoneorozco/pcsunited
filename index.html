@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Oct 27 2026 03:17:03 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Wed Oct 28 2026 03:12:54 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6ad2e1e4fdf89885caab663a" data-wf-site="6acde39c80b636b344e4764b" lang="en">
 <head>
   <meta charset="utf-8">
@@ -178,6 +178,130 @@
 #pcsj-journey #pcsu-journey-dialog .pcsj-links{flex-wrap:wrap}
 #pcsj-journey #pcsu-journey-dialog .pcsu-jstage-close:hover{background:#ffffff17}
 </style>
+  <style id="pcsu-footer-curtain-v1">
+/* Native footer contents remain editable in Webflow. */
+#pcsw-home{position:relative;z-index:1;background-color:#f8f9fa}
+#pcsu-reveal-footer{position:relative;inset:auto;margin-top:0;isolation:isolate;z-index:0}
+#pcsu-reveal-footer[data-reveal="true"]{position:sticky;top:auto;bottom:var(--pcsu-reveal-bottom,0px)}
+#pcsu-reveal-footer .footer_banners{transform:none}
+#pcsu-reveal-footer .footer-flex-wrapper-2{opacity:1!important;transform:none!important;margin:32px auto 24px;width:calc(100% - 40px)}
+#pcsu-reveal-footer .logo-image{position:static;transform:none;width:73px;height:auto;max-width:100%;flex-shrink:0}
+@media(max-width:991px){
+ #pcsu-reveal-footer[data-reveal]{position:relative;inset:auto}
+ #pcsu-reveal-footer{padding:24px 20px}
+ #pcsu-reveal-footer *{box-sizing:border-box}
+ #pcsu-reveal-footer .footer_banners{margin:0 0 32px}
+ #pcsu-reveal-footer .footer_buy{margin-top:0}
+ #pcsu-reveal-footer .footer-flex-wrapper-2{margin:0;gap:28px;width:100%}
+ #pcsu-reveal-footer .logo-image{position:static;transform:none;width:73px;height:auto;max-width:100%;flex-shrink:0}
+ #pcsu-reveal-footer .footer-content-wrapper-2{width:100%;min-width:0;max-width:100%;margin:0}
+ #pcsu-reveal-footer .logo-footer-wrapper{position:static;width:auto;max-width:100%;margin:0}
+ #pcsu-reveal-footer .footer-paragraph-2{width:auto;max-width:100%;margin:16px 0 0}
+ #pcsu-reveal-footer .footer-links-wrapper-2{width:100%;min-width:0;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px}
+ #pcsu-reveal-footer .footer-links-text-2{min-width:0}
+ #pcsu-reveal-footer .footer-link-3,#pcsu-reveal-footer .footer-text{overflow-wrap:anywhere}
+}
+@media(max-width:479px){
+ #pcsu-reveal-footer .footer-links-wrapper-2{grid-template-columns:repeat(2,minmax(0,1fr));gap:24px 16px}
+ #pcsu-reveal-footer .footer-links-text-2:last-child{grid-column:1/-1}
+ #pcsu-reveal-footer .footer_info{gap:20px}
+ #pcsu-reveal-footer .logo-footer-wrapper{justify-content:center}
+ #pcsu-reveal-footer .footer_buy .div-block-4{display:flex;flex-wrap:wrap;gap:8px}
+ #pcsu-reveal-footer .form_input-2{min-width:0;flex:1 1 150px}
+}
+@media(prefers-reduced-motion:reduce){
+ #pcsu-reveal-footer[data-reveal]{position:relative;inset:auto}
+}
+</style>
+  <style id="pcsu-phone-hero-v1">
+/* PCSUnited homepage: let phone hero slides grow with their content. */
+@media screen and (max-width: 767px) {
+  #pcsw-home .hero-slider-section,
+  #pcsw-home .hero-slider-section .home-one-hero-wrap,
+  #pcsw-home .hero-slider-section .slider-wrapper,
+  #pcsw-home .hero-slider-section .slider-subwrapper,
+  #pcsw-home .hero-slider-section .home-one-hero-slider,
+  #pcsw-home .hero-slider-section .w-slider-mask,
+  #pcsw-home .hero-slider-section .w-slide {
+    height: auto;
+    max-height: none;
+  }
+  #pcsw-home .hero-slider-section .w-slider-mask {
+    display: flex;
+    align-items: stretch;
+  }
+  #pcsw-home .hero-slider-section .w-slide {
+    flex-grow: 0;
+    flex-shrink: 0;
+    flex-basis: 100%;
+  }
+  #pcsw-home .hero-slider-section .home-one-slider-text-wrap {
+    position: relative;
+    top: auto;
+    bottom: auto;
+    height: auto;
+    min-height: 75vh;
+    min-height: 75svh;
+    padding-top: 110px;
+    padding-bottom: 40px;
+  }
+  #pcsw-home .hero-slider-section .home-one-slider-text-wrap > * {
+    flex-shrink: 0;
+  }
+}
+</style>
+  <style id="pcsu-mobile-submenus-v1">
+/* Touch navigation: native Webflow links, with independent submenu controls. */
+.pcsu-mobile-submenu-toggle{display:none}
+@media(max-width:991px){
+ .modern-navbar-2 .navbar-fullscreen-menu{height:100vh;height:100dvh;max-height:100dvh;padding:90px 20px 24px;box-sizing:border-box;align-items:stretch;flex-direction:column;justify-content:flex-start;overflow-x:hidden;overflow-y:auto;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
+ .modern-navbar-2 .fullscreen-menu-background-5{position:fixed;inset:0;pointer-events:none}
+ .modern-navbar-2 .navbar-fullscreen-menu-container{position:relative;width:100%;max-width:none;flex:none;margin:0}
+ .modern-navbar-2 .navbar-fullscreen-menu-main-wrapper,.modern-navbar-2 .navbar-fullscreen-menu-left-column{width:100%;display:block;padding:0;height:auto;min-height:0}
+ .modern-navbar-2 .navbar-two-main-menu{width:100%;gap:6px;transform:none!important;opacity:1!important}
+ .modern-navbar-2 .navbar-two-menu-items{display:grid;grid-template-columns:minmax(0,1fr) 44px;align-items:center;width:100%;gap:0 8px;padding:7px 0;border-bottom:1px solid #ffffff26}
+ .modern-navbar-2 .tor-main-menu-destination{min-width:0;min-height:48px;display:flex;align-items:center;gap:8px}
+ .modern-navbar-2 .menu-big-text{font-size:clamp(21px,5vw,30px);line-height:1.25;overflow-wrap:anywhere}
+ .modern-navbar-2 .navbar-two-arrow-wrapper{display:none}
+ .modern-navbar-2 .pcsu-mobile-submenu-toggle{display:flex;align-items:center;justify-content:center;width:44px;height:44px;min-width:44px;padding:0;border:1px solid #ffffff70;border-radius:50%;background:#12202d80;color:white;font:24px/1 Arial,sans-serif;cursor:pointer}
+ .modern-navbar-2 .pcsu-mobile-submenu-toggle:focus-visible,.modern-navbar-2 .sub-menu-text-2:focus-visible{outline:2px solid #e7b47c;outline-offset:3px}
+ .modern-navbar-2 .pcsu-mobile-submenu{grid-column:1/-1;position:static!important;width:100%!important;max-width:none;height:auto!important;gap:2px;padding:8px 12px 12px;border-radius:8px;background:#101b29c7;transform:none!important;opacity:1!important;flex-direction:column}
+ .modern-navbar-2 .pcsu-mobile-submenu[data-mobile-open="true"]{display:flex!important}
+ .modern-navbar-2 .pcsu-mobile-submenu[data-mobile-open="false"]{display:none!important}
+ .modern-navbar-2 .pcsu-mobile-submenu .sub-menu{display:flex!important;position:static!important;opacity:1!important;width:100%;gap:2px;transform:none!important}
+ .modern-navbar-2 .sub-menu-text-2{display:flex;align-items:center;min-height:44px;padding:8px 0;font-size:14px;line-height:1.4;letter-spacing:.05em;color:#fff;white-space:normal}
+ .modern-navbar-2 .navbar-two-sub-menus{display:none!important}
+ .modern-navbar-2 .navbar-fullscreen-menu-right-column{display:block;width:100%;margin-top:24px}
+ .modern-navbar-2 .navbar-small-menus{display:flex!important;flex-wrap:wrap;gap:24px;width:100%;transform:none!important;opacity:1!important;padding:0}
+ .modern-navbar-2 .navbar-small-sub-menus{gap:4px}
+ .modern-navbar-2 .navbar-small-menus a{display:flex;align-items:center;min-height:44px}
+ .modern-navbar-2 .navbar-bottom-copyright{position:relative;inset:auto;margin:28px 0 0;padding:0;width:100%;flex:none;opacity:1!important}
+ .modern-navbar-2 .border-wrapper-left-2{display:none}
+}
+</style>
+  <style id="pcsu-mobile-slider-controls-v1">
+/* Keep the native Webflow carousel controls available on phones. */
+@media screen and (max-width:767px){
+ #pcsw-home .hero-slider-section .home-one-slider-text-wrap{padding-top:156px}
+ #pcsw-home .hero-slider-section .w-slider-arrow-left,
+ #pcsw-home .hero-slider-section .w-slider-arrow-right{display:flex;align-items:center;justify-content:center;top:88px;bottom:auto;width:44px;height:44px;margin:0;padding:0;border:1px solid #ffffff80;border-radius:50%;background:#102236a6;z-index:5;cursor:pointer;touch-action:manipulation}
+ #pcsw-home .hero-slider-section .w-slider-arrow-left{left:12px;right:auto}
+ #pcsw-home .hero-slider-section .w-slider-arrow-right{right:12px;left:auto}
+ #pcsw-home .hero-slider-section .w-slider-arrow-left img,
+ #pcsw-home .hero-slider-section .w-slider-arrow-right img{width:12px;height:28px;object-fit:contain;pointer-events:none}
+ #pcsw-home .hero-slider-section .w-slider-nav{display:flex;align-items:center;justify-content:center;gap:4px;top:88px;bottom:auto;left:64px;right:64px;width:auto;height:44px;margin:0;padding:0;z-index:5}
+ #pcsw-home .hero-slider-section .w-slider-dot{display:flex;align-items:center;justify-content:center;flex:0 0 44px;width:44px;height:44px;margin:0!important;padding:0;border:1px solid #ffffff80;border-radius:50%;background:#102236a6;color:#fff;font:600 14px/1 Arial,sans-serif;touch-action:manipulation}
+ #pcsw-home .hero-slider-section .w-slider-dot.w-active{background:#fff;color:#17334d;border-color:#fff}
+ #pcsw-home .hero-slider-section .w-slider-arrow-left:focus-visible,
+ #pcsw-home .hero-slider-section .w-slider-arrow-right:focus-visible,
+ #pcsw-home .hero-slider-section .w-slider-dot:focus-visible{outline:3px solid #e6b984;outline-offset:3px}
+}
+@media screen and (max-width:767px){
+ #pcsw-home .hero-slider-section .w-slider-arrow-left,
+ #pcsw-home .hero-slider-section .w-slider-arrow-right,
+ #pcsw-home .hero-slider-section .w-slider-nav{opacity:0}
+}
+</style>
 </head>
 <body>
   <header class="modern-navbar-2 home-copy-blur-layer">
@@ -199,15 +323,19 @@
                   </a>
                 </div>
                 <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a0" class="w-layout-hflex navbar-two-menu-items">
-                  <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a1" class="menu-big-text blog-text">PCS Resources</div>
-                  <div class="navbar-two-arrow-wrapper overflow-hidden"><img src="images/Arrow.svg" loading="lazy" width="32" height="22" alt="Icon" data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a4" class="navbar-two-arrow blog-arrow"></div>
+                  <a href="pcs-resources.html" class="tor-main-menu-destination w-inline-block">
+                    <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a1" class="menu-big-text blog-text">PCS Resources</div>
+                    <div class="navbar-two-arrow-wrapper overflow-hidden"><img src="images/Arrow.svg" loading="lazy" width="32" height="22" alt="Icon" data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a4" class="navbar-two-arrow blog-arrow"></div>
+                  </a>
                 </div>
                 <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a5" class="w-layout-hflex navbar-two-menu-items">
-                  <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a6" class="menu-big-text contact-text">Financial</div>
-                  <div class="navbar-two-arrow-wrapper overflow-hidden"><img src="images/Arrow.svg" loading="lazy" width="32" height="22" alt="Icon" data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a9" class="navbar-two-arrow contact-arrow"></div>
+                  <a href="financial-guidance.html" class="tor-main-menu-destination w-inline-block">
+                    <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a6" class="menu-big-text contact-text">Financial</div>
+                    <div class="navbar-two-arrow-wrapper overflow-hidden"><img src="images/Arrow.svg" loading="lazy" width="32" height="22" alt="Icon" data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6a9" class="navbar-two-arrow contact-arrow"></div>
+                  </a>
                 </div>
                 <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6aa" class="w-layout-hflex navbar-two-menu-items">
-                  <a href="/military/air-force" class="tor-main-menu-destination w-inline-block">
+                  <a href="va-home-loan.html" class="tor-main-menu-destination w-inline-block">
                     <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6ac" class="menu-big-text pages-text">VA-HomeLoan</div>
                     <div class="navbar-two-arrow-wrapper overflow-hidden"><img src="images/Arrow.svg" loading="lazy" width="32" height="22" alt="Icon" data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6af" class="navbar-two-arrow pages-arrow"></div>
                   </a>
@@ -219,12 +347,12 @@
               </div>
               <div style="opacity:0;-webkit-transform:translate3d(0, 10%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-moz-transform:translate3d(0, 10%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);-ms-transform:translate3d(0, 10%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0);transform:translate3d(0, 10%, 0) scale3d(1, 1, 1) rotateX(0) rotateY(0) rotateZ(0) skew(0, 0)" class="navbar-two-sub-menus">
                 <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6b6" class="w-layout-vflex sub-menu portfolio-sub-menu">
-                  <a href="#" class="sub-menu-text-2">About OrozcoRealty</a>
-                  <a href="#" class="sub-menu-text-2">Information Center</a>
-                  <a href="/contact-us/contact-us" class="sub-menu-text-2">Contact Us</a>
+                  <a href="about-us.html" class="sub-menu-text-2">About Us</a>
+                  <a href="information/style-guide.html" class="sub-menu-text-2">Information Center</a>
+                  <a href="contact/contact-two.html" class="sub-menu-text-2">Contact Us</a>
                 </div>
                 <div data-w-id="2a8a7bd7-956b-d37a-0e51-99b17cedf6bd" class="w-layout-vflex sub-menu blog-menu">
-                  <a href="#" class="sub-menu-text-2">BAH &amp; Base Pay</a>
+                  <a href="air-force-pcs-planning.html" class="sub-menu-text-2">PCS Guidance</a>
                   <a href="#" class="sub-menu-text-2">Retirement Calculator</a>
                   <a href="#" class="sub-menu-text-2">VA Calculator</a>
                 </div>
@@ -438,15 +566,15 @@
       <section id="pcsj-journey" aria-labelledby="pcsj-title" class="pcsj-journey">
         <div class="pcsj-heading">
           <p class="pcsj-eyebrow">Begin your Home Buying Journey or simply get Insight &amp; Education.</p>
-          <h2 id="pcsj-title" class="pcsj-title">Guidance and Answer for all Stages of your Journey</h2>
+          <h2 id="pcsj-title" class="pcsj-title">Guidance for all Stages of your Journey</h2>
           <p class="pcsj-intro">Getting orders, considering ownership, or preparing to buy? <br>Find guidance for the questions in front of you. Start wherever you need.</p>
         </div>
         <div class="pcsj-grid">
           <article data-pcsj-card="base" class="pcsj-card">
             <a id="pcsj-trigger-base" data-pcsj-topic="base" aria-controls="pcsj-preview-base" aria-expanded="false" role="button" href="pcs-resources.html" class="pcsj-trigger w-inline-block">
-              <div class="pcsj-photo-wrap"><img src="images/PCS-orders.png" loading="lazy" sizes="(max-width: 1672px) 100vw, 1672px" srcset="images/792c5bd7e52762124e8b0a487730a255_Vartical-Accordion-Image-2-p-500.png 500w, images/792c5bd7e52762124e8b0a487730a255_Vartical-Accordion-Image-2-p-800.png 800w, images/792c5bd7e52762124e8b0a487730a255_Vartical-Accordion-Image-2-p-1080.png 1080w, images/792c5bd7e52762124e8b0a487730a255_Vartical-Accordion-Image-2-p-1600.png 1600w, images/PCS-orders.png 1672w" alt="Illustrative military family walking through a coastal neighborhood." class="pcsj-photo"></div>
+              <div class="pcsj-photo-wrap"><img src="images/Rezois-logo-white.png" loading="lazy" sizes="(max-width: 1672px) 100vw, 1672px" srcset="images/cac1fe04045ba5fef29c2d1b1e263486_Rezois-logo-white-p-500.png 500w, images/cac1fe04045ba5fef29c2d1b1e263486_Rezois-logo-white-p-800.png 800w, images/cac1fe04045ba5fef29c2d1b1e263486_Rezois-logo-white-p-1080.png 1080w, images/cac1fe04045ba5fef29c2d1b1e263486_Rezois-logo-white-p-1600.png 1600w, images/Rezois-logo-white.png 1672w" alt="Illustrative military family walking through a coastal neighborhood." class="pcsj-photo"></div>
               <div class="pcsj-card-copy">
-                <p class="pcsj-stage">01 / PCS RESOURCES</p>
+                <p class="pcsj-stage">Stage 1 / PCS RESOURCES</p>
                 <h3 class="pcsj-card-title">Explore Your Next Base</h3>
                 <p class="pcsj-description">Get to know the area, compare housing costs, and explore where your family could feel at home.</p>
                 <div class="pcsj-card-action"><span>Take a look</span><span aria-hidden="true" class="pcsj-plus">+</span></div>
@@ -454,10 +582,10 @@
             </a>
           </article>
           <article data-pcsj-card="budget" class="pcsj-card">
-            <a id="pcsj-trigger-budget" data-pcsj-topic="budget" aria-controls="pcsj-preview-budget" aria-expanded="false" role="button" href="#pcsj-preview-budget" class="pcsj-trigger w-inline-block">
-              <div class="pcsj-photo-wrap"><img src="images/Financial-Guidance.jpg" loading="lazy" sizes="(max-width: 1200px) 100vw, 1200px" srcset="images/e2217f4250ec42b08fbd5bcb3edf5273_Documentation-image-6-p-500.jpg 500w, images/e2217f4250ec42b08fbd5bcb3edf5273_Documentation-image-6-p-800.jpg 800w, images/e2217f4250ec42b08fbd5bcb3edf5273_Documentation-image-6-p-1080.jpg 1080w, images/Financial-Guidance.jpg 1200w" alt="Illustrative service member and partner reviewing paperwork at a table." class="pcsj-photo"></div>
+            <a id="pcsj-trigger-budget" data-pcsj-topic="budget" aria-controls="pcsj-preview-budget" aria-expanded="false" role="button" href="financial-guidance.html" class="pcsj-trigger w-inline-block">
+              <div class="pcsj-photo-wrap"><img src="images/Tab-Image-2.jpg" loading="lazy" sizes="(max-width: 1300px) 100vw, 1300px" srcset="images/a7facc65996edfce83b219e3f3f4f89a_Tab-Image-2-p-500.jpg 500w, images/a7facc65996edfce83b219e3f3f4f89a_Tab-Image-2-p-800.jpg 800w, images/a7facc65996edfce83b219e3f3f4f89a_Tab-Image-2-p-1080.jpg 1080w, images/Tab-Image-2.jpg 1300w" alt="Illustrative service member and partner reviewing paperwork at a table." class="pcsj-photo"></div>
               <div class="pcsj-card-copy">
-                <p class="pcsj-stage">02 / FINANCIAL GUIDANCE</p>
+                <p class="pcsj-stage">Stage 2 / FINANCIAL GUIDANCE</p>
                 <h3 class="pcsj-card-title">Understand Your Budget</h3>
                 <p class="pcsj-description">Look beyond the mortgage payment. Explore what ownership could cost—and what remains for everyday life.</p>
                 <div class="pcsj-card-action"><span>Take a look</span><span aria-hidden="true" class="pcsj-plus">+</span></div>
@@ -465,10 +593,10 @@
             </a>
           </article>
           <article data-pcsj-card="buy" class="pcsj-card">
-            <a id="pcsj-trigger-buy" data-pcsj-topic="buy" aria-controls="pcsj-preview-buy" aria-expanded="false" role="button" href="#pcsj-preview-buy" class="pcsj-trigger w-inline-block">
-              <div class="pcsj-photo-wrap"><img src="images/VA-Home-Loan.jpg" loading="lazy" sizes="(max-width: 1400px) 100vw, 1400px" srcset="images/01ce0e4e04bb6e19fdbab7438fd49a4e_Documentation-Image-8-p-500.jpg 500w, images/01ce0e4e04bb6e19fdbab7438fd49a4e_Documentation-Image-8-p-800.jpg 800w, images/01ce0e4e04bb6e19fdbab7438fd49a4e_Documentation-Image-8-p-1080.jpg 1080w, images/VA-Home-Loan.jpg 1400w" alt="A house with a covered front porch and a blue front door." class="pcsj-photo"></div>
+            <a id="pcsj-trigger-buy" data-pcsj-topic="buy" aria-controls="pcsj-preview-buy" aria-expanded="false" role="button" href="va-home-loan.html" class="pcsj-trigger w-inline-block">
+              <div class="pcsj-photo-wrap"><img src="images/Blog-Detaols-Two.jpg" loading="lazy" sizes="(max-width: 1672px) 100vw, 1672px" srcset="images/6748138918d62ed3b93896e0fffd6bd3_Blog-Detaols-Two-p-500.jpg 500w, images/6748138918d62ed3b93896e0fffd6bd3_Blog-Detaols-Two-p-800.jpg 800w, images/6748138918d62ed3b93896e0fffd6bd3_Blog-Detaols-Two-p-1080.jpg 1080w, images/6748138918d62ed3b93896e0fffd6bd3_Blog-Detaols-Two-p-1600.jpg 1600w, images/Blog-Detaols-Two.jpg 1672w" alt="A house with a covered front porch and a blue front door." class="pcsj-photo"></div>
               <div class="pcsj-card-copy">
-                <p class="pcsj-stage">03 / VA-HOMELOAN</p>
+                <p class="pcsj-stage">Stage 3 / VA-HOMELOAN</p>
                 <h3 class="pcsj-card-title">Your Homebuying Guide</h3>
                 <p class="pcsj-description">Understand financing options, discover benefits to investigate, and learn what to expect from preparation to closing.</p>
                 <div class="pcsj-card-action"><span>Take a look</span><span aria-hidden="true" class="pcsj-plus">+</span></div>
@@ -569,11 +697,53 @@
           <p class="pcsw-powered">Technology supported by TheWing.ai</p>
         </div>
       </section>
+      <div class="beyond-the-numbers-ad">
+        <div class="style-text-wrapper-2">
+          <div class="inside">
+            <div class="style-text-wrapper-2">
+              <div class="the-future-is-pcsu-ad">
+                <div class="services-h01-wrap">
+                  <div class="services-h01-text-wrap">
+                    <div class="align-left-14">
+                      <div class="content-tag-wrap">
+                        <div class="text-block-48">Learn more about</div>
+                      </div>
+                    </div>
+                    <h2 class="heading-160">Our Story</h2>
+                    <div class="opacity-80-4">A useful estimate shows its inputs and limits. Official benefit tables, household information, and TheWing’s planning rules serve different purposes; we explain each separately.</div>
+                    <div class="buttons-row-2">
+                      <a href="about-us.html" class="button-white-3 w-inline-block">
+                        <div class="button-black-text-with-overlay">About Us Page</div>
+                        <div class="button-primary-overlay-2"></div>
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                <div class="primary-glow-wrapper-24 blog-grid-child second-version">
+                  <div class="button-overflow-hidden-2-copy for--blog-copy">
+                    <div class="full-size">
+                      <div class="pedding-stroke-13 big--size full-size">
+                        <div class="inside-button-14 none-padding full-size for--blog">
+                          <a href="https://www.thewing.ai" target="_blank" class="w-inline-block"><img src="images/Credit-Property-Image.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-1080.png 1080w, images/Credit-Property-Image.png 1535w" alt="Credit Property Image" class="image-251"></a>
+                        </div>
+                      </div>
+                      <div class="glow-wrapper stroke for--boxes">
+                        <div class="glow-item left"></div>
+                        <div class="glow-item"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <section id="pcsw-benefits" aria-labelledby="pcsw-benefits-title" class="pcsw-benefits">
         <div class="pcsw-benefits-inner">
           <div class="pcsw-benefits-top">
             <div>
-              <p class="pcsw-eyebrow-light">AIR FORCE SPECIFIC SUPPORT WORTH KNOWING</p>
+              <p class="pcsw-eyebrow-light">AIR FORCE SPECIFIC APPLICATIONS WORTH KNOWING</p>
               <h2 id="pcsw-benefits-title" class="pcsw-h2-light">Your move may come<br>with more support.</h2>
             </div>
             <p class="pcsw-benefits-intro">Discover eight PCS benefits and allowances. Tap a topic. Explore what may apply.</p>
@@ -695,72 +865,15 @@
           <p class="pcsw-benefits-note">Details, illustrative examples, and official sources are one click away. Eligibility depends on your orders and circumstances.</p>
         </div>
       </section>
-      <div class="beyond-the-numbers-ad">
-        <div class="style-text-wrapper-2">
-          <div class="inside">
-            <div class="style-text-wrapper-2">
-              <div class="the-future-is-pcsu-ad">
-                <div class="services-h01-wrap">
-                  <div class="services-h01-text-wrap">
-                    <div class="align-left-14">
-                      <div class="content-tag-wrap">
-                        <div class="text-block-48">PCSUnited.com</div>
-                      </div>
-                    </div>
-                    <h2 class="heading-160">Our Story</h2>
-                    <div class="opacity-80-4">A useful estimate shows its inputs and limits. Official benefit tables, household information, and TheWing’s planning rules serve different purposes; we explain each separately.</div>
-                    <div class="buttons-row-2">
-                      <a href="#" class="button-white-3 w-inline-block">
-                        <div class="button-black-text-with-overlay">explore properties</div>
-                        <div class="button-primary-overlay-2"></div>
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="primary-glow-wrapper-24 blog-grid-child second-version">
-                  <div class="button-overflow-hidden-2-copy for--blog-copy">
-                    <div class="full-size">
-                      <div class="pedding-stroke-13 big--size full-size">
-                        <div class="inside-button-14 none-padding full-size for--blog">
-                          <a href="https://www.thewing.ai" target="_blank" class="w-inline-block"><img src="images/Credit-Property-Image.png" loading="lazy" sizes="100vw" srcset="images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-1080.png 1080w, images/Credit-Property-Image.png 1535w" alt="Credit Property Image" class="image-251"></a>
-                        </div>
-                      </div>
-                      <div class="glow-wrapper stroke for--boxes">
-                        <div class="glow-item left"></div>
-                        <div class="glow-item"></div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <section aria-labelledby="pcsu26-title" class="pcsu26-hero">
-        <div class="pcsu26-hero-copy">
-          <p class="pcsu26-eyebrow">Get the Quality of Life you deserve.</p>
-          <h1 id="pcsu26-title" class="pcsu26-h1">PCS orders?.<br>Get Insight Today.</h1>
-          <p class="pcsu26-lead">PCS is part of Military Life. Get the Information and Insight you Need to make your next housing decision with confidence. <br>Get PCS Assistance, Obtain Demographics of your Next Base. Compare BAH and Housing Trends. </p>
-          <a href="air-force-pcs-planning.html" class="pcsu26-primary">Explore Your Next Base</a>
-          <p class="pcsu26-reassurance">Free to use. No account. No sales pressure.</p>
-          <p class="pcsu26-audience">For service members, veterans, and military families.<br>Starting with the Air Force community.</p>
-        </div>
-        <div class="pcsu26-hero-visual"><img src="images/PCSUnited.com-Advertisement.png" loading="lazy" sizes="100vw" srcset="images/bafab13b1bfb46db75565125747a8822_Order-Confirm-p-500.png 500w, images/bafab13b1bfb46db75565125747a8822_Order-Confirm-p-800.png 800w, images/bafab13b1bfb46db75565125747a8822_Order-Confirm-p-1080.png 1080w, images/PCSUnited.com-Advertisement.png 1568w" alt="A service member and partner reviewing paperwork together at home." class="pcsu26-hero-image">
-          <div class="pcsu26-image-note"><span class="pcsu26-note-label">MORE THAN A CHANGE OF ADDRESS</span>
-            <p class="pcsu26-note-text">Solutions that works<br>for your whole family.</p>
-          </div>
-        </div>
-      </section>
     </main>
     <div class="badges">
-      <a href="pcs-resources.html" class="button-customize w-inline-block"><img loading="lazy" src="images/customize-icon.svg" alt="">
+      <a href="pcs-resources.html" class="button-customize w-inline-block"><img loading="lazy" src="images/1.svg" alt="quot">
         <div class="text-badges">PCS Resources</div><img loading="lazy" src="images/arrow-icon.svg" alt="">
       </a>
-      <a href="stage-2----understand-your-budget.html" class="button-customize w-inline-block"><img loading="lazy" src="images/customize-icon.svg" alt="">
+      <a href="financial-guidance.html" class="button-customize w-inline-block"><img loading="lazy" src="images/2.svg" alt="Bed Icon">
         <div class="text-badges">Financial Guidance</div><img loading="lazy" src="images/arrow-icon.svg" alt="">
       </a>
-      <a href="#" class="button-customize w-inline-block"><img loading="lazy" src="images/customize-icon.svg" alt="">
+      <a href="va-home-loan.html" class="button-customize w-inline-block"><img loading="lazy" src="images/3.svg" alt="Stage 3">
         <div class="text-badges">VA-Home Loan</div><img loading="lazy" src="images/arrow-icon.svg" alt="">
       </a>
       <div class="w-embed">
@@ -804,23 +917,78 @@ html[data-wf-page="691facbf35fbba00c096f3f2"] #pcsw-benefits .pcs-acronym{displa
 </style>
       </div>
     </div>
-    <footer class="pcsw-footer">
-      <div class="pcsw-footer-top">
-        <a href="/chatgpt-update" class="pcsw-footer-brand">PCSUnited<span class="pcsw-dot">.</span></a>
-        <nav aria-label="Footer navigation" class="pcsw-footer-nav">
-          <a data-pcsj-jump="base" href="#pcsj-trigger-base" class="pcsw-footer-link">Explore Your Next Base</a>
-          <a data-pcsj-jump="budget" href="#pcsj-trigger-budget" class="pcsw-footer-link">Understand Your Budget</a>
-          <a data-pcsj-jump="buy" href="#pcsj-trigger-buy" class="pcsw-footer-link">Your Homebuying Guide</a>
-          <a href="#pcsw-benefits" class="pcsw-footer-link">PCS benefits</a>
-        </nav>
-      </div>
-      <p class="pcsw-disclosure">PCSUnited is an independent educational platform, not affiliated with or endorsed by the Department of Defense, Department of Veterans Affairs, or any military branch. General education—not individualized financial, legal, or lending advice. Hero imagery is illustrative.</p>
-      <div class="pcsw-footer-bottom">
-        <p class="pcsw-footer-small">For every chapter of military life.</p>
-        <a href="#pcsw-home" class="pcsw-backtop">Back to top ↑</a>
-      </div>
-    </footer>
   </div>
+  <footer id="pcsu-reveal-footer" class="footer-3 footer-2 w-node-_1aac7d27-f281-d6ca-cb4c-4235bc259661-caab663a">
+    <div class="footer-content-wrapper">
+      <div class="footer_banners">
+        <div class="footer_buy">
+          <div class="heading-style-h4-3 text-align-center"><em>Built for service members, veterans, and military families who need clearer PCS, housing, pay, and financial readiness decisions before the move gets expensive.</em></div>
+          <div class="form-block-6 w-form">
+            <form id="wf-form-Newsletter-2" name="wf-form-Newsletter-2" data-name="Newsletter" method="get" data-wf-page-id="6ad2e1e4fdf89885caab663a" data-wf-element-id="1aac7d27-f281-d6ca-cb4c-4235bc259669">
+              <div class="div-block-4"><input class="form_input-2 is-footer w-input" maxlength="256" name="Email-Address" data-name="Email Address" placeholder="Email Address" type="email" id="Email-Address-3" required=""><input type="submit" data-wait="Please wait..." class="button-11 is-footer w-button" value="Send"></div>
+            </form>
+            <div class="form_message-success-2 w-form-done">
+              <div>Thank you! Your submission has been received!</div>
+            </div>
+            <div class="form_message-error w-form-fail">
+              <div>Oops! Something went wrong while submitting the form.</div>
+            </div>
+          </div>
+        </div><img src="images/Credit-Property-Image.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-1080.png 1080w, images/Credit-Property-Image.png 1535w" alt="Credit Property Image" class="footer_image">
+      </div>
+      <div data-w-id="1aac7d27-f281-d6ca-cb4c-4235bc259674" style="opacity:0" class="footer-flex-wrapper-2">
+        <div class="footer-content-wrapper-2">
+          <a href="#" class="footer-logo-link w-inline-block">
+            <div class="logo-footer-wrapper"><img width="73" height="175" alt="pcsunited-official-symbol" src="images/PCSUnited-Crest.png" loading="lazy" srcset="images/c6888af0fa07f62155e39e416aa2a8c9_Button-Shape-p-500.png 500w, images/c6888af0fa07f62155e39e416aa2a8c9_Button-Shape-p-800.png 800w, images/c6888af0fa07f62155e39e416aa2a8c9_Button-Shape-p-1080.png 1080w, images/PCSUnited-Crest.png 1536w" sizes="73px" class="logo-image half-size">
+              <div>
+                <h4 class="logo-text">PCSUnited</h4>
+                <h6 class="logo-text-small">Military FinTech Solutions</h6>
+              </div>
+            </div>
+          </a>
+          <div class="space-text"></div>
+          <p class="footer-paragraph-2">We are an A.I Driven Financial soluitions platform build for the Military Community. We provide data analytics and insight for homebuyers.</p>
+        </div>
+        <div class="w-layout-grid footer-links-wrapper-2">
+          <div class="footer-links-text-2">
+            <div class="footer-links-title-2">Explore</div>
+            <a href="#" class="footer-link-3">Contact Us</a>
+            <a href="#" class="footer-link-3">Information Page</a>
+            <a href="#" class="footer-link-3">About Us</a>
+            <a href="#" class="footer-link-3">Resources Hub</a>
+            <a href="#" class="footer-link-3">Contact</a>
+          </div>
+          <div class="footer-links-text-2">
+            <div class="footer-links-title-2">Tools</div>
+            <a href="#" class="footer-link-3">BAH Calculator</a>
+            <a href="#" class="footer-link-3">PCS Snapshot</a>
+            <a href="#" class="footer-link-3">VA Calculator</a>
+            <a href="#" class="footer-link-3">Base Demo</a>
+            <a href="#" class="footer-link-3">PT Calculator</a>
+          </div>
+          <div class="footer-links-text-2">
+            <div class="footer-links-title-2">Official Sources</div>
+            <p class="footer-text">FHFA<br></p>
+            <div class="flex-footer-2">
+              <div class="footer-text">MilitaryOneSource</div>
+            </div>
+            <div class="flex-footer-2">
+              <div class="footer-text">DFAS Pay Entitlements</div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="footer_info">
+        <div class="text-size-tiny-2">© Copyright 2025 Designs by <a href="https://www.loonis.co/" target="_blank" class="text-size-tiny-2 text-color-alternate">J.Orozco</a>, powered by A.I Technology.</div>
+        <div class="footer_socials">
+          <a href="#" class="social-link w-inline-block"><img loading="lazy" src="images/linkedin.svg" alt="LinkedIn" class="social-link-image"></a>
+          <a href="#" class="social-link w-inline-block"><img loading="lazy" src="images/instagram.svg" alt="Instagram" class="social-link-image"></a>
+          <a href="#" class="social-link w-inline-block"><img loading="lazy" src="https://cdn.prod.website-files.com/69b6b526f23748df9f189b16/69b6b528f23748df9f189ecc_twitter.svg" alt="" class="social-link-image"></a>
+        </div>
+      </div>
+      <div class="text-size-tiny-2 text-style-muted60">PCS United™ is operated by <strong>OrozcoRealty LLC</strong>, incorporated in <strong>[State], USA (Reg. No. XX-123456)</strong>. The PCS United platform provides informational tools and resources designed to assist military members and their families with relocation planning, housing insights, and financial scenario analysis. Where applicable, services may be provided in accordance with regulations established by the <strong>[State Real Estate Regulatory Authority] under the [Relevant State Act] (License No. XX-123456)</strong>. Information on this website is provided for educational purposes only and does not constitute financial, legal, or real estate advice.</div>
+    </div>
+  </footer>
   <script src="https://d3e54v103j8qbb.cloudfront.net/js/jquery-3.5.1.min.dc5e7f18c8.js?site=6acde39c80b636b344e4764b" type="text/javascript" integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0=" crossorigin="anonymous"></script>
   <script src="js/webflow.js" type="text/javascript"></script>
   <script src="https://cdn.prod.website-files.com/gsap/3.15.0/ScrollTrigger.min.js" type="text/javascript"></script>
@@ -830,7 +998,7 @@ const section=document.getElementById('pcsj-journey'),header=document.getElement
 const reduced=matchMedia('(prefers-reduced-motion:reduce)');
 let openStage=()=>{};
 if(section&&!section.dataset.pcsuGlassReady){
- const destinations={base:'/stage-1-explore-your-base',budget:'/stage-2----understand-your-budget',buy:'/va-command-center'};
+ const destinations={base:'/pcs-resources',budget:'/financial-guidance',buy:'/va-home-loan'};
  const sourceCards=[...section.querySelectorAll('[data-pcsj-topic]')],panels=[...section.querySelectorAll('[data-pcsj-panel]')];
  if(sourceCards.length===3&&panels.length===3&&sourceCards.every(a=>a.querySelector('.pcsj-card-action')&&a.querySelector('.pcsj-card-title')&&destinations[a.dataset.pcsjTopic])){
  const triggers=sourceCards.map(a=>{
@@ -886,6 +1054,77 @@ if(header){
  header.addEventListener('keydown',e=>{if(toggle?.getAttribute('aria-expanded')!=='true')return;if(e.key==='Escape'){e.preventDefault();setMenu(false)}if(e.key==='Tab'){const items=[...header.querySelectorAll('a[href],[role="button"][tabindex="0"]')].filter(x=>x.getBoundingClientRect().width>0),first=items[0],last=items[items.length-1];if(e.shiftKey&&document.activeElement===first){e.preventDefault();last.focus()}else if(!e.shiftKey&&document.activeElement===last){e.preventDefault();first.focus()}}});
 }
 document.querySelectorAll('#pcsj-header [data-pcsj-jump],#pcsw-home .pcsw-footer [data-pcsj-jump]').forEach(a=>a.addEventListener('click',e=>{e.preventDefault();closeMenu();openStage(a.dataset.pcsjJump)}));
+})();
+</script>
+  <script>
+/* PCSUnited footer curtain v1: adapts to edited content without disabling on short desktops. */
+(function(){
+ function init(){
+  const footer=document.querySelector('#pcsu-reveal-footer');
+  const main=document.querySelector('#pcsw-home');
+  if(!footer||!main)return;
+  const nav=document.querySelector('header.modern-navbar-2');
+  const mq=matchMedia('(min-width:992px) and (prefers-reduced-motion:no-preference)');
+  let frame=0,focusMode=false;
+  function sync(){
+   frame=0;
+   const available=Math.max(1,innerHeight-(nav?nav.getBoundingClientRect().height:0)-24);
+   const bottom=Math.min(0,available-footer.getBoundingClientRect().height);
+   footer.style.setProperty('--pcsu-reveal-bottom',bottom+'px');
+   footer.dataset.reveal=String(mq.matches&&!focusMode);
+  }
+  function schedule(){if(!frame)frame=requestAnimationFrame(sync);}
+  const observer=new ResizeObserver(schedule);observer.observe(footer);if(nav)observer.observe(nav);
+  addEventListener('resize',schedule,{passive:true});mq.addEventListener('change',schedule);
+  document.fonts?.ready.then(schedule);sync();
+  footer.addEventListener('focusin',()=>{
+   if(main.getBoundingClientRect().bottom>footer.getBoundingClientRect().top+1){
+    focusMode=true;sync();
+    requestAnimationFrame(()=>{if(footer.contains(document.activeElement))document.activeElement.scrollIntoView({block:'center',behavior:'instant'});});
+   }
+  });
+  footer.addEventListener('focusout',()=>requestAnimationFrame(()=>{
+   if(!footer.contains(document.activeElement)){focusMode=false;schedule();}
+  }));
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+})();
+</script>
+  <script id="pcsu-mobile-submenus-v1-js">
+(function(){
+ 'use strict';
+ function init(){
+  document.querySelectorAll('.modern-navbar-2 .navbar-fullscreen-menu').forEach(function(menu,menuIndex){
+   if(menu.dataset.mobileSubmenusReady)return;
+   var main=menu.querySelector('.navbar-two-main-menu'), source=menu.querySelector('.navbar-two-sub-menus');
+   if(!main||!source)return;
+   menu.dataset.mobileSubmenusReady='true';
+   var mq=matchMedia('(max-width:991px)'), entries=[];
+   var pairs=[['.portfolio-text','.portfolio-sub-menu'],['.blog-text','.blog-menu'],['.contact-text','.contact-menu'],['.pages-text','.military'],['.home-text','.home-submenu']];
+   pairs.forEach(function(pair,i){
+    var label=main.querySelector(pair[0]), panel=source.querySelector(pair[1]);
+    if(!label||!panel)return;
+    var item=label.closest('.navbar-two-menu-items');
+    var marker=document.createComment('Webflow submenu original position');panel.before(marker);
+    var originalId=panel.id, button=document.createElement('button');
+    panel.id=panel.id||'pcsu-mobile-submenu-'+menuIndex+'-'+i;
+    button.type='button';button.className='pcsu-mobile-submenu-toggle';
+    button.setAttribute('aria-label',label.textContent.trim()+' submenu');
+    button.setAttribute('aria-controls',panel.id);
+    var open=i===0;
+    function setOpen(value){open=value;button.setAttribute('aria-expanded',String(open));button.textContent=open?'−':'+';panel.dataset.mobileOpen=String(open);}
+    button.addEventListener('click',function(event){event.preventDefault();event.stopPropagation();setOpen(!open);});
+    item.append(button);setOpen(open);
+    entries.push({item:item,panel:panel,marker:marker,button:button});
+   });
+   function sync(){entries.forEach(function(entry){
+    if(mq.matches){entry.panel.classList.add('pcsu-mobile-submenu');entry.item.append(entry.panel);}
+    else{entry.marker.after(entry.panel);entry.panel.classList.remove('pcsu-mobile-submenu');}
+   });}
+   mq.addEventListener('change',sync);sync();
+  });
+ }
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 })();
 </script>
 </body>

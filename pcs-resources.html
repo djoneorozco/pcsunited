@@ -1,4 +1,4 @@
-<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Mon Nov 02 2026 03:31:03 GMT+0000 (Coordinated Universal Time)  -->
+<!DOCTYPE html><!--  This site was created in Webflow. https://webflow.com  --><!--  Last Published: Tue Nov 10 2026 05:08:36 GMT+0000 (Coordinated Universal Time)  -->
 <html data-wf-page="6ad306fe2c010258981aa38a" data-wf-site="6acde39c80b636b344e4764b" lang="en">
 <head>
   <meta charset="utf-8">
@@ -658,7 +658,7 @@ An iframe load event alone is NOT proof that data is ready.
                 </header>
                 <div class="brief-stage">
                   <div class="brief-cover" id="pcsu-brief-cover">
-                    <img src="images/Air-Force-Base-Demographics.jpg" alt="" decoding="async">
+                    <img src="images/Air-Force-PCS-for-Family.jpg" alt="" decoding="async">
                     <div class="brief-cover-copy">
                       <p class="brief-kicker">Know your next base</p>
                       <p id="pcsu-brief-status" class="brief-status">Enter your rank, years of service, family size, and destination. Then select Analyze.</p>
@@ -1309,33 +1309,45 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
 #pcs1-calculator-host>.w-embed{width:100%;min-width:0;max-width:none;margin:0!important;align-self:start}
 #pcs1-move{scroll-margin-top:90px;padding:20px 40px 40px}
 #pcsu-relocation-input,#pcsu-relocation-input *{box-sizing:border-box}
-#pcsu-relocation-input{font:14px/1.5 Arial,sans-serif;color:#17334d;min-width:0;text-align:left}
+#pcsu-relocation-input{font:14px/1.5 Arial,sans-serif;letter-spacing:.2px;color:#17334d;min-width:0;text-align:left;background:#f4f5f0}
 #pcsu-relocation-input [hidden]{display:none!important}
 #pcsu-relocation-input p,#pcsu-relocation-input h3{margin:0}
-#pcsu-relocation-input h3{font:700 24px/1.25 Arial,sans-serif;color:#17334d;margin-bottom:8px}
-#pcsu-relocation-input .pr-intro{color:#516b7e;margin-bottom:20px}
-#pcsu-relocation-input .pr-expense-box{padding:22px;border:1px solid #dbded9;background:#f0eee8;border-radius:18px;margin-bottom:20px}
-#pcsu-relocation-input .pr-expense-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-#pcsu-relocation-input .pr-expense-top>label{font-size:16px}
-#pcsu-relocation-input .pr-money{display:flex;align-items:center;gap:8px;width:160px;max-width:100%;font-size:20px}
-#pcsu-relocation-input .pr-money input{font-size:20px}
-#pcsu-relocation-input #pr-expense-slider{width:100%;height:36px;padding:0;margin:19px 0 0;accent-color:#287d73;cursor:pointer;background:transparent;border:0}
-#pcsu-relocation-input .pr-scale{display:flex;justify-content:space-between;color:#516b7e;font-size:12px}
+#pcsu-relocation-input h3{font:700 20px/1.25 Arial,sans-serif;letter-spacing:-.2px;color:#17334d;margin-bottom:5px}
+#pcsu-relocation-input .pr-intro{color:#516b7e;margin-bottom:18px}
 #pcsu-relocation-input .pr-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:14px 0}
-#pcsu-relocation-input .pr-field{display:grid;gap:6px;min-width:0;align-content:start}
-#pcsu-relocation-input label{font-size:13px;font-weight:700;color:#476172}
-#pcsu-relocation-input input:not([type=checkbox]):not([type=range]),#pcsu-relocation-input select{width:100%;min-width:0;min-height:46px;padding:10px;border:1px solid #b9cbd6;border-radius:9px;background:#fff;color:#17334d;font:16px/1.3 Arial,sans-serif}
-#pcsu-relocation-input .pr-destination{min-height:46px;display:flex;align-items:center;padding:10px;border:1px solid #d8e1e5;border-radius:9px;background:#edf4f6;font-weight:700;overflow-wrap:anywhere}
-#pcsu-relocation-input .pr-help{font-size:12px;color:#516b7e;margin-top:9px;line-height:1.6}
-#pcsu-relocation-input .pr-profile{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;font-size:12px;color:#516b7e;margin:12px 0}
+#pcsu-relocation-input .pr-base-fields{gap:11px;margin:0}
+#pcsu-relocation-input .pr-field{display:grid;gap:8px;min-width:0;align-content:start}
+#pcsu-relocation-input label{font-size:11px;font-weight:700;letter-spacing:0;color:#476172}
+#pcsu-relocation-input input:not([type=checkbox]):not([type=range]),#pcsu-relocation-input select{width:100%;min-width:0;min-height:38px;padding:9px 11px;border:1px solid #b9cbd6;border-radius:6px;background:#fff;color:#17334d;font:13px/1.3 Arial,sans-serif}
+#pcsu-relocation-input select{padding-left:7px}
+#pcsu-relocation-input .pr-destination{min-height:38px;display:flex;align-items:center;padding:7px 9px;border:1px solid #d8e1e5;border-radius:7px;background:#f0f4f7;font-weight:700;letter-spacing:.2px;overflow-wrap:anywhere}
+#pcsu-relocation-input .pr-help{font-size:10px;color:#516b7e;margin-top:9px;line-height:1.6}
+#pcsu-relocation-input .pr-profile{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px 12px;font-size:14px;color:#516b7e;margin:10px 0}
 #pcsu-relocation-input a{color:#245f70;text-underline-offset:3px}
-#pcsu-relocation-input details{border-top:1px solid #d8e1e5;margin-top:18px}
+#pcsu-relocation-input .pr-profile a{font-size:10px;text-decoration:none;white-space:nowrap}
+#pcsu-relocation-input .pr-profile a:hover{text-decoration:underline}
+#pcsu-relocation-input #pr-assumptions{margin-top:0;padding-bottom:15px;border-bottom:1px solid #d8e1e5}
+#pcsu-relocation-input .pr-expense-box{padding:17px 18px;border:1px solid #dbded9;background:#efeee9;border-radius:16px;margin:15px 0 0}
+#pcsu-relocation-input .pr-expense-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
+#pcsu-relocation-input .pr-expense-top>label{font-size:13px;letter-spacing:.15px}
+#pcsu-relocation-input .pr-money{display:flex;align-items:center;gap:8px;width:128px;max-width:100%;font-size:18px}
+#pcsu-relocation-input .pr-money input{font-size:12px}
+#pcsu-relocation-input #pr-expense-slider{display:block;appearance:none;-webkit-appearance:none;width:100%;height:36px;padding:0;margin:11px 0 0;accent-color:#287d73;cursor:pointer;background:transparent;border:0}
+#pcsu-relocation-input #pr-expense-slider::-webkit-slider-runnable-track{height:6px;border:1px solid #c4c5c1;border-radius:999px;background:#efeee9;box-shadow:inset 0 1px 1px #0000000d}
+#pcsu-relocation-input #pr-expense-slider::-webkit-slider-thumb{-webkit-appearance:none;width:12px;height:12px;margin-top:-4px;border:0;border-radius:50%;background:#287d73}
+#pcsu-relocation-input #pr-expense-slider::-moz-range-track{height:4px;border:1px solid #c4c5c1;border-radius:999px;background:#efeee9;box-shadow:inset 0 1px 1px #0000000d}
+#pcsu-relocation-input #pr-expense-slider::-moz-range-thumb{width:12px;height:12px;border:0;border-radius:50%;background:#287d73}
+#pcsu-relocation-input .pr-scale{display:flex;justify-content:space-between;color:#516b7e;font-size:10px}
+#pcsu-relocation-input .pr-expense-box .pr-help{margin-top:7px}
+#pcsu-relocation-input details{border:0;margin-top:0}
 #pcsu-relocation-input details>div{padding-bottom:12px}
-#pcsu-relocation-input summary{cursor:pointer;min-height:48px;padding:14px 0;font-size:14px;font-weight:700;color:#284d5c}
+#pcsu-relocation-input summary{display:block;list-style:none;cursor:pointer;min-height:40px;padding:11px 0;font-size:12px;font-weight:700;color:#284d5c}
+#pcsu-relocation-input summary::-webkit-details-marker{display:none}
 #pcsu-relocation-input .pr-check{display:flex;gap:9px;align-items:start;margin-top:14px}
 #pcsu-relocation-input .pr-check input{width:18px;height:18px;flex:none;margin:2px 0;accent-color:#287d73}
 #pcsu-relocation-input :is(input,select,summary,a):focus-visible{outline:3px solid #267f77;outline-offset:3px}
-#pcsu-relocation-input #pr-status{margin-top:9px;font-size:12px;color:#456174;min-height:18px}
+#pcsu-relocation-input #pr-status{margin-top:7px;font-size:10px;color:#456174;min-height:18px}
+#pcsu-relocation-input .pr-disclaimer{margin-top:12px;font-size:10px;line-height:1.6;letter-spacing:0;color:#516b7e}
 #pcsu-relocation-input [data-error=true]{color:#963f22}
 @media(max-width:900px){#pcs1-calculator-host{grid-template-columns:minmax(0,1fr)}#pcs1-move{padding:32px 10px 40px}}
 @media(max-width:480px){#pcsu-relocation-input .pr-expense-box{padding:16px}#pcsu-relocation-input .pr-fields{grid-template-columns:minmax(0,1fr)}}
@@ -1343,17 +1355,8 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
             <section id="pcsu-relocation-input" aria-labelledby="pr-title">
               <h3 id="pr-title">Your move details</h3>
               <p class="pr-intro">Set your expenses. Choose your current base. See what your move could cost.</p>
-              <div class="pr-expense-box">
-                <div class="pr-expense-top"><label for="pr-expenses">Projected total expenses</label>
-                  <div class="pr-money"><span aria-hidden="true">$</span><input id="pr-expenses" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="Enter total" aria-describedby="pr-expense-help pr-expense-error"></div>
-                </div>
-                <input id="pr-expense-slider" type="range" min="0" max="30000" step="100" value="0" aria-label="Projected total expenses slider" aria-valuetext="Expense estimate not entered">
-                <div class="pr-scale" aria-hidden="true"><span>$0</span><span id="pr-range-max">$30,000</span></div>
-                <p class="pr-help" id="pr-expense-help">Slide or enter your expected total for moving, fuel, meals, lodging and other costs.</p>
-                <p class="pr-help" id="pr-expense-error" data-error="true" hidden="">Enter expenses from $0 to $1,000,000, including cents.</p>
-              </div>
               <div id="pr-controls">
-                <div class="pr-fields">
+                <div class="pr-fields pr-base-fields">
                   <div class="pr-field"><label for="pr-current-base">Current base</label><select id="pr-current-base">
                       <option value="">Choose your current base</option>
                     </select></div>
@@ -1366,6 +1369,15 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
                   <a href="#pcs1-find">Edit Snapshot ↑</a>
                 </div>
                 <p class="pr-help" id="pr-assumptions">Starts with today, 1 vehicle and your household traveling together.</p>
+                <div class="pr-expense-box">
+                  <div class="pr-expense-top"><label for="pr-expenses">Projected total expenses</label>
+                    <div class="pr-money"><span aria-hidden="true">$</span><input id="pr-expenses" type="number" min="0" max="1000000" step="0.01" inputmode="decimal" placeholder="Enter total" aria-describedby="pr-expense-help pr-expense-error"></div>
+                  </div>
+                  <input id="pr-expense-slider" type="range" min="0" max="30000" step="100" value="0" aria-label="Projected total expenses slider" aria-valuetext="Expense estimate not entered">
+                  <div class="pr-scale" aria-hidden="true"><span>$0</span><span id="pr-range-max">$30,000</span></div>
+                  <p class="pr-help" id="pr-expense-help">Slide or enter your expected total for moving, fuel, meals, lodging and other costs.</p>
+                  <p class="pr-help" id="pr-expense-error" data-error="true" hidden="">Enter expenses from $0 to $1,000,000, including cents.</p>
+                </div>
                 <details id="pr-options">
                   <summary>Adjust travel details &amp; allowances</summary>
                   <div>
@@ -1396,6 +1408,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
                 </details>
               </div>
               <p id="pr-status" role="status" aria-live="polite">Estimates update automatically.</p>
+              <p class="pr-disclaimer">Estimates depend on your inputs and the tool’s assumptions. Confirm entitlements and travel arrangements with your finance and transportation offices.</p>
             </section>
             <script>
 (()=>{'use strict';
@@ -1452,7 +1465,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
    if(!profile){invalidate();status('Choose your destination and family size in PCS Snapshot above.');return;}
    if(!$('current-base').value){invalidate();status('Choose your current base. Your Snapshot details are already filled in.');return;}
    if($('current-base').value===profile.base){invalidate();status('Choose a different current base and destination.',true);return;}
-   for(const el of $('controls').querySelectorAll('input,select')){
+   for(const el of $('controls').querySelectorAll('input:not(#pr-expenses):not(#pr-expense-slider),select')){
     if(el.closest('[hidden]')||el.disabled)continue;
     if(!el.checkValidity()){invalidate();status('Check '+(root.querySelector(`label[for="${el.id}"]`)?.textContent||'your entry')+'.',true);return;}
    }
@@ -1464,6 +1477,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
   }
   $('expenses').addEventListener('input',()=>expenses(false));$('expense-slider').addEventListener('input',()=>expenses(true));
   $('controls').addEventListener('input',e=>{
+   if(e.target.closest('.pr-expense-box'))return;
    if(e.target.id==='pr-include-dla'){presentation();return;}
    if(e.target.id==='pr-current-base'){$('distance-source').value='auto';$('miles').value='';$('driving-days').value='';}
    if(e.target.id==='pr-distance-source')$('miles').value='';
@@ -1653,7 +1667,7 @@ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',
         <p class="pcs1-tool-note">Estimates depend on your inputs and the tool’s assumptions. Confirm entitlements and travel arrangements with your finance and transportation offices.</p>
         <a href="#pcs1-plan" class="pcs1-skip-tool">Continue to your PCS plan ↓</a>
       </section>
-      <section id="pcs1-plan" aria-labelledby="pcs1-plan-title" class="pcs1-section pcs1-tinted">
+      <section id="pcs1-plan" aria-labelledby="pcs1-plan-title" class="_03---total-deductions pcs1-tinted">
         <div class="pcs1-section-heading">
           <div>
             <p class="pcs1-eyebrow">04 / MAKE SPACE FOR WHAT’S NEXT</p>
@@ -2012,7 +2026,7 @@ function N(e,t){return"money"===t?k(e):C(e)+(t?" "+(1===e?t.replace(/s$/,""):t):
         <div class="pcsu26-hero-copy">
           <p class="pcsu26-eyebrow">Get the Quality of Life you deserve.</p>
           <h1 id="pcsu26-title" class="pcsu26-h1">Overwhelmed?.<br>Get Insight Today.</h1>
-          <p class="pcsu26-lead">Learn the benefits, rules and processess associated with PCS moves using official Air Force &amp;  DoW regulations and policies.<br>‍<br>Try our simple to follow approach now. </p>
+          <p class="pcsu26-lead">Learn the benefits, rules and processess associated with PCS moves using official Air Force &amp;  DoW regulations and policies.<br>Try our simple to follow approach now. </p>
           <a href="air-force-pcs-planning.html" class="pcsu26-primary">LAUNCH PCS-Planning</a>
           <p class="pcsu26-reassurance">Free to use. No account. No sales pressure.</p>
           <p class="pcsu26-audience">For service members, veterans, and military families.<br>Starting with the Air Force community.</p>
@@ -2041,7 +2055,7 @@ function N(e,t){return"money"===t?k(e):C(e)+(t?" "+(1===e?t.replace(/s$/,""):t):
               <div>Oops! Something went wrong while submitting the form.</div>
             </div>
           </div>
-        </div><img src="images/Credit-Property-Image.png" loading="lazy" sizes="100vw" srcset="images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-1080.png 1080w, images/Credit-Property-Image.png 1535w" alt="Credit Property Image" class="footer_image">
+        </div><img src="images/Credit-Property-Image.png" loading="lazy" sizes="(max-width: 1535px) 100vw, 1535px" srcset="images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-500.png 500w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-800.png 800w, images/f12a0e867348af5e78f7bceb192af540_Credit-Property-Image-p-1080.png 1080w, images/Credit-Property-Image.png 1535w" alt="Credit Property Image" class="footer_image">
       </div>
       <div data-w-id="4514d4ed-dce3-b610-8095-035fecb8bd1c" style="opacity:0" class="footer-flex-wrapper-2">
         <div class="footer-content-wrapper-2">
